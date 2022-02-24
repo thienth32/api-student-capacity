@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\TaiKhoan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,20 +19,7 @@ Route::get('/', function () {
 });
 
 Route::get('products', function(){
-    $products = [
-        [
-            "id" => 1,
-            "name" => "poly"
-        ],
-        [
-            "id" => 2,
-            "name" => "Btec"
-        ],
-        [
-            "id" => 3,
-            "name" => "melburn"
-        ],
 
-    ];
-    return response()->json($products);
+    $taikhoan = new TaiKhoan();
+    return response()->json($taikhoan->getTaiKhoanI());
 })->middleware('cors');
