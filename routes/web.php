@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Models\TaiKhoan;
 use Illuminate\Support\Facades\Route;
 
@@ -18,8 +19,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('products', function(){
-
-    $taikhoan = new TaiKhoan();
-    return response()->json($taikhoan->getTaiKhoanI());
-})->middleware('cors');
+Route::post('login-token', [AuthController::class, 'postLoginToken'])->middleware('cors');
