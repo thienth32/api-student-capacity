@@ -19,4 +19,3 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('login-token', [AuthController::class, 'postLoginToken'])->middleware('cors');
