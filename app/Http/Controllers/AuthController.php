@@ -14,7 +14,7 @@ class AuthController extends Controller
         try{
             $googleUser = Socialite::driver('google')->userFromToken($request->token);
         }catch(Exception $ex){
-            log::info("=================================");
+            Log::info("=================================");
             Log::error("Lỗi đăng nhập: " . $ex->getMessage());
             Log::error("Token: " . $request->token);
             log::info("=================================");
