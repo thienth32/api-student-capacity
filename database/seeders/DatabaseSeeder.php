@@ -24,6 +24,9 @@ class DatabaseSeeder extends Seeder
         // $this->call(TeamSeeder::class);
         // $this->call(memberSeeder::class);
         // $this->call(judgeSeeder::class);
-        $this->call(resultSeeder::class);
+        // $this->call(resultSeeder::class);
+        // \App\Models\User::factory(10)->create();
+        // \App\Models\Sponsor::factory(10)->create();
+
     }
 }
