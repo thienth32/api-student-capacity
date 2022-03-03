@@ -3,12 +3,14 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
- use App\Models\Major;
+use App\Models\TypeExam;
+
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Major>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TypeExam>
  */
-class MajorFactory extends Factory
+class TypeExamFactory extends Factory
 {
+    protected $model = TypeExam::class;
     /**
      * Define the model's default state.
      *
@@ -17,9 +19,7 @@ class MajorFactory extends Factory
     public function definition()
     {
         return [
-            'name'=>$this->faker->name(),
-            'slug'=>$this->faker->slug()
+            'name' => $this->faker->name,
         ];
-
     }
 }
