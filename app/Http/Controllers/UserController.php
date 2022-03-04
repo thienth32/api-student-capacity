@@ -74,7 +74,7 @@ class UserController extends Controller
 
     public function block_user(Request $request, $id)
     {
-        if($request->user()->id == $id){
+        if ($request->user()->id == $id) {
             return response()->json([
                 'status' => false,
                 'payload' => "Không được phép thực hiện hành động này!"
@@ -82,7 +82,7 @@ class UserController extends Controller
         }
 
         $user = User::find($id);
-        if($user){
+        if ($user) {
             $user->status = config('util.INACTIVE_STATUS');
             $user->save();
             return response()->json([
@@ -90,13 +90,10 @@ class UserController extends Controller
                 'payload' => $user
             ]);
         }
-        
         return response()->json([
             'status' => false,
             'payload' => "Không tìm thấy tài khoản"
         ], 404);
-
-        
     }
 
     public function updateRoleUser(Request $request, $id)
