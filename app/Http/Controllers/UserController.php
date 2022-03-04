@@ -71,4 +71,67 @@ class UserController extends Controller
             'payload' => $model->toArray()
         ]);
     }
+
+    public function block_user(Request $request, $id)
+    {
+        $validator = Validator::make(
+            $request->all(),
+            ['status' => 'integer',],
+            ['status.integer' => 'Không đúng định dạng !',]
+        );
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'payload' => $validator->errors()
+            ]);
+        }
+        try {
+            $user = User::find($id);
+            if (is_null($user)) {
+                return response()->json([
+                    'status' => false,
+                    'payload' => 'Lỗi tài khoản không tồn tại !'
+                ]);
+            } else {
+                // $user->status = 2;
+                // $user->save();
+                $user->update($request->all());
+                return response()->json([
+                    'status' => true,
+                    'payload' => 'Block thành công !'
+                ]);
+            }
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function updateRoleUser(Request $request, $id)
+    {
+        try {
+            $user = User::find($id);
+            if (is_null($user)) {
+                return response()->json([
+                    'status' => false,
+                    'payload' => 'Lỗi tài khoản không tồn tại !'
+                ]);
+            } else {
+                $role = Role::find($request->role_id);
+                if (is_null($role)) {
+                    return response()->json([
+                        'status' => false,
+                        'payload' => 'Quyền này không tồn tại !'
+                    ]);
+                } else {
+                    $user->syncRoles($role->name);
+                    return response()->json([
+                        'status' => true,
+                        'payload' => 'Block thành công !'
+                    ]);
+                }
+            }
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }

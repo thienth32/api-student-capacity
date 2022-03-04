@@ -20,5 +20,6 @@ Route::group(['middleware' => ['role:super admin']], function () {
 
     Route::group(['prefix' => 'account'], function () {
         Route::post('add', [UserController::class, 'add_user']);
+        Route::delete('block/{id}', [UserController::class, 'block_user']);
     });
 });
