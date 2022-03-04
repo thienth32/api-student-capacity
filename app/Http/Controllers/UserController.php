@@ -72,38 +72,10 @@ class UserController extends Controller
         ]);
     }
 
-    public function block_user(Request $request, $id)
+    public function block_user($id)
     {
-        $validator = Validator::make(
-            $request->all(),
-            ['status' => 'integer',],
-            ['status.integer' => 'Không đúng định dạng !',]
-        );
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'payload' => $validator->errors()
-            ]);
-        }
-        try {
-            $user = User::find($id);
-            if (is_null($user)) {
-                return response()->json([
-                    'status' => false,
-                    'payload' => 'Lỗi tài khoản không tồn tại !'
-                ]);
-            } else {
-                // $user->status = 2;
-                // $user->save();
-                $user->update($request->all());
-                return response()->json([
-                    'status' => true,
-                    'payload' => 'Block thành công !'
-                ]);
-            }
-        } catch (\Throwable $th) {
-            throw $th;
-        }
+        $user = User::find($id);
+        
     }
 
     public function updateRoleUser(Request $request, $id)
