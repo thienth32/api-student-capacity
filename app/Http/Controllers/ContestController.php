@@ -35,7 +35,7 @@ class ContestController extends Controller
         $dataContent->load('teams');
         return response()->json([
             'status' => true,
-            'dataContest' => $dataContent->toArray()
+            'payload' => $dataContent->toArray()
         ]);
     }
 }
