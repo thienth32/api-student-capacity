@@ -72,9 +72,30 @@ class UserController extends Controller
         ]);
     }
 
-    public function block_user($id)
+    public function block_user(Request $request, $id)
     {
+        if($request->user()->id == $id){
+            return response()->json([
+                'status' => false,
+                'payload' => "Không được phép thực hiện hành động này!"
+            ], 403);
+        }
+
         $user = User::find($id);
+        if($user){
+            $user->status = config('util.INACTIVE_STATUS');
+            $user->save();
+            return response()->json([
+                'status' => true,
+                'payload' => $user
+            ]);
+        }
+        
+        return response()->json([
+            'status' => false,
+            'payload' => "Không tìm thấy tài khoản"
+        ], 404);
+
         
     }
 
