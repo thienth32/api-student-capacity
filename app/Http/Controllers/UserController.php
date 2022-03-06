@@ -20,32 +20,26 @@ class UserController extends Controller
     {
         // List
         try {
-
             $limit = 10;
-            $user = User::query();
-
-            $user->when(request('sort'), function ($q) {
-                return $q->orderBy(request('sort_by') ?? 'id', (request('sort') == 'desc' ? 'desc' : 'asc'));
-            });
-            $user->when(request('search'), function ($q) {
-                $str = \Str::slug(request('search'), " ");
-                return $q->where('name', 'like', "%$str%")->orWhere('email', 'like', "%$str%");
-            });
-            $user = $user->paginate(request('limit') ?? $limit);
+            $users = User::status(request('status') ?? null)
+                ->sort(request('sort') == 'desc' ? 'desc' : 'asc', request('sort_by') ?? null, 'users')
+                ->search(request('search') ?? null)
+                ->has_role(request('role') ?? null)
+                ->paginate(request('limit') ?? $limit);
 
             return response()->json(
                 [
                     'status' => true,
-                    'data' => $user
+                    'payload' => $users
                 ],
-                201
+                200
             );
         } catch (\Throwable $e) {
 
             return response()->json(
                 [
                     'status' => false,
-                    'message' => 'Server error ! '
+                    'payload' => 'Máy chủ bị lỗi , liên hệ quản trị viên để khắc phục sự cố  !'
                 ],
                 506
             );
