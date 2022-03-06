@@ -15,4 +15,11 @@ class UserController extends Controller
             'payload' => $users->toArray()
         ]);
     }
+
+    public function get_user_by_token(Request $request){
+        return response([
+            'status' => true,
+            'payload' => $request->user()->toArray()
+        ]);
+    }
 }
