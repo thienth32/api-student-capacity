@@ -47,7 +47,6 @@ class UserController extends Controller
                 'payload' => $validator->errors()
             ]);
         }
-
         DB::beginTransaction();
         try {
             $model = new User();
@@ -65,7 +64,6 @@ class UserController extends Controller
                 'payload' => $ex->getMessage()
             ]);
         }
-
         return response()->json([
             'status' => true,
             'payload' => $model->toArray()
@@ -80,7 +78,6 @@ class UserController extends Controller
                 'payload' => "Không được phép thực hiện hành động này!"
             ], 403);
         }
-
         $user = User::find($id);
         if ($user) {
             $user->status = config('util.INACTIVE_STATUS');
@@ -98,30 +95,27 @@ class UserController extends Controller
 
     public function updateRoleUser(Request $request, $id)
     {
-        try {
-            $user = User::find($id);
-            if (is_null($user)) {
+        $user = User::find($id);
+        if (is_null($user)) {
+            return response()->json([
+                'status' => false,
+                'payload' => 'Lỗi tài khoản không tồn tại !'
+            ]);
+        } else {
+            $role = Role::find($request->role_id);
+            if (is_null($role)) {
                 return response()->json([
                     'status' => false,
-                    'payload' => 'Lỗi tài khoản không tồn tại !'
+                    'payload' => 'Quyền này không tồn tại !'
                 ]);
             } else {
-                $role = Role::find($request->role_id);
-                if (is_null($role)) {
-                    return response()->json([
-                        'status' => false,
-                        'payload' => 'Quyền này không tồn tại !'
-                    ]);
-                } else {
-                    $user->syncRoles($role->name);
-                    return response()->json([
-                        'status' => true,
-                        'payload' => 'Block thành công !'
-                    ]);
-                }
+                // dd($user->roles()->first());
+                $user->syncRoles($role->name);
+                return response()->json([
+                    'status' => true,
+                    'payload' => $user->roles()->get()
+                ]);
             }
-        } catch (\Throwable $th) {
-            throw $th;
         }
     }
 }
