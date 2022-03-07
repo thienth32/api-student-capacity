@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('get-user-by-token', [UserController::class, 'get_user_by_token']);
 
 Route::group(['middleware' => ['role:super admin']], function () {
     Route::get('/users', [UserController::class, 'list']);
