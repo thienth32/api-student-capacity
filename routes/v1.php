@@ -15,4 +15,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('role:super-admin')->get('/users', [UserController::class, 'list']);
+
+Route::group(['middleware' => ['role:super admin']], function () {
+    Route::get('/users', [UserController::class, 'list']);
+    Route::group(['prefix' => 'account'], function () {
+        Route::post('add', [UserController::class, 'add_user']);
+        Route::delete('block/{id}', [UserController::class, 'block_user']);
+        Route::delete('update-role-user/{id}', [UserController::class, 'updateRoleUser']);
+    });
+});
