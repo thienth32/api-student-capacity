@@ -10,11 +10,13 @@ class Majorcontroller extends Controller
 
     public function listMajor()
     {
-
-        $dataMajor = Major::all();
+        $limit = 10;
+        $dataMajor = Major::sort(request('sort') == 'asc' ? 'asc' : 'desc', request('sort_by') ?? null, 'majors')
+            ->search(request('search') ?? null,['name','slug'])
+            ->paginate(request('limit') ?? $limit);
         return response()->json([
             'status' => true,
-            'dataMajor' => $dataMajor->toArray()
+            'payload' => $dataMajor->toArray()
         ]);
     }
 }

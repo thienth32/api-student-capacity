@@ -19,11 +19,15 @@ class Builder extends  EloquentBuilder
         return $this->where('status', $status);
     }
 
-    public function search($search = null)
+    public function search($search = null , $search_by = null)
     {
         if ($search == null) return $this;
         if (!(\Str::contains($search, '@'))) $search = \Str::slug($search, " ");
-        return $this->where('name', 'like', "%$search%")->orWhere('email', 'like', "%$search%");
+        $this->where($search_by[0], 'like', "%$search%");
+        foreach ($search_by as $key => $item){
+            if($key !== 0) $this ->orWhere($item, 'like', "%$search%");
+        }
+        return $this;
     }
 
     public function has_role($role = null)

@@ -22,6 +22,6 @@ Route::get('contests', [ContestController::class, 'listContest']);
 
 Route::get('majors', [Majorcontroller::class, 'listMajor']); // Chuyên Ngành
 
-Route::get('users', [UserController::class, 'list']); // danh sách user
+Route::get('users', [UserController::class, 'index']); // danh sách user
 
 Route::get('company', [CompanyController::class, 'listCompany']); // Doanh nghiệp
