@@ -15,10 +15,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('role:super-admin')->get('/users', [UserController::class, 'index']);
+Route::get('get-user-by-token', [UserController::class, 'get_user_by_token']);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['middleware' => ['role:super admin']], function () {
+    Route::get('/users', [UserController::class, 'list']);
+    Route::group(['prefix' => 'account'], function () {
+        Route::post('add', [UserController::class, 'add_user']);
+        Route::delete('block/{id}', [UserController::class, 'block_user']);
+        Route::delete('update-role-user/{id}', [UserController::class, 'updateRoleUser']);
+    });
 });
-
-Route::apiResource('users', \App\Http\Controllers\UserController::class);
