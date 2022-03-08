@@ -26,7 +26,7 @@ class AuthController extends Controller
             ]);
         }
 
-        $user = User::where('email', $googleUser->email)->first();
+        $user = User::with('roles')->where('email', $googleUser->email)->first();
         if ($user) {
             $user->avatar = $googleUser->avatar;
             $user->save();
@@ -49,7 +49,7 @@ class AuthController extends Controller
 
     public function fake_login(Request $request)
     {
-        $user = User::where('email', $request->email)->first();
+        $user = User::with('roles')->where('email', $request->email)->first();
         if ($user) {
             $token = $user->createToken('auth_token')->plainTextToken;
             return response()->json([
