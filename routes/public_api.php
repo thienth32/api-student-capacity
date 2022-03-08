@@ -5,6 +5,7 @@ use App\Http\Controllers\ContestController;
 use App\Http\Controllers\Majorcontroller;
 use App\Http\Controllers\SponsorController;
 use App\Http\Controllers\UserController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -25,3 +26,10 @@ Route::get('majors', [Majorcontroller::class, 'listMajor']); // Chuyên Ngành
 Route::get('users', [UserController::class, 'list']); // danh sách user
 
 Route::get('company', [CompanyController::class, 'listCompany']); // Doanh nghiệp
+
+// Route::get('test', function (){
+//     $users = User::with('roles')->whereHas('roles', function($q){
+//         $q->where('id', 1);
+//     })->get();
+//     return response()->json($users);
+// });

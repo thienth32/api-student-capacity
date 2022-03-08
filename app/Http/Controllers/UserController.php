@@ -15,10 +15,44 @@ class UserController extends Controller
 {
     public function list(Request $request)
     {
-        $users = User::all();
+        $keyword = $request->has('keyword') ? $request->keyword : "";
+        $pageNumber = $request->has('page') ? intval($request->page) : 1;
+        $pageSize = $request->has('pageSize') ? intval($request->pageSize) : config('util.DEFAULT_PAGE_SIZE');
+        $status = $request->has('status') ? $request->status : config('util.ACTIVE_STATUS');
+        $orderBy = $request->has('orderBy') ? $request->orderBy : 'id';
+        $sortBy = $request->has('sortBy') ? $request->sortBy : "desc";
+
+        $query = User::with('roles')->where(function($q) use ($keyword){
+            return $q->where('name', 'like', "%".$keyword."%")
+                    ->orWhere("email", 'like', "%".$keyword."%");
+        })->where('status', $status);
+
+        if($request->has('roleId')){
+            $query->whereHas('roles', function($q) use ($request){
+                $q->where('id', $request->roleId);
+            });
+        }
+
+        $offset = ($pageNumber-1)*$pageSize;
+        $totalItem = $query->count();
+        if($sortBy == 'desc'){
+            $query = $query->orderByDesc($orderBy);
+        }else{
+            $query = $query->orderBy($orderBy);
+        }
+        
+        $responseData = $query->skip($offset)->take($pageSize)->get();
         return response()->json([
             'status' => true,
-            'payload' => $users->toArray()
+            'payload' => [
+                'data' => $responseData,
+                'pagination' => [
+                    'currentPage' => $pageNumber,
+                    'pageSize' => $pageSize,
+                    'totalItem' =>  $totalItem,
+                    'totalPage' => ceil($totalItem/$pageSize)
+                ]
+            ]
         ]);
     }
 
