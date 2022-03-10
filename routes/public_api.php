@@ -15,13 +15,20 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::get('sponsors', [SponsorController::class, 'list']);
+// Route::get('sponsors', [SponsorController::class, 'list']);
 
 Route::get('contests', [ContestController::class, 'listContest']);
 
+Route::get('contestOff', [ContestController::class, 'ContestOff']);
+Route::get('contestUpcoming', [ContestController::class, 'contestUpcoming']);
+
+
 Route::get('majors', [Majorcontroller::class, 'listMajor']); // Chuyên Ngành
 
-Route::get('users', [UserController::class, 'list']); // danh sách user
+// Route::get('ContestWhereDate', [Majorcontroller::class, 'ContestWhereDate']);
+
+// Route::get('users', [UserController::class, 'list']); // danh sách user
 
 Route::get('company', [CompanyController::class, 'listCompany']); // Doanh nghiệp
+Route::get('FeedbackCompany', [CompanyController::class, 'FeedbackCompany']); //feedback của doanh nghiệp
+

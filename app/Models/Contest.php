@@ -9,8 +9,10 @@ class Contest extends Model
 {
     use HasFactory;
     protected $table='contests';
-
     public function teams(){
         return $this->hasMany(Team::class,'contest_id')->with('members');
+    }
+    public function ResultTeam(){
+        return $this->hasMany(Team::class,'contest_id')->with('results');
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Result;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,6 +12,7 @@ return new class extends Migration
      *
      * @return void
      */
+    protected $model = Result::class;
     public function up()
     {
         Schema::create('results', function (Blueprint $table) {

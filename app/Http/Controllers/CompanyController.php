@@ -15,4 +15,13 @@ class CompanyController extends Controller
             'dataContest' => $dataCompany->toArray()
         ]);
     }
+    public function FeedbackCompany()
+    {
+        $dataFeedback = company::all();
+        $dataFeedback->load('feedbacks');
+        return response()->json([
+            'status' => true,
+            'dataFeedback' => $dataFeedback->toArray()
+        ]);
+    }
 }

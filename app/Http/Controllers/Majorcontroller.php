@@ -17,4 +17,6 @@ class Majorcontroller extends Controller
             'dataMajor' => $dataMajor->toArray()
         ]);
     }
+
+
 }
