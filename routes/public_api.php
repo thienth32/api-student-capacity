@@ -26,10 +26,3 @@ Route::get('majors', [Majorcontroller::class, 'listMajor']); // Chuyên Ngành
 Route::get('users', [UserController::class, 'index']); // danh sách user
 
 Route::get('company', [CompanyController::class, 'listCompany']); // Doanh nghiệp
-
-// Route::get('test', function (){
-//     $users = User::with('roles')->whereHas('roles', function($q){
-//         $q->where('id', 1);
-//     })->get();
-//     return response()->json($users);
-// });

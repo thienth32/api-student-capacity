@@ -10,6 +10,10 @@ class Major extends Model
 {
     use HasFactory;
     protected $table = 'majors';
+    protected $fillable = [
+        'name',
+        'slug'
+    ];
 
     public function newEloquentBuilder($query)
     {

@@ -40,7 +40,7 @@ class UserController extends Controller
         }else{
             $query = $query->orderBy($orderBy);
         }
-        
+
         $responseData = $query->skip($offset)->take($pageSize)->get();
         return response()->json([
             'status' => true,
@@ -66,6 +66,20 @@ class UserController extends Controller
                 ->search(request('search') ?? null,['name','email'])
                 ->has_role(request('role') ?? null)
                 ->paginate(request('limit') ?? $limit);
+
+            $users = array_merge(
+                $users -> toArray(),
+                [
+                    'roles' => Role::all()
+                            ->map(function ($role){
+                            return [
+                                'value' => $role -> id ,
+                                'slug_name' => \Str::slug($role->name, " "),
+                                'name' => \Str::title($role -> name),
+                                ];
+                            })
+                ]
+            );
 
             return response()->json(
                 [

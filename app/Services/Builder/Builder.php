@@ -23,6 +23,7 @@ class Builder extends  EloquentBuilder
     {
         if ($search == null) return $this;
         if (!(\Str::contains($search, '@'))) $search = \Str::slug($search, " ");
+
         $this->where($search_by[0], 'like', "%$search%");
         foreach ($search_by as $key => $item){
             if($key !== 0) $this ->orWhere($item, 'like', "%$search%");
@@ -32,6 +33,7 @@ class Builder extends  EloquentBuilder
 
     public function has_role($role = null)
     {
+        $this->with('roles');
         if ($role == null) return $this;
         $role = \Str::slug($role, " ");
         if (!(\Spatie\Permission\Models\Role::where('name', $role)->exists())) $role = \Spatie\Permission\Models\Role::first()->name;
