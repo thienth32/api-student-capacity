@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Models\TaiKhoan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,8 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::redirect('/', '/admin');
+Route::group(['prefix' => 'auth'], function(){
+    Route::get('login', [AuthController::class, 'adminLogin'])->name('login');
+    Route::get('google', [AuthController::class, 'redirectToGoogle'])->name('auth.redirect-google');
+    Route::get('google/callback', [AuthController::class, 'adminGoogleCallback'])->name('google-auth.callback');    
 });
+Route::any('logout', [AuthController::class, 'logout'])->name('logout');
+
 
 

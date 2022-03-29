@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::get('sponsors', [SponsorController::class, 'list']);
 
 Route::get('contests', [ContestController::class, 'listContest']);

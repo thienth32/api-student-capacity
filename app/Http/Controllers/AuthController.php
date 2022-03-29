@@ -5,11 +5,35 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
+    public function adminLogin(){
+        return view('auth.login');
+    }
+
+    public function redirectToGoogle()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    public function adminGoogleCallback()
+    {
+
+        $ggUser = Socialite::driver('google')->user();
+        $user = User::where('email', $ggUser->email)->first();
+        if($user && $user->hasRole([config('util.SUPER_ADMIN_ROLE'), config('util.ADMIN_ROLE')])){
+            Auth::login($user);
+            return redirect(route('dashboard'));
+        }
+
+        return redirect(route('login'))->with('msg', "Tài khoản của bạn không có quyền truy cập!");
+
+        
+    }
     public function postLoginToken(Request $request)
     {
         try {
@@ -65,5 +89,11 @@ class AuthController extends Controller
             'status' => false,
             'payload' => "email không tồn tại"
         ]);
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect(route('login'));
     }
 }
