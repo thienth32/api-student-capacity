@@ -35,7 +35,6 @@ class RoundController extends Controller
                     'type_exam',
                 ])
                 ->paginate(request('limit') ?? 10);
-
             return $data;
         } catch (\Throwable $th) {
             return false;
