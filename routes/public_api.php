@@ -21,6 +21,7 @@ use App\Http\Controllers\TeamController;
 |
 */
 
+
 Route::get('sponsors', [SponsorController::class, 'list']);
 
 Route::get('contests', [ContestController::class, 'listContest']);

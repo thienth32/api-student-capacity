@@ -19,4 +19,9 @@ class Team extends Model
     {
         return $this->hasMany(Member::class, 'team_id');
     }
+
+    public function contest()
+    {
+        return $this->belongsTo(Contest::class, 'contest_id');
+    }
 }
