@@ -102,30 +102,29 @@ class RoundController extends Controller
                     "type_exam_id.required" => "Tường loại thi không tồn tại !",
                 ]
             );
+
             if ($validator->fails()) return [
                 'status' => false,
                 'errors' => $validator,
             ];
             $data = null;
             if (request()->has('image')) {
+
                 $validator  =  Validator::make(
                     request()->all(),
                     [
-                        'image' => 'mimes:jpeg,jpg,png|max:10000'
+                        'image' => 'file|mimes:jpeg,jpg,png|max:10000'
                     ],
                     [
                         'image.max' => 'Ảnh không quá 10000 kb  !',
                         'image.mimes' => 'Ảnh không đúng định dạng: jpeg,jpg,png !',
                     ]
                 );
+
                 if ($validator->fails()) return [
                     'status' => false,
                     'errors' => $validator,
                 ];
-                // if (Storage::disk('google')->has($round->image)) Storage::disk('google')->delete($round->image);
-                // $nameFile = uniqid() . '-' . time() . '_img.' . request()->image->getClientOriginalExtension();
-                // Storage::disk('google')->putFileAs('', request()->image, $nameFile);
-
                 $nameFile = $this->uploadFile(request()->image, $round->image);
                 $data = array_merge(request()->except('image'), [
                     'image' => $nameFile
