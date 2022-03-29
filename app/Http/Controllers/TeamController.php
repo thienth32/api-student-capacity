@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\Team;
+use App\Services\Traits\TUploadImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Validator;
 class TeamController extends Controller
 {
 
+    use TUploadImage;
     public function update(Request $request, $id)
     {
 
@@ -19,13 +21,13 @@ class TeamController extends Controller
             $request->all(),
             [
                 'name' => 'required|max:255',
-                'image' => 'size:<=10000',
+                'image' => 'max:10000',
                 'contest_id' => 'required|numeric',
             ],
             [
                 'name.required' => 'Chưa nhập trường này !',
                 'name.max' => 'Độ dài kí tự không phù hợp !',
-                'image.size' => 'Dung lượng ảnh không được vượt quá 10MB !',
+                'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
                 'contest_id.required' => 'Chưa nhập trường này !',
                 'contest_id.numeric' => 'Sai định dạng !',
             ]
@@ -45,13 +47,12 @@ class TeamController extends Controller
                 ], 500);
             } else {
                 if ($request->has('image')) {
-                    if (Storage::disk('google')->has($team->image)) {
-                        Storage::disk('google')->delete($team->image);
-                    }
+                    // if (Storage::disk('google')->has($team->image)) Storage::disk('google')->delete($team->image);
                     $fileImage =  $request->file('image');
-                    $filename = time() . '_' . rand(01, 99) . '_img.' .  $fileImage->getClientOriginalExtension();
-                    $image =  $fileImage->store($filename, "google");
-                    Storage::disk("google")->putFileAs("", $fileImage, $filename);
+                    // $filename = time() . '_' . rand(01, 99) . '_img.' .  $fileImage->getClientOriginalExtension();
+                    // $image =  $fileImage->store($filename, "google");
+                    // Storage::disk("google")->putFileAs("", $fileImage, $filename);
+                    $image = $this->uploadFile($fileImage, $team->image);
                 }
                 $team->name = $request->name;
                 $team->image = $image;
