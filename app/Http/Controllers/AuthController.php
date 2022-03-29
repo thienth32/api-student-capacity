@@ -90,4 +90,10 @@ class AuthController extends Controller
             'payload' => "email không tồn tại"
         ]);
     }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect(route('login'));
+    }
 }
