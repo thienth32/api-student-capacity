@@ -1,12 +1,16 @@
 <?php
 
-use App\Http\Controllers\CompanyController;
-use App\Http\Controllers\ContestController;
-use App\Http\Controllers\Majorcontroller;
-use App\Http\Controllers\SponsorController;
-use App\Http\Controllers\UserController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\Majorcontroller;
+use App\Http\Controllers\RoundController;
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\ContestController;
+use App\Http\Controllers\SponsorController;
+use App\Http\Controllers\TeamController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -26,6 +30,14 @@ Route::get('majors', [Majorcontroller::class, 'listMajor']); // Chuyên Ngành
 Route::get('users', [UserController::class, 'list']); // danh sách user
 
 Route::get('company', [CompanyController::class, 'listCompany']); // Doanh nghiệp
+
+Route::prefix('round')->group(function () {
+    Route::post('', [RoundController::class, 'addRound'])->name('admin.round.create');
+});
+Route::prefix('teams')->group(function () {
+    Route::put('/{id}', [TeamController::class, 'update'])->name('admin.teams.update');
+});
+
 
 // Route::get('test', function (){
 //     $users = User::with('roles')->whereHas('roles', function($q){

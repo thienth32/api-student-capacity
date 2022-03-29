@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Contest;
 use App\Models\Member;
+use App\Models\Contest;
+use Exception;
 use Illuminate\Http\Request;
 
 class ContestController extends Controller
@@ -18,18 +19,18 @@ class ContestController extends Controller
         $sortBy = $request->has('sortBy') ? $request->sortBy : "desc";
 
         $query = Contest::where('status', config('util.ACTIVE_STATUS'))->where('name', 'like', "%$keyword%");
-        if($major != null){
+        if ($major != null) {
             $query->where('major_id', $major);
         }
 
 
-        if($sortBy == "desc"){
+        if ($sortBy == "desc") {
             $query->orderByDesc($orderBy);
-        }else{
+        } else {
             $query->orderBy($orderBy);
         }
 
-        $offset = ($pageNumber-1)*$pageSize;
+        $offset = ($pageNumber - 1) * $pageSize;
         $dataContent = $query->skip($offset)->take($pageSize)->get();
 
         $dataContent->load('teams');
