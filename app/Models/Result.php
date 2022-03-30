@@ -9,3 +9,4 @@ class Result extends Model
 {
     use HasFactory;
 }
+
