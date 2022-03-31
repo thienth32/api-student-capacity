@@ -89,7 +89,7 @@
                                 </ul>
                             </div>
                         </td>
-                        >
+
                         <td> <a data-url="{{ route('admin.delete.teams', $valueTeam->id) }}" id="{{ $valueTeam->id }}"
                                 class="btn btn-danger deleteTeams"><i class="fas fa-trash-alt"></i></a>
 

@@ -115,9 +115,12 @@
                             </div>
 
                         </div>
-                        @error('*user_id')
-                            <p class="text-danger">{{ $message }}</p>
-                        @enderror
+                        @if (session()->has('error'))
+                            <p class="text-danger">{{ session()->get('error') }}</p>
+                            @php
+                                Session::forget('error');
+                            @endphp
+                        @endif
                     </div>
                     <div class="form-group mb-10 ">
                         <button type="submit" id="addTeam" class="btn btn-success btn-lg btn-block">Lưu </button>
@@ -237,11 +240,17 @@
                     required: true,
                     maxlength: 255
                 },
+                image: {
+                    required: true
+                },
             },
             messages: {
                 name: {
                     required: 'Chưa nhập trường này !',
                     maxlength: 'Tối đa là 255 kí tự !'
+                },
+                image: {
+                    required: 'Chưa nhập trường này !',
                 },
             },
         });

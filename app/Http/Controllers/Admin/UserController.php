@@ -10,7 +10,7 @@ class UserController extends Controller
 {
     public function TeamUserSearch(Request $request)
     {
-        $users = User::search($request->key)->take(4)->get();
+        $users = User::search($request->key ?? null, ['name', 'email'])->take(4)->get();
         return response()->json($users, 200);
     }
 }

@@ -152,8 +152,7 @@ class TeamController extends Controller
     }
     public function store(Request $request)
     {
-
-        // dd($request->all());
+        if (!($request->has('user_id'))) return redirect()->back()->with('error', 'Chưa có thành viên trong đội');
 
         $validator = Validator::make(
             $request->all(),
@@ -161,11 +160,8 @@ class TeamController extends Controller
                 'name' => 'required|max:255',
                 'image' => 'required|max:10000',
                 'contest_id' => 'required|numeric',
-                "*.user_id" => 'required',
             ],
             [
-                "*.user_id" => 'Chưa có thành viên trong đội !',
-
                 'name.required' => 'Chưa nhập trường này !',
                 'name.max' => 'Độ dài kí tự không phù hợp !',
                 'image.required' => 'Chưa nhập trường này !',
@@ -181,12 +177,11 @@ class TeamController extends Controller
         DB::beginTransaction();
         try {
             $team = new Team();
-            // if ($request->has('image')) {
-            //     $fileImage =  $request->file('image');
-            //     $image = $this->uploadFile($fileImage);
-            // $team->image = $image;
-            $team->image = 'dsfidsifsdofisd';
-            // }
+            if ($request->has('image')) {
+                $fileImage =  $request->file('image');
+                $image = $this->uploadFile($fileImage);
+                $team->image = $image;
+            }
             $user_id = $request->user_id;
             $team->name = $request->name;
             $team->contest_id = $request->contest_id;
@@ -194,10 +189,10 @@ class TeamController extends Controller
             $team->members()->sync($user_id);
             Db::commit();
 
-            return redirect()->route('admin.round.list');
+            return redirect()->route('admin.teams');
         } catch (Exception $ex) {
             Db::rollBack();
-            dd($ex);
+            return redirect('error');
         }
     }
 
