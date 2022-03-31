@@ -32,12 +32,7 @@ Route::get('users', [UserController::class, 'list']); // danh sách user
 
 Route::get('company', [CompanyController::class, 'listCompany']); // Doanh nghiệp
 
-Route::prefix('round')->group(function () {
-    Route::post('', [RoundController::class, 'addRound'])->name('admin.round.create');
-});
-Route::prefix('teams')->group(function () {
-    Route::put('/{id}', [TeamController::class, 'update'])->name('admin.teams.update');
-});
+
 
 
 // Route::get('test', function (){

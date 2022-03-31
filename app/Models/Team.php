@@ -15,13 +15,17 @@ class Team extends Model
         'image',
         'contest_id',
     ];
-    public function members()
-    {
-        return $this->hasMany(Member::class, 'team_id');
-    }
+    // public function members()
+    // {
+    //     return $this->hasMany(Member::class, 'team_id');
+    // }
 
     public function contest()
     {
         return $this->belongsTo(Contest::class, 'contest_id');
+    }
+    public function members()
+    {
+        return $this->belongsToMany(User::class, 'members', 'team_id', 'user_id');
     }
 }
