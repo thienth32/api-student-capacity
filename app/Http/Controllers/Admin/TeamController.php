@@ -21,7 +21,7 @@ class TeamController extends Controller
     public function create()
     {
         $contests = Contest::all();
-        return view('page.team.form-add', compact('contests'));
+        return view('pages.team.form-add', compact('contests'));
     }
     public function store(Request $request)
     {
@@ -51,27 +51,27 @@ class TeamController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        // DB::beginTransaction();
-        // try {
-        //     $team = new Team();
-        //     // if ($request->has('image')) {
-        //     //     $fileImage =  $request->file('image');
-        //     //     $image = $this->uploadFile($fileImage);
-        //     // $team->image = $image;
-        //     $team->image = 'dsfidsifsdofisd';
-        //     // }
-        //     $user_id = $request->user_id;
-        //     $team->name = $request->name;
-        //     $team->contest_id = $request->contest_id;
-        //     $team->save();
-        //     $team->members()->sync($user_id);
-        //     Db::commit();
+        DB::beginTransaction();
+        try {
+            $team = new Team();
+            // if ($request->has('image')) {
+            //     $fileImage =  $request->file('image');
+            //     $image = $this->uploadFile($fileImage);
+            // $team->image = $image;
+            $team->image = 'dsfidsifsdofisd';
+            // }
+            $user_id = $request->user_id;
+            $team->name = $request->name;
+            $team->contest_id = $request->contest_id;
+            $team->save();
+            $team->members()->sync($user_id);
+            Db::commit();
 
-        //     return Redirect::back();
-        // } catch (Exception $ex) {
-        //     Db::rollBack();
-        //     dd($ex);
-        // }
+            return redirect()->route('admin.round.list');
+        } catch (Exception $ex) {
+            Db::rollBack();
+            dd($ex);
+        }
     }
 
     public function edit($id)
@@ -90,7 +90,7 @@ class TeamController extends Controller
                 }
             }
         }
-        return view('page.team.form-edit', compact('contests', 'team', 'userArray'));
+        return view('pages.team.form-edit', compact('contests', 'team', 'userArray'));
     }
     public function update(Request $request, $id)
     {

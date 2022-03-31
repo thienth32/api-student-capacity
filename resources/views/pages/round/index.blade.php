@@ -322,7 +322,7 @@
                                     </button>
                                     <ul style="min-width: 3rem !important" class="dropdown-menu w-10px ">
                                         <li>
-                                            <a href="{{ route('web.round.edit', ['id' => $round->id]) }}">
+                                            <a href="{{ route('admin.round.edit', ['id' => $round->id]) }}">
                                                 <span style="padding: 5px" role="button"
                                                     class="svg-icon svg-icon-success svg-icon-2x">
                                                     <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Design/Edit.svg--><svg
@@ -344,7 +344,7 @@
                                         </li>
                                         <li>
                                             @hasrole('super admin')
-                                                <form action="{{ route('web.round.destroy', ['id' => $round->id]) }}"
+                                                <form action="{{ route('admin.round.destroy', ['id' => $round->id]) }}"
                                                     method="post">
                                                     @csrf
                                                     @method('delete')

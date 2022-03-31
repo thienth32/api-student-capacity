@@ -110,9 +110,8 @@
 
                             <label for="" class="form-label">Thuộc cuộc thi</label>
                             <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
-                                data-hide-search="false" data-placeholder="Select an option" tabindex="-1"
-                                aria-hidden="true" name="contest_id" value="{{ old('contest_id') }}">
-                                <option data-select2-id="select2-data-130-vofb"></option>
+                                data-hide-search="false" tabindex="-1" aria-hidden="true" name="contest_id"
+                                value="{{ old('contest_id') }}">
                                 @foreach ($contests as $contest)
                                     <option value="{{ $contest->id }}"> {{ $contest->name }}</option>
                                 @endforeach
@@ -126,9 +125,9 @@
 
                             <label for="" class="form-label">Thể loại cuộc thi</label>
                             <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
-                                data-hide-search="false" data-placeholder="Select an option" tabindex="-1"
-                                aria-hidden="true" name="type_exam_id" value="{{ old('type_exam_id') }}">
-                                <option data-select2-id="select2-data-130-vofb"></option>
+                                data-hide-search="false" tabindex="-1" aria-hidden="true" name="type_exam_id"
+                                value="{{ old('type_exam_id') }}">
+
                                 @foreach ($typeexams as $typeexam)
                                     <option value="{{ $typeexam->id }}"> {{ $typeexam->name }}</option>
                                 @endforeach
@@ -150,7 +149,7 @@
                     {{-- <div class="mb-10">
                         <!--begin::Label-->
                         <label class="form-label">Mô tả cuộc thi</label>
-                      
+
                         <div class="ql-toolbar ql-snow"><span class="ql-formats"><span class="ql-header ql-picker"><span
                                         class="ql-picker-label" tabindex="0" role="button" aria-expanded="false"
                                         aria-controls="ql-picker-options-1"><svg viewBox="0 0 18 18">

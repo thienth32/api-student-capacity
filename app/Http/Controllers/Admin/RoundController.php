@@ -69,7 +69,7 @@ class RoundController extends Controller
         if (!($rounds = $this->getList())) return view('not_found');
 
         $rounds = $this->getList();
-        return view('pages.rounds.index', [
+        return view('pages.round.index', [
             'rounds' => $rounds->paginate(request('limit') ?? 5),
             'contests' => $this->contest::withCount(['teams', 'rounds'])->get(),
             'type_exams' => $this->type_exam::all(),
@@ -101,12 +101,15 @@ class RoundController extends Controller
      */
 
 
+    /**
+     *  Store round
+     */
 
     public function create()
     {
         $contests = Contest::all();
         $typeexams = TypeExam::all();
-        return view('page.round.form-add', compact('contests', 'typeexams'));
+        return view('pages.round.form-add', compact('contests', 'typeexams'));
     }
     public function store(Request $request)
     {
@@ -168,14 +171,16 @@ class RoundController extends Controller
             // return response()->json([
             //     "payload" => $round
             // ], 200);
-            return Redirect::back()->with(['msg' => 'Thêm thành công !']);
+            return Redirect::route('admin.round.list');
         } catch (Exception $ex) {
 
             Db::rollBack();
             return Redirect::back()->with(['err' => 'Thêm mới thất bại !']);
         }
     }
-
+    /**
+     *  End store round
+     */
 
 
 
@@ -186,7 +191,7 @@ class RoundController extends Controller
     public function edit($id)
     {
         try {
-            return view('pages.rounds.edit', [
+            return view('pages.round.edit', [
                 'round' => $this->round::where('id', $id)->get()->map->format()[0],
                 'contests' => $this->contest::all(),
                 'type_exams' => $this->type_exam::all(),
@@ -270,7 +275,7 @@ class RoundController extends Controller
     {
         if ($data = $this->updateRound($id)) {
             if (isset($data['status']) && $data['status'] == false) return redirect()->back()->withErrors($data['errors']);
-            return redirect(route('web.round.list'));
+            return redirect(route('admin.round.list'));
         }
         return redirect('error');
     }

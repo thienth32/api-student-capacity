@@ -11,10 +11,10 @@ Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::prefix('rounds')->group(function () {
     Route::get('form-add', [RoundController::class, 'create'])->name('admin.round.create');
     Route::post('form-add-save', [RoundController::class, 'store'])->name('admin.round.store');
-    Route::get('', [RoundController::class, 'index'])->name('web.round.list');
-    Route::get('{id}/edit', [RoundController::class, 'edit'])->name('web.round.edit');
-    Route::put('{id}', [RoundController::class, 'update'])->name('web.round.update');
-    Route::delete('{id}', [RoundController::class, 'destroy'])->name('web.round.destroy');
+    Route::get('', [RoundController::class, 'index'])->name('admin.round.list');
+    Route::get('{id}/edit', [RoundController::class, 'edit'])->name('admin.round.edit');
+    Route::put('{id}', [RoundController::class, 'update'])->name('admin.round.update');
+    Route::delete('{id}', [RoundController::class, 'destroy'])->name('admin.round.destroy');
 });
 
 Route::prefix('teams')->group(function () {

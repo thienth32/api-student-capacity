@@ -8,8 +8,6 @@ use App\Http\Controllers\Majorcontroller;
 use App\Http\Controllers\RoundController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ContestController;
-use App\Http\Controllers\Majorcontroller;
-use App\Http\Controllers\Admin\RoundController;
 use App\Http\Controllers\SponsorController;
 use App\Http\Controllers\TeamController;
 
