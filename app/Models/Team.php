@@ -8,17 +8,24 @@ use Illuminate\Database\Eloquent\Model;
 class Team extends Model
 {
     use HasFactory;
-    protected $table='teams';
-    protected $fillable=['name','image','contest_id'];
-    public function members(){
-return $this->hasMany(Member::class,'team_id')->with('user');
-        // return $this->belongsToMany(Member::class,'members','team_id','user_id');
-    }
+    protected $table = 'teams';
+    protected $primaryKey = "id";
+    public $fillable = [
+        'name',
+        'image',
+        'contest_id',
+    ];
+    // public function members()
+    // {
+    //     return $this->hasMany(Member::class, 'team_id');
+    // }
 
     public function contest()
     {
         return $this->belongsTo(Contest::class, 'contest_id');
     }
-
-
+    public function members()
+    {
+        return $this->belongsToMany(User::class, 'members', 'team_id', 'user_id');
+    }
 }

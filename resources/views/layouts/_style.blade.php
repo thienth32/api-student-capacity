@@ -10,3 +10,12 @@
 <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
 <link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
 <!-- CSS only -->
+<!--end::Global Stylesheets Bundle-->
+<link rel="stylesheet" href="assets/plugins/toastr/toastr.min.css">
+<link href="assets/css/toastr.css" rel="stylesheet" type="text/css" />
+<style>
+    label.error {
+        color: red;
+    }
+
+</style>

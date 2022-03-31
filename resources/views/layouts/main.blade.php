@@ -21,8 +21,6 @@
     <meta name="csrf_token" content="{{ csrf_token() }}" />
     <link rel="canonical" href="https://preview.keenthemes.com/metronic8" />
     <link rel="shortcut icon" href="assets/media/logos/favicon.ico" />
-
-
     @include('layouts._style')
 </head>
 <!--end::Head-->

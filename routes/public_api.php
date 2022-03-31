@@ -1,14 +1,19 @@
 <?php
 
-use App\Http\Controllers\CompanyController;
-use App\Http\Controllers\ContestController;
-use App\Http\Controllers\Majorcontroller;
-use App\Http\Controllers\SponsorController;
-use App\Http\Controllers\TeamController;
-use App\Http\Controllers\UserController;
-use App\Models\Team;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\Majorcontroller;
+use App\Http\Controllers\RoundController;
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\ContestController;
+use App\Http\Controllers\SponsorController;
+use App\Http\Controllers\TeamController;
+
+use App\Models\Team;
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -34,8 +39,14 @@ Route::get('company', [CompanyController::class, 'listCompany']); // Doanh nghi�
 
 
 Route::prefix('teams')->group(function () {
-    Route::get('api', [TeamController::class, 'Api_ListTeam']); // Api list Danh sách teams theo cuộc thi. phía client
-    Route::get('', [TeamController::class, 'ListTeam']); // Api list Danh sách teams theo cuộc thi. phía view
-    Route::delete('{id}', [TeamController::class, 'deleteTeam']); // Api xóa teams phía view
     Route::post('api-add-team', [TeamController::class, 'Api_addTeam']);
 });
+
+
+
+// Route::get('test', function (){
+//     $users = User::with('roles')->whereHas('roles', function($q){
+//         $q->where('id', 1);
+//     })->get();
+//     return response()->json($users);
+// });
