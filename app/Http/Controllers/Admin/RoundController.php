@@ -34,7 +34,7 @@ class RoundController extends Controller
         try {
             $data = $this->round::search(request('q') ?? null, ['name', 'description'])
                 ->sort((request('sort') == 'desc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'rounds')
-                ->hasDateTime(request('start_time') ?? null, request('end_time') ?? '')
+                ->hasDateTimeBetween('start_time', request('start_time') ?? null, request('end_time') ?? null)
                 ->hasSubTime(
                     ((request('day') ? 'day' : '') ??
                         (request('month') ? 'month' : '') ??

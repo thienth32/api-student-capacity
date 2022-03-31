@@ -8,15 +8,17 @@ use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 class Builder extends  EloquentBuilder
 {
     /**
-     *  Has date times
+     *  Has date time between
      */
-    public function hasDateTime($start_time = null, $end_time = null)
+    public function hasDateTimeBetween($column = null, $start_time = null, $end_time = null)
     {
-        if ($start_time) return $this->whereDate('start_time', '>', Carbon::parse($start_time)->toDateTimeString());
-        if ($end_time) return  $this->whereDate('end_time', '<', Carbon::parse($end_time)->toDateTimeString());
+        if ($column && $start_time && $end_time) return $this->whereBetween($column, [$start_time, $end_time]);
         return $this;
     }
 
+    /**
+     *  Has sub time
+     */
     public function hasSubTime($key = null, $data = null, $column)
     {
         if (!$key) return $this;
