@@ -2,8 +2,6 @@
 @section('title', 'Danh sách đội thi')
 @section('content')
     <div class="content">
-
-
         <h2 style="font-size: 30px;margin-bottom:70px" class="text-center "> Danh sách Đội thi</h2>
         <div class="row">
             <div class="col-md-4">
@@ -70,7 +68,9 @@
                     <tr>
                         <th scope="row">{{ $index += 1 }}</th>
                         <td>{{ $valueTeam->name }}</td>
-                        <td><img style="width:200px;height:200px" src="{{ $valueTeam->image }}" alt=""></td>
+                        <td><img style="width:200px;height:200px"
+                                src="{{ Storage::disk('google')->has($valueTeam->image)? Storage::disk('google')->url($valueTeam->image): 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
+                                alt=""></td>
                         <td>{{ $valueTeam->contest->name }}</td>
                         <td>{{ date('d-m-Y', strtotime($valueTeam->created_at)) }}</td>
                         <td>
@@ -80,14 +80,11 @@
                                     Xem Thêm...
                                 </button>
                                 <ul class="dropdown-menu">
-                                    {{-- <li><a class="dropdown-item" href="#"></a></li> --}}
-                                    {{-- <li><a class="dropdown-item" href="#"></a></li> --}}
+
                                     @foreach ($valueTeam->members as $member)
-                                        @foreach ($member->user as $user)
-                                            <li><a class="dropdown-item" href="javascript:void()"> Thành Viên
-                                                    :{{ $user->name }}</a>
-                                            </li>
-                                        @endforeach
+                                        <li><a class="dropdown-item" href="javascript:void()"> Thành Viên
+                                                : {{ $member->name }}</a>
+                                        </li>
                                     @endforeach
                                 </ul>
                             </div>
@@ -96,7 +93,8 @@
                         <td> <a data-url="{{ route('admin.delete.teams', $valueTeam->id) }}" id="{{ $valueTeam->id }}"
                                 class="btn btn-danger deleteTeams"><i class="fas fa-trash-alt"></i></a>
 
-                            <a class="btn  btn-success "><i class="fas fa-edit"></i></a>
+                            <a href="{{ route('admin.teams.edit', $valueTeam->id) }}" class="btn  btn-success "><i
+                                    class="fas fa-edit"></i></a>
                         </td>
                     </tr>
                 @endforeach
@@ -131,55 +129,19 @@
                         contest: idContest,
                     },
                     success: function(response) {
-                        // console.log(response.dataTeam.data);
-                        index = 1;
-                        list = ``;
-                        userName = ``;
-                        if (response.dataTeam.data.length > 0) {
 
-                            for (const valueTeam of response.dataTeam.data) {
-                                for (const member of valueTeam.members) {
-                                    for (const user of member.user) {
-                                        userName += `      <li><a class="dropdown-item" href="javascript:void()"> Thành Viên
-                                                    : ${user.name} </a>
-                                            </li>`
-
-
-                                    }
-
-                                }
-                                list += `   <tr>
-                        <th scope="row">${index++}</th>
-                        <td>${valueTeam.name}</td>
-                        <td><img style="width:200px;height:200px" src="${valueTeam.image}" alt=""></td>
-                        <td>${valueTeam.contest.name}</td>
-                        <td>${valueTeam.created_at}</td>
-
-                        <td>
-                            <div class="btn-group dropup">
-                                <button type="button" class="btn btn-secondary btn-sm dropdown-toggle"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    Xem Thêm..
-                                </button>
-                                <ul class="dropdown-menu">
-                                    ${userName}
-                                </ul>
-                            </div>
-                           </td>
-                        <td><a onclick="removeTeam(${valueTeam.id})" class="btn btn-danger deleteTeams" ><i class="fas fa-trash-alt"></i></a>
-                    <a class="btn  btn-success "><i class="fas fa-edit"></i></a></td>   </tr>
-                    </tr>`
-                            }
-                            $('#dataTeams').html(list)
-                        } else
-
+                        if (response == '') {
                             Swal.fire({
                                 icon: 'error',
                                 title: 'SOS',
-                                text: 'Không có Teams nào trong cuộc thi',
+                                text: 'Không Có đội thi nào',
                                 footer: '<a href="">Why do I have this issue?</a>'
                             })
 
+                        } else {
+                            $('#dataTeams').empty();
+                            $('#dataTeams').html(response)
+                        }
                     }
                 });
             });
@@ -196,51 +158,21 @@
                         sortBy: 'desc'
                     },
                     success: function(response) {
-                        // console.log(response.dataTeam.data);
-                        index = 1;
-                        list = ``;
-                        userName = ``;
-                        if (response.dataTeam.data.length > 0) {
-                            for (const valueTeam of response.dataTeam.data) {
-                                for (const member of valueTeam.members) {
-                                    for (const user of member.user) {
-                                        userName += `      <li><a class="dropdown-item" href="javascript:void()"> Thành Viên
-                                                    : ${user.name} </a>
-                                            </li>`
-
-
-                                    }
-
-                                }
-                                list += `   <tr>
-                        <th scope="row">${index++}</th>
-                        <td>${valueTeam.name}</td>
-                        <td><img style="width:200px;height:200px" src="${valueTeam.image}" alt=""></td>
-                        <td>${valueTeam.contest.name}</td>
-                        <td>${valueTeam.created_at}</td>
-
-                        <td>     <div class="btn-group dropup">
-                                <button type="button" class="btn btn-secondary btn-sm dropdown-toggle"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    Xem Thêm..
-                                </button>
-                                <ul class="dropdown-menu">
-                                    ${userName}
-                                </ul>
-                            </div></td>
-                        <td><a onclick="removeTeam(${valueTeam.id})"  id="${valueTeam.id}" class="btn btn-danger deleteTeams" ><i class="fas fa-trash-alt"></i></a></a>
-                    <a class="btn  btn-success "><i class="fas fa-edit"></i></a></td>   </tr>
-                    </tr>`
-                            }
-                            $('#dataTeams').html(list)
-                        } else
-
+                        if (response == null) {
                             Swal.fire({
                                 icon: 'error',
                                 title: 'SOS',
-                                text: '....',
+                                text: 'Không Có đội thi nào',
                                 footer: '<a href="">Why do I have this issue?</a>'
                             })
+
+                        } else {
+                            $('#dataTeams').empty();
+
+                            $('#dataTeams').html(response)
+                        }
+
+
 
                     }
                 })
@@ -256,44 +188,9 @@
                         keyword: keySearch,
                     },
                     success: function(response) {
-                        // console.log(response.dataTeam.data);
-                        index = 1;
-                        list = ``;
-                        userName = ``;
-                        if (response.dataTeam.data.length > 0) {
-                            for (const valueTeam of response.dataTeam.data) {
-                                for (const member of valueTeam.members) {
-                                    for (const user of member.user) {
-                                        userName += `      <li><a class="dropdown-item" href="javascript:void()"> Thành Viên
-                                                    : ${user.name} </a>
-                                            </li>`
 
-
-                                    }
-
-                                }
-                                list += `   <tr>
-                        <th scope="row">${index++}</th>
-                        <td>${valueTeam.name}</td>
-                        <td><img style="width:200px;height:200px" src="${valueTeam.image}" alt=""></td>
-                        <td>${valueTeam.contest.name}</td>
-                        <td>${valueTeam.created_at}</td>
-
-                        <td>  <div class="btn-group dropup">
-                                <button type="button" class="btn btn-secondary btn-sm dropdown-toggle"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    Xem Thêm..
-                                </button>
-                                <ul class="dropdown-menu">
-                                    ${userName}
-                                </ul>
-                            </div></td>
-                        <td><a  onclick="removeTeam(${valueTeam.id})"  id="${valueTeam.id}" class="btn btn-danger deleteTeams" ><i class="fas fa-trash-alt"></i></a>
-                    <a class="btn  btn-success "><i class="fas fa-edit"></i></a></td>   </tr>
-                    </tr>`
-                            }
-                            $('#dataTeams').html(list)
-                        }
+                        $('#dataTeams').empty();
+                        $('#dataTeams').html(response)
                     }
                 });
 
@@ -304,7 +201,7 @@
 
             $('.deleteTeams').click(function() {
                 var urlTeam = $(this).attr('data-url');
-                alert(urlTeam)
+
                 Swal.fire({
                     title: 'Bạn có muốn xóa không?',
                     text: "Sẽ không thể phục hồi",
@@ -324,7 +221,6 @@
 
                             },
                             success: function(response) {
-                                if (response.status == true) {
                                     Swal.fire({
                                         position: 'center',
                                         icon: 'success',
@@ -332,19 +228,8 @@
                                         showConfirmButton: false,
                                         timer: 1500
                                     })
-                                    setTimeout(() => {
-                                        location.reload();
-                                    }, 1000);
-                                } else {
-                                    Swal.fire({
-                                        position: 'center',
-                                        icon: 'success',
-                                        title: 'Xóa thất bại',
-                                        showConfirmButton: false,
-                                        timer: 1500
-                                    })
-                                }
-
+                                    $('#dataTeams').empty();
+                                    $('#dataTeams').html(response)
                             }
                         })
 
@@ -375,7 +260,7 @@
 
                         },
                         success: function(response) {
-                            if (response.status == true) {
+
                                 Swal.fire({
                                     position: 'center',
                                     icon: 'success',
@@ -383,18 +268,17 @@
                                     showConfirmButton: false,
                                     timer: 1500
                                 })
-                                setTimeout(() => {
-                                    location.reload();
-                                }, 1000);
-                            } else {
-                                Swal.fire({
-                                    position: 'center',
-                                    icon: 'success',
-                                    title: 'Xóa thất bại',
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                })
-                            }
+                                $('#dataTeams').empty();
+                                $('#dataTeams').html(response)
+                            // } else {
+                            //     Swal.fire({
+                            //         position: 'center',
+                            //         icon: 'success',
+                            //         title: 'Xóa thất bại',
+                            //         showConfirmButton: false,
+                            //         timer: 1500
+                            //     })
+                            // }
 
                         }
                     })
