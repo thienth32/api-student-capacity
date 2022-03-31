@@ -49,4 +49,11 @@ class User extends Authenticatable
     {
         return new Builder($query);
     }
+
+    // public function scopeSearch($query, $key)
+    // {
+    //     return $query
+    //         ->where('email', 'like', "%" . $key . "%")
+    //         ->orWhere('name', 'like', "%" . $key . "%");
+    // }
 }

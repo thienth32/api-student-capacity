@@ -10,8 +10,17 @@ use Illuminate\Support\Facades\Storage;
 class Round extends Model
 {
     use HasFactory;
-
-    protected $guarded = [];
+    protected $table = "rounds";
+    protected $primaryKey = "id";
+    public $fillable = [
+        'name',
+        'image',
+        'start_time',
+        'end_time',
+        'description',
+        'contest_id',
+        'type_exam_id',
+    ];
 
     // public static function boot(){
     //     parent::boot();

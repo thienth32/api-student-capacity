@@ -2,53 +2,37 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Contest;
 use App\Models\Member;
+use App\Models\Contest;
+use Exception;
 use Illuminate\Http\Request;
 
 class ContestController extends Controller
 {
-    private $contest;
-
-    public function __construct(Contest $contest)
+    public function listContest(Request $request)
     {
-        $this->contest = $contest;
-    }
+        $keyword = $request->has('keyword') ? $request->keyword : "";
+        $pageNumber = $request->has('page') ? $request->page : 1;
+        $pageSize = $request->has('pageSize') ? $request->pageSize : config('util.HOMEPAGE_ITEM_AMOUNT');
+        $major = $request->has('major') ? $request->major : null;
+        $orderBy = $request->has('orderBy') ? $request->orderBy : 'date_start';
+        $sortBy = $request->has('sortBy') ? $request->sortBy : "desc";
 
-    /**
-     *  Get list contest
-     */
-    private function getList()
-    {
-        try {
-            $data = $this->contest::search(request('q') ?? null, ['name', 'description'])
-                ->status(request('status'))
-                ->sort((request('sort') == 'desc' ? 'desc' : 'asc'), request('sort_by') ?? null, 'contests')
-                ->hasReuqest(['major_id' => request('major_id') ?? null])
-                ->with([
-                    'major',
-                    'teams',
-                ])
-                ->withCount('teams')
-                ->paginate(request('limit') ?? 10);
-            // if(request()->ajax()){}
-            return $data;
-        } catch (\Throwable $th) {
-            return false;
+        $query = Contest::where('status', config('util.ACTIVE_STATUS'))->where('name', 'like', "%$keyword%");
+        if ($major != null) {
+            $query->where('major_id', $major);
         }
-    }
 
-    //  View contest
-    public function index()
-    {
-        if (!($data = $this->getList())) return view('not_found');
-        $data = $this->getList();
-        return view('', ['contests' => $data]);
-    }
 
-    //  Response contest
-    public function apiIndex()
-    {
+
+        if ($sortBy == "desc") {
+            $query->orderByDesc($orderBy);
+        } else {
+            $query->orderBy($orderBy);
+        }
+
+        $offset = ($pageNumber - 1) * $pageSize;
+        $dataContent = $query->skip($offset)->take($pageSize)->get();
 
         if (!($data = $this->getList())) return response()->json([
             "status" => false,
@@ -59,7 +43,4 @@ class ContestController extends Controller
             "payload" => $data,
         ], 200);
     }
-    /**
-     *  End contest
-     */
 }

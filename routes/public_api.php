@@ -1,13 +1,18 @@
 <?php
 
+use App\Models\User;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\Majorcontroller;
+use App\Http\Controllers\RoundController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ContestController;
 use App\Http\Controllers\Majorcontroller;
 use App\Http\Controllers\Admin\RoundController;
 use App\Http\Controllers\SponsorController;
-use App\Http\Controllers\UserController;
-use App\Models\User;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TeamController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -30,8 +35,8 @@ Route::get('users', [UserController::class, 'index']); // danh sách user
 Route::get('company', [CompanyController::class, 'listCompany']); // Doanh nghiệp
 
 
-Route::prefix('rounds')->group(function () {
-    Route::get('', [RoundController::class, 'apiIndex'])->name('round.admin.index');
-    Route::put('{id}', [RoundController::class, 'update'])->name('round.update');
-    Route::delete('{id}', [RoundController::class, 'destroy'])->name('round.delete');
-});
+// Route::prefix('rounds')->group(function () {
+//     Route::get('', [RoundController::class, 'apiIndex'])->name('round.admin.index');
+//     Route::put('{id}', [RoundController::class, 'update'])->name('round.update');
+//     Route::delete('{id}', [RoundController::class, 'destroy'])->name('round.delete');
+// });

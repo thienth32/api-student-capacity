@@ -178,6 +178,11 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\GoogleServiceProvider::class,
 
+
+
+        App\Providers\GoogleServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class
+
     ],
 
     /*
@@ -193,6 +198,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // ...
+        'Image' => Intervention\Image\Facades\Image::class,
     ])->toArray(),
 
 ];
