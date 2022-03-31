@@ -11,6 +11,9 @@ use App\Http\Controllers\ContestController;
 use App\Http\Controllers\SponsorController;
 use App\Http\Controllers\TeamController;
 
+use App\Models\Team;
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -32,6 +35,12 @@ Route::get('users', [UserController::class, 'index']); // danh sách user
 
 Route::get('company', [CompanyController::class, 'listCompany']); // Doanh nghiệp
 
+// TEAMS
+
+
+Route::prefix('teams')->group(function () {
+    Route::post('api-add-team', [TeamController::class, 'Api_addTeam']);
+});
 
 // Route::prefix('rounds')->group(function () {
 //     Route::get('', [RoundController::class, 'apiIndex'])->name('round.admin.index');

@@ -32,7 +32,7 @@ class AuthController extends Controller
 
         return redirect(route('login'))->with('msg', "Tài khoản của bạn không có quyền truy cập!");
 
-        
+
     }
     public function postLoginToken(Request $request)
     {

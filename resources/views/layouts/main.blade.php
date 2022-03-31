@@ -18,7 +18,7 @@
         content="Metronic - Bootstrap 5 HTML, VueJS, React, Angular &amp; Laravel Admin Dashboard Theme" />
     <meta property="og:url" content="https://keenthemes.com/metronic" />
     <meta property="og:site_name" content="Keenthemes | Metronic" />
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf_token" content="{{ csrf_token() }}" />
     <link rel="canonical" href="https://preview.keenthemes.com/metronic8" />
     <link rel="shortcut icon" href="assets/media/logos/favicon.ico" />
     @include('layouts._style')
