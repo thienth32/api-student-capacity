@@ -21,6 +21,11 @@ class Contest extends Model
         return $this->belongsTo(Major::class, 'major_id');
     }
 
+    public function rounds()
+    {
+        return $this->hasMany(Round::class, 'contest_id');
+    }
+
     public function newEloquentBuilder($query)
     {
         return new Builder($query);

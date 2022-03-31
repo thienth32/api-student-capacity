@@ -1,21 +1,29 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Round;
 use App\Services\Traits\TResponse;
 use App\Services\Traits\TUploadImage;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Controller;
+use App\Models\Contest;
+use App\Models\TypeExam;
+use Illuminate\Support\Facades\DB;
 
 class RoundController extends Controller
 {
     use TResponse, TUploadImage;
     private $round;
+    private $contest;
+    private $type_exam;
 
-    public function __construct(Round $round)
+    public function __construct(Round $round, Contest $contest, TypeExam $type_exam)
     {
         $this->round = $round;
+        $this->contest = $contest;
+        $this->type_exam = $type_exam;
     }
 
     /**
@@ -25,7 +33,17 @@ class RoundController extends Controller
     {
         try {
             $data = $this->round::search(request('q') ?? null, ['name', 'description'])
-                ->sort((request('sort') == 'desc' ? 'desc' : 'asc'), request('sort_by') ?? null, 'rounds')
+                ->sort((request('sort') == 'desc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'rounds')
+                ->hasDateTime(request('start_time') ?? null, request('end_time') ?? '')
+                ->hasSubTime(
+                    ((request('day') ? 'day' : '') ??
+                        (request('month') ? 'month' : '') ??
+                        (request('year') ? 'year' : '')) ?? null,
+                    (request('day') ??
+                        request('month') ??
+                        request('year')) ?? null,
+                    'start_time'
+                )
                 ->hasReuqest([
                     'contest_id' => request('contest_id') ?? null,
                     'type_exam_id' => request('type_exam_id') ?? null,
@@ -33,8 +51,7 @@ class RoundController extends Controller
                 ->with([
                     'contest',
                     'type_exam',
-                ])
-                ->paginate(request('limit') ?? 10);
+                ]);
 
             return $data;
         } catch (\Throwable $th) {
@@ -45,9 +62,14 @@ class RoundController extends Controller
     //  View round
     public function index()
     {
-        if (!($data = $this->getList())) return view('not_found');
-        $data = $this->getList();
-        return view('', ['rounds' => $data]);
+        if (!($rounds = $this->getList())) return view('not_found');
+
+        $rounds = $this->getList();
+        return view('pages.rounds.index', [
+            'rounds' => $rounds->paginate(request('limit') ?? 5),
+            'contests' => $this->contest::withCount(['teams', 'rounds'])->get(),
+            'type_exams' => $this->type_exam::all(),
+        ]);
     }
 
     //  Response round
@@ -65,12 +87,34 @@ class RoundController extends Controller
         return $this->responseApi(
             [
                 "status" => true,
-                "payload" => $data,
+                "payload" => $data->get(),
             ]
         );
     }
+
     /**
      *  End list round
+     */
+
+    /**
+     *  Edit
+     */
+
+    public function edit($id)
+    {
+        try {
+            return view('pages.rounds.edit', [
+                'round' => $this->round::where('id', $id)->get()->map->format()[0],
+                'contests' => $this->contest::all(),
+                'type_exams' => $this->type_exam::all(),
+            ]);
+        } catch (\Throwable $th) {
+            return view('error');
+        }
+    }
+
+    /**
+     *  End edit round
      */
 
     /**
@@ -85,8 +129,8 @@ class RoundController extends Controller
                 request()->all(),
                 [
                     'name' => "required",
-                    'start_time' => "required|date_format:Y-m-d H:i:s|",
-                    'end_time' => "required|date_format:Y-m-d H:i:s|after:start_time",
+                    'start_time' => "required",
+                    'end_time' => "required|after:start_time",
                     'description' => "required",
                     'contest_id' => "required",
                     'type_exam_id' => "required",
@@ -94,9 +138,7 @@ class RoundController extends Controller
                 [
                     "name.required" => "Tường name không bỏ trống !",
                     "start_time.required" => "Tường thời gian bắt đầu  không bỏ trống !",
-                    "start_time.date_format" => "Tường thời gian  bắt đầu không khớp !",
                     "end_time.required" => "Tường thời gian kết thúc không bỏ trống !",
-                    "end_time.date_format" => "Tường thời gian kết thúc không khớp !",
                     "end_time.after" => "Tường thời gian kết thúc không nhỏ hơn trường bắt đầu  !",
                     "description.required" => "Tường mô tả không bỏ trống !",
                     "contest_id.required" => "Tường cuộc thi tồn tại !",
@@ -145,7 +187,7 @@ class RoundController extends Controller
     {
         if ($data = $this->updateRound($id)) {
             if (isset($data['status']) && $data['status'] == false) return redirect()->back()->withErrors($data['errors']);
-            return redirect('');
+            return redirect(route('web.round.list'));
         }
         return redirect('error');
     }
@@ -179,9 +221,12 @@ class RoundController extends Controller
     private function destroyRound($id)
     {
         try {
-            if (!($data = $this->round::find($id))) return false;
-            if (Storage::disk('google')->has($data->image)) Storage::disk('google')->delete($data->image);
-            $data->delete();
+            DB::transaction(function () use ($id) {
+                if (!($data = $this->round::find($id))) return false;
+                if (Storage::disk('google')->has($data->image)) Storage::disk('google')->delete($data->image);
+                $data->results()->delete();
+                $data->delete();
+            });
             return true;
         } catch (\Throwable $th) {
             return false;
@@ -191,7 +236,7 @@ class RoundController extends Controller
     // View round
     public function destroy($id)
     {
-        if ($this->destroyRound($id)) return redirect('');
+        if ($this->destroyRound($id)) return redirect()->back();
         return redirect('error');
     }
 

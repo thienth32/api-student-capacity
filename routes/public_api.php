@@ -3,7 +3,7 @@
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ContestController;
 use App\Http\Controllers\Majorcontroller;
-use App\Http\Controllers\RoundController;
+use App\Http\Controllers\Admin\RoundController;
 use App\Http\Controllers\SponsorController;
 use App\Http\Controllers\UserController;
 use App\Models\User;
@@ -33,5 +33,5 @@ Route::get('company', [CompanyController::class, 'listCompany']); // Doanh nghiá
 Route::prefix('rounds')->group(function () {
     Route::get('', [RoundController::class, 'apiIndex'])->name('round.admin.index');
     Route::put('{id}', [RoundController::class, 'update'])->name('round.update');
+    Route::delete('{id}', [RoundController::class, 'destroy'])->name('round.delete');
 });
-Route::delete('rounds/{id}', [RoundController::class, 'destroy'])->name('round.delete');

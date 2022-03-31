@@ -2,10 +2,40 @@
 
 namespace App\Services\Builder;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 
 class Builder extends  EloquentBuilder
 {
+    /**
+     *  Has date times
+     */
+    public function hasDateTime($start_time = null, $end_time = null)
+    {
+        if ($start_time) return $this->whereDate('start_time', '>', Carbon::parse($start_time)->toDateTimeString());
+        if ($end_time) return  $this->whereDate('end_time', '<', Carbon::parse($end_time)->toDateTimeString());
+        return $this;
+    }
+
+    public function hasSubTime($key = null, $data = null, $column)
+    {
+        if (!$key) return $this;
+        $now = Carbon::now('Asia/Ho_Chi_Minh');
+        switch ($key) {
+            case 'day':
+                return $this->whereDay($column, '>', $now->subDays($data));
+                break;
+            case 'month':
+                return $this->whereMonth($column, '>', $now->subMonths($data));
+                break;
+            case 'year':
+                return $this->whereMonth($column, '>', $now->subYears($data));
+                break;
+            default:
+                return $this;
+                break;
+        }
+    }
 
     /**
      * Sort
