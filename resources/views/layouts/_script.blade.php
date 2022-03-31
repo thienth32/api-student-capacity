@@ -6,3 +6,4 @@
 <!--end::Global Javascript Bundle-->
 <!--begin::Page Vendors Javascript(used by this page)-->
 {{-- <script src="assets/plugins/custom/datatables/datatables.bundle.js"></script> --}}
+<!-- JavaScript Bundle with Popper -->

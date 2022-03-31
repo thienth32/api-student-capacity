@@ -9,5 +9,8 @@ class Member extends Model
 {
     protected $table='members';
     protected $fillable=['user_id','team_id'];
+    public function user(){
+        return $this->hasMany(User::class,'id');
+    }
     use HasFactory;
 }

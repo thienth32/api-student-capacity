@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Contest;
 use App\Models\Member;
 use App\Models\Result;
 use App\Models\Team;
@@ -10,16 +11,23 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Contracts\Service\Attribute\Required;
 use Illuminate\Support\Facades\DB;
+use SebastianBergmann\Environment\Console;
+use Spatie\LaravelIgnition\Recorders\DumpRecorder\Dump;
 
 class TeamController extends Controller
 {
+
     private function getList(Request $request)
     {
         $keyword = $request->has('keyword') ? $request->keyword : "";
         $contest = $request->has('contest') ? $request->contest : null;
         $orderBy = $request->has('orderBy') ? $request->orderBy : 'id';
+
         $sortBy = $request->has('sortBy') ? $request->sortBy : "desc";
-        $query = Team::where('contest_id', $contest)->where('name', 'like', "%$keyword%");
+        $query = Team::where('name', 'like', "%$keyword%");
+        if ($contest != null) {
+            $query->where('contest_id', $contest);
+        }
         if ($sortBy == "desc") {
             $query->orderByDesc($orderBy);
         } else {
@@ -32,7 +40,7 @@ class TeamController extends Controller
     public function Api_ListTeam(Request $request)
     {
         $pageNumber = $request->has('page') ? $request->page : 1;
-        $pageSize = $request->has('pageSize') ? $request->pageSize : config('util.HOMEPAGE_ITEM_AMOUNT');
+        $pageSize = $request->has('pageSize') ? $request->pageSize : config('util.HOMEPAGE_ITEM_TEAM');
         $offset = ($pageNumber - 1) * $pageSize;
         $dataTeam = $this->getList($request)->skip($offset)->take($pageSize)->get();
         $dataTeam->load('members');
@@ -41,14 +49,39 @@ class TeamController extends Controller
             'payload' => $dataTeam->toArray()
         ]);
     }
-
-    // Danh sách teams phía view
-    public function ListTeam(Request $request)
+    //Api sách team
+    public function ApiContestteams(Request $request)
     {
 
         $dataTeam = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
         $dataTeam->load('members');
-        return view('', ['payload' => $dataTeam]);
+        $dataTeam->load('contest');
+
+        return response()->json([
+            'status' => true,
+            'dataTeam' => $dataTeam->toArray()
+        ]);
+    }
+    // Danh sách teams phía view1
+    public function ListTeam(Request $request)
+    {
+
+        $Contest = Contest::orderBy('id', 'DESC')->get();
+        $dataTeam = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
+        $dataTeam->load('members');
+
+//        foreach($dataTeam as $team){
+//             foreach($team->members as $member){
+// foreach( $member->user as $user){
+// var_dump($user->name);
+// }
+//             }
+//        }
+//        die;
+        return view('teams.listTeam', [
+            'dataTeam' => $dataTeam,
+            'Contest' => $Contest
+        ]);
     }
 
 
@@ -62,9 +95,15 @@ class TeamController extends Controller
             Result::destroy($valueResult->id);
         }
         if (Team::destroy($id)) {
-            return view('', ['status' => true]);
+            return response()->json([
+                'status' => true,
+
+            ]);
         } else {
-            return view('', ['status' => false]);
+            return response()->json([
+                'status' => false,
+
+            ]);
         }
     }
     // Add team phía client
@@ -108,7 +147,6 @@ class TeamController extends Controller
                         'user_id' => $user->id,
                         'team_id' => $team->id
                     ]);
-
                 }
                 DB::commit();
 

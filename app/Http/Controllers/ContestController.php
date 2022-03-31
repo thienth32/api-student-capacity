@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 class ContestController extends Controller
 {
+
     public function listContest(Request $request)
     {
         $keyword = $request->has('keyword') ? $request->keyword : "";
