@@ -83,11 +83,12 @@
                                     {{-- <li><a class="dropdown-item" href="#"></a></li> --}}
                                     {{-- <li><a class="dropdown-item" href="#"></a></li> --}}
                                     @foreach ($valueTeam->members as $member)
-                                        @foreach ($member->user as $user)
-                                            <li><a class="dropdown-item" href="javascript:void()"> Thành Viên
-                                                    :{{ $user->name }}</a>
-                                            </li>
-                                        @endforeach
+                                        {{-- {{ dd($member) }} --}}
+                                        {{-- @foreach ($member->user as $user) --}}
+                                        <li><a class="dropdown-item" href="javascript:void()"> Thành Viên
+                                                :{{ $member->name }}</a>
+                                        </li>
+                                        {{-- @endforeach --}}
                                     @endforeach
                                 </ul>
                             </div>
