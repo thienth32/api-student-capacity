@@ -1,6 +1,53 @@
 @extends('layouts.main')
 @section('title', 'Danh sách đội thi')
 @section('content')
+    <style>
+
+        #loading {
+          position: fixed;
+          z-index: 100;
+            top: 40%;
+            left: 55%;
+            display: none;
+            width: 3.5em;
+            height: 3.5em;
+            border: 3px solid transparent;
+            border-top-color: #3cefff;
+            border-bottom-color: #3cefff;
+            border-radius: 50%;
+            animation: spin 1.5s linear infinite;
+        }
+
+        #loading:before {
+            content: '';
+            display: block;
+            margin: auto;
+            width: 0.75em;
+            height: 0.75em;
+            border: 3px solid #3cefff;
+            border-radius: 50%;
+            animation: pulse 1s alternate ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes pulse {
+            from {
+                transform: scale(0.5);
+            }
+
+            to {
+                transform: scale(1);
+            }
+        }
+
+    </style>
+
+    <div id="loading"></div>
     <div class="content">
         <h2 style="font-size: 30px;margin-bottom:70px" class="text-center "> Danh sách Đội thi</h2>
         <div class="row">
@@ -120,25 +167,31 @@
 @section('js_admin')
     <script>
         $(document).ready(function() {
-
+            $('.pagination a').unbind('click').on('click', function(
+                e) {
+                e.preventDefault();
+                var page = $(this).attr('href').split('page=')[1];
+                getPosts(page, key = '', value = '');
+            });
 
             function getPosts(page, key, value) {
+                $('#loading').css('display', 'flex');
                 $.ajax({
 
                     url: "{{ url('admin/teams/api-teams') }}?" + key + "=" + value + "&page=" + page,
-                    type: 'POST',
+                    type: 'get',
                     data: {
                         _token: "{{ csrf_token() }}",
                     },
                     success: function(data) {
+                        $('#loading').css('display', 'none');
                         $('#listTeams').empty();
-
                         $('#listTeams').html(data)
                         $('.paginate .pagination a').unbind('click').on('click', function(
                             e) {
                             e.preventDefault();
                             var page = $(this).attr('href').split('page=')[1];
-                            getPosts(page, key = 'orderBy', value);
+                            getPosts(page, key = '', value);
                         });
                     }
                 })
@@ -149,10 +202,10 @@
             $(document).on('change', '#selectContest', function(e) {
                 e.preventDefault();
                 let idContest = $(this).val();
-
+                $('#loading').css('display', 'flex');
                 $.ajax({
                     url: "{{ route('admin.contest.team') }}",
-                    type: 'POST',
+                    type: 'get',
                     data: {
                         _token: "{{ csrf_token() }}",
                         contest: idContest,
@@ -168,8 +221,8 @@
                             })
 
                         } else {
+                            $('#loading').css('display', 'none');
                             $('#listTeams').empty();
-
                             $('#listTeams').html(response)
                             $('.paginate .pagination a').unbind('click').on('click', function(
                                 e) {
@@ -182,12 +235,14 @@
                 });
             });
             $('#selectOderByTeam').change(function(e) {
+
                 e.preventDefault();
                 let orderBy = $(this).val();
+                $('#loading').css('display', 'flex');
                 // alert(orderBy)
                 $.ajax({
                     url: "{{ route('admin.contest.team') }}",
-                    type: 'POST',
+                    type: 'get',
                     data: {
                         _token: "{{ csrf_token() }}",
                         orderBy: orderBy,
@@ -203,6 +258,7 @@
                             })
 
                         } else {
+                            $('#loading').css('display', 'none');
                             $('#listTeams').empty();
 
                             $('#listTeams').html(response)
@@ -221,15 +277,17 @@
             })
             $('#searchTeam').keyup(function(e) {
                 e.preventDefault();
+                $('#loading').css('display', 'flex');
                 let keySearch = $(this).val();
                 $.ajax({
                     url: "{{ route('admin.contest.team') }}",
-                    type: 'POST',
+                    type: 'get',
                     data: {
                         _token: "{{ csrf_token() }}",
                         keyword: keySearch,
                     },
                     success: function(response) {
+                        $('#loading').css('display', 'none');
                         $('#listTeams').empty();
 
                         $('#listTeams').html(response)
@@ -260,7 +318,7 @@
                     confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
                     if (result.isConfirmed) {
-
+                        $('#loading').css('display', 'flex');
                         $.ajax({
                             url: urlTeam,
                             type: 'delete',
@@ -276,6 +334,7 @@
                                     showConfirmButton: false,
                                     timer: 1500
                                 })
+                                $('#loading').css('display', 'none');
                                 $('#listTeams').empty();
                                 $('#listTeams').html(response)
 
@@ -299,13 +358,12 @@
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-
+                    $('#loading').css('display', 'flex');
                     $.ajax({
                         url: "{{ url('admin/teams') }}/" + id,
                         type: 'delete',
                         data: {
                             _token: "{{ csrf_token() }}",
-
                         },
                         success: function(response) {
 
@@ -316,8 +374,90 @@
                                 showConfirmButton: false,
                                 timer: 1500
                             })
+                            $('#loading').css('display', 'none');
                             $('#listTeams').empty();
                             $('#listTeams').html(response)
+                            $(document).ready(function() {
+                                $('.paginate .pagination a').unbind('click').on('click',
+                                    function(
+                                        e) {
+                                        e.preventDefault();
+                                        $('#loading').css('display', 'flex');
+                                        var page = $(this).attr('href').split('page=')[1];
+                                        $.ajax({
+
+                                            url: "{{ url('admin/teams/api-teams') }}?page=" +
+                                                page,
+                                            type: 'POST',
+                                            data: {
+                                                _token: "{{ csrf_token() }}",
+                                            },
+                                            success: function(data) {
+                                                $('#loading').css('display', 'none');
+                                                $('#listTeams').empty();
+
+                                                $('#listTeams').html(data)
+                                                $('.paginate .pagination a')
+                                                    .unbind('click')
+                                                    .on('click', function(
+                                                        e) {
+                                                        e.preventDefault();
+                                                        var page = $(this)
+                                                            .attr('href')
+                                                            .split('page=')[
+                                                                1];
+                                                                $('#loading').css('display', 'flex');
+                                                        $.ajax({
+
+                                                            url: "{{ url('admin/teams/api-teams') }}?page=" +
+                                                                page,
+                                                            type: 'POST',
+                                                            data: {
+                                                                _token: "{{ csrf_token() }}",
+                                                            },
+                                                            success: function(
+                                                                data
+                                                            ) {
+                                                                $('#loading').css('display', 'none');
+                                                                $('#listTeams')
+                                                                    .empty();
+
+                                                                $('#listTeams')
+                                                                    .html(
+                                                                        data
+                                                                    )
+                                                                $('.paginate .pagination a')
+                                                                    .unbind(
+                                                                        'click'
+                                                                    )
+                                                                    .on('click',
+                                                                        function(
+                                                                            e
+                                                                        ) {
+                                                                            e
+                                                                                .preventDefault();
+                                                                            var page =
+                                                                                $(
+                                                                                    this
+                                                                                )
+                                                                                .attr(
+                                                                                    'href'
+                                                                                )
+                                                                                .split(
+                                                                                    'page='
+                                                                                )[
+                                                                                    1
+                                                                                ];
+
+                                                                        }
+                                                                    );
+                                                            }
+                                                        })
+                                                    });
+                                            }
+                                        })
+                                    });
+                            })
 
                         }
 

@@ -1,5 +1,3 @@
-
-
 <table class="table">
     <thead>
         <tr>
@@ -16,6 +14,7 @@
         <?php $index = 0; ?>
         @foreach ($dataTeam as $valueTeam)
             <tr>
+
                 <th scope="row">{{ $index += 1 }}</th>
                 <td>{{ $valueTeam->name }}</td>
                 <td><img style="width:200px;height:200px"
@@ -57,7 +56,7 @@
 <div class="paginate">
 
 
-        {{ $dataTeam->appends(request()->all())->links('pagination::bootstrap-4') }}
+    {{ $dataTeam->appends(request()->all())->links('pagination::bootstrap-4') }}
 
 
 </div>

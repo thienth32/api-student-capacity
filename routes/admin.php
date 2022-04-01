@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ContestController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\RoundController;
 use Illuminate\Support\Facades\Route;
@@ -17,6 +18,10 @@ Route::prefix('rounds')->group(function () {
     Route::get('{id}/edit', [RoundController::class, 'edit'])->name('admin.round.edit');
     Route::put('{id}', [RoundController::class, 'update'])->name('admin.round.update');
     Route::delete('{id}', [RoundController::class, 'destroy'])->name('admin.round.destroy');
+});
+Route::prefix('contests')->group(function () {
+    Route::get('{id}/edit', [ContestController::class, 'edit'])->name('admin.contest.edit');
+    Route::put('{id}', [ContestController::class, 'update'])->name('admin.contest.update');
 });
 
 Route::prefix('teams')->group(function () {
