@@ -11,6 +11,18 @@ class Contest extends Model
     use HasFactory;
     protected $table = 'contests';
 
+    public static function boot()
+    {
+
+        parent::boot();
+
+        static::deleting(function ($q) {
+            $q->teams()->delete();
+            $q->rounds()->delete();
+            $q->enterprise()->detach();
+        });
+    }
+
     public $fillable = [
         'name',
         'img',
@@ -33,6 +45,11 @@ class Contest extends Model
     public function rounds()
     {
         return $this->hasMany(Round::class, 'contest_id');
+    }
+
+    public function enterprise()
+    {
+        return $this->belongsToMany(Enterprise::class, 'donors', 'contest_id', 'enterprise_id');
     }
 
     public function newEloquentBuilder($query)

@@ -22,9 +22,14 @@ class Round extends Model
         'type_exam_id',
     ];
 
-    // public static function boot(){
-    //     parent::boot();
-    // }
+    public static function boot()
+    {
+
+        parent::boot();
+        static::deleting(function ($q) {
+            $q->results()->delete();
+        });
+    }
 
     public function format()
     {

@@ -38,7 +38,7 @@ class ContestController extends Controller
                 ->passDate('register_deadline', request('pass_date') ?? null, $now->toDateTimeString())
                 // ->passDate('date_start', request('upcoming_date') ?? null, $now->toDateTimeString())
                 ->status(request('status'))
-                ->sort((request('sort') == 'desc' ? 'desc' : 'asc'), request('sort_by') ?? null, 'contests')
+                ->sort((request('sort') == 'desc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'contests')
                 ->hasDateTimeBetween('date_start', request('start_time') ?? null, request('end_time') ?? null)
                 ->hasReuqest(['major_id' => request('major_id') ?? null])
                 ->with([
@@ -191,10 +191,12 @@ class ContestController extends Controller
         try {
             if (!(auth()->user()->hasRole('super admin'))) return redirect()->back()->with('error', 'Không thể xóa ');
             $contest = $this->contest::find($id);
+            if (Storage::disk('google')->has($contest->image)) Storage::disk('google')->delete($contest->image);
             $contest->delete();
             return redirect()->back();
         } catch (\Throwable $th) {
-            return redirect()->back()->with('error', 'Xóa không thành công ');
+            return redirect('error');
+            // return redirect()->back()->with('error', 'Xóa không thành công ');
         }
     }
 }

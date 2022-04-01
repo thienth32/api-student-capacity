@@ -305,7 +305,6 @@ class RoundController extends Controller
             DB::transaction(function () use ($id) {
                 if (!($data = $this->round::find($id))) return false;
                 if (Storage::disk('google')->has($data->image)) Storage::disk('google')->delete($data->image);
-                $data->results()->delete();
                 $data->delete();
             });
             return true;
