@@ -14,8 +14,7 @@
                     @method('put')
                     <div class="form-group mb-10">
                         <label for="">Tên vòng thi</label>
-                        <input type="text" name="name" value="{{ $Contest->name }}" class=" form-control"
-                            placeholder="">
+                        <input type="text" name="name" value="{{ $Contest->name }}" class=" form-control" placeholder="">
                         @error('name')
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
@@ -134,7 +133,7 @@
                     <div class="form-group mb-10">
                         <label for="">Mô tả cuộc thi</label>
                         <textarea class="form-control" name="description" id="" rows="3">
-                            {{ $Contest->description}}
+                            {{ $Contest->description }}
                         </textarea>
                         @error('description')
                             <p class="text-danger">{{ $message }}</p>
@@ -143,21 +142,9 @@
                     <div class="form-group mb-10">
                         <label for="">Trạng thái cuộc thi</label>
                         <br><br>
-
                         <select class="form-control" name="status" id="">
-                            {{-- <option @selected($Contest['major_id'] == $valueMajor->id) value="{{ $valueMajor->id }}">
-                                {{ $valueMajor->name }}</option> --}}
-                            @if ( $Contest->status == 0)
-                                <option value="{{ $Contest->status }}"> Cuộc thi đang đóng </option>
-                            @else
-                                <option value="{{ $Contest->status }}"> Cuộc thi đang Mở </option>
-                            @endif
-
-                            <option value="">
-                                <hr>
-                            </option>
-                            <option value="0"> Đóng Cuộc thi </option>
-                            <option value="1"> Mở đang Mở </option>
+                            <option @selected($Contest->status == 0) value="0"> Đóng Cuộc thi </option>
+                            <option @selected($Contest->status == 1) value="1"> Mở đang Mở </option>
                         </select>
 
 

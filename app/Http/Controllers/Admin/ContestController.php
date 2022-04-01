@@ -251,7 +251,6 @@ class ContestController extends Controller
             ], 500);
         } else {
             if ($request->has('img')) {
-                // dd($request->img);
                 $fileImage =  $request->file('img');
                 $img = $this->uploadFile($fileImage, $contest->img);
                 $contest->img = $img;
@@ -259,8 +258,7 @@ class ContestController extends Controller
             $contest->update($request->all());
 
             Db::commit();
-
-            return Redirect::back();
+            return Redirect::route('admin.contest.list');
         }
     }
 }
