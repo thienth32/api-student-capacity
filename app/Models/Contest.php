@@ -25,7 +25,6 @@ class Contest extends Model
 
     public $fillable = [
         'name',
-        'img',
         'date_start',
         'register_deadline',
         'description',
@@ -36,12 +35,10 @@ class Contest extends Model
     {
         return $this->hasMany(Team::class, 'contest_id')->with('members');
     }
-
     public function major()
     {
         return $this->belongsTo(Major::class, 'major_id');
     }
-
     public function rounds()
     {
         return $this->hasMany(Round::class, 'contest_id');
