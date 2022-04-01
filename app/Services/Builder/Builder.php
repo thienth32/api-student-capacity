@@ -7,6 +7,24 @@ use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 
 class Builder extends  EloquentBuilder
 {
+    public function missingDate($column = null, $miss_date = null, $time = null)
+    {
+        if ($miss_date == null) return $this;
+        return $this->whereDate($column, "<", $time);
+    }
+
+    public function passDate($column = null, $pass_date = null, $time = null)
+    {
+        if ($pass_date == null) return $this;
+        return $this->whereDate($column, ">", $time);
+    }
+
+    // public function upComingDate($column = null, $pass_date = null, $time = null)
+    // {
+    //     if ($pass_date == null) return $this;
+    //     return $this->whereDate($column, ">=", $time);
+    // }
+
     /**
      *  Has date time between
      */

@@ -409,34 +409,11 @@
 @section('js_admin')
     <script>
         let url = '/admin/rounds?';
+    </script>
+    <script src="js/listformat.js"></script>
+    <script>
         const sort = '{{ request()->has('sort') ? (request('sort') == 'desc' ? 'asc' : 'desc') : 'desc' }}';
-        const aListQuery = [
-            'page',
-            'contest_id',
-            'type_exam_id',
-            'q',
-            'sort_by',
-            'sort',
-            'start_time',
-            'end_time',
-        ];
-        let searchParams = new URLSearchParams(window.location.search);
 
-        function checkUrlOut(key, value, valueAdd = '') {
-            if (window.location.href.indexOf('?')) {
-                aListQuery.map(function(data) {
-                    if (data == key) {
-                        url = url + '&' + key + '=' + value
-                    } else {
-                        if (searchParams.has(data)) {
-                            url = url + '&' + data + '=' + searchParams.get(data);
-                        }
-                    }
-                })
-                return window.location = url + valueAdd;
-            }
-            window.location = window.location.href + '?' + key + '=' + value;
-        }
         $(document).ready(function() {
             let searchParams = new URLSearchParams(window.location.search);
             $('#select-contest').on('change', function() {
@@ -444,26 +421,6 @@
             })
             $('#select-type-exam').on('change', function() {
                 checkUrlOut('type_exam_id', $(this).val());
-            })
-            $('.format-database').on('click', function() {
-                window.location = '/admin/rounds' + '?sort_by=' + $(this).data('key') + '&sort=' + sort;
-            })
-            $('.refresh-btn').on('click', function() {
-                window.location = url;
-            })
-            $('.ip-search').on('keyup', function(e) {
-                if (e.keyCode == 13) {
-                    checkUrlOut('q', $(this).val());
-                }
-            })
-
-            $('.btn-time').on('click', function(e) {
-                e.preventDefault();
-                let start_time = $('.start_time').val();
-                let end_time = $('.end_time').val();
-                if (new Date(start_time).getTime() >= new Date(end_time).getTime()) return alert(
-                    'Thời gian kết thúc phải lớn hơn thời gian bắt đầu thời gian bắt đâu !');
-                window.location = url + '&start_time=' + start_time + '&end_time=' + end_time;
             })
             $('.btn-show').hide();
             $('.btn-hide').on('click', function() {

@@ -324,6 +324,7 @@ class RoundController extends Controller
     // View round
     public function destroy($id)
     {
+        if (!(auth()->user()->hasRole('super admin'))) return redirect()->back()->with('error', 'Không thể xóa ');
         if ($this->destroyRound($id)) return redirect()->back();
         return redirect('error');
     }

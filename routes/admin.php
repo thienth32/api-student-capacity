@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ContestController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\RoundController;
 use Illuminate\Support\Facades\Route;
@@ -32,4 +33,15 @@ Route::prefix('teams')->group(function () {
 });
 Route::prefix('users')->group(function () {
     Route::post('team-user-search', [UserController::class, 'TeamUserSearch'])->name('admin.user.TeamUserSearch');
+});
+
+Route::prefix('contests')->group(function () {
+    Route::get('', [ContestController::class, 'index'])->name('admin.contest.list');
+    Route::get('create', [ContestController::class, 'create'])->name('admin.contest.create');
+
+    Route::post('un-status/{id}', [ContestController::class, 'un_status'])->name('admin.contest.un.status');
+    Route::post('re-status/{id}', [ContestController::class, 're_status'])->name('admin.contest.re.status');
+
+    Route::delete('{id}', [ContestController::class, 'destroy'])->name('admin.contest.destroy');
+    Route::get('{id}/edit', [ContestController::class, 'destroy'])->name('admin.contest.edit');
 });
