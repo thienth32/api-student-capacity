@@ -113,7 +113,6 @@ class RoundController extends Controller
     }
     public function store(Request $request)
     {
-        // dd($request->all());
         $validator = Validator::make(
             $request->all(),
             [
@@ -146,12 +145,6 @@ class RoundController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-        // if ($validator->fails()) {
-        //     return response()->json([
-        //         'status' => false,
-        //         'payload' => $validator->errors()
-        //     ]);
-        // }
         DB::beginTransaction();
         try {
             if ($request->hasFile('image')) {
@@ -168,14 +161,14 @@ class RoundController extends Controller
             $round->type_exam_id = $request->type_exam_id;
             $round->save();
             Db::commit();
-            // return response()->json([
-            //     "payload" => $round
-            // ], 200);
             return Redirect::route('admin.round.list');
         } catch (Exception $ex) {
-
+            if ($request->hasFile('image')) {
+                $fileImage = $request->file('image');
+                if (Storage::disk('google')->has($filename)) Storage::disk('google')->delete($filename);
+            }
             Db::rollBack();
-            return Redirect::back()->with(['err' => 'Thêm mới thất bại !']);
+            return Redirect::back()->with(['error' => 'Thêm mới thất bại !']);
         }
     }
     /**
