@@ -128,7 +128,7 @@
             <table class=" table table-hover table-responsive-md ">
                 <thead>
                     <tr>
-                        <th scope="col">
+                        <th scope="col" width="2%">
                             <span role="button" data-key="id"
                                 class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
@@ -155,7 +155,7 @@
                                 <!--end::Svg Icon-->
                             </span>
                         </th>
-                        <th scope="col">Vòng thi
+                        <th scope="col" width="10%">Vòng thi
                             <span role="button" data-key="name"
                                 class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
@@ -182,8 +182,8 @@
                                 <!--end::Svg Icon-->
                             </span>
                         </th>
-                        <th scope="col">Ảnh đại diện </th>
-                        <th scope="col">Chi tiết
+                        <th scope="col" width="10%">Ảnh đại diện </th>
+                        <th scope="col" width="10%">Chi tiết
                             <span role="button" data-key="description"
                                 class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
@@ -210,9 +210,9 @@
                                 <!--end::Svg Icon-->
                             </span>
                         </th>
-                        <th scope="col">Cuộc thi </th>
-                        <th scope="col">Loại cuộc thi </th>
-                        <th scope="col">Thời gian bắt đầu
+                        <th scope="col" width="10%">Cuộc thi </th>
+                        <th scope="col" width="10%">Loại cuộc thi </th>
+                        <th scope="col" width="10%">Thời gian bắt đầu
                             <span role="button" data-key="start_time"
                                 class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
@@ -239,7 +239,7 @@
                                 <!--end::Svg Icon-->
                             </span>
                         </th>
-                        <th scope="col">Thời gian kết thúc
+                        <th scope="col" width="10%">Thời gian kết thúc
                             <span role="button" data-key="end_time"
                                 class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
@@ -266,20 +266,8 @@
                                 <!--end::Svg Icon-->
                             </span>
                         </th>
-                        <th class="text-center" colspan="2">
-                            <span class="svg-icon svg-icon-success svg-icon-2x">
-                                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Settings-2.svg--><svg
-                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                    width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                        <rect x="0" y="0" width="24" height="24" />
-                                        <path
-                                            d="M5,8.6862915 L5,5 L8.6862915,5 L11.5857864,2.10050506 L14.4852814,5 L19,5 L19,9.51471863 L21.4852814,12 L19,14.4852814 L19,19 L14.4852814,19 L11.5857864,21.8994949 L8.6862915,19 L5,19 L5,15.3137085 L1.6862915,12 L5,8.6862915 Z M12,15 C13.6568542,15 15,13.6568542 15,12 C15,10.3431458 13.6568542,9 12,9 C10.3431458,9 9,10.3431458 9,12 C9,13.6568542 10.3431458,15 12,15 Z"
-                                            fill="#000000" />
-                                    </g>
-                                </svg>
-                                <!--end::Svg Icon-->
-                            </span>
+                        <th class="text-center" width="5%" colspan="2">
+
                         </th>
 
                     </tr>
@@ -296,7 +284,54 @@
                                         : \Storage::disk('google')->url($round->image) }}"
                                     alt="">
                             </td>
-                            <td>{{ $round->description }}</td>
+                            <td>
+
+                                <button class="p-4" type="button"
+                                    style="background: none ; border : none ; list-style  : none " data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal_{{ $key }}">
+                                    <span class="svg-icon svg-icon-success svg-icon-2x">
+                                        <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Visible.svg--><svg
+                                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                            width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <rect x="0" y="0" width="24" height="24" />
+                                                <path
+                                                    d="M3,12 C3,12 5.45454545,6 12,6 C16.9090909,6 21,12 21,12 C21,12 16.9090909,18 12,18 C5.45454545,18 3,12 3,12 Z"
+                                                    fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                                                <path
+                                                    d="M12,15 C10.3431458,15 9,13.6568542 9,12 C9,10.3431458 10.3431458,9 12,9 C13.6568542,9 15,10.3431458 15,12 C15,13.6568542 13.6568542,15 12,15 Z"
+                                                    fill="#000000" opacity="0.3" />
+                                            </g>
+                                        </svg>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="exampleModal_{{ $key }}" tabindex="-1"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Chi tiết vòng
+                                                    thi
+                                                </h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body  ">
+                                                {{ $round->description }}
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Thoát
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </td>
                             <td>{{ $round->contest->name }}</td>
                             <td>{{ $round->type_exam->name }}</td>
                             <td>{{ $round->start_time }}</td>

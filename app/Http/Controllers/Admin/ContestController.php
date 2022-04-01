@@ -189,14 +189,15 @@ class ContestController extends Controller
     public function destroy($id)
     {
         try {
-            if (!(auth()->user()->hasRole('super admin'))) return redirect()->back()->with('error', 'Không thể xóa ');
-            $contest = $this->contest::find($id);
-            if (Storage::disk('google')->has($contest->image)) Storage::disk('google')->delete($contest->image);
-            $contest->delete();
+            if (!(auth()->user()->hasRole('super admin'))) return abort(404);
+            DB::transaction(function () use ($id) {
+                $contest = $this->contest::find($id);
+                if (Storage::disk('google')->has($contest->image)) Storage::disk('google')->delete($contest->image);
+                $contest->delete();
+            });
             return redirect()->back();
         } catch (\Throwable $th) {
-            return redirect('error');
-            // return redirect()->back()->with('error', 'Xóa không thành công ');
+            return abort(404);
         }
     }
 }

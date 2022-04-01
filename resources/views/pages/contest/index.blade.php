@@ -97,7 +97,7 @@
                         <table class=" table table-hover table-responsive-md ">
                             <thead>
                                 <tr>
-                                    <th scope="col">
+                                    <th scope="col" width="2%">
                                         <span role="button" data-key="id"
                                             class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
@@ -125,7 +125,7 @@
                                             <!--end::Svg Icon-->
                                         </span>
                                     </th>
-                                    <th scope="col">Cuộc thi
+                                    <th scope="col" width="10%">Cuộc thi
                                         <span role="button" data-key="name"
                                             class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
@@ -153,8 +153,8 @@
                                             <!--end::Svg Icon-->
                                         </span>
                                     </th>
-                                    <th scope="col">Ảnh đại diện </th>
-                                    <th scope="col">Chi tiết
+                                    <th scope="col" width="10%">Ảnh đại diện </th>
+                                    <th scope="col" width="10%">Chi tiết
                                         <span role="button" data-key="description"
                                             class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
@@ -182,10 +182,10 @@
                                             <!--end::Svg Icon-->
                                         </span>
                                     </th>
-                                    <th scope="col">Chuyên ngành </th>
-                                    <th scope="col">Tình trạng </th>
-                                    <th scope="col"> Quá trình </th>
-                                    <th scope="col">Thời gian bắt đầu
+                                    <th scope="col" width="10%">Chuyên ngành </th>
+                                    <th scope="col" width="10%">Tình trạng </th>
+                                    <th scope="col" width="10%"> Quá trình </th>
+                                    <th scope="col" width="10%">Thời gian bắt đầu
                                         <span role="button" data-key="date_start"
                                             class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
@@ -213,7 +213,7 @@
                                             <!--end::Svg Icon-->
                                         </span>
                                     </th>
-                                    <th scope="col">Thời gian kết thúc
+                                    <th scope="col" width="10%">Thời gian kết thúc
                                         <span role="button" data-key="register_deadline"
                                             class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg

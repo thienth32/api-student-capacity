@@ -302,6 +302,7 @@ class RoundController extends Controller
     private function destroyRound($id)
     {
         try {
+            if (!(auth()->user()->hasRole('super admin'))) return false;
             DB::transaction(function () use ($id) {
                 if (!($data = $this->round::find($id))) return false;
                 if (Storage::disk('google')->has($data->image)) Storage::disk('google')->delete($data->image);
