@@ -22,25 +22,25 @@ class UserController extends Controller
         $orderBy = $request->has('orderBy') ? $request->orderBy : 'id';
         $sortBy = $request->has('sortBy') ? $request->sortBy : "desc";
 
-        $query = User::with('roles')->where(function($q) use ($keyword){
-            return $q->where('name', 'like', "%".$keyword."%")
-                    ->orWhere("email", 'like', "%".$keyword."%");
+        $query = User::with('roles')->where(function ($q) use ($keyword) {
+            return $q->where('name', 'like', "%" . $keyword . "%")
+                ->orWhere("email", 'like', "%" . $keyword . "%");
         })->where('status', $status);
 
-        if($request->has('roleId')){
-            $query->whereHas('roles', function($q) use ($request){
+        if ($request->has('roleId')) {
+            $query->whereHas('roles', function ($q) use ($request) {
                 $q->where('id', $request->roleId);
             });
         }
 
-        $offset = ($pageNumber-1)*$pageSize;
+        $offset = ($pageNumber - 1) * $pageSize;
         $totalItem = $query->count();
-        if($sortBy == 'desc'){
+        if ($sortBy == 'desc') {
             $query = $query->orderByDesc($orderBy);
-        }else{
+        } else {
             $query = $query->orderBy($orderBy);
         }
-        
+
         $responseData = $query->skip($offset)->take($pageSize)->get();
         return response()->json([
             'status' => true,
@@ -50,13 +50,58 @@ class UserController extends Controller
                     'currentPage' => $pageNumber,
                     'pageSize' => $pageSize,
                     'totalItem' =>  $totalItem,
-                    'totalPage' => ceil($totalItem/$pageSize)
+                    'totalPage' => ceil($totalItem / $pageSize)
                 ]
             ]
         ]);
     }
 
-    public function get_user_by_token(Request $request){
+    public function index()
+    {
+        // List
+        try {
+            $limit = 10;
+            $users = User::status(request('status') ?? null)
+                ->sort(request('sort') == 'desc' ? 'desc' : 'asc', request('sort_by') ?? null, 'users')
+                ->search(request('search') ?? null, ['name', 'email'])
+                ->has_role(request('role') ?? null)
+                ->paginate(request('limit') ?? $limit);
+
+            $users = array_merge(
+                $users->toArray(),
+                [
+                    'roles' => Role::all()
+                        ->map(function ($role) {
+                            return [
+                                'value' => $role->id,
+                                'slug_name' => \Str::slug($role->name, " "),
+                                'name' => \Str::title($role->name),
+                            ];
+                        })
+                ]
+            );
+
+            return response()->json(
+                [
+                    'status' => true,
+                    'payload' => $users
+                ],
+                200
+            );
+        } catch (\Throwable $e) {
+
+            return response()->json(
+                [
+                    'status' => false,
+                    'payload' => 'Máy chủ bị lỗi , liên hệ quản trị viên để khắc phục sự cố  !'
+                ],
+                506
+            );
+        }
+    }
+
+    public function get_user_by_token(Request $request)
+    {
         return response([
             'status' => true,
             'payload' => $request->user()->toArray()
