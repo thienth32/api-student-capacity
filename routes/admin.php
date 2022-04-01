@@ -22,7 +22,7 @@ Route::prefix('rounds')->group(function () {
 Route::prefix('teams')->group(function () {
     //list
     Route::get('', [TeamController::class, 'ListTeam'])->name('admin.teams'); // Api list Danh sách teams theo cuộc thi. phía view
-    Route::post('api-teams', [TeamController::class, 'ApiContestteams'])->name('admin.contest.team');
+    Route::get('api-teams', [TeamController::class, 'ApiContestteams'])->name('admin.contest.team');
     // end lisst
     Route::delete('{id}', [TeamController::class, 'deleteTeam'])->name('admin.delete.teams'); // Api xóa teams phía view
     Route::get('form-add', [TeamController::class, 'create'])->name('admin.teams.create');

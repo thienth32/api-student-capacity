@@ -50,62 +50,66 @@
             </div>
         </div>
         <hr>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Tên Nhóm</th>
-                    <th scope="col">Ảnh nhóm </th>
-                    <th scope="col"> Tham gia Cuộc Thi </th>
-                    <th scope="col"> Ngày Tạo </th>
-                    <th scope="col"> Thành Viên </th>
-                    <th scope="col">Action</th>
-                </tr>
-            </thead>
-            <tbody id="dataTeams">
-                <?php $index = 0; ?>
-                @foreach ($dataTeam as $valueTeam)
+        <div id="listTeams">
+            <table class="table">
+                <thead>
                     <tr>
-                        <th scope="row">{{ $index += 1 }}</th>
-                        <td>{{ $valueTeam->name }}</td>
-                        <td><img style="width:200px;height:200px"
-                                src="{{ Storage::disk('google')->has($valueTeam->image)? Storage::disk('google')->url($valueTeam->image): 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
-                                alt=""></td>
-                        <td>{{ $valueTeam->contest->name }}</td>
-                        <td>{{ date('d-m-Y', strtotime($valueTeam->created_at)) }}</td>
-                        <td>
-                            <div class="btn-group dropup">
-                                <button type="button" class="btn btn-secondary btn-sm dropdown-toggle"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    Xem Thêm...
-                                </button>
-                                <ul class="dropdown-menu">
-
-                                    @foreach ($valueTeam->members as $member)
-                                        <li><a class="dropdown-item" href="javascript:void()"> Thành Viên
-                                                : {{ $member->name }}</a>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        </td>
-
-                        <td> <a data-url="{{ route('admin.delete.teams', $valueTeam->id) }}" id="{{ $valueTeam->id }}"
-                                class="btn btn-danger deleteTeams"><i class="fas fa-trash-alt"></i></a>
-
-                            <a href="{{ route('admin.teams.edit', $valueTeam->id) }}" class="btn  btn-success "><i
-                                    class="fas fa-edit"></i></a>
-                        </td>
+                        <th scope="col">#</th>
+                        <th scope="col">Tên Nhóm</th>
+                        <th scope="col">Ảnh nhóm </th>
+                        <th scope="col"> Tham gia Cuộc Thi </th>
+                        <th scope="col"> Ngày Tạo </th>
+                        <th scope="col"> Thành Viên </th>
+                        <th scope="col">Action</th>
                     </tr>
-                @endforeach
+                </thead>
+                <tbody id="dataTeams">
+                    <?php $index = 0; ?>
+                    @foreach ($dataTeam as $valueTeam)
+                        <tr>
+                            <th scope="row">{{ $index += 1 }}</th>
+                            <td>{{ $valueTeam->name }}</td>
+                            <td><img style="width:200px;height:200px"
+                                    src="{{ Storage::disk('google')->has($valueTeam->image)? Storage::disk('google')->url($valueTeam->image): 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
+                                    alt=""></td>
+                            <td>{{ $valueTeam->contest->name }}</td>
+                            <td>{{ date('d-m-Y', strtotime($valueTeam->created_at)) }}</td>
+                            <td>
+                                <div class="btn-group dropup">
+                                    <button type="button" class="btn btn-secondary btn-sm dropdown-toggle"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        Xem Thêm...
+                                    </button>
+                                    <ul class="dropdown-menu">
 
-            </tbody>
+                                        @foreach ($valueTeam->members as $member)
+                                            <li><a class="dropdown-item" href="javascript:void()"> Thành Viên
+                                                    : {{ $member->name }}</a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </td>
 
-        </table>
-        <hr>
-        <div>
-            {{ $dataTeam->appends(request()->all())->links('pagination::bootstrap-4') }}
+                            <td> <a data-url="{{ route('admin.delete.teams', $valueTeam->id) }}"
+                                    id="{{ $valueTeam->id }}" class="btn btn-danger deleteTeams"><i
+                                        class="fas fa-trash-alt"></i></a>
+
+                                <a href="{{ route('admin.teams.edit', $valueTeam->id) }}" class="btn  btn-success "><i
+                                        class="fas fa-edit"></i></a>
+                            </td>
+                        </tr>
+                    @endforeach
+
+                </tbody>
+
+            </table>
+            <hr>
+            <div>
+                {{ $dataTeam->appends(request()->all())->links('pagination::bootstrap-4') }}
+            </div>
         </div>
+
     </div>
 
 
@@ -116,6 +120,31 @@
 @section('js_admin')
     <script>
         $(document).ready(function() {
+
+
+            function getPosts(page, key, value) {
+                $.ajax({
+
+                    url: "{{ url('admin/teams/api-teams') }}?" + key + "=" + value + "&page=" + page,
+                    type: 'POST',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                    },
+                    success: function(data) {
+                        $('#listTeams').empty();
+
+                        $('#listTeams').html(data)
+                        $('.paginate .pagination a').unbind('click').on('click', function(
+                            e) {
+                            e.preventDefault();
+                            var page = $(this).attr('href').split('page=')[1];
+                            getPosts(page, key = 'orderBy', value);
+                        });
+                    }
+                })
+
+            }
+
 
             $(document).on('change', '#selectContest', function(e) {
                 e.preventDefault();
@@ -139,8 +168,15 @@
                             })
 
                         } else {
-                            $('#dataTeams').empty();
-                            $('#dataTeams').html(response)
+                            $('#listTeams').empty();
+
+                            $('#listTeams').html(response)
+                            $('.paginate .pagination a').unbind('click').on('click', function(
+                                e) {
+                                e.preventDefault();
+                                var page = $(this).attr('href').split('page=')[1];
+                                getPosts(page, key = 'contest', orderBy);
+                            });
                         }
                     }
                 });
@@ -167,9 +203,15 @@
                             })
 
                         } else {
-                            $('#dataTeams').empty();
+                            $('#listTeams').empty();
 
-                            $('#dataTeams').html(response)
+                            $('#listTeams').html(response)
+                            $('.paginate .pagination a').unbind('click').on('click', function(
+                                e) {
+                                e.preventDefault();
+                                var page = $(this).attr('href').split('page=')[1];
+                                getPosts(page, key = 'orderBy', sortBy = orderBy);
+                            });
                         }
 
 
@@ -188,9 +230,15 @@
                         keyword: keySearch,
                     },
                     success: function(response) {
+                        $('#listTeams').empty();
 
-                        $('#dataTeams').empty();
-                        $('#dataTeams').html(response)
+                        $('#listTeams').html(response)
+                        $('.paginate .pagination a').unbind('click').on('click', function(
+                            e) {
+                            e.preventDefault();
+                            var page = $(this).attr('href').split('page=')[1];
+                            getPosts(page, key = 'keyword', keySearch);
+                        });
                     }
                 });
 
@@ -228,15 +276,15 @@
                                     showConfirmButton: false,
                                     timer: 1500
                                 })
-                                $('#dataTeams').empty();
-                                $('#dataTeams').html(response)
+                                $('#listTeams').empty();
+                                $('#listTeams').html(response)
+
                             }
                         })
 
                     }
                 })
             })
-
         });
 
         function removeTeam(id) {
@@ -268,19 +316,11 @@
                                 showConfirmButton: false,
                                 timer: 1500
                             })
-                            $('#dataTeams').empty();
-                            $('#dataTeams').html(response)
-                            // } else {
-                            //     Swal.fire({
-                            //         position: 'center',
-                            //         icon: 'success',
-                            //         title: 'Xóa thất bại',
-                            //         showConfirmButton: false,
-                            //         timer: 1500
-                            //     })
-                            // }
+                            $('#listTeams').empty();
+                            $('#listTeams').html(response)
 
                         }
+
                     })
 
                 }

@@ -55,17 +55,20 @@ class TeamController extends Controller
     //Api sách team
     public function ApiContestteams(Request $request)
     {
-        $dataTeam = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
-        return view('pages.team.include.contenTable', compact('dataTeam'));
+        if ($request->ajax() || 'NULL') {
+            $dataTeam = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
+            return view('pages.team.include.contenTable', compact('dataTeam'));
+        }
     }
     // Danh sách teams phía view
     public function ListTeam(Request $request)
     {
-
-        $Contest = Contest::orderBy('id', 'DESC')->get();
-        $dataTeam = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
-        $dataTeam->load('members');
-        return view('pages.team.listTeam', compact('dataTeam', 'Contest'));
+        if ($request->ajax() || 'NULL') {
+            $Contest = Contest::orderBy('id', 'DESC')->get();
+            $dataTeam = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
+            $dataTeam->load('members');
+            return view('pages.team.listTeam', compact('dataTeam', 'Contest'));
+        }
     }
 
 
@@ -80,7 +83,7 @@ class TeamController extends Controller
         }
         if (Team::destroy($id)) {
             $dataTeam = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
-            return view('page.team.include.contenTable', compact('dataTeam'));
+            return view('pages.team.include.contenTable', compact('dataTeam'));
         } else {
             return response()->json([
                 'status' => false,
