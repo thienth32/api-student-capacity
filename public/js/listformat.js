@@ -52,3 +52,14 @@ $(".btn-time").on("click", function (e) {
     window.location =
         url + "&start_time=" + start_time + "&end_time=" + end_time;
 });
+$(".btn-show").hide();
+$(".btn-hide").on("click", function () {
+    $(".card-format").hide(1000);
+    $(this).hide();
+    $(".btn-show").show(500);
+});
+$(".btn-show").on("click", function () {
+    $(".card-format").show(1000);
+    $(".btn-hide").show(500);
+    $(this).hide();
+});

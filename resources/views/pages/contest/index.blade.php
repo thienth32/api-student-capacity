@@ -91,398 +91,423 @@
                     </div>
 
 
+                </div>
+            </div>
+        </div>
 
-                    {{--  --}}
-                    <div class="tb">
-                        <table class=" table table-hover table-responsive-md ">
-                            <thead>
-                                <tr>
-                                    <th scope="col" width="2%">
-                                        <span role="button" data-key="id"
-                                            class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
-                                            <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                style="width: 14px !important ; height: 14px !important" width="24px"
-                                                height="24px" viewBox="0 0 24 24" version="1.1">
-                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                    <polygon points="0 0 24 0 24 24 0 24" />
-                                                    <rect fill="#000000" opacity="0.3"
-                                                        transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
-                                                        x="5" y="5" width="2" height="12" rx="1" />
-                                                    <path
-                                                        d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
-                                                        fill="#000000" fill-rule="nonzero" />
-                                                    <rect fill="#000000" opacity="0.3"
-                                                        transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
-                                                        x="17" y="7" width="2" height="12" rx="1" />
-                                                    <path
-                                                        d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
-                                                        fill="#000000" fill-rule="nonzero"
-                                                        transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
-                                                </g>
-                                            </svg>
-                                            <!--end::Svg Icon-->
-                                        </span>
-                                    </th>
-                                    <th scope="col" width="10%">Cuộc thi
-                                        <span role="button" data-key="name"
-                                            class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
-                                            <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                style="width: 14px !important ; height: 14px !important" width="24px"
-                                                height="24px" viewBox="0 0 24 24" version="1.1">
-                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                    <polygon points="0 0 24 0 24 24 0 24" />
-                                                    <rect fill="#000000" opacity="0.3"
-                                                        transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
-                                                        x="5" y="5" width="2" height="12" rx="1" />
-                                                    <path
-                                                        d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
-                                                        fill="#000000" fill-rule="nonzero" />
-                                                    <rect fill="#000000" opacity="0.3"
-                                                        transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
-                                                        x="17" y="7" width="2" height="12" rx="1" />
-                                                    <path
-                                                        d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
-                                                        fill="#000000" fill-rule="nonzero"
-                                                        transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
-                                                </g>
-                                            </svg>
-                                            <!--end::Svg Icon-->
-                                        </span>
-                                    </th>
-                                    <th scope="col" width="10%">Ảnh đại diện </th>
-                                    <th scope="col" width="10%">Chi tiết
-                                        <span role="button" data-key="description"
-                                            class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
-                                            <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                style="width: 14px !important ; height: 14px !important" width="24px"
-                                                height="24px" viewBox="0 0 24 24" version="1.1">
-                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                    <polygon points="0 0 24 0 24 24 0 24" />
-                                                    <rect fill="#000000" opacity="0.3"
-                                                        transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
-                                                        x="5" y="5" width="2" height="12" rx="1" />
-                                                    <path
-                                                        d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
-                                                        fill="#000000" fill-rule="nonzero" />
-                                                    <rect fill="#000000" opacity="0.3"
-                                                        transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
-                                                        x="17" y="7" width="2" height="12" rx="1" />
-                                                    <path
-                                                        d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
-                                                        fill="#000000" fill-rule="nonzero"
-                                                        transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
-                                                </g>
-                                            </svg>
-                                            <!--end::Svg Icon-->
-                                        </span>
-                                    </th>
-                                    <th scope="col" width="10%">Chuyên ngành </th>
-                                    <th scope="col" width="10%">Tình trạng </th>
-                                    <th scope="col" width="10%"> Quá trình </th>
-                                    <th scope="col" width="10%">Thời gian bắt đầu
-                                        <span role="button" data-key="date_start"
-                                            class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
-                                            <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                style="width: 14px !important ; height: 14px !important" width="24px"
-                                                height="24px" viewBox="0 0 24 24" version="1.1">
-                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                    <polygon points="0 0 24 0 24 24 0 24" />
-                                                    <rect fill="#000000" opacity="0.3"
-                                                        transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
-                                                        x="5" y="5" width="2" height="12" rx="1" />
-                                                    <path
-                                                        d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
-                                                        fill="#000000" fill-rule="nonzero" />
-                                                    <rect fill="#000000" opacity="0.3"
-                                                        transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
-                                                        x="17" y="7" width="2" height="12" rx="1" />
-                                                    <path
-                                                        d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
-                                                        fill="#000000" fill-rule="nonzero"
-                                                        transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
-                                                </g>
-                                            </svg>
-                                            <!--end::Svg Icon-->
-                                        </span>
-                                    </th>
-                                    <th scope="col" width="10%">Thời gian kết thúc
-                                        <span role="button" data-key="register_deadline"
-                                            class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
-                                            <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                style="width: 14px !important ; height: 14px !important" width="24px"
-                                                height="24px" viewBox="0 0 24 24" version="1.1">
-                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                    <polygon points="0 0 24 0 24 24 0 24" />
-                                                    <rect fill="#000000" opacity="0.3"
-                                                        transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
-                                                        x="5" y="5" width="2" height="12" rx="1" />
-                                                    <path
-                                                        d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
-                                                        fill="#000000" fill-rule="nonzero" />
-                                                    <rect fill="#000000" opacity="0.3"
-                                                        transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
-                                                        x="17" y="7" width="2" height="12" rx="1" />
-                                                    <path
-                                                        d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
-                                                        fill="#000000" fill-rule="nonzero"
-                                                        transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
-                                                </g>
-                                            </svg>
-                                            <!--end::Svg Icon-->
-                                        </span>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($contests as $key => $contest)
-                                    <tr>
-                                        <th scope="row">{{ $key + 1 }}</th>
-                                        <td>{{ $contest->name }}</td>
-                                        <td>
-                                            <img style="width:100px"
-                                                src="{{ (\Storage::disk('google')->has($contest->img) ? 111 : null) == null
-                                                    ? 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg'
-                                                    : \Storage::disk('google')->url($contest->img) }}"
-                                                alt="">
-                                        </td>
-                                        <td>
+        {{--  --}}
+        <div>
+            <div class="back">
 
-                                            <button class="p-4" type="button"
-                                                style="background: none ; border : none ; list-style  : none "
-                                                data-bs-toggle="modal" data-bs-target="#exampleModal_{{ $key }}">
-                                                <span class="svg-icon svg-icon-success svg-icon-2x">
-                                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Visible.svg--><svg
+                <span class="btn-hide svg-icon svg-icon-primary svg-icon-2x">
+                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Stockholm-icons/Navigation/Angle-up.svg--><svg
+                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                        height="24px" viewBox="0 0 24 24" version="1.1">
+                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <polygon points="0 0 24 0 24 24 0 24" />
+                            <path
+                                d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z"
+                                fill="#000000" fill-rule="nonzero" />
+                        </g>
+                    </svg>
+                </span>
+
+                <span class="btn-show svg-icon svg-icon-primary svg-icon-2x">
+                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Angle-down.svg--><svg
+                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                        height="24px" viewBox="0 0 24 24" version="1.1">
+                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <polygon points="0 0 24 0 24 24 0 24" />
+                            <path
+                                d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z"
+                                fill="#000000" fill-rule="nonzero"
+                                transform="translate(12.000003, 11.999999) rotate(-180.000000) translate(-12.000003, -11.999999) " />
+                        </g>
+                    </svg>
+                    <!--end::Svg Icon-->
+                </span>
+
+            </div>
+        </div>
+
+        {{--  --}}
+        <div class="tb  ">
+            <table class=" table table-hover table-responsive-md ">
+                <thead>
+                    <tr>
+                        <th scope="col" width="2%">
+                            <span role="button" data-key="id"
+                                class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
+                                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
+                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    style="width: 14px !important ; height: 14px !important" width="24px" height="24px"
+                                    viewBox="0 0 24 24" version="1.1">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <polygon points="0 0 24 0 24 24 0 24" />
+                                        <rect fill="#000000" opacity="0.3"
+                                            transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
+                                            x="5" y="5" width="2" height="12" rx="1" />
+                                        <path
+                                            d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
+                                            fill="#000000" fill-rule="nonzero" />
+                                        <rect fill="#000000" opacity="0.3"
+                                            transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
+                                            x="17" y="7" width="2" height="12" rx="1" />
+                                        <path
+                                            d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
+                                            fill="#000000" fill-rule="nonzero"
+                                            transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
+                                    </g>
+                                </svg>
+                                <!--end::Svg Icon-->
+                            </span>
+                        </th>
+                        <th scope="col" width="10%">Cuộc thi
+                            <span role="button" data-key="name"
+                                class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
+                                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
+                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    style="width: 14px !important ; height: 14px !important" width="24px" height="24px"
+                                    viewBox="0 0 24 24" version="1.1">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <polygon points="0 0 24 0 24 24 0 24" />
+                                        <rect fill="#000000" opacity="0.3"
+                                            transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
+                                            x="5" y="5" width="2" height="12" rx="1" />
+                                        <path
+                                            d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
+                                            fill="#000000" fill-rule="nonzero" />
+                                        <rect fill="#000000" opacity="0.3"
+                                            transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
+                                            x="17" y="7" width="2" height="12" rx="1" />
+                                        <path
+                                            d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
+                                            fill="#000000" fill-rule="nonzero"
+                                            transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
+                                    </g>
+                                </svg>
+                                <!--end::Svg Icon-->
+                            </span>
+                        </th>
+                        <th scope="col" width="10%">Ảnh đại diện </th>
+                        <th scope="col" width="10%">Chi tiết
+                            <span role="button" data-key="description"
+                                class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
+                                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
+                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    style="width: 14px !important ; height: 14px !important" width="24px" height="24px"
+                                    viewBox="0 0 24 24" version="1.1">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <polygon points="0 0 24 0 24 24 0 24" />
+                                        <rect fill="#000000" opacity="0.3"
+                                            transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
+                                            x="5" y="5" width="2" height="12" rx="1" />
+                                        <path
+                                            d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
+                                            fill="#000000" fill-rule="nonzero" />
+                                        <rect fill="#000000" opacity="0.3"
+                                            transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
+                                            x="17" y="7" width="2" height="12" rx="1" />
+                                        <path
+                                            d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
+                                            fill="#000000" fill-rule="nonzero"
+                                            transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
+                                    </g>
+                                </svg>
+                                <!--end::Svg Icon-->
+                            </span>
+                        </th>
+                        <th scope="col" width="10%">Chuyên ngành </th>
+                        <th scope="col" width="10%">Tình trạng </th>
+                        <th scope="col" width="10%"> Quá trình </th>
+                        <th scope="col" width="10%">Thời gian bắt đầu
+                            <span role="button" data-key="date_start"
+                                class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
+                                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
+                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    style="width: 14px !important ; height: 14px !important" width="24px" height="24px"
+                                    viewBox="0 0 24 24" version="1.1">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <polygon points="0 0 24 0 24 24 0 24" />
+                                        <rect fill="#000000" opacity="0.3"
+                                            transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
+                                            x="5" y="5" width="2" height="12" rx="1" />
+                                        <path
+                                            d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
+                                            fill="#000000" fill-rule="nonzero" />
+                                        <rect fill="#000000" opacity="0.3"
+                                            transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
+                                            x="17" y="7" width="2" height="12" rx="1" />
+                                        <path
+                                            d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
+                                            fill="#000000" fill-rule="nonzero"
+                                            transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
+                                    </g>
+                                </svg>
+                                <!--end::Svg Icon-->
+                            </span>
+                        </th>
+                        <th scope="col" width="10%">Thời gian kết thúc
+                            <span role="button" data-key="register_deadline"
+                                class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
+                                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
+                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    style="width: 14px !important ; height: 14px !important" width="24px" height="24px"
+                                    viewBox="0 0 24 24" version="1.1">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <polygon points="0 0 24 0 24 24 0 24" />
+                                        <rect fill="#000000" opacity="0.3"
+                                            transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
+                                            x="5" y="5" width="2" height="12" rx="1" />
+                                        <path
+                                            d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
+                                            fill="#000000" fill-rule="nonzero" />
+                                        <rect fill="#000000" opacity="0.3"
+                                            transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
+                                            x="17" y="7" width="2" height="12" rx="1" />
+                                        <path
+                                            d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
+                                            fill="#000000" fill-rule="nonzero"
+                                            transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
+                                    </g>
+                                </svg>
+                                <!--end::Svg Icon-->
+                            </span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($contests as $key => $contest)
+                        <tr>
+                            <th scope="row">{{ $key + 1 }}</th>
+                            <td>{{ $contest->name }}</td>
+                            <td>
+                                <img style="width:100px"
+                                    src="{{ (\Storage::disk('google')->has($contest->img) ? 111 : null) == null
+                                        ? 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg'
+                                        : \Storage::disk('google')->url($contest->img) }}"
+                                    alt="">
+                            </td>
+                            <td>
+
+                                <button class="p-4" type="button"
+                                    style="background: none ; border : none ; list-style  : none " data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal_{{ $key }}">
+                                    <span class="svg-icon svg-icon-success svg-icon-2x">
+                                        <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Visible.svg--><svg
+                                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                            width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <rect x="0" y="0" width="24" height="24" />
+                                                <path
+                                                    d="M3,12 C3,12 5.45454545,6 12,6 C16.9090909,6 21,12 21,12 C21,12 16.9090909,18 12,18 C5.45454545,18 3,12 3,12 Z"
+                                                    fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                                                <path
+                                                    d="M12,15 C10.3431458,15 9,13.6568542 9,12 C9,10.3431458 10.3431458,9 12,9 C13.6568542,9 15,10.3431458 15,12 C15,13.6568542 13.6568542,15 12,15 Z"
+                                                    fill="#000000" opacity="0.3" />
+                                            </g>
+                                        </svg>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="exampleModal_{{ $key }}" tabindex="-1"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Chi tiết cuộc
+                                                    thi
+                                                </h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body  ">
+                                                {{ $contest->description }}
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Thoát
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </td>
+                            <td>{{ $contest->major->name }}</td>
+                            <td>
+
+                                <div class="form-check form-switch">
+                                    <input value="{{ $contest->status }}" data-id="{{ $contest->id }}"
+                                        class="form-select-status form-check-input" @checked($contest->status == 1)
+                                        type="checkbox" role="switch">
+                                </div>
+
+                            </td>
+                            <td>
+                                @if (\Carbon\Carbon::parse($contest->date_start)->toDateTimeString() > \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
+                                    <span class="badge bg-primary">Sắp diễn ra </span>
+                                @elseif (\Carbon\Carbon::parse($contest->register_deadline)->toDateTimeString() > \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
+                                    <span class="badge bg-success">Đang mở</span>
+                                @else
+                                    <span class="badge bg-danger"> Quá hạn</span>
+                                @endif
+                            </td>
+                            <td>{{ $contest->date_start }}</td>
+                            <td>{{ $contest->register_deadline }}</td>
+                            <td>
+                                <div class="btn-group dropstart">
+                                    <button type="button" class="btn   btn-sm dropdown-toggle" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        <span class="svg-icon svg-icon-success svg-icon-2x">
+                                            <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Settings-2.svg--><svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+                                                viewBox="0 0 24 24" version="1.1">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <rect x="0" y="0" width="24" height="24" />
+                                                    <path
+                                                        d="M5,8.6862915 L5,5 L8.6862915,5 L11.5857864,2.10050506 L14.4852814,5 L19,5 L19,9.51471863 L21.4852814,12 L19,14.4852814 L19,19 L14.4852814,19 L11.5857864,21.8994949 L8.6862915,19 L5,19 L5,15.3137085 L1.6862915,12 L5,8.6862915 Z M12,15 C13.6568542,15 15,13.6568542 15,12 C15,10.3431458 13.6568542,9 12,9 C10.3431458,9 9,10.3431458 9,12 C9,13.6568542 10.3431458,15 12,15 Z"
+                                                        fill="#000000" />
+                                                </g>
+                                            </svg>
+                                            <!--end::Svg Icon-->
+                                        </span>
+                                    </button>
+                                    <ul style="min-width: 3rem !important" class="dropdown-menu w-10px ">
+                                        <li>
+                                            <a href="{{ route('admin.contest.edit', ['id' => $contest->id]) }}">
+                                                <span style="padding: 5px" role="button"
+                                                    class="svg-icon svg-icon-success svg-icon-2x">
+                                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Design/Edit.svg--><svg
                                                         xmlns="http://www.w3.org/2000/svg"
                                                         xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                                                         height="24px" viewBox="0 0 24 24" version="1.1">
                                                         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                                             <rect x="0" y="0" width="24" height="24" />
                                                             <path
-                                                                d="M3,12 C3,12 5.45454545,6 12,6 C16.9090909,6 21,12 21,12 C21,12 16.9090909,18 12,18 C5.45454545,18 3,12 3,12 Z"
-                                                                fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                                                                d="M8,17.9148182 L8,5.96685884 C8,5.56391781 8.16211443,5.17792052 8.44982609,4.89581508 L10.965708,2.42895648 C11.5426798,1.86322723 12.4640974,1.85620921 13.0496196,2.41308426 L15.5337377,4.77566479 C15.8314604,5.0588212 16,5.45170806 16,5.86258077 L16,17.9148182 C16,18.7432453 15.3284271,19.4148182 14.5,19.4148182 L9.5,19.4148182 C8.67157288,19.4148182 8,18.7432453 8,17.9148182 Z"
+                                                                fill="#000000" fill-rule="nonzero"
+                                                                transform="translate(12.000000, 10.707409) rotate(-135.000000) translate(-12.000000, -10.707409) " />
+                                                            <rect fill="#000000" opacity="0.3" x="5" y="20" width="15"
+                                                                height="2" rx="1" />
+                                                        </g>
+                                                    </svg>
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            @hasrole('super admin')
+                                                <form action="{{ route('admin.contest.destroy', ['id' => $contest->id]) }}"
+                                                    method="post">
+                                                    @csrf
+                                                    @method('delete')
+                                                    <button
+                                                        style="padding: 5px ; background: none ; border: none ; list-style : none"
+                                                        type="submit">
+                                                        <span role="button" class="svg-icon svg-icon-danger svg-icon-2x">
+                                                            <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Trash.svg--><svg
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                                                height="24px" viewBox="0 0 24 24" version="1.1">
+                                                                <g stroke="none" stroke-width="1" fill="none"
+                                                                    fill-rule="evenodd">
+                                                                    <rect x="0" y="0" width="24" height="24" />
+                                                                    <path
+                                                                        d="M6,8 L18,8 L17.106535,19.6150447 C17.04642,20.3965405 16.3947578,21 15.6109533,21 L8.38904671,21 C7.60524225,21 6.95358004,20.3965405 6.89346498,19.6150447 L6,8 Z M8,10 L8.45438229,14.0894406 L15.5517885,14.0339036 L16,10 L8,10 Z"
+                                                                        fill="#000000" fill-rule="nonzero" />
+                                                                    <path
+                                                                        d="M14,4.5 L14,3.5 C14,3.22385763 13.7761424,3 13.5,3 L10.5,3 C10.2238576,3 10,3.22385763 10,3.5 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z"
+                                                                        fill="#000000" opacity="0.3" />
+                                                                </g>
+                                                            </svg>
+                                                            <!--end::Svg Icon-->
+                                                        </span>
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <span style="padding: 5px ;cursor: not-allowed; user-select: none"
+                                                    class="svg-icon svg-icon-danger svg-icon-2x">
+                                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Code/Lock-circle.svg--><svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+                                                        viewBox="0 0 24 24" version="1.1">
+                                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                            <rect x="0" y="0" width="24" height="24" />
+                                                            <circle fill="#000000" opacity="0.3" cx="12" cy="12" r="10" />
                                                             <path
-                                                                d="M12,15 C10.3431458,15 9,13.6568542 9,12 C9,10.3431458 10.3431458,9 12,9 C13.6568542,9 15,10.3431458 15,12 C15,13.6568542 13.6568542,15 12,15 Z"
-                                                                fill="#000000" opacity="0.3" />
+                                                                d="M14.5,11 C15.0522847,11 15.5,11.4477153 15.5,12 L15.5,15 C15.5,15.5522847 15.0522847,16 14.5,16 L9.5,16 C8.94771525,16 8.5,15.5522847 8.5,15 L8.5,12 C8.5,11.4477153 8.94771525,11 9.5,11 L9.5,10.5 C9.5,9.11928813 10.6192881,8 12,8 C13.3807119,8 14.5,9.11928813 14.5,10.5 L14.5,11 Z M12,9 C11.1715729,9 10.5,9.67157288 10.5,10.5 L10.5,11 L13.5,11 L13.5,10.5 C13.5,9.67157288 12.8284271,9 12,9 Z"
+                                                                fill="#000000" />
                                                         </g>
                                                     </svg>
                                                     <!--end::Svg Icon-->
                                                 </span>
-                                            </button>
+                                            @endhasrole
 
-                                            <!-- Modal -->
-                                            <div class="modal fade" id="exampleModal_{{ $key }}" tabindex="-1"
-                                                aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel">Chi tiết cuộc
-                                                                thi
-                                                            </h5>
-                                                            <button type="button" class="btn-close"
-                                                                data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body  ">
-                                                            {{ $contest->description }}
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary"
-                                                                data-bs-dismiss="modal">Thoát
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </td>
-                                        <td>{{ $contest->major->name }}</td>
-                                        <td>
-
-                                            <div class="form-check form-switch">
-                                                <input value="{{ $contest->status }}" data-id="{{ $contest->id }}"
-                                                    class="form-select-status form-check-input" @checked($contest->status == 1)
-                                                    type="checkbox" role="switch">
-                                            </div>
-
-                                        </td>
-                                        <td>
-                                            @if (\Carbon\Carbon::parse($contest->date_start)->toDateTimeString() > \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
-                                                <span class="badge bg-primary">Sắp diễn ra </span>
-                                            @elseif (\Carbon\Carbon::parse($contest->register_deadline)->toDateTimeString() > \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
-                                                <span class="badge bg-success">Đang mở</span>
-                                            @else
-                                                <span class="badge bg-danger"> Quá hạn</span>
-                                            @endif
-                                        </td>
-                                        <td>{{ $contest->date_start }}</td>
-                                        <td>{{ $contest->register_deadline }}</td>
-                                        <td>
-                                            <div class="btn-group dropstart">
-                                                <button type="button" class="btn   btn-sm dropdown-toggle"
-                                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <span class="svg-icon svg-icon-success svg-icon-2x">
-                                                        <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Settings-2.svg--><svg
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                                                            height="24px" viewBox="0 0 24 24" version="1.1">
-                                                            <g stroke="none" stroke-width="1" fill="none"
-                                                                fill-rule="evenodd">
-                                                                <rect x="0" y="0" width="24" height="24" />
-                                                                <path
-                                                                    d="M5,8.6862915 L5,5 L8.6862915,5 L11.5857864,2.10050506 L14.4852814,5 L19,5 L19,9.51471863 L21.4852814,12 L19,14.4852814 L19,19 L14.4852814,19 L11.5857864,21.8994949 L8.6862915,19 L5,19 L5,15.3137085 L1.6862915,12 L5,8.6862915 Z M12,15 C13.6568542,15 15,13.6568542 15,12 C15,10.3431458 13.6568542,9 12,9 C10.3431458,9 9,10.3431458 9,12 C9,13.6568542 10.3431458,15 12,15 Z"
-                                                                    fill="#000000" />
-                                                            </g>
-                                                        </svg>
-                                                        <!--end::Svg Icon-->
-                                                    </span>
-                                                </button>
-                                                <ul style="min-width: 3rem !important" class="dropdown-menu w-10px ">
-                                                    <li>
-                                                        <a
-                                                            href="{{ route('admin.contest.edit', ['id' => $contest->id]) }}">
-                                                            <span style="padding: 5px" role="button"
-                                                                class="svg-icon svg-icon-success svg-icon-2x">
-                                                                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Design/Edit.svg--><svg
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                    xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                                                                    height="24px" viewBox="0 0 24 24" version="1.1">
-                                                                    <g stroke="none" stroke-width="1" fill="none"
-                                                                        fill-rule="evenodd">
-                                                                        <rect x="0" y="0" width="24" height="24" />
-                                                                        <path
-                                                                            d="M8,17.9148182 L8,5.96685884 C8,5.56391781 8.16211443,5.17792052 8.44982609,4.89581508 L10.965708,2.42895648 C11.5426798,1.86322723 12.4640974,1.85620921 13.0496196,2.41308426 L15.5337377,4.77566479 C15.8314604,5.0588212 16,5.45170806 16,5.86258077 L16,17.9148182 C16,18.7432453 15.3284271,19.4148182 14.5,19.4148182 L9.5,19.4148182 C8.67157288,19.4148182 8,18.7432453 8,17.9148182 Z"
-                                                                            fill="#000000" fill-rule="nonzero"
-                                                                            transform="translate(12.000000, 10.707409) rotate(-135.000000) translate(-12.000000, -10.707409) " />
-                                                                        <rect fill="#000000" opacity="0.3" x="5" y="20"
-                                                                            width="15" height="2" rx="1" />
-                                                                    </g>
-                                                                </svg>
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        @hasrole('super admin')
-                                                            <form
-                                                                action="{{ route('admin.contest.destroy', ['id' => $contest->id]) }}"
-                                                                method="post">
-                                                                @csrf
-                                                                @method('delete')
-                                                                <button
-                                                                    style="padding: 5px ; background: none ; border: none ; list-style : none"
-                                                                    type="submit">
-                                                                    <span role="button"
-                                                                        class="svg-icon svg-icon-danger svg-icon-2x">
-                                                                        <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Trash.svg--><svg
-                                                                            xmlns="http://www.w3.org/2000/svg"
-                                                                            xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                                            width="24px" height="24px" viewBox="0 0 24 24"
-                                                                            version="1.1">
-                                                                            <g stroke="none" stroke-width="1" fill="none"
-                                                                                fill-rule="evenodd">
-                                                                                <rect x="0" y="0" width="24" height="24" />
-                                                                                <path
-                                                                                    d="M6,8 L18,8 L17.106535,19.6150447 C17.04642,20.3965405 16.3947578,21 15.6109533,21 L8.38904671,21 C7.60524225,21 6.95358004,20.3965405 6.89346498,19.6150447 L6,8 Z M8,10 L8.45438229,14.0894406 L15.5517885,14.0339036 L16,10 L8,10 Z"
-                                                                                    fill="#000000" fill-rule="nonzero" />
-                                                                                <path
-                                                                                    d="M14,4.5 L14,3.5 C14,3.22385763 13.7761424,3 13.5,3 L10.5,3 C10.2238576,3 10,3.22385763 10,3.5 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z"
-                                                                                    fill="#000000" opacity="0.3" />
-                                                                            </g>
-                                                                        </svg>
-                                                                        <!--end::Svg Icon-->
-                                                                    </span>
-                                                                </button>
-                                                            </form>
-                                                        @else
-                                                            <span style="padding: 5px ;cursor: not-allowed; user-select: none"
-                                                                class="svg-icon svg-icon-danger svg-icon-2x">
-                                                                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Code/Lock-circle.svg--><svg
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                    xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                                                                    height="24px" viewBox="0 0 24 24" version="1.1">
-                                                                    <g stroke="none" stroke-width="1" fill="none"
-                                                                        fill-rule="evenodd">
-                                                                        <rect x="0" y="0" width="24" height="24" />
-                                                                        <circle fill="#000000" opacity="0.3" cx="12" cy="12"
-                                                                            r="10" />
-                                                                        <path
-                                                                            d="M14.5,11 C15.0522847,11 15.5,11.4477153 15.5,12 L15.5,15 C15.5,15.5522847 15.0522847,16 14.5,16 L9.5,16 C8.94771525,16 8.5,15.5522847 8.5,15 L8.5,12 C8.5,11.4477153 8.94771525,11 9.5,11 L9.5,10.5 C9.5,9.11928813 10.6192881,8 12,8 C13.3807119,8 14.5,9.11928813 14.5,10.5 L14.5,11 Z M12,9 C11.1715729,9 10.5,9.67157288 10.5,10.5 L10.5,11 L13.5,11 L13.5,10.5 C13.5,9.67157288 12.8284271,9 12,9 Z"
-                                                                            fill="#000000" />
-                                                                    </g>
-                                                                </svg>
-                                                                <!--end::Svg Icon-->
-                                                            </span>
-                                                        @endhasrole
-
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @empty
-                                @endforelse
-                            </tbody>
-                        </table>
-                        {{ $contests->appends(request()->all())->links('pagination::bootstrap-4') }}
-                    </div>
-                </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                    @endforelse
+                </tbody>
+            </table>
+            {{ $contests->appends(request()->all())->links('pagination::bootstrap-4') }}
+        </div>
+    </div>
 
 
-            @endsection
-            @section('js_admin')
-                <script>
-                    let url = "/admin/contests?";
-                </script>
-                <script src="js/listformat.js"></script>
-                <script>
-                    const sort = '{{ request()->has('sort') ? (request('sort') == 'desc' ? 'asc' : 'desc') : 'desc' }}';
 
-                    $(document).ready(function() {
-                        $('#select-major').on('change', function() {
-                            checkUrlOut('major_id', $(this).val());
-                        })
+@endsection
+@section('js_admin')
+    <script>
+        let url = "/admin/contests?";
+    </script>
+    <script src="js/listformat.js"></script>
+    <script>
+        const sort = '{{ request()->has('sort') ? (request('sort') == 'desc' ? 'asc' : 'desc') : 'desc' }}';
 
-                        $('#select-status').on('change', function() {
-                            checkUrlOut('status', $(this).val());
-                        })
-                        $('.select-date-time-contest').on('change', function() {
-                            window.location = url + $(this).val() + '=' + $(this).val();
-                        })
-                        $('.form-select-status').on('change', function() {
-                            let id = $(this).data('id');
-                            if ($(this).val() == 1) {
-                                $.ajax({
-                                    url: (`admin/contests/un-status/${id}`),
-                                    method: "POST",
-                                    data: {
-                                        _token: "{{ csrf_token() }}"
-                                    },
-                                    success: function(data) {
-                                        if (!data.status) return alert(data.payload);
-                                    }
-                                })
-                            } else {
-                                $.ajax({
-                                    url: (`admin/contests/re-status/${id}`),
-                                    method: "POST",
-                                    data: {
+        $(document).ready(function() {
+            $('#select-major').on('change', function() {
+                checkUrlOut('major_id', $(this).val());
+            })
 
-                                        _token: "{{ csrf_token() }}"
-                                    },
-                                    success: function(data) {
-                                        if (!data.status) return alert(data.payload);
-                                    }
-                                })
-                            }
-                        });
+            $('#select-status').on('change', function() {
+                checkUrlOut('status', $(this).val());
+            })
+            $('.select-date-time-contest').on('change', function() {
+                window.location = url + $(this).val() + '=' + $(this).val();
+            })
+            $('.form-select-status').on('change', function() {
+                let id = $(this).data('id');
+                if ($(this).val() == 1) {
+                    $.ajax({
+                        url: (`admin/contests/un-status/${id}`),
+                        method: "POST",
+                        data: {
+                            _token: "{{ csrf_token() }}"
+                        },
+                        success: function(data) {
+                            if (!data.status) return alert(data.payload);
+                        }
                     })
-                </script>
-            @endsection
+                } else {
+                    $.ajax({
+                        url: (`admin/contests/re-status/${id}`),
+                        method: "POST",
+                        data: {
+
+                            _token: "{{ csrf_token() }}"
+                        },
+                        success: function(data) {
+                            if (!data.status) return alert(data.payload);
+                        }
+                    })
+                }
+            });
+        })
+    </script>
+@endsection

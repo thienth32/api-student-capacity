@@ -457,17 +457,7 @@
             $('#select-type-exam').on('change', function() {
                 checkUrlOut('type_exam_id', $(this).val());
             })
-            $('.btn-show').hide();
-            $('.btn-hide').on('click', function() {
-                $('.card-format').hide(1000);
-                $(this).hide(500);
-                $('.btn-show').show(500);
-            })
-            $('.btn-show').on('click', function() {
-                $('.card-format').show(1000);
-                $('.btn-hide').show(500);
-                $(this).hide(500);
-            })
+
             $('.select-date-serach').on('change', function() {
                 const value = $(this).val();
                 switch (value) {
