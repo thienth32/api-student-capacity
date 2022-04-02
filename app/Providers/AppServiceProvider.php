@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +15,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
     }
 
     /**
@@ -23,6 +24,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Arr::macro('listColumnOfTable', function (string $table) {
+            return Schema::getColumnListing($table);
+        });
     }
 }
