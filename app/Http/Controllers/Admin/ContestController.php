@@ -45,9 +45,11 @@ class ContestController extends Controller
                 ->with([
                     'major',
                     'teams',
+                    'rounds',
+                    'enterprise'
                 ])
-                ->withCount('teams')
-                ->paginate(request('limit') ?? 10);
+                ->withCount('teams');
+            // ->paginate(request('limit') ?? 10);
             // if(request()->ajax()){}
             return $data;
         } catch (\Throwable $th) {
@@ -58,7 +60,7 @@ class ContestController extends Controller
     //  View contest
     public function index()
     {
-        if (!($data = $this->getList())) return abort(404);
+        if (!($data = $this->getList()->paginate(request('limit') ?? 10))) return abort(404);
 
         return view('pages.contest.index', [
             'contests' => $data,
@@ -80,7 +82,7 @@ class ContestController extends Controller
         return $this->responseApi(
             [
                 "status" => true,
-                "payload" => $data,
+                "payload" => $data->get(),
             ]
         );
     }

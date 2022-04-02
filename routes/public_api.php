@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Majorcontroller;
-use App\Http\Controllers\RoundController;
+use App\Http\Controllers\Admin\RoundController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ContestController;
 use App\Http\Controllers\SponsorController;
@@ -28,8 +28,6 @@ use App\Models\Team;
 
 Route::get('sponsors', [SponsorController::class, 'list']);
 
-Route::get('contests', [ContestController::class, 'apiIndex']);
-
 Route::get('majors', [Majorcontroller::class, 'listMajor']); // Chuyên Ngành
 
 Route::get('users', [UserController::class, 'index']); // danh sách user
@@ -39,19 +37,16 @@ Route::get('company', [CompanyController::class, 'listCompany']); // Doanh nghi�
 // TEAMS
 
 
-Route::prefix('teams')->group(function () {
-    Route::post('api-add-team', [TeamController::class, 'Api_addTeam']);
-});
+// Route::prefix('teams')->group(function () {
+//     Route::post('api-add-team', [TeamController::class, 'Api_addTeam']);
+// });
 
 
-Route::prefix('contest')->group(function () {
+Route::prefix('contests')->group(function () {
+    Route::get('', [AdminContestController::class, 'apiIndex'])->name('contest.api.index');
     Route::get('{id}', [AdminContestController::class, 'apiShow'])->name('contest.api.show');
 });
-Route::prefix('round')->group(function () {
-    // Route::get('', [RoundController::class, 'apiIndex'])->name('round.admin.index');
-    // Route::put('{id}', [RoundController::class, 'update'])->name('round.update');
-    // Route::delete('{id}', [RoundController::class, 'destroy'])->name('round.delete');
-
-
+Route::prefix('rounds')->group(function () {
+    Route::get('', [RoundController::class, 'apiIndex'])->name('round.api.index');
     Route::get('{id}', [RoundController::class, 'show'])->name('round.api.show');
 });
