@@ -114,13 +114,13 @@
                             <div id="resultArrayUser" class=" mt-4">
                             </div>
 
+                            @if (session()->has('error'))
+                                <p class="text-danger">{{ session()->get('error') }}</p>
+                                @php
+                                    Session::forget('error');
+                                @endphp
+                            @endif
                         </div>
-                        @if (session()->has('error'))
-                            <p class="text-danger">{{ session()->get('error') }}</p>
-                            @php
-                                Session::forget('error');
-                            @endphp
-                        @endif
                     </div>
                     <div class="form-group mb-10 ">
                         <button type="submit" id="addTeam" class="btn btn-success btn-lg btn-block">Lưu </button>

@@ -43,13 +43,13 @@ class Builder extends  EloquentBuilder
         $now = Carbon::now('Asia/Ho_Chi_Minh');
         switch ($key) {
             case 'day':
-                return $this->whereDay($column, '>', $now->subDays($data));
+                return $this->whereDate($column, '>', $now->subDays($data));
                 break;
             case 'month':
-                return $this->whereMonth($column, '>', $now->subMonths($data));
+                return $this->whereDate($column, '>', $now->subMonths($data));
                 break;
             case 'year':
-                return $this->whereMonth($column, '>', $now->subYears($data));
+                return $this->whereDate($column, '>', $now->subYears($data));
                 break;
             default:
                 return $this;
