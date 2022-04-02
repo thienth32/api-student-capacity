@@ -50,7 +50,6 @@ class RoundController extends Controller
         if (is_null($round)) {
             return response()->json(['payload' => 'Không tồn tại trong hệ thống !'], 200);
         } {
-
             $round->load('contest');
             $round->load('type_exam');
             return response()->json(['payload' => $round], 200);
