@@ -56,7 +56,7 @@ class Round extends Model
 
     public function contest()
     {
-        return $this->belongsTo(Contest::class, 'contest_id');
+        return $this->belongsTo(Contest::class, 'contest_id')->with('teams');
     }
 
     public function type_exam()

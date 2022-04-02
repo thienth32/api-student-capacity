@@ -219,7 +219,7 @@ class TeamController extends Controller
     }
     public function update(Request $request, $id)
     {
-        if (!($request->has('user_id'))) return redirect()->back()->with('error', 'Chưa có thành viên trong đội');
+        if (!($request->has('user_id'))) return redirect()->back()->with('error', 'Chưa có thành viên trong đội !')->withInput();
         $validator = Validator::make(
             $request->all(),
             [
