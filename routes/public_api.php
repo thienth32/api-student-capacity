@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ContestController as AdminContestController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -47,3 +48,5 @@ Route::prefix('teams')->group(function () {
 //     Route::put('{id}', [RoundController::class, 'update'])->name('round.update');
 //     Route::delete('{id}', [RoundController::class, 'destroy'])->name('round.delete');
 // });
+
+Route::get('contest/{id}', [AdminContestController::class, 'apiShow']);

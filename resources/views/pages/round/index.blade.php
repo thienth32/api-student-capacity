@@ -58,22 +58,10 @@
             </div>
             <div class="col-12 row ">
                 <div class="col-12 row">
-                    <div class="col-4 col-xm-12">
-                        <label for="" class="label">Thời gian bắt đầu </label>
-                        <input
-                            value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime(request('start_time') ?? date(now()))) }}"
-                            type="datetime-local" class="start_time form-control">
-                    </div>
-                    <div class="col-4 col-xm-12">
-                        <label for="" class="label">Thời gian kết thúc </label>
-                        <input value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime(request('end_time') ?? date(now()))) }}"
-                            type="datetime-local" class="end_time form-control">
-
-                    </div>
-                    <div class="col-4 col-xm-12  ">
-                        <label for=""></label>
-                        <input class="btn-time form-control" type="button" value="Lọc ">
-                        {{-- <button type="button" class=" btn-time  btn btn-success   ">Lọc </button> --}}
+                    <div class="mb-0">
+                        <label class="form-label">Thời gian </label>
+                        <input class="form-control form-control-solid" placeholder="Pick date rage"
+                            id="kt_daterangepicker_2" />
                     </div>
                 </div>
 
@@ -107,7 +95,7 @@
                 </svg>
             </span>
 
-            <span class="btn-show svg-icon svg-icon-primary svg-icon-2x">
+            <span style="display: none" class="btn-show svg-icon svg-icon-primary svg-icon-2x">
                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Angle-down.svg--><svg
                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
                     viewBox="0 0 24 24" version="1.1">
@@ -459,23 +447,24 @@
             })
 
             $('.select-date-serach').on('change', function() {
+                loadToast();
                 const value = $(this).val();
                 switch (value) {
                     case 'day-7':
                         window.location = url + '&day=' + 7;
-                        break;
+                        return false;
                     case 'day-15':
                         window.location = url + '&day=' + 15;
-                        break;
+                        return false;
                     case 'month-1':
                         window.location = url + '&month=' + 1;
-                        break;
+                        return false;
                     case 'month-6':
                         window.location = url + '&month=' + 6;
-                        break;
+                        return false;
                     case 'year-1':
                         window.location = url + '&year=' + 1;
-                        break;
+                        return false;
                     default:
                         break;
                 }

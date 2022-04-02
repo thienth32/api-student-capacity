@@ -14,8 +14,29 @@ const aListQuery = [
     "miss_date",
 ];
 let searchParams = new URLSearchParams(window.location.search);
+toastr.options = {
+    closeButton: true,
+    debug: false,
+    newestOnTop: false,
+    progressBar: true,
+    positionClass: "toastr-bottom-left",
+    preventDuplicates: false,
+    onclick: null,
+    showDuration: "300",
+    hideDuration: "1000",
+    timeOut: "5000",
+    extendedTimeOut: "1000",
+    showEasing: "swing",
+    hideEasing: "linear",
+    showMethod: "fadeIn",
+    hideMethod: "fadeOut",
+};
 
+function loadToast() {
+    toastr.info("Trương trình đang chạy ...");
+}
 function checkUrlOut(key, value, valueAdd = "") {
+    loadToast();
     if (window.location.href.indexOf("?")) {
         aListQuery.map(function (data) {
             if (data == key) {
@@ -29,12 +50,18 @@ function checkUrlOut(key, value, valueAdd = "") {
         return (window.location = url + valueAdd);
     }
     window.location = window.location.href + "?" + key + "=" + value;
+    return false;
 }
+
 $(".refresh-btn").on("click", function () {
+    loadToast();
     window.location = url;
+    return false;
 });
 $(".format-database").on("click", function () {
+    loadToast();
     window.location = url + "sort_by=" + $(this).data("key") + "&sort=" + sort;
+    return false;
 });
 $(".ip-search").on("keyup", function (e) {
     if (e.keyCode == 13) {
@@ -63,3 +90,34 @@ $(".btn-show").on("click", function () {
     $(".btn-hide").show(500);
     $(this).hide();
 });
+// $(".btn-time").on("click", function (e) {
+//     e.preventDefault();
+//     let start_time = $(".start_time").val();
+//     let end_time = $(".end_time").val();
+//     if (new Date(start_time).getTime() >= new Date(end_time).getTime())
+//         return alert(
+//             "Thời gian kết thúc phải lớn hơn thời gian bắt đầu thời gian bắt đâu !"
+//         );
+//     window.location =
+//         url + "&start_time=" + start_time + "&end_time=" + end_time;
+// });
+$("#kt_daterangepicker_2").daterangepicker(
+    {
+        timePicker: true,
+        startDate: moment(),
+        endDate: moment(),
+        locale: {
+            format: "DD/MM/YYYY hh:mm:ss A",
+        },
+    },
+    function (start, end) {
+        this.loadToast();
+        window.location =
+            url +
+            "&start_time=" +
+            moment(start).format("YYYY-MM-DDThh:mm") +
+            "&end_time=" +
+            moment(end).format("YYYY-MM-DDThh:mm");
+        return false;
+    }
+);
