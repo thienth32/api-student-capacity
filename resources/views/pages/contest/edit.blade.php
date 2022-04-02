@@ -60,10 +60,10 @@
                                         <!--begin::Image input-->
                                         <div style="position: relative" class="image-input image-input-outline"
                                             data-kt-image-input="true"
-                                            style="background-image: url('{{ Storage::disk('google')->has($Contest->img)? Storage::disk('google')->url($Contest->img): 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}')">
+                                            style="background-image: url('{{ $Contest->img? $Contest->img: 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}')">
                                             <!--begin::Preview existing avatar-->
                                             <div class="image-input-wrapper w-100px h-100px"
-                                                style="background-image: url('{{ Storage::disk('google')->has($Contest->img)? Storage::disk('google')->url($Contest->img): 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}')">
+                                                style="background-image: url('{{ $Contest->img? $Contest->img: 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}')">
                                             </div>
                                             <!--end::Preview existing avatar-->
                                             <!--begin::Edit-->
@@ -152,14 +152,14 @@
                     @error('status')
                         <p class="text-danger">{{ $message }}</p>
                     @enderror
-            </div>
-            <div class="form-group mb-10 ">
-                <button type="submit" name="" id="" class="btn btn-success btn-lg btn-block">Lưu </button>
+                    <div class="form-group mb-10 ">
+                        <button type="submit" name="" id="" class="btn btn-success btn-lg btn-block">Lưu </button>
+                    </div>
             </div>
             </form>
         </div>
     </div>
-    </div>
+
 @endsection
 @section('js_admin')
 
