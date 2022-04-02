@@ -20,10 +20,9 @@
         </h1>
         {{--  --}}
 
-        <div class="col-sm-12 row card-format">
+        <div class="row card-format">
 
-
-            <div class="col-4">
+            <div class=" col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="   form-group p-2">
                     <label>Chuyên ngành </label>
                     <select id="select-major" class="form-control form-control-solid">
@@ -37,7 +36,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-4">
+            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="   form-group p-2">
                     <label>Tình trạng </label>
                     <select id="select-status" class="form-control form-control-solid">
@@ -50,7 +49,7 @@
                 </div>
             </div>
 
-            <div class="col-4">
+            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="  form-group p-2">
                     <label>Tìm kiếm </label>
                     <input type="text" value="{{ request('q') ?? '' }}" placeholder="Tìm kiếm ... "
@@ -66,7 +65,7 @@
                     </div>
 
 
-                    <div class="col-12 col-xm-12">
+                    <div class="col-12 ">
                         <label for="" class="label">Hoạt động cuộc thi </label>
                         <select class="select-date-time-contest form-control">
                             <option class="form-control">---- Hoạt động cuộc thi ----</option>
@@ -121,8 +120,8 @@
         </div>
 
         {{--  --}}
-        <div class="tb  ">
-            <table class=" table table-hover table-responsive-md ">
+        <div class="table-responsive  ">
+            <table class=" table table-hover  ">
                 <thead>
                     <tr>
                         <th scope="col" width="2%">
