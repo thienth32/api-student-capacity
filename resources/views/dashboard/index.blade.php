@@ -2,9 +2,6 @@
 @section('title', "Bàn làm việc")
 @section('page-title', 'Bàn làm việc')
 @section('content')
-@php
-    use Illuminate\Support\Facades\Auth;
-@endphp
 <div class="row">
     <div class="col-xl-4 mb-5 mb-xl-10">
         <div class="card card-flush h-xl-100">
