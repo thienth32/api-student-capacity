@@ -41,10 +41,10 @@
                 <div class="   form-group p-2">
                     <label>Tình trạng </label>
                     <select id="select-status" class="form-control form-control-solid">
-                        <option>-- Tình trạng --</option>
+                        <option @selected(!request()->has('status'))>-- Tình trạng --</option>
                         <option @selected(request('status') == 1) value="1">Kích họat
                         </option>
-                        <option @selected(request('status') == 0) value="0">Không kích hoạt
+                        <option @selected(request()->has('status') && request('status') == 0) value="0">Không kích hoạt
                         </option>
                     </select>
                 </div>
@@ -59,20 +59,10 @@
             </div>
             <div class="col-12 row ">
                 <div class="col-12 row">
-                    <div class="col-4 col-xm-12">
-                        <label for="" class="label">Thời gian bắt đầu </label>
-                        <input
-                            value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime(request('start_time') ?? date(now()))) }}"
-                            type="datetime-local" class="start_time form-control">
-                    </div>
-                    <div class="col-4 col-xm-12">
-                        <label for="" class="label">Thời gian kết thúc </label>
-                        <input value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime(request('end_time') ?? date(now()))) }}"
-                            type="datetime-local" class="end_time form-control">
-                    </div>
-                    <div class="col-4 col-xm-12  ">
-                        <label for=""></label>
-                        <input class="btn-time form-control" type="button" value="Lọc ">
+                    <div class="mb-0">
+                        <label class="form-label">Thời gian </label>
+                        <input class="form-control form-control-solid" placeholder="Pick date rage"
+                            id="kt_daterangepicker_2" />
                     </div>
 
 
@@ -250,9 +240,7 @@
                                         <td>{{ $contest->name }}</td>
                                         <td>
                                             <img style="width:100px"
-                                                src="{{ (\Storage::disk('google')->has($contest->img) ? 111 : null) == null
-                                                    ? 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg'
-                                                    : \Storage::disk('google')->url($contest->img) }}"
+                                                src="{{ $contest->img == null? 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg': $contest->img }}"
                                                 alt="">
                                         </td>
                                         <td>
@@ -454,7 +442,9 @@
                             checkUrlOut('status', $(this).val());
                         })
                         $('.select-date-time-contest').on('change', function() {
+                            loadToast();
                             window.location = url + $(this).val() + '=' + $(this).val();
+                            return false;
                         })
                         $('.form-select-status').on('change', function() {
                             let id = $(this).data('id');

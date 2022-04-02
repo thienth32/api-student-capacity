@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Contest;
 use App\Models\Major;
+use App\Services\Traits\TResponse;
 use App\Services\Traits\TUploadImage;
 use Carbon\Carbon;
 use Exception;
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Validator;
 
 class ContestController extends Controller
 {
-    use TUploadImage;
+    use TUploadImage, TResponse;
     private $contest;
     private $major;
 
@@ -69,14 +70,19 @@ class ContestController extends Controller
     public function apiIndex()
     {
 
-        if (!($data = $this->getList())) return response()->json([
-            "status" => false,
-            "payload" => "Server not found",
-        ], 404);
-        return response()->json([
-            "status" => true,
-            "payload" => $data,
-        ], 200);
+        if (!($data = $this->getList())) return $this->responseApi(
+            [
+                "status" => false,
+                "payload" => "Not found",
+            ],
+            404
+        );
+        return $this->responseApi(
+            [
+                "status" => true,
+                "payload" => $data,
+            ]
+        );
     }
     /**
      *  End contest
@@ -205,7 +211,7 @@ class ContestController extends Controller
     {
         $major = Major::orderBy('id', 'desc')->get();
 
-        $Contest = Contest::find($id);
+        $Contest = $this->getContest($id)->first();
         // dd($Contest);
         if ($Contest) {
             return view('pages.contest.edit', compact('Contest', 'major'));
@@ -259,6 +265,62 @@ class ContestController extends Controller
 
             Db::commit();
             return Redirect::route('admin.contest.list');
+        }
+    }
+
+    private function getContest($id)
+    {
+        try {
+            $contest = $this->contest::where('id', $id);
+            return $contest;
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
+
+    private function addCollectionApiContest($contest)
+    {
+        try {
+            return $contest->with(['teams' => function ($q) {
+                return $q->withCount('members');
+            }, 'rounds'])->withCount('rounds');
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
+
+    public function apiShow($id)
+    {
+        try {
+            //
+            if (!($contest = $this->getContest($id))) return $this->responseApi(
+                [
+                    'status' => false,
+                    'payload' => 'Không tìm thấy cuộc thi !',
+                ]
+            );
+            if (!($contest2 = $this->addCollectionApiContest($contest))) return $this->responseApi(
+                [
+                    'status' => false,
+                    'payload' => 'Không thể lấy thông tin cuộc thi  !',
+                ]
+            );
+
+            return $this->responseApi(
+                [
+                    "status" => true,
+                    "payload" => $contest2->first(),
+                ]
+            );
+        } catch (\Throwable $th) {
+
+            return $this->responseApi(
+                [
+                    "status" => false,
+                    "payload" => 'Not found ',
+                ],
+                404
+            );
         }
     }
 }

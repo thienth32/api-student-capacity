@@ -3,15 +3,19 @@
 namespace App\Models;
 
 use App\Services\Builder\Builder;
+use App\Services\Traits\TGetAttributeColumn;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
 class Round extends Model
 {
-    use HasFactory;
+    use HasFactory, TGetAttributeColumn;
     protected $table = "rounds";
     protected $primaryKey = "id";
+    protected $appends = [
+        'slug_name',
+    ];
     public $fillable = [
         'name',
         'image',
