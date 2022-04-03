@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ContestController as AdminContestController;
+use App\Http\Controllers\Admin\MajorController as AdminMajorController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -28,7 +29,7 @@ use App\Models\Team;
 
 Route::get('sponsors', [SponsorController::class, 'list']);
 
-Route::get('majors', [Majorcontroller::class, 'listMajor']); // Chuyên Ngành
+// Route::get('majors', [Majorcontroller::class, 'listMajor']); // Chuyên Ngành
 
 Route::get('users', [UserController::class, 'index']); // danh sách user
 
@@ -49,4 +50,8 @@ Route::prefix('contests')->group(function () {
 Route::prefix('rounds')->group(function () {
     Route::get('', [RoundController::class, 'apiIndex'])->name('round.api.index');
     Route::get('{id}', [RoundController::class, 'show'])->name('round.api.show');
+});
+Route::prefix('majors')->group(function () {
+    // Route::get('', [RoundController::class, 'apiIndex'])->name('round.api.index');
+    Route::get('{id}', [AdminMajorController::class, 'apiShow'])->name('major.api.show');
 });
