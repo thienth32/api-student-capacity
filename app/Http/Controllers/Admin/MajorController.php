@@ -16,10 +16,10 @@ class MajorController extends Controller
         $this->major = $major;
     }
 
-    private function getMajor($id)
+    private function getMajor($slug)
     {
         try {
-            $major = $this->major::where('id', $id);
+            $major = $this->major::where('slug', $slug);
             return $major;
         } catch (\Throwable $th) {
             return false;
@@ -35,9 +35,9 @@ class MajorController extends Controller
         }
     }
 
-    public function apiShow($id)
+    public function apiShow($slug)
     {
-        if (!($major = $this->getMajor($id))) return $this->responseApi(
+        if (!($major = $this->getMajor($slug))) return $this->responseApi(
             [
                 'status' => false,
                 'payload' => 'Không tìm thấy major '

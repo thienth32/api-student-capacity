@@ -53,5 +53,5 @@ Route::prefix('rounds')->group(function () {
 });
 Route::prefix('majors')->group(function () {
     // Route::get('', [RoundController::class, 'apiIndex'])->name('round.api.index');
-    Route::get('{id}', [AdminMajorController::class, 'apiShow'])->name('major.api.show');
+    Route::get('{slug}', [AdminMajorController::class, 'apiShow'])->name('major.api.show');
 });
