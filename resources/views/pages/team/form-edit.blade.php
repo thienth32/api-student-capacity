@@ -1,10 +1,8 @@
 @extends('layouts.main')
 @section('title', 'Chỉnh sửa đội thi')
+@section('page-title', 'Chỉnh sửa đội thi')
 @section('content')
     <div class="row">
-        <div class="col-lg-12">
-            <h1 class="text-center">Chỉnh sửa đội thi</h1>
-        </div>
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
                 <form id="formEditTeam" action="{{ route('admin.teams.update', ['id' => $team->id]) }}" method="post"
@@ -134,7 +132,7 @@
     </div>
 @endsection
 
-@section('js_admin')
+@section('page-script')
     <script>
         $(document).ready(function() {
             var userArray = @json($userArray);
@@ -190,7 +188,8 @@
                         type: "post",
                         url: "{{ route('admin.user.TeamUserSearch') }}",
                         data: {
-                            key: key
+                            key: key,
+                            _token: "{{ csrf_token() }}",
                         },
                         success: function(response) {
                             var _html = ``;

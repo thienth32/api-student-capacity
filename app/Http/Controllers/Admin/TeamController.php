@@ -260,7 +260,7 @@ class TeamController extends Controller
                 $team->save();
                 Db::commit();
 
-                return Redirect::back();
+                return Redirect::route('admin.teams');
             }
         } catch (Exception $ex) {
             Db::rollBack();
