@@ -121,11 +121,11 @@
         </div>
 
         {{--  --}}
-        <div class="table-responsive  ">
+        <div class="table-responsive ">
             <table class=" table table-hover  ">
                 <thead>
                     <tr>
-                        <th scope="col" width="2%">
+                        <th scope="col">
                             <span role="button" data-key="id"
                                 class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
@@ -152,7 +152,7 @@
                                 <!--end::Svg Icon-->
                             </span>
                         </th>
-                        <th scope="col" width="10%">Cuộc thi
+                        <th scope="col">Cuộc thi
                             <span role="button" data-key="name"
                                 class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
@@ -179,8 +179,7 @@
                                 <!--end::Svg Icon-->
                             </span>
                         </th>
-                        <th scope="col" width="10%">Ảnh đại diện </th>
-                        <th scope="col" width="10%">Chi tiết
+                        <th scope="col">Chi tiết
                             <span role="button" data-key="description"
                                 class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
@@ -207,10 +206,10 @@
                                 <!--end::Svg Icon-->
                             </span>
                         </th>
-                        <th scope="col" width="10%">Chuyên ngành </th>
-                        <th scope="col" width="10%">Tình trạng </th>
-                        <th scope="col" width="10%"> Quá trình </th>
-                        <th scope="col" width="10%">Thời gian bắt đầu
+                        <th scope="col">Chuyên ngành </th>
+                        <th scope="col">Tình trạng </th>
+                        <th scope="col"> Quá trình </th>
+                        <th scope="col">Thời gian bắt đầu
                             <span role="button" data-key="date_start"
                                 class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
@@ -237,7 +236,7 @@
                                 <!--end::Svg Icon-->
                             </span>
                         </th>
-                        <th scope="col" width="10%">Thời gian kết thúc
+                        <th scope="col">Thời gian kết thúc
                             <span role="button" data-key="register_deadline"
                                 class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
@@ -269,15 +268,11 @@
                 <tbody>
                     @forelse ($contests as $key => $contest)
                         <tr>
-                            <th scope="row">{{ $key + 1 }}</th>
+                            <th scope="row">
+                                {{ (request()->has('page') && request('page') !== 1 ? $contests->perPage() * (request('page') - 1) : 0) +$key +1 }}
+                            </th>
                             <td>{{ $contest->name }}</td>
-                            <td>
-                                <img style="width:100px"
-                                    src="{{ $contest->img == null
-                                        ? 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg'
-                                        : $contest->img }}"
-                                    alt="">
-                            </td>
+
                             <td>
 
                                 <button class="p-4" type="button"

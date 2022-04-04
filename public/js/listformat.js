@@ -33,7 +33,7 @@ toastr.options = {
 };
 
 function loadToast() {
-    toastr.info("Trương trình đang chạy ...");
+    toastr.info("Chương trình đang chạy ...");
 }
 function checkUrlOut(key, value, valueAdd = "") {
     loadToast();

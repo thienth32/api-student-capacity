@@ -159,7 +159,7 @@
 
 @endsection
 
-@section('js_admin')
+@section('page-script')
     <script>
 
     </script>

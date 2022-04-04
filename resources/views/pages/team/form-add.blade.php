@@ -131,7 +131,7 @@
     </div>
 @endsection
 
-@section('js_admin')
+@section('page-script')
     <script>
         $(document).ready(function() {
             var userArray = [];

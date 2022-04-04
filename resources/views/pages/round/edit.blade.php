@@ -160,7 +160,7 @@
         </div>
     </div>
 @endsection
-@section('js_admin')
+@section('page-script')
 
     <script>
         $("#formAddRound").validate({

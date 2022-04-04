@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title', 'Thêm vòng thi')
+@section('title', 'Thêm cuộc thi')
 @section('page-title', 'Thêm mới cuộc thi')
 @section('content')
     <div class="row">
@@ -204,7 +204,7 @@
 
 @endsection
 
-@section('js_admin')
+@section('page-script')
 
     <script>
         $("#formAddContest").validate({
