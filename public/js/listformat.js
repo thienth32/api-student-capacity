@@ -111,7 +111,7 @@ $("#kt_daterangepicker_2").daterangepicker(
         },
     },
     function (start, end) {
-        this.loadToast();
+        loadToast();
         window.location =
             url +
             "&start_time=" +

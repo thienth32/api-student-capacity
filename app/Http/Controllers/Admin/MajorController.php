@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Major;
 use App\Services\Traits\TResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class MajorController extends Controller
 {
@@ -111,9 +112,46 @@ class MajorController extends Controller
                 'name' => $request->name,
                 'slug' => $slug,
             ]);
-            return;
+            return redirect()->route('admin.major.list');;
         } catch (\Throwable $th) {
-            //throw $th;
+            return abort(404);
         }
+    }
+
+    public function edit(Request $request, $slug)
+    {
+        if ($major = $this->getMajor($slug)) {
+            return view('pages.major.edit', ['major' => $major->first()]);
+        }
+        return abort(404);
+    }
+
+    public function update(Request $request, $slug)
+    {
+        if (!($major = $this->getMajor($slug))) return abort(404);
+        $request->validate(
+            [
+                'name' => 'required|min:4',
+                'slug' => 'required|unique:majors,slug'
+            ],
+            [
+                'name.required' => 'Không được bỏ trống tên !',
+                'slug.required' => 'Không được bỏ trống slug !',
+                'name.min' => 'Ký tự tên phải lớn hơn 4 ký tự  !',
+                'name.unique' => 'Slug không được trùng !',
+            ]
+        );
+        $major->update([
+            'name' => $request->name,
+            'slug' => $slug,
+        ]);
+        return redirect()->route('admin.major.list');
+    }
+
+    public function destroy($slug)
+    {
+        if (!($major = $this->getMajor($slug))) return abort(404);
+        $major->delete();
+        return redirect()->back();
     }
 }

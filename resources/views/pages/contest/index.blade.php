@@ -1,5 +1,6 @@
 @extends('layouts.main')
 @section('title', 'Danh sách cuộc thi')
+@section('page-title', 'Danh sách cuộc thi')
 @section('content')
 
     <div class="card card-flush p-4">
@@ -451,7 +452,7 @@
 
 
 @endsection
-@section('js_admin')
+@section('page-script')
     <script>
         let url = "/admin/contests?";
     </script>
