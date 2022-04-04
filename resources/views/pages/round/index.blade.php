@@ -368,7 +368,7 @@
                                             </a>
                                         </li>
                                         <li class="my-3">
-                                            <a href="javascript:void()" data-bs-toggle="modal"
+                                            {{-- <a href="javascript:void()" data-bs-toggle="modal"
                                                 data-bs-target="#kt_modal_{{ $round->id }}_{{ $key }}">
                                                 <span class="svg-icon svg-icon-primary svg-icon-2x">
                                                     <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Communication/Group.svg--><svg
@@ -388,7 +388,7 @@
                                                     <!--end::Svg Icon-->
                                                 </span>
                                                 Ban giám khảo
-                                            </a>
+                                            </a> --}}
 
 
                                         </li>
@@ -443,58 +443,6 @@
 
                                         </li>
                                     </ul>
-                                </div>
-
-                                <div class="modal fade" tabindex="-1"
-                                    id="kt_modal_{{ $round->id }}_{{ $key }}">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title">Modal title</h5>
-
-                                                <!--begin::Close-->
-                                                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2"
-                                                    data-bs-dismiss="modal" aria-label="Close">
-                                                    <span class="svg-icon svg-icon-2x"></span>
-                                                </div>
-                                                <!--end::Close-->
-                                            </div>
-
-                                            <div class="modal-body">
-                                                <div class="table-responsive">
-                                                    <table class="table table-rounded table-striped border gy-7 gs-7">
-                                                        <thead>
-                                                            <tr
-                                                                class="fw-bold fs-6 text-gray-800 border-bottom border-gray-200">
-                                                                <th>Name</th>
-                                                                <th>Email</th>
-
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @if (is_null($round->judges))
-                                                                Chưa có giám khảo cho cuộc thi này !!
-                                                            @else
-                                                                @foreach ($round->judges as $judge)
-                                                                    <tr>
-                                                                        <td>{{ $judge->name }}</td>
-                                                                        <td>{{ $judge->email }}</td>
-
-                                                                    </tr>
-                                                                @endforeach
-                                                            @endif
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-light"
-                                                    data-bs-dismiss="modal">Close</button>
-
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </td>
                         </tr>
