@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ContestController;
 use App\Http\Controllers\Admin\DashboardController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('dashboard/api-cuoc-thi', [DashboardController::class, 'chartCompetity'])->name('dashboard.chart-competity');
 
 Route::prefix('rounds')->group(function () {
     Route::get('form-add', [RoundController::class, 'create'])->name('admin.round.create');
@@ -49,3 +50,4 @@ Route::prefix('contests')->group(function () {
 
     Route::delete('{id}', [ContestController::class, 'destroy'])->name('admin.contest.destroy');
 });
+?>

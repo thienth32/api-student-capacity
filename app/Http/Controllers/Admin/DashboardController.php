@@ -34,4 +34,18 @@ class DashboardController extends Controller
             'totalStudentAccount'
         ));
     }
+
+    public function chartCompetity(Request $request){
+        $start = date($request->startDate);
+        $end = date($request->endDate);
+        $lstContest = Contest::with('teams')
+                                ->where('status', config('util.CONTEST_STATUS_REGISTERING'))
+                                ->whereBetween('register_deadline', [$start, $end])
+                                ->orderByDesc('id')
+                                ->get();
+        return response()->json([
+            'status' => true,
+            'data' => $lstContest
+        ]);
+    }
 }
