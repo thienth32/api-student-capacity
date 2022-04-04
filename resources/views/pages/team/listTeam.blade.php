@@ -1,5 +1,6 @@
 @extends('layouts.main')
 @section('title', 'Danh sách đội thi')
+@section('page-title', 'Danh sách đội thi')
 @section('content')
     <style>
 
@@ -49,7 +50,6 @@
 
     <div id="loading"></div>
     <div class="content">
-        <h2 style="font-size: 30px;margin-bottom:70px" class="text-center "> Danh sách Đội thi</h2>
         <div class="row">
             <div class="col-md-4">
                 <div style="width:300px" class="form-group mb-5">

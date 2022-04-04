@@ -226,8 +226,10 @@ class TeamController extends Controller
                 'name' => 'required|max:255',
                 'image' => 'max:10000',
                 'contest_id' => 'required|numeric',
+                // "*.user_id" => 'required',
             ],
             [
+                // "*.user_id" => 'Chưa có thành viên trong đội !',
                 'name.required' => 'Chưa nhập trường này !',
                 'name.max' => 'Độ dài kí tự không phù hợp !',
                 'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
