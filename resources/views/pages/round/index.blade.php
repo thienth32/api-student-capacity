@@ -368,8 +368,7 @@
                                             </a>
                                         </li>
                                         <li class="my-3">
-                                            {{-- <a href="javascript:void()" data-bs-toggle="modal"
-                                                data-bs-target="#kt_modal_{{ $round->id }}_{{ $key }}">
+                                            <a href="{{ route('admin.round.judges', ['id' => $round->id]) }}">
                                                 <span class="svg-icon svg-icon-primary svg-icon-2x">
                                                     <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Communication/Group.svg--><svg
                                                         xmlns="http://www.w3.org/2000/svg"
@@ -388,7 +387,7 @@
                                                     <!--end::Svg Icon-->
                                                 </span>
                                                 Ban giám khảo
-                                            </a> --}}
+                                            </a>
 
 
                                         </li>

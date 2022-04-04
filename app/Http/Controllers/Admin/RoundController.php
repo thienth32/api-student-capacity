@@ -335,4 +335,23 @@ class RoundController extends Controller
     /**
      *  End destroy round
      */
+    private function roundJudges($id)
+    {
+        $rounds = Round::find($id);
+        $rounds->load('judges');
+        return $rounds;
+    }
+
+    public function roundDetailJudges($id)
+    {
+        $rounds = $this->roundJudges($id);
+        return view('pages.judges.list', compact('rounds'));
+    }
+    public function roundDetailJudgesApi($id)
+    {
+        // return response()->json($id, 200);
+
+        $rounds = $this->roundJudges($id);
+        return response()->json(['payload' => $rounds], 200);
+    }
 }

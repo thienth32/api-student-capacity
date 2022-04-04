@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoundController;
 use App\Http\Controllers\Admin\ContestController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\JudgeController;
 use App\Http\Controllers\Admin\MajorController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
@@ -18,6 +19,8 @@ Route::prefix('rounds')->group(function () {
     Route::get('{id}/edit', [RoundController::class, 'edit'])->name('admin.round.edit');
     Route::put('{id}', [RoundController::class, 'update'])->name('admin.round.update');
     Route::delete('{id}', [RoundController::class, 'destroy'])->name('admin.round.destroy');
+    Route::get('{id}/judges', [RoundController::class, 'roundDetailJudges'])->name('admin.round.judges');
+    Route::get('{id}/judges-api', [RoundController::class, 'roundDetailJudgesApi'])->name('admin.round.judges.api');
 });
 Route::prefix('contests')->group(function () {
 });
@@ -62,4 +65,10 @@ Route::prefix('majors')->group(function () {
     Route::post('store', [MajorController::class, 'store'])->name('admin.major.store');
 
     Route::delete('{slug}', [MajorController::class, 'destroy'])->name('admin.major.destroy');
+});
+
+Route::prefix('judges')->group(function () {
+    Route::post('{id}/attach', [JudgeController::class, 'attachJudge'])->name('admin.judge.attachJudge');
+    Route::post('{id}/detach', [JudgeController::class, 'detachJudge'])->name('admin.judge.detachJudge');
+    Route::post('{id}/sync', [JudgeController::class, 'syncJudge'])->name('admin.judge.syncJudge');
 });
