@@ -15,6 +15,11 @@ class Major extends Model
         'slug'
     ];
 
+    public function contests()
+    {
+        return $this->hasMany(Contest::class, 'major_id');
+    }
+
     public function newEloquentBuilder($query)
     {
         return new Builder($query);
