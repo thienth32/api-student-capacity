@@ -21,8 +21,8 @@
         <div class="row card-format">
 
 
-            <div class="col-4">
-                <div class="   form-group p-2">
+            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
+                <div class="form-group p-2">
                     <label>Cuộc thi </label>
                     <select id="select-contest" class="form-control form-control-solid">
                         <option>-- Cuộc thi --</option>
@@ -35,7 +35,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-4">
+            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="  form-group p-2">
                     <label>Loại vòng thi </label>
                     <select id="select-type-exam" class="form-control form-control-solid">
@@ -49,7 +49,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-4">
+            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="  form-group p-2">
                     <label>Tìm kiếm </label>
                     <input type="text" value="{{ request('q') ?? '' }}" placeholder="Tìm kiếm ... "
@@ -58,26 +58,14 @@
             </div>
             <div class="col-12 row ">
                 <div class="col-12 row">
-                    <div class="col-4 col-xm-12">
-                        <label for="" class="label">Thời gian bắt đầu </label>
-                        <input
-                            value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime(request('start_time') ?? date(now()))) }}"
-                            type="datetime-local" class="start_time form-control">
-                    </div>
-                    <div class="col-4 col-xm-12">
-                        <label for="" class="label">Thời gian kết thúc </label>
-                        <input value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime(request('end_time') ?? date(now()))) }}"
-                            type="datetime-local" class="end_time form-control">
-
-                    </div>
-                    <div class="col-4 col-xm-12  ">
-                        <label for=""></label>
-                        <input class="btn-time form-control" type="button" value="Lọc ">
-                        {{-- <button type="button" class=" btn-time  btn btn-success   ">Lọc </button> --}}
+                    <div class="col-12  ">
+                        <label class="form-label">Thời gian </label>
+                        <input class="form-control form-control-solid" placeholder="Pick date rage"
+                            id="kt_daterangepicker_2" />
                     </div>
                 </div>
 
-                <div class="col-12 col-xm-12">
+                <div class="col-12  ">
                     <label for="" class="label">Khoảng thời gian </label>
                     <select class="select-date-serach form-control">
                         <option class="form-control">---- Thời gian ----</option>
@@ -93,7 +81,7 @@
 
         </div>
         <div class="back">
-
+            <hr>
             <span class="btn-hide svg-icon svg-icon-primary svg-icon-2x">
                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Stockholm-icons/Navigation/Angle-up.svg--><svg
                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
@@ -107,7 +95,7 @@
                 </svg>
             </span>
 
-            <span class="btn-show svg-icon svg-icon-primary svg-icon-2x">
+            <span style="display: none" class="btn-show svg-icon svg-icon-primary svg-icon-2x">
                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Angle-down.svg--><svg
                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
                     viewBox="0 0 24 24" version="1.1">
@@ -123,7 +111,7 @@
             </span>
 
         </div>
-        <div class=" p-4 card card-flush ">
+        <div class="table-responsive p-4 card card-flush ">
 
             <table class=" table table-hover table-responsive-md ">
                 <thead>
@@ -457,35 +445,26 @@
             $('#select-type-exam').on('change', function() {
                 checkUrlOut('type_exam_id', $(this).val());
             })
-            $('.btn-show').hide();
-            $('.btn-hide').on('click', function() {
-                $('.card-format').hide(1000);
-                $(this).hide(500);
-                $('.btn-show').show(500);
-            })
-            $('.btn-show').on('click', function() {
-                $('.card-format').show(1000);
-                $('.btn-hide').show(500);
-                $(this).hide(500);
-            })
+
             $('.select-date-serach').on('change', function() {
+                loadToast();
                 const value = $(this).val();
                 switch (value) {
                     case 'day-7':
                         window.location = url + '&day=' + 7;
-                        break;
+                        return false;
                     case 'day-15':
                         window.location = url + '&day=' + 15;
-                        break;
+                        return false;
                     case 'month-1':
                         window.location = url + '&month=' + 1;
-                        break;
+                        return false;
                     case 'month-6':
                         window.location = url + '&month=' + 6;
-                        break;
+                        return false;
                     case 'year-1':
                         window.location = url + '&year=' + 1;
-                        break;
+                        return false;
                     default:
                         break;
                 }

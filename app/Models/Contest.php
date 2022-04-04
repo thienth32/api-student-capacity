@@ -2,14 +2,25 @@
 
 namespace App\Models;
 
+use App\Casts\FormatDate;
+use App\Casts\FormatImageGet;
 use App\Services\Builder\Builder;
+use App\Services\Traits\TGetAttributeColumn;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Contest extends Model
 {
-    use HasFactory;
+    use HasFactory, TGetAttributeColumn;
     protected $table = 'contests';
+    protected $casts = [
+        'created_at' => FormatDate::class,
+        'updated_at' =>  FormatDate::class,
+        'img' => FormatImageGet::class,
+    ];
+    protected $appends = [
+        'slug_name',
+    ];
 
     public static function boot()
     {
