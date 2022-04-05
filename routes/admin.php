@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoundController;
 use App\Http\Controllers\Admin\ContestController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\EnterpriseController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('dashboard/api-cuoc-thi', [DashboardController::class, 'chartCompetity'])->name('dashboard.chart-competity');
@@ -50,4 +51,12 @@ Route::prefix('contests')->group(function () {
 
     Route::delete('{id}', [ContestController::class, 'destroy'])->name('admin.contest.destroy');
 });
-?>
+Route::prefix('enterprise')->group(function () {
+    Route::get('{id}/edit', [EnterpriseController::class, 'edit'])->name('admin.enterprise.edit');
+    Route::put('{id}', [EnterpriseController::class, 'update'])->name('admin.enterprise.update');
+    Route::get('', [EnterpriseController::class, 'index'])->name('admin.enterprise.list');
+    Route::get('form-add', [EnterpriseController::class, 'create'])->name('admin.enterprise.create');
+    Route::post('form-add-save', [EnterpriseController::class, 'store'])->name('admin.enterprise.store');
+    Route::delete('{id}', [EnterpriseController::class, 'destroy'])->name('admin.enterprise.destroy');
+
+});

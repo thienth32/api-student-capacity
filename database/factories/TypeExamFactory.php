@@ -12,6 +12,7 @@ class TypeExamFactory extends Factory
 {
     protected $model = TypeExam::class;
     /**
+     *
      * Define the model's default state.
      *
      * @return array<string, mixed>
@@ -20,6 +21,7 @@ class TypeExamFactory extends Factory
     {
         return [
             'name' => $this->faker->name,
+            'description'=>$this->faker->text
         ];
     }
 }
