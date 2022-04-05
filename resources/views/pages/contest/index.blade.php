@@ -473,51 +473,9 @@
 @section('page-script')
     <script>
         let url = "/admin/contests?";
-    </script>
-    <script src="js/listformat.js"></script>
-    <script>
+        const _token = "{{ csrf_token() }}";
         const sort = '{{ request()->has('sort') ? (request('sort') == 'desc' ? 'asc' : 'desc') : 'desc' }}';
-
-        $(document).ready(function() {
-            $('#select-major').on('change', function() {
-                checkUrlOut('major_id', $(this).val());
-            })
-
-            $('#select-status').on('change', function() {
-                checkUrlOut('status', $(this).val());
-            })
-            $('.select-date-time-contest').on('change', function() {
-                loadToast();
-                window.location = url + $(this).val() + '=' + $(this).val();
-                return false;
-            })
-            $('.form-select-status').on('change', function() {
-                let id = $(this).data('id');
-                if ($(this).val() == 1) {
-                    $.ajax({
-                        url: (`admin/contests/un-status/${id}`),
-                        method: "POST",
-                        data: {
-                            _token: "{{ csrf_token() }}"
-                        },
-                        success: function(data) {
-                            if (!data.status) return alert(data.payload);
-                        }
-                    })
-                } else {
-                    $.ajax({
-                        url: (`admin/contests/re-status/${id}`),
-                        method: "POST",
-                        data: {
-
-                            _token: "{{ csrf_token() }}"
-                        },
-                        success: function(data) {
-                            if (!data.status) return alert(data.payload);
-                        }
-                    })
-                }
-            });
-        })
     </script>
+    <script src="assets/js/system/formatlist/formatlis.js"></script>
+    <script src="assets/js/system/contest/contest.js"></script>
 @endsection

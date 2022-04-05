@@ -274,8 +274,6 @@
         let url = "/admin/majors?";
         const sort = '{{ request()->has('sort') ? (request('sort') == 'desc' ? 'asc' : 'desc') : 'desc' }}';
     </script>
-    <script src="js/listformat.js"></script>
-    <script>
+    <script src="assets/js/system/formatlist/formatlis.js"></script>
 
-    </script>
 @endsection

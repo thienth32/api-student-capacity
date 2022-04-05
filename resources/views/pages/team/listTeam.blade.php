@@ -424,7 +424,7 @@
                                                                     .css(
                                                                         'display',
                                                                         'none'
-                                                                        );
+                                                                    );
                                                                 $('#listTeams')
                                                                     .empty();
 

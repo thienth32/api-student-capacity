@@ -455,44 +455,9 @@
 @section('page-script')
     <script>
         let url = '/admin/rounds?';
-    </script>
-    <script src="js/listformat.js"></script>
-    <script>
+        const _token = "{{ csrf_token() }}";
         const sort = '{{ request()->has('sort') ? (request('sort') == 'desc' ? 'asc' : 'desc') : 'desc' }}';
-
-        $(document).ready(function() {
-            let searchParams = new URLSearchParams(window.location.search);
-            $('#select-contest').on('change', function() {
-                checkUrlOut('contest_id', $(this).val());
-            })
-            $('#select-type-exam').on('change', function() {
-                checkUrlOut('type_exam_id', $(this).val());
-            })
-
-            $('.select-date-serach').on('change', function() {
-                loadToast();
-                const value = $(this).val();
-                switch (value) {
-                    case 'day-7':
-                        window.location = url + '&day=' + 7;
-                        return false;
-                    case 'day-15':
-                        window.location = url + '&day=' + 15;
-                        return false;
-                    case 'month-1':
-                        window.location = url + '&month=' + 1;
-                        return false;
-                    case 'month-6':
-                        window.location = url + '&month=' + 6;
-                        return false;
-                    case 'year-1':
-                        window.location = url + '&year=' + 1;
-                        return false;
-                    default:
-                        break;
-                }
-
-            })
-        })
     </script>
+    <script src="assets/js/system/formatlist/formatlis.js"></script>
+    <script src="assets/js/system/round/round.js"></script>
 @endsection
