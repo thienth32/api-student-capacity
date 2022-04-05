@@ -28,10 +28,7 @@ class AuthController extends Controller
             Auth::login($user);
             return redirect(route('dashboard'));
         }
-
         return redirect(route('login'))->with('msg', "Tài khoản của bạn không có quyền truy cập!");
-
-
     }
     public function postLoginToken(Request $request)
     {
