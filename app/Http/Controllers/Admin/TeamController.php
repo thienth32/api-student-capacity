@@ -13,8 +13,6 @@ use App\Models\Member;
 use App\Models\Result;
 use App\Services\Traits\TUploadImage;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Redis;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class TeamController extends Controller
@@ -226,8 +224,10 @@ class TeamController extends Controller
                 'name' => 'required|max:255',
                 'image' => 'max:10000',
                 'contest_id' => 'required|numeric',
+                // "*.user_id" => 'required',
             ],
             [
+                // "*.user_id" => 'Chưa có thành viên trong đội !',
                 'name.required' => 'Chưa nhập trường này !',
                 'name.max' => 'Độ dài kí tự không phù hợp !',
                 'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
