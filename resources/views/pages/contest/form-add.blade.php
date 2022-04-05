@@ -206,7 +206,7 @@
 
 @endsection
 
-@section('js_admin')
+@section('page-script')
 
     <script>
         $("#formAddContest").validate({
