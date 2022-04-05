@@ -6,8 +6,7 @@
 
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
-                <form id="formAddTeam" action="{{ route('admin.teams.store') }}" method="post"
-                    enctype="multipart/form-data">
+                <form id="formTeam" action="{{ route('admin.teams.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="row">
@@ -132,9 +131,15 @@
 
 @section('page-script')
     <script>
+        // var userArray = @json($userArray);
+        var userArray = [];
+        var _token = "{{ csrf_token() }}"
+        var urlSearch = "{{ route('admin.user.TeamUserSearch') }}"
+    </script>
+    {{-- <script src="{{ asset('assets/js/system/team/team.js') }}"></script> --}}
+    {{-- <script>
         $(document).ready(function() {
             var userArray = [];
-            // loadUserTeam(userArray);
             function loadUserTeam(data) {
                 var _html = ``;
                 $.map(data, function(val, key) {
@@ -219,39 +224,8 @@
                     loadUserTeam(userArray);
                 }
             });
-            // $('#addTeam').click(function(e) {
-            //     e.preventDefault();
 
-            //     if (userArray.length == 0) {
-            //         toastr.error('Đội này chưa có thành viên  !');
-            //         return;
-            //     } else {
-            //         $('#formAddTeam').submit()
-            //     }
-            // });
         });
     </script>
-    <script>
-        $("#formAddTeam").validate({
-            onkeyup: false,
-            rules: {
-                name: {
-                    required: true,
-                    maxlength: 255
-                },
-                image: {
-                    required: true
-                },
-            },
-            messages: {
-                name: {
-                    required: 'Chưa nhập trường này !',
-                    maxlength: 'Tối đa là 255 kí tự !'
-                },
-                image: {
-                    required: 'Chưa nhập trường này !',
-                },
-            },
-        });
-    </script>
-@endsection
+   
+@endsection --}}
