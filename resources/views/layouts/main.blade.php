@@ -70,7 +70,7 @@
 								</div>
 								<!--end::Page title-->
 								<!--begin::Actions-->
-								
+
 								<!--end::Actions-->
 							</div>
 							<!--end::Container-->
@@ -125,13 +125,12 @@
 		</div>
 		<!--end::Scrolltop-->
 		<!--begin::Modals-->
-		
+
 		<!--end::Modals-->
 		<!--begin::Javascript-->
 		@include('layouts._script')
 		@yield('page-script')
-		<!--end::Page Custom Javascript-->
-		<!--end::Javascript-->
+
 	</body>
 	<!--end::Body-->
 </html>

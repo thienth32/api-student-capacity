@@ -12,7 +12,6 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-
         $totalContestRegistering = Contest::where('status', config('util.CONTEST_STATUS_REGISTERING'))->count();
         $totalContestGoingOn = Contest::where('status', config('util.CONTEST_STATUS_GOING_ON'))->count();
         $totalContestDone = Contest::where('status', config('util.CONTEST_STATUS_DONE'))->count();
@@ -27,8 +26,8 @@ class DashboardController extends Controller
                                     $q->where('id', config('util.STUDENT_ROLE'));
                                 })->count();
         return view('dashboard.index', compact(
-            'totalContestRegistering', 
-            'totalContestGoingOn', 
+            'totalContestRegistering',
+            'totalContestGoingOn',
             'totalContestDone',
             'totalTeamActive',
             'totalStudentAccount'
