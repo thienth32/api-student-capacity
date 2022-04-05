@@ -22,17 +22,13 @@ class AuthController extends Controller
 
     public function adminGoogleCallback()
     {
-
         $ggUser = Socialite::driver('google')->user();
         $user = User::where('email', $ggUser->email)->first();
         if($user && $user->hasRole([config('util.SUPER_ADMIN_ROLE'), config('util.ADMIN_ROLE')])){
             Auth::login($user);
             return redirect(route('dashboard'));
         }
-
         return redirect(route('login'))->with('msg', "Tài khoản của bạn không có quyền truy cập!");
-
-
     }
     public function postLoginToken(Request $request)
     {

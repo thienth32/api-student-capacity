@@ -61,9 +61,7 @@ class MajorController extends Controller
         try {
             $limit = 10;
             $dataMajor = Major::sort(request('sort') == 'asc' ? 'asc' : 'desc', request('sort_by') ?? null, 'majors')
-                ->search(request('search') ?? null, ['name', 'slug'])
-                ->paginate(request('limit') ?? $limit);
-
+                ->search(request('q') ?? null, ['name', 'slug']);
             return $dataMajor;
         } catch (\Throwable $th) {
             return false;
@@ -74,7 +72,7 @@ class MajorController extends Controller
     {
         if ($data = $this->getList()) {
             return  view('pages.major.index', [
-                'majos' => $data,
+                'majors' => $data->paginate(request('limit') ?? 5),
             ]);
         }
         return abort(404);
@@ -86,7 +84,7 @@ class MajorController extends Controller
             return $this->responseApi(
                 [
                     'status' => true,
-                    'payload' => $data,
+                    'payload' => $data->get(),
                 ]
             );
         }
@@ -106,16 +104,25 @@ class MajorController extends Controller
 
     public function store(Request $request)
     {
-        try {
-            $slug = \Str::slug($request->name);
-            $this->major::create([
-                'name' => $request->name,
-                'slug' => $slug,
-            ]);
-            return redirect()->route('admin.major.list');;
-        } catch (\Throwable $th) {
-            return abort(404);
-        }
+
+        $request->validate(
+            [
+                'name' => 'required|min:4',
+                'slug' => 'required|unique:majors,slug'
+            ],
+            [
+                'name.required' => 'Không được bỏ trống tên !',
+                'slug.required' => 'Không được bỏ trống slug !',
+                'name.min' => 'Ký tự tên phải lớn hơn 4 ký tự  !',
+                'name.unique' => 'Slug không được trùng !',
+            ]
+        );
+        $slug = \Str::slug($request->slug);
+        $this->major::create([
+            'name' => $request->name,
+            'slug' => $slug,
+        ]);
+        return redirect()->route('admin.major.list');;
     }
 
     public function edit(Request $request, $slug)
@@ -141,6 +148,7 @@ class MajorController extends Controller
                 'name.unique' => 'Slug không được trùng !',
             ]
         );
+        $slug = \Str::slug($request->slug);
         $major->update([
             'name' => $request->name,
             'slug' => $slug,

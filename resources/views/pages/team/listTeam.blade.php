@@ -3,10 +3,9 @@
 @section('page-title', 'Danh sách đội thi')
 @section('content')
     <style>
-
         #loading {
-          position: fixed;
-          z-index: 100;
+            position: fixed;
+            z-index: 100;
             top: 40%;
             left: 55%;
             display: none;
@@ -164,7 +163,7 @@
 
 @endsection
 
-@section('js_admin')
+@section('page-script')
     <script>
         $(document).ready(function() {
             $('.pagination a').unbind('click').on('click', function(
@@ -393,7 +392,8 @@
                                                 _token: "{{ csrf_token() }}",
                                             },
                                             success: function(data) {
-                                                $('#loading').css('display', 'none');
+                                                $('#loading').css('display',
+                                                    'none');
                                                 $('#listTeams').empty();
 
                                                 $('#listTeams').html(data)
@@ -406,7 +406,9 @@
                                                             .attr('href')
                                                             .split('page=')[
                                                                 1];
-                                                                $('#loading').css('display', 'flex');
+                                                        $('#loading').css(
+                                                            'display',
+                                                            'flex');
                                                         $.ajax({
 
                                                             url: "{{ url('admin/teams/api-teams') }}?page=" +
@@ -418,7 +420,11 @@
                                                             success: function(
                                                                 data
                                                             ) {
-                                                                $('#loading').css('display', 'none');
+                                                                $('#loading')
+                                                                    .css(
+                                                                        'display',
+                                                                        'none'
+                                                                    );
                                                                 $('#listTeams')
                                                                     .empty();
 

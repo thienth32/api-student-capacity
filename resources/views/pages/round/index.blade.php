@@ -118,7 +118,7 @@
             <table class=" table table-hover table-responsive-md ">
                 <thead>
                     <tr>
-                        <th scope="col" width="2%">
+                        <th scope="col">
                             <span role="button" data-key="id"
                                 class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
@@ -145,7 +145,7 @@
                                 <!--end::Svg Icon-->
                             </span>
                         </th>
-                        <th scope="col" width="10%">Vòng thi
+                        <th scope="col">Vòng thi
                             <span role="button" data-key="name"
                                 class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
@@ -172,8 +172,7 @@
                                 <!--end::Svg Icon-->
                             </span>
                         </th>
-                        <th scope="col" width="10%">Ảnh đại diện </th>
-                        <th scope="col" width="10%">Chi tiết
+                        <th scope="col">Chi tiết
                             <span role="button" data-key="description"
                                 class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
@@ -200,9 +199,9 @@
                                 <!--end::Svg Icon-->
                             </span>
                         </th>
-                        <th scope="col" width="10%">Cuộc thi </th>
-                        <th scope="col" width="10%">Loại cuộc thi </th>
-                        <th scope="col" width="10%">Thời gian bắt đầu
+                        <th scope="col">Cuộc thi </th>
+                        <th scope="col">Loại cuộc thi </th>
+                        <th scope="col">Thời gian bắt đầu
                             <span role="button" data-key="start_time"
                                 class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
@@ -229,7 +228,7 @@
                                 <!--end::Svg Icon-->
                             </span>
                         </th>
-                        <th scope="col" width="10%">Thời gian kết thúc
+                        <th scope="col">Thời gian kết thúc
                             <span role="button" data-key="end_time"
                                 class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
@@ -256,7 +255,7 @@
                                 <!--end::Svg Icon-->
                             </span>
                         </th>
-                        <th class="text-center" width="5%" colspan="2">
+                        <th class="text-center" colspan="2">
 
                         </th>
 
@@ -265,15 +264,11 @@
                 <tbody>
                     @forelse ($rounds as $key => $round)
                         <tr>
-                            <th scope="row">{{ $key + 1 }}</th>
+                            <th scope="row">
+                                {{ (request()->has('page') && request('page') !== 1 ? $rounds->perPage() * (request('page') - 1) : 0) +$key +1 }}
+                            </th>
                             <td>{{ $round->name }}</td>
-                            <td>
-                                <img style="width:100px"
-                                    src="{{ (\Storage::disk('google')->has($round->image) ? 111 : null) == null
-                                        ? 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg'
-                                        : \Storage::disk('google')->url($round->image) }}"
-                                    alt="">
-                            </td>
+
                             <td>
 
                                 <button class="p-4" type="button"
@@ -460,44 +455,9 @@
 @section('page-script')
     <script>
         let url = '/admin/rounds?';
-    </script>
-    <script src="js/listformat.js"></script>
-    <script>
+        const _token = "{{ csrf_token() }}";
         const sort = '{{ request()->has('sort') ? (request('sort') == 'desc' ? 'asc' : 'desc') : 'desc' }}';
-
-        $(document).ready(function() {
-            let searchParams = new URLSearchParams(window.location.search);
-            $('#select-contest').on('change', function() {
-                checkUrlOut('contest_id', $(this).val());
-            })
-            $('#select-type-exam').on('change', function() {
-                checkUrlOut('type_exam_id', $(this).val());
-            })
-
-            $('.select-date-serach').on('change', function() {
-                loadToast();
-                const value = $(this).val();
-                switch (value) {
-                    case 'day-7':
-                        window.location = url + '&day=' + 7;
-                        return false;
-                    case 'day-15':
-                        window.location = url + '&day=' + 15;
-                        return false;
-                    case 'month-1':
-                        window.location = url + '&month=' + 1;
-                        return false;
-                    case 'month-6':
-                        window.location = url + '&month=' + 6;
-                        return false;
-                    case 'year-1':
-                        window.location = url + '&year=' + 1;
-                        return false;
-                    default:
-                        break;
-                }
-
-            })
-        })
     </script>
+    <script src="assets/js/system/formatlist/formatlis.js"></script>
+    <script src="assets/js/system/round/round.js"></script>
 @endsection

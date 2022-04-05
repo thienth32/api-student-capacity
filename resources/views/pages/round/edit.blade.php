@@ -160,45 +160,8 @@
         </div>
     </div>
 @endsection
-@section('js_admin')
-
-    <script>
-        $("#formAddRound").validate({
-            onkeyup: true,
-            rules: {
-                name: {
-                    required: true,
-                    maxlength: 255
-                },
-                start_time: {
-                    required: true,
-                },
-                end_time: {
-                    required: true,
-                },
-                description: {
-                    required: true,
-                },
-            },
-            messages: {
-                name: {
-                    required: 'Chưa nhập trường này !',
-                    maxlength: 'Tối đa là 255 kí tự !'
-                },
-                start_time: {
-                    required: 'Chưa nhập trường này !',
-                    date: true
-                },
-                end_time: {
-                    required: 'Chưa nhập trường này !',
-                    date: true
-                },
-                description: {
-                    required: 'Chưa nhập trường này !',
-                },
-            },
-        });
-    </script>
-
+@section('page-script')
+    <script src="assets/js/system/round/form.js"></script>
+    <script src="assets/js/system/validate/validate.js"></script>
 
 @endsection

@@ -3,7 +3,6 @@
 @section('page-title', 'Thêm đội thi')
 @section('content')
     <div class="row">
-
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
                 <form id="formTeam" action="{{ route('admin.teams.store') }}" method="post" enctype="multipart/form-data">

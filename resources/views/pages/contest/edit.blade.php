@@ -158,45 +158,7 @@
     </div>
 
 @endsection
-@section('js_admin')
-
-    <script>
-        $("#formAddContest").validate({
-            onkeyup: true,
-            rules: {
-                name: {
-                    required: true,
-                    maxlength: 255
-                },
-                date_start: {
-                    required: true,
-                },
-                register_deadline: {
-                    required: true,
-                },
-                description: {
-                    required: true,
-                },
-            },
-            messages: {
-                name: {
-                    required: 'Chưa nhập trường này !',
-                    maxlength: 'Tối đa là 255 kí tự !'
-                },
-                date_start: {
-                    required: 'Chưa nhập trường này !',
-                    date: true
-                },
-                register_deadline: {
-                    required: 'Chưa nhập trường này !',
-                    date: true
-                },
-                description: {
-                    required: 'Chưa nhập trường này !',
-                },
-            },
-        });
-    </script>
-
-
+@section('page-script')
+    <script src="assets/js/system/contest/form.js"></script>
+    <script src="assets/js/system/validate/validate.js"></script>
 @endsection

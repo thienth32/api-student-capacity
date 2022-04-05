@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title', 'Thêm vòng thi')
+@section('title', 'Thêm cuộc thi')
 @section('page-title', 'Thêm mới cuộc thi')
 @section('content')
     <div class="row">
@@ -204,51 +204,16 @@
 
 @endsection
 
-@section('js_admin')
-
+@section('page-script')
+    <script src="assets/js/system/contest/form.js"></script>
     <script>
-        $("#formAddContest").validate({
-            onkeyup: true,
-            rules: {
-                name: {
-                    required: true,
-                    maxlength: 255
-                },
-                img: {
-                    required: true,
-                },
-                date_start: {
-                    required: true,
-                },
-                register_deadline: {
-                    required: true,
-                },
-                description: {
-                    required: true,
-                },
-            },
-            messages: {
-                name: {
-                    required: 'Chưa nhập trường này !',
-                    maxlength: 'Tối đa là 255 kí tự !'
-                },
-                img: {
-                    required: 'Chưa nhập trường này !',
-                },
-                date_start: {
-                    required: 'Chưa nhập trường này !',
-                    date: true
-                },
-                register_deadline: {
-                    required: 'Chưa nhập trường này !',
-                    date: true
-                },
-                description: {
-                    required: 'Chưa nhập trường này !',
-                },
-            },
-        });
+        rules.img = {
+            required: true,
+        };
+        messages.img = {
+            required: 'Chưa nhập trường này !',
+        };
     </script>
 
-
+    <script src="assets/js/system/validate/validate.js"></script>
 @endsection
