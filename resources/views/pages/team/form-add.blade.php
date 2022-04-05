@@ -1,10 +1,8 @@
 @extends('layouts.main')
-@section('title', 'Chỉnh sửa đội thi')
+@section('title', 'Thêm đội thi')
+@section('page-title', 'Thêm đội thi')
 @section('content')
     <div class="row">
-        <div class="col-lg-12">
-            <h1 class="text-center">Thêm đội thi</h1>
-        </div>
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
                 <form id="formAddTeam" action="{{ route('admin.teams.store') }}" method="post"
