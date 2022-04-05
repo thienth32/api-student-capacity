@@ -6,8 +6,10 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoundController;
 use App\Http\Controllers\Admin\ContestController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\MajorController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('dashboard/api-cuoc-thi', [DashboardController::class, 'chartCompetity'])->name('dashboard.chart-competity');
 
 Route::prefix('rounds')->group(function () {
     Route::get('form-add', [RoundController::class, 'create'])->name('admin.round.create');
@@ -38,6 +40,7 @@ Route::prefix('users')->group(function () {
 
 Route::prefix('contests')->group(function () {
     Route::get('{id}/edit', [ContestController::class, 'edit'])->name('admin.contest.edit');
+    Route::get('{id}/detail', [ContestController::class, 'show'])->name('admin.contest.show');
     Route::put('{id}', [ContestController::class, 'update'])->name('admin.contest.update');
 
     Route::get('', [ContestController::class, 'index'])->name('admin.contest.list');
@@ -48,4 +51,15 @@ Route::prefix('contests')->group(function () {
     Route::post('re-status/{id}', [ContestController::class, 're_status'])->name('admin.contest.re.status');
 
     Route::delete('{id}', [ContestController::class, 'destroy'])->name('admin.contest.destroy');
+});
+
+Route::prefix('majors')->group(function () {
+    Route::get('{slug}/edit', [MajorController::class, 'edit'])->name('admin.major.edit');
+    Route::put('{slug}', [MajorController::class, 'update'])->name('admin.major.update');
+
+    Route::get('', [MajorController::class, 'index'])->name('admin.major.list');
+    Route::get('create', [MajorController::class, 'create'])->name('admin.major.create');
+    Route::post('store', [MajorController::class, 'store'])->name('admin.major.store');
+
+    Route::delete('{slug}', [MajorController::class, 'destroy'])->name('admin.major.destroy');
 });

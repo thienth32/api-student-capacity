@@ -4,23 +4,14 @@
 
 <head>
     <base href="/">
-    <title>Metronic - the world's #1 selling Bootstrap Admin Theme Ecosystem for HTML, Vue, React, Angular &amp; Laravel
-        by Keenthemes</title>
+    <title>FPT Polytechnic - Cổng đánh giá năng lực sinh viên</title>
     <meta charset="utf-8" />
-    <meta name="description"
-        content="The most advanced Bootstrap Admin Theme on Themeforest trusted by 94,000 beginners and professionals. Multi-demo, Dark Mode, RTL support and complete React, Angular, Vue &amp; Laravel versions. Grab your copy now and get life-time updates for free." />
-    <meta name="keywords"
-        content="Metronic, bootstrap, bootstrap 5, Angular, VueJs, React, Laravel, admin themes, web design, figma, web development, free templates, free admin themes, bootstrap theme, bootstrap template, bootstrap dashboard, bootstrap dak mode, bootstrap button, bootstrap datepicker, bootstrap timepicker, fullcalendar, datatables, flaticon" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="article" />
-    <meta property="og:title"
-        content="Metronic - Bootstrap 5 HTML, VueJS, React, Angular &amp; Laravel Admin Dashboard Theme" />
-    <meta property="og:url" content="https://keenthemes.com/metronic" />
-    <meta property="og:site_name" content="Keenthemes | Metronic" />
-    <meta name="csrf_token" content="{{ csrf_token() }}" />
-    <link rel="canonical" href="https://preview.keenthemes.com/metronic8" />
-    <link rel="shortcut icon" href="assets/media/logos/favicon.ico" />
+    <link rel="shortcut icon" href="{{ asset('assets/media/logos/poly-favicon.ico') }}" />
     @include('layouts._style')
 </head>
 <!--end::Head-->
@@ -42,8 +33,8 @@
                 <!--begin::Brand-->
                 <div class="aside-logo flex-column-auto" id="kt_aside_logo">
                     <!--begin::Logo-->
-                    <a href="../../demo1/dist/index.html">
-                        <img alt="Logo" src="assets/media/logos/logo-1-dark.svg" class="h-25px logo" />
+                    <a href="{{ route('dashboard') }}">
+                        <img alt="Logo" src="{{ asset('assets/media/logos/logo-poly.png') }}" class="h-25px logo" />
                     </a>
                     <!--end::Logo-->
                     <!--begin::Aside toggler-->
@@ -88,8 +79,9 @@
                                 data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                 class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                 <!--begin::Title-->
-                                <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">@yield('page-title',
-                                    'Admin')</h1>
+                                <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">
+                                    @yield('page-title', 'Admin')
+                                </h1>
                                 <!--end::Title-->
                             </div>
                             <!--end::Page title-->
@@ -158,7 +150,7 @@
     <!--end::Modals-->
     <!--begin::Javascript-->
     @include('layouts._script')
-    @yield('js_admin')
+    @yield('page-script')
     <!--end::Page Custom Javascript-->
     <!--end::Javascript-->
 </body>

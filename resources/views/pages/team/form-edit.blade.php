@@ -1,10 +1,8 @@
 @extends('layouts.main')
 @section('title', 'Chỉnh sửa đội thi')
+@section('page-title', 'Chỉnh sửa đội thi')
 @section('content')
     <div class="row">
-        <div class="col-lg-12">
-            <h1 class="text-center">Chỉnh sửa đội thi</h1>
-        </div>
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
                 <form id="formEditTeam" action="{{ route('admin.teams.update', ['id' => $team->id]) }}" method="post"
@@ -134,7 +132,7 @@
     </div>
 @endsection
 
-@section('js_admin')
+@section('page-script')
     <script>
         $(document).ready(function() {
             var userArray = @json($userArray);
@@ -155,7 +153,7 @@
                         <li class="list-group-item py-4">
                             <div class='d-flex justify-content-between align-items-center'>
                                 <span>
-                                    ${val.email_user} 
+                                    ${val.email_user}
                                     <input hidden type="text" value="${val.id_user}"  name="user_id[]" >
                                 </span>
                                 <button data-idUser='${key}' class="deleteUserArray btn btn-danger"   data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on top" data-theme="dark" type="button" >
@@ -165,7 +163,7 @@
                                         <path d="M6,8 L18,8 L17.106535,19.6150447 C17.04642,20.3965405 16.3947578,21 15.6109533,21 L8.38904671,21 C7.60524225,21 6.95358004,20.3965405 6.89346498,19.6150447 L6,8 Z M8,10 L8.45438229,14.0894406 L15.5517885,14.0339036 L16,10 L8,10 Z" fill="#000000" fill-rule="nonzero"/>
                                         <path d="M14,4.5 L14,3.5 C14,3.22385763 13.7761424,3 13.5,3 L10.5,3 C10.2238576,3 10,3.22385763 10,3.5 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z" fill="#000000" opacity="0.3"/>
                                     </g>
-                                    </svg><!--end::Svg Icon--></span>    
+                                    </svg><!--end::Svg Icon--></span>
                                 </button>
                             </div>
                         </li>
@@ -190,7 +188,8 @@
                         type: "post",
                         url: "{{ route('admin.user.TeamUserSearch') }}",
                         data: {
-                            key: key
+                            key: key,
+                            _token: "{{ csrf_token() }}",
                         },
                         success: function(response) {
                             var _html = ``;
