@@ -325,6 +325,12 @@ class ContestController extends Controller
             );
         }
     }
+
+    public function show($id)
+    {
+        $contest = Contest::find($id);
+        return view('pages.contest.detail', compact('contest'));
+    }
 }
 
 //

@@ -1,11 +1,8 @@
 @extends('layouts.main')
-@section('title', 'Sửa vòng thi ')
+@section('title', 'Cập nhật cuộc thi ')
+@section('page-title', 'Cập nhật cuộc thi')
 @section('content')
     <div class="row">
-        <div class="col-lg-12">
-            <h1 class="text-center">Cập nhật đội thi</h1>
-
-        </div>
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
                 <form id="formAddContest" action="{{ route('admin.contest.update', ['id' => $Contest->id]) }}"
@@ -161,45 +158,7 @@
     </div>
 
 @endsection
-@section('js_admin')
-
-    <script>
-        $("#formAddContest").validate({
-            onkeyup: true,
-            rules: {
-                name: {
-                    required: true,
-                    maxlength: 255
-                },
-                date_start: {
-                    required: true,
-                },
-                register_deadline: {
-                    required: true,
-                },
-                description: {
-                    required: true,
-                },
-            },
-            messages: {
-                name: {
-                    required: 'Chưa nhập trường này !',
-                    maxlength: 'Tối đa là 255 kí tự !'
-                },
-                date_start: {
-                    required: 'Chưa nhập trường này !',
-                    date: true
-                },
-                register_deadline: {
-                    required: 'Chưa nhập trường này !',
-                    date: true
-                },
-                description: {
-                    required: 'Chưa nhập trường này !',
-                },
-            },
-        });
-    </script>
-
-
+@section('page-script')
+    <script src="assets/js/system/contest/form.js"></script>
+    <script src="assets/js/system/validate/validate.js"></script>
 @endsection

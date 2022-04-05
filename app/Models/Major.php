@@ -15,6 +15,15 @@ class Major extends Model
         'slug'
     ];
 
+    public static function boot()
+    {
+
+        parent::boot();
+        static::deleting(function ($q) {
+            $q->contests()->delete();
+        });
+    }
+
     public function contests()
     {
         return $this->hasMany(Contest::class, 'major_id');

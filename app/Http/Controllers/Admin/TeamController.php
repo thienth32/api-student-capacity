@@ -13,8 +13,6 @@ use App\Models\Member;
 use App\Models\Result;
 use App\Services\Traits\TUploadImage;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Redis;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class TeamController extends Controller
@@ -260,7 +258,7 @@ class TeamController extends Controller
                 $team->save();
                 Db::commit();
 
-                return Redirect::back();
+                return Redirect::route('admin.teams');
             }
         } catch (Exception $ex) {
             Db::rollBack();

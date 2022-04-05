@@ -1,15 +1,10 @@
-
-
-
 @extends('layouts.main')
-@section('title', 'Sửa vòng thi ')
+@section('title', 'Cập nhật vòng thi ')
+@section('page-title', 'Cập nhật vòng thi')
 @section('content')
 
     <div class="row">
-        <div class="col-lg-12">
-            <h1 class="text-center">Cập nhật vòng thi</h1>
 
-        </div>
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
                 <form id="formAddRound" action="{{ route('admin.round.update', ['id' => $round['id']]) }}" method="post"
@@ -165,45 +160,8 @@
         </div>
     </div>
 @endsection
-@section('js_admin')
-
-    <script>
-        $("#formAddRound").validate({
-            onkeyup: true,
-            rules: {
-                name: {
-                    required: true,
-                    maxlength: 255
-                },
-                start_time: {
-                    required: true,
-                },
-                end_time: {
-                    required: true,
-                },
-                description: {
-                    required: true,
-                },
-            },
-            messages: {
-                name: {
-                    required: 'Chưa nhập trường này !',
-                    maxlength: 'Tối đa là 255 kí tự !'
-                },
-                start_time: {
-                    required: 'Chưa nhập trường này !',
-                    date: true
-                },
-                end_time: {
-                    required: 'Chưa nhập trường này !',
-                    date: true
-                },
-                description: {
-                    required: 'Chưa nhập trường này !',
-                },
-            },
-        });
-    </script>
-
+@section('page-script')
+    <script src="assets/js/system/round/form.js"></script>
+    <script src="assets/js/system/validate/validate.js"></script>
 
 @endsection

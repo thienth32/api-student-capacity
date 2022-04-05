@@ -346,93 +346,70 @@
 
             function removeTeam(id) {
 
-                Swal.fire({
-                    title: 'Bạn có muốn xóa không?',
-                    text: "Sẽ không thể phục hồi",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $('#loading').css('display', 'flex');
-                        $.ajax({
-                            url: "{{ url('admin/teams') }}/" + id,
-                            type: 'delete',
-                            data: {
-                                _token: "{{ csrf_token() }}",
-                            },
-                            success: function(response) {
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'success',
+                                title: 'Xóa Thành Công',
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                            $('#loading').css('display', 'none');
+                            $('#listTeams').empty();
+                            $('#listTeams').html(response)
+                            $(document).ready(function() {
+                                $('.paginate .pagination a').unbind('click').on('click',
+                                    function(
+                                        e) {
+                                        e.preventDefault();
+                                        $('#loading').css('display', 'flex');
+                                        var page = $(this).attr('href').split('page=')[1];
+                                        $.ajax({
 
-                                Swal.fire({
-                                    position: 'center',
-                                    icon: 'success',
-                                    title: 'Xóa Thành Công',
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                })
-                                $('#loading').css('display', 'none');
-                                $('#listTeams').empty();
-                                $('#listTeams').html(response)
-                                $(document).ready(function() {
-                                    $('.paginate .pagination a').unbind('click').on(
-                                        'click',
-                                        function(
-                                            e) {
-                                            e.preventDefault();
-                                            $('#loading').css('display', 'flex');
-                                            var page = $(this).attr('href').split(
-                                                'page=')[1];
-                                            $.ajax({
+                                            url: "{{ url('admin/teams/api-teams') }}?page=" +
+                                                page,
+                                            type: 'POST',
+                                            data: {
+                                                _token: "{{ csrf_token() }}",
+                                            },
+                                            success: function(data) {
+                                                $('#loading').css('display',
+                                                    'none');
+                                                $('#listTeams').empty();
 
-                                                url: "{{ url('admin/teams/api-teams') }}?page=" +
-                                                    page,
-                                                type: 'POST',
-                                                data: {
-                                                    _token: "{{ csrf_token() }}",
-                                                },
-                                                success: function(data) {
-                                                    $('#loading').css(
-                                                        'display',
-                                                        'none');
-                                                    $('#listTeams')
-                                                        .empty();
+                                                $('#listTeams').html(data)
+                                                $('.paginate .pagination a')
+                                                    .unbind('click')
+                                                    .on('click', function(
+                                                        e) {
+                                                        e.preventDefault();
+                                                        var page = $(this)
+                                                            .attr('href')
+                                                            .split('page=')[
+                                                                1];
+                                                        $('#loading').css(
+                                                            'display',
+                                                            'flex');
+                                                        $.ajax({
 
-                                                    $('#listTeams')
-                                                        .html(data)
-                                                    $('.paginate .pagination a')
-                                                        .unbind('click')
-                                                        .on('click',
-                                                            function(
-                                                                e) {
-                                                                e
-                                                            .preventDefault();
-                                                                var page =
-                                                                    $(
-                                                                        this)
-                                                                    .attr(
-                                                                        'href'
-                                                                        )
-                                                                    .split(
-                                                                        'page='
-                                                                        )[
-                                                                        1
-                                                                        ];
+                                                            url: "{{ url('admin/teams/api-teams') }}?page=" +
+                                                                page,
+                                                            type: 'POST',
+                                                            data: {
+                                                                _token: "{{ csrf_token() }}",
+                                                            },
+                                                            success: function(
+                                                                data
+                                                            ) {
                                                                 $('#loading')
                                                                     .css(
                                                                         'display',
-                                                                        'flex'
-                                                                        );
-                                                                $.ajax({
+                                                                        'none'
+                                                                    );
+                                                                $('#listTeams')
+                                                                    .empty();
 
-                                                                    url: "{{ url('admin/teams/api-teams') }}?page=" +
-                                                                        page,
-                                                                    type: 'POST',
-                                                                    data: {
-                                                                        _token: "{{ csrf_token() }}",
-                                                                    },
-                                                                    success: function(
+                                                                $('#listTeams')
+                                                                    .html(
                                                                         data
                                                                     ) {
                                                                         $('#loading')

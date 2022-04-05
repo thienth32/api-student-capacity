@@ -234,6 +234,50 @@
                 </div>
             </div>
 
+            <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                <span class="menu-link">
+                    <span class="menu-icon">
+                        <!--begin::Svg Icon | path: icons/duotune/communication/com013.svg-->
+                        <span class="svg-icon svg-icon-primary svg-icon-2x">
+                            <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Devices/Cardboard-vr.svg--><svg
+                                xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <rect x="0" y="0" width="24" height="24" />
+                                    <polygon fill="#000000" opacity="0.3" points="6 4 18 4 20 6.5 4 6.5" />
+                                    <path
+                                        d="M5,6 L19,6 C20.1045695,6 21,6.8954305 21,8 L20.999994,17.0000172 C20.999994,18.1045834 20.1045662,19.0000112 19,19.0000112 C17.4805018,19.0000037 16.4805051,19 16,19 C15,19 14.5,17 12,17 C9.5,17 9.5,19 8,19 C7.31386312,19 6.31387037,19.0000034 5.00002173,19.0000102 L5.00002173,19.0000216 C3.89544593,19.0000273 3.00000569,18.1045963 3,17.0000205 C3,17.000017 3,17.0000136 3,17.0000102 L3,8 C3,6.8954305 3.8954305,6 5,6 Z M8,14 C9.1045695,14 10,13.1045695 10,12 C10,10.8954305 9.1045695,10 8,10 C6.8954305,10 6,10.8954305 6,12 C6,13.1045695 6.8954305,14 8,14 Z M16,14 C17.1045695,14 18,13.1045695 18,12 C18,10.8954305 17.1045695,10 16,10 C14.8954305,10 14,10.8954305 14,12 C14,13.1045695 14.8954305,14 16,14 Z"
+                                        fill="#000000" />
+                                </g>
+                            </svg>
+                            <!--end::Svg Icon-->
+                        </span>
+                        <!--end::Svg Icon-->
+                    </span>
+                    <span class="menu-title">Quản lý chuyên ngành </span>
+                    <span class="menu-arrow"></span>
+                </span>
+                <div class="menu-sub menu-sub-accordion menu-active-bg">
+                    <div class="menu-item">
+                        <a class="menu-link" href="{{ route('admin.major.list') }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Danh sách chuyên ngành </span>
+                        </a>
+                    </div>
+                    <div class="menu-item">
+                        <a class="menu-link" href="{{ route('admin.major.create') }}">
+                            <span class="menu-bullet">
+                                <span class="bullet bullet-dot"></span>
+                            </span>
+                            <span class="menu-title">Thêm mới chuyên ngành </span>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
         <!--end::Menu-->
     </div>
