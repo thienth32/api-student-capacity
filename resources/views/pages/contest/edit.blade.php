@@ -1,11 +1,8 @@
 @extends('layouts.main')
-@section('title', 'Sửa vòng thi ')
+@section('title', 'Cập nhật cuộc thi ')
+@section('page-title', 'Cập nhật cuộc thi')
 @section('content')
     <div class="row">
-        <div class="col-lg-12">
-            <h1 class="text-center">Cập nhật đội thi</h1>
-
-        </div>
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
                 <form id="formAddContest" action="{{ route('admin.contest.update', ['id' => $Contest->id]) }}"
@@ -161,7 +158,7 @@
     </div>
 
 @endsection
-@section('js_admin')
+@section('page-script')
 
     <script>
         $("#formAddContest").validate({

@@ -33,7 +33,7 @@ toastr.options = {
 };
 
 function loadToast() {
-    toastr.info("Trương trình đang chạy ...");
+    toastr.info("Chương trình đang chạy ...");
 }
 function checkUrlOut(key, value, valueAdd = "") {
     loadToast();
@@ -111,7 +111,7 @@ $("#kt_daterangepicker_2").daterangepicker(
         },
     },
     function (start, end) {
-        this.loadToast();
+        loadToast();
         window.location =
             url +
             "&start_time=" +

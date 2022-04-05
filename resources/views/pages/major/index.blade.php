@@ -1,11 +1,10 @@
 @extends('layouts.main')
-@section('title', 'Danh sách vòng thi ')
-@section('page-title', 'Danh sách vòng thi')
+@section('title', 'Danh sách chuyên ngành ')
+@section('page-title', 'Danh sách chuyên ngành ')
 @section('content')
 
-
     <div class="card card-flush p-4">
-        <h1>Quản lý vòng thi
+        <h1>Quản lý chuyên ngành
             <span role="button" class="refresh-btn svg-icon svg-icon-primary svg-icon-2x">
                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Update.svg--><svg
                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
@@ -20,70 +19,20 @@
                 <!--end::Svg Icon-->
             </span>
         </h1>
-        <div class="row card-format">
-
-
+        <div class=" card-format row">
+            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4"></div>
+            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4"></div>
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
-                <div class="form-group p-2">
-                    <label>Cuộc thi </label>
-                    <select id="select-contest" class="form-control form-control-solid">
-                        <option>-- Cuộc thi --</option>
-                        @forelse ($contests as $contest)
-                            <option @selected(request('contest_id') == $contest->id) value="{{ $contest->id }}">{{ $contest->name }}
-                            </option>
-                        @empty
-                            <option>-- Không có cuộc thi --</option>
-                        @endforelse
-                    </select>
-                </div>
-            </div>
-            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
-                <div class="  form-group p-2">
-                    <label>Loại vòng thi </label>
-                    <select id="select-type-exam" class="form-control form-control-solid">
-                        <option>-- Loại vòng thi --</option>
-                        @forelse ($type_exams as $type_exam)
-                            <option @selected(request('type_exam_id') == $type_exam->id) value="{{ $type_exam->id }}">{{ $type_exam->name }}
-                            </option>
-                        @empty
-                            <option>-- Không có loại vòng thi --</option>
-                        @endforelse
-                    </select>
-                </div>
-            </div>
-            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
-                <div class="  form-group p-2">
+                <div class=" form-group p-2">
                     <label>Tìm kiếm </label>
                     <input type="text" value="{{ request('q') ?? '' }}" placeholder="Tìm kiếm ... "
                         class=" ip-search form-control">
                 </div>
             </div>
-            <div class="col-12 row ">
-                <div class="col-12 row">
-                    <div class="col-12  ">
-                        <label class="form-label">Thời gian </label>
-                        <input class="form-control form-control-solid" placeholder="Pick date rage"
-                            id="kt_daterangepicker_2" />
-                    </div>
-                </div>
-
-                <div class="col-12  ">
-                    <label for="" class="label">Khoảng thời gian </label>
-                    <select class="select-date-serach form-control">
-                        <option class="form-control">---- Thời gian ----</option>
-
-                        <option class="form-control" @selected(request('day') == 7) value="day-7">7 Ngày </option>
-                        <option class="form-control" @selected(request('day') == 15) value="day-15">15 Ngày </option>
-                        <option class="form-control" @selected(request('month') == 1) value="month-1">1 Tháng </option>
-                        <option class="form-control" @selected(request('month') == 6) value="month-6">6 Tháng </option>
-                        <option class="form-control" @selected(request('year') == 1) value="year-1">1 Năm</option>
-                    </select>
-                </div>
-            </div>
-
         </div>
+
         <div class="back">
-            <hr>
+
             <span class="btn-hide svg-icon svg-icon-primary svg-icon-2x">
                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Stockholm-icons/Navigation/Angle-up.svg--><svg
                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
@@ -97,7 +46,7 @@
                 </svg>
             </span>
 
-            <span style="display: none" class="btn-show svg-icon svg-icon-primary svg-icon-2x">
+            <span class="btn-show svg-icon svg-icon-primary svg-icon-2x">
                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Angle-down.svg--><svg
                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
                     viewBox="0 0 24 24" version="1.1">
@@ -113,12 +62,13 @@
             </span>
 
         </div>
-        <div class="table-responsive p-4 card card-flush ">
+        {{--  --}}
 
-            <table class=" table table-hover table-responsive-md ">
+        <div class="table-responsive  ">
+            <table class=" table table-hover  ">
                 <thead>
                     <tr>
-                        <th scope="col">
+                        <th scope="col" width="2%">
                             <span role="button" data-key="id"
                                 class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
@@ -145,7 +95,7 @@
                                 <!--end::Svg Icon-->
                             </span>
                         </th>
-                        <th scope="col">Vòng thi
+                        <th scope="col"> Chuyên ngành
                             <span role="button" data-key="name"
                                 class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
@@ -172,8 +122,8 @@
                                 <!--end::Svg Icon-->
                             </span>
                         </th>
-                        <th scope="col">Chi tiết
-                            <span role="button" data-key="description"
+                        <th scope="col"> Slug chuyên ngành
+                            <span role="button" data-key="slug"
                                 class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -198,129 +148,19 @@
                                 </svg>
                                 <!--end::Svg Icon-->
                             </span>
-                        </th>
-                        <th scope="col">Cuộc thi </th>
-                        <th scope="col">Loại cuộc thi </th>
-                        <th scope="col">Thời gian bắt đầu
-                            <span role="button" data-key="start_time"
-                                class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
-                                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
-                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                    style="width: 14px !important ; height: 14px !important" width="24px" height="24px"
-                                    viewBox="0 0 24 24" version="1.1">
-                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                        <polygon points="0 0 24 0 24 24 0 24" />
-                                        <rect fill="#000000" opacity="0.3"
-                                            transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
-                                            x="5" y="5" width="2" height="12" rx="1" />
-                                        <path
-                                            d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
-                                            fill="#000000" fill-rule="nonzero" />
-                                        <rect fill="#000000" opacity="0.3"
-                                            transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
-                                            x="17" y="7" width="2" height="12" rx="1" />
-                                        <path
-                                            d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
-                                            fill="#000000" fill-rule="nonzero"
-                                            transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
-                                    </g>
-                                </svg>
-                                <!--end::Svg Icon-->
-                            </span>
-                        </th>
-                        <th scope="col">Thời gian kết thúc
-                            <span role="button" data-key="end_time"
-                                class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
-                                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
-                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                    style="width: 14px !important ; height: 14px !important" width="24px" height="24px"
-                                    viewBox="0 0 24 24" version="1.1">
-                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                        <polygon points="0 0 24 0 24 24 0 24" />
-                                        <rect fill="#000000" opacity="0.3"
-                                            transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
-                                            x="5" y="5" width="2" height="12" rx="1" />
-                                        <path
-                                            d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
-                                            fill="#000000" fill-rule="nonzero" />
-                                        <rect fill="#000000" opacity="0.3"
-                                            transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
-                                            x="17" y="7" width="2" height="12" rx="1" />
-                                        <path
-                                            d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
-                                            fill="#000000" fill-rule="nonzero"
-                                            transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
-                                    </g>
-                                </svg>
-                                <!--end::Svg Icon-->
-                            </span>
-                        </th>
-                        <th class="text-center" colspan="2">
-
                         </th>
 
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($rounds as $key => $round)
+                    @forelse ($majors as $key => $major)
                         <tr>
                             <th scope="row">
-                                {{ (request()->has('page') && request('page') !== 1 ? $rounds->perPage() * (request('page') - 1) : 0) +$key +1 }}
+                                {{ (request()->has('page') && request('page') !== 1 ? $majors->perPage() * (request('page') - 1) : 0) +$key +1 }}
                             </th>
-                            <td>{{ $round->name }}</td>
+                            <td>{{ $major->name }}</td>
+                            <td>{{ $major->slug }}</td>
 
-                            <td>
-
-                                <button class="p-4" type="button"
-                                    style="background: none ; border : none ; list-style  : none " data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal_{{ $key }}">
-                                    <span class="svg-icon svg-icon-success svg-icon-2x">
-                                        <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Visible.svg--><svg
-                                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                            width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                <rect x="0" y="0" width="24" height="24" />
-                                                <path
-                                                    d="M3,12 C3,12 5.45454545,6 12,6 C16.9090909,6 21,12 21,12 C21,12 16.9090909,18 12,18 C5.45454545,18 3,12 3,12 Z"
-                                                    fill="#000000" fill-rule="nonzero" opacity="0.3" />
-                                                <path
-                                                    d="M12,15 C10.3431458,15 9,13.6568542 9,12 C9,10.3431458 10.3431458,9 12,9 C13.6568542,9 15,10.3431458 15,12 C15,13.6568542 13.6568542,15 12,15 Z"
-                                                    fill="#000000" opacity="0.3" />
-                                            </g>
-                                        </svg>
-                                        <!--end::Svg Icon-->
-                                    </span>
-                                </button>
-
-                                <!-- Modal -->
-                                <div class="modal fade" id="exampleModal_{{ $key }}" tabindex="-1"
-                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Chi tiết vòng
-                                                    thi
-                                                </h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body  ">
-                                                {{ $round->description }}
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Thoát
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </td>
-                            <td>{{ $round->contest->name }}</td>
-                            <td>{{ $round->type_exam->name }}</td>
-                            <td>{{ $round->start_time }}</td>
-                            <td>{{ $round->end_time }}</td>
                             <td>
                                 <div class="btn-group dropstart">
                                     <button type="button" class="btn   btn-sm dropdown-toggle" data-bs-toggle="dropdown"
@@ -340,10 +180,11 @@
                                             <!--end::Svg Icon-->
                                         </span>
                                     </button>
-                                    <ul style="min-width: 17rem;" class="dropdown-menu px-4 ">
-                                        <li class="my-3">
-                                            <a href="{{ route('admin.round.edit', ['id' => $round->id]) }}">
-                                                <span role="button" class="svg-icon svg-icon-success svg-icon-2x">
+                                    <ul style="min-width: 3rem !important" class="dropdown-menu w-10px ">
+                                        <li>
+                                            <a href="{{ route('admin.major.edit', ['slug' => $major->slug]) }}">
+                                                <span style="padding: 5px" role="button"
+                                                    class="svg-icon svg-icon-success svg-icon-2x">
                                                     <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Design/Edit.svg--><svg
                                                         xmlns="http://www.w3.org/2000/svg"
                                                         xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
@@ -359,41 +200,17 @@
                                                         </g>
                                                     </svg>
                                                 </span>
-                                                Chỉnh sửa
                                             </a>
                                         </li>
-                                        <li class="my-3">
-                                            {{-- <a href="javascript:void()" data-bs-toggle="modal"
-                                                data-bs-target="#kt_modal_{{ $round->id }}_{{ $key }}">
-                                                <span class="svg-icon svg-icon-primary svg-icon-2x">
-                                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Communication/Group.svg--><svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                                                        height="24px" viewBox="0 0 24 24" version="1.1">
-                                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                            <polygon points="0 0 24 0 24 24 0 24" />
-                                                            <path
-                                                                d="M18,14 C16.3431458,14 15,12.6568542 15,11 C15,9.34314575 16.3431458,8 18,8 C19.6568542,8 21,9.34314575 21,11 C21,12.6568542 19.6568542,14 18,14 Z M9,11 C6.790861,11 5,9.209139 5,7 C5,4.790861 6.790861,3 9,3 C11.209139,3 13,4.790861 13,7 C13,9.209139 11.209139,11 9,11 Z"
-                                                                fill="#000000" fill-rule="nonzero" opacity="0.3" />
-                                                            <path
-                                                                d="M17.6011961,15.0006174 C21.0077043,15.0378534 23.7891749,16.7601418 23.9984937,20.4 C24.0069246,20.5466056 23.9984937,21 23.4559499,21 L19.6,21 C19.6,18.7490654 18.8562935,16.6718327 17.6011961,15.0006174 Z M0.00065168429,20.1992055 C0.388258525,15.4265159 4.26191235,13 8.98334134,13 C13.7712164,13 17.7048837,15.2931929 17.9979143,20.2 C18.0095879,20.3954741 17.9979143,21 17.2466999,21 C13.541124,21 8.03472472,21 0.727502227,21 C0.476712155,21 -0.0204617505,20.45918 0.00065168429,20.1992055 Z"
-                                                                fill="#000000" fill-rule="nonzero" />
-                                                        </g>
-                                                    </svg>
-                                                    <!--end::Svg Icon-->
-                                                </span>
-                                                Ban giám khảo
-                                            </a> --}}
+                                        <li>
 
-
-                                        </li>
-                                        <li class="my-3">
                                             @hasrole('super admin')
-                                                <form action="{{ route('admin.round.destroy', ['id' => $round->id]) }}"
+                                                <form action="{{ route('admin.major.destroy', ['slug' => $major->slug]) }}"
                                                     method="post">
                                                     @csrf
                                                     @method('delete')
-                                                    <button style=" background: none ; border: none ; list-style : none"
+                                                    <button
+                                                        style="padding: 5px ; background: none ; border: none ; list-style : none"
                                                         type="submit">
                                                         <span role="button" class="svg-icon svg-icon-danger svg-icon-2x">
                                                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Trash.svg--><svg
@@ -413,11 +230,10 @@
                                                             </svg>
                                                             <!--end::Svg Icon-->
                                                         </span>
-                                                        Xóa bỏ
                                                     </button>
                                                 </form>
                                             @else
-                                                <span style="cursor: not-allowed; user-select: none"
+                                                <span style="padding: 5px ;cursor: not-allowed; user-select: none"
                                                     class="svg-icon svg-icon-danger svg-icon-2x">
                                                     <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Code/Lock-circle.svg--><svg
                                                         xmlns="http://www.w3.org/2000/svg"
@@ -433,10 +249,11 @@
                                                     </svg>
                                                     <!--end::Svg Icon-->
                                                 </span>
-                                                Xóa bỏ
                                             @endhasrole
 
+
                                         </li>
+
                                     </ul>
                                 </div>
                             </td>
@@ -445,7 +262,7 @@
                     @endforelse
                 </tbody>
             </table>
-            {{ $rounds->appends(request()->all())->links('pagination::bootstrap-4') }}
+            {{ $majors->appends(request()->all())->links('pagination::bootstrap-4') }}
         </div>
     </div>
 
@@ -454,45 +271,11 @@
 @endsection
 @section('page-script')
     <script>
-        let url = '/admin/rounds?';
+        let url = "/admin/majors?";
+        const sort = '{{ request()->has('sort') ? (request('sort') == 'desc' ? 'asc' : 'desc') : 'desc' }}';
     </script>
     <script src="js/listformat.js"></script>
     <script>
-        const sort = '{{ request()->has('sort') ? (request('sort') == 'desc' ? 'asc' : 'desc') : 'desc' }}';
 
-        $(document).ready(function() {
-            let searchParams = new URLSearchParams(window.location.search);
-            $('#select-contest').on('change', function() {
-                checkUrlOut('contest_id', $(this).val());
-            })
-            $('#select-type-exam').on('change', function() {
-                checkUrlOut('type_exam_id', $(this).val());
-            })
-
-            $('.select-date-serach').on('change', function() {
-                loadToast();
-                const value = $(this).val();
-                switch (value) {
-                    case 'day-7':
-                        window.location = url + '&day=' + 7;
-                        return false;
-                    case 'day-15':
-                        window.location = url + '&day=' + 15;
-                        return false;
-                    case 'month-1':
-                        window.location = url + '&month=' + 1;
-                        return false;
-                    case 'month-6':
-                        window.location = url + '&month=' + 6;
-                        return false;
-                    case 'year-1':
-                        window.location = url + '&year=' + 1;
-                        return false;
-                    default:
-                        break;
-                }
-
-            })
-        })
     </script>
 @endsection

@@ -1,10 +1,8 @@
 @extends('layouts.main')
 @section('title', 'Thêm vòng thi')
+@section('page-title', 'Thêm vòng thi')
 @section('content')
     <div class="row">
-        <div class="col-lg-12">
-            <h1 class="text-center">Thêm mới vòng thi</h1>
-        </div>
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
                 <form id="formAddRound" action="{{ route('admin.round.store') }}" method="post"
@@ -161,7 +159,7 @@
 
 @endsection
 
-@section('js_admin')
+@section('page-script')
     <script>
 
     </script>
