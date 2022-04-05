@@ -188,7 +188,8 @@
                         type: "post",
                         url: "{{ route('admin.user.TeamUserSearch') }}",
                         data: {
-                            key: key
+                            key: key,
+                            _token: "{{ csrf_token() }}",
                         },
                         success: function(response) {
                             var _html = ``;

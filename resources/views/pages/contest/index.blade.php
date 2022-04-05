@@ -121,8 +121,8 @@
         </div>
 
         {{--  --}}
-        <div class="table-responsive ">
-            <table class=" table table-hover  ">
+        <div class="  ">
+            <table class=" table table-hover  table-responsive">
                 <thead>
                     <tr>
                         <th scope="col">
@@ -361,11 +361,10 @@
                                             <!--end::Svg Icon-->
                                         </span>
                                     </button>
-                                    <ul style="min-width: 3rem !important" class="dropdown-menu w-10px ">
-                                        <li>
+                                    <ul class="dropdown-menu  px-4 ">
+                                        <li class="my-3">
                                             <a href="{{ route('admin.contest.edit', ['id' => $contest->id]) }}">
-                                                <span style="padding: 5px" role="button"
-                                                    class="svg-icon svg-icon-success svg-icon-2x">
+                                                <span role="button" class="svg-icon svg-icon-success svg-icon-2x">
                                                     <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Design/Edit.svg--><svg
                                                         xmlns="http://www.w3.org/2000/svg"
                                                         xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
@@ -381,16 +380,36 @@
                                                         </g>
                                                     </svg>
                                                 </span>
+                                                Chỉnh sửa
                                             </a>
                                         </li>
-                                        <li>
+                                        <li class="my-3">
+                                            <a href="{{ route('admin.contest.show', ['id' => $contest->id]) }}">
+                                                <span class="svg-icon svg-icon-primary svg-icon-2x ">
+                                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Text/Redo.svg--><svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                                        height="24px" viewBox="0 0 24 24" version="1.1">
+                                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                            <rect x="0" y="0" width="24" height="24" />
+                                                            <path
+                                                                d="M21.4451171,17.7910156 C21.4451171,16.9707031 21.6208984,13.7333984 19.0671874,11.1650391 C17.3484374,9.43652344 14.7761718,9.13671875 11.6999999,9 L11.6999999,4.69307548 C11.6999999,4.27886191 11.3642135,3.94307548 10.9499999,3.94307548 C10.7636897,3.94307548 10.584049,4.01242035 10.4460626,4.13760526 L3.30599678,10.6152626 C2.99921905,10.8935795 2.976147,11.3678924 3.2544639,11.6746702 C3.26907199,11.6907721 3.28437331,11.7062312 3.30032452,11.7210037 L10.4403903,18.333467 C10.7442966,18.6149166 11.2188212,18.596712 11.5002708,18.2928057 C11.628669,18.1541628 11.6999999,17.9721616 11.6999999,17.7831961 L11.6999999,13.5 C13.6531249,13.5537109 15.0443703,13.6779456 16.3083984,14.0800781 C18.1284272,14.6590944 19.5349747,16.3018455 20.5280411,19.0083314 L20.5280247,19.0083374 C20.6363903,19.3036749 20.9175496,19.5 21.2321404,19.5 L21.4499999,19.5 C21.4499999,19.0068359 21.4451171,18.2255859 21.4451171,17.7910156 Z"
+                                                                fill="#000000" fill-rule="nonzero"
+                                                                transform="translate(12.254964, 11.721538) scale(-1, 1) translate(-12.254964, -11.721538) " />
+                                                        </g>
+                                                    </svg>
+                                                    <!--end::Svg Icon-->
+                                                </span>
+                                                Chi tiết
+                                            </a>
+                                        </li>
+                                        <li class="my-3">
                                             @hasrole('super admin')
                                                 <form action="{{ route('admin.contest.destroy', ['id' => $contest->id]) }}"
                                                     method="post">
                                                     @csrf
                                                     @method('delete')
-                                                    <button
-                                                        style="padding: 5px ; background: none ; border: none ; list-style : none"
+                                                    <button style=" background: none ; border: none ; list-style : none"
                                                         type="submit">
                                                         <span role="button" class="svg-icon svg-icon-danger svg-icon-2x">
                                                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Trash.svg--><svg
@@ -410,25 +429,29 @@
                                                             </svg>
                                                             <!--end::Svg Icon-->
                                                         </span>
+                                                        Xóa bỏ
                                                     </button>
                                                 </form>
                                             @else
-                                                <span style="padding: 5px ;cursor: not-allowed; user-select: none"
-                                                    class="svg-icon svg-icon-danger svg-icon-2x">
-                                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Code/Lock-circle.svg--><svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                                                        viewBox="0 0 24 24" version="1.1">
-                                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                            <rect x="0" y="0" width="24" height="24" />
-                                                            <circle fill="#000000" opacity="0.3" cx="12" cy="12" r="10" />
-                                                            <path
-                                                                d="M14.5,11 C15.0522847,11 15.5,11.4477153 15.5,12 L15.5,15 C15.5,15.5522847 15.0522847,16 14.5,16 L9.5,16 C8.94771525,16 8.5,15.5522847 8.5,15 L8.5,12 C8.5,11.4477153 8.94771525,11 9.5,11 L9.5,10.5 C9.5,9.11928813 10.6192881,8 12,8 C13.3807119,8 14.5,9.11928813 14.5,10.5 L14.5,11 Z M12,9 C11.1715729,9 10.5,9.67157288 10.5,10.5 L10.5,11 L13.5,11 L13.5,10.5 C13.5,9.67157288 12.8284271,9 12,9 Z"
-                                                                fill="#000000" />
-                                                        </g>
-                                                    </svg>
-                                                    <!--end::Svg Icon-->
-                                                </span>
+                                                <div style="cursor: not-allowed; user-select: none">
+
+                                                    <span class="svg-icon svg-icon-danger svg-icon-2x">
+                                                        <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Code/Lock-circle.svg--><svg
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                                            height="24px" viewBox="0 0 24 24" version="1.1">
+                                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                                <rect x="0" y="0" width="24" height="24" />
+                                                                <circle fill="#000000" opacity="0.3" cx="12" cy="12" r="10" />
+                                                                <path
+                                                                    d="M14.5,11 C15.0522847,11 15.5,11.4477153 15.5,12 L15.5,15 C15.5,15.5522847 15.0522847,16 14.5,16 L9.5,16 C8.94771525,16 8.5,15.5522847 8.5,15 L8.5,12 C8.5,11.4477153 8.94771525,11 9.5,11 L9.5,10.5 C9.5,9.11928813 10.6192881,8 12,8 C13.3807119,8 14.5,9.11928813 14.5,10.5 L14.5,11 Z M12,9 C11.1715729,9 10.5,9.67157288 10.5,10.5 L10.5,11 L13.5,11 L13.5,10.5 C13.5,9.67157288 12.8284271,9 12,9 Z"
+                                                                    fill="#000000" />
+                                                            </g>
+                                                        </svg>
+                                                        <!--end::Svg Icon-->
+                                                    </span>
+                                                    Xóa bỏ
+                                                </div>
                                             @endhasrole
 
                                         </li>

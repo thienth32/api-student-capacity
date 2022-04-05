@@ -40,6 +40,7 @@ Route::prefix('users')->group(function () {
 
 Route::prefix('contests')->group(function () {
     Route::get('{id}/edit', [ContestController::class, 'edit'])->name('admin.contest.edit');
+    Route::get('{id}/detail', [ContestController::class, 'show'])->name('admin.contest.show');
     Route::put('{id}', [ContestController::class, 'update'])->name('admin.contest.update');
 
     Route::get('', [ContestController::class, 'index'])->name('admin.contest.list');
