@@ -13,4 +13,5 @@ class UserController extends Controller
         $users = User::search($request->key ?? null, ['name', 'email'])->take(4)->get();
         return response()->json($users, 200);
     }
+
 }
