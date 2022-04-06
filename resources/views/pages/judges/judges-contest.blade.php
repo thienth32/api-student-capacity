@@ -2,29 +2,48 @@
 @section('title', 'Chi tiết cuộc thi')
 @section('page-title', 'Danh sách giám khảo ')
 @section('content')
-
-    <div class="row">
-        <div class="col-lg-12">
-            <form id="formJudges">
-                @csrf
-                <div class="form-group list-group mb-5">
-                    <div class="input-group mb-3">
-                        <input type="text" placeholder="Tìm ban giám khảo thêm vô cuộc thi ..." class="form-control"
-                            id="searchUserValue">
-                        <button id="searchUser" class="btn btn-secondary " type="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">Tìm</button>
-                        <ul id="resultUserSearch" class="dropdown-menu dropdown-menu-end w-500px">
-                        </ul>
-                    </div>
-                    <div id="resultArrayUser" class=" mt-4">
-                    </div>
-
-
-                </div>
-                <button type="button" id="attachJudges" class="btn btn-primary"> Thêm </button>
-                <button type="button" id="syncJudges" class="btn btn-warning"> Thêm đồng bộ </button>
-            </form>
+    <div class=" card card-flush p-5">
+        <div class="row pb-5">
+            <div class="col-lg-12">
+                <ol class="breadcrumb text-muted fs-6 fw-bold">
+                    <li class="breadcrumb-item pe-3">
+                        <a href="{{ route('admin.contest.list') }}" class="pe-3">Cuộc
+                            thi</a>
+                    </li>
+                    <li class="breadcrumb-item px-3 ">
+                        <a href="{{ route('admin.contest.show', ['id' => $contest->id]) }}" class="pe-3">
+                            {{ $contest->name }}
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item px-3 text-muted">
+                        Danh sách ban giám khảo của {{ $contest->name }}
+                    </li>
+                </ol>
+            </div>
         </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <form id="formJudges">
+                    @csrf
+                    <div class="form-group list-group mb-5">
+                        <div class="input-group mb-3">
+                            <input type="text" placeholder="Tìm ban giám khảo thêm vô cuộc thi ..." class="form-control"
+                                id="searchUserValue">
+                            <button id="searchUser" class="btn btn-secondary " type="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">Tìm</button>
+                            <ul id="resultUserSearch" class="dropdown-menu dropdown-menu-end w-500px">
+                            </ul>
+                        </div>
+                        <div id="resultArrayUser" class=" mt-4">
+                        </div>
+
+
+                    </div>
+                    <button type="button" id="attachJudges" class="btn btn-primary"> Thêm </button>
+                </form>
+            </div>
+        </div>
+
     </div>
 
     <div class="row mt-5">
