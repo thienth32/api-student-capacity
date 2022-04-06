@@ -79,6 +79,7 @@ Route::prefix('majors')->group(function () {
 
 Route::prefix('judges')->group(function () {
     Route::get('{contest_id}/contest', [JudgesController::class, 'getJudgesContest'])->name('admin.judges.contest');
+    Route::get('{round_id}/round', [JudgesController::class, 'getJudgesRound'])->name('admin.judges.round');
 
     Route::post('{contest_id}/attach', [JudgesController::class, 'attachJudges'])->name('admin.judges.attach');
     Route::post('{contest_id}/sync', [JudgesController::class, 'syncJudges'])->name('admin.judges.sync');

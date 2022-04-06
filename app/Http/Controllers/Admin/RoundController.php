@@ -361,8 +361,9 @@ class RoundController extends Controller
             'contest' =>  $contest
         ]);
     }
-    public function adminShow()
+    public function adminShow($id)
     {
-        # code...
+        if (!($round = $this->round::with(['contest', 'type_exam', 'judges', 'teams'])->where('id', $id)->first())) return abort(404);
+        return view('pages.round.detail.detail', ['round' => $round]);
     }
 }
