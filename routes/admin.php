@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\RoundController;
 use App\Http\Controllers\Admin\ContestController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EnterpriseController;
+use App\Http\Controllers\Admin\JudgesController;
 use App\Http\Controllers\Admin\MajorController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
@@ -47,10 +48,8 @@ Route::prefix('contests')->group(function () {
     Route::get('', [ContestController::class, 'index'])->name('admin.contest.list');
     Route::get('form-add', [ContestController::class, 'create'])->name('admin.contest.create');
     Route::post('form-add-save', [ContestController::class, 'store'])->name('admin.contest.store');
-
     Route::post('un-status/{id}', [ContestController::class, 'un_status'])->name('admin.contest.un.status');
     Route::post('re-status/{id}', [ContestController::class, 're_status'])->name('admin.contest.re.status');
-
     Route::delete('{id}', [ContestController::class, 'destroy'])->name('admin.contest.destroy');
 });
 Route::prefix('enterprise')->group(function () {
@@ -60,7 +59,6 @@ Route::prefix('enterprise')->group(function () {
     Route::get('form-add', [EnterpriseController::class, 'create'])->name('admin.enterprise.create');
     Route::post('form-add-save', [EnterpriseController::class, 'store'])->name('admin.enterprise.store');
     Route::delete('{id}', [EnterpriseController::class, 'destroy'])->name('admin.enterprise.destroy');
-
 });
 
 Route::prefix('majors')->group(function () {
@@ -72,4 +70,12 @@ Route::prefix('majors')->group(function () {
     Route::post('store', [MajorController::class, 'store'])->name('admin.major.store');
 
     Route::delete('{slug}', [MajorController::class, 'destroy'])->name('admin.major.destroy');
+});
+
+Route::prefix('judges')->group(function () {
+    Route::get('{contest_id}/contest', [JudgesController::class, 'getJudgesContest'])->name('admin.judges.contest');
+
+    Route::post('{contest_id}/attach', [JudgesController::class, 'attachJudges'])->name('admin.judges.attach');
+    Route::post('{contest_id}/sync', [JudgesController::class, 'syncJudges'])->name('admin.judges.sync');
+    Route::delete('{contest_id}/detach', [JudgesController::class, 'detachJudges'])->name('admin.judges.detach');
 });

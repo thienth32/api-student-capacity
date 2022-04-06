@@ -2,89 +2,72 @@
 @section('title', 'Chi tiết cuộc thi')
 @section('page-title', 'Chi tiết cuộc thi')
 @section('content')
-    <div class="row">
-        <div class="col-lg-2">
-            <div class="card card-flush ">
-                <img src="{{ $datas->img == null
-                    ? 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg'
-                    : $datas->img }}"
-                    alt="">
-
+    <div class=" mb-4">
+        <div class="row">
+            <div class="col-lg-12">
+                <ol class="breadcrumb text-muted fs-6 fw-bold">
+                    <li class="breadcrumb-item pe-3">
+                        <a href="{{ route('admin.contest.list') }}" class="pe-3">Cuộc
+                            thi</a>
+                    </li>
+                    <li class="breadcrumb-item px-3 text-muted">{{ $contest->name }}</li>
+                </ol>
             </div>
-            <ul class="nav flex-row flex-md-column nav-custom  border-0 fs-4 fw-bold mb-n2 mt-3">
-
-                <li class="nav-item">
-                    <a class="tabbar_detail_contest nav-link text-active-primary" href="javascript:void()">
-                        Chi tiết
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="tabbar_round_contest nav-link text-active-primary " href="javascript:void()">
-                        Vòng thi</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="tabbar_teams_contest nav-link text-active-primary " href="javascript:void()">Đội
-                        thi</a>
-                </li>
-                <li class="nav-item">
-                    <a class="tabbar_judges_contest nav-link text-active-primary " href="javascript:void()">
-                        Ban giám khảo
-                    </a>
-                </li>
-            </ul>
         </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-4 mb-5 mb-xl-10">
+            <div class="card card-flush ">
+                <!--begin::Heading-->
+                <div class=" rounded bgi-no-repeat bgi-size-cover bgi-position-y-top bgi-position-x-center align-items-start "
+                    style="background-image:url('assets/media/svg/shapes/top-green.png')">
+                    <!--begin::Title-->
+                    <div class="p-5">
+                        <span class="fw-bolder text-white fs-2x mb-3">{{ $contest->name }}</span>
+                        <div class="fs-4 text-white mt-5">
+                            <div class="opacity-75">
+                                <img style="width:100%"
+                                    src="{{ $contest->img? $contest->img: 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
+                                    alt="">
+                            </div>
+                        </div>
 
-        <div class="col-lg-10">
-            <div class="container-fluid mt-3 card card-flush">
-
-                <div class="row">
-                    <div class="col-lg-12">
-                        <ul class="list-group list-group-flush fs-2 ">
-                            <li class="list-group-item">
+                        <div class="fs-4 text-white mt-5">
+                            <div class="opacity-75">
                                 <div class="row">
                                     <div class="col-4">
-                                        <h2>Tên cuộc thi</h2>
+                                        <h3>Thời gian bắt đầu</h3>
                                     </div>
                                     <div class="col-8">
-                                        {{ $datas->name }}
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="list-group-item">
-                                <div class="row">
-                                    <div class="col-4">
-                                        <h2>Thời gian bắt đầu</h2>
-
-                                    </div>
-                                    <div class="col-8">
-                                        {{ date('d-m-Y H:i', strtotime($datas->date_start)) }}
+                                        {{ date('d-m-Y H:i', strtotime($contest->date_start)) }}
                                         <br>
-                                        {{ \Carbon\Carbon::parse($datas->date_start)->diffforHumans() }}
+                                        {{ \Carbon\Carbon::parse($contest->date_start)->diffforHumans() }}
                                     </div>
                                 </div>
-
-                            </li>
-                            <li class="list-group-item">
+                            </div>
+                        </div>
+                        <div class="fs-4 text-white mt-5">
+                            <div class="opacity-75">
                                 <div class="row">
                                     <div class="col-4">
-                                        <h2>Thời gian kết thúc</h2>
+                                        <h3>Thời gian kết thúc</h3>
                                     </div>
                                     <div class="col-8">
-                                        {{ date('d-m-Y H:i', strtotime($datas->register_deadline)) }}
+                                        {{ date('d-m-Y H:i', strtotime($contest->register_deadline)) }}
                                         <br>
-                                        {{ \Carbon\Carbon::parse($datas->register_deadline)->diffforHumans() }}
+                                        {{ \Carbon\Carbon::parse($contest->register_deadline)->diffforHumans() }}
                                     </div>
                                 </div>
-                            </li>
-                            <li class="list-group-item">
+                            </div>
+                        </div>
+                        <div class="fs-4 text-white mt-5">
+                            <div class="opacity-75">
                                 <div class="row">
                                     <div class="col-4">
-                                        <h2>Trạng thái</h2>
+                                        <h3>Trạng thái</h3>
                                     </div>
                                     <div class="col-8">
-                                        @if ($datas->status == 1)
+                                        @if ($contest->status == 1)
                                             <button type="button" class="btn btn-primary">
                                                 Kích hoạt
                                             </button>
@@ -95,26 +78,75 @@
                                         @endif
                                     </div>
                                 </div>
-                            </li>
-                        </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
+            </div>
+        </div>
+
+        <div class="col-xl-8 mb-5 mb-xl-10">
+
+            <div class="container-fluid  card card-flush">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h2 class="ps-5">Mô tả cuộc thi</h2>
-                        <div class="card-body fs-3">
-                            {!! $datas->description !!}
+                        <h2 class="my-6">Mô tả cuộc thi</h2>
+                        <div class=" fs-3 pb-5">
+                            {!! $contest->description !!}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class=" card card-flush ">
+                <div class="row p-5 d-flex justify-content-center align-items-center ">
+
+                    <div class="col-md-3">
+                        <a href="{{ route('admin.round.list', 'contest_id=' . $contest->id) }}">
+                            <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
+                                <div class="m-0">
+                                    <span class="text-gray-700 fw-bold fs-6">Vòng thi</span>
+                                </div>
+                                <div class="m-0 badge badge-primary badge-pill">
+                                    <span class=" fs-6 text-white">{{ count($contest->rounds) }}</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="">
+                            <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
+                                <div class="m-0">
+                                    <span class="text-gray-700 fw-bold fs-6">Đội thi</span>
+                                </div>
+                                <div class="m-0 badge badge-primary badge-pill">
+                                    <span class=" fs-6 text-white">{{ count($contest->teams) }}</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{{ route('admin.judges.contest', ['contest_id' => $contest->id]) }}">
+                            <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
+                                <div class="m-0">
+                                    <span class="text-gray-700 fw-bold fs-6">Ban giám khảo</span>
+                                </div>
+                                <div class="m-0 badge badge-primary badge-pill">
+                                    <span class=" fs-6 text-white">{{ count($contest->judges) }}</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @section('page-script')
-    <script>
-        const URL_ROUTE = `{{ route('admin.contest.show', ['id' => $datas->id]) }}`
-    </script>
-    <script src="assets/js/system/contest/detail-contest.js"></script>
 @endsection

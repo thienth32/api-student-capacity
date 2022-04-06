@@ -5,7 +5,7 @@ const teamPage = {
             e.preventDefault();
             let key = $('input#searchUserValue').val();
             if (key != '') {
-                toastr.info('Đang tìm kiếm người dùng !!')
+
                 $.ajax({
                     type: "post",
                     url: urlSearch,
@@ -20,6 +20,8 @@ const teamPage = {
                                 <li><a data-id_user='${val.id}' data-email_user='${val.email}' class="addUserArray dropdown-item py-5" href="javascript:void()">${val.email}</a></li>
                             `;
                         });
+                        toastr.success('Tìm kiếm thành công !!')
+                        $('input#searchUserValue').val();
                         $('#resultUserSearch').html(_html);
                     }
                 });
@@ -42,7 +44,7 @@ const teamPage = {
                         <div class='d-flex justify-content-between align-items-center'>
                             <span>
                                 ${val.email_user} 
-                                <input hidden type="text" value="${val.id_user}"  name="user_id[]" >
+                                <input hidden type="text" value="${val.id_user}" class="user_id"  name="user_id[]" >
                             </span>
                             <button data-idUser='${key}' class="deleteUserArray btn btn-danger"   data-bs-toggle="tooltip" data-bs-placement="right" title="Xóa người dùng khỏi danh sách chờ !" data-theme="dark" type="button" >
                                 <span class="svg-icon svg-icon-2x svg-icon-primary "><!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Trash.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
