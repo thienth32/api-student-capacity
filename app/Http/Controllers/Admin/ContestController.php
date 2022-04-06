@@ -290,7 +290,7 @@ class ContestController extends Controller
     private function addCollectionApiContest($contest)
     {
         try {
-            dd('judges');
+
             return $contest->with(['teams' => function ($q) {
                 return $q->withCount('members');
             }, 'rounds' => function ($q) {
@@ -299,7 +299,7 @@ class ContestController extends Controller
                         return $q->with('members');
                     }
                 ]);
-            }])->withCount('rounds');
+            }, 'judges'])->withCount('rounds');
         } catch (\Throwable $th) {
             return false;
         }
