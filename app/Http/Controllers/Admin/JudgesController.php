@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Contest;
+use App\Models\Round;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
@@ -43,5 +44,18 @@ class JudgesController extends Controller
         } catch (\Throwable $th) {
             return response()->json(['status' => false, 'payload' => "Có vẻ đang bị lỗi ở :" . $th], 500);
         }
+    }
+
+    public function getJudgesRound($round_id)
+    {
+        $round = Round::find($round_id);
+        $round->load(['judges' => function ($q) {
+            return $q;
+        }]);
+        $round->load(['contest' => function ($q) {
+            return $q->with('judges');
+        }]);
+        // dd($round->toArray());
+        return view('pages.judges.judges-contest', compact('round'));
     }
 }
