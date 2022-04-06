@@ -20,9 +20,10 @@ Route::prefix('rounds')->group(function () {
     Route::get('{id}/edit', [RoundController::class, 'edit'])->name('admin.round.edit');
     Route::put('{id}', [RoundController::class, 'update'])->name('admin.round.update');
     Route::delete('{id}', [RoundController::class, 'destroy'])->name('admin.round.destroy');
+
+    Route::get('{id}/detail', [RoundController::class, 'adminShow'])->name('admin.round.detail');
 });
-Route::prefix('contests')->group(function () {
-});
+
 
 Route::prefix('teams')->group(function () {
     //list
@@ -42,7 +43,6 @@ Route::prefix('users')->group(function () {
 
 Route::prefix('contests')->group(function () {
     Route::get('{id}/edit', [ContestController::class, 'edit'])->name('admin.contest.edit');
-    Route::get('{id}/detail', [ContestController::class, 'show'])->name('admin.contest.show');
     Route::put('{id}', [ContestController::class, 'update'])->name('admin.contest.update');
 
     Route::get('', [ContestController::class, 'index'])->name('admin.contest.list');
@@ -51,6 +51,11 @@ Route::prefix('contests')->group(function () {
     Route::post('un-status/{id}', [ContestController::class, 'un_status'])->name('admin.contest.un.status');
     Route::post('re-status/{id}', [ContestController::class, 're_status'])->name('admin.contest.re.status');
     Route::delete('{id}', [ContestController::class, 'destroy'])->name('admin.contest.destroy');
+
+    Route::prefix('{id}/detail')->group(function () {
+        Route::get('', [ContestController::class, 'show'])->name('admin.contest.show');
+        Route::get('round', [RoundController::class, 'contestDetailRound'])->name('admin.contest.detail.round');
+    });
 });
 Route::prefix('enterprise')->group(function () {
     Route::get('{id}/edit', [EnterpriseController::class, 'edit'])->name('admin.enterprise.edit');

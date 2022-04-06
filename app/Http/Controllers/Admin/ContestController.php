@@ -327,16 +327,9 @@ class ContestController extends Controller
     }
 
 
-    private function getApiDetailContest($id)
-    {
-
-        $data = Contest::find($id);
-        return $data;
-    }
     public function show(Request $request, $id)
     {
-        $contest = $this->getApiDetailContest($id);
-
+        $contest =  Contest::find($id);
         return view('pages.contest.detail.detail', compact('contest'));
     }
 }

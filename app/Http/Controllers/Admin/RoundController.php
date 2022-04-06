@@ -335,4 +335,22 @@ class RoundController extends Controller
     /**
      *  End destroy round
      */
+
+
+    public function contestDetailRound($id)
+    {
+        if (!($rounds = $this->getList())) return view('not_found');
+        $contest = $this->contest->find($id);
+        $rounds = $this->getList();
+        return view('pages.contest.detail.contest-round', [
+            'rounds' => $rounds->where('contest_id', $id)->paginate(request('limit') ?? 5),
+            'contests' => $this->contest::withCount(['teams', 'rounds'])->get(),
+            'type_exams' => $this->type_exam::all(),
+            'contest' =>  $contest
+        ]);
+    }
+    public function adminShow()
+    {
+        # code...
+    }
 }

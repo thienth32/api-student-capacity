@@ -107,7 +107,8 @@
                 <div class="row p-5 d-flex justify-content-center align-items-center ">
 
                     <div class="col-md-3">
-                        <a href="{{ route('admin.round.list', 'contest_id=' . $contest->id) }}">
+                        <a
+                            href="{{ route('admin.contest.detail.round', ['id' => $contest->id], 'contest_id=' . $contest->id) }}">
                             <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
                                 <div class="m-0">
                                     <span class="text-gray-700 fw-bold fs-6">Vòng thi</span>
