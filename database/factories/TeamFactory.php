@@ -20,7 +20,7 @@ class TeamFactory extends Factory
         return [
             'name' => $this->faker->name,
             'contest_id' => Contest::all()->random()->id,
-            'image' => $this->faker->name,
+            'image' => 'https://i.pinimg.com/originals/6a/54/2a/6a542ae20b05d5129568fd49e03adb16.jpg',
         ];
     }
 }
