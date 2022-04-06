@@ -28,6 +28,11 @@
                     <a class="tabbar_teams_contest nav-link text-active-primary " href="javascript:void()">Đội
                         thi</a>
                 </li>
+                <li class="nav-item">
+                    <a class="tabbar_judges_contest nav-link text-active-primary " href="javascript:void()">
+                        Ban giám khảo
+                    </a>
+                </li>
             </ul>
         </div>
 

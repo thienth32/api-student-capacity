@@ -50,6 +50,10 @@ class Contest extends Model
     {
         return $this->belongsTo(Major::class, 'major_id');
     }
+    public function judges() // Giám khảo
+    {
+        return $this->belongsToMany(User::class, 'judges', 'contest_id', 'user_id');
+    }
     public function rounds()
     {
         return $this->hasMany(Round::class, 'contest_id');

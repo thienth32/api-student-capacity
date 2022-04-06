@@ -335,21 +335,17 @@ class ContestController extends Controller
     public function show(Request $request, $id)
     {
         $datas = $this->getApiDetailContest($id);
-        // if (request('page') == '' || request('page') == null) {
-        // }
-        // $contest->load(request('page') == 'rounds');
-
-
         if (request('page') == 'rounds') {
             $datas->load('rounds');
             return view('pages.contest.detail.contest-round', compact('datas'));
         } elseif (request('page') == 'teams') {
             $datas->load('teams');
             return view('pages.contest.detail.contest-team', compact('datas'));
+        } elseif (request('page') == 'judges') {
+            $datas->load('judges');
+            return view('pages.contest.detail.contest-judges', compact('datas'));
         } else {
             return view('pages.contest.detail.detail', compact('datas'));
         }
     }
 }
-
-//

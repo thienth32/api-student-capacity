@@ -20,8 +20,17 @@ const detailContest = {
 
         });
     },
+    loadJudgess: function() {
+        $(document).on('click', '.tabbar_judges_contest', function(e) {
+            e.preventDefault();
+            window.location.href = URL_ROUTE + '?page=judges'
+
+
+        });
+    },
 }
 
 detailContest.loadContestDetail()
 detailContest.loadRounds()
 detailContest.loadTeams()
+detailContest.loadJudgess()

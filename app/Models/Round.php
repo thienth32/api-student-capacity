@@ -68,9 +68,4 @@ class Round extends Model
     {
         return $this->hasMany(Result::class, 'round_id');
     }
-
-    public function judges() // Giám khảo
-    {
-        return $this->belongsToMany(User::class, 'judges', 'round_id', 'user_id');
-    }
 }
