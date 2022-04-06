@@ -120,7 +120,7 @@
                         </a>
                     </div>
                     <div class="col-md-3">
-                        <a href="">
+                        <a href="{{ route('admin.contest.detail.team', ['id' => $contest->id]) }}">
                             <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
                                 <div class="m-0">
                                     <span class="text-gray-700 fw-bold fs-6">Đội thi</span>
