@@ -13,9 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('judges', function (Blueprint $table) {
-            $table->bigInteger('contest_id')->unsigned()->nullable();
-            $table->foreign('contest_id')->references('id')->on('contests')->onDelete('cascade');
+        Schema::create('skills', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->string('name');
+            $table->string('short_name')->unique();
+            $table->string('image_url')->nullable();
+            $table->string('description');
+            $table->softDeletes();
         });
 
     }
@@ -27,7 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('judges', function (Blueprint $table) {
-        });
+        Schema::dropIfExists('skills');
     }
 };
