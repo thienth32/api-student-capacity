@@ -73,4 +73,9 @@ class Round extends Model
     {
         return $this->belongsToMany(User::class, 'judges', 'round_id', 'user_id');
     }
+
+    public function teams()
+    {
+        return $this->belongsToMany(Team::class, 'round_teams', 'round_id', 'team_id');
+    }
 }

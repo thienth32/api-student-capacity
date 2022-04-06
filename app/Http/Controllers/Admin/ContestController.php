@@ -285,7 +285,13 @@ class ContestController extends Controller
         try {
             return $contest->with(['teams' => function ($q) {
                 return $q->withCount('members');
-            }, 'rounds'])->withCount('rounds');
+            }, 'rounds' => function ($q) {
+                return $q->with([
+                    'teams' => function ($q) {
+                        return $q->with('members');
+                    }
+                ]);
+            }])->withCount('rounds');
         } catch (\Throwable $th) {
             return false;
         }

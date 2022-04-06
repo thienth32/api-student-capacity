@@ -335,4 +335,18 @@ class RoundController extends Controller
     /**
      *  End destroy round
      */
+    public function show(Round $round, $id)
+    {
+        $round = Round::find($id);
+        if (is_null($round)) {
+            return response()->json(['payload' => 'Không tồn tại trong hệ thống !'], 200);
+        } {
+            $round->load('contest');
+            $round->load('type_exam');
+            $round->load(['teams' => function ($q) {
+                return $q->with('members');
+            }]);
+            return response()->json(['payload' => $round], 200);
+        }
+    }
 }
