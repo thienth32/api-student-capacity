@@ -340,10 +340,11 @@ class ContestController extends Controller
         }
     }
 
-    public function show($id)
+
+    public function show(Request $request, $id)
     {
-        $contest = Contest::find($id);
-        return view('pages.contest.detail', compact('contest'));
+        $contest =  Contest::find($id);
+        return view('pages.contest.detail.detail', compact('contest'));
     }
 }
 
