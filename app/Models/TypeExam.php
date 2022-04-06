@@ -11,6 +11,6 @@ class TypeExam extends Model
     protected $table = "type_exams";
     protected $primaryKey = "id";
     public $fillable = [
-        'name'
+        'name','description'
     ];
 }

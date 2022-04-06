@@ -5,9 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Donor extends Model
+class RoundTeam extends Model
 {
-  protected $table='donors';
-  protected $fillable=['contest_id','enterprise_id'];
+
+    protected $table='round_teams';
+    protected $fillable=['team_id','round_id'];
     use HasFactory;
 }

@@ -343,28 +343,8 @@
                     }
                 })
             })
-        });
 
-        function removeTeam(id) {
-
-            Swal.fire({
-                title: 'Bạn có muốn xóa không?',
-                text: "Sẽ không thể phục hồi",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $('#loading').css('display', 'flex');
-                    $.ajax({
-                        url: "{{ url('admin/teams') }}/" + id,
-                        type: 'delete',
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                        },
-                        success: function(response) {
+            function removeTeam(id) {
 
                             Swal.fire({
                                 position: 'center',
@@ -431,47 +411,60 @@
                                                                 $('#listTeams')
                                                                     .html(
                                                                         data
-                                                                    )
-                                                                $('.paginate .pagination a')
-                                                                    .unbind(
-                                                                        'click'
-                                                                    )
-                                                                    .on('click',
-                                                                        function(
-                                                                            e
-                                                                        ) {
-                                                                            e
-                                                                                .preventDefault();
-                                                                            var page =
-                                                                                $(
-                                                                                    this
-                                                                                )
-                                                                                .attr(
-                                                                                    'href'
-                                                                                )
-                                                                                .split(
-                                                                                    'page='
-                                                                                )[
-                                                                                    1
-                                                                                ];
+                                                                    ) {
+                                                                        $('#loading')
+                                                                            .css(
+                                                                                'display',
+                                                                                'none'
+                                                                                );
+                                                                        $('#listTeams')
+                                                                            .empty();
 
-                                                                        }
-                                                                    );
-                                                            }
-                                                        })
-                                                    });
-                                            }
-                                        })
-                                    });
-                            })
+                                                                        $('#listTeams')
+                                                                            .html(
+                                                                                data
+                                                                            )
+                                                                        $('.paginate .pagination a')
+                                                                            .unbind(
+                                                                                'click'
+                                                                            )
+                                                                            .on('click',
+                                                                                function(
+                                                                                    e
+                                                                                ) {
+                                                                                    e
+                                                                                        .preventDefault();
+                                                                                    var page =
+                                                                                        $(
+                                                                                            this
+                                                                                        )
+                                                                                        .attr(
+                                                                                            'href'
+                                                                                        )
+                                                                                        .split(
+                                                                                            'page='
+                                                                                        )[
+                                                                                            1
+                                                                                        ];
 
-                        }
+                                                                                }
+                                                                            );
+                                                                    }
+                                                                })
+                                                            });
+                                                }
+                                            })
+                                        });
+                                })
 
-                    })
+                            }
 
-                }
-            })
-        }
+                        })
+
+                    }
+                })
+            }
+        });
     </script>
 
 @endsection

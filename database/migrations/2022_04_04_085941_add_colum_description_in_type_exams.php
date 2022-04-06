@@ -13,8 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->integer('status')->default(1);
+        Schema::table('type_exams', function (Blueprint $table) {
+        $table->string('description');
+
         });
     }
 
@@ -25,8 +26,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('status');
+        Schema::table('type_exams', function (Blueprint $table) {
+               $table->dropColumn('description');
         });
     }
 };
