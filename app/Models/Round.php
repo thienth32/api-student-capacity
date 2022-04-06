@@ -6,10 +6,12 @@ use App\Services\Builder\Builder;
 use App\Services\Traits\TGetAttributeColumn;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 
 class Round extends Model
 {
+    use SoftDeletes;
     use HasFactory, TGetAttributeColumn;
     protected $table = "rounds";
     protected $primaryKey = "id";
