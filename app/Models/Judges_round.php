@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Evaluation extends Model
+class Judges_round extends Model
 {
-    protected $table='evaluations';
-    protected $fillable=['ponit','exams_team_id','judge_round_id'];
+    protected $table ='judges_rounds';
+    protected $fillable=['judge_id','round_id'];
     use HasFactory;
 }
