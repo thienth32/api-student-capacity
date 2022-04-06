@@ -1,17 +1,11 @@
 const teamPage = {
-
-
-
-
-
-
     searchUserDB: function() {
         // tìm kiếm người dùng trong db và in ra màn  hình để  thêm vô mảng 
-        $('#searchUser').on('click', function(e) {
+        $(document).on('click', '#searchUser', function(e) {
             e.preventDefault();
             let key = $('input#searchUserValue').val();
             if (key != '') {
-                toastr.info('Đang tìm kiếm người dùng !!', 'Đang chạy')
+                toastr.info('Đang tìm kiếm người dùng !!')
                 $.ajax({
                     type: "post",
                     url: urlSearch,
@@ -23,8 +17,8 @@ const teamPage = {
                         var _html = ``;
                         $.map(response, function(val, key) {
                             _html += /*html*/ `
-                                    <li><a data-id_user='${val.id}' data-email_user='${val.email}' class="addUserArray dropdown-item py-5" href="javascript:void()">${val.email}</a></li>
-                                `;
+                                <li><a data-id_user='${val.id}' data-email_user='${val.email}' class="addUserArray dropdown-item py-5" href="javascript:void()">${val.email}</a></li>
+                            `;
                         });
                         $('#resultUserSearch').html(_html);
                     }
@@ -95,44 +89,9 @@ const teamPage = {
             e.preventDefault();
             let key = $(this).attr('data-idUser');
             userArray.splice(key, 1)
-                // delete userArray[key];
             loadUserTeam(userArray);
         });
     },
-
-    editTeam: function() {
-        // lấy dữ liệu mảng người dùng và submit form thêm vô cơ sở dữ liệu
-        // $(document).on('click', '#editTeam', function(e) {
-        //     e.preventDefault();
-        //     if (userArray.length == 0) {
-        //         toastr.error('Đội này chưa có thành viên  !');
-        //         return;
-        //     } else {
-        //         $(document).submit('#formEditTeam')
-        //     }
-        // });
-    },
-
-    validateForm: function() {
-        // validate form team
-        $("#formTeam").validate({
-            onkeyup: false,
-            rules: {
-                name: {
-                    required: true,
-                    maxlength: 255
-                },
-            },
-            messages: {
-                name: {
-                    required: 'Chưa nhập trường này !',
-                    maxlength: 'Tối đa là 255 kí tự !'
-                },
-            },
-        });
-    }
 }
 teamPage.userArray(userArray);
 teamPage.searchUserDB();
-teamPage.editTeam();
-teamPage.validateForm();

@@ -326,10 +326,29 @@ class ContestController extends Controller
         }
     }
 
-    public function show($id)
+    private function getApiDetailContest($id)
     {
-        $contest = Contest::find($id);
-        return view('pages.contest.detail', compact('contest'));
+
+        $data = Contest::find($id);
+        return $data;
+    }
+    public function show(Request $request, $id)
+    {
+        $datas = $this->getApiDetailContest($id);
+        // if (request('page') == '' || request('page') == null) {
+        // }
+        // $contest->load(request('page') == 'rounds');
+
+
+        if (request('page') == 'rounds') {
+            $datas->load('rounds');
+            return view('pages.contest.detail.contest-round', compact('datas'));
+        } elseif (request('page') == 'teams') {
+            $datas->load('teams');
+            return view('pages.contest.detail.contest-team', compact('datas'));
+        } else {
+            return view('pages.contest.detail.detail', compact('datas'));
+        }
     }
 }
 
