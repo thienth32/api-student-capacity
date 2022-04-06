@@ -45,8 +45,15 @@ class ContestController extends Controller
                 ->with([
                     'major',
                     'teams',
-                    'rounds',
-                    'enterprise'
+                    'rounds' => function ($q) {
+                        return $q->with([
+                            'teams' => function ($q) {
+                                return $q->with('members');
+                            }
+                        ]);
+                    },
+                    'enterprise',
+                    'judges'
                 ])
                 ->withCount('teams');
             // ->paginate(request('limit') ?? 10);
@@ -283,6 +290,7 @@ class ContestController extends Controller
     private function addCollectionApiContest($contest)
     {
         try {
+            dd('judges');
             return $contest->with(['teams' => function ($q) {
                 return $q->withCount('members');
             }, 'rounds' => function ($q) {
