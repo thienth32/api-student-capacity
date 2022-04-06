@@ -13,12 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('judges', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->timestamps();
+        Schema::table('judges', function (Blueprint $table) {
+            $table->bigInteger('contest_id')->unsigned()->nullable();
+            $table->foreign('contest_id')->references('id')->on('contests')->onDelete('cascade');
         });
+
     }
 
     /**
@@ -28,6 +27,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('judges');
+        Schema::table('judges', function (Blueprint $table) {
+        });
     }
 };

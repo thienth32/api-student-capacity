@@ -2,18 +2,15 @@
 
 namespace Database\Factories;
 
-use App\Models\Contest;
 use App\Models\Judge;
 use App\Models\Round;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Judge>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Judges_round>
  */
-class JudgeFactory extends Factory
+class Judges_roundFactory extends Factory
 {
-    protected $model = Judge::class;
     /**
      * Define the model's default state.
      *
@@ -22,8 +19,8 @@ class JudgeFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => User::all()->random()->id,
-            'contest_id' => Contest::all()->random()->id,
+            'round_id' => Round::all()->random()->id,
+            'judge_id' => Judge::all()->random()->id,
         ];
     }
 }

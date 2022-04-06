@@ -18,9 +18,9 @@ return new class extends Migration
             $table->timestamps();
             $table->integer('ponit');
             $table->unsignedBigInteger('exams_team_id');
-            $table->unsignedBigInteger('judges_id');
+            $table->unsignedBigInteger('judge_round_id');
             $table->foreign('exams_team_id')->references('id')->on('take_exams')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('judges_id')->references('id')->on('judges')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('judge_round_id')->references('id')->on('judges_rounds')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

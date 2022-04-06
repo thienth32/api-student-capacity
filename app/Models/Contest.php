@@ -8,9 +8,11 @@ use App\Services\Builder\Builder;
 use App\Services\Traits\TGetAttributeColumn;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Contest extends Model
 {
+    use SoftDeletes;
     use HasFactory, TGetAttributeColumn;
     protected $table = 'contests';
     protected $casts = [

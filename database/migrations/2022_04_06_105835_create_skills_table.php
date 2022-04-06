@@ -13,12 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('judges', function (Blueprint $table) {
+        Schema::create('skills', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
+            $table->string('name');
+            $table->string('short_name')->unique();
+            $table->string('image_url')->nullable();
+            $table->string('description');
+            $table->softDeletes();
         });
+
     }
 
     /**
@@ -28,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('judges');
+        Schema::dropIfExists('skills');
     }
 };
