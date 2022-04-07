@@ -58,14 +58,14 @@
             </div>
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="  form-group p-2">
-                    <label>Loại vòng thi </label>
+                    <label>Kiểu thi </label>
                     <select id="select-type-exam" class="form-control form-control-solid">
-                        <option value="0">-- Loại vòng thi --</option>
+                        <option value="0">-- Kiểu thi --</option>
                         @forelse ($type_exams as $type_exam)
                             <option @selected(request('type_exam_id') == $type_exam->id) value="{{ $type_exam->id }}">{{ $type_exam->name }}
                             </option>
                         @empty
-                            <option>-- Không có loại vòng thi --</option>
+                            <option>-- Không có kiểu thi --</option>
                         @endforelse
                     </select>
                 </div>
@@ -230,7 +230,7 @@
                             </span>
                         </th>
                         <th scope="col">Cuộc thi </th>
-                        <th scope="col">Loại cuộc thi </th>
+                        <th scope="col">Loại kiểu thi </th>
                         <th scope="col">Thời gian bắt đầu
                             <span role="button" data-key="start_time"
                                 class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
@@ -318,9 +318,8 @@
                             </td>
                             <td>
 
-                                <button class="p-4" type="button"
-                                    style="background: none ; border : none ; list-style  : none " data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal_{{ $key }}">
+                                <button type="button" style="background: none ; border : none ; list-style  : none "
+                                    data-bs-toggle="modal" data-bs-target="#exampleModal_{{ $key }}">
                                     <span class="svg-icon svg-icon-success svg-icon-2x">
                                         <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Visible.svg--><svg
                                             xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -371,8 +370,8 @@
                             <td>{{ $round->end_time }}</td>
                             <td>
                                 <div class="btn-group dropstart">
-                                    <button type="button" class="btn   btn-sm dropdown-toggle" data-bs-toggle="dropdown"
-                                        aria-expanded="false">
+                                    <button style="padding: 0" type="button" class="btn   btn-sm dropdown-toggle"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
                                         <span class="svg-icon svg-icon-success svg-icon-2x">
                                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Settings-2.svg--><svg
                                                 xmlns="http://www.w3.org/2000/svg"
@@ -388,7 +387,7 @@
                                             <!--end::Svg Icon-->
                                         </span>
                                     </button>
-                                    <ul class="dropdown-menu px-4 ">
+                                    <ul class="dropdown-menu">
                                         <li class="my-3">
                                             <a href="{{ route('admin.round.edit', ['id' => $round->id]) }}">
                                                 <span role="button" class="svg-icon svg-icon-success svg-icon-2x">
