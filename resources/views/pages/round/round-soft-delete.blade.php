@@ -156,7 +156,7 @@
 
                                             </li>
                                             <li class="my-3">
-                                                @hasrole('admin')
+                                                @hasrole('super admin')
                                                     <a
                                                         href="{{ route('admin.round.soft.delete', ['id' => $listRoundSoft->id]) }}">
                                                         <span role="button" class="svg-icon svg-icon-danger svg-icon-2x">
