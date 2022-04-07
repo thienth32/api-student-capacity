@@ -284,7 +284,11 @@
                                     {{ (request()->has('page') && request('page') !== 1 ? $contests->perPage() * (request('page') - 1) : 0) +$key +1 }}
                                 </th>
                             @endif
-                            <td>{{ $contest->name }}</td>
+                            <td>
+                                <a href="{{ route('admin.contest.show', ['id' => $contest->id]) }}">
+                                    {{ $contest->name }}
+                                </a>
+                            </td>
 
                             <td>
 

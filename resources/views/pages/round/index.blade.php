@@ -292,9 +292,11 @@
                                     {{ (request()->has('page') && request('page') !== 1 ? $rounds->perPage() * (request('page') - 1) : 0) +$key +1 }}
                                 </th>
                             @endif
-
-                            <td>{{ $round->name }}</td>
-
+                            <td>
+                                <a href="{{ route('admin.round.detail', ['id' => $round->id]) }}">
+                                    {{ $round->name }}
+                                </a>
+                            </td>
                             <td>
 
                                 <button class="p-4" type="button"
