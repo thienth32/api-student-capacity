@@ -28,7 +28,6 @@ Route::prefix('rounds')->group(function () {
 Route::prefix('teams')->group(function () {
     //list
     Route::get('', [TeamController::class, 'ListTeam'])->name('admin.teams'); // Api list Danh sách teams theo cuộc thi. phía view
-    Route::get('api-teams', [TeamController::class, 'ApiContestteams'])->name('admin.contest.team');
     // end lisst
     Route::delete('{id}', [TeamController::class, 'deleteTeam'])->name('admin.delete.teams'); // Api xóa teams phía view
     Route::get('form-add', [TeamController::class, 'create'])->name('admin.teams.create');
@@ -71,11 +70,9 @@ Route::prefix('enterprise')->group(function () {
 Route::prefix('majors')->group(function () {
     Route::get('{slug}/edit', [MajorController::class, 'edit'])->name('admin.major.edit');
     Route::put('{slug}', [MajorController::class, 'update'])->name('admin.major.update');
-
     Route::get('', [MajorController::class, 'index'])->name('admin.major.list');
     Route::get('create', [MajorController::class, 'create'])->name('admin.major.create');
     Route::post('store', [MajorController::class, 'store'])->name('admin.major.store');
-
     Route::delete('{slug}', [MajorController::class, 'destroy'])->name('admin.major.destroy');
 });
 
