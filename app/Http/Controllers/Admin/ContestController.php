@@ -294,7 +294,7 @@ class ContestController extends Controller
     {
         try {
 
-            return $contest->with(['teams' => function ($q) {
+            return $contest->with(['enterprise', 'teams' => function ($q) {
                 return $q->withCount('members');
             }, 'rounds' => function ($q) {
                 return $q->with([
