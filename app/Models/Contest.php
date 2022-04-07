@@ -26,13 +26,12 @@ class Contest extends Model
 
     public static function boot()
     {
-
         parent::boot();
-
         static::deleting(function ($q) {
             $q->teams()->delete();
             $q->rounds()->delete();
             $q->enterprise()->detach();
+            $q->judges()->detach();
         });
     }
 

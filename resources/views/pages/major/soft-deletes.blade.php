@@ -6,9 +6,18 @@
     <div class="card card-flush p-4">
         <div class=" d-flex justify-content-between align-items-center">
             <div>
-                <h1>Thùng rác
-
-                </h1>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <ol class="breadcrumb text-muted fs-6 fw-bold">
+                            <li class="breadcrumb-item pe-3">
+                                <a href="{{ route('admin.major.list') }}" class="pe-3">Quản lý chuyên ngành
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item px-3 text-muted">Thùng rác</li>
+                        </ol>
+                    </div>
+                </div>
+                <h1></h1>
             </div>
             <div>
                 <h5>
@@ -137,9 +146,9 @@
 
                                         </span>
                                     </button>
-                                    <ul class="dropdown-menu ">
-                                        <li class="py-3">
-                                            <a href="{{ route('admin.major.soft.deletes', ['slug' => $major->slug]) }}">
+                                    <ul class="dropdown-menu px-4">
+                                        <li class="my-3">
+                                            <a href="{{ route('admin.major.soft.restore', ['slug' => $major->slug]) }}">
                                                 <span class="svg-icon svg-icon-primary svg-icon-2x">
                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                         xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
@@ -160,7 +169,7 @@
                                                 </span>
                                             </a>
                                         </li>
-                                        <li class="py-3">
+                                        <li class="my-3">
 
                                             {{-- @hasrole('super admin') --}}
 
@@ -203,7 +212,6 @@
 
 
                                         </li>
-
                                     </ul>
                                 </div>
                             </td>
