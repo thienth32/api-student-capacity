@@ -338,7 +338,7 @@
                                 </div>
 
                             </td>
-                            <td>{{ $contest->major->name }}</td>
+                            <td>{{ $contest->major->name ?? 'Chưa có chuyên ngành ' }}</td>
                             <td>
 
                                 <div class="form-check form-switch">
