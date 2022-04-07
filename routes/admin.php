@@ -54,7 +54,9 @@ Route::prefix('contests')->group(function () {
 
     Route::prefix('{id}/detail')->group(function () {
         Route::get('', [ContestController::class, 'show'])->name('admin.contest.show');
-        Route::get('round', [RoundController::class, 'contestDetailRound'])->name('admin.contest.detail.round');
+        Route::get('rounds', [RoundController::class, 'contestDetailRound'])->name('admin.contest.detail.round');
+        Route::get('teams', [ContestController::class, 'contestDetailTeam'])->name('admin.contest.detail.team');
+        Route::post('teams-add', [ContestController::class, 'contestDetailTeamAdd'])->name('admin.contest.detail.team.add');
     });
 });
 Route::prefix('enterprise')->group(function () {
