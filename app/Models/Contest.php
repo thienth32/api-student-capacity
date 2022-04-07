@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Contest extends Model
 {
-     use SoftDeletes;
+    use SoftDeletes;
     use HasFactory, TGetAttributeColumn;
     protected $table = 'contests';
     protected $casts = [
@@ -51,6 +51,10 @@ class Contest extends Model
     public function major()
     {
         return $this->belongsTo(Major::class, 'major_id');
+    }
+    public function judges() // Giám khảo
+    {
+        return $this->belongsToMany(User::class, 'judges', 'contest_id', 'user_id');
     }
     public function rounds()
     {

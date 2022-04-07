@@ -27,7 +27,7 @@
                 <div class="form-group p-2">
                     <label>Cuộc thi </label>
                     <select id="select-contest" class="form-control form-control-solid">
-                        <option>-- Cuộc thi --</option>
+                        <option value="0">-- Cuộc thi --</option>
                         @forelse ($contests as $contest)
                             <option @selected(request('contest_id') == $contest->id) value="{{ $contest->id }}">{{ $contest->name }}
                             </option>
@@ -41,7 +41,7 @@
                 <div class="  form-group p-2">
                     <label>Loại vòng thi </label>
                     <select id="select-type-exam" class="form-control form-control-solid">
-                        <option>-- Loại vòng thi --</option>
+                        <option value="0">-- Loại vòng thi --</option>
                         @forelse ($type_exams as $type_exam)
                             <option @selected(request('type_exam_id') == $type_exam->id) value="{{ $type_exam->id }}">{{ $type_exam->name }}
                             </option>
@@ -71,12 +71,23 @@
                     <label for="" class="label">Khoảng thời gian </label>
                     <select class="select-date-serach form-control">
                         <option class="form-control">---- Thời gian ----</option>
-
-                        <option class="form-control" @selected(request('day') == 7) value="day-7">7 Ngày </option>
-                        <option class="form-control" @selected(request('day') == 15) value="day-15">15 Ngày </option>
-                        <option class="form-control" @selected(request('month') == 1) value="month-1">1 Tháng </option>
-                        <option class="form-control" @selected(request('month') == 6) value="month-6">6 Tháng </option>
-                        <option class="form-control" @selected(request('year') == 1) value="year-1">1 Năm</option>
+                        <option class="form-control" @selected(request('day') == 7 && request('op_time') == 'add') value="add-day-7">7 Ngày tới </option>
+                        <option class="form-control" @selected(request('day') == 15 && request('op_time') == 'add') value="add-day-15">15 Ngày tới </option>
+                        <option class="form-control" @selected(request('month') == 1 && request('op_time') == 'add') value="add-month-1">1 Tháng tới
+                        </option>
+                        <option class="form-control" @selected(request('month') == 6 && request('op_time') == 'add') value="add-month-6">6 Tháng tới
+                        </option>
+                        <option class="form-control" @selected(request('year') == 1 && request('op_time') == 'add') value="add-year-1">1 Năm tới </option>
+                        <option class="form-control" disabled> </option>
+                        <option class="form-control" @selected(request('day') == 7 && request('op_time') == 'sub') value="sub-day-7">7 Ngày trước </option>
+                        <option class="form-control" @selected(request('day') == 15 && request('op_time') == 'sub') value="sub-day-15">15 Ngày trước
+                        </option>
+                        <option class="form-control" @selected(request('month') == 1 && request('op_time') == 'sub') value="sub-month-1">1 Tháng trước
+                        </option>
+                        <option class="form-control" @selected(request('month') == 6 && request('op_time') == 'sub') value="sub-month-6">6 Tháng trước
+                        </option>
+                        <option class="form-control" @selected(request('year') == 1 && request('op_time') == 'sub') value="sub-year-1">1 Năm trước
+                        </option>
                     </select>
                 </div>
             </div>
@@ -262,13 +273,30 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+
+                        $total = $rounds->total();
+                    @endphp
                     @forelse ($rounds as $key => $round)
                         <tr>
-                            <th scope="row">
-                                {{ (request()->has('page') && request('page') !== 1 ? $rounds->perPage() * (request('page') - 1) : 0) +$key +1 }}
-                            </th>
-                            <td>{{ $round->name }}</td>
-
+                            @if (request()->has('sort'))
+                                <th scope="row">
+                                    @if (request('sort') == 'desc')
+                                        {{ (request()->has('page') && request('page') !== 1 ? $rounds->perPage() * (request('page') - 1) : 0) +$key +1 }}
+                                    @else
+                                        {{ request()->has('page') && request('page') !== 1? $total - $rounds->perPage() * (request('page') - 1) - $key: ($total -= 1) }}
+                                    @endif
+                                </th>
+                            @else
+                                <th scope="row">
+                                    {{ (request()->has('page') && request('page') !== 1 ? $rounds->perPage() * (request('page') - 1) : 0) +$key +1 }}
+                                </th>
+                            @endif
+                            <td>
+                                <a href="{{ route('admin.round.detail', ['id' => $round->id]) }}">
+                                    {{ $round->name }}
+                                </a>
+                            </td>
                             <td>
 
                                 <button class="p-4" type="button"
@@ -340,7 +368,7 @@
                                             <!--end::Svg Icon-->
                                         </span>
                                     </button>
-                                    <ul style="min-width: 17rem;" class="dropdown-menu px-4 ">
+                                    <ul class="dropdown-menu px-4 ">
                                         <li class="my-3">
                                             <a href="{{ route('admin.round.edit', ['id' => $round->id]) }}">
                                                 <span role="button" class="svg-icon svg-icon-success svg-icon-2x">
@@ -363,27 +391,24 @@
                                             </a>
                                         </li>
                                         <li class="my-3">
-                                            {{-- <a href="javascript:void()" data-bs-toggle="modal"
-                                                data-bs-target="#kt_modal_{{ $round->id }}_{{ $key }}">
-                                                <span class="svg-icon svg-icon-primary svg-icon-2x">
-                                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Communication/Group.svg--><svg
+                                            <a href="{{ route('admin.round.detail', ['id' => $round->id]) }}">
+                                                <span class="svg-icon svg-icon-primary svg-icon-2x ">
+                                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Text/Redo.svg--><svg
                                                         xmlns="http://www.w3.org/2000/svg"
                                                         xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                                                         height="24px" viewBox="0 0 24 24" version="1.1">
                                                         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                            <polygon points="0 0 24 0 24 24 0 24" />
+                                                            <rect x="0" y="0" width="24" height="24" />
                                                             <path
-                                                                d="M18,14 C16.3431458,14 15,12.6568542 15,11 C15,9.34314575 16.3431458,8 18,8 C19.6568542,8 21,9.34314575 21,11 C21,12.6568542 19.6568542,14 18,14 Z M9,11 C6.790861,11 5,9.209139 5,7 C5,4.790861 6.790861,3 9,3 C11.209139,3 13,4.790861 13,7 C13,9.209139 11.209139,11 9,11 Z"
-                                                                fill="#000000" fill-rule="nonzero" opacity="0.3" />
-                                                            <path
-                                                                d="M17.6011961,15.0006174 C21.0077043,15.0378534 23.7891749,16.7601418 23.9984937,20.4 C24.0069246,20.5466056 23.9984937,21 23.4559499,21 L19.6,21 C19.6,18.7490654 18.8562935,16.6718327 17.6011961,15.0006174 Z M0.00065168429,20.1992055 C0.388258525,15.4265159 4.26191235,13 8.98334134,13 C13.7712164,13 17.7048837,15.2931929 17.9979143,20.2 C18.0095879,20.3954741 17.9979143,21 17.2466999,21 C13.541124,21 8.03472472,21 0.727502227,21 C0.476712155,21 -0.0204617505,20.45918 0.00065168429,20.1992055 Z"
-                                                                fill="#000000" fill-rule="nonzero" />
+                                                                d="M21.4451171,17.7910156 C21.4451171,16.9707031 21.6208984,13.7333984 19.0671874,11.1650391 C17.3484374,9.43652344 14.7761718,9.13671875 11.6999999,9 L11.6999999,4.69307548 C11.6999999,4.27886191 11.3642135,3.94307548 10.9499999,3.94307548 C10.7636897,3.94307548 10.584049,4.01242035 10.4460626,4.13760526 L3.30599678,10.6152626 C2.99921905,10.8935795 2.976147,11.3678924 3.2544639,11.6746702 C3.26907199,11.6907721 3.28437331,11.7062312 3.30032452,11.7210037 L10.4403903,18.333467 C10.7442966,18.6149166 11.2188212,18.596712 11.5002708,18.2928057 C11.628669,18.1541628 11.6999999,17.9721616 11.6999999,17.7831961 L11.6999999,13.5 C13.6531249,13.5537109 15.0443703,13.6779456 16.3083984,14.0800781 C18.1284272,14.6590944 19.5349747,16.3018455 20.5280411,19.0083314 L20.5280247,19.0083374 C20.6363903,19.3036749 20.9175496,19.5 21.2321404,19.5 L21.4499999,19.5 C21.4499999,19.0068359 21.4451171,18.2255859 21.4451171,17.7910156 Z"
+                                                                fill="#000000" fill-rule="nonzero"
+                                                                transform="translate(12.254964, 11.721538) scale(-1, 1) translate(-12.254964, -11.721538) " />
                                                         </g>
                                                     </svg>
                                                     <!--end::Svg Icon-->
                                                 </span>
-                                                Ban giám khảo
-                                            </a> --}}
+                                                Chi tiết
+                                            </a>
 
 
                                         </li>
@@ -456,7 +481,7 @@
     <script>
         let url = '/admin/rounds?';
         const _token = "{{ csrf_token() }}";
-        const sort = '{{ request()->has('sort') ? (request('sort') == 'desc' ? 'asc' : 'desc') : 'desc' }}';
+        const sort = '{{ request()->has('sort') ? (request('sort') == 'desc' ? 'asc' : 'desc') : 'asc' }}';
     </script>
     <script src="assets/js/system/formatlist/formatlis.js"></script>
     <script src="assets/js/system/round/round.js"></script>

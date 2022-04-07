@@ -36,16 +36,28 @@ class RoundController extends Controller
     private function getList()
     {
         try {
+            $key = null;
+            $valueDate = null;
+            if (request()->has('day')) {
+                $valueDate = request('day');
+                $key = 'day';
+            }
+            if (request()->has('month')) {
+                $valueDate = request('month');
+                $key = 'month';
+            };
+            if (request()->has('year')) {
+                $valueDate = request('year');
+                $key = 'year';
+            };
+
             $data = $this->round::search(request('q') ?? null, ['name', 'description'])
                 ->sort((request('sort') == 'desc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'rounds')
                 ->hasDateTimeBetween('start_time', request('start_time') ?? null, request('end_time') ?? null)
                 ->hasSubTime(
-                    ((request('day') ? 'day' : '') ??
-                        (request('month') ? 'month' : '') ??
-                        (request('year') ? 'year' : '')) ?? null,
-                    (request('day') ??
-                        request('month') ??
-                        request('year')) ?? null,
+                    $key,
+                    $valueDate,
+                    (request('op_time') == 'sub' ? 'sub' : 'add'),
                     'start_time'
                 )
                 ->hasReuqest([
@@ -348,5 +360,22 @@ class RoundController extends Controller
             }]);
             return response()->json(['payload' => $round], 200);
         }
+    }
+    public function contestDetailRound($id)
+    {
+        if (!($rounds = $this->getList())) return view('not_found');
+        $contest = $this->contest->find($id);
+        $rounds = $this->getList();
+        return view('pages.contest.detail.contest-round', [
+            'rounds' => $rounds->where('contest_id', $id)->paginate(request('limit') ?? 5),
+            'contests' => $this->contest::withCount(['teams', 'rounds'])->get(),
+            'type_exams' => $this->type_exam::all(),
+            'contest' =>  $contest
+        ]);
+    }
+    public function adminShow($id)
+    {
+        if (!($round = $this->round::with(['contest', 'type_exam', 'judges', 'teams'])->where('id', $id)->first())) return abort(404);
+        return view('pages.round.detail.detail', ['round' => $round]);
     }
 }

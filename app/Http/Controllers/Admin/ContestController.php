@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Contest;
 use App\Models\Major;
+use App\Models\Team;
 use App\Services\Traits\TResponse;
 use App\Services\Traits\TUploadImage;
 use Carbon\Carbon;
@@ -20,11 +21,13 @@ class ContestController extends Controller
     use TUploadImage, TResponse;
     private $contest;
     private $major;
+    private $team;
 
-    public function __construct(Contest $contest, Major $major)
+    public function __construct(Contest $contest, Major $major, Team $team)
     {
         $this->contest = $contest;
         $this->major = $major;
+        $this->team = $team;
     }
 
     /**
@@ -45,8 +48,15 @@ class ContestController extends Controller
                 ->with([
                     'major',
                     'teams',
-                    'rounds',
-                    'enterprise'
+                    'rounds' => function ($q) {
+                        return $q->with([
+                            'teams' => function ($q) {
+                                return $q->with('members');
+                            }
+                        ]);
+                    },
+                    'enterprise',
+                    'judges'
                 ])
                 ->withCount('teams');
             // ->paginate(request('limit') ?? 10);
@@ -283,6 +293,7 @@ class ContestController extends Controller
     private function addCollectionApiContest($contest)
     {
         try {
+
             return $contest->with(['teams' => function ($q) {
                 return $q->withCount('members');
             }, 'rounds' => function ($q) {
@@ -291,7 +302,7 @@ class ContestController extends Controller
                         return $q->with('members');
                     }
                 ]);
-            }])->withCount('rounds');
+            }, 'judges'])->withCount('rounds');
         } catch (\Throwable $th) {
             return false;
         }
@@ -332,10 +343,33 @@ class ContestController extends Controller
         }
     }
 
-    public function show($id)
+
+    public function show(Request $request, $id)
     {
+        $contest =  Contest::find($id);
+        return view('pages.contest.detail.detail', compact('contest'));
+    }
+
+
+    public function contestDetailTeam($id)
+    {
+        $contest =  Contest::find($id);
+        $teams = Team::all();
+        return view('pages.contest.detail.contest-team', compact('contest', 'teams'));
+    }
+
+    public function contestDetailTeamAdd(Request  $request, $id)
+    {
+        // dd($request->all());
         $contest = Contest::find($id);
-        return view('pages.contest.detail', compact('contest'));
+        $team = Team::find($request->team_id);
+        if (is_null($contest) && is_null($team)) {
+            return Redirect::back();
+        } else {
+            $team->contest_id = $id;
+            $team->save();
+            return Redirect::back();
+        }
     }
 }
 
