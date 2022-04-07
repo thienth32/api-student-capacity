@@ -175,7 +175,7 @@ class MajorController extends Controller
     }
     public function permanently_deleted($slug)
     {
-        $major = Major::withTrashed()->where('slug', $slug);
+        $major = Major::withTrashed()->where('slug', $slug)->first();
         $major->forceDelete();
         return redirect()->back();
     }
