@@ -37,23 +37,46 @@ class Builder extends  EloquentBuilder
     /**
      *  Has sub time
      */
-    public function hasSubTime($key = null, $data = null, $column)
+    public function hasSubTime($key = null, $data = null, $op_time = null, $column)
     {
+
         if (!$key) return $this;
         $now = Carbon::now('Asia/Ho_Chi_Minh');
-        switch ($key) {
-            case 'day':
-                return $this->whereDate($column, '>', $now->subDays($data));
-                break;
-            case 'month':
-                return $this->whereDate($column, '>', $now->subMonths($data));
-                break;
-            case 'year':
-                return $this->whereDate($column, '>', $now->subYears($data));
-                break;
-            default:
-                return $this;
-                break;
+        $nowSub = Carbon::now('Asia/Ho_Chi_Minh');
+
+
+        if ($op_time == 'sub') {
+            switch ($key) {
+                case 'day':
+
+                    return $this->whereBetween($column, [$nowSub->subDays($data)->toDateTimeString(), $now->toDateTimeString()]);
+                    break;
+                case 'month':
+                    return $this->whereBetween($column, [$nowSub->subMonths($data)->toDateTimeString(), $now->toDateTimeString()]);
+                    break;
+                case 'year':
+                    return $this->whereBetween($column, [$nowSub->subYears($data)->toDateTimeString(), $now->toDateTimeString()]);
+                    break;
+                default:
+                    return $this;
+                    break;
+            }
+        } else {
+
+            switch ($key) {
+                case 'day':
+                    return $this->whereBetween($column, [$now->toDateTimeString(), $nowSub->addDays($data)->toDateTimeString()]);
+                    break;
+                case 'month':
+                    return $this->whereBetween($column, [$now->toDateTimeString(), $nowSub->addMonths($data)->toDateTimeString()]);
+                    break;
+                case 'year':
+                    return $this->whereBetween($column, [$now->toDateTimeString(), $nowSub->addYears($data)->toDateTimeString()]);
+                    break;
+                default:
+                    return $this;
+                    break;
+            }
         }
     }
 

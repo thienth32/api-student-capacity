@@ -73,7 +73,7 @@ class Round extends Model
 
     public function judges() // Giám khảo
     {
-        return $this->belongsToMany(User::class, 'judges_rounds', 'round_id', 'judge_id');
+        return $this->belongsToMany(Judge::class, 'judges_rounds', 'round_id', 'judge_id');
     }
 
     public function teams()

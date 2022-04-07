@@ -53,7 +53,7 @@
                                             aria-label="Allowed file types: png, jpg, jpeg."></i>
                                     </label>
                                     @error('image')
-                                        <p class="text-danger">{{ $message }}</p>
+                                        <p class="text-danger">{{ $message }} </p>
                                     @enderror
                                     <div class="mt-1">
 
