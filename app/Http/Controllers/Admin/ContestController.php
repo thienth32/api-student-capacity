@@ -37,7 +37,9 @@ class ContestController extends Controller
     {
         try {
             $now = Carbon::now('Asia/Ho_Chi_Minh');
-            $data = $this->contest::search(request('q') ?? null, ['name', 'description'])
+            $data = $this->contest::when(request()->has('contest_soft_delete'), function ($q) {
+                return $q->onlyTrashed();
+            })->search(request('q') ?? null, ['name', 'description'])
                 ->missingDate('register_deadline', request('miss_date') ?? null, $now->toDateTimeString())
                 ->passDate('register_deadline', request('pass_date') ?? null, $now->toDateTimeString())
                 // ->passDate('date_start', request('upcoming_date') ?? null, $now->toDateTimeString())
@@ -377,7 +379,7 @@ class ContestController extends Controller
 
     public function softDelete()
     {
-        $listContestSofts = $this->getList()->onlyTrashed()->paginate(request('limit') ?? 5);
+        $listContestSofts = $this->getList()->paginate(request('limit') ?? 5);
         return view('pages.contest.contest-soft-delete', [
             'listContestSofts' => $listContestSofts
         ]);
