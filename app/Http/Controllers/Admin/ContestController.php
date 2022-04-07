@@ -300,6 +300,9 @@ class ContestController extends Controller
                 return $q->with([
                     'teams' => function ($q) {
                         return $q->with('members');
+                    },
+                    'judges' => function ($q) {
+                        return $q->with('user');
                     }
                 ]);
             }, 'judges'])->withCount('rounds');
