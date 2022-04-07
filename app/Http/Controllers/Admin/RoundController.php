@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Models\Contest;
+use App\Models\Team;
 use App\Models\TypeExam;
 use Illuminate\Support\Facades\DB;
 use Image;
@@ -51,7 +52,9 @@ class RoundController extends Controller
                 $key = 'year';
             };
 
-            $data = $this->round::search(request('q') ?? null, ['name', 'description'])
+            $data = $this->round::when(request()->has('round_soft_delete'), function ($q) {
+                return $q->onlyTrashed();
+            })->search(request('q') ?? null, ['name', 'description'])
                 ->sort((request('sort') == 'desc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'rounds')
                 ->hasDateTimeBetween('start_time', request('start_time') ?? null, request('end_time') ?? null)
                 ->hasSubTime(
@@ -377,5 +380,59 @@ class RoundController extends Controller
     {
         if (!($round = $this->round::with(['contest', 'type_exam', 'judges', 'teams'])->where('id', $id)->first())) return abort(404);
         return view('pages.round.detail.detail', ['round' => $round]);
+    }
+
+    public function softDelete()
+    {
+        $listRoundSofts = $this->getList()->paginate(request('limit') ?? 5);
+        return view('pages.round.round-soft-delete', [
+            'listRoundSofts' => $listRoundSofts
+        ]);
+    }
+
+    public function backUpRound($id)
+    {
+        try {
+            $this->round::withTrashed()->where('id', $id)->restore();
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            return abort(404);
+        }
+    }
+
+    public function deleteRound($id)
+    {
+        try {
+            $this->round::withTrashed()->where('id', $id)->forceDelete();
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            return abort(404);
+        }
+    }
+
+    public function roundDetailTeam($id)
+    {
+        $round = Round::find($id);
+        $teams =  Round::find($id)->load('contest')->contest->teams;
+        return view('pages.round.detail.round-team', compact('round', 'teams'));
+    }
+
+    public function attachTeam(Request $request, $id)
+    {
+        try {
+            Round::find($id)->teams()->syncWithoutDetaching($request->team_id);
+            return Redirect::back();
+        } catch (\Throwable $th) {
+            return Redirect::back();
+        }
+    }
+    public function detachTeam($id, $team_id)
+    {
+        try {
+            Round::find($id)->teams()->detach([$team_id]);
+            return Redirect::back();
+        } catch (\Throwable $th) {
+            return Redirect::back();
+        }
     }
 }
