@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Models\Contest;
+use App\Models\Team;
 use App\Models\TypeExam;
 use Illuminate\Support\Facades\DB;
 use Image;
@@ -406,6 +407,32 @@ class RoundController extends Controller
             return redirect()->back();
         } catch (\Throwable $th) {
             return abort(404);
+        }
+    }
+
+    public function roundDetailTeam($id)
+    {
+        $round = Round::find($id);
+        $teams =  Round::find($id)->load('contest')->contest->teams;
+        return view('pages.round.detail.round-team', compact('round', 'teams'));
+    }
+
+    public function attachTeam(Request $request, $id)
+    {
+        try {
+            Round::find($id)->teams()->syncWithoutDetaching($request->team_id);
+            return Redirect::back();
+        } catch (\Throwable $th) {
+            return Redirect::back();
+        }
+    }
+    public function detachTeam($id, $team_id)
+    {
+        try {
+            Round::find($id)->teams()->detach([$team_id]);
+            return Redirect::back();
+        } catch (\Throwable $th) {
+            return Redirect::back();
         }
     }
 }

@@ -21,10 +21,19 @@ Route::prefix('rounds')->group(function () {
     Route::put('{id}', [RoundController::class, 'update'])->name('admin.round.update');
     Route::delete('{id}', [RoundController::class, 'destroy'])->name('admin.round.destroy');
 
-    Route::get('{id}/detail', [RoundController::class, 'adminShow'])->name('admin.round.detail');
     Route::get('round-soft-delete', [RoundController::class, 'softDelete'])->name('admin.round.soft.delete');
     Route::get('round-soft-delete/{id}/backup', [RoundController::class, 'backUpRound'])->name('admin.round.soft.backup');
     Route::get('round-soft-delete/{id}/delete', [RoundController::class, 'deleteRound'])->name('admin.round.soft.destroy');
+
+    Route::prefix('{id}/detail')->group(function () {
+        Route::get('', [RoundController::class, 'adminShow'])->name('admin.round.detail');
+        Route::prefix('team')->group(function () {
+            Route::get('', [RoundController::class, 'roundDetailTeam'])->name('admin.round.detail.team');
+            Route::post('attach', [RoundController::class, 'attachTeam'])->name('admin.round.detail.team.attach');
+            Route::post('sync', [RoundController::class, 'syncTeam'])->name('admin.round.detail.team.sync');
+            Route::get('detach/{team_id}', [RoundController::class, 'detachTeam'])->name('admin.round.detail.team.detach');
+        });
+    });
 });
 
 
@@ -77,6 +86,11 @@ Route::prefix('majors')->group(function () {
     Route::get('create', [MajorController::class, 'create'])->name('admin.major.create');
     Route::post('store', [MajorController::class, 'store'])->name('admin.major.store');
     Route::delete('{slug}', [MajorController::class, 'destroy'])->name('admin.major.destroy');
+
+    Route::prefix('list-soft-deletes')->group(function () {
+        Route::get('', [MajorController::class, 'listRecordSoftDeletes'])->name('admin.major.list.soft.deletes');
+        Route::get('{slug}/delete', [MajorController::class, 'permanently_deleted'])->name('admin.major.soft.deletes');
+    });
 });
 
 Route::prefix('judges')->group(function () {

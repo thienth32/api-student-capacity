@@ -4,21 +4,47 @@
 @section('content')
 
     <div class="card card-flush p-4">
-        <h1>Quản lý chuyên ngành
-            <span role="button" class="refresh-btn svg-icon svg-icon-primary svg-icon-2x">
-                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Update.svg--><svg
-                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                    viewBox="0 0 24 24" version="1.1">
-                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                        <rect x="0" y="0" width="24" height="24" />
-                        <path
-                            d="M8.43296491,7.17429118 L9.40782327,7.85689436 C9.49616631,7.91875282 9.56214077,8.00751728 9.5959027,8.10994332 C9.68235021,8.37220548 9.53982427,8.65489052 9.27756211,8.74133803 L5.89079566,9.85769242 C5.84469033,9.87288977 5.79661753,9.8812917 5.74809064,9.88263369 C5.4720538,9.8902674 5.24209339,9.67268366 5.23445968,9.39664682 L5.13610134,5.83998177 C5.13313425,5.73269078 5.16477113,5.62729274 5.22633424,5.53937151 C5.384723,5.31316892 5.69649589,5.25819495 5.92269848,5.4165837 L6.72910242,5.98123382 C8.16546398,4.72182424 10.0239806,4 12,4 C16.418278,4 20,7.581722 20,12 C20,16.418278 16.418278,20 12,20 C7.581722,20 4,16.418278 4,12 L6,12 C6,15.3137085 8.6862915,18 12,18 C15.3137085,18 18,15.3137085 18,12 C18,8.6862915 15.3137085,6 12,6 C10.6885336,6 9.44767246,6.42282109 8.43296491,7.17429118 Z"
-                            fill="#000000" fill-rule="nonzero" />
-                    </g>
-                </svg>
-                <!--end::Svg Icon-->
-            </span>
-        </h1>
+        <div class=" d-flex justify-content-between align-items-center">
+            <div>
+                <h1>Quản lý chuyên ngành
+                    <span role="button" class="refresh-btn svg-icon svg-icon-primary svg-icon-2x">
+                        <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Update.svg--><svg
+                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                            height="24px" viewBox="0 0 24 24" version="1.1">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <rect x="0" y="0" width="24" height="24" />
+                                <path
+                                    d="M8.43296491,7.17429118 L9.40782327,7.85689436 C9.49616631,7.91875282 9.56214077,8.00751728 9.5959027,8.10994332 C9.68235021,8.37220548 9.53982427,8.65489052 9.27756211,8.74133803 L5.89079566,9.85769242 C5.84469033,9.87288977 5.79661753,9.8812917 5.74809064,9.88263369 C5.4720538,9.8902674 5.24209339,9.67268366 5.23445968,9.39664682 L5.13610134,5.83998177 C5.13313425,5.73269078 5.16477113,5.62729274 5.22633424,5.53937151 C5.384723,5.31316892 5.69649589,5.25819495 5.92269848,5.4165837 L6.72910242,5.98123382 C8.16546398,4.72182424 10.0239806,4 12,4 C16.418278,4 20,7.581722 20,12 C20,16.418278 16.418278,20 12,20 C7.581722,20 4,16.418278 4,12 L6,12 C6,15.3137085 8.6862915,18 12,18 C15.3137085,18 18,15.3137085 18,12 C18,8.6862915 15.3137085,6 12,6 C10.6885336,6 9.44767246,6.42282109 8.43296491,7.17429118 Z"
+                                    fill="#000000" fill-rule="nonzero" />
+                            </g>
+                        </svg>
+                        <!--end::Svg Icon-->
+                    </span>
+                </h1>
+            </div>
+            <div>
+                <h5>
+                    <a href="{{ route('admin.major.list.soft.deletes') }}">
+                        <span class="svg-icon svg-icon-primary svg-icon-2x">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                height="24px" viewBox="0 0 24 24" version="1.1">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <rect x="0" y="0" width="24" height="24" />
+                                    <path
+                                        d="M6,8 L18,8 L17.106535,19.6150447 C17.04642,20.3965405 16.3947578,21 15.6109533,21 L8.38904671,21 C7.60524225,21 6.95358004,20.3965405 6.89346498,19.6150447 L6,8 Z M8,10 L8.45438229,14.0894406 L15.5517885,14.0339036 L16,10 L8,10 Z"
+                                        fill="#000000" fill-rule="nonzero" />
+                                    <path
+                                        d="M14,4.5 L14,3.5 C14,3.22385763 13.7761424,3 13.5,3 L10.5,3 C10.2238576,3 10,3.22385763 10,3.5 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z"
+                                        fill="#000000" opacity="0.3" />
+                                </g>
+                            </svg>
+                        </span>
+                        Thùng rác
+                    </a>
+                </h5>
+            </div>
+
+        </div>
         <div class=" card-format row">
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4"></div>
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4"></div>
@@ -190,14 +216,13 @@
                                                         fill="#000000" />
                                                 </g>
                                             </svg>
-                                            <!--end::Svg Icon-->
+
                                         </span>
                                     </button>
-                                    <ul style="min-width: 3rem !important" class="dropdown-menu w-10px ">
-                                        <li>
+                                    <ul class="dropdown-menu ps-5   ">
+                                        <li class="py-3">
                                             <a href="{{ route('admin.major.edit', ['slug' => $major->slug]) }}">
-                                                <span style="padding: 5px" role="button"
-                                                    class="svg-icon svg-icon-success svg-icon-2x">
+                                                <span role="button" class="svg-icon svg-icon-success svg-icon-2x">
                                                     <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Design/Edit.svg--><svg
                                                         xmlns="http://www.w3.org/2000/svg"
                                                         xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
@@ -212,44 +237,42 @@
                                                                 height="2" rx="1" />
                                                         </g>
                                                     </svg>
+                                                    Chỉnh sửa
                                                 </span>
                                             </a>
                                         </li>
-                                        <li>
+                                        <li class="py-3">
 
-                                            @hasrole('super admin')
-                                                <form action="{{ route('admin.major.destroy', ['slug' => $major->slug]) }}"
-                                                    method="post">
-                                                    @csrf
-                                                    @method('delete')
-                                                    <button
-                                                        style="padding: 5px ; background: none ; border: none ; list-style : none"
-                                                        type="submit">
-                                                        <span role="button" class="svg-icon svg-icon-danger svg-icon-2x">
-                                                            <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Trash.svg--><svg
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                                                                height="24px" viewBox="0 0 24 24" version="1.1">
-                                                                <g stroke="none" stroke-width="1" fill="none"
-                                                                    fill-rule="evenodd">
-                                                                    <rect x="0" y="0" width="24" height="24" />
-                                                                    <path
-                                                                        d="M6,8 L18,8 L17.106535,19.6150447 C17.04642,20.3965405 16.3947578,21 15.6109533,21 L8.38904671,21 C7.60524225,21 6.95358004,20.3965405 6.89346498,19.6150447 L6,8 Z M8,10 L8.45438229,14.0894406 L15.5517885,14.0339036 L16,10 L8,10 Z"
-                                                                        fill="#000000" fill-rule="nonzero" />
-                                                                    <path
-                                                                        d="M14,4.5 L14,3.5 C14,3.22385763 13.7761424,3 13.5,3 L10.5,3 C10.2238576,3 10,3.22385763 10,3.5 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z"
-                                                                        fill="#000000" opacity="0.3" />
-                                                                </g>
-                                                            </svg>
-                                                            <!--end::Svg Icon-->
-                                                        </span>
-                                                    </button>
-                                                </form>
-                                            @else
-                                                <span style="padding: 5px ;cursor: not-allowed; user-select: none"
+                                            {{-- @hasrole('super admin') --}}
+                                            <form action="{{ route('admin.major.destroy', ['slug' => $major->slug]) }}"
+                                                method="post">
+                                                @csrf
+                                                @method('delete')
+                                                <button style=" background: none ; border: none ; list-style : none"
+                                                    type="submit">
+                                                    <span role="button" class="svg-icon svg-icon-danger svg-icon-2x">
+                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                                            height="24px" viewBox="0 0 24 24" version="1.1">
+                                                            <g stroke="none" stroke-width="1" fill="none"
+                                                                fill-rule="evenodd">
+                                                                <rect x="0" y="0" width="24" height="24" />
+                                                                <path
+                                                                    d="M6,8 L18,8 L17.106535,19.6150447 C17.04642,20.3965405 16.3947578,21 15.6109533,21 L8.38904671,21 C7.60524225,21 6.95358004,20.3965405 6.89346498,19.6150447 L6,8 Z M8,10 L8.45438229,14.0894406 L15.5517885,14.0339036 L16,10 L8,10 Z"
+                                                                    fill="#000000" fill-rule="nonzero" />
+                                                                <path
+                                                                    d="M14,4.5 L14,3.5 C14,3.22385763 13.7761424,3 13.5,3 L10.5,3 C10.2238576,3 10,3.22385763 10,3.5 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z"
+                                                                    fill="#000000" opacity="0.3" />
+                                                            </g>
+                                                        </svg>
+                                                        Xóa bỏ
+                                                    </span>
+                                                </button>
+                                            </form>
+                                            {{-- @else
+                                                <span style="cursor: not-allowed; user-select: none"
                                                     class="svg-icon svg-icon-danger svg-icon-2x">
-                                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Code/Lock-circle.svg--><svg
-                                                        xmlns="http://www.w3.org/2000/svg"
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
                                                         xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
                                                         viewBox="0 0 24 24" version="1.1">
                                                         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -260,9 +283,9 @@
                                                                 fill="#000000" />
                                                         </g>
                                                     </svg>
-                                                    <!--end::Svg Icon-->
+                                                    Xóa bỏ
                                                 </span>
-                                            @endhasrole
+                                            @endhasrole --}}
 
 
                                         </li>
