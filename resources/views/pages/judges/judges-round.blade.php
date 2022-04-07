@@ -93,15 +93,7 @@
         const _token = "{{ csrf_token() }}"
         const listUserIsset = @json($round->judges);
     </script>
-    {{-- <script>
-        var URL = window.location.href;
-        var userArray = [];
-        var _token = "{{ csrf_token() }}"
-        var urlSearch = "{{ route('admin.user.TeamUserSearch') }}"
-        var URL_ATTACH = "{{ route('admin.judges.attach', ['contest_id' => $contest->id]) }}"
-        var URL_SYNC = "{{ route('admin.judges.sync', ['contest_id' => $contest->id]) }}"
-        var URL_DETACH = "{{ route('admin.judges.detach', ['contest_id' => $contest->id]) }}"
-    </script> --}}
+
     <script src="{{ asset('assets/js/system/team/team.js') }}"></script>
     <script src="{{ asset('assets/js/system/judges/judges-round.js') }}"></script>
 @endsection

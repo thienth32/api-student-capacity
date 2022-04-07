@@ -20,8 +20,15 @@ Route::prefix('rounds')->group(function () {
     Route::get('{id}/edit', [RoundController::class, 'edit'])->name('admin.round.edit');
     Route::put('{id}', [RoundController::class, 'update'])->name('admin.round.update');
     Route::delete('{id}', [RoundController::class, 'destroy'])->name('admin.round.destroy');
-
-    Route::get('{id}/detail', [RoundController::class, 'adminShow'])->name('admin.round.detail');
+    Route::prefix('{id}/detail')->group(function () {
+        Route::get('', [RoundController::class, 'adminShow'])->name('admin.round.detail');
+        Route::prefix('team')->group(function () {
+            Route::get('', [RoundController::class, 'roundDetailTeam'])->name('admin.round.detail.team');
+            Route::post('attach', [RoundController::class, 'attachTeam'])->name('admin.round.detail.team.attach');
+            Route::post('sync', [RoundController::class, 'syncTeam'])->name('admin.round.detail.team.sync');
+            Route::get('detach/{team_id}', [RoundController::class, 'detachTeam'])->name('admin.round.detail.team.detach');
+        });
+    });
 });
 
 
