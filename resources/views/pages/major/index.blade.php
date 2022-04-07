@@ -153,11 +153,24 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+                        $total = $majors->total();
+                    @endphp
                     @forelse ($majors as $key => $major)
                         <tr>
-                            <th scope="row">
-                                {{ (request()->has('page') && request('page') !== 1 ? $majors->perPage() * (request('page') - 1) : 0) +$key +1 }}
-                            </th>
+                            @if (request()->has('sort'))
+                                <th scope="row">
+                                    @if (request('sort') == 'desc')
+                                        {{ (request()->has('page') && request('page') !== 1 ? $majors->perPage() * (request('page') - 1) : 0) +$key +1 }}
+                                    @else
+                                        {{ request()->has('page') && request('page') !== 1? $total - $majors->perPage() * (request('page') - 1) - $key: ($total -= 1) }}
+                                    @endif
+                                </th>
+                            @else
+                                <th scope="row">
+                                    {{ (request()->has('page') && request('page') !== 1 ? $majors->perPage() * (request('page') - 1) : 0) +$key +1 }}
+                                </th>
+                            @endif
                             <td>{{ $major->name }}</td>
                             <td>{{ $major->slug }}</td>
 
@@ -272,7 +285,7 @@
 @section('page-script')
     <script>
         let url = "/admin/majors?";
-        const sort = '{{ request()->has('sort') ? (request('sort') == 'desc' ? 'asc' : 'desc') : 'desc' }}';
+        const sort = '{{ request()->has('sort') ? (request('sort') == 'desc' ? 'asc' : 'desc') : 'asc' }}';
     </script>
     <script src="assets/js/system/formatlist/formatlis.js"></script>
 

@@ -4,7 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Contest;
+use App\Models\Judge;
+use App\Models\Round;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 
 class JudgesController extends Controller
@@ -42,6 +46,77 @@ class JudgesController extends Controller
             return response()->json(['status' => true,  'payload' => 'Xóa thành công !'], 200);
         } catch (\Throwable $th) {
             return response()->json(['status' => false, 'payload' => "Có vẻ đang bị lỗi ở :" . $th], 500);
+        }
+    }
+
+    public function getJudgesRound($round_id)
+    {
+        $round = Round::find($round_id);
+        $round->load(['judges' => function ($q) {
+            return $q->with('user');
+        }]);
+        $round->load(['contest' => function ($q) {
+            return $q->with('judges');
+        }]);
+        // dd($round->toArray());
+        return view('pages.judges.judges-round', compact('round'));
+    }
+
+    private function getIdJudges($users)
+    {
+        $listId = [];
+        foreach ($users as $user) {
+            if ($judge = Judge::where('user_id', $user['pivot']['user_id'])->where('contest_id', $user['pivot']['contest_id'])->first()) {
+                array_push($listId, $judge->id);
+            }
+        }
+        return $listId;
+    }
+
+    public function attachRound(Request $request, $id)
+    {
+
+        try {
+            DB::transaction(function () use ($request, $id, &$listId) {
+                $round = Round::with(['judges'])->where('id', $id)->first();
+                $round->judges()->syncWithoutDetaching($this->getIdJudges($request->users));
+            });
+
+            return response()->json(
+                [
+                    "status" => true,
+                    "Success"
+                ]
+            );
+        } catch (\Throwable $th) {
+            return response()->json(
+                [
+                    "status" => false,
+                    "Không thể cập nhật !"
+                ]
+            );
+        }
+    }
+
+    public function dettachRound(Request $request, $id)
+    {
+        try {
+            $round = Round::with(['judges'])->where('id', $id)->first();
+            $round->judges()->detach($request->users);
+
+            return response()->json(
+                [
+                    "status" => true,
+                    "Success"
+                ]
+            );
+        } catch (\Throwable $th) {
+            return response()->json(
+                [
+                    "status" => false,
+                    "Không thể cập nhật !"
+                ]
+            );
         }
     }
 }

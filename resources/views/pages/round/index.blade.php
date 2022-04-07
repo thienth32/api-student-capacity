@@ -27,7 +27,7 @@
                 <div class="form-group p-2">
                     <label>Cuộc thi </label>
                     <select id="select-contest" class="form-control form-control-solid">
-                        <option>-- Cuộc thi --</option>
+                        <option value="0">-- Cuộc thi --</option>
                         @forelse ($contests as $contest)
                             <option @selected(request('contest_id') == $contest->id) value="{{ $contest->id }}">{{ $contest->name }}
                             </option>
@@ -41,7 +41,7 @@
                 <div class="  form-group p-2">
                     <label>Loại vòng thi </label>
                     <select id="select-type-exam" class="form-control form-control-solid">
-                        <option>-- Loại vòng thi --</option>
+                        <option value="0">-- Loại vòng thi --</option>
                         @forelse ($type_exams as $type_exam)
                             <option @selected(request('type_exam_id') == $type_exam->id) value="{{ $type_exam->id }}">{{ $type_exam->name }}
                             </option>
@@ -71,12 +71,23 @@
                     <label for="" class="label">Khoảng thời gian </label>
                     <select class="select-date-serach form-control">
                         <option class="form-control">---- Thời gian ----</option>
-
-                        <option class="form-control" @selected(request('day') == 7) value="day-7">7 Ngày </option>
-                        <option class="form-control" @selected(request('day') == 15) value="day-15">15 Ngày </option>
-                        <option class="form-control" @selected(request('month') == 1) value="month-1">1 Tháng </option>
-                        <option class="form-control" @selected(request('month') == 6) value="month-6">6 Tháng </option>
-                        <option class="form-control" @selected(request('year') == 1) value="year-1">1 Năm</option>
+                        <option class="form-control" @selected(request('day') == 7 && request('op_time') == 'add') value="add-day-7">7 Ngày tới </option>
+                        <option class="form-control" @selected(request('day') == 15 && request('op_time') == 'add') value="add-day-15">15 Ngày tới </option>
+                        <option class="form-control" @selected(request('month') == 1 && request('op_time') == 'add') value="add-month-1">1 Tháng tới
+                        </option>
+                        <option class="form-control" @selected(request('month') == 6 && request('op_time') == 'add') value="add-month-6">6 Tháng tới
+                        </option>
+                        <option class="form-control" @selected(request('year') == 1 && request('op_time') == 'add') value="add-year-1">1 Năm tới </option>
+                        <option class="form-control" disabled> </option>
+                        <option class="form-control" @selected(request('day') == 7 && request('op_time') == 'sub') value="sub-day-7">7 Ngày trước </option>
+                        <option class="form-control" @selected(request('day') == 15 && request('op_time') == 'sub') value="sub-day-15">15 Ngày trước
+                        </option>
+                        <option class="form-control" @selected(request('month') == 1 && request('op_time') == 'sub') value="sub-month-1">1 Tháng trước
+                        </option>
+                        <option class="form-control" @selected(request('month') == 6 && request('op_time') == 'sub') value="sub-month-6">6 Tháng trước
+                        </option>
+                        <option class="form-control" @selected(request('year') == 1 && request('op_time') == 'sub') value="sub-year-1">1 Năm trước
+                        </option>
                     </select>
                 </div>
             </div>
@@ -262,11 +273,26 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+
+                        $total = $rounds->total();
+                    @endphp
                     @forelse ($rounds as $key => $round)
                         <tr>
-                            <th scope="row">
-                                {{ (request()->has('page') && request('page') !== 1 ? $rounds->perPage() * (request('page') - 1) : 0) +$key +1 }}
-                            </th>
+                            @if (request()->has('sort'))
+                                <th scope="row">
+                                    @if (request('sort') == 'desc')
+                                        {{ (request()->has('page') && request('page') !== 1 ? $rounds->perPage() * (request('page') - 1) : 0) +$key +1 }}
+                                    @else
+                                        {{ request()->has('page') && request('page') !== 1? $total - $rounds->perPage() * (request('page') - 1) - $key: ($total -= 1) }}
+                                    @endif
+                                </th>
+                            @else
+                                <th scope="row">
+                                    {{ (request()->has('page') && request('page') !== 1 ? $rounds->perPage() * (request('page') - 1) : 0) +$key +1 }}
+                                </th>
+                            @endif
+
                             <td>{{ $round->name }}</td>
 
                             <td>
@@ -453,7 +479,7 @@
     <script>
         let url = '/admin/rounds?';
         const _token = "{{ csrf_token() }}";
-        const sort = '{{ request()->has('sort') ? (request('sort') == 'desc' ? 'asc' : 'desc') : 'desc' }}';
+        const sort = '{{ request()->has('sort') ? (request('sort') == 'desc' ? 'asc' : 'desc') : 'asc' }}';
     </script>
     <script src="assets/js/system/formatlist/formatlis.js"></script>
     <script src="assets/js/system/round/round.js"></script>

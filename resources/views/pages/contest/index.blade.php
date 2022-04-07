@@ -27,7 +27,7 @@
                 <div class="   form-group p-2">
                     <label>Chuyên ngành </label>
                     <select id="select-major" class="form-control form-control-solid">
-                        <option>-- Chuyên ngành --</option>
+                        <option value="0">-- Chuyên ngành --</option>
                         @forelse ($majors as $major)
                             <option @selected(request('major_id') == $major->id) value="{{ $major->id }}">{{ $major->name }}
                             </option>
@@ -41,7 +41,7 @@
                 <div class="   form-group p-2">
                     <label>Tình trạng </label>
                     <select id="select-status" class="form-control form-control-solid">
-                        <option @selected(!request()->has('status'))>-- Tình trạng --</option>
+                        <option value="0" @selected(!request()->has('status'))>-- Tình trạng --</option>
                         <option @selected(request('status') == 1) value="1">Kích họat
                         </option>
                         <option @selected(request()->has('status') && request('status') == 0) value="0">Không kích hoạt
@@ -266,11 +266,24 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+                        $total = $contests->total();
+                    @endphp
                     @forelse ($contests as $key => $contest)
                         <tr>
-                            <th scope="row">
-                                {{ (request()->has('page') && request('page') !== 1 ? $contests->perPage() * (request('page') - 1) : 0) +$key +1 }}
-                            </th>
+                            @if (request()->has('sort'))
+                                <th scope="row">
+                                    @if (request('sort') == 'desc')
+                                        {{ (request()->has('page') && request('page') !== 1 ? $contests->perPage() * (request('page') - 1) : 0) +$key +1 }}
+                                    @else
+                                        {{ request()->has('page') && request('page') !== 1? $total - $contests->perPage() * (request('page') - 1) - $key: ($total -= 1) }}
+                                    @endif
+                                </th>
+                            @else
+                                <th scope="row">
+                                    {{ (request()->has('page') && request('page') !== 1 ? $contests->perPage() * (request('page') - 1) : 0) +$key +1 }}
+                                </th>
+                            @endif
                             <td>{{ $contest->name }}</td>
 
                             <td>
@@ -474,7 +487,7 @@
     <script>
         let url = "/admin/contests?";
         const _token = "{{ csrf_token() }}";
-        const sort = '{{ request()->has('sort') ? (request('sort') == 'desc' ? 'asc' : 'desc') : 'desc' }}';
+        const sort = '{{ request()->has('sort') ? (request('sort') == 'desc' ? 'asc' : 'desc') : 'asc' }}';
     </script>
     <script src="assets/js/system/formatlist/formatlis.js"></script>
     <script src="assets/js/system/contest/contest.js"></script>
