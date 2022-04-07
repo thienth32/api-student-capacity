@@ -18,11 +18,14 @@ class Team extends Model
         'image',
         'contest_id',
     ];
-    // public function members()
-    // {
-    //     return $this->hasMany(Member::class, 'team_id');
-    // }
 
+    public static function boot()
+    {
+        parent::boot();
+        static::deleting(function ($q) {
+            $q->members()->detach();
+        });
+    }
     public function contest()
     {
         return $this->belongsTo(Contest::class, 'contest_id');

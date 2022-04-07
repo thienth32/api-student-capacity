@@ -366,6 +366,7 @@
                             </td>
                             <td>{{ $round->contest->name ?? 'Chưa có cuộc thi ' }}</td>
                             <td>{{ $round->type_exam->name ?? 'Chưa có kiểu cuộc thi' }}</td>
+
                             <td>{{ $round->start_time }}</td>
                             <td>{{ $round->end_time }}</td>
                             <td>

@@ -94,6 +94,7 @@ Route::prefix('majors')->group(function () {
     Route::prefix('list-soft-deletes')->group(function () {
         Route::get('', [MajorController::class, 'listRecordSoftDeletes'])->name('admin.major.list.soft.deletes');
         Route::get('{slug}/delete', [MajorController::class, 'permanently_deleted'])->name('admin.major.soft.deletes');
+        Route::get('{slug}/restore', [MajorController::class, 'restore_deleted'])->name('admin.major.soft.restore');
     });
 });
 
