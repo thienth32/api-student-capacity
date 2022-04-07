@@ -22,7 +22,9 @@ Route::prefix('rounds')->group(function () {
     Route::delete('{id}', [RoundController::class, 'destroy'])->name('admin.round.destroy');
 
     Route::get('{id}/detail', [RoundController::class, 'adminShow'])->name('admin.round.detail');
-    // Route::get('{id}/detail', [RoundController::class, 'adminShow'])->name('admin.round.detail');
+    Route::get('round-soft-delete', [RoundController::class, 'softDelete'])->name('admin.round.soft.delete');
+    Route::get('round-soft-delete/{id}/backup', [RoundController::class, 'backUpRound'])->name('admin.round.soft.backup');
+    Route::get('round-soft-delete/{id}/delete', [RoundController::class, 'deleteRound'])->name('admin.round.soft.destroy');
 });
 
 

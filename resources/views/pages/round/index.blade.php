@@ -19,7 +19,7 @@
                 </svg>
                 <!--end::Svg Icon-->
             </span>
-            <a href="">
+            <a href="{{ route('admin.round.soft.delete', 'round_soft_delete=1') }}">
 
                 <span class=" svg-icon svg-icon-primary svg-icon-2x">
                     <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Files/Deleted-folder.svg--><svg
@@ -432,7 +432,7 @@
 
                                         </li>
                                         <li class="my-3">
-                                            @hasrole('super admin')
+                                            @hasrole('admin')
                                                 <form action="{{ route('admin.round.destroy', ['id' => $round->id]) }}"
                                                     method="post">
                                                     @csrf
