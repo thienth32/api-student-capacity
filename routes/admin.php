@@ -69,6 +69,10 @@ Route::prefix('contests')->group(function () {
         Route::get('teams', [ContestController::class, 'contestDetailTeam'])->name('admin.contest.detail.team');
         Route::post('teams-add', [ContestController::class, 'contestDetailTeamAdd'])->name('admin.contest.detail.team.add');
     });
+
+    Route::get('contest-soft-delete', [ContestController::class, 'softDelete'])->name('admin.contest.soft.delete');
+    Route::get('contest-soft-delete/{id}/backup', [ContestController::class, 'backUpContest'])->name('admin.contest.soft.backup');
+    Route::get('contest-soft-delete/{id}/delete', [ContestController::class, 'deleteContest'])->name('admin.contest.soft.destroy');
 });
 Route::prefix('enterprise')->group(function () {
     Route::get('{id}/edit', [EnterpriseController::class, 'edit'])->name('admin.enterprise.edit');

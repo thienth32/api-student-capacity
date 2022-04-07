@@ -374,6 +374,34 @@ class ContestController extends Controller
             return Redirect::back();
         }
     }
+
+    public function softDelete()
+    {
+        $listContestSofts = $this->getList()->onlyTrashed()->paginate(request('limit') ?? 5);
+        return view('pages.contest.contest-soft-delete', [
+            'listContestSofts' => $listContestSofts
+        ]);
+    }
+
+    public function backUpContest($id)
+    {
+        try {
+            $this->contest::withTrashed()->where('id', $id)->restore();
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            return abort(404);
+        }
+    }
+
+    public function deleteContest($id)
+    {
+        try {
+            $this->contest::withTrashed()->where('id', $id)->forceDelete();
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            return abort(404);
+        }
+    }
 }
 
 //

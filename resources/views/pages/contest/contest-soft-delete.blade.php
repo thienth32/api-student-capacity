@@ -1,13 +1,13 @@
 @extends('layouts.main')
-@section('title', 'Danh sách các vòng thi đã xóa ')
-@section('page-title', 'Danh sách các vòng thi đã xóa ')
+@section('title', 'Danh sách các cuộc thi đã xóa ')
+@section('page-title', 'Danh sách các cuộc thi đã xóa ')
 @section('content')
 
     <div class="card card-flush p-4">
 
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('admin.round.list') }}">Round</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.contest.list') }}">Cuộc thi </a></li>
                 <li class="breadcrumb-item disable" aria-current="page">Backup
                     <span role="button" class="refresh-btn svg-icon svg-icon-primary svg-icon-2x">
                         <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Update.svg--><svg
@@ -35,28 +35,27 @@
                     class=" ip-search form-control">
             </div>
         </div>
-        @if (request()->has('round_soft_delete'))
+        @if (request()->has('contest_soft_delete'))
             <div class="table">
                 <table class="table table-responsive">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Vòng thi </th>
-                            <th scope="col">Chi tiết </th>
                             <th scope="col">Cuộc thi </th>
-                            <th scope="col">Loại cuộc thi </th>
+                            <th scope="col">Chi tiết </th>
+                            <th scope="col">Chuyên ngành</th>
                             <th scope="col">Xóa ngày</th>
                             <th colspan="2"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        @if (count($listRoundSofts) > 0)
-                            @foreach ($listRoundSofts as $key => $listRoundSoft)
+                        @if (count($listContestSofts) > 0)
+                            @foreach ($listContestSofts as $key => $listContestSoft)
                                 <tr>
                                     <td>
-                                        {{ (request()->has('page') && request('page') !== 1 ? $listRoundSofts->perPage() * (request('page') - 1) : 0) +$key +1 }}
+                                        {{ (request()->has('page') && request('page') !== 1? $listContestSofts->perPage() * (request('page') - 1): 0) +$key +1 }}
                                     </td>
-                                    <td>{{ $listRoundSoft->name }}</td>
+                                    <td>{{ $listContestSoft->name }}</td>
                                     <td>
                                         <button type="button" style="background: none ; border : none ; list-style  : none "
                                             data-bs-toggle="modal" data-bs-target="#exampleModal_{{ $key }}">
@@ -85,14 +84,14 @@
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Chi tiết vòng
+                                                        <h5 class="modal-title" id="exampleModalLabel">Chi tiết cuộc
                                                             thi
                                                         </h5>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                             aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body  ">
-                                                        {{ $listRoundSoft->description }}
+                                                        {{ $listContestSoft->description }}
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary"
@@ -104,10 +103,9 @@
                                         </div>
 
                                     </td>
-                                    <td>{{ $listRoundSoft->contest->name ?? 'Chưa có cuộc thi ' }}</td>
-                                    <td>{{ $listRoundSoft->type_exam->name ?? 'Chưa có loại cuộc thi ' }}</td>
-                                    <td>{{ $listRoundSoft->deleted_at }}
-                                        <p>{{ \Carbon\Carbon::parse($listRoundSoft->deleted_at)->diffForHumans() }}</p>
+                                    <td>{{ $listContestSoft->major->name ?? 'Chưa có chuyên ngành ' }}</td>
+                                    <td>{{ $listContestSoft->deleted_at }}
+                                        <p>{{ \Carbon\Carbon::parse($listContestSoft->deleted_at)->diffForHumans() }}</p>
                                     </td>
                                     <td>
                                         <div class="btn-group dropstart">
@@ -132,7 +130,7 @@
 
                                                 <li class="my-3">
                                                     <a
-                                                        href="{{ route('admin.round.soft.backup', ['id' => $listRoundSoft->id]) }}">
+                                                        href="{{ route('admin.contest.soft.backup', ['id' => $listContestSoft->id]) }}">
                                                         <span class="svg-icon svg-icon-primary svg-icon-2x">
                                                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Files/Cloud-upload.svg--><svg
                                                                 xmlns="http://www.w3.org/2000/svg"
@@ -160,7 +158,7 @@
                                                 <li class="my-3">
                                                     @hasrole('super admin')
                                                         <a
-                                                            href="{{ route('admin.round.soft.destroy', ['id' => $listRoundSoft->id]) }}">
+                                                            href="{{ route('admin.contest.soft.destroy', ['id' => $listContestSoft->id]) }}">
                                                             <span role="button" class="svg-icon svg-icon-danger svg-icon-2x">
                                                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Trash.svg--><svg
                                                                     xmlns="http://www.w3.org/2000/svg"
@@ -200,7 +198,7 @@
                                                             </svg>
                                                             <!--end::Svg Icon-->
                                                         </span>
-                                                        Xóa vĩnh viễn
+                                                        Xóa vv
                                                     @endhasrole
 
                                                 </li>
@@ -216,7 +214,7 @@
 
                     </tbody>
                 </table>
-                {{ $listRoundSofts->appends(request()->all())->links('pagination::bootstrap-4') }}
+                {{ $listContestSofts->appends(request()->all())->links('pagination::bootstrap-4') }}
             </div>
         @else
             <div class="text-center">
@@ -242,7 +240,7 @@
 @endsection
 @section('page-script')
     <script>
-        let url = '/admin/rounds/round-soft-delete?round_soft_delete=1';
+        let url = '/admin/contests/contest-soft-delete?contest_soft_delete=1';
     </script>
     <script src="assets/js/system/formatlist/formatlis.js"></script>
 @endsection
