@@ -1,11 +1,13 @@
 const contestPage = {
     selectMajor: function () {
         $("#select-major").on("change", function () {
+            if ($(this).val() == 0) return (window.location = url);
             checkUrlOut("major_id", $(this).val());
         });
     },
     selectStatus: function () {
         $("#select-status").on("change", function () {
+            if ($(this).val() == 0) return (window.location = url);
             checkUrlOut("status", $(this).val());
         });
     },

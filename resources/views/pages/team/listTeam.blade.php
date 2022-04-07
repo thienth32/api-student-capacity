@@ -2,163 +2,471 @@
 @section('title', 'Danh sách đội thi')
 @section('page-title', 'Danh sách đội thi')
 @section('content')
-    <style>
-        #loading {
-            position: fixed;
-            z-index: 100;
-            top: 40%;
-            left: 55%;
-            display: none;
-            width: 3.5em;
-            height: 3.5em;
-            border: 3px solid transparent;
-            border-top-color: #3cefff;
-            border-bottom-color: #3cefff;
-            border-radius: 50%;
-            animation: spin 1.5s linear infinite;
-        }
 
-        #loading:before {
-            content: '';
-            display: block;
-            margin: auto;
-            width: 0.75em;
-            height: 0.75em;
-            border: 3px solid #3cefff;
-            border-radius: 50%;
-            animation: pulse 1s alternate ease-in-out infinite;
-        }
 
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
+    <div class="card card-flush p-4">
+        <h1>Quản lý đội thi
+            <span role="button" class="refresh-btn svg-icon svg-icon-primary svg-icon-2x">
+                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Update.svg--><svg
+                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+                    viewBox="0 0 24 24" version="1.1">
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <rect x="0" y="0" width="24" height="24" />
+                        <path
+                            d="M8.43296491,7.17429118 L9.40782327,7.85689436 C9.49616631,7.91875282 9.56214077,8.00751728 9.5959027,8.10994332 C9.68235021,8.37220548 9.53982427,8.65489052 9.27756211,8.74133803 L5.89079566,9.85769242 C5.84469033,9.87288977 5.79661753,9.8812917 5.74809064,9.88263369 C5.4720538,9.8902674 5.24209339,9.67268366 5.23445968,9.39664682 L5.13610134,5.83998177 C5.13313425,5.73269078 5.16477113,5.62729274 5.22633424,5.53937151 C5.384723,5.31316892 5.69649589,5.25819495 5.92269848,5.4165837 L6.72910242,5.98123382 C8.16546398,4.72182424 10.0239806,4 12,4 C16.418278,4 20,7.581722 20,12 C20,16.418278 16.418278,20 12,20 C7.581722,20 4,16.418278 4,12 L6,12 C6,15.3137085 8.6862915,18 12,18 C15.3137085,18 18,15.3137085 18,12 C18,8.6862915 15.3137085,6 12,6 C10.6885336,6 9.44767246,6.42282109 8.43296491,7.17429118 Z"
+                            fill="#000000" fill-rule="nonzero" />
+                    </g>
+                </svg>
+                <!--end::Svg Icon-->
+            </span>
+        </h1>
+        <div class="row card-format">
 
-        @keyframes pulse {
-            from {
-                transform: scale(0.5);
-            }
 
-            to {
-                transform: scale(1);
-            }
-        }
-
-    </style>
-
-    <div id="loading"></div>
-    <div class="content">
-        <div class="row">
-            <div class="col-md-4">
-                <div style="width:300px" class="form-group mb-5">
-                    <label for="">
-                        <h3>Danh Sách cuộc thi</h3>
-                    </label>
-
-                    <select class="form-control" name="" id="selectContest">
-                        <option>___CHỌN CUỘC THI___</option>
-                        @foreach ($Contest as $itemContest)
-                            <option value="{{ $itemContest->id }}"> Cuộc Thi :{{ $itemContest->name }}</option>
-                        @endforeach
+            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
+                <div class="form-group p-2">
+                    <label>Cuộc thi </label>
+                    <select id="selectContest" class="form-control form-control-solid">
+                        <option>-- Cuộc thi --</option>
+                        @forelse ($Contest as $itemContest)
+                            <option @selected(request('contest') == $itemContest->id) value="{{ $itemContest->id }}">
+                                Cuộc Thi: {{ $itemContest->name }}
+                            </option>
+                        @empty
+                            <option>-- Không có cuộc thi --</option>
+                        @endforelse
                     </select>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div style="width:300px" class="form-group mb-5">
-                    <label for="">
-                        <h3>Sắp xếp Đội Thi</h3>
-                    </label>
-
-                    <select class="form-control" name="" id="selectOderByTeam">
-                        <option>___CHỌN___</option>
-                        <option value="name">Sắp xếp theo tên</option>
-                        <option value="created_at">Sắp xếp theo Thời gian</option>
-                        <option value="id">Các đội mới lập</option>
+            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
+                <div class="form-group p-2">
+                    <label for="" class="label">Khoảng thời gian </label>
+                    <select id="select-date-serach" class="select-date-serach form-control">
+                        <option class="form-control">---- Thời gian ----</option>
+                        <option class="form-control" @selected(request('day') == 7) value="day-7">7 Ngày </option>
+                        <option class="form-control" @selected(request('day') == 14) value="day-14">14 Ngày </option>
+                        <option class="form-control" @selected(request('day') == 30) value="day-30">30 Ngày </option>
+                        <option class="form-control" @selected(request('day') == 60) value="day-60">60 Ngày </option>
+                        <option class="form-control" @selected(request('day') == 90) value="day-90">90 Ngày</option>
                     </select>
                 </div>
+
             </div>
-            <div class="col-md-4">
-                <div style="width:300px" class="form-group mb-5">
-                    <label for="">
-                        <h3>Tìm Kiếm Đội Thi</h3>
-                    </label>
-
-
-                    <div class="form-group">
-                        <input id="searchTeam" placeholder="Nhập Tên nhóm...." type="text" class="form-control" name=""
-                            aria-describedby="helpId" placeholder="">
-
-                    </div>
-
-
+            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
+                <div class="  form-group p-2">
+                    <label>Tìm kiếm </label>
+                    <input id="searchTeam" type="text" value="{{ request('q') ?? '' }}"
+                        placeholder="'*Enter' tìm kiếm ..." class=" ip-search form-control">
                 </div>
             </div>
+
         </div>
-        <hr>
-        <div id="listTeams">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Tên Nhóm</th>
-                        <th scope="col">Ảnh nhóm </th>
-                        <th scope="col"> Tham gia Cuộc Thi </th>
-                        <th scope="col"> Ngày Tạo </th>
-                        <th scope="col"> Thành Viên </th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody id="dataTeams">
-                    <?php $index = 0; ?>
-                    @foreach ($dataTeam as $valueTeam)
-                        <tr>
-                            <th scope="row">{{ $index += 1 }}</th>
-                            <td>{{ $valueTeam->name }}</td>
-                            <td><img style="width:200px;height:200px"
-                                    src="{{ Storage::disk('google')->has($valueTeam->image)? Storage::disk('google')->url($valueTeam->image): 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
-                                    alt=""></td>
-                            <td>{{ $valueTeam->contest->name }}</td>
-                            <td>{{ date('d-m-Y', strtotime($valueTeam->created_at)) }}</td>
-                            <td>
-                                <div class="btn-group dropup">
-                                    <button type="button" class="btn btn-secondary btn-sm dropdown-toggle"
-                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                        Xem Thêm...
-                                    </button>
-                                    <ul class="dropdown-menu">
-
-                                        @foreach ($valueTeam->members as $member)
-                                            <li><a class="dropdown-item" href="javascript:void()"> Thành Viên
-                                                    : {{ $member->name }}</a>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            </td>
-
-                            <td> <a data-url="{{ route('admin.delete.teams', $valueTeam->id) }}"
-                                    id="{{ $valueTeam->id }}" class="btn btn-danger deleteTeams"><i
-                                        class="fas fa-trash-alt"></i></a>
-
-                                <a href="{{ route('admin.teams.edit', $valueTeam->id) }}" class="btn  btn-success "><i
-                                        class="fas fa-edit"></i></a>
-                            </td>
-                        </tr>
-                    @endforeach
-
-                </tbody>
-
-            </table>
+        <div class="back">
             <hr>
-            <div>
-                {{ $dataTeam->appends(request()->all())->links('pagination::bootstrap-4') }}
-            </div>
+            <span class="btn-hide svg-icon svg-icon-primary svg-icon-2x">
+                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Stockholm-icons/Navigation/Angle-up.svg--><svg
+                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+                    viewBox="0 0 24 24" version="1.1">
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <polygon points="0 0 24 0 24 24 0 24" />
+                        <path
+                            d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z"
+                            fill="#000000" fill-rule="nonzero" />
+                    </g>
+                </svg>
+            </span>
+
+            <span style="display: none" class="btn-show svg-icon svg-icon-primary svg-icon-2x">
+                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Angle-down.svg--><svg
+                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+                    viewBox="0 0 24 24" version="1.1">
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <polygon points="0 0 24 0 24 24 0 24" />
+                        <path
+                            d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z"
+                            fill="#000000" fill-rule="nonzero"
+                            transform="translate(12.000003, 11.999999) rotate(-180.000000) translate(-12.000003, -11.999999) " />
+                    </g>
+                </svg>
+                <!--end::Svg Icon-->
+            </span>
+
         </div>
+        <div class="table-responsive p-4 card card-flush ">
+            @if (count($dataTeam) > 0)
+                <table class=" table table-hover table-responsive-md ">
+                    <thead>
+                        <tr>
+                            <th scope="col">
+                                <span role="button" data-key="id"
+                                    class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
+                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
+                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        style="width: 14px !important ; height: 14px !important" width="24px" height="24px"
+                                        viewBox="0 0 24 24" version="1.1">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <polygon points="0 0 24 0 24 24 0 24" />
+                                            <rect fill="#000000" opacity="0.3"
+                                                transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
+                                                x="5" y="5" width="2" height="12" rx="1" />
+                                            <path
+                                                d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
+                                                fill="#000000" fill-rule="nonzero" />
+                                            <rect fill="#000000" opacity="0.3"
+                                                transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
+                                                x="17" y="7" width="2" height="12" rx="1" />
+                                            <path
+                                                d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
+                                                fill="#000000" fill-rule="nonzero"
+                                                transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
+                                        </g>
+                                    </svg>
+                                    <!--end::Svg Icon-->
+                                </span>
+                            </th>
+                            <th scope="col">Đội Thi
+                                <span role="button" data-key="name"
+                                    class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
+                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
+                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        style="width: 14px !important ; height: 14px !important" width="24px" height="24px"
+                                        viewBox="0 0 24 24" version="1.1">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <polygon points="0 0 24 0 24 24 0 24" />
+                                            <rect fill="#000000" opacity="0.3"
+                                                transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
+                                                x="5" y="5" width="2" height="12" rx="1" />
+                                            <path
+                                                d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
+                                                fill="#000000" fill-rule="nonzero" />
+                                            <rect fill="#000000" opacity="0.3"
+                                                transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
+                                                x="17" y="7" width="2" height="12" rx="1" />
+                                            <path
+                                                d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
+                                                fill="#000000" fill-rule="nonzero"
+                                                transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
+                                        </g>
+                                    </svg>
+                                    <!--end::Svg Icon-->
+                                </span>
+                            </th>
+                            <th scope="col"> Thuộc Cuộc thi <span role="button" data-key="name"
+                                    class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
+                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
+                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        style="width: 14px !important ; height: 14px !important" width="24px" height="24px"
+                                        viewBox="0 0 24 24" version="1.1">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <polygon points="0 0 24 0 24 24 0 24" />
+                                            <rect fill="#000000" opacity="0.3"
+                                                transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
+                                                x="5" y="5" width="2" height="12" rx="1" />
+                                            <path
+                                                d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
+                                                fill="#000000" fill-rule="nonzero" />
+                                            <rect fill="#000000" opacity="0.3"
+                                                transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
+                                                x="17" y="7" width="2" height="12" rx="1" />
+                                            <path
+                                                d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
+                                                fill="#000000" fill-rule="nonzero"
+                                                transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
+                                        </g>
+                                    </svg>
+                                    <!--end::Svg Icon-->
+                                </span> </th>
+                            <th scope="col">Thành Viên
+                                <span role="button" data-key="start_time"
+                                    class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
+                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
+                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        style="width: 14px !important ; height: 14px !important" width="24px" height="24px"
+                                        viewBox="0 0 24 24" version="1.1">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <polygon points="0 0 24 0 24 24 0 24" />
+                                            <rect fill="#000000" opacity="0.3"
+                                                transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
+                                                x="5" y="5" width="2" height="12" rx="1" />
+                                            <path
+                                                d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
+                                                fill="#000000" fill-rule="nonzero" />
+                                            <rect fill="#000000" opacity="0.3"
+                                                transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
+                                                x="17" y="7" width="2" height="12" rx="1" />
+                                            <path
+                                                d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
+                                                fill="#000000" fill-rule="nonzero"
+                                                transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
+                                        </g>
+                                    </svg>
+                                    <!--end::Svg Icon-->
+                                </span>
+                            </th>
+                            <th scope="col">Ngày Tạo
+                                <span role="button" data-key="end_time"
+                                    class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
+                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
+                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        style="width: 14px !important ; height: 14px !important" width="24px" height="24px"
+                                        viewBox="0 0 24 24" version="1.1">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <polygon points="0 0 24 0 24 24 0 24" />
+                                            <rect fill="#000000" opacity="0.3"
+                                                transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
+                                                x="5" y="5" width="2" height="12" rx="1" />
+                                            <path
+                                                d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
+                                                fill="#000000" fill-rule="nonzero" />
+                                            <rect fill="#000000" opacity="0.3"
+                                                transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
+                                                x="17" y="7" width="2" height="12" rx="1" />
+                                            <path
+                                                d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
+                                                fill="#000000" fill-rule="nonzero"
+                                                transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
+                                        </g>
+                                    </svg>
+                                    <!--end::Svg Icon-->
+                                </span>
+                            </th>
+                            <th class="text-center" colspan="2">
 
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @forelse ($dataTeam as $index=> $key)
+                            <tr>
+                                <th scope="row">
+                                    {{ (request()->has('page') && request('page') !== 1 ? $dataTeam->perPage() * (request('page') - 1) : 0) +$index +1 }}
+                                </th>
+                                <td>
+
+                                    <button style="border:none;background:#ffff" type="button" data-bs-toggle="modal"
+                                        data-bs-target="#deltai_team_{{ $key->id }}">
+                                        {{ $key->name }}
+                                    </button>
+
+                                    <!-- Modal -->
+                                    <div style="margin-left:600px;width:800px" class="modal fade " id="deltai_team_{{ $key->id }}" tabindex="-1"
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Chi tiết đội thi
+                                                    </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body  ">
+                                                    <div class="row">
+                                                        <div class="col md-6">
+                                                            <img style="width:200px;height:200px"
+                                                                src="{{ Storage::disk('google')->has($key->image)? Storage::disk('google')->url($key->image): 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
+                                                                alt="">
+                                                            <h4 class="mt-3">Ngày Tạo : {{ $key->created_at }}</h4>
+                                                            <h5>Tham gia cuộc thi :{{ $key->contest->name }}</h5>
+                                                        </div>
+                                                        <div class="col md-6">
+                                                             <h3>Tên Đội : {{ $key->name }}</h3>
+                                                            <h4 class="mt-3"> Danh sách thành viên </h4>
+                                                            <ul>
+                                                            @foreach ($key->members as $user)
+
+
+                                                             <li class="pt-3">{{ $user->name }}</li>
+
+
+                                                        @endforeach
+                                                    </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Thoát
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    Cuộc Thi: {{ $key->contest->name }}
+                                </td>
+                                <td>
+                                    <button class="badge bg-primary" type="button" data-bs-toggle="modal"
+                                        data-bs-target="#exampleModal_{{ $key->id }}">
+                                        Xem Thêm
+                                    </button>
+
+                                    <!-- Modal -->
+                                    <div style="margin:auto" class="modal fade "
+                                        id="exampleModal_{{ $key->id }}" tabindex="-1"
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Các Thành Viên Trong
+                                                        Team
+                                                    </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body  ">
+
+                                                    <table class="table table-striped">
+
+                                                        <thead>
+                                                            <tr>
+                                                                <th></th>
+                                                                <th>Họ Tên</th>
+                                                                <th>Email</th>
+                                                            </tr>
+
+                                                        </thead>
+
+                                                        <tbody>
+                                                            <?php $indexUser = 1; ?>
+                                                            @foreach ($key->members as $user)
+                                                                <tr>
+                                                                    <td>{{ $indexUser++ }}</td>
+                                                                    <td>{{ $user->name }}</td>
+                                                                    <td>{{ $user->email }}</td>
+                                                                </tr>
+                                                                @empty($user)
+                                                                    <tr>Không có Thành viên nào</tr>
+                                                                @endempty
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Thoát
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                <td>{{ $key->created_at }}</td>
+
+                                <td>
+                                    <div class="btn-group dropstart">
+                                        <button type="button" class="btn   btn-sm dropdown-toggle" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                            <span class="svg-icon svg-icon-success svg-icon-2x">
+                                                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Settings-2.svg--><svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+                                                    viewBox="0 0 24 24" version="1.1">
+                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                        <rect x="0" y="0" width="24" height="24" />
+                                                        <path
+                                                            d="M5,8.6862915 L5,5 L8.6862915,5 L11.5857864,2.10050506 L14.4852814,5 L19,5 L19,9.51471863 L21.4852814,12 L19,14.4852814 L19,19 L14.4852814,19 L11.5857864,21.8994949 L8.6862915,19 L5,19 L5,15.3137085 L1.6862915,12 L5,8.6862915 Z M12,15 C13.6568542,15 15,13.6568542 15,12 C15,10.3431458 13.6568542,9 12,9 C10.3431458,9 9,10.3431458 9,12 C9,13.6568542 10.3431458,15 12,15 Z"
+                                                            fill="#000000" />
+                                                    </g>
+                                                </svg>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                        </button>
+                                        <ul class="dropdown-menu  px-4 ">
+                                            <li class="my-3">
+                                                <a href="{{ route('admin.teams.edit', $key->id) }}">
+                                                    <span role="button" class="svg-icon svg-icon-success svg-icon-2x">
+                                                        <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Design/Edit.svg--><svg
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                                            height="24px" viewBox="0 0 24 24" version="1.1">
+                                                            <g stroke="none" stroke-width="1" fill="none"
+                                                                fill-rule="evenodd">
+                                                                <rect x="0" y="0" width="24" height="24" />
+                                                                <path
+                                                                    d="M8,17.9148182 L8,5.96685884 C8,5.56391781 8.16211443,5.17792052 8.44982609,4.89581508 L10.965708,2.42895648 C11.5426798,1.86322723 12.4640974,1.85620921 13.0496196,2.41308426 L15.5337377,4.77566479 C15.8314604,5.0588212 16,5.45170806 16,5.86258077 L16,17.9148182 C16,18.7432453 15.3284271,19.4148182 14.5,19.4148182 L9.5,19.4148182 C8.67157288,19.4148182 8,18.7432453 8,17.9148182 Z"
+                                                                    fill="#000000" fill-rule="nonzero"
+                                                                    transform="translate(12.000000, 10.707409) rotate(-135.000000) translate(-12.000000, -10.707409) " />
+                                                                <rect fill="#000000" opacity="0.3" x="5" y="20" width="15"
+                                                                    height="2" rx="1" />
+                                                            </g>
+                                                        </svg>
+                                                    </span>
+                                                    Chỉnh sửa
+                                                </a>
+                                            </li>
+
+                                            <li class="my-3">
+                                                @hasrole('super admin')
+                                                    <form action="{{ route('admin.delete.teams', $key->id) }}" method="post">
+                                                        @csrf
+                                                        @method('delete')
+                                                        <button style=" background: none ; border: none ; list-style : none"
+                                                            type="submit">
+                                                            <span role="button" class="svg-icon svg-icon-danger svg-icon-2x">
+                                                                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Trash.svg--><svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                                                    height="24px" viewBox="0 0 24 24" version="1.1">
+                                                                    <g stroke="none" stroke-width="1" fill="none"
+                                                                        fill-rule="evenodd">
+                                                                        <rect x="0" y="0" width="24" height="24" />
+                                                                        <path
+                                                                            d="M6,8 L18,8 L17.106535,19.6150447 C17.04642,20.3965405 16.3947578,21 15.6109533,21 L8.38904671,21 C7.60524225,21 6.95358004,20.3965405 6.89346498,19.6150447 L6,8 Z M8,10 L8.45438229,14.0894406 L15.5517885,14.0339036 L16,10 L8,10 Z"
+                                                                            fill="#000000" fill-rule="nonzero" />
+                                                                        <path
+                                                                            d="M14,4.5 L14,3.5 C14,3.22385763 13.7761424,3 13.5,3 L10.5,3 C10.2238576,3 10,3.22385763 10,3.5 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z"
+                                                                            fill="#000000" opacity="0.3" />
+                                                                    </g>
+                                                                </svg>
+                                                                <!--end::Svg Icon-->
+                                                            </span>
+                                                            Xóa bỏ
+                                                        </button>
+                                                    </form>
+                                                @else
+                                                    <div style="cursor: not-allowed; user-select: none">
+
+                                                        <span class="svg-icon svg-icon-danger svg-icon-2x">
+                                                            <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Code/Lock-circle.svg--><svg
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                                                height="24px" viewBox="0 0 24 24" version="1.1">
+                                                                <g stroke="none" stroke-width="1" fill="none"
+                                                                    fill-rule="evenodd">
+                                                                    <rect x="0" y="0" width="24" height="24" />
+                                                                    <circle fill="#000000" opacity="0.3" cx="12" cy="12"
+                                                                        r="10" />
+                                                                    <path
+                                                                        d="M14.5,11 C15.0522847,11 15.5,11.4477153 15.5,12 L15.5,15 C15.5,15.5522847 15.0522847,16 14.5,16 L9.5,16 C8.94771525,16 8.5,15.5522847 8.5,15 L8.5,12 C8.5,11.4477153 8.94771525,11 9.5,11 L9.5,10.5 C9.5,9.11928813 10.6192881,8 12,8 C13.3807119,8 14.5,9.11928813 14.5,10.5 L14.5,11 Z M12,9 C11.1715729,9 10.5,9.67157288 10.5,10.5 L10.5,11 L13.5,11 L13.5,10.5 C13.5,9.67157288 12.8284271,9 12,9 Z"
+                                                                        fill="#000000" />
+                                                                </g>
+                                                            </svg>
+                                                            <!--end::Svg Icon-->
+                                                        </span>
+                                                        Xóa bỏ
+                                                    </div>
+                                                @endhasrole
+
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                        @endforelse
+                    </tbody>
+                </table>
+                {{ $dataTeam->appends(request()->all())->links('pagination::bootstrap-4') }}
+            @else
+                <h2>Không tìm thấy đội thi !!!</h2>
+            @endif
+        </div>
     </div>
-
-
 
 
 @endsection
@@ -166,304 +474,46 @@
 @section('page-script')
     <script>
         $(document).ready(function() {
-            $('.pagination a').unbind('click').on('click', function(
-                e) {
-                e.preventDefault();
-                var page = $(this).attr('href').split('page=')[1];
-                getPosts(page, key = '', value = '');
-            });
-
-            function getPosts(page, key, value) {
-                $('#loading').css('display', 'flex');
-                $.ajax({
-
-                    url: "{{ url('admin/teams/api-teams') }}?" + key + "=" + value + "&page=" + page,
-                    type: 'get',
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                    },
-                    success: function(data) {
-                        $('#loading').css('display', 'none');
-                        $('#listTeams').empty();
-                        $('#listTeams').html(data)
-                        $('.paginate .pagination a').unbind('click').on('click', function(
-                            e) {
-                            e.preventDefault();
-                            var page = $(this).attr('href').split('page=')[1];
-                            getPosts(page, key = '', value);
-                        });
-                    }
-                })
-
-            }
-
-
-            $(document).on('change', '#selectContest', function(e) {
-                e.preventDefault();
+            $('#selectContest').change(function() {
                 let idContest = $(this).val();
-                $('#loading').css('display', 'flex');
-                $.ajax({
-                    url: "{{ route('admin.contest.team') }}",
-                    type: 'get',
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        contest: idContest,
-                    },
-                    success: function(response) {
+                window.location = 'admin/teams?contest=' + idContest;
+            })
+            $('#searchTeam').keypress(function(event) {
+                var keycode = (event.keyCode ? event.keyCode : event.which);
+                if (keycode == '13') {
+                    let key = $(this).val();
+                    // alert(key)
+                    window.location = 'admin/teams?keyword=' + key;
+                }
 
-                        if (response == '') {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'SOS',
-                                text: 'Không Có đội thi nào',
-                                footer: '<a href="">Why do I have this issue?</a>'
-                            })
-
-                        } else {
-                            $('#loading').css('display', 'none');
-                            $('#listTeams').empty();
-                            $('#listTeams').html(response)
-                            $('.paginate .pagination a').unbind('click').on('click', function(
-                                e) {
-                                e.preventDefault();
-                                var page = $(this).attr('href').split('page=')[1];
-                                getPosts(page, key = 'contest', orderBy);
-                            });
-                        }
-                    }
-                });
             });
-            $('#selectOderByTeam').change(function(e) {
-
-                e.preventDefault();
-                let orderBy = $(this).val();
-                $('#loading').css('display', 'flex');
-                // alert(orderBy)
-                $.ajax({
-                    url: "{{ route('admin.contest.team') }}",
-                    type: 'get',
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        orderBy: orderBy,
-                        sortBy: 'desc'
-                    },
-                    success: function(response) {
-                        if (response == null) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'SOS',
-                                text: 'Không Có đội thi nào',
-                                footer: '<a href="">Why do I have this issue?</a>'
-                            })
-
-                        } else {
-                            $('#loading').css('display', 'none');
-                            $('#listTeams').empty();
-
-                            $('#listTeams').html(response)
-                            $('.paginate .pagination a').unbind('click').on('click', function(
-                                e) {
-                                e.preventDefault();
-                                var page = $(this).attr('href').split('page=')[1];
-                                getPosts(page, key = 'orderBy', sortBy = orderBy);
-                            });
-                        }
-
-
-
-                    }
-                })
-            })
-            $('#searchTeam').keyup(function(e) {
-                e.preventDefault();
-                $('#loading').css('display', 'flex');
-                let keySearch = $(this).val();
-                $.ajax({
-                    url: "{{ route('admin.contest.team') }}",
-                    type: 'get',
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        keyword: keySearch,
-                    },
-                    success: function(response) {
-                        $('#loading').css('display', 'none');
-                        $('#listTeams').empty();
-
-                        $('#listTeams').html(response)
-                        $('.paginate .pagination a').unbind('click').on('click', function(
-                            e) {
-                            e.preventDefault();
-                            var page = $(this).attr('href').split('page=')[1];
-                            getPosts(page, key = 'keyword', keySearch);
-                        });
-                    }
-                });
-
+            $('#select-date-serach').change(function() {
+                let url = '/admin/teams?';
+                const value = $(this).val();
+                // alert(value);
+                switch (value) {
+                    case "day-7":
+                        window.location = url + "&day=" + 7;
+                        return false;
+                    case "day-14":
+                        window.location = url + "&day=" + 14;
+                        return false;
+                    case "day-30":
+                        window.location = url + "&day=" + 30;
+                        return false;
+                    case "day-60":
+                        window.location = url + "&day=" + 60;
+                        return false;
+                    case "day-90":
+                        window.location = url + "&day=" + 90;
+                        return false;
+                    default:
+                        break;
+                }
             })
 
 
 
-
-            $('.deleteTeams').click(function() {
-                var urlTeam = $(this).attr('data-url');
-
-                Swal.fire({
-                    title: 'Bạn có muốn xóa không?',
-                    text: "Sẽ không thể phục hồi",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $('#loading').css('display', 'flex');
-                        $.ajax({
-                            url: urlTeam,
-                            type: 'delete',
-                            data: {
-                                _token: "{{ csrf_token() }}",
-
-                            },
-                            success: function(response) {
-                                Swal.fire({
-                                    position: 'center',
-                                    icon: 'success',
-                                    title: 'Xóa Thành Công',
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                })
-                                $('#loading').css('display', 'none');
-                                $('#listTeams').empty();
-                                $('#listTeams').html(response)
-
-                            }
-                        })
-
-                    }
-                })
-            })
-
-            function removeTeam(id) {
-
-                            Swal.fire({
-                                position: 'center',
-                                icon: 'success',
-                                title: 'Xóa Thành Công',
-                                showConfirmButton: false,
-                                timer: 1500
-                            })
-                            $('#loading').css('display', 'none');
-                            $('#listTeams').empty();
-                            $('#listTeams').html(response)
-                            $(document).ready(function() {
-                                $('.paginate .pagination a').unbind('click').on('click',
-                                    function(
-                                        e) {
-                                        e.preventDefault();
-                                        $('#loading').css('display', 'flex');
-                                        var page = $(this).attr('href').split('page=')[1];
-                                        $.ajax({
-
-                                            url: "{{ url('admin/teams/api-teams') }}?page=" +
-                                                page,
-                                            type: 'POST',
-                                            data: {
-                                                _token: "{{ csrf_token() }}",
-                                            },
-                                            success: function(data) {
-                                                $('#loading').css('display',
-                                                    'none');
-                                                $('#listTeams').empty();
-
-                                                $('#listTeams').html(data)
-                                                $('.paginate .pagination a')
-                                                    .unbind('click')
-                                                    .on('click', function(
-                                                        e) {
-                                                        e.preventDefault();
-                                                        var page = $(this)
-                                                            .attr('href')
-                                                            .split('page=')[
-                                                                1];
-                                                        $('#loading').css(
-                                                            'display',
-                                                            'flex');
-                                                        $.ajax({
-
-                                                            url: "{{ url('admin/teams/api-teams') }}?page=" +
-                                                                page,
-                                                            type: 'POST',
-                                                            data: {
-                                                                _token: "{{ csrf_token() }}",
-                                                            },
-                                                            success: function(
-                                                                data
-                                                            ) {
-                                                                $('#loading')
-                                                                    .css(
-                                                                        'display',
-                                                                        'none'
-                                                                    );
-                                                                $('#listTeams')
-                                                                    .empty();
-
-                                                                $('#listTeams')
-                                                                    .html(
-                                                                        data
-                                                                    ) {
-                                                                        $('#loading')
-                                                                            .css(
-                                                                                'display',
-                                                                                'none'
-                                                                                );
-                                                                        $('#listTeams')
-                                                                            .empty();
-
-                                                                        $('#listTeams')
-                                                                            .html(
-                                                                                data
-                                                                            )
-                                                                        $('.paginate .pagination a')
-                                                                            .unbind(
-                                                                                'click'
-                                                                            )
-                                                                            .on('click',
-                                                                                function(
-                                                                                    e
-                                                                                ) {
-                                                                                    e
-                                                                                        .preventDefault();
-                                                                                    var page =
-                                                                                        $(
-                                                                                            this
-                                                                                        )
-                                                                                        .attr(
-                                                                                            'href'
-                                                                                        )
-                                                                                        .split(
-                                                                                            'page='
-                                                                                        )[
-                                                                                            1
-                                                                                        ];
-
-                                                                                }
-                                                                            );
-                                                                    }
-                                                                })
-                                                            });
-                                                }
-                                            })
-                                        });
-                                })
-
-                            }
-
-                        })
-
-                    }
-                })
-            }
         });
     </script>
 

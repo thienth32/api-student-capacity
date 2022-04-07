@@ -43,22 +43,29 @@ class EnterpriseController extends Controller
 
             $Enterprise = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
 
+//          foreach($Enterprise[0]->enterprise as $item){
+//              echo '<pre>';
+// var_dump($item);
+//          };
+//          die();
             return view('pages.enterprise.index', compact('Enterprise', 'contest'));
-
         }
         $listEnterprise = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
         return view('pages.enterprise.index', compact('listEnterprise', 'contest'));
     }
     public function destroy($id)
     {
-
-        $data = Enterprise::find($id);
-        if ($data) {
-            if (Storage::disk('google')->has($data->logo)) Storage::disk('google')->delete($data->logo);
-            $data->delete();
+        try {
+            if (!(auth()->user()->hasRole('super admin'))) return false;
+            DB::transaction(function () use ($id) {
+                if (!($data = Enterprise::find($id))) return false;
+                if (Storage::disk('google')->has($data->logo)) Storage::disk('google')->delete($data->logo);
+                $data->delete();
+            });
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            return false;
         }
-
-        return response()->json(['status' => true]);
     }
     public function create(Request $request)
     {

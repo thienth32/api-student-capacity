@@ -1,20 +1,28 @@
 @extends('layouts.main')
-@section('title', 'Chi tiết cuộc thi')
-@section('page-title', 'Chi tiết cuộc thi')
+@section('title', 'Chi tiết vòng thi thi')
+@section('page-title', 'Chi tiết vòng thi thi')
 @section('content')
     <div class=" mb-4">
         <div class="row">
             <div class="col-lg-12">
                 <ol class="breadcrumb text-muted fs-6 fw-bold">
                     <li class="breadcrumb-item pe-3">
-                        <a href="{{ route('admin.contest.list') }}" class="pe-3">Cuộc
-                            thi</a>
+                        <a href="{{ route('admin.contest.list') }}" class="pe-3">Cuộc thi </a>
                     </li>
-                    <li class="breadcrumb-item px-3 text-muted">{{ $contest->name }}</li>
+                    <li class="breadcrumb-item px-3 ">
+                        <a href="{{ route('admin.contest.show', ['id' => $round->contest->id]) }}" class="pe-3">
+                            {{ $round->contest->name }}
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item pe-3">
+                        <a href="{{ route('admin.round.list') }}" class="pe-3">Vòng thi </a>
+                    </li>
+                    <li class="breadcrumb-item px-3 text-muted">{{ $round->name }}</li>
                 </ol>
             </div>
         </div>
     </div>
+
     <div class="row">
         <div class="col-xl-4 mb-5 mb-xl-10">
             <div class="card card-flush ">
@@ -23,15 +31,40 @@
                     style="background-image:url('assets/media/svg/shapes/top-green.png')">
                     <!--begin::Title-->
                     <div class="p-5">
-                        <span class="fw-bolder text-white fs-2x mb-3">{{ $contest->name }}</span>
+                        <span class="fw-bolder text-white fs-2x mb-3">{{ $round->name }}</span>
                         <div class="fs-4 text-white mt-5">
                             <div class="opacity-75">
                                 <img style="width:100%"
-                                    src="{{ $contest->img? $contest->img: 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
+                                    src="{{ Storage::disk('google')->has($round['image'])? Storage::disk('google')->url($round['image']): 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
                                     alt="">
                             </div>
                         </div>
+                        <div class="fs-4 text-white mt-5">
+                            <div class="opacity-75">
+                                <div class="row">
+                                    <div class="col-4">
+                                        <h3>Cuộc thi </h3>
+                                    </div>
+                                    <div class="col-8">
+                                        {{ $round->contest->name }}
 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fs-4 text-white mt-5">
+                            <div class="opacity-75">
+                                <div class="row">
+                                    <div class="col-4">
+                                        <h3>Thể loại cuộc thi </h3>
+                                    </div>
+                                    <div class="col-8">
+                                        {{ $round->type_exam->name }}
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="fs-4 text-white mt-5">
                             <div class="opacity-75">
                                 <div class="row">
@@ -39,9 +72,9 @@
                                         <h3>Thời gian bắt đầu</h3>
                                     </div>
                                     <div class="col-8">
-                                        {{ date('d-m-Y H:i', strtotime($contest->date_start)) }}
+                                        {{ date('d-m-Y H:i', strtotime($round->start_time)) }}
                                         <br>
-                                        {{ \Carbon\Carbon::parse($contest->date_start)->diffforHumans() }}
+                                        {{ \Carbon\Carbon::parse($round->start_time)->diffforHumans() }}
                                     </div>
                                 </div>
                             </div>
@@ -53,14 +86,14 @@
                                         <h3>Thời gian kết thúc</h3>
                                     </div>
                                     <div class="col-8">
-                                        {{ date('d-m-Y H:i', strtotime($contest->register_deadline)) }}
+                                        {{ date('d-m-Y H:i', strtotime($round->end_time)) }}
                                         <br>
-                                        {{ \Carbon\Carbon::parse($contest->register_deadline)->diffforHumans() }}
+                                        {{ \Carbon\Carbon::parse($round->end_time)->diffforHumans() }}
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="fs-4 text-white mt-5">
+                        {{-- <div class="fs-4 text-white mt-5">
                             <div class="opacity-75">
                                 <div class="row">
                                     <div class="col-4">
@@ -79,7 +112,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
 
@@ -91,9 +124,9 @@
             <div class="container-fluid  card card-flush">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h2 class="my-6">Mô tả cuộc thi</h2>
+                        <h2 class="my-6">Mô tả vòng thi </h2>
                         <div class=" fs-3 pb-5">
-                            {!! $contest->description !!}
+                            {!! $round->description !!}
                         </div>
                     </div>
                 </div>
@@ -107,38 +140,25 @@
                 <div class="row p-5 d-flex justify-content-center align-items-center ">
 
                     <div class="col-md-3">
-                        <a
-                            href="{{ route('admin.contest.detail.round', ['id' => $contest->id], 'contest_id=' . $contest->id) }}">
-                            <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
-                                <div class="m-0">
-                                    <span class="text-gray-700 fw-bold fs-6">Vòng thi</span>
-                                </div>
-                                <div class="m-0 badge badge-primary badge-pill">
-                                    <span class=" fs-6 text-white">{{ count($contest->rounds) }}</span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-3">
-                        <a href="{{ route('admin.contest.detail.team', ['id' => $contest->id]) }}">
+                        <a href="">
                             <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
                                 <div class="m-0">
                                     <span class="text-gray-700 fw-bold fs-6">Đội thi</span>
                                 </div>
                                 <div class="m-0 badge badge-primary badge-pill">
-                                    <span class=" fs-6 text-white">{{ count($contest->teams) }}</span>
+                                    <span class=" fs-6 text-white">{{ count($round->teams) }}</span>
                                 </div>
                             </div>
                         </a>
                     </div>
                     <div class="col-md-3">
-                        <a href="{{ route('admin.judges.contest', ['contest_id' => $contest->id]) }}">
+                        <a href="{{ route('admin.judges.round', ['round_id' => $round->id]) }}">
                             <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
                                 <div class="m-0">
                                     <span class="text-gray-700 fw-bold fs-6">Ban giám khảo</span>
                                 </div>
                                 <div class="m-0 badge badge-primary badge-pill">
-                                    <span class=" fs-6 text-white">{{ count($contest->judges) }}</span>
+                                    <span class=" fs-6 text-white">{{ count($round->judges) }}</span>
                                 </div>
                             </div>
                         </a>

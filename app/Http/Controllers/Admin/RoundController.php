@@ -36,16 +36,28 @@ class RoundController extends Controller
     private function getList()
     {
         try {
+            $key = null;
+            $valueDate = null;
+            if (request()->has('day')) {
+                $valueDate = request('day');
+                $key = 'day';
+            }
+            if (request()->has('month')) {
+                $valueDate = request('month');
+                $key = 'month';
+            };
+            if (request()->has('year')) {
+                $valueDate = request('year');
+                $key = 'year';
+            };
+
             $data = $this->round::search(request('q') ?? null, ['name', 'description'])
                 ->sort((request('sort') == 'desc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'rounds')
                 ->hasDateTimeBetween('start_time', request('start_time') ?? null, request('end_time') ?? null)
                 ->hasSubTime(
-                    ((request('day') ? 'day' : '') ??
-                        (request('month') ? 'month' : '') ??
-                        (request('year') ? 'year' : '')) ?? null,
-                    (request('day') ??
-                        request('month') ??
-                        request('year')) ?? null,
+                    $key,
+                    $valueDate,
+                    (request('op_time') == 'sub' ? 'sub' : 'add'),
                     'start_time'
                 )
                 ->hasReuqest([
@@ -361,8 +373,9 @@ class RoundController extends Controller
             'contest' =>  $contest
         ]);
     }
-    public function adminShow()
+    public function adminShow($id)
     {
-        # code...
+        if (!($round = $this->round::with(['contest', 'type_exam', 'judges', 'teams'])->where('id', $id)->first())) return abort(404);
+        return view('pages.round.detail.detail', ['round' => $round]);
     }
 }
