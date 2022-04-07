@@ -13,15 +13,14 @@ class Majorcontroller extends Controller
         try {
             $limit = 10;
             $dataMajor = Major::sort(request('sort') == 'asc' ? 'asc' : 'desc', request('sort_by') ?? null, 'majors')
-                ->search(request('search') ?? null,['name','slug'])
+                ->search(request('search') ?? null, ['name', 'slug'])
                 ->paginate(request('limit') ?? $limit);
 
             return response()->json([
                 'status' => true,
                 'payload' => $dataMajor->toArray()
-            ],200);
-
-        }catch(\Throwable $e) {
+            ], 200);
+        } catch (\Throwable $e) {
             return response()->json(
                 [
                     'status' => false,
@@ -30,16 +29,15 @@ class Majorcontroller extends Controller
                 506
             );
         }
-
     }
 
     public function store(Request $request)
     {
         try {
-            $slug = \Str::slug($request -> name);
+            $slug = \Str::slug($request->name);
             Major::create([
-                'name' => $request -> name ,
-                'slug' => $slug ,
+                'name' => $request->name,
+                'slug' => $slug,
             ]);
 
             return response()->json(
@@ -48,8 +46,7 @@ class Majorcontroller extends Controller
                     'payload' => 'Thành công '
                 ]
             );
-        }catch(\Throwable $h)
-        {
+        } catch (\Throwable $h) {
             return response()->json(
                 [
                     'status' => false,
@@ -63,7 +60,7 @@ class Majorcontroller extends Controller
     {
         try {
             $major = Major::find($id);
-            $this -> checkMajor($major);
+            $this->checkMajor($major);
 
             return response()->json(
                 [
@@ -71,8 +68,7 @@ class Majorcontroller extends Controller
                     'payload' => $major
                 ]
             );
-        }catch(\Throwable $h)
-        {
+        } catch (\Throwable $h) {
             return response()->json(
                 [
                     'status' => false,
@@ -82,15 +78,15 @@ class Majorcontroller extends Controller
         }
     }
 
-    public function update($id , Request $request)
+    public function update($id, Request $request)
     {
         try {
             $major = Major::find($id);
-            $this -> checkMajor($major);
+            $this->checkMajor($major);
 
-            $slug = \Str::slug($request -> name);
+            $slug = \Str::slug($request->name);
             $major->update([
-                'name' => $request -> name,
+                'name' => $request->name,
                 'slug' => $slug,
             ]);
 
@@ -100,8 +96,7 @@ class Majorcontroller extends Controller
                     'payload' => $major
                 ]
             );
-        }catch(\Throwable $h)
-        {
+        } catch (\Throwable $h) {
             return response()->json(
                 [
                     'status' => false,
@@ -116,8 +111,8 @@ class Majorcontroller extends Controller
         try {
 
             $major = Major::find($id);
-            $this -> checkMajor($major);
-            $major -> delete();
+            $this->checkMajor($major);
+            $major->delete();
 
             return response()->json(
                 [
@@ -125,9 +120,7 @@ class Majorcontroller extends Controller
                     'payload' => 'Thành công'
                 ]
             );
-
-        }catch(\Throwable $h)
-        {
+        } catch (\Throwable $h) {
             return response()->json(
                 [
                     'status' => false,
@@ -139,7 +132,7 @@ class Majorcontroller extends Controller
 
     public function checkMajor($major)
     {
-        if(!$major)  return response()->json(
+        if (!$major)  return response()->json(
             [
                 'status' => false,
                 'payload' => ' Không tìm thấy chuyên ngành !'

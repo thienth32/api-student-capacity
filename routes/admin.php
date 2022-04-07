@@ -84,6 +84,11 @@ Route::prefix('majors')->group(function () {
     Route::post('store', [MajorController::class, 'store'])->name('admin.major.store');
 
     Route::delete('{slug}', [MajorController::class, 'destroy'])->name('admin.major.destroy');
+
+    Route::prefix('list-soft-deletes')->group(function () {
+        Route::get('', [MajorController::class, 'listRecordSoftDeletes'])->name('admin.major.list.soft.deletes');
+        Route::get('{slug}/delete', [MajorController::class, 'permanently_deleted'])->name('admin.major.soft.deletes');
+    });
 });
 
 Route::prefix('judges')->group(function () {
