@@ -52,7 +52,9 @@ class RoundController extends Controller
                 $key = 'year';
             };
 
-            $data = $this->round::search(request('q') ?? null, ['name', 'description'])
+            $data = $this->round::when(request()->has('round_soft_delete'), function ($q) {
+                return $q->onlyTrashed();
+            })->search(request('q') ?? null, ['name', 'description'])
                 ->sort((request('sort') == 'desc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'rounds')
                 ->hasDateTimeBetween('start_time', request('start_time') ?? null, request('end_time') ?? null)
                 ->hasSubTime(
@@ -379,6 +381,35 @@ class RoundController extends Controller
         if (!($round = $this->round::with(['contest', 'type_exam', 'judges', 'teams'])->where('id', $id)->first())) return abort(404);
         return view('pages.round.detail.detail', ['round' => $round]);
     }
+
+    public function softDelete()
+    {
+        $listRoundSofts = $this->getList()->paginate(request('limit') ?? 5);
+        return view('pages.round.round-soft-delete', [
+            'listRoundSofts' => $listRoundSofts
+        ]);
+    }
+
+    public function backUpRound($id)
+    {
+        try {
+            $this->round::withTrashed()->where('id', $id)->restore();
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            return abort(404);
+        }
+    }
+
+    public function deleteRound($id)
+    {
+        try {
+            $this->round::withTrashed()->where('id', $id)->forceDelete();
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            return abort(404);
+        }
+    }
+
     public function roundDetailTeam($id)
     {
         $round = Round::find($id);
