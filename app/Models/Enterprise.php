@@ -21,7 +21,7 @@ class Enterprise extends Model
     }
     public function donors()
     {
-        return $this->belongsToMany(Contest::class, 'donors', 'contest_id', 'enterprise_id');
+        return $this->belongsToMany(Contest::class, 'donors');
     }
     use HasFactory;
 }

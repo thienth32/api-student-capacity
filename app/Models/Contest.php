@@ -23,7 +23,6 @@ class Contest extends Model
     protected $appends = [
         'slug_name',
     ];
-
     public static function boot()
     {
         parent::boot();
