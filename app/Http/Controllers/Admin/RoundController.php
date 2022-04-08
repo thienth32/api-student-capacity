@@ -132,7 +132,7 @@ class RoundController extends Controller
             $request->all(),
             [
                 'name' => 'required|max:255',
-                'image' => 'required|required|mimes:jpeg,png,jpg|max:10000',
+                'image' => 'required|mimes:jpeg,png,jpg|max:10000',
                 'start_time' => 'required',
                 'end_time' => 'required|after:start_time',
                 'description' => 'required',
@@ -147,7 +147,7 @@ class RoundController extends Controller
                 'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
                 'start_time.required' => 'Chưa nhập trường này !',
                 'end_time.required' => 'Chưa nhập trường này !',
-                'end_time.after' => 'Thời gian kết thúc không được bằng thời gian bắt đầu !',
+                'end_time.after' => 'Thời gian kết thúc không được nhỏ hơn  thời gian bắt đầu !',
                 'description.required' => 'Chưa nhập trường này !',
                 'contest_id.required' => 'Chưa nhập trường này !',
                 'contest_id.numeric' => 'Sai định dạng !',
@@ -230,13 +230,13 @@ class RoundController extends Controller
                     'type_exam_id' => "required",
                 ],
                 [
-                    "name.required" => "Tường name không bỏ trống !",
-                    "start_time.required" => "Tường thời gian bắt đầu  không bỏ trống !",
-                    "end_time.required" => "Tường thời gian kết thúc không bỏ trống !",
-                    "end_time.after" => "Tường thời gian kết thúc không nhỏ hơn trường bắt đầu  !",
-                    "description.required" => "Tường mô tả không bỏ trống !",
-                    "contest_id.required" => "Tường cuộc thi tồn tại !",
-                    "type_exam_id.required" => "Tường loại thi không tồn tại !",
+                    "name.required" => "Trường name không bỏ trống !",
+                    "start_time.required" => "Trường thời gian bắt đầu  không bỏ trống !",
+                    "end_time.required" => "Trường thời gian kết thúc không bỏ trống !",
+                    "end_time.after" => "Trường thời gian kết thúc không nhỏ hơn trường bắt đầu  !",
+                    "description.required" => "Trường mô tả không bỏ trống !",
+                    "contest_id.required" => "Trường cuộc thi tồn tại !",
+                    "type_exam_id.required" => "Trường loại thi không tồn tại !",
                 ]
             );
 
