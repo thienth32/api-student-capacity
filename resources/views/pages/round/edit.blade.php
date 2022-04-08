@@ -26,7 +26,7 @@
                                 <div class="form-group mb-10">
                                     <label for="">Thời gian bắt đầu</label>
                                     <input value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime($round['start_time'])) }}"
-                                        type="datetime-local" max="" name="start_time" class="form-control"
+                                        type="datetime-local" id="begin" max="" name="start_time" class="form-control"
                                         placeholder="">
                                     @error('start_time')
                                         <p class="text-danger">{{ $message }}</p>
@@ -35,7 +35,7 @@
                                 <div class="form-group mb-10">
                                     <label for="">Thời gian kết thúc</label>
                                     <input value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime($round['end_time'])) }}"
-                                        min="" type="datetime-local" name="end_time" id="" class="form-control"
+                                        id="end" min="" type="datetime-local" name="end_time" class="form-control"
                                         placeholder="">
                                     @error('end_time')
                                         <p class="text-danger">{{ $message }}</p>
@@ -161,7 +161,11 @@
     </div>
 @endsection
 @section('page-script')
+    <script src="assets/js/system/date-after/date-after.js"></script>
     <script src="assets/js/system/round/form.js"></script>
+    <script>
+        dateAfter('input[type=datetime-local]#begin', 'input[type=datetime-local]#end')
+    </script>
     <script src="assets/js/system/validate/validate.js"></script>
 
 @endsection

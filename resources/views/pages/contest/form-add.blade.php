@@ -54,7 +54,7 @@
                         Session::forget('error');
                     @endphp
                 @endif
-                <form id="formAddContest" action="{{ route('admin.contest.store') }}" method="post"
+                <form id="formContest" action="{{ route('admin.contest.store') }}" method="post"
                     enctype="multipart/form-data">
                     @csrf
                     <div class="form-group mb-10">
@@ -72,16 +72,16 @@
 
                                 <div class="form-group mb-10">
                                     <label for="">Thời gian bắt đầu</label>
-                                    <input value="{{ old('date_start') }}" type="datetime-local" max="" name="date_start"
-                                        class="form-control" placeholder="">
+                                    <input max="" id="begin" value="{{ old('date_start') }}" type="datetime-local"
+                                        name="date_start" class="form-control" placeholder="">
                                     @error('date_start')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="form-group mb-10">
                                     <label for="">Thời gian kết thúc</label>
-                                    <input value="{{ old('register_deadline') }}" min="" type="datetime-local"
-                                        name="register_deadline" id="" class="form-control" placeholder="">
+                                    <input min="" value="{{ old('register_deadline') }}" type="datetime-local"
+                                        name="register_deadline" id="end" class="form-control" placeholder="">
                                     @error('register_deadline')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
@@ -152,21 +152,7 @@
                                 </div>
                             </div>
                         </div>
-                        {{-- <div class="form-group mb-10">
 
-                            <label for="" class="form-label">Thuộc cuộc thi</label>
-                            <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
-                                data-hide-search="false" tabindex="-1" aria-hidden="true" name="contest_id"
-                                value="{{ old('contest_id') }}">
-                                @foreach ($contests as $contest)
-                                    <option value="{{ $contest->id }}"> {{ $contest->name }}</option>
-                                @endforeach
-                            </select>
-
-                            @error('contest_id')
-                                <p class="text-danger">{{ $message }}</p>
-                            @enderror
-                        </div> --}}
                         <div class="form-group mb-10">
 
                             <label for="" class="form-label">Thuộc chuyên ngành</label>
@@ -205,14 +191,20 @@
 @endsection
 
 @section('page-script')
+
+
+    <script src="assets/js/system/date-after/date-after.js"></script>
     <script src="assets/js/system/contest/form.js"></script>
     <script>
         rules.img = {
             required: true,
         };
+
         messages.img = {
             required: 'Chưa nhập trường này !',
         };
+
+        dateAfter('input[type=datetime-local]#begin', 'input[type=datetime-local]#end')
     </script>
 
     <script src="assets/js/system/validate/validate.js"></script>

@@ -24,8 +24,8 @@
 
                                 <div class="form-group mb-10">
                                     <label for="">Thời gian bắt đầu</label>
-                                    <input type="datetime-local" value="{{ old('start_time') }}" name="start_time"
-                                        class="form-control " placeholder="">
+                                    <input id="begin" max="" type="datetime-local" value="{{ old('start_time') }}"
+                                        name="start_time" class="form-control " placeholder="">
                                     @error('start_time')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
@@ -33,10 +33,9 @@
                                 <div class="form-group mb-10">
 
                                     <label for="">Thời gian kết thúc</label>
-                                    <input type="datetime-local" name="end_time" value="{{ old('end_time') }}"
-                                        class="form-control  " placeholder="Pick date rage" />
-
-
+                                    <input id="end" min="" type="datetime-local" name="end_time"
+                                        value="{{ old('end_time') }}" class="form-control  "
+                                        placeholder="Pick date rage" />
                                     @error('end_time')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
@@ -160,14 +159,17 @@
 @endsection
 
 @section('page-script')
+
+    <script src="assets/js/system/date-after/date-after.js"></script>
+    <script src="assets/js/system/round/form.js"></script>
     <script>
         rules.image = {
             required: true,
         };
         messages.image = {
-            required: "Chưa nhập trường này !",
-        },
+            required: 'Chưa nhập trường này !',
+        };
+        dateAfter('input[type=datetime-local]#begin', 'input[type=datetime-local]#end')
     </script>
-    <script src="assets/js/system/round/form.js"></script>
     <script src="assets/js/system/validate/validate.js"></script>
 @endsection

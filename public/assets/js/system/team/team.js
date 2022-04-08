@@ -20,7 +20,6 @@ const teamPage = {
                                 <li><a data-id_user='${val.id}' data-email_user='${val.email}' class="addUserArray dropdown-item py-5" href="javascript:void()">${val.email}</a></li>
                             `;
                         });
-                        toastr.success('Tìm kiếm thành công !!')
                         $('input#searchUserValue').val();
                         $('#resultUserSearch').html(_html);
                     }

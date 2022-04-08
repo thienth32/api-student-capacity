@@ -5,8 +5,8 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
-                <form id="formAddContest" action="{{ route('admin.contest.update', ['id' => $Contest->id]) }}"
-                    method="post" enctype="multipart/form-data">
+                <form id="formContest" action="{{ route('admin.contest.update', ['id' => $Contest->id]) }}" method="post"
+                    enctype="multipart/form-data">
                     @csrf
                     @method('put')
                     <div class="form-group mb-10">
@@ -24,7 +24,7 @@
                                 <div class="form-group mb-10">
                                     <label for="">Thời gian bắt đầu</label>
                                     <input value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime($Contest->date_start)) }}"
-                                        type="datetime-local" max="" name="date_start" class="form-control"
+                                        type="datetime-local" id="begin" max="" name="date_start" class="form-control"
                                         placeholder="">
 
                                     @error('date_start')
@@ -35,8 +35,8 @@
                                     <label for="">Thời gian kết thúc</label>
                                     <input
                                         value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime($Contest->register_deadline)) }}"
-                                        min="" type="datetime-local" name="register_deadline" id="" class="form-control"
-                                        placeholder="">
+                                        min="" type="datetime-local" name="register_deadline" id="end"
+                                        class="form-control" placeholder="">
                                     @error('register_deadline')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
@@ -159,6 +159,10 @@
 
 @endsection
 @section('page-script')
+    <script src="assets/js/system/date-after/date-after.js"></script>
     <script src="assets/js/system/contest/form.js"></script>
+    <script>
+        dateAfter('input[type=datetime-local]#begin', 'input[type=datetime-local]#end')
+    </script>
     <script src="assets/js/system/validate/validate.js"></script>
 @endsection
