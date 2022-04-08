@@ -131,7 +131,7 @@ class RoundController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'name' => 'required|max:255',
+                'name' => 'required|unique:rounds|max:255',
                 'image' => 'required|required|mimes:jpeg,png,jpg|max:10000',
                 'start_time' => 'required',
                 'end_time' => 'required|after:start_time',
@@ -142,6 +142,7 @@ class RoundController extends Controller
             [
                 'name.required' => 'Chưa nhập trường này !',
                 'name.max' => 'Độ dài kí tự không phù hợp !',
+                'name.unique' => 'Đã tồn tại trong cơ sở dữ liệu !',
                 'image.mimes' => 'Sai định dạng !',
                 'image.required' => 'Chưa nhập trường này !',
                 'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
@@ -222,7 +223,7 @@ class RoundController extends Controller
             $validator = Validator::make(
                 request()->all(),
                 [
-                    'name' => "required",
+                    'name' => "required|unique:rounds|max:255",
                     'start_time' => "required",
                     'end_time' => "required|after:start_time",
                     'description' => "required",
@@ -231,6 +232,8 @@ class RoundController extends Controller
                 ],
                 [
                     "name.required" => "Tường name không bỏ trống !",
+                    'name.max' => 'Độ dài kí tự không phù hợp !',
+                    'name.unique' => 'Đã tồn tại trong cơ sở dữ liệu !',
                     "start_time.required" => "Tường thời gian bắt đầu  không bỏ trống !",
                     "end_time.required" => "Tường thời gian kết thúc không bỏ trống !",
                     "end_time.after" => "Tường thời gian kết thúc không nhỏ hơn trường bắt đầu  !",
