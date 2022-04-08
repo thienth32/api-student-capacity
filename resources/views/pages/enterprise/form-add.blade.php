@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title', 'Danh sách vòng thi ')
+@section('title', 'thêm doanh nghiệp ')
 @section('content')
     <div class="card card-flush p-4">
         <div class="row">

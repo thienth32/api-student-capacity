@@ -24,6 +24,7 @@ class TeamController extends Controller
         $orderBy = $request->has('orderBy') ? $request->orderBy : 'id';
 
         $sortBy = $request->has('sortBy') ? $request->sortBy : "desc";
+
         $query = Team::where('name', 'like', "%$keyword%");
         if ($contest != null) {
             $query->where('contest_id', $contest);
@@ -70,14 +71,14 @@ class TeamController extends Controller
         $dataTeam = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
         $dataTeam->load('members');
 
-//        foreach($dataTeam as $team){
-//             foreach($team->members as $member){
-// foreach( $member->user as $user){
-// var_dump($user->name);
-// }
-//             }
-//        }
-//        die;
+        //        foreach($dataTeam as $team){
+        //             foreach($team->members as $member){
+        // foreach( $member->user as $user){
+        // var_dump($user->name);
+        // }
+        //             }
+        //        }
+        //        die;
         return view('teams.listTeam', [
             'dataTeam' => $dataTeam,
             'Contest' => $Contest
@@ -162,6 +163,6 @@ class TeamController extends Controller
             ]);
         }
     }
+
+
 }
-
-

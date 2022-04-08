@@ -46,7 +46,12 @@ Route::prefix('teams')->group(function () {
     Route::post('form-add-save', [TeamController::class, 'store'])->name('admin.teams.store');
     Route::get('form-edit/{id}', [TeamController::class, 'edit'])->name('admin.teams.edit');
     Route::put('form-edit-save/{id}', [TeamController::class, 'update'])->name('admin.teams.update');
+
+    Route::get('team-soft-delete', [TeamController::class, 'softDelete'])->name('admin.team.soft.delete');
+    Route::get('team-soft-delete/{id}/backup', [TeamController::class, 'backUpTeam'])->name('admin.team.soft.backup');
+    Route::get('team-soft-delete/{id}/delete', [TeamController::class, 'destroy'])->name('admin.team.soft.destroy');
 });
+
 Route::prefix('users')->group(function () {
     Route::post('team-user-search', [UserController::class, 'TeamUserSearch'])->name('admin.user.TeamUserSearch');
 });
@@ -81,6 +86,10 @@ Route::prefix('enterprise')->group(function () {
     Route::get('form-add', [EnterpriseController::class, 'create'])->name('admin.enterprise.create');
     Route::post('form-add-save', [EnterpriseController::class, 'store'])->name('admin.enterprise.store');
     Route::delete('{id}', [EnterpriseController::class, 'destroy'])->name('admin.enterprise.destroy');
+
+    Route::get('enterprise-soft-delete', [EnterpriseController::class, 'softDelete'])->name('admin.enterprise.soft.delete');
+    Route::get('enterprise-soft-delete/{id}/backup', [EnterpriseController::class, 'backUpEnterprise'])->name('admin.enterprise.soft.backup');
+    Route::get('enterprise-soft-delete/{id}/delete', [EnterpriseController::class, 'delete'])->name('admin.enterprise.soft.destroy');
 });
 
 Route::prefix('majors')->group(function () {

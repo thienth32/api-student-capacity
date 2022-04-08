@@ -27,8 +27,13 @@ class TeamController extends Controller
         $contest = $request->has('contest') ? $request->contest : null;
         $orderBy = $request->has('orderBy') ? $request->orderBy : 'id';
         $timeDay = $request->has('day') ? $request->day : Null;
-
         $sortBy = $request->has('sortBy') ? $request->sortBy : "desc";
+        $softDelete = $request->has('team_soft_delete') ? $request->team_soft_delete : null;
+
+        if ($softDelete != null) {
+            $query = Team::onlyTrashed()->where('name', 'like', "%$keyword%")->orderByDesc('deleted_at');
+            return $query;
+        }
         $query = Team::where('name', 'like', "%$keyword%");
         if ($timeDay != null) {
             $current = Carbon::now();
@@ -52,6 +57,13 @@ class TeamController extends Controller
         try {
             $Contest = Contest::orderBy('id', 'DESC')->get();
             $dataTeam = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
+            // foreach ($dataTeam as $key) {
+
+            //     echo '<pre/>';
+            //     var_dump($key->contest->name);
+            // }
+            // die();
+
             DB::commit();
             return view('pages.team.listTeam', compact('dataTeam', 'Contest'));
         } catch (\Throwable $th) {
@@ -254,6 +266,34 @@ class TeamController extends Controller
             return response()->json([
                 "payload" => $ex
             ], 500);
+        }
+    }
+
+    public function softDelete(Request $request)
+    {
+        $listTeamSofts = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
+
+        return view('pages.team.team-soft-delete', compact('listTeamSofts'));
+    }
+    public function backUpTeam($id)
+    {
+        try {
+            Team::withTrashed()->where('id', $id)->restore();
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            return abort(404);
+        }
+    }
+    public function destroy($id)
+    {
+        // dd($id);
+        try {
+            if (!(auth()->user()->hasRole('super admin'))) return false;
+
+            Team::withTrashed()->where('id', $id)->forceDelete();
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            return abort(404);
         }
     }
 }
