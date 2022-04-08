@@ -251,7 +251,8 @@
                                     </button>
 
                                     <!-- Modal -->
-                                    <div style="margin-left:600px;width:800px" class="modal fade " id="deltai_team_{{ $key->id }}" tabindex="-1"
+                                    <div style="margin-left:600px;width:800px" class="modal fade "
+                                        id="deltai_team_{{ $key->id }}" tabindex="-1"
                                         aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
@@ -267,21 +268,18 @@
                                                             <img style="width:200px;height:200px"
                                                                 src="{{ Storage::disk('google')->has($key->image)? Storage::disk('google')->url($key->image): 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
                                                                 alt="">
-                                                            <h4 class="mt-3">Ngày Tạo : {{ $key->created_at }}</h4>
+                                                            <h4 class="mt-3">Ngày Tạo : {{ $key->created_at }}
+                                                            </h4>
                                                             <h5>Tham gia cuộc thi :{{ $key->contest->name }}</h5>
                                                         </div>
                                                         <div class="col md-6">
-                                                             <h3>Tên Đội : {{ $key->name }}</h3>
+                                                            <h3>Tên Đội : {{ $key->name }}</h3>
                                                             <h4 class="mt-3"> Danh sách thành viên </h4>
                                                             <ul>
-                                                            @foreach ($key->members as $user)
-
-
-                                                             <li class="pt-3">{{ $user->name }}</li>
-
-
-                                                        @endforeach
-                                                    </ul>
+                                                                @foreach ($key->members as $user)
+                                                                    <li class="pt-3">{{ $user->name }}</li>
+                                                                @endforeach
+                                                            </ul>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -305,9 +303,8 @@
                                     </button>
 
                                     <!-- Modal -->
-                                    <div style="margin:auto" class="modal fade "
-                                        id="exampleModal_{{ $key->id }}" tabindex="-1"
-                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div style="margin:auto" class="modal fade " id="exampleModal_{{ $key->id }}"
+                                        tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -401,11 +398,12 @@
                                             </li>
 
                                             <li class="my-3">
-                                                @hasrole('super admin')
+                                                @hasrole(config('util.ROLE_DELETE'))
                                                     <form action="{{ route('admin.delete.teams', $key->id) }}" method="post">
                                                         @csrf
                                                         @method('delete')
-                                                        <button style=" background: none ; border: none ; list-style : none"
+                                                        <button onclick="return confirm('Bạn có chắc muốn xóa không !')"
+                                                            style=" background: none ; border: none ; list-style : none"
                                                             type="submit">
                                                             <span role="button" class="svg-icon svg-icon-danger svg-icon-2x">
                                                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Trash.svg--><svg

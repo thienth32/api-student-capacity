@@ -160,6 +160,14 @@
 @endsection
 
 @section('page-script')
+    <script>
+        rules.image = {
+            required: true,
+        };
+        messages.image = {
+            required: "Chưa nhập trường này !",
+        },
+    </script>
     <script src="assets/js/system/round/form.js"></script>
     <script src="assets/js/system/validate/validate.js"></script>
 @endsection

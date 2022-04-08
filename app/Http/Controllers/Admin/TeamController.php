@@ -67,7 +67,7 @@ class TeamController extends Controller
     public function deleteTeam(Request $request, $id)
     {
         try {
-            if (!(auth()->user()->hasRole('super admin'))) return false;
+            if (!(auth()->user()->hasRole(config('util.ROLE_DELETE')))) return false;
             DB::transaction(function () use ($id) {
                 if (!($data = Team::find($id))) return false;
                 if (Storage::disk('google')->has($data->image)) Storage::disk('google')->delete($data->image);

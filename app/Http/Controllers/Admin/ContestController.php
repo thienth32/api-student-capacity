@@ -210,7 +210,7 @@ class ContestController extends Controller
     public function destroy($id)
     {
         try {
-            if (!(auth()->user()->hasRole('super admin'))) return abort(404);
+            if (!(auth()->user()->hasRole(config('util.ROLE_DELETE')))) return abort(404);
             DB::transaction(function () use ($id) {
                 $contest = $this->contest::find($id);
                 if (Storage::disk('google')->has($contest->image)) Storage::disk('google')->delete($contest->image);

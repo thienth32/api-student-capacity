@@ -7,7 +7,7 @@
 
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('admin.round.list') }}">Round</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.round.list') }}">Vòng thi</a></li>
                 <li class="breadcrumb-item disable" aria-current="page">Backup
                     <span role="button" class="refresh-btn svg-icon svg-icon-primary svg-icon-2x">
                         <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Update.svg--><svg
@@ -158,8 +158,8 @@
 
                                                 </li>
                                                 <li class="my-3">
-                                                    @hasrole('super admin')
-                                                        <a
+                                                    @hasrole(config('util.ROLE_DELETE'))
+                                                        <a onclick="return confirm('Bạn có chắc muốn xóa không !')"
                                                             href="{{ route('admin.round.soft.destroy', ['id' => $listRoundSoft->id]) }}">
                                                             <span role="button" class="svg-icon svg-icon-danger svg-icon-2x">
                                                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Trash.svg--><svg

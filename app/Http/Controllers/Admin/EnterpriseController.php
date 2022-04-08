@@ -43,11 +43,11 @@ class EnterpriseController extends Controller
 
             $Enterprise = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
 
-//          foreach($Enterprise[0]->enterprise as $item){
-//              echo '<pre>';
-// var_dump($item);
-//          };
-//          die();
+            //          foreach($Enterprise[0]->enterprise as $item){
+            //              echo '<pre>';
+            // var_dump($item);
+            //          };
+            //          die();
             return view('pages.enterprise.index', compact('Enterprise', 'contest'));
         }
         $listEnterprise = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
@@ -56,7 +56,7 @@ class EnterpriseController extends Controller
     public function destroy($id)
     {
         try {
-            if (!(auth()->user()->hasRole('super admin'))) return false;
+            if (!(auth()->user()->hasRole(config('util.ROLE_DELETE')))) return false;
             DB::transaction(function () use ($id) {
                 if (!($data = Enterprise::find($id))) return false;
                 if (Storage::disk('google')->has($data->logo)) Storage::disk('google')->delete($data->logo);

@@ -60,6 +60,8 @@ function checkUrlOut(key, value, valueAdd = "") {
 function loadTast() {
     toastr.info("Chương trình đang chạy ...");
 }
+// console.log("Start time ", url);
+
 // Page
 const formatPage = {
     refresh: function () {
@@ -116,8 +118,10 @@ const formatPage = {
         $("#kt_daterangepicker_2").daterangepicker(
             {
                 timePicker: true,
-                startDate: moment(),
-                endDate: moment(),
+                startDate: moment(start_time).format("DD/MM/YYYY hh:mm:ss A"),
+                endDate: moment(end_time).format("DD/MM/YYYY hh:mm:ss A"),
+                // startDate: moment(),
+                // endDate: moment(),
                 locale: {
                     format: "DD/MM/YYYY hh:mm:ss A",
                 },

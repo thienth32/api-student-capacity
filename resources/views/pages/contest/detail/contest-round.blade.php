@@ -396,13 +396,14 @@
 
                                                 </li>
                                                 <li class="my-3">
-                                                    @hasrole('super admin')
+                                                    @hasrole(config('util.ROLE_DELETE'))
                                                         <form
                                                             action="{{ route('admin.round.destroy', ['id' => $round->id]) }}"
                                                             method="post">
                                                             @csrf
                                                             @method('delete')
-                                                            <button style=" background: none ; border: none ; list-style : none"
+                                                            <button onclick="return confirm('Bạn có chắc muốn xóa không !')"
+                                                                style=" background: none ; border: none ; list-style : none"
                                                                 type="submit">
                                                                 <span role="button"
                                                                     class="svg-icon svg-icon-danger svg-icon-2x">

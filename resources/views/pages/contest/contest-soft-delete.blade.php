@@ -156,8 +156,8 @@
 
                                                 </li>
                                                 <li class="my-3">
-                                                    @hasrole('super admin')
-                                                        <a
+                                                    @hasrole(config('util.ROLE_DELETE'))
+                                                        <a onclick="return confirm('Bạn có chắc muốn xóa không !')"
                                                             href="{{ route('admin.contest.soft.destroy', ['id' => $listContestSoft->id]) }}">
                                                             <span role="button" class="svg-icon svg-icon-danger svg-icon-2x">
                                                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Trash.svg--><svg

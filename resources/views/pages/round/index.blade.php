@@ -3,7 +3,7 @@
 @section('page-title', 'Danh sách vòng thi')
 @section('content')
 
-
+    {{-- {{ dd(\Carbon\Carbon::parse(request('start_time'))->format('m/d/Y h:i:s A')) }} --}}
     <div class="card card-flush p-4">
         <h1>Quản lý vòng thi
             <span role="button" class="refresh-btn svg-icon svg-icon-primary svg-icon-2x">
@@ -432,12 +432,13 @@
 
                                         </li>
                                         <li class="my-3">
-                                            @hasrole('admin')
+                                            @hasrole(config('util.ROLE_DELETE'))
                                                 <form action="{{ route('admin.round.destroy', ['id' => $round->id]) }}"
                                                     method="post">
                                                     @csrf
                                                     @method('delete')
-                                                    <button style=" background: none ; border: none ; list-style : none"
+                                                    <button onclick="return confirm('Bạn có chắc muốn xóa không !')"
+                                                        style=" background: none ; border: none ; list-style : none"
                                                         type="submit">
                                                         <span role="button" class="svg-icon svg-icon-danger svg-icon-2x">
                                                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Trash.svg--><svg
@@ -501,6 +502,10 @@
         let url = '/admin/rounds?';
         const _token = "{{ csrf_token() }}";
         const sort = '{{ request()->has('sort') ? (request('sort') == 'desc' ? 'asc' : 'desc') : 'asc' }}';
+        const start_time =
+            '{{ request()->has('start_time')? \Carbon\Carbon::parse(request('start_time'))->format('m/d/Y h:i:s A'): \Carbon\Carbon::now()->format('m/d/Y h:i:s A') }}'
+        const end_time =
+            '{{ request()->has('end_time')? \Carbon\Carbon::parse(request('end_time'))->format('m/d/Y h:i:s A'): \Carbon\Carbon::now()->format('m/d/Y h:i:s A') }}'
     </script>
     <script src="assets/js/system/formatlist/formatlis.js"></script>
     <script src="assets/js/system/round/round.js"></script>
