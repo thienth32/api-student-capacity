@@ -8,9 +8,11 @@ use App\Services\Builder\Builder;
 use App\Services\Traits\TGetAttributeColumn;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Contest extends Model
 {
+    use SoftDeletes;
     use HasFactory, TGetAttributeColumn;
     protected $table = 'contests';
     protected $casts = [
@@ -21,16 +23,14 @@ class Contest extends Model
     protected $appends = [
         'slug_name',
     ];
-
     public static function boot()
     {
-
         parent::boot();
-
         static::deleting(function ($q) {
             $q->teams()->delete();
             $q->rounds()->delete();
             $q->enterprise()->detach();
+            $q->judges()->detach();
         });
     }
 
@@ -49,6 +49,10 @@ class Contest extends Model
     public function major()
     {
         return $this->belongsTo(Major::class, 'major_id');
+    }
+    public function judges() // Giám khảo
+    {
+        return $this->belongsToMany(User::class, 'judges', 'contest_id', 'user_id');
     }
     public function rounds()
     {

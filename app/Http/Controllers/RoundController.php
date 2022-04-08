@@ -52,6 +52,15 @@ class RoundController extends Controller
         } {
             $round->load('contest');
             $round->load('type_exam');
+            $round->load(['teams' => function ($q) {
+                return $q->with([
+                    'teams' => function ($q) {
+                        return $q->with('members');
+                    }
+                ]);
+            }]);
+
+
             return response()->json(['payload' => $round], 200);
         }
     }

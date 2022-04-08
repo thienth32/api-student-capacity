@@ -3,7 +3,7 @@
 @section('page-title', 'Danh sách vòng thi')
 @section('content')
 
-
+    {{-- {{ dd(\Carbon\Carbon::parse(request('start_time'))->format('m/d/Y h:i:s A')) }} --}}
     <div class="card card-flush p-4">
         <h1>Quản lý vòng thi
             <span role="button" class="refresh-btn svg-icon svg-icon-primary svg-icon-2x">
@@ -19,6 +19,25 @@
                 </svg>
                 <!--end::Svg Icon-->
             </span>
+            <a href="{{ route('admin.round.soft.delete', 'round_soft_delete=1') }}">
+
+                <span class=" svg-icon svg-icon-primary svg-icon-2x">
+                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Files/Deleted-folder.svg--><svg
+                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                        height="24px" viewBox="0 0 24 24" version="1.1">
+                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <rect x="0" y="0" width="24" height="24" />
+                            <path
+                                d="M3.5,21 L20.5,21 C21.3284271,21 22,20.3284271 22,19.5 L22,8.5 C22,7.67157288 21.3284271,7 20.5,7 L10,7 L7.43933983,4.43933983 C7.15803526,4.15803526 6.77650439,4 6.37867966,4 L3.5,4 C2.67157288,4 2,4.67157288 2,5.5 L2,19.5 C2,20.3284271 2.67157288,21 3.5,21 Z"
+                                fill="#000000" opacity="0.3" />
+                            <path
+                                d="M10.5857864,14 L9.17157288,12.5857864 C8.78104858,12.1952621 8.78104858,11.5620972 9.17157288,11.1715729 C9.56209717,10.7810486 10.1952621,10.7810486 10.5857864,11.1715729 L12,12.5857864 L13.4142136,11.1715729 C13.8047379,10.7810486 14.4379028,10.7810486 14.8284271,11.1715729 C15.2189514,11.5620972 15.2189514,12.1952621 14.8284271,12.5857864 L13.4142136,14 L14.8284271,15.4142136 C15.2189514,15.8047379 15.2189514,16.4379028 14.8284271,16.8284271 C14.4379028,17.2189514 13.8047379,17.2189514 13.4142136,16.8284271 L12,15.4142136 L10.5857864,16.8284271 C10.1952621,17.2189514 9.56209717,17.2189514 9.17157288,16.8284271 C8.78104858,16.4379028 8.78104858,15.8047379 9.17157288,15.4142136 L10.5857864,14 Z"
+                                fill="#000000" />
+                        </g>
+                    </svg>
+                    <!--end::Svg Icon-->
+                </span>
+            </a>
         </h1>
         <div class="row card-format">
 
@@ -27,7 +46,7 @@
                 <div class="form-group p-2">
                     <label>Cuộc thi </label>
                     <select id="select-contest" class="form-control form-control-solid">
-                        <option>-- Cuộc thi --</option>
+                        <option value="0">-- Cuộc thi --</option>
                         @forelse ($contests as $contest)
                             <option @selected(request('contest_id') == $contest->id) value="{{ $contest->id }}">{{ $contest->name }}
                             </option>
@@ -39,14 +58,14 @@
             </div>
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="  form-group p-2">
-                    <label>Loại vòng thi </label>
+                    <label>Kiểu thi </label>
                     <select id="select-type-exam" class="form-control form-control-solid">
-                        <option>-- Loại vòng thi --</option>
+                        <option value="0">-- Kiểu thi --</option>
                         @forelse ($type_exams as $type_exam)
                             <option @selected(request('type_exam_id') == $type_exam->id) value="{{ $type_exam->id }}">{{ $type_exam->name }}
                             </option>
                         @empty
-                            <option>-- Không có loại vòng thi --</option>
+                            <option>-- Không có kiểu thi --</option>
                         @endforelse
                     </select>
                 </div>
@@ -54,7 +73,7 @@
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="  form-group p-2">
                     <label>Tìm kiếm </label>
-                    <input type="text" value="{{ request('q') ?? '' }}" placeholder="Tìm kiếm ... "
+                    <input type="text" value="{{ request('q') ?? '' }}" placeholder="'*Enter' tìm kiếm ..."
                         class=" ip-search form-control">
                 </div>
             </div>
@@ -71,12 +90,23 @@
                     <label for="" class="label">Khoảng thời gian </label>
                     <select class="select-date-serach form-control">
                         <option class="form-control">---- Thời gian ----</option>
-
-                        <option class="form-control" @selected(request('day') == 7) value="day-7">7 Ngày </option>
-                        <option class="form-control" @selected(request('day') == 15) value="day-15">15 Ngày </option>
-                        <option class="form-control" @selected(request('month') == 1) value="month-1">1 Tháng </option>
-                        <option class="form-control" @selected(request('month') == 6) value="month-6">6 Tháng </option>
-                        <option class="form-control" @selected(request('year') == 1) value="year-1">1 Năm</option>
+                        <option class="form-control" @selected(request('day') == 7 && request('op_time') == 'add') value="add-day-7">7 Ngày tới </option>
+                        <option class="form-control" @selected(request('day') == 15 && request('op_time') == 'add') value="add-day-15">15 Ngày tới </option>
+                        <option class="form-control" @selected(request('month') == 1 && request('op_time') == 'add') value="add-month-1">1 Tháng tới
+                        </option>
+                        <option class="form-control" @selected(request('month') == 6 && request('op_time') == 'add') value="add-month-6">6 Tháng tới
+                        </option>
+                        <option class="form-control" @selected(request('year') == 1 && request('op_time') == 'add') value="add-year-1">1 Năm tới </option>
+                        <option class="form-control" disabled> </option>
+                        <option class="form-control" @selected(request('day') == 7 && request('op_time') == 'sub') value="sub-day-7">7 Ngày trước </option>
+                        <option class="form-control" @selected(request('day') == 15 && request('op_time') == 'sub') value="sub-day-15">15 Ngày trước
+                        </option>
+                        <option class="form-control" @selected(request('month') == 1 && request('op_time') == 'sub') value="sub-month-1">1 Tháng trước
+                        </option>
+                        <option class="form-control" @selected(request('month') == 6 && request('op_time') == 'sub') value="sub-month-6">6 Tháng trước
+                        </option>
+                        <option class="form-control" @selected(request('year') == 1 && request('op_time') == 'sub') value="sub-year-1">1 Năm trước
+                        </option>
                     </select>
                 </div>
             </div>
@@ -200,7 +230,7 @@
                             </span>
                         </th>
                         <th scope="col">Cuộc thi </th>
-                        <th scope="col">Loại cuộc thi </th>
+                        <th scope="col">Loại kiểu thi </th>
                         <th scope="col">Thời gian bắt đầu
                             <span role="button" data-key="start_time"
                                 class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
@@ -262,18 +292,34 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+
+                        $total = $rounds->total();
+                    @endphp
                     @forelse ($rounds as $key => $round)
                         <tr>
-                            <th scope="row">
-                                {{ (request()->has('page') && request('page') !== 1 ? $rounds->perPage() * (request('page') - 1) : 0) +$key +1 }}
-                            </th>
-                            <td>{{ $round->name }}</td>
-
+                            @if (request()->has('sort'))
+                                <th scope="row">
+                                    @if (request('sort') == 'desc')
+                                        {{ (request()->has('page') && request('page') !== 1 ? $rounds->perPage() * (request('page') - 1) : 0) +$key +1 }}
+                                    @else
+                                        {{ request()->has('page') && request('page') !== 1? $total - $rounds->perPage() * (request('page') - 1) - $key: ($total -= 1) }}
+                                    @endif
+                                </th>
+                            @else
+                                <th scope="row">
+                                    {{ (request()->has('page') && request('page') !== 1 ? $rounds->perPage() * (request('page') - 1) : 0) +$key +1 }}
+                                </th>
+                            @endif
+                            <td>
+                                <a href="{{ route('admin.round.detail', ['id' => $round->id]) }}">
+                                    {{ $round->name }}
+                                </a>
+                            </td>
                             <td>
 
-                                <button class="p-4" type="button"
-                                    style="background: none ; border : none ; list-style  : none " data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal_{{ $key }}">
+                                <button type="button" style="background: none ; border : none ; list-style  : none "
+                                    data-bs-toggle="modal" data-bs-target="#exampleModal_{{ $key }}">
                                     <span class="svg-icon svg-icon-success svg-icon-2x">
                                         <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Visible.svg--><svg
                                             xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -317,14 +363,15 @@
                                 </div>
 
                             </td>
-                            <td>{{ $round->contest->name }}</td>
-                            <td>{{ $round->type_exam->name }}</td>
+                            <td>{{ $round->contest->name ?? 'Chưa có cuộc thi ' }}</td>
+                            <td>{{ $round->type_exam->name ?? 'Chưa có kiểu cuộc thi' }}</td>
+
                             <td>{{ $round->start_time }}</td>
                             <td>{{ $round->end_time }}</td>
                             <td>
                                 <div class="btn-group dropstart">
-                                    <button type="button" class="btn   btn-sm dropdown-toggle" data-bs-toggle="dropdown"
-                                        aria-expanded="false">
+                                    <button style="padding: 0" type="button" class="btn   btn-sm dropdown-toggle"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
                                         <span class="svg-icon svg-icon-success svg-icon-2x">
                                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Settings-2.svg--><svg
                                                 xmlns="http://www.w3.org/2000/svg"
@@ -340,7 +387,7 @@
                                             <!--end::Svg Icon-->
                                         </span>
                                     </button>
-                                    <ul style="min-width: 17rem;" class="dropdown-menu px-4 ">
+                                    <ul class="dropdown-menu">
                                         <li class="my-3">
                                             <a href="{{ route('admin.round.edit', ['id' => $round->id]) }}">
                                                 <span role="button" class="svg-icon svg-icon-success svg-icon-2x">
@@ -363,37 +410,35 @@
                                             </a>
                                         </li>
                                         <li class="my-3">
-                                            {{-- <a href="javascript:void()" data-bs-toggle="modal"
-                                                data-bs-target="#kt_modal_{{ $round->id }}_{{ $key }}">
-                                                <span class="svg-icon svg-icon-primary svg-icon-2x">
-                                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Communication/Group.svg--><svg
+                                            <a href="{{ route('admin.round.detail', ['id' => $round->id]) }}">
+                                                <span class="svg-icon svg-icon-primary svg-icon-2x ">
+                                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Text/Redo.svg--><svg
                                                         xmlns="http://www.w3.org/2000/svg"
                                                         xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                                                         height="24px" viewBox="0 0 24 24" version="1.1">
                                                         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                            <polygon points="0 0 24 0 24 24 0 24" />
+                                                            <rect x="0" y="0" width="24" height="24" />
                                                             <path
-                                                                d="M18,14 C16.3431458,14 15,12.6568542 15,11 C15,9.34314575 16.3431458,8 18,8 C19.6568542,8 21,9.34314575 21,11 C21,12.6568542 19.6568542,14 18,14 Z M9,11 C6.790861,11 5,9.209139 5,7 C5,4.790861 6.790861,3 9,3 C11.209139,3 13,4.790861 13,7 C13,9.209139 11.209139,11 9,11 Z"
-                                                                fill="#000000" fill-rule="nonzero" opacity="0.3" />
-                                                            <path
-                                                                d="M17.6011961,15.0006174 C21.0077043,15.0378534 23.7891749,16.7601418 23.9984937,20.4 C24.0069246,20.5466056 23.9984937,21 23.4559499,21 L19.6,21 C19.6,18.7490654 18.8562935,16.6718327 17.6011961,15.0006174 Z M0.00065168429,20.1992055 C0.388258525,15.4265159 4.26191235,13 8.98334134,13 C13.7712164,13 17.7048837,15.2931929 17.9979143,20.2 C18.0095879,20.3954741 17.9979143,21 17.2466999,21 C13.541124,21 8.03472472,21 0.727502227,21 C0.476712155,21 -0.0204617505,20.45918 0.00065168429,20.1992055 Z"
-                                                                fill="#000000" fill-rule="nonzero" />
+                                                                d="M21.4451171,17.7910156 C21.4451171,16.9707031 21.6208984,13.7333984 19.0671874,11.1650391 C17.3484374,9.43652344 14.7761718,9.13671875 11.6999999,9 L11.6999999,4.69307548 C11.6999999,4.27886191 11.3642135,3.94307548 10.9499999,3.94307548 C10.7636897,3.94307548 10.584049,4.01242035 10.4460626,4.13760526 L3.30599678,10.6152626 C2.99921905,10.8935795 2.976147,11.3678924 3.2544639,11.6746702 C3.26907199,11.6907721 3.28437331,11.7062312 3.30032452,11.7210037 L10.4403903,18.333467 C10.7442966,18.6149166 11.2188212,18.596712 11.5002708,18.2928057 C11.628669,18.1541628 11.6999999,17.9721616 11.6999999,17.7831961 L11.6999999,13.5 C13.6531249,13.5537109 15.0443703,13.6779456 16.3083984,14.0800781 C18.1284272,14.6590944 19.5349747,16.3018455 20.5280411,19.0083314 L20.5280247,19.0083374 C20.6363903,19.3036749 20.9175496,19.5 21.2321404,19.5 L21.4499999,19.5 C21.4499999,19.0068359 21.4451171,18.2255859 21.4451171,17.7910156 Z"
+                                                                fill="#000000" fill-rule="nonzero"
+                                                                transform="translate(12.254964, 11.721538) scale(-1, 1) translate(-12.254964, -11.721538) " />
                                                         </g>
                                                     </svg>
                                                     <!--end::Svg Icon-->
                                                 </span>
-                                                Ban giám khảo
-                                            </a> --}}
+                                                Chi tiết
+                                            </a>
 
 
                                         </li>
                                         <li class="my-3">
-                                            @hasrole('super admin')
+                                            @hasrole(config('util.ROLE_DELETE'))
                                                 <form action="{{ route('admin.round.destroy', ['id' => $round->id]) }}"
                                                     method="post">
                                                     @csrf
                                                     @method('delete')
-                                                    <button style=" background: none ; border: none ; list-style : none"
+                                                    <button onclick="return confirm('Bạn có chắc muốn xóa không !')"
+                                                        style=" background: none ; border: none ; list-style : none"
                                                         type="submit">
                                                         <span role="button" class="svg-icon svg-icon-danger svg-icon-2x">
                                                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Trash.svg--><svg
@@ -456,7 +501,11 @@
     <script>
         let url = '/admin/rounds?';
         const _token = "{{ csrf_token() }}";
-        const sort = '{{ request()->has('sort') ? (request('sort') == 'desc' ? 'asc' : 'desc') : 'desc' }}';
+        const sort = '{{ request()->has('sort') ? (request('sort') == 'desc' ? 'asc' : 'desc') : 'asc' }}';
+        const start_time =
+            '{{ request()->has('start_time')? \Carbon\Carbon::parse(request('start_time'))->format('m/d/Y h:i:s A'): \Carbon\Carbon::now()->format('m/d/Y h:i:s A') }}'
+        const end_time =
+            '{{ request()->has('end_time')? \Carbon\Carbon::parse(request('end_time'))->format('m/d/Y h:i:s A'): \Carbon\Carbon::now()->format('m/d/Y h:i:s A') }}'
     </script>
     <script src="assets/js/system/formatlist/formatlis.js"></script>
     <script src="assets/js/system/round/round.js"></script>

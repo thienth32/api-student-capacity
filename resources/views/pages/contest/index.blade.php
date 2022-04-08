@@ -18,6 +18,25 @@
                 </svg>
                 <!--end::Svg Icon-->
             </span>
+            <a href="{{ route('admin.contest.soft.delete', 'contest_soft_delete=1') }}">
+
+                <span class=" svg-icon svg-icon-primary svg-icon-2x">
+                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Files/Deleted-folder.svg--><svg
+                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                        height="24px" viewBox="0 0 24 24" version="1.1">
+                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <rect x="0" y="0" width="24" height="24" />
+                            <path
+                                d="M3.5,21 L20.5,21 C21.3284271,21 22,20.3284271 22,19.5 L22,8.5 C22,7.67157288 21.3284271,7 20.5,7 L10,7 L7.43933983,4.43933983 C7.15803526,4.15803526 6.77650439,4 6.37867966,4 L3.5,4 C2.67157288,4 2,4.67157288 2,5.5 L2,19.5 C2,20.3284271 2.67157288,21 3.5,21 Z"
+                                fill="#000000" opacity="0.3" />
+                            <path
+                                d="M10.5857864,14 L9.17157288,12.5857864 C8.78104858,12.1952621 8.78104858,11.5620972 9.17157288,11.1715729 C9.56209717,10.7810486 10.1952621,10.7810486 10.5857864,11.1715729 L12,12.5857864 L13.4142136,11.1715729 C13.8047379,10.7810486 14.4379028,10.7810486 14.8284271,11.1715729 C15.2189514,11.5620972 15.2189514,12.1952621 14.8284271,12.5857864 L13.4142136,14 L14.8284271,15.4142136 C15.2189514,15.8047379 15.2189514,16.4379028 14.8284271,16.8284271 C14.4379028,17.2189514 13.8047379,17.2189514 13.4142136,16.8284271 L12,15.4142136 L10.5857864,16.8284271 C10.1952621,17.2189514 9.56209717,17.2189514 9.17157288,16.8284271 C8.78104858,16.4379028 8.78104858,15.8047379 9.17157288,15.4142136 L10.5857864,14 Z"
+                                fill="#000000" />
+                        </g>
+                    </svg>
+                    <!--end::Svg Icon-->
+                </span>
+            </a>
         </h1>
         {{--  --}}
 
@@ -27,7 +46,7 @@
                 <div class="   form-group p-2">
                     <label>Chuyên ngành </label>
                     <select id="select-major" class="form-control form-control-solid">
-                        <option>-- Chuyên ngành --</option>
+                        <option value="0">-- Chuyên ngành --</option>
                         @forelse ($majors as $major)
                             <option @selected(request('major_id') == $major->id) value="{{ $major->id }}">{{ $major->name }}
                             </option>
@@ -41,7 +60,7 @@
                 <div class="   form-group p-2">
                     <label>Tình trạng </label>
                     <select id="select-status" class="form-control form-control-solid">
-                        <option @selected(!request()->has('status'))>-- Tình trạng --</option>
+                        <option value="0" @selected(!request()->has('status'))>-- Tình trạng --</option>
                         <option @selected(request('status') == 1) value="1">Kích họat
                         </option>
                         <option @selected(request()->has('status') && request('status') == 0) value="0">Không kích hoạt
@@ -53,7 +72,7 @@
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="  form-group p-2">
                     <label>Tìm kiếm </label>
-                    <input type="text" value="{{ request('q') ?? '' }}" placeholder="Tìm kiếm ... "
+                    <input type="text" value="{{ request('q') ?? '' }}" placeholder="'*Enter' tìm kiếm ..."
                         class=" ip-search form-control">
                 </div>
             </div>
@@ -266,12 +285,29 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+                        $total = $contests->total();
+                    @endphp
                     @forelse ($contests as $key => $contest)
                         <tr>
-                            <th scope="row">
-                                {{ (request()->has('page') && request('page') !== 1 ? $contests->perPage() * (request('page') - 1) : 0) +$key +1 }}
-                            </th>
-                            <td>{{ $contest->name }}</td>
+                            @if (request()->has('sort'))
+                                <th scope="row">
+                                    @if (request('sort') == 'desc')
+                                        {{ (request()->has('page') && request('page') !== 1 ? $contests->perPage() * (request('page') - 1) : 0) +$key +1 }}
+                                    @else
+                                        {{ request()->has('page') && request('page') !== 1? $total - $contests->perPage() * (request('page') - 1) - $key: ($total -= 1) }}
+                                    @endif
+                                </th>
+                            @else
+                                <th scope="row">
+                                    {{ (request()->has('page') && request('page') !== 1 ? $contests->perPage() * (request('page') - 1) : 0) +$key +1 }}
+                                </th>
+                            @endif
+                            <td>
+                                <a href="{{ route('admin.contest.show', ['id' => $contest->id]) }}">
+                                    {{ $contest->name }}
+                                </a>
+                            </td>
 
                             <td>
 
@@ -321,7 +357,7 @@
                                 </div>
 
                             </td>
-                            <td>{{ $contest->major->name }}</td>
+                            <td>{{ $contest->major->name ?? 'Chưa có chuyên ngành ' }}</td>
                             <td>
 
                                 <div class="form-check form-switch">
@@ -404,12 +440,13 @@
                                             </a>
                                         </li>
                                         <li class="my-3">
-                                            @hasrole('super admin')
+                                            @hasrole(config('util.ROLE_DELETE'))
                                                 <form action="{{ route('admin.contest.destroy', ['id' => $contest->id]) }}"
                                                     method="post">
                                                     @csrf
                                                     @method('delete')
-                                                    <button style=" background: none ; border: none ; list-style : none"
+                                                    <button onclick="return confirm('Bạn có chắc muốn xóa không !')"
+                                                        style=" background: none ; border: none ; list-style : none"
                                                         type="submit">
                                                         <span role="button" class="svg-icon svg-icon-danger svg-icon-2x">
                                                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Trash.svg--><svg
@@ -467,14 +504,18 @@
         </div>
     </div>
 
-
+    \
 
 @endsection
 @section('page-script')
     <script>
         let url = "/admin/contests?";
         const _token = "{{ csrf_token() }}";
-        const sort = '{{ request()->has('sort') ? (request('sort') == 'desc' ? 'asc' : 'desc') : 'desc' }}';
+        const sort = '{{ request()->has('sort') ? (request('sort') == 'desc' ? 'asc' : 'desc') : 'asc' }}';
+        const start_time =
+            '{{ request()->has('start_time')? \Carbon\Carbon::parse(request('start_time'))->format('m/d/Y h:i:s A'): \Carbon\Carbon::now()->format('m/d/Y h:i:s A') }}'
+        const end_time =
+            '{{ request()->has('end_time')? \Carbon\Carbon::parse(request('end_time'))->format('m/d/Y h:i:s A'): \Carbon\Carbon::now()->format('m/d/Y h:i:s A') }}'
     </script>
     <script src="assets/js/system/formatlist/formatlis.js"></script>
     <script src="assets/js/system/contest/contest.js"></script>

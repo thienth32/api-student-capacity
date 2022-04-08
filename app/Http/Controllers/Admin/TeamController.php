@@ -12,8 +12,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Member;
 use App\Models\Result;
 use App\Services\Traits\TUploadImage;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use phpDocumentor\Reflection\Types\Null_;
 
 class TeamController extends Controller
 {
@@ -23,9 +26,19 @@ class TeamController extends Controller
         $keyword = $request->has('keyword') ? $request->keyword : "";
         $contest = $request->has('contest') ? $request->contest : null;
         $orderBy = $request->has('orderBy') ? $request->orderBy : 'id';
-
+        $timeDay = $request->has('day') ? $request->day : Null;
         $sortBy = $request->has('sortBy') ? $request->sortBy : "desc";
+        $softDelete = $request->has('team_soft_delete') ? $request->team_soft_delete : null;
+
+        if ($softDelete != null) {
+            $query = Team::onlyTrashed()->where('name', 'like', "%$keyword%")->orderByDesc('deleted_at');
+            return $query;
+        }
         $query = Team::where('name', 'like', "%$keyword%");
+        if ($timeDay != null) {
+            $current = Carbon::now();
+            $query->where('created_at', '>=', $current->subDays($timeDay));
+        }
         if ($contest != null) {
             $query->where('contest_id', $contest);
         }
@@ -34,59 +47,47 @@ class TeamController extends Controller
         } else {
             $query->orderBy($orderBy);
         }
+        // dd($query->get());
         return $query;
-    }
-
-    // Danh sách teams phía client
-    public function Api_ListTeam(Request $request)
-    {
-        $pageNumber = $request->has('page') ? $request->page : 1;
-        $pageSize = $request->has('pageSize') ? $request->pageSize : config('util.HOMEPAGE_ITEM_TEAM');
-        $offset = ($pageNumber - 1) * $pageSize;
-        $dataTeam = $this->getList($request)->skip($offset)->take($pageSize)->get();
-        $dataTeam->load('members');
-        return response()->json([
-            'status' => true,
-            'payload' => $dataTeam->toArray()
-        ]);
-    }
-    //Api sách team
-    public function ApiContestteams(Request $request)
-    {
-        if ($request->ajax() || 'NULL') {
-            $dataTeam = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
-            return view('pages.team.include.contenTable', compact('dataTeam'));
-        }
     }
     // Danh sách teams phía view
     public function ListTeam(Request $request)
     {
-        if ($request->ajax() || 'NULL') {
+        DB::beginTransaction();
+        try {
             $Contest = Contest::orderBy('id', 'DESC')->get();
             $dataTeam = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
-            $dataTeam->load('members');
+            // foreach ($dataTeam as $key) {
+
+            //     echo '<pre/>';
+            //     var_dump($key->contest->name);
+            // }
+            // die();
+
+            DB::commit();
             return view('pages.team.listTeam', compact('dataTeam', 'Contest'));
-        }
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json([
+                'status' => 'lỗi'
+            ]);
+        };
     }
 
 
     //xóa Teams
     public function deleteTeam(Request $request, $id)
     {
-
-        $dataResult = Result::where('team_id', $id)->get();
-        // return $dataResult;
-        foreach ($dataResult as $valueResult) {
-            Result::destroy($valueResult->id);
-        }
-        if (Team::destroy($id)) {
-            $dataTeam = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
-            return view('pages.team.include.contenTable', compact('dataTeam'));
-        } else {
-            return response()->json([
-                'status' => false,
-
-            ]);
+        try {
+            if (!(auth()->user()->hasRole(config('util.ROLE_DELETE')))) return false;
+            DB::transaction(function () use ($id) {
+                if (!($data = Team::find($id))) return false;
+                if (Storage::disk('google')->has($data->image)) Storage::disk('google')->delete($data->image);
+                $data->delete();
+            });
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            return false;
         }
     }
     // Add team phía client
@@ -265,6 +266,34 @@ class TeamController extends Controller
             return response()->json([
                 "payload" => $ex
             ], 500);
+        }
+    }
+
+    public function softDelete(Request $request)
+    {
+        $listTeamSofts = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
+
+        return view('pages.team.team-soft-delete', compact('listTeamSofts'));
+    }
+    public function backUpTeam($id)
+    {
+        try {
+            Team::withTrashed()->where('id', $id)->restore();
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            return abort(404);
+        }
+    }
+    public function destroy($id)
+    {
+        // dd($id);
+        try {
+            if (!(auth()->user()->hasRole('super admin'))) return false;
+
+            Team::withTrashed()->where('id', $id)->forceDelete();
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            return abort(404);
         }
     }
 }

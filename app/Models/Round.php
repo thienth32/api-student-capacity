@@ -6,10 +6,12 @@ use App\Services\Builder\Builder;
 use App\Services\Traits\TGetAttributeColumn;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 
 class Round extends Model
 {
+    use SoftDeletes;
     use HasFactory, TGetAttributeColumn;
     protected $table = "rounds";
     protected $primaryKey = "id";
@@ -31,7 +33,9 @@ class Round extends Model
 
         parent::boot();
         static::deleting(function ($q) {
-            $q->results()->delete();
+            // $q->results()->delete();
+            $q->teams()->detach();
+            $q->judges()->detach();
         });
     }
 
@@ -71,6 +75,11 @@ class Round extends Model
 
     public function judges() // Giám khảo
     {
-        return $this->belongsToMany(User::class, 'judges', 'round_id', 'user_id');
+        return $this->belongsToMany(Judge::class, 'judges_rounds', 'round_id', 'judge_id');
+    }
+
+    public function teams()
+    {
+        return $this->belongsToMany(Team::class, 'round_teams', 'round_id', 'team_id');
     }
 }

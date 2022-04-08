@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Contest;
 use App\Models\Judge;
 use App\Models\Round;
 use App\Models\User;
@@ -22,7 +23,7 @@ class JudgeFactory extends Factory
     {
         return [
             'user_id' => User::all()->random()->id,
-            'round_id' => Round::all()->random()->id,
+            'contest_id' => Contest::all()->random()->id,
         ];
     }
 }
