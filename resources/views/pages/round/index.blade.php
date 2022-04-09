@@ -459,7 +459,6 @@
                                                             <!--end::Svg Icon-->
                                                             Xóa bỏ
                                                         </span>
-                                                        Xóa bỏ
                                                     @endhasrole
 
                                                 </li>
