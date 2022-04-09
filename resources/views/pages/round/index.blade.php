@@ -333,7 +333,7 @@
                 </thead>
                 <tbody>
                     @php
-
+                        
                         $total = $rounds->total();
                     @endphp
                     @forelse ($rounds as $key => $round)
@@ -381,7 +381,7 @@
                                             <!--end::Svg Icon-->
                                         </span>
                                     </button>
-                                    <ul class="dropdown-menu ps-3">
+                                    <ul class="dropdown-menu ps-4">
                                         <li class="my-3">
                                             <a href="{{ route('admin.round.edit', ['id' => $round->id]) }}">
                                                 <span role="button" class="svg-icon svg-icon-success svg-icon-2x">
@@ -451,8 +451,8 @@
                                                                 </g>
                                                             </svg>
                                                             <!--end::Svg Icon-->
+                                                            Xóa bỏ
                                                         </span>
-                                                        Xóa bỏ
                                                     </button>
                                                 </form>
                                             @else
@@ -471,8 +471,8 @@
                                                         </g>
                                                     </svg>
                                                     <!--end::Svg Icon-->
+                                                    Xóa bỏ
                                                 </span>
-                                                Xóa bỏ
                                             @endhasrole
 
                                         </li>
