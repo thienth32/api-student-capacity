@@ -90,10 +90,8 @@
             </span>
 
         </div>
-        {{--  --}}
-
-        <div class="table-responsive  ">
-            <table class=" table table-hover  ">
+        <div class="table-responsive table-responsive-md">
+            <table class="table table-row-bordered table-row-gray-300 gy-7  table-hover ">
                 <thead>
                     <tr>
                         <th scope="col" width="2%">
@@ -250,9 +248,8 @@
                                                     method="post">
                                                     @csrf
                                                     @method('delete')
-                                                    <button
-                                                    onclick="return confirm('Bạn có chắc muốn xóa không !')"
-                                                    style=" background: none ; border: none ; list-style : none"
+                                                    <button onclick="return confirm('Bạn có chắc muốn xóa không !')"
+                                                        style=" background: none ; border: none ; list-style : none"
                                                         type="submit">
                                                         <span role="button" class="svg-icon svg-icon-danger svg-icon-2x">
                                                             <svg xmlns="http://www.w3.org/2000/svg"

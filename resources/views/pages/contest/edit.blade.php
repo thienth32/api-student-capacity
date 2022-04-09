@@ -10,7 +10,7 @@
                     @csrf
                     @method('put')
                     <div class="form-group mb-10">
-                        <label for="">Tên vòng thi</label>
+                        <label class="form-label" for="">Tên vòng thi</label>
                         <input type="text" name="name" value="{{ $Contest->name }}" class=" form-control" placeholder="">
                         @error('name')
                             <p class="text-danger">{{ $message }}</p>
@@ -22,7 +22,7 @@
                             <div class="col-8">
 
                                 <div class="form-group mb-10">
-                                    <label for="">Thời gian bắt đầu</label>
+                                    <label class="form-label" for="">Thời gian bắt đầu</label>
                                     <input value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime($Contest->date_start)) }}"
                                         type="datetime-local" id="begin" max="" name="date_start" class="form-control"
                                         placeholder="">
@@ -32,7 +32,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group mb-10">
-                                    <label for="">Thời gian kết thúc</label>
+                                    <label class="form-label" for="">Thời gian kết thúc</label>
                                     <input
                                         value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime($Contest->register_deadline)) }}"
                                         min="" type="datetime-local" name="register_deadline" id="end"
@@ -109,7 +109,6 @@
                             </div>
                         </div>
                         <div class="form-group mb-10">
-
                             <label for="" class="form-label">Thuộc Chuyên Ngành</label>
                             <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
                                 data-placeholder="Select an option" tabindex="-1" aria-hidden="true" name="major_id">
@@ -123,12 +122,9 @@
                                 <p class="text-danger">{{ $message }}</p>
                             @enderror
                         </div>
-
-
                     </div>
-
                     <div class="form-group mb-10">
-                        <label for="">Mô tả cuộc thi</label>
+                        <label class="form-label" for="">Mô tả cuộc thi</label>
                         <textarea class="form-control" name="description" id="" rows="3">
                             {{ $Contest->description }}
                         </textarea>
@@ -137,14 +133,11 @@
                         @enderror
                     </div>
                     <div class="form-group mb-10">
-                        <label for="">Trạng thái cuộc thi</label>
-                        <br><br>
+                        <label class="form-label" for="">Trạng thái cuộc thi</label>
                         <select class="form-control" name="status" id="">
                             <option @selected($Contest->status == 0) value="0"> Đóng Cuộc thi </option>
                             <option @selected($Contest->status == 1) value="1"> Mở đang Mở </option>
                         </select>
-
-
                     </div>
                     @error('status')
                         <p class="text-danger">{{ $message }}</p>
@@ -152,8 +145,8 @@
                     <div class="form-group mb-10 ">
                         <button type="submit" name="" id="" class="btn btn-success btn-lg btn-block">Lưu </button>
                     </div>
+                </form>
             </div>
-            </form>
         </div>
     </div>
 

@@ -1,7 +1,5 @@
 const elForm = "#formContest";
 const onkeyup = true;
-
-alert()
 const rules = {
     name: {
         required: true,

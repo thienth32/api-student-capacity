@@ -1,6 +1,6 @@
 @extends('layouts.main')
-@section('title', 'Danh sách doanh nghiệp ')
-
+@section('title', 'Danh sách doanh nghiệp')
+@section('page-title', 'Danh sách doanh nghiệp')
 @section('content')
 
     <div class="card card-flush p-4">
@@ -46,9 +46,10 @@
 
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="form-group p-2">
-                    <label>Tài trợ cuộc thi </label>
-                    <select id="selectContest" class="form-control form-control-solid">
-                        <option>-- Cuộc thi --</option>
+                    <label class="form-label">Tài trợ cuộc thi </label>
+                    <select id="selectContest" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                        data-hide-search="true" tabindex="-1" aria-hidden="true">
+                        <option value="0">Chọn cuộc thi</option>
 
                         @foreach ($contest as $itemContest)
                             <option @selected(request('contest') == $itemContest->id) value="{{ $itemContest->id }}">
@@ -74,7 +75,7 @@
             </div> --}}
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="  form-group p-2">
-                    <label>Tìm kiếm </label>
+                    <label class="form-label">Tìm kiếm </label>
                     <input id="searchTeam" type="text" placeholder="'*Enter' tìm kiếm ..." class=" ip-search form-control">
                 </div>
             </div>
@@ -111,10 +112,10 @@
             </span>
 
         </div>
-        <div class="table-responsive p-4 card card-flush ">
+        <div class="table-responsive table-responsive-md">
             @if (isset($listEnterprise))
                 @if (count($listEnterprise) > 0)
-                    <table class=" table table-hover table-responsive-md ">
+                    <table class="table table-row-bordered table-row-gray-300 gy-7  table-hover ">
                         <thead>
                             <tr>
                                 <th scope="col">
@@ -275,7 +276,7 @@
                                     </td>
                                     <td>
 
-                                        <button class="badge bg-primary" type="button" data-bs-toggle="modal"
+                                        <button class="btn  btn-primary btn-sm" type="button" data-bs-toggle="modal"
                                             data-bs-target="#introduce_{{ $key->id }}">
                                             Xem thông tin...
                                         </button>
@@ -307,8 +308,8 @@
                                     </td>
                                     <td>
                                         <div class="btn-group dropup">
-                                            <button class="badge bg-primary" type="button" data-bs-toggle="modal"
-                                                data-bs-target="#Donors{{ $key->id }}">
+                                            <button class="btn  btn-primary btn-sm rounded-end" type="button"
+                                                data-bs-toggle="modal" data-bs-target="#Donors{{ $key->id }}">
                                                 Xem thông tin... </button>
 
                                             <!-- Modal -->
