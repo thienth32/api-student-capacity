@@ -47,24 +47,26 @@
 
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="form-group p-2">
-                    <label>Cuộc thi </label>
-                    <select id="selectContest" class="form-control form-control-solid">
-                        <option>-- Cuộc thi --</option>
+                    <label class="form-label">Cuộc thi </label>
+                    <select id="selectContest" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                        data-hide-search="true" tabindex="-1" aria-hidden="true">
+                        <option value="0">Chọn cuộc thi</option>
                         @forelse ($Contest as $itemContest)
                             <option @selected(request('contest') == $itemContest->id) value="{{ $itemContest->id }}">
-                                Cuộc Thi: {{ $itemContest->name }}
+                                Cuộc Thi : {{ $itemContest->name }}
                             </option>
                         @empty
-                            <option>-- Không có cuộc thi --</option>
+                            <option>Không có cuộc thi</option>
                         @endforelse
                     </select>
                 </div>
             </div>
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="form-group p-2">
-                    <label for="" class="label">Khoảng thời gian </label>
-                    <select id="select-date-serach" class="select-date-serach form-control">
-                        <option class="form-control">---- Thời gian ----</option>
+                    <label for="" class="form-label">Khoảng thời gian </label>
+                    <select id="select-date-serach" class="form-select mb-2 select2-hidden-accessible"
+                        data-control="select2" data-hide-search="true" tabindex="-1" aria-hidden="true">
+                        <option class="form-control">Chọn thời gian</option>
                         <option class="form-control" @selected(request('day') == 7) value="day-7">7 Ngày </option>
                         <option class="form-control" @selected(request('day') == 14) value="day-14">14 Ngày </option>
                         <option class="form-control" @selected(request('day') == 30) value="day-30">30 Ngày </option>
@@ -76,7 +78,7 @@
             </div>
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="  form-group p-2">
-                    <label>Tìm kiếm </label>
+                    <label class="form-label">Tìm kiếm </label>
                     <input id="searchTeam" type="text" value="{{ request('q') ?? '' }}"
                         placeholder="'*Enter' tìm kiếm ..." class=" ip-search form-control">
                 </div>
@@ -114,9 +116,9 @@
             </span>
 
         </div>
-        <div class="table-responsive p-4 card card-flush ">
+        <div class="table-responsive ">
             @if (count($dataTeam) > 0)
-                <table class=" table table-hover table-responsive-md ">
+                <table class="table table-row-bordered table-row-gray-300 gy-7 table-hover">
                     <thead>
                         <tr>
                             <th scope="col">
@@ -324,7 +326,7 @@
                                     Cuộc Thi: {{ $key->contest->name ?? 'Chưa có Cuộc thi ' }}
                                 </td>
                                 <td>
-                                    <button class="badge bg-primary" type="button" data-bs-toggle="modal"
+                                    <button class="btn  btn-primary btn-sm" type="button" data-bs-toggle="modal"
                                         data-bs-target="#exampleModal_{{ $key->id }}">
                                         Xem Thêm
                                     </button>

@@ -211,7 +211,7 @@
                             <!--end::Svg Icon-->
                         </span>
                     </span>
-                    <span class="menu-title">Quản lý Doanh Nghiệp </span>
+                    <span class="menu-title">Quản lý doanh Nghiệp </span>
                     <span class="menu-arrow"></span>
                 </span>
                 <div class="menu-sub menu-sub-accordion menu-active-bg">
@@ -220,7 +220,7 @@
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
-                            <span class="menu-title">Danh sách Doanh nghiệp </span>
+                            <span class="menu-title">Danh sách doanh nghiệp </span>
                         </a>
                     </div>
                     <div class="menu-item">
@@ -228,7 +228,7 @@
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
-                            <span class="menu-title">Thêm mới Doanh nghiệp </span>
+                            <span class="menu-title">Thêm mới doanh nghiệp </span>
                         </a>
                     </div>
 

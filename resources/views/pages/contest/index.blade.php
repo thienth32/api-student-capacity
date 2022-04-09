@@ -43,24 +43,26 @@
         <div class="row card-format">
 
             <div class=" col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
-                <div class="   form-group p-2">
+                <div class="form-group">
                     <label class="form-label">Chuyên ngành </label>
-                    <select id="select-major" class="form-control form-control-solid">
-                        <option value="0">-- Chuyên ngành --</option>
+                    <select id="select-major" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                        data-hide-search="true" tabindex="-1" aria-hidden="true">
+                        <option value="0">Chọn chuyên ngành</option>
                         @forelse ($majors as $major)
                             <option @selected(request('major_id') == $major->id) value="{{ $major->id }}">{{ $major->name }}
                             </option>
                         @empty
-                            <option>-- Không có chuyên ngành --</option>
+                            <option disabled>Không có chuyên ngành</option>
                         @endforelse
                     </select>
                 </div>
             </div>
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
-                <div class="   form-group p-2">
+                <div class="form-group">
                     <label class="form-label">Tình trạng </label>
-                    <select id="select-status" class="form-control form-control-solid">
-                        <option value="0" @selected(!request()->has('status'))>-- Tình trạng --</option>
+                    <select id="select-status" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                        data-hide-search="true" tabindex="-1" aria-hidden="true">
+                        <option value="0" @selected(!request()->has('status'))>Chọn tình trạng</option>
                         <option @selected(request('status') == 1) value="1">Kích họat
                         </option>
                         <option @selected(request()->has('status') && request('status') == 0) value="0">Không kích hoạt
@@ -70,7 +72,7 @@
             </div>
 
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
-                <div class="  form-group p-2">
+                <div class="  form-group">
                     <label class="form-label">Tìm kiếm </label>
                     <input type="text" value="{{ request('q') ?? '' }}" placeholder="*Enter tìm kiếm ..."
                         class=" ip-search form-control">
@@ -80,15 +82,15 @@
                 <div class="col-12 row">
                     <div class="mb-0">
                         <label class="form-label">Thời gian </label>
-                        <input class="form-control form-control-solid" placeholder="Pick date rage"
-                            id="kt_daterangepicker_2" />
+                        <input class="form-control " placeholder="Pick date rage" id="kt_daterangepicker_2" />
                     </div>
 
 
-                    <div class="col-12 ">
+                    <div class="col-12 mt-4 ">
                         <label for="" class="form-label">Hoạt động cuộc thi </label>
-                        <select class="select-date-time-contest form-control">
-                            <option class="form-control">---- Hoạt động cuộc thi ----</option>
+                        <select class="select-date-time-contest form-select mb-2 select2-hidden-accessible"
+                            data-control="select2" data-hide-search="true" tabindex="-1" aria-hidden="true">
+                            <option class="form-control">Chọn hoạt động cuộc thi</option>
                             {{-- <option class="form-control" @selected(request()->has('upcoming_date')) value="upcoming_date">Sắp diễn ra
                             </option> --}}
                             <option class="form-control" @selected(request()->has('pass_date')) value="pass_date"> Sắp và đang diễn
@@ -140,9 +142,8 @@
             </div>
         </div>
 
-        {{--  --}}
-        <div class="  ">
-            <table class=" table table-hover  table-responsive">
+        <div class="table-responsive table-responsive-md">
+            <table class="table table-row-bordered table-row-gray-300 gy-7  table-hover ">
                 <thead>
                     <tr>
                         <th scope="col">
