@@ -84,7 +84,7 @@
                         Thời
                         gian cụ thể </button>
                     <button
-                        class="click-time {{ (request()->has('day') || request()->has('month') || request()->has('year')) && request()->has('op_time')? '': 'btn-default' }} btn ">Khoảng
+                        class="click-time {{ (request()->has('day') || request()->has('month') || request()->has('year')) && request()->has('op_time')? 'btn-primary': 'btn-default' }} btn ">Khoảng
                         thời gian</button>
                     <div class="show-time">
                         <div style="{{ request()->has('start_time') && request()->has('end_time') ? '' : 'display : none' }}"

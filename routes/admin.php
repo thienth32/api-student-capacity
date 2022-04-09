@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EnterpriseController;
 use App\Http\Controllers\Admin\JudgesController;
 use App\Http\Controllers\Admin\MajorController;
+use App\Http\Controllers\Admin\SliderController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('dashboard/api-cuoc-thi', [DashboardController::class, 'chartCompetity'])->name('dashboard.chart-competity');
@@ -116,4 +117,8 @@ Route::prefix('judges')->group(function () {
     Route::post('{contest_id}/attach', [JudgesController::class, 'attachJudges'])->name('admin.judges.attach');
     Route::post('{contest_id}/sync', [JudgesController::class, 'syncJudges'])->name('admin.judges.sync');
     Route::delete('{contest_id}/detach', [JudgesController::class, 'detachJudges'])->name('admin.judges.detach');
+});
+
+Route::prefix('sliders')->group(function () {
+    Route::get('/', [SliderController::class, 'index'])->name('admin.sliders.list');
 });

@@ -28,10 +28,6 @@ class SliderController extends Controller
                         request('year')) ?? null,
                     'start_time'
                 )
-                ->hasReuqest([
-                    'contest_id' => request('contest_id') ?? null,
-                    'type_exam_id' => request('type_exam_id') ?? null,
-                ])
                 ->with([
                     'contest',
                     'type_exam',
@@ -39,5 +35,9 @@ class SliderController extends Controller
         } catch (\Throwable $th) {
             return false;
         }
+    }
+    public function index()
+    {
+        return view('pages.slider.index');
     }
 }

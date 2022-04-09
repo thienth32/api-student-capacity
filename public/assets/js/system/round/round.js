@@ -1,7 +1,5 @@
 const roundPage = {
     addTimeLocal: function () {
-        $("#time-local").show();
-        $(".click-time-local").addClass("btn-primary");
         $(".click-time-local").on("click", function () {
             $("#time").hide();
             $(".click-time").removeClass("btn-primary");
