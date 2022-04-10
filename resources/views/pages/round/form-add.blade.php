@@ -113,7 +113,8 @@
                                 data-hide-search="false" tabindex="-1" aria-hidden="true" name="contest_id"
                                 value="{{ old('contest_id') }}">
                                 @foreach ($contests as $contest)
-                                    <option value="{{ $contest->id }}"> {{ $contest->name }}</option>
+                                    <option @selected(request()->has('contest_id') && request('contest_id') == $contest->id) value="{{ $contest->id }}">
+                                        {{ $contest->name }}</option>
                                 @endforeach
                             </select>
 

@@ -1,18 +1,4 @@
 const roundPage = {
-    addTimeLocal: function () {
-        $(".click-time-local").on("click", function () {
-            $("#time").hide();
-            $(".click-time").removeClass("btn-primary");
-            $(this).addClass("btn-primary");
-            $("#time-local").show();
-        });
-        $(".click-time").on("click", function () {
-            $("#time-local").hide();
-            $(".click-time-local").removeClass("btn-primary");
-            $(this).addClass("btn-primary");
-            $("#time").show();
-        });
-    },
     selectContest: function () {
         $("#select-contest").on("change", function () {
             if ($(this).val() == 0) return (window.location = url);
@@ -69,4 +55,3 @@ const roundPage = {
 roundPage.selectContest();
 roundPage.selectTypeExam();
 roundPage.selectDateSearch();
-roundPage.addTimeLocal();

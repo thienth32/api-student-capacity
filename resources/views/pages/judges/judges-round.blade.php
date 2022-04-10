@@ -35,6 +35,7 @@
             <select class="form-select form-select-judges mb-2 select2-hidden-accessible" data-control="select2"
                 data-hide-search="false" tabindex="-1" aria-hidden="true" name="contest_id"
                 value="{{ old('contest_id') }}">
+                <option value="0">--Ban giám khảo--</option>
                 @foreach ($round->contest->judges as $user)
                     <option value="{{ $user }}">
                         {{ $user->name }} -

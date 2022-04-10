@@ -11,5 +11,5 @@ return [
     "CONTEST_STATUS_REGISTERING" => 1,
     "CONTEST_STATUS_GOING_ON" => 2,
     "CONTEST_STATUS_DONE" => 3,
-    "ROLE_DELETE" => "super admin",
+    "ROLE_DELETE" => "admin",
 ];
