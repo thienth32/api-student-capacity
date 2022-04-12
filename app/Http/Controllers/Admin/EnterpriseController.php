@@ -30,8 +30,7 @@ class EnterpriseController extends Controller
         }
         $query = Enterprise::where('name', 'like', "%$keyword%");
         if ($contest != null) {
-            $query = Contest::where('id', $contest);
-            return $query;
+            $query = Contest::find($contest);
         }
         if ($sortBy == "desc") {
             $query->orderByDesc($orderBy);
@@ -40,23 +39,22 @@ class EnterpriseController extends Controller
         }
         return $query;
     }
+    public function apiIndex(Request $request)
+    {
+        $listEnterprise = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
+        return response()->json([
+            'status' => true,
+            'payload' => $listEnterprise,
+        ]);
+    }
     public function index(Request $request)
     {
-
-
         $contest = Contest::all();
-        if ($request->contest) {
 
-            $Enterprise = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
-
-            //          foreach($Enterprise[0]->enterprise as $item){
-            //              echo '<pre>';
-            // var_dump($item);
-            //          };
-            //          die();
-            return view('pages.enterprise.index', compact('Enterprise', 'contest'));
-        }
         $listEnterprise = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
+        if ($request->contest) {
+            $listEnterprise = $this->getList($request)->enterprise()->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
+        }
         return view('pages.enterprise.index', compact('listEnterprise', 'contest'));
     }
     public function destroy($id)

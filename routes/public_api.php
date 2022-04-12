@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ContestController as AdminContestController;
+use App\Http\Controllers\Admin\EnterpriseController;
 use App\Http\Controllers\Admin\MajorController as AdminMajorController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -42,7 +43,6 @@ Route::get('company', [CompanyController::class, 'listCompany']); // Doanh nghiá
 //     Route::post('api-add-team', [TeamController::class, 'Api_addTeam']);
 // });
 
-
 Route::prefix('contests')->group(function () {
     Route::get('', [AdminContestController::class, 'apiIndex'])->name('contest.api.index');
     Route::get('{id}', [AdminContestController::class, 'apiShow'])->name('contest.api.show');
@@ -54,4 +54,7 @@ Route::prefix('rounds')->group(function () {
 Route::prefix('majors')->group(function () {
     Route::get('', [AdminMajorController::class, 'apiIndex'])->name('major.api.index');
     Route::get('{slug}', [AdminMajorController::class, 'apiShow'])->name('major.api.show');
+});
+Route::prefix('enterprise')->group(function () {
+    Route::get('', [EnterpriseController::class, 'apiIndex'])->name('enterprise.api.index');
 });
