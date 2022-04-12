@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\EnterpriseController;
 use App\Http\Controllers\Admin\MajorController as AdminMajorController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\RoundController;
+use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\TeamController as AdminTeamController;
 use App\Http\Controllers\Admin\SponsorController as AdminSponsorController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
@@ -43,7 +44,9 @@ Route::prefix('majors')->group(function () {
     Route::get('{slug}', [AdminMajorController::class, 'apiShow'])->name('major.api.show');
 });
 
-
+Route::prefix('sliders')->group(function () {
+    Route::get('', [SliderController::class, 'apiIndex'])->name('slider.api.index');
+});
 
 Route::prefix('enterprise')->group(function () {
     Route::get('', [EnterpriseController::class, 'apiIndex'])->name('enterprise.api.index');

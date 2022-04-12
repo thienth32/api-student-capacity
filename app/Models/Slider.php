@@ -29,4 +29,9 @@ class Slider extends Model
     {
         return $this->belongsTo(Major::class, 'major_id');
     }
+
+    public function round()
+    {
+        return $this->belongsTo(Round::class, 'round_id');
+    }
 }

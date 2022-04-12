@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Major;
+use App\Models\Round;
 use App\Models\Slider;
 use App\Services\Traits\TUploadImage;
 use Illuminate\Http\Request;
@@ -13,10 +14,12 @@ class SliderController extends Controller
     use TUploadImage;
     private $slider;
     private $major;
-    public function __construct(Slider $slider, Major $major)
+    private $round;
+    public function __construct(Slider $slider, Major $major, Round $round)
     {
         $this->slider = $slider;
         $this->major = $major;
+        $this->round = $round;
     }
 
     private function getList()
@@ -41,7 +44,7 @@ class SliderController extends Controller
                 return $q->onlyTrashed();
             })->search(request('q') ?? null, ['link_to', 'image_url'])
                 ->sort((request('sort') == 'desc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'sliders')
-                ->status(request('status') ?? null)
+
                 ->hasReuqest([
                     'major_id' => request('major_id') ?? null,
                 ])
@@ -54,6 +57,7 @@ class SliderController extends Controller
                 )
                 ->with([
                     'major',
+                    'round'
                 ]);
 
             return $sliders;
@@ -63,12 +67,32 @@ class SliderController extends Controller
     }
     public function index()
     {
-        $sliders =  $this->getList()->paginate(request('limit') ?? 5);
+        $sliders =  $this->getList()->status(request('status') ?? null)->paginate(request('limit') ?? 5);
         $majors = $this->major::all();
         return view('pages.slider.index', [
             'sliders' => $sliders,
             'majors' => $majors
         ]);
+    }
+
+    public function apiIndex()
+    {
+        try {
+            $data = $this->getList();
+            return response()->json(
+                [
+                    "status" => true,
+                    "payload" => $data->where('status', 1)->get(),
+                ]
+            );
+        } catch (\Throwable $th) {
+            return response()->json(
+                [
+                    "status" => false,
+                    "payload" => "Serve not found",
+                ]
+            );
+        }
     }
 
     public function un_status($id)
@@ -113,11 +137,16 @@ class SliderController extends Controller
     public function create()
     {
         $majors = $this->major::all();
-        return view('pages.slider.create', ['majors' => $majors]);
+        $rounds = $this->round::all();
+        return view('pages.slider.create', [
+            'majors' => $majors,
+            'rounds' => $rounds
+        ]);
     }
 
     public function store(Request $request)
     {
+
         $request->validate(
             [
                 'link_to' => 'required',
@@ -140,14 +169,19 @@ class SliderController extends Controller
                 $fileImage = $request->file('image_url');
                 $filename = $this->uploadFile($fileImage);
             }
-            $this->slider::create([
+            $dataCreate = [
                 'link_to' => $request->link_to,
                 'start_time' => $request->start_time,
                 'end_time' => $request->end_time,
-                'major_id' => $request->major_id,
                 'image_url' => $filename,
                 'status' => 1,
-            ]);
+            ];
+            if ($request->major_id != 0) {
+                $dataCreate = array_merge($dataCreate, ['major_id' => $request->major_id]);
+            } elseif ($request->round_id != 0) {
+                $dataCreate = array_merge($dataCreate, ['round_id' => $request->round_id]);
+            }
+            $this->slider::create($dataCreate);
             return redirect()->route('admin.sliders.list');;
         } catch (\Throwable $th) {
             return abort(404);
@@ -157,7 +191,7 @@ class SliderController extends Controller
     public function edit(Request $request, $id)
     {
         if ($slider = $this->slider::find($id)->load("major")) {
-            return view('pages.slider.edit', ['slider' => $slider, 'majors' => $this->major::all()]);
+            return view('pages.slider.edit', ['slider' => $slider, 'majors' => $this->major::all(), 'rounds' => $this->round::all()]);
         }
         return abort(404);
     }
@@ -192,13 +226,18 @@ class SliderController extends Controller
                 ]
             );
             $nameFile = $this->uploadFile(request()->image_url, $slider->image_url);
-            $data = array_merge(request()->except('image_url'), [
+            $data = array_merge(request()->except('image_url', 'major_id', 'round_id'), [
                 'image_url' => $nameFile
             ]);
         } else {
             $data = request()->only([
-                'major_id', 'start_time', 'end_time', 'link_to'
+                'start_time', 'end_time', 'link_to'
             ]);
+        }
+        if ($request->major_id != 0) {
+            $data = array_merge($data, ['major_id' => $request->major_id]);
+        } elseif ($request->round_id != 0) {
+            $data = array_merge($data, ['round_id' => $request->round_id]);
         }
         $slider->update($data);
         return redirect()->route('admin.sliders.list');

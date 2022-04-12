@@ -41,11 +41,12 @@
         </h1>
 
         <div class="row card-format">
-            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
+            <div class="col-12 col-lg-6 col-sx-12 col-md-12 col-sm-12 col-xxl-6 col-xl-6">
                 <div class="   ">
                     <label class="form-label">Tình trạng </label>
-                    <select id="select-status" class="form-control form-control-solid">
-                        <option value="3" @selected(!request()->has('status'))>-- Tình trạng --</option>
+                    <select id="select-status" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                        data-hide-search="true" tabindex="-1" aria-hidden="true">
+                        <option value="3" @selected(!request()->has('status'))>Chọn tình trạng </option>
                         <option @selected(request('status') == 1) value="1">Kích họat
                         </option>
                         <option @selected(request()->has('status') && request('status') == 0) value="0">Không kích hoạt
@@ -53,11 +54,12 @@
                     </select>
                 </div>
             </div>
-            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
+            {{-- <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="">
                     <label class="form-label">Chuyên ngành </label>
-                    <select id="select-major" class="form-control form-control-solid">
-                        <option value="0">-- Chuyên ngành --</option>
+                    <select id="select-major" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                        data-hide-search="true" tabindex="-1" aria-hidden="true">
+                        <option value="0">Chọn chuyên ngành </option>
                         @forelse ($majors as $major)
                             <option @selected(request('major_id') == $major->id) value="{{ $major->id }}">{{ $major->name }}
                             </option>
@@ -66,8 +68,8 @@
                         @endforelse
                     </select>
                 </div>
-            </div>
-            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
+            </div> --}}
+            <div class="col-12 col-lg-6 col-sx-12 col-md-12 col-sm-12 col-xxl-6 col-xl-6">
                 <div class="">
                     <label class="form-label">Tìm kiếm </label>
                     <input type="text" value="{{ request('q') ?? '' }}" placeholder="*Enter tìm kiếm ..."
@@ -176,7 +178,7 @@
         </div>
 
         <div class="">
-            <table class="table-responsive table table-hover   ">
+            <table class=" table table-row-bordered table-row-gray-300 gy-7  table-hover  ">
                 <thead>
                     <tr>
                         <th scope="col">
@@ -208,8 +210,10 @@
                         </th>
                         <th>Url chuyển hướng </th>
                         <th>Banner </th>
-                        <th>Thuộc chuyên ngành </th>
+                        <th>Thuộc thành phần </th>
                         <th>Tình trạng </th>
+                        <th>Thời gian bắt đầu</th>
+                        <th>Thời gian kết thúc </th>
                         <th class="text-center" colspan="2">
 
                         </th>
@@ -237,9 +241,28 @@
                                 </th>
                             @endif
                             <td width="20%">
-                                <p><span id="text_{{ $slider->id }}">{{ $slider->link_to }}</span> <span
-                                        class="coppyText" data-key="{{ $slider->id }}" role="button"
-                                        style="background:rgb(172, 172, 172) ; padding : 2px ; color : white">Coppy</span>
+                                <p><span id="text_{{ $slider->id }}">{{ $slider->link_to }}
+                                        <span class="coppyText" data-key="{{ $slider->id }}" role="button">
+                                            <span class="svg-icon svg-icon-dark svg-icon-xx">
+                                                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Design/Substract.svg--><svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+                                                    viewBox="0 0 24 24" version="1.1">
+                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                        <rect x="0" y="0" width="24" height="24" />
+                                                        <path
+                                                            d="M6,9 L6,15 C6,16.6568542 7.34314575,18 9,18 L15,18 L15,18.8181818 C15,20.2324881 14.2324881,21 12.8181818,21 L5.18181818,21 C3.76751186,21 3,20.2324881 3,18.8181818 L3,11.1818182 C3,9.76751186 3.76751186,9 5.18181818,9 L6,9 Z"
+                                                            fill="#000000" fill-rule="nonzero" />
+                                                        <path
+                                                            d="M10.1818182,4 L17.8181818,4 C19.2324881,4 20,4.76751186 20,6.18181818 L20,13.8181818 C20,15.2324881 19.2324881,16 17.8181818,16 L10.1818182,16 C8.76751186,16 8,15.2324881 8,13.8181818 L8,6.18181818 C8,4.76751186 8.76751186,4 10.1818182,4 Z"
+                                                            fill="#000000" opacity="0.3" />
+                                                    </g>
+                                                </svg>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                        </span>
+                                    </span>
+
                                 </p>
                             </td>
                             <td>
@@ -247,8 +270,16 @@
                                     src="{{ $slider->image_url ?? 'assets/media/avatars/blank.png' }}" alt="">
                             </td>
                             <td>
-                                {{ $slider->major->name ?? 'Chưa thuộc chuyên ngành nào ' }}
+                                @if (!is_null($slider->major_id))
+                                    Chuyên ngành : <b>{{ $slider->major->name }}</b>
+                                @elseif(!is_null($slider->round_id))
+                                    Vòng thi : <b>{{ $slider->major->name }}</b>
+                                @else
+                                    {{ 'Trang chủ ' }}
+                                @endif
+
                             </td>
+
                             <td>
 
                                 <div class="form-check form-switch">
@@ -258,6 +289,10 @@
                                 </div>
 
                             </td>
+                            <td> {{ $slider->start_time }} <br>
+                                {{ \Carbon\Carbon::parse($slider->start_time)->diffForHumans() }}</td>
+                            <td> {{ $slider->end_time }} <br>
+                                {{ \Carbon\Carbon::parse($slider->end_time)->diffForHumans() }}</td>
                             <td>
                                 <div class="btn-group dropstart">
                                     <button style="padding: 0" type="button" class="btn   btn-sm dropdown-toggle"
