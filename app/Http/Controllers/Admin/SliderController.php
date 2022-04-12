@@ -54,6 +54,7 @@ class SliderController extends Controller
                 )
                 ->with([
                     'major',
+                    'round'
                 ]);
 
             return $sliders;
@@ -69,6 +70,26 @@ class SliderController extends Controller
             'sliders' => $sliders,
             'majors' => $majors
         ]);
+    }
+
+    public function apiIndex()
+    {
+        try {
+            $data = $this->getList();
+            return response()->json(
+                [
+                    "status" => true,
+                    "payload" => $data->get(),
+                ]
+            );
+        } catch (\Throwable $th) {
+            return response()->json(
+                [
+                    "status" => false,
+                    "payload" => "Serve not found",
+                ]
+            );
+        }
     }
 
     public function un_status($id)
