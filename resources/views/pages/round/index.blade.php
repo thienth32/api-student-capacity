@@ -507,6 +507,5 @@
         const end_time =
             '{{ request()->has('end_time')? \Carbon\Carbon::parse(request('end_time'))->format('m/d/Y h:i:s A'): \Carbon\Carbon::now()->format('m/d/Y h:i:s A') }}'
     </script>
-    <script src="assets/js/system/formatlist/formatlis.js"></script>
     <script src="assets/js/system/round/round.js"></script>
 @endsection
