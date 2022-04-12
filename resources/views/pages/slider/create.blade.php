@@ -59,16 +59,44 @@
                                 @enderror
                             </div>
                             <div class="col-12">
+
+
+                            </div>
+
+                        </div>
+                        <div class="col-12 pb-2">
+                            <label for="" class="form-label">Thuộc thành phần </label>
+                            <div class="row pb-2">
+                                <div class="col-4">
+                                    <button type="button" class="btn btn-light btn-major">Chuyên ngành </button>
+                                </div>
+                                <div class="col-4">
+                                    <button type="button" class="btn btn-light btn-round">Vòng thi </button>
+                                </div>
+                                <div class="col-4">
+                                    <button type="button" class="btn btn-light btn-home">Trang chủ </button>
+                                </div>
+                            </div>
+                            <div style="display: none" id="major">
                                 <label class="form-label">Chuyên ngành</label>
-                                <select name="major_id" class="form-select " data-control="select2"
+                                <select name="major_id" class="form-select form-major" data-control="select2"
                                     data-placeholder="Chọn chuyên ngành ">
+                                    <option value="0">Chọn chuyên ngành</option>
                                     @foreach ($majors as $major)
                                         <option value="{{ $major->id }}">{{ $major->name }}</option>
                                     @endforeach
                                 </select>
-
                             </div>
-
+                            <div style="display: none" id="round">
+                                <label class="form-label">Vòng thi </label>
+                                <select name="round_id" class="form-select form-round " data-control="select2"
+                                    data-placeholder="Chọn vòng thi ">
+                                    <option value="0">Chọn vòng thi</option>
+                                    @foreach ($rounds as $round)
+                                        <option value="{{ $round->id }}">{{ $round->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group mb-10 ">
@@ -95,7 +123,8 @@
         messages.image_url = {
             required: "Chưa nhập trường này !",
         }
-        dateAfter('input[type=datetime-local]#begin', 'input[type=datetime-local]#end')
+        dateAfter('input[type=datetime-local]#begin', 'input[type=datetime-local]#end');
+        $('.btn-home').click();
     </script>
     <script src="assets/js/system/validate/validate.js"></script>
 @endsection

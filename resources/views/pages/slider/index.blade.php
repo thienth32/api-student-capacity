@@ -41,7 +41,7 @@
         </h1>
 
         <div class="row card-format">
-            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
+            <div class="col-12 col-lg-6 col-sx-12 col-md-12 col-sm-12 col-xxl-6 col-xl-6">
                 <div class="   ">
                     <label class="form-label">Tình trạng </label>
                     <select id="select-status" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
@@ -54,7 +54,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
+            {{-- <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="">
                     <label class="form-label">Chuyên ngành </label>
                     <select id="select-major" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
@@ -68,8 +68,8 @@
                         @endforelse
                     </select>
                 </div>
-            </div>
-            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
+            </div> --}}
+            <div class="col-12 col-lg-6 col-sx-12 col-md-12 col-sm-12 col-xxl-6 col-xl-6">
                 <div class="">
                     <label class="form-label">Tìm kiếm </label>
                     <input type="text" value="{{ request('q') ?? '' }}" placeholder="*Enter tìm kiếm ..."
