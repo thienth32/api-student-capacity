@@ -47,23 +47,18 @@
 
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="form-group p-2">
-                    <<<<<<< HEAD <label class="form-label">Cuộc thi </label>
-                        <select id="selectContest" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
-                            data-hide-search="true" tabindex="-1" aria-hidden="true">
-                            <option value="0">Chọn cuộc thi</option>
-                            =======
-                            <label>Cuộc thi </label>
-                            <select id="selectContest" class="form-control form-control-solid">
-                                <option value="">-- Cuộc thi --</option>
-                                >>>>>>> binhnd_Api_update_cha_con_cho_bang_major
-                                @forelse ($Contest as $itemContest)
-                                    <option @selected(request('contest') == $itemContest->id) value="{{ $itemContest->id }}">
-                                        Cuộc Thi : {{ $itemContest->name }}
-                                    </option>
-                                @empty
-                                    <option>Không có cuộc thi</option>
-                                @endforelse
-                            </select>
+                    <label class="form-label">Cuộc thi </label>
+                    <select id="selectContest" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                        data-hide-search="true" tabindex="-1" aria-hidden="true">
+                        <option value="0">Chọn cuộc thi</option>
+                        @forelse ($Contest as $itemContest)
+                            <option @selected(request('contest') == $itemContest->id) value="{{ $itemContest->id }}">
+                                Cuộc Thi : {{ $itemContest->name }}
+                            </option>
+                        @empty
+                            <option>Không có cuộc thi</option>
+                        @endforelse
+                    </select>
                 </div>
             </div>
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">

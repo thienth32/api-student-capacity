@@ -88,16 +88,16 @@
                             id="time-local">
                             <div class="col-12  ">
                                 <label class="form-label">Thời gian </label>
-                                <input class="form-control form-control-solid" placeholder="Pick date rage"
-                                    id="kt_daterangepicker_2" />
+                                <input class="form-control " placeholder="Pick date rage" id="kt_daterangepicker_2" />
                             </div>
                         </div>
                         <div style="{{ (request()->has('day') || request()->has('month') || request()->has('year')) && request()->has('op_time')? '': 'display : none' }}"
                             id="time">
                             <div class="col-12  ">
                                 <label for="" class="form-label">Khoảng thời gian </label>
-                                <select class="select-date-serach form-control">
-                                    <option class="form-control">---- Thời gian ----</option>
+                                <select class="select-date-serach form-control form-select mb-2 select2-hidden-accessible"
+                                    data-control="select2" data-hide-search="true" tabindex="-1" aria-hidden="true">
+                                    <option class="form-control">Chọn thời gian</option>
                                     <option class="form-control" @selected(request('day') == 7 && request('op_time') == 'add') value="add-day-7">7 Ngày
                                         tới
                                     </option>
