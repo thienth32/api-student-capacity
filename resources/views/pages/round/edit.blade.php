@@ -164,7 +164,7 @@
     <script src="assets/js/system/date-after/date-after.js"></script>
     <script src="assets/js/system/round/form.js"></script>
     <script>
-        dateAfter('input[type=datetime-local]#begin', 'input[type=datetime-local]#end')
+        dateAfterEdit('input[type=datetime-local]#begin', 'input[type=datetime-local]#end')
     </script>
     <script src="assets/js/system/validate/validate.js"></script>
 

@@ -339,7 +339,7 @@
                 </span>
                 <div class="menu-sub menu-sub-accordion menu-active-bg">
                     <div class="menu-item">
-                        <a class="menu-link" href="{{ route('admin.major.list') }}">
+                        <a class="menu-link" href="{{ route('admin.sliders.list') }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
@@ -347,7 +347,7 @@
                         </a>
                     </div>
                     <div class="menu-item">
-                        <a class="menu-link" href="{{ route('admin.major.create') }}">
+                        <a class="menu-link" href="{{ route('admin.sliders.create') }}">
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
