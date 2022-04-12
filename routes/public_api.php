@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Majorcontroller;
 use App\Http\Controllers\Admin\RoundController;
+use App\Http\Controllers\Admin\TeamController as AdminTeamController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ContestController;
 use App\Http\Controllers\SponsorController;
@@ -54,4 +55,8 @@ Route::prefix('rounds')->group(function () {
 Route::prefix('majors')->group(function () {
     Route::get('', [AdminMajorController::class, 'apiIndex'])->name('major.api.index');
     Route::get('{slug}', [AdminMajorController::class, 'apiShow'])->name('major.api.show');
+});
+
+Route::prefix('teams')->group(function () {
+    Route::post('{contest_id}/add-team', [AdminTeamController::class, "apiAddTeam"])->name('client.api.add.team');
 });

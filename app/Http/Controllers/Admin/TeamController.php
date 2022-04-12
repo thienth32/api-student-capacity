@@ -21,6 +21,15 @@ use phpDocumentor\Reflection\Types\Null_;
 class TeamController extends Controller
 {
     use TUploadImage;
+
+    private $contest;
+    private $team;
+
+    public function __construct(Contest $contest, Team $team)
+    {
+        $this->contest = $contest;
+        $this->team = $team;
+    }
     private function getList(Request $request)
     {
         $keyword = $request->has('keyword') ? $request->keyword : "";
@@ -91,60 +100,53 @@ class TeamController extends Controller
         }
     }
     // Add team phía client
-    public function Api_addTeam(Request $request)
+    public function apiAddTeam(Request $request, $contest_id)
+
     {
-
-
-        $listUser = $request->has('users') ? $request->users : [];
-        //        foreach($listUser as $value){
-        // var_dump($value['email']);
-        //        }
-
-        $validate = validator::make(
-            $request->all(),
-            [
-                'name' => 'required',
-                'image' => 'required|max:500',
-            ],
-            [
-                'name.required' => 'Hãy nhập tên nhóm',
-                'image.required' => 'Hãy Nhập ảnh nhóm',
-                'image.max' => 'File ảnh quá lớn'
-            ]
-        );
-        if ($validate->fails()) {
-            return response()->json([
-                'status' => false,
-                'payload' => $validate->errors()
-            ]);
-        }
-        DB::beginTransaction();
-        try {
-            $team = Team::create($request->all());
-            if ($team) {
-
-                foreach ($listUser as $value) {
-
-                    $user = User::where('email', $value['email'])->first();
-
-                    Member::create([
-                        'user_id' => $user->id,
-                        'team_id' => $team->id
-                    ]);
-                }
-                DB::commit();
-
-                return response()->json([
-                    'status' => true,
-                    'payload' => $team,
-                ]);
-            }
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            return response()->json([
-                'status' => 'lỗi'
-            ]);
-        }
+        dd($contest_id);
+        // $contest = 
+        // $listUser = $request->has('users') ? $request->users : [];
+        // $validate = validator::make(
+        //     $request->all(),
+        //     [
+        //         'name' => 'required',
+        //         'image' => 'required|max:500',
+        //     ],
+        //     [
+        //         'name.required' => 'Hãy nhập tên nhóm',
+        //         'image.required' => 'Hãy Nhập ảnh nhóm',
+        //         'image.max' => 'File ảnh quá lớn'
+        //     ]
+        // );
+        // if ($validate->fails()) {
+        //     return response()->json([
+        //         'status' => false,
+        //         'payload' => $validate->errors()
+        //     ]);
+        // }
+        // DB::beginTransaction();
+        // try {
+        //     $team = Team::create($request->all());
+        //     if ($team) {
+        //         foreach ($listUser as $value) {
+        //             $user = User::where('email', $value['email'])->first();
+        //             Member::create([
+        //                 'user_id' => $user->id,
+        //                 'team_id' => $team->id
+        //             ]);
+        //         }
+        //         DB::commit();
+        //         return response()->json([
+        //             'status' => true,
+        //             'payload' => $team,
+        //         ]);
+        //     }
+        // } catch (\Throwable $th) {
+        //     DB::rollBack();
+        //     return response()->json([
+        //         'status' => 'lỗi'
+        //     ]);
+        // }
     }
 
     public function create()
