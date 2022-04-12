@@ -30,6 +30,11 @@ class Major extends Model
     {
         return $this->hasMany(Contest::class, 'major_id');
     }
+    public function Skill()
+    {
+        return $this->belongsToMany(Skills::class, 'major_skills','major_id','skill_id');
+
+    }
 
     public function newEloquentBuilder($query)
     {

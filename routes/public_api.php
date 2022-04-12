@@ -1,20 +1,15 @@
 <?php
 
+use App\Http\Controllers\Admin\CompanyController as AdminCompanyController;
 use App\Http\Controllers\Admin\ContestController as AdminContestController;
+use App\Http\Controllers\Admin\EnterpriseController;
 use App\Http\Controllers\Admin\MajorController as AdminMajorController;
-use App\Models\User;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\Majorcontroller;
 use App\Http\Controllers\Admin\RoundController;
 use App\Http\Controllers\Admin\TeamController as AdminTeamController;
-use App\Http\Controllers\CompanyController;
-use App\Http\Controllers\ContestController;
-use App\Http\Controllers\SponsorController;
-use App\Http\Controllers\TeamController;
+use App\Http\Controllers\Admin\SponsorController as AdminSponsorController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 
-use App\Models\Team;
 
 
 /*
@@ -28,20 +23,11 @@ use App\Models\Team;
 */
 
 
-Route::get('sponsors', [SponsorController::class, 'list']);
+Route::get('sponsors', [AdminSponsorController::class, 'list']);
 
-// Route::get('majors', [Majorcontroller::class, 'listMajor']); // Chuyên Ngành
+Route::get('users', [AdminUserController::class, 'index']); // danh sách user
 
-Route::get('users', [UserController::class, 'index']); // danh sách user
-
-Route::get('company', [CompanyController::class, 'listCompany']); // Doanh nghiệp
-
-// TEAMS
-
-
-// Route::prefix('teams')->group(function () {
-//     Route::post('api-add-team', [TeamController::class, 'Api_addTeam']);
-// });
+Route::get('company', [AdminCompanyController::class, 'listCompany']); // Doanh nghiệp
 
 
 Route::prefix('contests')->group(function () {
@@ -58,5 +44,9 @@ Route::prefix('majors')->group(function () {
 });
 
 Route::prefix('teams')->group(function () {
-    Route::post('{contest_id}/add-team', [AdminTeamController::class, "apiAddTeam"])->name('client.api.add.team');
+    Route::post('{contest_id}/add-team/{user_id}', [AdminTeamController::class, "apiAddTeam"])->name('client.api.add.team');
+});
+
+Route::prefix('enterprise')->group(function () {
+    Route::get('', [EnterpriseController::class, 'apiIndex'])->name('enterprise.api.index');
 });

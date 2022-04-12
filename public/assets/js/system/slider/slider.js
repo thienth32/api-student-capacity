@@ -1,25 +1,10 @@
-const contestPage = {
-    selectMajor: function () {
-        $("#select-major").on("change", function () {
-            if ($(this).val() == 0) return (window.location = url);
-            checkUrlOut("major_id", $(this).val());
-        });
-    },
-
-    selectDateTimeContest: function () {
-        $(".select-date-time-contest").on("change", function () {
-            loadTast();
-            window.location = url + $(this).val() + "=" + $(this).val();
-            return false;
-        });
-    },
-
+const sliderPage = {
     selectChangeStatus: function () {
         $(".form-select-status").on("change", function () {
             let id = $(this).data("id");
             if ($(this).val() == 1) {
                 $.ajax({
-                    url: `admin/contests/un-status/${id}`,
+                    url: `admin/sliders/un-status/${id}`,
                     method: "POST",
                     data: {
                         _token: _token,
@@ -30,7 +15,7 @@ const contestPage = {
                 });
             } else {
                 $.ajax({
-                    url: `admin/contests/re-status/${id}`,
+                    url: `admin/sliders/re-status/${id}`,
                     method: "POST",
                     data: {
                         _token: _token,
@@ -42,8 +27,21 @@ const contestPage = {
             }
         });
     },
+    getText: function () {
+        $(".coppyText").on("click", function () {
+            let id = $(this).data("key");
+            var textCoppy = $("#text_" + id);
+            navigator.clipboard.writeText(textCoppy.text());
+            loadTast("Đã coppy", "toastr-bottom-left", "success");
+        });
+    },
+    selectMajor: function () {
+        $("#select-major").on("change", function () {
+            if ($(this).val() == 0) return (window.location = url);
+            checkUrlOut("major_id", $(this).val());
+        });
+    },
 };
-contestPage.selectMajor();
-// contestPage.selectStatus();
-contestPage.selectDateTimeContest();
-contestPage.selectChangeStatus();
+sliderPage.selectChangeStatus();
+sliderPage.getText();
+sliderPage.selectMajor();

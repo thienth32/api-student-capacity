@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,8 +28,8 @@ Route::group(['middleware' => ['role:super admin']], function () {
 });
 
 Route::group(['prefix' => 'majors'], function () {
-    Route::post('/', [\App\Http\Controllers\Majorcontroller::class, 'store']);
-    Route::delete('/{id}', [\App\Http\Controllers\Majorcontroller::class, 'destroy']);
-    Route::put('/{id}', [\App\Http\Controllers\Majorcontroller::class, 'update']);
-    Route::get('/{id}/edit', [\App\Http\Controllers\Majorcontroller::class, 'edit']);
+    Route::post('/', [\App\Http\Controllers\Admin\Majorcontroller::class, 'store']);
+    Route::delete('/{id}', [\App\Http\Controllers\Admin\Majorcontroller::class, 'destroy']);
+    Route::put('/{id}', [\App\Http\Controllers\Admin\Majorcontroller::class, 'update']);
+    Route::get('/{id}/edit', [\App\Http\Controllers\Admin\Majorcontroller::class, 'edit']);
 });
