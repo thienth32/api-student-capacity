@@ -6,8 +6,8 @@
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
 
-                <form id="formAddSlider" action="{{ route('admin.sliders.update', ['id' => $slider->id]) }}"
-                    method="post" enctype="multipart/form-data">
+                <form id="formAddSlider" action="{{ route('admin.sliders.update', ['id' => $slider->id]) }}" method="post"
+                    enctype="multipart/form-data">
                     @csrf
                     @method('put')
                     <div class="text-center">
@@ -67,7 +67,7 @@
                                 <select name="major_id" class="form-select " data-control="select2"
                                     data-placeholder="Chọn chuyên ngành ">
                                     @foreach ($majors as $major)
-                                        <option @selected($slider->major->id == $major->id) value="{{ $major->id }}">
+                                        <option @selected($slider->major->id ?? 0 == $major->id) value="{{ $major->id }}">
                                             {{ $major->name }}</option>
                                     @endforeach
                                 </select>
@@ -94,7 +94,7 @@
     <script src="assets/js/system/date-after/date-after.js"></script>
     <script src="assets/js/system/slider/form.js"></script>
     <script>
-        dateAfter('input[type=datetime-local]#begin', 'input[type=datetime-local]#end')
+        dateAfterEdit('input[type=datetime-local]#begin', 'input[type=datetime-local]#end')
     </script>
     <script src="assets/js/system/validate/validate.js"></script>
 @endsection
