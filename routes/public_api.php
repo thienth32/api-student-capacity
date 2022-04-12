@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ContestController as AdminContestController;
+use App\Http\Controllers\Admin\EnterpriseController;
 use App\Http\Controllers\Admin\MajorController as AdminMajorController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -25,8 +26,6 @@ use App\Models\Team;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-
 Route::get('sponsors', [SponsorController::class, 'list']);
 
 // Route::get('majors', [Majorcontroller::class, 'listMajor']); // Chuyên Ngành
@@ -36,13 +35,9 @@ Route::get('users', [UserController::class, 'index']); // danh sách user
 Route::get('company', [CompanyController::class, 'listCompany']); // Doanh nghiệp
 
 // TEAMS
-
-
 // Route::prefix('teams')->group(function () {
 //     Route::post('api-add-team', [TeamController::class, 'Api_addTeam']);
 // });
-
-
 Route::prefix('contests')->group(function () {
     Route::get('', [AdminContestController::class, 'apiIndex'])->name('contest.api.index');
     Route::get('{id}', [AdminContestController::class, 'apiShow'])->name('contest.api.show');
@@ -54,4 +49,7 @@ Route::prefix('rounds')->group(function () {
 Route::prefix('majors')->group(function () {
     Route::get('', [AdminMajorController::class, 'apiIndex'])->name('major.api.index');
     Route::get('{slug}', [AdminMajorController::class, 'apiShow'])->name('major.api.show');
+});
+Route::prefix('enterprise')->group(function () {
+    Route::get('', [EnterpriseController::class, 'apiIndex'])->name('enterprise.api.index');
 });

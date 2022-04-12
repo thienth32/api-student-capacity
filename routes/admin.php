@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\EnterpriseController;
 use App\Http\Controllers\Admin\JudgesController;
 use App\Http\Controllers\Admin\MajorController;
 use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Admin\SkillController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('dashboard/api-cuoc-thi', [DashboardController::class, 'chartCompetity'])->name('dashboard.chart-competity');
@@ -36,7 +37,6 @@ Route::prefix('rounds')->group(function () {
         });
     });
 });
-
 
 Route::prefix('teams')->group(function () {
     //list
@@ -121,4 +121,16 @@ Route::prefix('judges')->group(function () {
 
 Route::prefix('sliders')->group(function () {
     Route::get('/', [SliderController::class, 'index'])->name('admin.sliders.list');
+});
+Route::prefix('skill')->group(function () {
+    Route::get('{id}/edit', [SkillController::class, 'edit'])->name('admin.skill.edit');
+    Route::put('{id}', [SkillController::class, 'update'])->name('admin.skill.update');
+    Route::get('', [SkillController::class, 'index'])->name('admin.skill.index');
+    Route::get('create', [SkillController::class, 'create'])->name('admin.skill.create');
+    Route::post('store', [SkillController::class, 'store'])->name('admin.skill.store');
+    Route::delete('{id}', [SkillController::class, 'destroy'])->name('admin.skill.destroy');
+    Route::get('{id}/detail', [SkillController::class, 'detail'])->name('admin.skill.detail');
+    Route::get('skill-soft-delete', [SkillController::class, 'softDelete'])->name('admin.skill.soft.delete');
+    Route::get('skill-soft-delete/{id}/backup', [SkillController::class, 'backUpSkill'])->name('admin.skill.soft.backup');
+    Route::get('skill-soft-delete/{id}/delete', [SkillController::class, 'delete'])->name('admin.skill.soft.destroy');
 });

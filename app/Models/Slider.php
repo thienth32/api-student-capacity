@@ -10,6 +10,6 @@ class Slider extends Model
 {
     use SoftDeletes;
     protected $table = 'sliders';
-    protected $fillable = ['link_to', 'major_id', 'start_time', 'end_time', 'status', 'image_url'];
+    protected $fillable = ['link_to', 'major_id', 'start_time', 'end_time', 'status', 'image_url','round_id'];
     use HasFactory;
 }
