@@ -26,8 +26,6 @@ use App\Models\Team;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-
 Route::get('sponsors', [SponsorController::class, 'list']);
 
 // Route::get('majors', [Majorcontroller::class, 'listMajor']); // Chuyên Ngành
@@ -37,12 +35,9 @@ Route::get('users', [UserController::class, 'index']); // danh sách user
 Route::get('company', [CompanyController::class, 'listCompany']); // Doanh nghiệp
 
 // TEAMS
-
-
 // Route::prefix('teams')->group(function () {
 //     Route::post('api-add-team', [TeamController::class, 'Api_addTeam']);
 // });
-
 Route::prefix('contests')->group(function () {
     Route::get('', [AdminContestController::class, 'apiIndex'])->name('contest.api.index');
     Route::get('{id}', [AdminContestController::class, 'apiShow'])->name('contest.api.show');
