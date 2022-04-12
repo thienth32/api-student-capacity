@@ -43,9 +43,7 @@ Route::prefix('majors')->group(function () {
     Route::get('{slug}', [AdminMajorController::class, 'apiShow'])->name('major.api.show');
 });
 
-Route::prefix('teams')->group(function () {
-    Route::post('{contest_id}/add-team/{user_id}', [AdminTeamController::class, "apiAddTeam"])->name('client.api.add.team');
-});
+
 
 Route::prefix('enterprise')->group(function () {
     Route::get('', [EnterpriseController::class, 'apiIndex'])->name('enterprise.api.index');

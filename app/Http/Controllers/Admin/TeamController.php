@@ -24,11 +24,13 @@ class TeamController extends Controller
 
     private $contest;
     private $team;
+    private $user;
 
-    public function __construct(Contest $contest, Team $team)
+    public function __construct(Contest $contest, User $user, Team $team)
     {
         $this->contest = $contest;
         $this->team = $team;
+        $this->user = $user;
     }
     private function getList(Request $request)
     {
@@ -99,54 +101,78 @@ class TeamController extends Controller
             return false;
         }
     }
+
     // Add team phía client
     public function apiAddTeam(Request $request, $contest_id)
-
     {
-        dd($contest_id);
-        // $contest = 
-        // $listUser = $request->has('users') ? $request->users : [];
-        // $validate = validator::make(
-        //     $request->all(),
-        //     [
-        //         'name' => 'required',
-        //         'image' => 'required|max:500',
-        //     ],
-        //     [
-        //         'name.required' => 'Hãy nhập tên nhóm',
-        //         'image.required' => 'Hãy Nhập ảnh nhóm',
-        //         'image.max' => 'File ảnh quá lớn'
-        //     ]
-        // );
-        // if ($validate->fails()) {
-        //     return response()->json([
-        //         'status' => false,
-        //         'payload' => $validate->errors()
-        //     ]);
-        // }
-        // DB::beginTransaction();
-        // try {
-        //     $team = Team::create($request->all());
-        //     if ($team) {
-        //         foreach ($listUser as $value) {
-        //             $user = User::where('email', $value['email'])->first();
-        //             Member::create([
-        //                 'user_id' => $user->id,
-        //                 'team_id' => $team->id
-        //             ]);
-        //         }
-        //         DB::commit();
-        //         return response()->json([
-        //             'status' => true,
-        //             'payload' => $team,
-        //         ]);
-        //     }
-        // } catch (\Throwable $th) {
-        //     DB::rollBack();
-        //     return response()->json([
-        //         'status' => 'lỗi'
-        //     ]);
-        // }
+        DB::beginTransaction();
+        try {
+            $today = Carbon::now()->toDateTimeString();
+            $user_id = auth('sanctum')->user()->id;
+            $user = User::find($user_id);
+            $contest = Contest::find($contest_id);
+            if (is_null($user) || is_null($contest)) {
+                return response()->json([
+                    'status' => false,
+                    'payload' => 'Không tồn tại trong cơ sở dữ liệu !'
+                ]);
+            } else {
+                if ($user->status != config('util.ACTIVE_STATUS')) return response()->json([
+                    'status' => false,
+                    'payload' => 'Tài khoản đã bị khóa !'
+                ]);
+                if (strtotime($contest->register_deadline) > strtotime($today)) {
+                    $validate = validator::make(
+                        $request->all(),
+                        [
+                            'name' => 'required',
+                            'image' =>  'mimes:jpeg,png,jpg|max:10000',
+                        ],
+                        [
+                            'name.required' => 'Chưa nhập trường này !',
+                            'image.mimes' => 'Sai định dạng !',
+                            'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
+                        ]
+                    );
+                    if ($validate->fails()) return response()->json([
+                        'status' => false,
+                        'payload' => $validate->errors()
+                    ]);
+
+                    $teamModel = new Team();
+                    if ($request->hasFile('image')) {
+                        $fileImage = $request->file('image');
+                        $filename = $this->uploadFile($fileImage);
+                        $teamModel->image = $filename;
+                    }
+                    $teamModel->name = $request->name;
+                    $teamModel->contest_id = $contest_id;
+                    $teamModel->save();
+                    $teamModel->members()->attach($user_id, ['bot' => config('util.ACTIVE_STATUS')]);
+
+                    DB::commit();
+                    return response()->json([
+                        'status' => true,
+                        'payload' => 'Tạo đội thành công !'
+                    ]);
+                } else {
+                    return response()->json([
+                        'status' => false,
+                        'payload' => 'Đã quá thời hạn đăng kí cuộc thi !'
+                    ]);
+                }
+            }
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            if ($request->hasFile('image')) {
+                $fileImage = $request->file('image');
+                if (Storage::disk('google')->has($filename)) Storage::disk('google')->delete($filename);
+            }
+            return response()->json([
+                'status' => false,
+                'payload' => 'Lỗi'
+            ]);
+        }
     }
 
     public function create()
