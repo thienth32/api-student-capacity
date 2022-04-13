@@ -10,10 +10,10 @@
                     enctype="multipart/form-data">
                     @csrf
                     @method('put')
-                    <div class="text-center">
+                    <div style="width: 80%" class="text-center m-auto">
                         <img class="pb-4"
                             src="{{ $slider->image_url ?? 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
-                            style="max-height:200px , width: 100%" id="previewImg">
+                            style=" width: 100%" id="previewImg">
 
                     </div>
                     <div>

@@ -1,5 +1,5 @@
 const elForm = "#formAddSlider";
-const onkeyup = true;
+const onkeyup = false;
 const rules = {
     link_to: {
         required: true,
@@ -36,17 +36,20 @@ const pageSliderForm = {
             $(this).addClass("btn-primary");
             $(".btn-round").removeClass("btn-primary");
             $(".btn-home").removeClass("btn-primary");
+            $(".btn-home-re").removeClass("btn-primary");
         });
         $(".btn-round").on("click", function (e) {
             $("#round").show();
             $("#major").hide();
             $(".form-major").val(0);
             $(".btn-major").removeClass("btn-primary");
+            $(".btn-home-re").removeClass("btn-primary");
             $(".btn-home").removeClass("btn-primary");
             $(this).addClass("btn-primary");
         });
         $(".btn-home").on("click", function (e) {
             $(this).addClass("btn-primary");
+
             $(".btn-round").removeClass("btn-primary");
             $(".btn-major").removeClass("btn-primary");
             $("#major").hide();
