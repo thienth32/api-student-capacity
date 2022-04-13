@@ -10,7 +10,7 @@
                     @csrf
 
                     <div class="form-group mb-10">
-                        <label for="">Tên vòng thi</label>
+                        <label class="form-label" for="">Tên vòng thi</label>
                         <input type="text" name="name" value="{{ old('name') }}" class=" form-control" placeholder="">
                         @error('name')
                             <p class="text-danger">{{ $message }}</p>
@@ -23,7 +23,7 @@
                             <div class="col-8">
 
                                 <div class="form-group mb-10">
-                                    <label for="">Thời gian bắt đầu</label>
+                                    <label class="form-label" for="">Thời gian bắt đầu</label>
                                     <input id="begin" max="" type="datetime-local" value="{{ old('start_time') }}"
                                         name="start_time" class="form-control " placeholder="">
                                     @error('start_time')
@@ -32,7 +32,7 @@
                                 </div>
                                 <div class="form-group mb-10">
 
-                                    <label for="">Thời gian kết thúc</label>
+                                    <label class="form-label" for="">Thời gian kết thúc</label>
                                     <input id="end" min="" type="datetime-local" name="end_time"
                                         value="{{ old('end_time') }}" class="form-control  "
                                         placeholder="Pick date rage" />
@@ -88,7 +88,7 @@
                     </div>
 
                     <div class="form-group mb-10">
-                        <label for="">Mô tả cuộc thi</label>
+                        <label class="form-label" for="">Mô tả cuộc thi</label>
                         <textarea class="form-control" name="description" id="" rows="3">{{ old('description') }}</textarea>
                         @error('description')
                             <p class="text-danger">{{ $message }}</p>

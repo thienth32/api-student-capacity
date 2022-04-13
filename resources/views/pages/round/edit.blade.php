@@ -12,7 +12,7 @@
                     @csrf
                     @method('put')
                     <div class="form-group mb-10">
-                        <label for="">Tên vòng thi</label>
+                        <label class="form-label" for="">Tên vòng thi</label>
                         <input type="text" name="name" value="{{ $round['name'] }}" class=" form-control" placeholder="">
                         @error('name')
                             <p class="text-danger">{{ $message }}</p>
@@ -24,7 +24,7 @@
                             <div class="col-8">
 
                                 <div class="form-group mb-10">
-                                    <label for="">Thời gian bắt đầu</label>
+                                    <label class="form-label" for="">Thời gian bắt đầu</label>
                                     <input value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime($round['start_time'])) }}"
                                         type="datetime-local" id="begin" max="" name="start_time" class="form-control"
                                         placeholder="">
@@ -33,7 +33,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group mb-10">
-                                    <label for="">Thời gian kết thúc</label>
+                                    <label class="form-label" for="">Thời gian kết thúc</label>
                                     <input value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime($round['end_time'])) }}"
                                         id="end" min="" type="datetime-local" name="end_time" class="form-control"
                                         placeholder="">
@@ -94,7 +94,7 @@
                     </div>
 
                     <div class="form-group mb-10">
-                        <label for="">Mô tả cuộc thi</label>
+                        <label class="form-label" for="">Mô tả cuộc thi</label>
                         <textarea class="form-control" name="description" id="" rows="3">
                             {{ $round['description'] }}
                         </textarea>
