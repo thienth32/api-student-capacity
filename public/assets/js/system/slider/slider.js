@@ -37,11 +37,32 @@ const sliderPage = {
     },
     selectMajor: function () {
         $("#select-major").on("change", function () {
+            loadTast();
+            url = url + "&major=1";
             if ($(this).val() == 0) return (window.location = url);
-            checkUrlOut("major_id", $(this).val());
+            window.location = url + "&major_id=" + $(this).val();
+            return false;
+        });
+    },
+    selectRound: function () {
+        $("#select-round").on("change", function () {
+            loadTast();
+            url = url + "&round=1";
+            if ($(this).val() == 0) return (window.location = url);
+            window.location = url + "&round_id=" + $(this).val();
+            return false;
+        });
+    },
+    reHome: function () {
+        $(".btn-home-re").on("click", function () {
+            loadTast();
+            window.location = url + "&home=1";
+            return false;
         });
     },
 };
 sliderPage.selectChangeStatus();
 sliderPage.getText();
 sliderPage.selectMajor();
+sliderPage.selectRound();
+sliderPage.reHome();

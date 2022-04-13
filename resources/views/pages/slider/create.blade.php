@@ -9,10 +9,8 @@
                 <form id="formAddSlider" action="{{ route('admin.sliders.store') }}" method="post"
                     enctype="multipart/form-data">
                     @csrf
-
-                    <div class="text-center">
-
-                        <img class="pb-4" style="max-height:200px , width: 100%" id="previewImg">
+                    <div style="width: 80%" class="text-center m-auto">
+                        <img class="pb-4" style=" width: 100%" id="previewImg">
 
                     </div>
                     <div>

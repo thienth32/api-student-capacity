@@ -44,10 +44,17 @@ class SliderController extends Controller
                 return $q->onlyTrashed();
             })->search(request('q') ?? null, ['link_to', 'image_url'])
                 ->sort((request('sort') == 'desc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'sliders')
-
-                ->hasReuqest([
-                    'major_id' => request('major_id') ?? null,
+                ->hasRequestNotNull([
+                    'major_id' => request()->has('major') ?? null,
+                    'round_id' => request()->has('round') ?? null,
                 ])
+                ->hasRequest([
+                    'major_id' => request('major_id') ?? null,
+                    'round_id' => request('round_id') ?? null,
+                ])
+                ->when(request()->has('home'), function ($q) {
+                    return $q->whereNull('round_id')->whereNull('major_id');
+                })
                 ->hasDateTimeBetween('start_time', request('start_time') ?? null, request('end_time') ?? null)
                 ->hasSubTime(
                     $key,
@@ -69,9 +76,11 @@ class SliderController extends Controller
     {
         $sliders =  $this->getList()->status(request('status') ?? null)->paginate(request('limit') ?? 5);
         $majors = $this->major::all();
+        $rounds = $this->round::all();
         return view('pages.slider.index', [
             'sliders' => $sliders,
-            'majors' => $majors
+            'majors' => $majors,
+            'rounds' => $rounds,
         ]);
     }
 

@@ -8,11 +8,27 @@ const aListQuery = [
     "sort",
     "contest_id",
     "type_exam_id",
+    "round_id",
+    "major",
+    "round",
     "start_time",
     "end_time",
     "pass_date",
     "upcoming_date",
     "miss_date",
+    "day",
+    "month",
+    "year",
+    "op_time",
+];
+
+const aListHasOne = [
+    "day",
+    "month",
+    "year",
+    "op_time",
+    "start_time",
+    "end_time",
 ];
 
 // Search params
@@ -28,6 +44,10 @@ function checkUrlOut(key, value, valueAdd = "") {
             if (data == key) {
                 url = url + "&" + key + "=" + value;
             } else {
+                // console.log(data);
+                // let checkLength = aListHasOne.filter(function (d) {
+                //     return d === searchParams.has(data);
+                // });
                 if (searchParams.has(data)) {
                     url = url + "&" + data + "=" + searchParams.get(data);
                 }
