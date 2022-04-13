@@ -41,105 +41,55 @@
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
+                                <div class="form-group mb-10">
+
+                                    <label for="" class="form-label">Thuộc cuộc thi</label>
+                                    <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                                        data-placeholder="Select an option" tabindex="-1" aria-hidden="true"
+                                        name="contest_id">
+                                        <option data-select2-id="select2-data-130-vofb"></option>
+                                        @foreach ($contests as $contest)
+                                            <option @selected($round['contest_id'] == $contest->id) value="{{ $contest->id }}">
+                                                {{ $contest->name }}</option>
+                                        @endforeach
+                                    </select>
+
+                                    @error('contest_id')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div class="form-group mb-10">
+
+                                    <label for="" class="form-label">Thể loại cuộc thi</label>
+                                    <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                                        data-hide-search="false" data-placeholder="Select an option" tabindex="-1"
+                                        aria-hidden="true" name="type_exam_id" value="{{ old('type_exam_id') }}">
+                                        <option data-select2-id="select2-data-130-vofb"></option>
+                                        @foreach ($type_exams as $typeexam)
+                                            <option @selected($round['type_exam_id'] == $typeexam->id) value="{{ $typeexam->id }}">
+                                                {{ $typeexam->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('type_exam_id')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
                             </div>
                             <div class="col-4">
-                                <div class="form-group mb-10 ms-4">
-
-                                    <label class="fs-6 fw-bold mb-3">
-                                        <span>Ảnh vòng thi</span>
-
-                                        <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title=""
-                                            data-bs-original-title="Allowed file types: png, jpg, jpeg."
-                                            aria-label="Allowed file types: png, jpg, jpeg."></i>
-                                    </label>
+                                <div class="form-group ">
+                                    <label for="" class="form-label">Ảnh cuộc thi</label>
+                                    <input value="{{ old('image') }}" name="image" type='file' id="file-input"
+                                        class="form-control" accept=".png, .jpg, .jpeg" />
                                     @error('image')
                                         <p class="text-danger">{{ $message }} </p>
                                     @enderror
-                                    <div class="mt-1">
-
-                                        <div style="position: relative" class="image-input image-input-outline"
-                                            data-kt-image-input="true"
-                                            style="background-image: url('{{ $round['image'] !== null? $round['image']: 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}')">
-
-                                            <div class="image-input-wrapper w-100px h-100px"
-                                                style="background-image: url('{{ $round['image'] !== null? $round['image']: 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}')">
-                                            </div>
-
-                                            <label
-                                                class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
-                                                data-kt-image-input-action="change" data-bs-toggle="tooltip" title=""
-                                                data-bs-original-title="Change avatar">
-                                                <i class="bi bi-pencil-fill fs-7"></i>
-
-                                                <input value="{{ old('image') }}" type="file" name="image"
-                                                    accept=".png, .jpg, .jpeg">
-
-                                                <style>
-                                                    label#image-error {
-                                                        position: absolute;
-                                                        min-width: 150px;
-                                                        top: 500%;
-                                                        right: -100%;
-                                                    }
-
-                                                </style>
-                                            </label>
-                                            <!--end::Edit-->
-                                            <!--begin::Cancel-->
-                                            <span
-                                                class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
-                                                data-kt-image-input-action="cancel" data-bs-toggle="tooltip" title=""
-                                                data-bs-original-title="Cancel avatar">
-                                                <i class="bi bi-x fs-2"></i>
-                                            </span>
-                                            <!--end::Cancel-->
-                                            <!--begin::Remove-->
-                                            <span
-                                                class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
-                                                data-kt-image-input-action="remove" data-bs-toggle="tooltip" title=""
-                                                data-bs-original-title="Remove avatar">
-                                                <i class="bi bi-x fs-2"></i>
-                                            </span>
-                                            <!--end::Remove-->
-                                        </div>
-                                        <!--end::Image input-->
-                                    </div>
-                                    <!--end::Image input wrapper-->
+                                    <img class="w-100 mt-4 border rounded-3" id="image-preview"
+                                        src="{{ $round['image'] !== null? $round['image']: 'https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg' }} " />
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group mb-10">
 
-                            <label for="" class="form-label">Thuộc cuộc thi</label>
-                            <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
-                                data-placeholder="Select an option" tabindex="-1" aria-hidden="true" name="contest_id">
-                                <option data-select2-id="select2-data-130-vofb"></option>
-                                @foreach ($contests as $contest)
-                                    <option @selected($round['contest_id'] == $contest->id) value="{{ $contest->id }}">
-                                        {{ $contest->name }}</option>
-                                @endforeach
-                            </select>
-
-                            @error('contest_id')
-                                <p class="text-danger">{{ $message }}</p>
-                            @enderror
                         </div>
-                        <div class="form-group mb-10">
 
-                            <label for="" class="form-label">Thể loại cuộc thi</label>
-                            <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
-                                data-hide-search="false" data-placeholder="Select an option" tabindex="-1"
-                                aria-hidden="true" name="type_exam_id" value="{{ old('type_exam_id') }}">
-                                <option data-select2-id="select2-data-130-vofb"></option>
-                                @foreach ($type_exams as $typeexam)
-                                    <option @selected($round['type_exam_id'] == $typeexam->id) value="{{ $typeexam->id }}">
-                                        {{ $typeexam->name }}</option>
-                                @endforeach
-                            </select>
-                            @error('type_exam_id')
-                                <p class="text-danger">{{ $message }}</p>
-                            @enderror
-                        </div>
 
                     </div>
 

@@ -134,11 +134,12 @@
 
 @section('page-script')
 
+    <script src="assets/js/system/preview-file/previewImg.js"></script>
     <script src="assets/js/system/date-after/date-after.js"></script>
     <script src="assets/js/system/slider/form.js"></script>
     <script>
         dateAfterEdit('input[type=datetime-local]#begin', 'input[type=datetime-local]#end');
-
+        preview.showFile('.file-change', '#previewImg');
         // $('.btn-home').click();
     </script>
     <script src="assets/js/system/validate/validate.js"></script>
