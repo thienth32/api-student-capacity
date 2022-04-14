@@ -35,6 +35,7 @@
             <select class="form-select form-select-judges mb-2 select2-hidden-accessible" data-control="select2"
                 data-hide-search="false" tabindex="-1" aria-hidden="true" name="contest_id"
                 value="{{ old('contest_id') }}">
+                <option value="0">--Ban giám khảo--</option>
                 @foreach ($round->contest->judges as $user)
                     <option value="{{ $user }}">
                         {{ $user->name }} -
@@ -93,15 +94,7 @@
         const _token = "{{ csrf_token() }}"
         const listUserIsset = @json($round->judges);
     </script>
-    {{-- <script>
-        var URL = window.location.href;
-        var userArray = [];
-        var _token = "{{ csrf_token() }}"
-        var urlSearch = "{{ route('admin.user.TeamUserSearch') }}"
-        var URL_ATTACH = "{{ route('admin.judges.attach', ['contest_id' => $contest->id]) }}"
-        var URL_SYNC = "{{ route('admin.judges.sync', ['contest_id' => $contest->id]) }}"
-        var URL_DETACH = "{{ route('admin.judges.detach', ['contest_id' => $contest->id]) }}"
-    </script> --}}
+
     <script src="{{ asset('assets/js/system/team/team.js') }}"></script>
     <script src="{{ asset('assets/js/system/judges/judges-round.js') }}"></script>
 @endsection

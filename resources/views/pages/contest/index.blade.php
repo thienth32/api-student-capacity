@@ -18,30 +18,51 @@
                 </svg>
                 <!--end::Svg Icon-->
             </span>
+            <a href="{{ route('admin.contest.soft.delete', 'contest_soft_delete=1') }}">
+
+                <span class=" svg-icon svg-icon-primary svg-icon-2x">
+                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Files/Deleted-folder.svg--><svg
+                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                        height="24px" viewBox="0 0 24 24" version="1.1">
+                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <rect x="0" y="0" width="24" height="24" />
+                            <path
+                                d="M3.5,21 L20.5,21 C21.3284271,21 22,20.3284271 22,19.5 L22,8.5 C22,7.67157288 21.3284271,7 20.5,7 L10,7 L7.43933983,4.43933983 C7.15803526,4.15803526 6.77650439,4 6.37867966,4 L3.5,4 C2.67157288,4 2,4.67157288 2,5.5 L2,19.5 C2,20.3284271 2.67157288,21 3.5,21 Z"
+                                fill="#000000" opacity="0.3" />
+                            <path
+                                d="M10.5857864,14 L9.17157288,12.5857864 C8.78104858,12.1952621 8.78104858,11.5620972 9.17157288,11.1715729 C9.56209717,10.7810486 10.1952621,10.7810486 10.5857864,11.1715729 L12,12.5857864 L13.4142136,11.1715729 C13.8047379,10.7810486 14.4379028,10.7810486 14.8284271,11.1715729 C15.2189514,11.5620972 15.2189514,12.1952621 14.8284271,12.5857864 L13.4142136,14 L14.8284271,15.4142136 C15.2189514,15.8047379 15.2189514,16.4379028 14.8284271,16.8284271 C14.4379028,17.2189514 13.8047379,17.2189514 13.4142136,16.8284271 L12,15.4142136 L10.5857864,16.8284271 C10.1952621,17.2189514 9.56209717,17.2189514 9.17157288,16.8284271 C8.78104858,16.4379028 8.78104858,15.8047379 9.17157288,15.4142136 L10.5857864,14 Z"
+                                fill="#000000" />
+                        </g>
+                    </svg>
+                    <!--end::Svg Icon-->
+                </span>
+            </a>
         </h1>
         {{--  --}}
 
         <div class="row card-format">
 
             <div class=" col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
-                <div class="   form-group p-2">
-                    <label>Chuyên ngành </label>
-                    <select id="select-major" class="form-control form-control-solid">
-                        <option value="0">-- Chuyên ngành --</option>
+                <div class="form-group">
+                    <label class="form-label">Chuyên ngành </label>
+                    <select id="select-major" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                        data-hide-search="true" tabindex="-1" aria-hidden="true">
+                        <option value="0">Chọn chuyên ngành</option>
                         @forelse ($majors as $major)
                             <option @selected(request('major_id') == $major->id) value="{{ $major->id }}">{{ $major->name }}
                             </option>
                         @empty
-                            <option>-- Không có chuyên ngành --</option>
+                            <option disabled>Không có chuyên ngành</option>
                         @endforelse
                     </select>
                 </div>
             </div>
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
-                <div class="   form-group p-2">
-                    <label>Tình trạng </label>
-                    <select id="select-status" class="form-control form-control-solid">
-                        <option value="0" @selected(!request()->has('status'))>-- Tình trạng --</option>
+                <div class="form-group">
+                    <label class="form-label">Tình trạng </label>
+                    <select id="select-status" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                        data-hide-search="true" tabindex="-1" aria-hidden="true">
+                        <option value="3" @selected(!request()->has('status'))>-- Tình trạng --</option>
                         <option @selected(request('status') == 1) value="1">Kích họat
                         </option>
                         <option @selected(request()->has('status') && request('status') == 0) value="0">Không kích hoạt
@@ -51,9 +72,9 @@
             </div>
 
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
-                <div class="  form-group p-2">
-                    <label>Tìm kiếm </label>
-                    <input type="text" value="{{ request('q') ?? '' }}" placeholder="'*Enter' tìm kiếm ..."
+                <div class="  form-group">
+                    <label class="form-label">Tìm kiếm </label>
+                    <input type="text" value="{{ request('q') ?? '' }}" placeholder="*Enter tìm kiếm ..."
                         class=" ip-search form-control">
                 </div>
             </div>
@@ -61,21 +82,22 @@
                 <div class="col-12 row">
                     <div class="mb-0">
                         <label class="form-label">Thời gian </label>
-                        <input class="form-control form-control-solid" placeholder="Pick date rage"
-                            id="kt_daterangepicker_2" />
+                        <input class="form-control " placeholder="Pick date rage" id="kt_daterangepicker_2" />
                     </div>
 
 
-                    <div class="col-12 ">
-                        <label for="" class="label">Hoạt động cuộc thi </label>
-                        <select class="select-date-time-contest form-control">
-                            <option class="form-control">---- Hoạt động cuộc thi ----</option>
+                    <div class="col-12 mt-4 ">
+                        <label for="" class="form-label">Hoạt động cuộc thi </label>
+                        <select class="select-date-time-contest form-select mb-2 select2-hidden-accessible"
+                            data-control="select2" data-hide-search="true" tabindex="-1" aria-hidden="true">
+                            <option class="form-control">Chọn hoạt động cuộc thi</option>
                             {{-- <option class="form-control" @selected(request()->has('upcoming_date')) value="upcoming_date">Sắp diễn ra
                             </option> --}}
                             <option class="form-control" @selected(request()->has('pass_date')) value="pass_date"> Sắp và đang diễn
                                 ra
                             </option>
-                            <option class="form-control" @selected(request()->has('miss_date')) value="miss_date">Quá hạn </option>
+                            <option class="form-control" @selected(request()->has('miss_date')) value="miss_date">Đã diễn ra
+                            </option>
 
                         </select>
                     </div>
@@ -120,9 +142,8 @@
             </div>
         </div>
 
-        {{--  --}}
-        <div class="  ">
-            <table class=" table table-hover  table-responsive">
+        <div class="table-responsive table-responsive-md">
+            <table class="table table-row-bordered table-row-gray-300 gy-7  table-hover ">
                 <thead>
                     <tr>
                         <th scope="col">
@@ -179,32 +200,9 @@
                                 <!--end::Svg Icon-->
                             </span>
                         </th>
-                        <th scope="col">Chi tiết
-                            <span role="button" data-key="description"
-                                class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
-                                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
-                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                    style="width: 14px !important ; height: 14px !important" width="24px" height="24px"
-                                    viewBox="0 0 24 24" version="1.1">
-                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                        <polygon points="0 0 24 0 24 24 0 24" />
-                                        <rect fill="#000000" opacity="0.3"
-                                            transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
-                                            x="5" y="5" width="2" height="12" rx="1" />
-                                        <path
-                                            d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
-                                            fill="#000000" fill-rule="nonzero" />
-                                        <rect fill="#000000" opacity="0.3"
-                                            transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
-                                            x="17" y="7" width="2" height="12" rx="1" />
-                                        <path
-                                            d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
-                                            fill="#000000" fill-rule="nonzero"
-                                            transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
-                                    </g>
-                                </svg>
-                                <!--end::Svg Icon-->
-                            </span>
+                        <th scope="col">Đội thi
+                        </th>
+                        <th scope="col">Ban giám khảo
                         </th>
                         <th scope="col">Chuyên ngành </th>
                         <th scope="col">Tình trạng </th>
@@ -290,55 +288,18 @@
                                 </a>
                             </td>
 
-                            <td>
+                            <td class="text-center">
 
-                                <button class="p-4" type="button"
-                                    style="background: none ; border : none ; list-style  : none " data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal_{{ $key }}">
-                                    <span class="svg-icon svg-icon-success svg-icon-2x">
-                                        <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Visible.svg--><svg
-                                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                            width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                <rect x="0" y="0" width="24" height="24" />
-                                                <path
-                                                    d="M3,12 C3,12 5.45454545,6 12,6 C16.9090909,6 21,12 21,12 C21,12 16.9090909,18 12,18 C5.45454545,18 3,12 3,12 Z"
-                                                    fill="#000000" fill-rule="nonzero" opacity="0.3" />
-                                                <path
-                                                    d="M12,15 C10.3431458,15 9,13.6568542 9,12 C9,10.3431458 10.3431458,9 12,9 C13.6568542,9 15,10.3431458 15,12 C15,13.6568542 13.6568542,15 12,15 Z"
-                                                    fill="#000000" opacity="0.3" />
-                                            </g>
-                                        </svg>
-                                        <!--end::Svg Icon-->
-                                    </span>
-                                </button>
-
-                                <!-- Modal -->
-                                <div class="modal fade" id="exampleModal_{{ $key }}" tabindex="-1"
-                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Chi tiết cuộc
-                                                    thi
-                                                </h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body  ">
-                                                {{ $contest->description }}
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Thoát
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                {{ $contest->teams_count }}
 
                             </td>
-                            <td>{{ $contest->major->name }}</td>
+
+                            <td class="text-center">
+
+                                {{ count($contest->judges) }}
+
+                            </td>
+                            <td>{{ $contest->major->name ?? 'Chưa có chuyên ngành ' }}</td>
                             <td>
 
                                 <div class="form-check form-switch">
@@ -352,9 +313,9 @@
                                 @if (\Carbon\Carbon::parse($contest->date_start)->toDateTimeString() > \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
                                     <span class="badge bg-primary">Sắp diễn ra </span>
                                 @elseif (\Carbon\Carbon::parse($contest->register_deadline)->toDateTimeString() > \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
-                                    <span class="badge bg-success">Đang mở</span>
+                                    <span class="badge bg-success">Đang diễn ra </span>
                                 @else
-                                    <span class="badge bg-danger"> Quá hạn</span>
+                                    <span class="badge bg-danger"> Đã diễn ra </span>
                                 @endif
                             </td>
                             <td>{{ $contest->date_start }}</td>
@@ -421,12 +382,13 @@
                                             </a>
                                         </li>
                                         <li class="my-3">
-                                            @hasrole('super admin')
+                                            @hasrole(config('util.ROLE_DELETE'))
                                                 <form action="{{ route('admin.contest.destroy', ['id' => $contest->id]) }}"
                                                     method="post">
                                                     @csrf
                                                     @method('delete')
-                                                    <button style=" background: none ; border: none ; list-style : none"
+                                                    <button onclick="return confirm('Bạn có chắc muốn xóa không !')"
+                                                        style=" background: none ; border: none ; list-style : none"
                                                         type="submit">
                                                         <span role="button" class="svg-icon svg-icon-danger svg-icon-2x">
                                                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Trash.svg--><svg
@@ -485,13 +447,16 @@
     </div>
 
 
-
 @endsection
 @section('page-script')
     <script>
         let url = "/admin/contests?";
         const _token = "{{ csrf_token() }}";
         const sort = '{{ request()->has('sort') ? (request('sort') == 'desc' ? 'asc' : 'desc') : 'asc' }}';
+        const start_time =
+            '{{ request()->has('start_time')? \Carbon\Carbon::parse(request('start_time'))->format('m/d/Y h:i:s A'): \Carbon\Carbon::now()->format('m/d/Y h:i:s A') }}'
+        const end_time =
+            '{{ request()->has('end_time')? \Carbon\Carbon::parse(request('end_time'))->format('m/d/Y h:i:s A'): \Carbon\Carbon::now()->format('m/d/Y h:i:s A') }}'
     </script>
     <script src="assets/js/system/formatlist/formatlis.js"></script>
     <script src="assets/js/system/contest/contest.js"></script>

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Models\Contest;
+use App\Models\Team;
 use App\Models\TypeExam;
 use Illuminate\Support\Facades\DB;
 use Image;
@@ -51,7 +52,9 @@ class RoundController extends Controller
                 $key = 'year';
             };
 
-            $data = $this->round::search(request('q') ?? null, ['name', 'description'])
+            $data = $this->round::when(request()->has('round_soft_delete'), function ($q) {
+                return $q->onlyTrashed();
+            })->search(request('q') ?? null, ['name', 'description'])
                 ->sort((request('sort') == 'desc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'rounds')
                 ->hasDateTimeBetween('start_time', request('start_time') ?? null, request('end_time') ?? null)
                 ->hasSubTime(
@@ -60,7 +63,7 @@ class RoundController extends Controller
                     (request('op_time') == 'sub' ? 'sub' : 'add'),
                     'start_time'
                 )
-                ->hasReuqest([
+                ->hasRequest([
                     'contest_id' => request('contest_id') ?? null,
                     'type_exam_id' => request('type_exam_id') ?? null,
                 ])
@@ -128,7 +131,7 @@ class RoundController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'name' => 'required|max:255',
+                'name' => 'required|unique:rounds|max:255',
                 'image' => 'required|required|mimes:jpeg,png,jpg|max:10000',
                 'start_time' => 'required',
                 'end_time' => 'required|after:start_time',
@@ -139,12 +142,13 @@ class RoundController extends Controller
             [
                 'name.required' => 'Chưa nhập trường này !',
                 'name.max' => 'Độ dài kí tự không phù hợp !',
+                'name.unique' => 'Đã tồn tại trong cơ sở dữ liệu !',
                 'image.mimes' => 'Sai định dạng !',
                 'image.required' => 'Chưa nhập trường này !',
                 'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
                 'start_time.required' => 'Chưa nhập trường này !',
                 'end_time.required' => 'Chưa nhập trường này !',
-                'end_time.after' => 'Thời gian kết thúc không được bằng thời gian bắt đầu !',
+                'end_time.after' => 'Thời gian kết thúc không được nhỏ hơn  thời gian bắt đầu !',
                 'description.required' => 'Chưa nhập trường này !',
                 'contest_id.required' => 'Chưa nhập trường này !',
                 'contest_id.numeric' => 'Sai định dạng !',
@@ -215,25 +219,31 @@ class RoundController extends Controller
     private function updateRound($id)
     {
         try {
+            // dd(request()->all());
             if (!($round = $this->round::find($id))) return false;
             $validator = Validator::make(
                 request()->all(),
                 [
-                    'name' => "required",
-                    'start_time' => "required",
+                    'name' => "required|unique:rounds,name,$round->id|max:255",
+                    'start_time' => "required|before:end_time",
                     'end_time' => "required|after:start_time",
                     'description' => "required",
                     'contest_id' => "required",
                     'type_exam_id' => "required",
                 ],
                 [
-                    "name.required" => "Tường name không bỏ trống !",
-                    "start_time.required" => "Tường thời gian bắt đầu  không bỏ trống !",
-                    "end_time.required" => "Tường thời gian kết thúc không bỏ trống !",
-                    "end_time.after" => "Tường thời gian kết thúc không nhỏ hơn trường bắt đầu  !",
-                    "description.required" => "Tường mô tả không bỏ trống !",
-                    "contest_id.required" => "Tường cuộc thi tồn tại !",
-                    "type_exam_id.required" => "Tường loại thi không tồn tại !",
+                    "name.required" => "Trường name không bỏ trống !",
+                    'name.max' => 'Độ dài kí tự không phù hợp !',
+                    'name.unique' => 'Đã tồn tại trong cơ sở dữ liệu !',
+                    // "start_time.date_format" => "Trường thời gian bắt đầu không đúng định dạng !",
+                    // "end_time.date_format" => "Trường thời gian kết thúc không đúng định dạng !",
+                    "start_time.required" => "Trường thời gian bắt đầu  không bỏ trống !",
+                    "end_time.required" => "Trường thời gian kết thúc không bỏ trống !",
+                    "start_time.before" => "Trường thời gian bắt đầu  không nhỏ hơn trường kết thúc  !",
+                    "end_time.after" => "Trường thời gian kết thúc không nhỏ hơn trường bắt đầu  !",
+                    "description.required" => "Trường mô tả không bỏ trống !",
+                    "contest_id.required" => "Trường cuộc thi tồn tại !",
+                    "type_exam_id.required" => "Trường loại thi không tồn tại !",
                 ]
             );
 
@@ -312,7 +322,7 @@ class RoundController extends Controller
     private function destroyRound($id)
     {
         try {
-            if (!(auth()->user()->hasRole('super admin'))) return false;
+            if (!(auth()->user()->hasRole(config('util.ROLE_DELETE')))) return false;
             DB::transaction(function () use ($id) {
                 if (!($data = $this->round::find($id))) return false;
                 if (Storage::disk('google')->has($data->image)) Storage::disk('google')->delete($data->image);
@@ -327,7 +337,7 @@ class RoundController extends Controller
     // View round
     public function destroy($id)
     {
-        if (!(auth()->user()->hasRole('super admin'))) return redirect()->back()->with('error', 'Không thể xóa ');
+        if (!(auth()->user()->hasRole(config('util.ROLE_DELETE')))) return redirect()->back()->with('error', 'Không thể xóa ');
         if ($this->destroyRound($id)) return redirect()->back();
         return redirect('error');
     }
@@ -377,5 +387,59 @@ class RoundController extends Controller
     {
         if (!($round = $this->round::with(['contest', 'type_exam', 'judges', 'teams'])->where('id', $id)->first())) return abort(404);
         return view('pages.round.detail.detail', ['round' => $round]);
+    }
+
+    public function softDelete()
+    {
+        $listRoundSofts = $this->getList()->paginate(request('limit') ?? 5);
+        return view('pages.round.round-soft-delete', [
+            'listRoundSofts' => $listRoundSofts
+        ]);
+    }
+
+    public function backUpRound($id)
+    {
+        try {
+            $this->round::withTrashed()->where('id', $id)->restore();
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            return abort(404);
+        }
+    }
+
+    public function deleteRound($id)
+    {
+        try {
+            $this->round::withTrashed()->where('id', $id)->forceDelete();
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            return abort(404);
+        }
+    }
+
+    public function roundDetailTeam($id)
+    {
+        $round = Round::find($id);
+        $teams =  Round::find($id)->load('contest')->contest->teams;
+        return view('pages.round.detail.round-team', compact('round', 'teams'));
+    }
+
+    public function attachTeam(Request $request, $id)
+    {
+        try {
+            Round::find($id)->teams()->syncWithoutDetaching($request->team_id);
+            return Redirect::back();
+        } catch (\Throwable $th) {
+            return Redirect::back();
+        }
+    }
+    public function detachTeam($id, $team_id)
+    {
+        try {
+            Round::find($id)->teams()->detach([$team_id]);
+            return Redirect::back();
+        } catch (\Throwable $th) {
+            return Redirect::back();
+        }
     }
 }

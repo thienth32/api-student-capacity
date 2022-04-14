@@ -1,0 +1,120 @@
+@extends('layouts.main')
+@section('title', 'Chi tiết cuộc thi')
+@section('page-title', 'Danh sách đội thi ')
+@section('content')
+    <div class=" card card-flush p-5">
+        <div class=" mb-4">
+            <div class="row">
+                <div class="col-lg-12">
+                    <ol class="breadcrumb text-muted fs-6 fw-bold">
+                        <li class="breadcrumb-item pe-3">
+                            <a href="{{ route('admin.contest.list') }}" class="pe-3">Cuộc thi </a>
+                        </li>
+                        <li class="breadcrumb-item px-3 ">
+                            <a href="{{ route('admin.contest.show', ['id' => $round->contest->id]) }}"
+                                class="pe-3">
+                                {{ $round->contest->name }}
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item pe-3">
+                            <a href="{{ route('admin.round.list') }}" class="pe-3">Vòng thi </a>
+                        </li>
+                        <li class="breadcrumb-item px-3 text-muted">
+                            <a href="{{ route('admin.round.detail', ['id' => $round->id]) }}">
+                                {{ $round->name }}
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item px-3 text-muted">Danh sách đội thi</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <form id="formTeam" action="{{ route('admin.round.detail.team.attach', ['id' => $round->id]) }}"
+                    method="POST">
+                    @csrf
+                    <label for="" class="form-label">Đội thi</label>
+                    <select multiple class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                        data-hide-search="false" tabindex="-1" aria-hidden="true" name="team_id[]"
+                        value="{{ old('team_id') }}">
+                        @foreach ($teams as $teamSelect)
+                            <option value="{{ $teamSelect->id }}"> {{ $teamSelect->name }}</option>
+                        @endforeach
+                    </select>
+                    <button type="submit" class="btn btn-primary"> Thêm </button>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-lg-12">
+
+            <div class=" card card-flush  p-5">
+                <div class="table-responsive">
+                    <table class="table table-row-dashed table-row-gray-300 gy-7">
+                        <thead>
+                            <tr class="fw-bolder fs-6 text-gray-800">
+                                <th>#</th>
+                                <th>Ảnh</th>
+                                <th>Tên đội</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php
+                                $key = 1;
+                            @endphp
+                            @foreach ($round->teams as $team)
+                                <tr>
+                                    <td>{{ $key++ }}</td>
+                                    <td><img class='w-100px'
+                                            src="{{ Storage::disk('google')->has($team->image)? Storage::disk('google')->url($team->image): 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
+                                            alt=""></td>
+                                    <td>{{ $team->name }}</td>
+                                    <td>
+                                        <a href="{{ route('admin.round.detail.team.detach', ['id' => $round->id, 'team_id' => $team->id]) }}"
+                                            class="btn btn-danger deleteTeams"><i class="fas fa-trash-alt"></i></a>
+                                    </td>
+
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+@endsection
+@section('page-script')
+    <script>
+        var URL = window.location.href;
+        var userArray = [];
+        var _token = "{{ csrf_token() }}"
+        // var URL_ATTACH = "{{ route('admin.judges.attach', ['contest_id' => $round->id]) }}"
+        // var URL_SYNC = "{{ route('admin.judges.sync', ['contest_id' => $round->id]) }}"
+        // var URL_DETACH = "{{ route('admin.judges.detach', ['contest_id' => $round->id]) }}"
+    </script>
+    <script>
+        const elForm = "#formTeam";
+        const onkeyup = true;
+        const rules = {
+            team_id: {
+                required: true,
+            }
+        };
+        const messages = {
+            team_id: {
+                required: 'Chưa chọn đội !!',
+            }
+        };
+    </script>
+    <script src="assets/js/system/validate/validate.js"></script>
+    <script src="{{ asset('assets/js/system/round/round-team.js') }}"></script>
+@endsection

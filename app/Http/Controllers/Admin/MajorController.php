@@ -158,8 +158,31 @@ class MajorController extends Controller
 
     public function destroy($slug)
     {
+        // dd($slug);
         if (!($major = $this->getMajor($slug))) return abort(404);
         $major->delete();
+        return redirect()->back();
+    }
+
+    public function listRecordSoftDeletes()
+    {
+        if ($data = $this->getList()->onlyTrashed()) {
+            return  view('pages.major.soft-deletes', [
+                'majors' => $data->paginate(request('limit') ?? 5),
+            ]);
+        }
+        return abort(404);
+    }
+    public function permanently_deleted($slug)
+    {
+        $major = Major::withTrashed()->where('slug', $slug)->first();
+        $major->forceDelete();
+        return redirect()->back();
+    }
+    public function restore_deleted($slug)
+    {
+        $major = Major::withTrashed()->where('slug', $slug)->first();
+        $major->restore();
         return redirect()->back();
     }
 }

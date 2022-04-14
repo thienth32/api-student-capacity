@@ -22,10 +22,15 @@ class EnterpriseController extends Controller
         $orderBy = $request->has('orderBy') ? $request->orderBy : 'id';
 
         $sortBy = $request->has('sortBy') ? $request->sortBy : "desc";
+        $softDelete = $request->has('enterprise_soft_delete') ? $request->enterprise_soft_delete : null;
+
+        if ($softDelete != null) {
+            $query = Enterprise::onlyTrashed()->where('name', 'like', "%$keyword%")->orderByDesc('deleted_at');
+            return $query;
+        }
         $query = Enterprise::where('name', 'like', "%$keyword%");
         if ($contest != null) {
-            $query = Contest::where('id', $contest);
-            return $query;
+            $query = Contest::find($contest);
         }
         if ($sortBy == "desc") {
             $query->orderByDesc($orderBy);
@@ -34,29 +39,28 @@ class EnterpriseController extends Controller
         }
         return $query;
     }
+    public function apiIndex(Request $request)
+    {
+        $listEnterprise = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
+        return response()->json([
+            'status' => true,
+            'payload' => $listEnterprise,
+        ]);
+    }
     public function index(Request $request)
     {
-
-
         $contest = Contest::all();
-        if ($request->contest) {
 
-            $Enterprise = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
-
-//          foreach($Enterprise[0]->enterprise as $item){
-//              echo '<pre>';
-// var_dump($item);
-//          };
-//          die();
-            return view('pages.enterprise.index', compact('Enterprise', 'contest'));
-        }
         $listEnterprise = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
+        if ($request->contest) {
+            $listEnterprise = $this->getList($request)->enterprise()->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
+        }
         return view('pages.enterprise.index', compact('listEnterprise', 'contest'));
     }
     public function destroy($id)
     {
         try {
-            if (!(auth()->user()->hasRole('super admin'))) return false;
+            if (!(auth()->user()->hasRole(config('util.ROLE_DELETE')))) return false;
             DB::transaction(function () use ($id) {
                 if (!($data = Enterprise::find($id))) return false;
                 if (Storage::disk('google')->has($data->logo)) Storage::disk('google')->delete($data->logo);
@@ -163,6 +167,34 @@ class EnterpriseController extends Controller
         } catch (\Throwable $th) {
             Db::rollBack();
             return redirect('error');
+        }
+    }
+    public function softDelete(Request $request)
+    {
+        $listSofts = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
+
+        return view('pages.enterprise.enterprise-soft-delete', compact('listSofts'));
+    }
+    public function backUpEnterprise($id)
+    {
+        try {
+            Enterprise::withTrashed()->where('id', $id)->restore();
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            return abort(404);
+        }
+    }
+    //xóa vĩnh viễn
+    public function delete($id)
+    {
+        // dd($id);
+        try {
+            if (!(auth()->user()->hasRole('super admin'))) return false;
+
+            Enterprise::withTrashed()->where('id', $id)->forceDelete();
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            return abort(404);
         }
     }
 }

@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Major;
+use App\Models\Round;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,6 +22,7 @@ class SliderFactory extends Factory
             'start_time' => date("Y-m-d H:i:s"),
             'end_time' => date("Y-m-d H:i:s"),
             'major_id' => Major::all()->random()->id,
+            'round_id' => Round::all()->random()->id,
             'image_url' => $this->faker->imageUrl($width = 640, $height = 480, $category = "image_url"),
             'link_to'=>$this->faker->sentence(15)
         ];

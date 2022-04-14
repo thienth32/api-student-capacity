@@ -1,3 +1,18 @@
 label.error {
     color: red;
 }
+
+label#img-error {
+    position: absolute;
+    min-width: 150px;
+    top: 500%;
+    right: -100%;
+}
+
+#img_contain {
+    margin-top: 10px;
+}
+
+#img_contain>img {
+    width: 100%;
+}

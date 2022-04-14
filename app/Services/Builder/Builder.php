@@ -105,10 +105,9 @@ class Builder extends  EloquentBuilder
     {
         if ($search == null) return $this;
         // if (!(\Str::contains($search, '@'))) $search = \Str::slug($search, " ");
-
-        $this->where($search_by[0], 'like', "%$search%");
+        $this->where($search_by[0], 'LIKE', "%" . $search . "%");
         foreach ($search_by as $key => $item) {
-            if ($key !== 0) $this->orWhere($item, 'like', "%$search%");
+            if ($key !== 0) $this->orWhere($item, 'LIKE', "%" . $search . "%");
         }
         return $this;
     }
@@ -116,12 +115,32 @@ class Builder extends  EloquentBuilder
     /**
      * Has request url
      */
-    public function hasReuqest($data = [])
+    public function hasRequest($data = [])
     {
         if (count($data) == 0) return $this;
         $q = $this;
         foreach ($data as $key => $v) {
             if ($v) $q = $q->where($key, $v);
+        }
+        return $q;
+    }
+
+    public function hasRequestNotNull($data = [])
+    {
+        if (count($data) == 0) return $this;
+        $q = $this;
+        foreach ($data as $key => $v) {
+            if ($v) $q = $q->whereNotNull($key);
+        }
+        return $q;
+    }
+
+    public function hasRequestNull($data = [])
+    {
+        if (count($data) == 0) return $this;
+        $q = $this;
+        foreach ($data as $key => $v) {
+            if ($v) $q = $q->whereNotNull($key);
         }
         return $q;
     }
