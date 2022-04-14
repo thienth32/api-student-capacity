@@ -244,9 +244,11 @@ class SliderController extends Controller
             ]);
         }
         if ($request->major_id != 0) {
-            $data = array_merge($data, ['major_id' => $request->major_id]);
+            $data = array_merge($data, ['major_id' => $request->major_id, 'round_id' => null]);
         } elseif ($request->round_id != 0) {
-            $data = array_merge($data, ['round_id' => $request->round_id]);
+            $data = array_merge($data, ['round_id' => $request->round_id, 'major_id' => null]);
+        } else {
+            $data = array_merge($data, ['round_id' => null, 'major_id' => null]);
         }
         $slider->update($data);
         return redirect()->route('admin.sliders.list');
