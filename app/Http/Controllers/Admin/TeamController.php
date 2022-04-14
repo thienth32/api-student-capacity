@@ -256,14 +256,29 @@ class TeamController extends Controller
 
 
     // Add team phía client
-    public function apiAddTeam(Request $request, $contest_id)
+    public function apiAddTeam(Request $request)
     {
+        $validate = validator::make(
+            $request->all(),
+            [
+                'contest_id' => 'required',
+
+            ],
+            [
+                'contest_id.required' => 'Chưa nhập trường này !',
+
+            ]
+        );
+        if ($validate->fails()) return response()->json([
+            'status' => false,
+            'payload' => $validate->errors()
+        ]);
         DB::beginTransaction();
         try {
             $today = Carbon::now()->toDateTimeString();
             $user_id = auth('sanctum')->user()->id;
             $user = User::find($user_id);
-            $contest = Contest::find($contest_id);
+            $contest = Contest::find($request->contest_id);
             if (is_null($user) || is_null($contest)) {
                 return response()->json([
                     'status' => false,
