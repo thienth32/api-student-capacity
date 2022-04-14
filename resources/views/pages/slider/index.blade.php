@@ -41,7 +41,7 @@
         </h1>
 
         <div class="row card-format">
-            <div class="col-12 col-lg-6 col-sx-12 col-md-12 col-sm-12 col-xxl-6 col-xl-6">
+            <div class="col-12 col-lg-8 col-sx-12 col-md-12 col-sm-12 col-xxl-8 col-xl-8">
                 <div class="   ">
                     <label class="form-label">Tình trạng </label>
                     <select id="select-status" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
@@ -69,34 +69,74 @@
                     </select>
                 </div>
             </div> --}}
-            <div class="col-12 col-lg-6 col-sx-12 col-md-12 col-sm-12 col-xxl-6 col-xl-6">
+            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="">
                     <label class="form-label">Tìm kiếm </label>
                     <input type="text" value="{{ request('q') ?? '' }}" placeholder="*Enter tìm kiếm ..."
                         class=" ip-search form-control">
                 </div>
             </div>
-            <div class="col-12 row ">
-                <div class="col-12">
+            <div class="col-12 row">
+                <label class="form-label">Lọc theo thành phần </label>
+                <div class="row col-12 m-auto">
                     <button
-                        class="click-time-local {{ request()->has('start_time') && request()->has('end_time') ? ' btn-primary' : ' btn-default' }} btn ">
+                        class="btn-round {{ request()->has('round') ? 'btn-primary' : '' }} btn col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light">Banner
+                        thuộc vòng thi</button>
+                    <button
+                        class="btn-major {{ request()->has('major') ? 'btn-primary' : '' }} btn col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light">Banner
+                        thuộc chuyên ngành</button>
+                    <button
+                        class="btn-home-re {{ request()->has('home') ? 'btn-primary' : '' }} btn col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light">Banner
+                        thuộc trang chủ </button>
+                </div>
+                <div class="col-12 pb-2">
+                    <div style="{{ request()->has('major') ? '' : 'display: none' }} " id="major">
+                        <label class="form-label">Chuyên ngành</label>
+                        <select id="select-major" name="major_id" class="form-select form-major" data-control="select2"
+                            data-placeholder="Chọn chuyên ngành ">
+                            <option value="0">Chọn chuyên ngành</option>
+                            @foreach ($majors as $major)
+                                <option @selected(request('major_id') == $major->id) value="{{ $major->id }}">{{ $major->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div style="{{ request()->has('round') ? '' : 'display: none' }}" id="round">
+                        <label class="form-label">Vòng thi </label>
+                        <select id="select-round" name="round_id" class="form-select form-round " data-control="select2"
+                            data-placeholder="Chọn vòng thi ">
+                            <option value="0">Chọn vòng thi</option>
+                            @foreach ($rounds as $round)
+                                <option @selected(request('round_id') == $round->id) value="{{ $round->id }}">{{ $round->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="col-12 row ">
+                <label class="form-label">Lọc theo thời gian </label>
+                <div class="col-12 row m-auto">
+                    <button
+                        class="btn-light col-12 col-lg-6 col-sx-12 col-md-12 col-sm-12 col-xxl-6 col-xl-6 click-time-local {{ request()->has('start_time') && request()->has('end_time') ? ' btn-primary' : ' btn-default' }} btn ">
                         Thời
                         gian cụ thể </button>
                     <button
-                        class="click-time {{ (request()->has('day') || request()->has('month') || request()->has('year')) && request()->has('op_time')? 'btn-primary': 'btn-default' }} btn ">Khoảng
+                        class="btn-light col-12 col-lg-6 col-sx-12 col-md-12 col-sm-12 col-xxl-6 col-xl-6 click-time {{ (request()->has('day') || request()->has('month') || request()->has('year')) && request()->has('op_time')? 'btn-primary': 'btn-default' }} btn ">Khoảng
                         thời gian</button>
                     <div class="show-time">
                         <div style="{{ request()->has('start_time') && request()->has('end_time') ? '' : 'display : none' }}"
                             id="time-local">
                             <div class="col-12  ">
-                                <label class="form-label">Thời gian </label>
+                                <small class="small">Thời gian </small>
                                 <input class="form-control " placeholder="Pick date rage" id="kt_daterangepicker_2" />
                             </div>
                         </div>
                         <div style="{{ (request()->has('day') || request()->has('month') || request()->has('year')) && request()->has('op_time')? '': 'display : none' }}"
                             id="time">
                             <div class="col-12  ">
-                                <label for="" class="form-label">Khoảng thời gian </label>
+                                <small for="" class="small">Khoảng thời gian </small>
                                 <select class="select-date-serach form-control form-select mb-2 select2-hidden-accessible"
                                     data-control="select2" data-hide-search="true" tabindex="-1" aria-hidden="true">
                                     <option class="form-control">Chọn thời gian</option>
@@ -223,7 +263,7 @@
                 <tbody>
                     @php
 
-                        $total = $sliders->total();
+                        $total = $sliders->total() + 1;
                     @endphp
                     @forelse ($sliders as $key => $slider)
                         <tr>
@@ -273,7 +313,7 @@
                                 @if (!is_null($slider->major_id))
                                     Chuyên ngành : <b>{{ $slider->major->name }}</b>
                                 @elseif(!is_null($slider->round_id))
-                                    Vòng thi : <b>{{ $slider->major->name }}</b>
+                                    Vòng thi : <b>{{ $slider->round->name }}</b>
                                 @else
                                     {{ 'Trang chủ ' }}
                                 @endif
@@ -412,5 +452,6 @@
             '{{ request()->has('end_time')? \Carbon\Carbon::parse(request('end_time'))->format('m/d/Y h:i:s A'): \Carbon\Carbon::now()->format('m/d/Y h:i:s A') }}'
     </script>
     <script src="assets/js/system/formatlist/formatlis.js"></script>
+    <script src="assets/js/system/slider/form.js"></script>
     <script src="assets/js/system/slider/slider.js"></script>
 @endsection

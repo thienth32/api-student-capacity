@@ -26,6 +26,12 @@ function dateAfter(begin, end) {
 function dateAfterEdit(begin, end) {
     let getTimeToday = new Date().toJSON().slice(0, 19);
     let that = this;
+    $(end).prop("min", function () {
+        return $(begin).val();
+    });
+    $(begin).prop("max", function () {
+        return $(end).val();
+    });
     // $(this.begin).val(getTimeToday);
     // $(this.end).val(getTimeToday);
 

@@ -9,10 +9,8 @@
                 <form id="formAddSlider" action="{{ route('admin.sliders.store') }}" method="post"
                     enctype="multipart/form-data">
                     @csrf
-
-                    <div class="text-center">
-
-                        <img class="pb-4" style="max-height:200px , width: 100%" id="previewImg">
+                    <div style="width: 80%" class="text-center m-auto">
+                        <img class="pb-4" style=" width: 100%" id="previewImg">
 
                     </div>
                     <div>
@@ -113,7 +111,7 @@
 @endsection
 
 @section('page-script')
-
+    <script src="assets/js/system/preview-file/previewImg.js"></script>
     <script src="assets/js/system/date-after/date-after.js"></script>
     <script src="assets/js/system/slider/form.js"></script>
     <script>
@@ -125,6 +123,7 @@
         }
         dateAfter('input[type=datetime-local]#begin', 'input[type=datetime-local]#end');
         $('.btn-home').click();
+        preview.showFile('.file-change', '#previewImg');
     </script>
     <script src="assets/js/system/validate/validate.js"></script>
 @endsection

@@ -115,12 +115,32 @@ class Builder extends  EloquentBuilder
     /**
      * Has request url
      */
-    public function hasReuqest($data = [])
+    public function hasRequest($data = [])
     {
         if (count($data) == 0) return $this;
         $q = $this;
         foreach ($data as $key => $v) {
             if ($v) $q = $q->where($key, $v);
+        }
+        return $q;
+    }
+
+    public function hasRequestNotNull($data = [])
+    {
+        if (count($data) == 0) return $this;
+        $q = $this;
+        foreach ($data as $key => $v) {
+            if ($v) $q = $q->whereNotNull($key);
+        }
+        return $q;
+    }
+
+    public function hasRequestNull($data = [])
+    {
+        if (count($data) == 0) return $this;
+        $q = $this;
+        foreach ($data as $key => $v) {
+            if ($v) $q = $q->whereNotNull($key);
         }
         return $q;
     }
