@@ -10,7 +10,12 @@
                         <li class="breadcrumb-item pe-3">
                             <a href="{{ route('admin.contest.list') }}" class="pe-3">Cuộc thi </a>
                         </li>
-
+                        <li class="breadcrumb-item px-3 ">
+                            <a href="{{ route('admin.contest.show', ['id' => $round->contest->id]) }}"
+                                class="pe-3">
+                                {{ $round->contest->name }}
+                            </a>
+                        </li>
                         <li class="breadcrumb-item pe-3">
                             <a href="{{ route('admin.round.list') }}" class="pe-3">Vòng thi </a>
                         </li>

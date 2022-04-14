@@ -3,7 +3,7 @@
 @section('page-title', 'Danh sách vòng thi')
 @section('content')
 
-
+    {{-- {{ dd(\Carbon\Carbon::parse(request('start_time'))->format('m/d/Y h:i:s A')) }} --}}
     <div class="card card-flush p-4">
         <h1>Quản lý vòng thi
             <span role="button" class="refresh-btn svg-icon svg-icon-primary svg-icon-2x">
@@ -39,78 +39,115 @@
                 </span>
             </a>
         </h1>
+
         <div class="row card-format">
 
 
-            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
-                <div class="form-group p-2">
-                    <label>Cuộc thi </label>
-                    <select id="select-contest" class="form-control form-control-solid">
-                        <option value="0">-- Cuộc thi --</option>
+            <div class="col-lg-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
+                <div class="form-group ">
+                    <label class="form-label">Cuộc thi </label>
+                    <select id="select-contest" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                        data-hide-search="true" tabindex="-1" aria-hidden="true">
+                        <option value="0">Chọn cuộc thi</option>
                         @forelse ($contests as $contest)
                             <option @selected(request('contest_id') == $contest->id) value="{{ $contest->id }}">{{ $contest->name }}
                             </option>
                         @empty
-                            <option>-- Không có cuộc thi --</option>
+                            <option disabled>Không có cuộc thi</option>
                         @endforelse
                     </select>
                 </div>
             </div>
-            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
-                <div class="  form-group p-2">
-                    <label>Loại vòng thi </label>
-                    <select id="select-type-exam" class="form-control form-control-solid">
-                        <option value="0">-- Loại vòng thi --</option>
+            <div class="col-lg-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
+                <div class="  form-group ">
+                    <label class="form-label">Kiểu thi </label>
+                    <select id="select-type-exam" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                        data-hide-search="true" tabindex="-1" aria-hidden="true">
+                        <option value="0">Chọn kiểu thi</option>
                         @forelse ($type_exams as $type_exam)
-                            <option @selected(request('type_exam_id') == $type_exam->id) value="{{ $type_exam->id }}">{{ $type_exam->name }}
+                            <option @selected(request('type_exam_id') == $type_exam->id) value="{{ $type_exam->id }}">
+                                {{ $type_exam->name }}
                             </option>
                         @empty
-                            <option>-- Không có loại vòng thi --</option>
+                            <option disabled>Không có kiểu thi</option>
                         @endforelse
                     </select>
                 </div>
             </div>
-            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
-                <div class="  form-group p-2">
-                    <label>Tìm kiếm </label>
-                    <input type="text" value="{{ request('q') ?? '' }}" placeholder="'*Enter' tìm kiếm ..."
+            <div class="col-lg-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
+                <div class="  form-group ">
+                    <label class="form-label">Tìm kiếm </label>
+                    <input type="text" value="{{ request('q') ?? '' }}" placeholder="*Enter tìm kiếm ..."
                         class=" ip-search form-control">
                 </div>
             </div>
-            <div class="col-12 row ">
-                <div class="col-12 row">
-                    <div class="col-12  ">
-                        <label class="form-label">Thời gian </label>
-                        <input class="form-control form-control-solid" placeholder="Pick date rage"
-                            id="kt_daterangepicker_2" />
+
+            <div class="col-lg-12 mt-4">
+                <button
+                    class="click-time-local {{ request()->has('start_time') && request()->has('end_time') ? ' btn-primary' : ' btn-default' }} btn ">
+                    Thời
+                    gian cụ thể </button>
+                <button
+                    class="click-time {{ (request()->has('day') || request()->has('month') || request()->has('year')) && request()->has('op_time')? 'btn-primary': 'btn-default' }} btn ">Khoảng
+                    thời gian</button>
+                <div class="show-time mt-4">
+                    <div style="{{ request()->has('start_time') && request()->has('end_time') ? '' : 'display : none' }}"
+                        id="time-local">
+                        <div class="col-12  ">
+                            <label class="form-label">Thời gian </label>
+                            <input class="form-control " placeholder="Pick date rage" id="kt_daterangepicker_2" />
+                        </div>
+                    </div>
+                    <div style="{{ (request()->has('day') || request()->has('month') || request()->has('year')) && request()->has('op_time')? '': 'display : none' }}"
+                        id="time">
+                        <div class="col-12  ">
+                            <label for="" class="form-label">Khoảng thời gian </label>
+                            <select class="select-date-serach form-control form-select mb-2 select2-hidden-accessible"
+                                data-control="select2" data-hide-search="true" tabindex="-1" aria-hidden="true">
+                                <option class="form-control">Chọn thời gian</option>
+                                <option class="form-control" @selected(request('day') == 7 && request('op_time') == 'add') value="add-day-7">7 Ngày
+                                    tới
+                                </option>
+                                <option class="form-control" @selected(request('day') == 15 && request('op_time') == 'add') value="add-day-15">15
+                                    Ngày
+                                    tới </option>
+                                <option class="form-control" @selected(request('month') == 1 && request('op_time') == 'add') value="add-month-1">1
+                                    Tháng
+                                    tới
+                                </option>
+                                <option class="form-control" @selected(request('month') == 6 && request('op_time') == 'add') value="add-month-6">6
+                                    Tháng
+                                    tới
+                                </option>
+                                <option class="form-control" @selected(request('year') == 1 && request('op_time') == 'add') value="add-year-1">1 Năm
+                                    tới
+                                </option>
+                                <option class="form-control" disabled>
+                                    <hr>
+                                </option>
+                                <option class="form-control" @selected(request('day') == 7 && request('op_time') == 'sub') value="sub-day-7">7 Ngày
+                                    trước </option>
+                                <option class="form-control" @selected(request('day') == 15 && request('op_time') == 'sub') value="sub-day-15">15
+                                    Ngày
+                                    trước
+                                </option>
+                                <option class="form-control" @selected(request('month') == 1 && request('op_time') == 'sub') value="sub-month-1">1
+                                    Tháng
+                                    trước
+                                </option>
+                                <option class="form-control" @selected(request('month') == 6 && request('op_time') == 'sub') value="sub-month-6">6
+                                    Tháng
+                                    trước
+                                </option>
+                                <option class="form-control" @selected(request('year') == 1 && request('op_time') == 'sub') value="sub-year-1">1
+                                    Năm
+                                    trước
+                                </option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-
-                <div class="col-12  ">
-                    <label for="" class="label">Khoảng thời gian </label>
-                    <select class="select-date-serach form-control">
-                        <option class="form-control">---- Thời gian ----</option>
-                        <option class="form-control" @selected(request('day') == 7 && request('op_time') == 'add') value="add-day-7">7 Ngày tới </option>
-                        <option class="form-control" @selected(request('day') == 15 && request('op_time') == 'add') value="add-day-15">15 Ngày tới </option>
-                        <option class="form-control" @selected(request('month') == 1 && request('op_time') == 'add') value="add-month-1">1 Tháng tới
-                        </option>
-                        <option class="form-control" @selected(request('month') == 6 && request('op_time') == 'add') value="add-month-6">6 Tháng tới
-                        </option>
-                        <option class="form-control" @selected(request('year') == 1 && request('op_time') == 'add') value="add-year-1">1 Năm tới </option>
-                        <option class="form-control" disabled> </option>
-                        <option class="form-control" @selected(request('day') == 7 && request('op_time') == 'sub') value="sub-day-7">7 Ngày trước </option>
-                        <option class="form-control" @selected(request('day') == 15 && request('op_time') == 'sub') value="sub-day-15">15 Ngày trước
-                        </option>
-                        <option class="form-control" @selected(request('month') == 1 && request('op_time') == 'sub') value="sub-month-1">1 Tháng trước
-                        </option>
-                        <option class="form-control" @selected(request('month') == 6 && request('op_time') == 'sub') value="sub-month-6">6 Tháng trước
-                        </option>
-                        <option class="form-control" @selected(request('year') == 1 && request('op_time') == 'sub') value="sub-year-1">1 Năm trước
-                        </option>
-                    </select>
-                </div>
             </div>
-
         </div>
         <div class="back">
             <hr>
@@ -145,7 +182,7 @@
         </div>
         <div class="table-responsive p-4 card card-flush ">
 
-            <table class=" table table-hover table-responsive-md ">
+            <table class=" table table-row-bordered table-row-gray-300 gy-7  table-hover">
                 <thead>
                     <tr>
                         <th scope="col">
@@ -202,35 +239,9 @@
                                 <!--end::Svg Icon-->
                             </span>
                         </th>
-                        <th scope="col">Chi tiết
-                            <span role="button" data-key="description"
-                                class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
-                                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
-                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                    style="width: 14px !important ; height: 14px !important" width="24px" height="24px"
-                                    viewBox="0 0 24 24" version="1.1">
-                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                        <polygon points="0 0 24 0 24 24 0 24" />
-                                        <rect fill="#000000" opacity="0.3"
-                                            transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
-                                            x="5" y="5" width="2" height="12" rx="1" />
-                                        <path
-                                            d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
-                                            fill="#000000" fill-rule="nonzero" />
-                                        <rect fill="#000000" opacity="0.3"
-                                            transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
-                                            x="17" y="7" width="2" height="12" rx="1" />
-                                        <path
-                                            d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
-                                            fill="#000000" fill-rule="nonzero"
-                                            transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
-                                    </g>
-                                </svg>
-                                <!--end::Svg Icon-->
-                            </span>
-                        </th>
+
                         <th scope="col">Cuộc thi </th>
-                        <th scope="col">Loại cuộc thi </th>
+                        <th scope="col">Loại kiểu thi </th>
                         <th scope="col">Thời gian bắt đầu
                             <span role="button" data-key="start_time"
                                 class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
@@ -316,62 +327,16 @@
                                     {{ $round->name }}
                                 </a>
                             </td>
-                            <td>
 
-                                <button class="p-4" type="button"
-                                    style="background: none ; border : none ; list-style  : none " data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal_{{ $key }}">
-                                    <span class="svg-icon svg-icon-success svg-icon-2x">
-                                        <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Visible.svg--><svg
-                                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                            width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                <rect x="0" y="0" width="24" height="24" />
-                                                <path
-                                                    d="M3,12 C3,12 5.45454545,6 12,6 C16.9090909,6 21,12 21,12 C21,12 16.9090909,18 12,18 C5.45454545,18 3,12 3,12 Z"
-                                                    fill="#000000" fill-rule="nonzero" opacity="0.3" />
-                                                <path
-                                                    d="M12,15 C10.3431458,15 9,13.6568542 9,12 C9,10.3431458 10.3431458,9 12,9 C13.6568542,9 15,10.3431458 15,12 C15,13.6568542 13.6568542,15 12,15 Z"
-                                                    fill="#000000" opacity="0.3" />
-                                            </g>
-                                        </svg>
-                                        <!--end::Svg Icon-->
-                                    </span>
-                                </button>
-
-                                <!-- Modal -->
-                                <div class="modal fade" id="exampleModal_{{ $key }}" tabindex="-1"
-                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Chi tiết vòng
-                                                    thi
-                                                </h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body  ">
-                                                {{ $round->description }}
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Thoát
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </td>
                             <td>{{ $round->contest->name ?? 'Chưa có cuộc thi ' }}</td>
                             <td>{{ $round->type_exam->name ?? 'Chưa có kiểu cuộc thi' }}</td>
+
                             <td>{{ $round->start_time }}</td>
                             <td>{{ $round->end_time }}</td>
                             <td>
                                 <div class="btn-group dropstart">
-                                    <button type="button" class="btn   btn-sm dropdown-toggle" data-bs-toggle="dropdown"
-                                        aria-expanded="false">
+                                    <button style="padding: 0" type="button" class="btn   btn-sm dropdown-toggle"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
                                         <span class="svg-icon svg-icon-success svg-icon-2x">
                                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Settings-2.svg--><svg
                                                 xmlns="http://www.w3.org/2000/svg"
@@ -387,7 +352,7 @@
                                             <!--end::Svg Icon-->
                                         </span>
                                     </button>
-                                    <ul class="dropdown-menu px-4 ">
+                                    <ul class="dropdown-menu ps-3">
                                         <li class="my-3">
                                             <a href="{{ route('admin.round.edit', ['id' => $round->id]) }}">
                                                 <span role="button" class="svg-icon svg-icon-success svg-icon-2x">
@@ -432,12 +397,13 @@
 
                                         </li>
                                         <li class="my-3">
-                                            @hasrole('admin')
+                                            @hasrole(config('util.ROLE_DELETE'))
                                                 <form action="{{ route('admin.round.destroy', ['id' => $round->id]) }}"
                                                     method="post">
                                                     @csrf
                                                     @method('delete')
-                                                    <button style=" background: none ; border: none ; list-style : none"
+                                                    <button onclick="return confirm('Bạn có chắc muốn xóa không !')"
+                                                        style=" background: none ; border: none ; list-style : none"
                                                         type="submit">
                                                         <span role="button" class="svg-icon svg-icon-danger svg-icon-2x">
                                                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Trash.svg--><svg
@@ -501,7 +467,12 @@
         let url = '/admin/rounds?';
         const _token = "{{ csrf_token() }}";
         const sort = '{{ request()->has('sort') ? (request('sort') == 'desc' ? 'asc' : 'desc') : 'asc' }}';
+        const start_time =
+            '{{ request()->has('start_time')? \Carbon\Carbon::parse(request('start_time'))->format('m/d/Y h:i:s A'): \Carbon\Carbon::now()->format('m/d/Y h:i:s A') }}'
+        const end_time =
+            '{{ request()->has('end_time')? \Carbon\Carbon::parse(request('end_time'))->format('m/d/Y h:i:s A'): \Carbon\Carbon::now()->format('m/d/Y h:i:s A') }}'
     </script>
     <script src="assets/js/system/formatlist/formatlis.js"></script>
     <script src="assets/js/system/round/round.js"></script>
+
 @endsection

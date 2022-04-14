@@ -5,9 +5,6 @@ const rules = {
         required: true,
         maxlength: 255,
     },
-    image: {
-        required: true,
-    },
     start_time: {
         required: true,
     },
@@ -23,18 +20,17 @@ const messages = {
         required: "Chưa nhập trường này !",
         maxlength: "Tối đa là 255 kí tự !",
     },
-    image: {
+
+    description: {
         required: "Chưa nhập trường này !",
     },
     start_time: {
         required: "Chưa nhập trường này !",
-        date: true,
+        min: "Thời gian bắt đầu không được nhỏ hơn thời gian hiện tại !",
+        max: "Vui  lòng nhập thời gian bắt đầu nhỏ hơn thời gian kết thúc !",
     },
     end_time: {
         required: "Chưa nhập trường này !",
-        date: true,
-    },
-    description: {
-        required: "Chưa nhập trường này !",
-    },
+        min: "Thời gian kết thúc không được lớn hơn thời gian bắt đầu !",
+    }
 };

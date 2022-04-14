@@ -5,12 +5,12 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
-                <form id="formAddContest" action="{{ route('admin.contest.update', ['id' => $Contest->id]) }}"
-                    method="post" enctype="multipart/form-data">
+                <form id="formContest" action="{{ route('admin.contest.update', ['id' => $Contest->id]) }}" method="post"
+                    enctype="multipart/form-data">
                     @csrf
                     @method('put')
                     <div class="form-group mb-10">
-                        <label for="">Tên vòng thi</label>
+                        <label class="form-label" for="">Tên vòng thi</label>
                         <input type="text" name="name" value="{{ $Contest->name }}" class=" form-control" placeholder="">
                         @error('name')
                             <p class="text-danger">{{ $message }}</p>
@@ -22,9 +22,9 @@
                             <div class="col-8">
 
                                 <div class="form-group mb-10">
-                                    <label for="">Thời gian bắt đầu</label>
+                                    <label class="form-label" for="">Thời gian bắt đầu</label>
                                     <input value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime($Contest->date_start)) }}"
-                                        type="datetime-local" max="" name="date_start" class="form-control"
+                                        type="datetime-local" id="begin" max="" name="date_start" class="form-control"
                                         placeholder="">
 
                                     @error('date_start')
@@ -32,11 +32,11 @@
                                     @enderror
                                 </div>
                                 <div class="form-group mb-10">
-                                    <label for="">Thời gian kết thúc</label>
+                                    <label class="form-label" for="">Thời gian kết thúc</label>
                                     <input
                                         value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime($Contest->register_deadline)) }}"
-                                        min="" type="datetime-local" name="register_deadline" id="" class="form-control"
-                                        placeholder="">
+                                        min="" type="datetime-local" name="register_deadline" id="end"
+                                        class="form-control" placeholder="">
                                     @error('register_deadline')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
@@ -109,7 +109,6 @@
                             </div>
                         </div>
                         <div class="form-group mb-10">
-
                             <label for="" class="form-label">Thuộc Chuyên Ngành</label>
                             <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
                                 data-placeholder="Select an option" tabindex="-1" aria-hidden="true" name="major_id">
@@ -123,12 +122,9 @@
                                 <p class="text-danger">{{ $message }}</p>
                             @enderror
                         </div>
-
-
                     </div>
-
                     <div class="form-group mb-10">
-                        <label for="">Mô tả cuộc thi</label>
+                        <label class="form-label" for="">Mô tả cuộc thi</label>
                         <textarea class="form-control" name="description" id="" rows="3">
                             {{ $Contest->description }}
                         </textarea>
@@ -137,14 +133,11 @@
                         @enderror
                     </div>
                     <div class="form-group mb-10">
-                        <label for="">Trạng thái cuộc thi</label>
-                        <br><br>
+                        <label class="form-label" for="">Trạng thái cuộc thi</label>
                         <select class="form-control" name="status" id="">
                             <option @selected($Contest->status == 0) value="0"> Đóng Cuộc thi </option>
                             <option @selected($Contest->status == 1) value="1"> Mở đang Mở </option>
                         </select>
-
-
                     </div>
                     @error('status')
                         <p class="text-danger">{{ $message }}</p>
@@ -152,13 +145,17 @@
                     <div class="form-group mb-10 ">
                         <button type="submit" name="" id="" class="btn btn-success btn-lg btn-block">Lưu </button>
                     </div>
+                </form>
             </div>
-            </form>
         </div>
     </div>
 
 @endsection
 @section('page-script')
+    <script src="assets/js/system/date-after/date-after.js"></script>
     <script src="assets/js/system/contest/form.js"></script>
+    <script>
+        dateAfterEdit('input[type=datetime-local]#begin', 'input[type=datetime-local]#end')
+    </script>
     <script src="assets/js/system/validate/validate.js"></script>
 @endsection

@@ -45,8 +45,8 @@
 
 
                     <div class="col-12 col-lg-2 col-sx-12 col-md-12 col-sm-12 ">
-                        <div class="  form-group p-2">
-                            <label>Loại vòng thi </label>
+                        <div class=" ">
+                            <label class="form-label">Loại vòng thi </label>
                             <select id="select-type-exam" class="form-control form-control-solid">
                                 <option>-- Loại vòng thi --</option>
                                 @forelse ($type_exams as $type_exam)
@@ -60,7 +60,7 @@
                         </div>
                     </div>
                     <div class="col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 ">
-                        <div class="  form-group p-2">
+                        <div class=" form-label ">
                             <label>Tìm kiếm </label>
                             <input type="text" value="{{ request('q') ?? '' }}" placeholder="'*Enter' tìm kiếm ..."
                                 class=" ip-search form-control">
@@ -69,14 +69,14 @@
 
 
                     <div class="col-12 col-lg-5 col-sx-12 col-md-12 col-sm-12">
-                        <label class="">Thời gian </label>
+                        <label class="form-label">Thời gian </label>
                         <input class="form-control form-control-solid" placeholder="Pick date rage"
                             id="kt_daterangepicker_2" />
                     </div>
 
 
                     <div class="col-12 col-lg-2 col-sx-12 col-md-12 col-sm-12">
-                        <label for="" class="label">Khoảng thời gian </label>
+                        <label for="" class="form-label">Khoảng thời gian </label>
                         <select class="select-date-serach form-control">
                             <option class="form-control">---- Thời gian ----</option>
 
@@ -263,8 +263,25 @@
                                         <!--end::Svg Icon-->
                                     </span>
                                 </th>
-                                <th class="text-center" colspan="2">
+                                <th colspan="2">
 
+                                    <a class=" btn btn-sm "
+                                        href="{{ route('admin.round.create', '?contest_id=' . $contest->id) }}">
+                                        <span class="svg-icon svg-icon-primary svg-icon-2x">
+                                            <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Plus.svg--><svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+                                                viewBox="0 0 24 24" version="1.1">
+                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                    <rect fill="#000000" x="4" y="11" width="16" height="2" rx="1" />
+                                                    <rect fill="#000000" opacity="0.3"
+                                                        transform="translate(12.000000, 12.000000) rotate(-270.000000) translate(-12.000000, -12.000000) "
+                                                        x="4" y="11" width="16" height="2" rx="1" />
+                                                </g>
+                                            </svg>
+                                            <!--end::Svg Icon-->
+                                        </span>
+                                    </a>
                                 </th>
 
                             </tr>
@@ -396,13 +413,14 @@
 
                                                 </li>
                                                 <li class="my-3">
-                                                    @hasrole('super admin')
+                                                    @hasrole(config('util.ROLE_DELETE'))
                                                         <form
                                                             action="{{ route('admin.round.destroy', ['id' => $round->id]) }}"
                                                             method="post">
                                                             @csrf
                                                             @method('delete')
-                                                            <button style=" background: none ; border: none ; list-style : none"
+                                                            <button onclick="return confirm('Bạn có chắc muốn xóa không !')"
+                                                                style=" background: none ; border: none ; list-style : none"
                                                                 type="submit">
                                                                 <span role="button"
                                                                     class="svg-icon svg-icon-danger svg-icon-2x">

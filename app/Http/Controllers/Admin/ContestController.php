@@ -37,7 +37,9 @@ class ContestController extends Controller
     {
         try {
             $now = Carbon::now('Asia/Ho_Chi_Minh');
-            $data = $this->contest::search(request('q') ?? null, ['name', 'description'])
+            $data = $this->contest::when(request()->has('contest_soft_delete'), function ($q) {
+                return $q->onlyTrashed();
+            })->search(request('q') ?? null, ['name', 'description'])
                 ->missingDate('register_deadline', request('miss_date') ?? null, $now->toDateTimeString())
                 ->passDate('register_deadline', request('pass_date') ?? null, $now->toDateTimeString())
                 // ->passDate('date_start', request('upcoming_date') ?? null, $now->toDateTimeString())
@@ -208,7 +210,7 @@ class ContestController extends Controller
     public function destroy($id)
     {
         try {
-            if (!(auth()->user()->hasRole('super admin'))) return abort(404);
+            if (!(auth()->user()->hasRole(config('util.ROLE_DELETE')))) return abort(404);
             DB::transaction(function () use ($id) {
                 $contest = $this->contest::find($id);
                 if (Storage::disk('google')->has($contest->image)) Storage::disk('google')->delete($contest->image);
@@ -372,6 +374,34 @@ class ContestController extends Controller
             $team->contest_id = $id;
             $team->save();
             return Redirect::back();
+        }
+    }
+
+    public function softDelete()
+    {
+        $listContestSofts = $this->getList()->paginate(request('limit') ?? 5);
+        return view('pages.contest.contest-soft-delete', [
+            'listContestSofts' => $listContestSofts
+        ]);
+    }
+
+    public function backUpContest($id)
+    {
+        try {
+            $this->contest::withTrashed()->where('id', $id)->restore();
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            return abort(404);
+        }
+    }
+
+    public function deleteContest($id)
+    {
+        try {
+            $this->contest::withTrashed()->where('id', $id)->forceDelete();
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            return abort(404);
         }
     }
 }

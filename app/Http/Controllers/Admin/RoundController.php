@@ -131,7 +131,7 @@ class RoundController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'name' => 'required|max:255',
+                'name' => 'required|unique:rounds|max:255',
                 'image' => 'required|required|mimes:jpeg,png,jpg|max:10000',
                 'start_time' => 'required',
                 'end_time' => 'required|after:start_time',
@@ -142,12 +142,13 @@ class RoundController extends Controller
             [
                 'name.required' => 'Chưa nhập trường này !',
                 'name.max' => 'Độ dài kí tự không phù hợp !',
+                'name.unique' => 'Đã tồn tại trong cơ sở dữ liệu !',
                 'image.mimes' => 'Sai định dạng !',
                 'image.required' => 'Chưa nhập trường này !',
                 'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
                 'start_time.required' => 'Chưa nhập trường này !',
                 'end_time.required' => 'Chưa nhập trường này !',
-                'end_time.after' => 'Thời gian kết thúc không được bằng thời gian bắt đầu !',
+                'end_time.after' => 'Thời gian kết thúc không được nhỏ hơn  thời gian bắt đầu !',
                 'description.required' => 'Chưa nhập trường này !',
                 'contest_id.required' => 'Chưa nhập trường này !',
                 'contest_id.numeric' => 'Sai định dạng !',
@@ -222,7 +223,7 @@ class RoundController extends Controller
             $validator = Validator::make(
                 request()->all(),
                 [
-                    'name' => "required",
+                    'name' => "required|unique:rounds|max:255",
                     'start_time' => "required",
                     'end_time' => "required|after:start_time",
                     'description' => "required",
@@ -231,6 +232,8 @@ class RoundController extends Controller
                 ],
                 [
                     "name.required" => "Tường name không bỏ trống !",
+                    'name.max' => 'Độ dài kí tự không phù hợp !',
+                    'name.unique' => 'Đã tồn tại trong cơ sở dữ liệu !',
                     "start_time.required" => "Tường thời gian bắt đầu  không bỏ trống !",
                     "end_time.required" => "Tường thời gian kết thúc không bỏ trống !",
                     "end_time.after" => "Tường thời gian kết thúc không nhỏ hơn trường bắt đầu  !",
@@ -315,7 +318,7 @@ class RoundController extends Controller
     private function destroyRound($id)
     {
         try {
-            if (!(auth()->user()->hasRole('super admin'))) return false;
+            if (!(auth()->user()->hasRole(config('util.ROLE_DELETE')))) return false;
             DB::transaction(function () use ($id) {
                 if (!($data = $this->round::find($id))) return false;
                 if (Storage::disk('google')->has($data->image)) Storage::disk('google')->delete($data->image);
@@ -330,7 +333,7 @@ class RoundController extends Controller
     // View round
     public function destroy($id)
     {
-        if (!(auth()->user()->hasRole('super admin'))) return redirect()->back()->with('error', 'Không thể xóa ');
+        if (!(auth()->user()->hasRole(config('util.ROLE_DELETE')))) return redirect()->back()->with('error', 'Không thể xóa ');
         if ($this->destroyRound($id)) return redirect()->back();
         return redirect('error');
     }

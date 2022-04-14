@@ -20,7 +20,6 @@ class Major extends Model
 
     public static function boot()
     {
-
         parent::boot();
         static::deleting(function ($q) {
             $q->contests()->delete();
@@ -30,6 +29,11 @@ class Major extends Model
     public function contests()
     {
         return $this->hasMany(Contest::class, 'major_id');
+    }
+    public function Skill()
+    {
+        return $this->belongsToMany(Skills::class, 'major_skills','major_id','skill_id');
+
     }
 
     public function newEloquentBuilder($query)

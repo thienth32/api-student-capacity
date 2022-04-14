@@ -7,7 +7,7 @@
 
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('admin.round.list') }}">Round</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.round.list') }}">Vòng thi</a></li>
                 <li class="breadcrumb-item disable" aria-current="page">Backup
                     <span role="button" class="refresh-btn svg-icon svg-icon-primary svg-icon-2x">
                         <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Update.svg--><svg
@@ -53,7 +53,9 @@
                         @if (count($listRoundSofts) > 0)
                             @foreach ($listRoundSofts as $key => $listRoundSoft)
                                 <tr>
-                                    <th scope="row">1</th>
+                                    <td>
+                                        {{ (request()->has('page') && request('page') !== 1 ? $listRoundSofts->perPage() * (request('page') - 1) : 0) +$key +1 }}
+                                    </td>
                                     <td>{{ $listRoundSoft->name }}</td>
                                     <td>
                                         <button type="button" style="background: none ; border : none ; list-style  : none "
@@ -102,8 +104,8 @@
                                         </div>
 
                                     </td>
-                                    <td>{{ $listRoundSoft->contest->name }}</td>
-                                    <td>{{ $listRoundSoft->type_exam->name }}</td>
+                                    <td>{{ $listRoundSoft->contest->name ?? 'Chưa có cuộc thi ' }}</td>
+                                    <td>{{ $listRoundSoft->type_exam->name ?? 'Chưa có loại cuộc thi ' }}</td>
                                     <td>{{ $listRoundSoft->deleted_at }}
                                         <p>{{ \Carbon\Carbon::parse($listRoundSoft->deleted_at)->diffForHumans() }}</p>
                                     </td>
@@ -156,8 +158,8 @@
 
                                                 </li>
                                                 <li class="my-3">
-                                                    @hasrole('super admin')
-                                                        <a
+                                                    @hasrole(config('util.ROLE_DELETE'))
+                                                        <a onclick="return confirm('Bạn có chắc muốn xóa không !')"
                                                             href="{{ route('admin.round.soft.destroy', ['id' => $listRoundSoft->id]) }}">
                                                             <span role="button" class="svg-icon svg-icon-danger svg-icon-2x">
                                                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Trash.svg--><svg

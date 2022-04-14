@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title', 'Danh sách vòng thi ')
+@section('title', 'thêm doanh nghiệp ')
 @section('content')
     <div class="card card-flush p-4">
         <div class="row">
@@ -62,7 +62,7 @@
                         enctype="multipart/form-data">
                         @csrf
                         <div class="form-group mb-10">
-                            <label for="">Tên doanh nghiệp</label>
+                            <label class="form-label" for="">Tên doanh nghiệp</label>
                             <input type="text" name="name" value="{{ old('name') }}" class=" form-control"
                                 placeholder="">
                             @error('name')
@@ -73,7 +73,8 @@
 
 
                             <div class="row">
-                                <div class="col-8">Giới Thiệu</label>
+                                <div class="col-8">
+                                    <label for="" class="form-label">Giới Thiệu</label>
                                     <textarea class="form-control" name="description" id="" rows="3"></textarea>
                                     @error('description')
                                         <p class="text-danger">{{ $message }}</p>
@@ -83,7 +84,7 @@
                                     <div class="form-group mb-10 ms-4">
                                         <!--begin::Label-->
                                         <label class="fs-6 fw-bold mb-3">
-                                            <span>logo doanh nghiệp</span>
+                                            <span>Ảnh doanh nghiệp</span>
                                             <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title=""
                                                 data-bs-original-title="Allowed file types: png, jpg, jpeg."
                                                 aria-label="Allowed file types: png, jpg, jpeg."></i>

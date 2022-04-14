@@ -5,12 +5,7 @@ const contestPage = {
             checkUrlOut("major_id", $(this).val());
         });
     },
-    selectStatus: function () {
-        $("#select-status").on("change", function () {
-            if ($(this).val() == 0) return (window.location = url);
-            checkUrlOut("status", $(this).val());
-        });
-    },
+
     selectDateTimeContest: function () {
         $(".select-date-time-contest").on("change", function () {
             loadTast();
@@ -49,6 +44,6 @@ const contestPage = {
     },
 };
 contestPage.selectMajor();
-contestPage.selectStatus();
+// contestPage.selectStatus();
 contestPage.selectDateTimeContest();
 contestPage.selectChangeStatus();

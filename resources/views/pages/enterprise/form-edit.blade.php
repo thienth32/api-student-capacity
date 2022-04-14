@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title', 'Danh sách vòng thi ')
+@section('title', 'sửa doanh nghiệp')
 @section('content')
     <div class="card card-flush p-4">
         <div class="row">
@@ -57,12 +57,12 @@
                             Session::forget('error');
                         @endphp
                     @endif
-                    <form id="formAddContest" action="{{ route('admin.enterprise.update',$enterprise->id) }}" method="post"
-                        enctype="multipart/form-data">
+                    <form id="formAddContest" action="{{ route('admin.enterprise.update', $enterprise->id) }}"
+                        method="post" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="form-group mb-10">
-                            <label for="">Tên doanh nghiệp</label>
+                            <label class="form-label" for="">Tên doanh nghiệp</label>
                             <input type="text" name="name" value="{{ $enterprise->name }}" class=" form-control"
                                 placeholder="">
                             @error('name')
@@ -73,7 +73,8 @@
 
 
                             <div class="row">
-                                <div class="col-8">Giới Thiệu</label>
+                                <div class="col-8">
+                                    <label for="" class="form-label">Giới thiệu</label>
                                     <textarea class="form-control" name="description" value="" id="" rows="3">{{ $enterprise->description }}</textarea>
                                     @error('description')
                                         <p class="text-danger">{{ $message }}</p>
@@ -83,7 +84,7 @@
                                     <div class="form-group mb-10 ms-4">
                                         <!--begin::Label-->
                                         <label class="fs-6 fw-bold mb-3">
-                                            <span>logo doanh nghiệp</span>
+                                            <span>Ảnh doanh nghiệp</span>
                                             <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title=""
                                                 data-bs-original-title="Allowed file types: png, jpg, jpeg."
                                                 aria-label="Allowed file types: png, jpg, jpeg."></i>
@@ -93,51 +94,52 @@
                                         <div class="mt-1">
                                             <!--begin::Image input-->
                                             <div style="position: relative" class="image-input image-input-outline"
-                                            data-kt-image-input="true"
-                                            style="background-image: url('{{ Storage::disk('google')->has( $enterprise->logo)? Storage::disk('google')->url( $enterprise->logo): 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}')">
-                                            <!--begin::Preview existing avatar-->
-                                            <div class="image-input-wrapper w-100px h-100px"
-                                                style="background-image: url('{{ Storage::disk('google')->has( $enterprise->logo)? Storage::disk('google')->url( $enterprise->logo): 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}')">
+                                                data-kt-image-input="true"
+                                                style="background-image: url('{{ Storage::disk('google')->has($enterprise->logo)? Storage::disk('google')->url($enterprise->logo): 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}')">
+                                                <!--begin::Preview existing avatar-->
+                                                <div class="image-input-wrapper w-100px h-100px"
+                                                    style="background-image: url('{{ Storage::disk('google')->has($enterprise->logo)? Storage::disk('google')->url($enterprise->logo): 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}')">
+                                                </div>
+                                                <!--end::Preview existing avatar-->
+                                                <!--begin::Edit-->
+                                                <label
+                                                    class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
+                                                    data-kt-image-input-action="change" data-bs-toggle="tooltip" title=""
+                                                    data-bs-original-title="Change avatar">
+                                                    <i class="bi bi-pencil-fill fs-7"></i>
+                                                    <!--begin::Inputs-->
+                                                    <input value="{{ old('logo') }}" type="file" name="logo"
+                                                        accept=".png, .jpg, .jpeg">
+                                                    {{-- <input type="hidden" name="avatar_remove"> --}}
+                                                    <!--end::Inputs-->
+                                                    <style>
+                                                        label#image-error {
+                                                            position: absolute;
+                                                            min-width: 150px;
+                                                            top: 500%;
+                                                            right: -100%;
+                                                        }
+
+                                                    </style>
+                                                </label>
+                                                <!--end::Edit-->
+                                                <!--begin::Cancel-->
+                                                <span
+                                                    class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
+                                                    data-kt-image-input-action="cancel" data-bs-toggle="tooltip" title=""
+                                                    data-bs-original-title="Cancel avatar">
+                                                    <i class="bi bi-x fs-2"></i>
+                                                </span>
+                                                <!--end::Cancel-->
+                                                <!--begin::Remove-->
+                                                <span
+                                                    class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
+                                                    data-kt-image-input-action="remove" data-bs-toggle="tooltip" title=""
+                                                    data-bs-original-title="Remove avatar">
+                                                    <i class="bi bi-x fs-2"></i>
+                                                </span>
+                                                <!--end::Remove-->
                                             </div>
-                                            <!--end::Preview existing avatar-->
-                                            <!--begin::Edit-->
-                                            <label
-                                                class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
-                                                data-kt-image-input-action="change" data-bs-toggle="tooltip" title=""
-                                                data-bs-original-title="Change avatar">
-                                                <i class="bi bi-pencil-fill fs-7"></i>
-                                                <!--begin::Inputs-->
-                                                <input value="{{ old('logo') }}" type="file" name="logo"
-                                                    accept=".png, .jpg, .jpeg">
-                                                {{-- <input type="hidden" name="avatar_remove"> --}}
-                                                <!--end::Inputs-->
-                                                <style>
-                                                    label#image-error {
-                                                        position: absolute;
-                                                        min-width: 150px;
-                                                        top: 500%;
-                                                        right: -100%;
-                                                    }
-                                                </style>
-                                            </label>
-                                            <!--end::Edit-->
-                                            <!--begin::Cancel-->
-                                            <span
-                                                class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
-                                                data-kt-image-input-action="cancel" data-bs-toggle="tooltip" title=""
-                                                data-bs-original-title="Cancel avatar">
-                                                <i class="bi bi-x fs-2"></i>
-                                            </span>
-                                            <!--end::Cancel-->
-                                            <!--begin::Remove-->
-                                            <span
-                                                class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
-                                                data-kt-image-input-action="remove" data-bs-toggle="tooltip" title=""
-                                                data-bs-original-title="Remove avatar">
-                                                <i class="bi bi-x fs-2"></i>
-                                            </span>
-                                            <!--end::Remove-->
-                                        </div>
                                             <!--end::Image input-->
                                         </div>
                                         <!--end::Image input wrapper-->
