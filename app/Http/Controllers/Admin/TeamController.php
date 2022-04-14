@@ -262,11 +262,14 @@ class TeamController extends Controller
             $request->all(),
             [
                 'contest_id' => 'required',
-
+                'name' => 'required',
+                'image' =>  'mimes:jpeg,png,jpg|max:10000',
             ],
             [
                 'contest_id.required' => 'Chưa nhập trường này !',
-
+                'name.required' => 'Chưa nhập trường này !',
+                'image.mimes' => 'Sai định dạng !',
+                'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
             ]
         );
         if ($validate->fails()) return response()->json([
@@ -290,23 +293,6 @@ class TeamController extends Controller
                     'payload' => 'Tài khoản đã bị khóa !'
                 ]);
                 if (strtotime($contest->register_deadline) > strtotime($today)) {
-                    $validate = validator::make(
-                        $request->all(),
-                        [
-                            'name' => 'required',
-                            'image' =>  'mimes:jpeg,png,jpg|max:10000',
-                        ],
-                        [
-                            'name.required' => 'Chưa nhập trường này !',
-                            'image.mimes' => 'Sai định dạng !',
-                            'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
-                        ]
-                    );
-                    if ($validate->fails()) return response()->json([
-                        'status' => false,
-                        'payload' => $validate->errors()
-                    ]);
-
                     $teamModel = new Team();
                     if ($request->hasFile('image')) {
                         $fileImage = $request->file('image');
@@ -314,7 +300,7 @@ class TeamController extends Controller
                         $teamModel->image = $filename;
                     }
                     $teamModel->name = $request->name;
-                    $teamModel->contest_id = $contest_id;
+                    $teamModel->contest_id = $request->contest_id;
                     $teamModel->save();
                     $teamModel->members()->attach($user_id, ['bot' => config('util.ACTIVE_STATUS')]);
 
