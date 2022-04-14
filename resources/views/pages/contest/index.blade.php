@@ -43,24 +43,26 @@
         <div class="row card-format">
 
             <div class=" col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
-                <div class="   form-group p-2">
-                    <label>Chuyên ngành </label>
-                    <select id="select-major" class="form-control form-control-solid">
-                        <option value="0">-- Chuyên ngành --</option>
+                <div class="form-group">
+                    <label class="form-label">Chuyên ngành </label>
+                    <select id="select-major" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                        data-hide-search="true" tabindex="-1" aria-hidden="true">
+                        <option value="0">Chọn chuyên ngành</option>
                         @forelse ($majors as $major)
                             <option @selected(request('major_id') == $major->id) value="{{ $major->id }}">{{ $major->name }}
                             </option>
                         @empty
-                            <option>-- Không có chuyên ngành --</option>
+                            <option disabled>Không có chuyên ngành</option>
                         @endforelse
                     </select>
                 </div>
             </div>
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
-                <div class="   form-group p-2">
-                    <label>Tình trạng </label>
-                    <select id="select-status" class="form-control form-control-solid">
-                        <option value="0" @selected(!request()->has('status'))>-- Tình trạng --</option>
+                <div class="form-group">
+                    <label class="form-label">Tình trạng </label>
+                    <select id="select-status" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                        data-hide-search="true" tabindex="-1" aria-hidden="true">
+                        <option value="3" @selected(!request()->has('status'))>-- Tình trạng --</option>
                         <option @selected(request('status') == 1) value="1">Kích họat
                         </option>
                         <option @selected(request()->has('status') && request('status') == 0) value="0">Không kích hoạt
@@ -70,9 +72,9 @@
             </div>
 
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
-                <div class="  form-group p-2">
-                    <label>Tìm kiếm </label>
-                    <input type="text" value="{{ request('q') ?? '' }}" placeholder="'*Enter' tìm kiếm ..."
+                <div class="  form-group">
+                    <label class="form-label">Tìm kiếm </label>
+                    <input type="text" value="{{ request('q') ?? '' }}" placeholder="*Enter tìm kiếm ..."
                         class=" ip-search form-control">
                 </div>
             </div>
@@ -80,21 +82,22 @@
                 <div class="col-12 row">
                     <div class="mb-0">
                         <label class="form-label">Thời gian </label>
-                        <input class="form-control form-control-solid" placeholder="Pick date rage"
-                            id="kt_daterangepicker_2" />
+                        <input class="form-control " placeholder="Pick date rage" id="kt_daterangepicker_2" />
                     </div>
 
 
-                    <div class="col-12 ">
-                        <label for="" class="label">Hoạt động cuộc thi </label>
-                        <select class="select-date-time-contest form-control">
-                            <option class="form-control">---- Hoạt động cuộc thi ----</option>
+                    <div class="col-12 mt-4 ">
+                        <label for="" class="form-label">Hoạt động cuộc thi </label>
+                        <select class="select-date-time-contest form-select mb-2 select2-hidden-accessible"
+                            data-control="select2" data-hide-search="true" tabindex="-1" aria-hidden="true">
+                            <option class="form-control">Chọn hoạt động cuộc thi</option>
                             {{-- <option class="form-control" @selected(request()->has('upcoming_date')) value="upcoming_date">Sắp diễn ra
                             </option> --}}
                             <option class="form-control" @selected(request()->has('pass_date')) value="pass_date"> Sắp và đang diễn
                                 ra
                             </option>
-                            <option class="form-control" @selected(request()->has('miss_date')) value="miss_date">Quá hạn </option>
+                            <option class="form-control" @selected(request()->has('miss_date')) value="miss_date">Đã diễn ra
+                            </option>
 
                         </select>
                     </div>
@@ -139,9 +142,8 @@
             </div>
         </div>
 
-        {{--  --}}
-        <div class="  ">
-            <table class=" table table-hover  table-responsive">
+        <div class="table-responsive table-responsive-md">
+            <table class="table table-row-bordered table-row-gray-300 gy-7  table-hover ">
                 <thead>
                     <tr>
                         <th scope="col">
@@ -198,32 +200,9 @@
                                 <!--end::Svg Icon-->
                             </span>
                         </th>
-                        <th scope="col">Chi tiết
-                            <span role="button" data-key="description"
-                                class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
-                                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
-                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                    style="width: 14px !important ; height: 14px !important" width="24px" height="24px"
-                                    viewBox="0 0 24 24" version="1.1">
-                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                        <polygon points="0 0 24 0 24 24 0 24" />
-                                        <rect fill="#000000" opacity="0.3"
-                                            transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
-                                            x="5" y="5" width="2" height="12" rx="1" />
-                                        <path
-                                            d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
-                                            fill="#000000" fill-rule="nonzero" />
-                                        <rect fill="#000000" opacity="0.3"
-                                            transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
-                                            x="17" y="7" width="2" height="12" rx="1" />
-                                        <path
-                                            d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
-                                            fill="#000000" fill-rule="nonzero"
-                                            transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
-                                    </g>
-                                </svg>
-                                <!--end::Svg Icon-->
-                            </span>
+                        <th scope="col">Đội thi
+                        </th>
+                        <th scope="col">Ban giám khảo
                         </th>
                         <th scope="col">Chuyên ngành </th>
                         <th scope="col">Tình trạng </th>
@@ -309,52 +288,15 @@
                                 </a>
                             </td>
 
-                            <td>
+                            <td class="text-center">
 
-                                <button class="p-4" type="button"
-                                    style="background: none ; border : none ; list-style  : none " data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal_{{ $key }}">
-                                    <span class="svg-icon svg-icon-success svg-icon-2x">
-                                        <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Visible.svg--><svg
-                                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                            width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                <rect x="0" y="0" width="24" height="24" />
-                                                <path
-                                                    d="M3,12 C3,12 5.45454545,6 12,6 C16.9090909,6 21,12 21,12 C21,12 16.9090909,18 12,18 C5.45454545,18 3,12 3,12 Z"
-                                                    fill="#000000" fill-rule="nonzero" opacity="0.3" />
-                                                <path
-                                                    d="M12,15 C10.3431458,15 9,13.6568542 9,12 C9,10.3431458 10.3431458,9 12,9 C13.6568542,9 15,10.3431458 15,12 C15,13.6568542 13.6568542,15 12,15 Z"
-                                                    fill="#000000" opacity="0.3" />
-                                            </g>
-                                        </svg>
-                                        <!--end::Svg Icon-->
-                                    </span>
-                                </button>
+                                {{ $contest->teams_count }}
 
-                                <!-- Modal -->
-                                <div class="modal fade" id="exampleModal_{{ $key }}" tabindex="-1"
-                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Chi tiết cuộc
-                                                    thi
-                                                </h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body  ">
-                                                {{ $contest->description }}
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Thoát
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            </td>
+
+                            <td class="text-center">
+
+                                {{ count($contest->judges) }}
 
                             </td>
                             <td>{{ $contest->major->name ?? 'Chưa có chuyên ngành ' }}</td>
@@ -371,9 +313,9 @@
                                 @if (\Carbon\Carbon::parse($contest->date_start)->toDateTimeString() > \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
                                     <span class="badge bg-primary">Sắp diễn ra </span>
                                 @elseif (\Carbon\Carbon::parse($contest->register_deadline)->toDateTimeString() > \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
-                                    <span class="badge bg-success">Đang mở</span>
+                                    <span class="badge bg-success">Đang diễn ra </span>
                                 @else
-                                    <span class="badge bg-danger"> Quá hạn</span>
+                                    <span class="badge bg-danger"> Đã diễn ra </span>
                                 @endif
                             </td>
                             <td>{{ $contest->date_start }}</td>
@@ -504,7 +446,6 @@
         </div>
     </div>
 
-    \
 
 @endsection
 @section('page-script')

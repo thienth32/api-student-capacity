@@ -36,23 +36,23 @@
                     method="post" enctype="multipart/form-data">
                     @csrf
                     @method('put')
-                    <div class="form-group mb-10">
-                        <label for="">Tên chuyên ngành</label>
+                    <div class="form-group mb-5">
+                        <label class="form-label" for="">Tên chuyên ngành</label>
                         <input type="text" name="name" value="{{ $major->name }}" class="name-sl form-control"
                             placeholder="">
                         @error('name')
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
                     </div>
-                    <div class="form-group mb-10">
-                        <label for="">Slug chuyên ngành</label>
+                    <div class="form-group mb-5">
+                        <label class="form-label" for="">Slug chuyên ngành</label>
                         <input type="text" name="slug" value="{{ $major->slug }}" class="slug-sl form-control"
                             placeholder="">
                         @error('slug')
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
                     </div>
-                    <div class="form-group mb-10 ">
+                    <div class="form-group mb-5 ">
                         <button type="submit" name="" id="" class="btn btn-success btn-lg btn-block">Lưu </button>
                     </div>
                 </form>

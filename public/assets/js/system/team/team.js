@@ -20,7 +20,6 @@ const teamPage = {
                                 <li><a data-id_user='${val.id}' data-email_user='${val.email}' class="addUserArray dropdown-item py-5" href="javascript:void()">${val.email}</a></li>
                             `;
                         });
-                        toastr.success('Tìm kiếm thành công !!')
                         $('input#searchUserValue').val();
                         $('#resultUserSearch').html(_html);
                     }
@@ -67,23 +66,20 @@ const teamPage = {
             e.preventDefault();
             let email = $(this).attr('data-email_user');
             let id = $(this).attr('data-id_user');
-            if (userArray.length == 7) {
-                toastr.warning('Tối đa 7 thành viên !');
-                return;
+
+            var check = userArray.filter(function(user) {
+                return user.id_user == id;
+            })
+            if (check.length > 0) {
+                toastr.warning('Thành viên này đã có trong nhóm !')
             } else {
-                var check = userArray.filter(function(user) {
-                    return user.id_user == id;
-                })
-                if (check.length > 0) {
-                    toastr.warning('Thành viên này đã có trong nhóm !')
-                } else {
-                    userArray.push({
-                        'id_user': id,
-                        'email_user': email
-                    });
-                }
-                loadUserTeam(userArray);
+                userArray.push({
+                    'id_user': id,
+                    'email_user': email
+                });
             }
+            loadUserTeam(userArray);
+
         });
 
         // xóa user ra khỏi mảng

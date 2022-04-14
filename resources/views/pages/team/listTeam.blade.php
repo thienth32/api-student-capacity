@@ -47,24 +47,26 @@
 
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="form-group p-2">
-                    <label>Cuộc thi </label>
-                    <select id="selectContest" class="form-control form-control-solid">
-                        <option>-- Cuộc thi --</option>
+                    <label class="form-label">Cuộc thi </label>
+                    <select id="selectContest" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                        data-hide-search="true" tabindex="-1" aria-hidden="true">
+                        <option value="0">Chọn cuộc thi</option>
                         @forelse ($Contest as $itemContest)
                             <option @selected(request('contest') == $itemContest->id) value="{{ $itemContest->id }}">
-                                Cuộc Thi: {{ $itemContest->name }}
+                                Cuộc Thi : {{ $itemContest->name }}
                             </option>
                         @empty
-                            <option>-- Không có cuộc thi --</option>
+                            <option>Không có cuộc thi</option>
                         @endforelse
                     </select>
                 </div>
             </div>
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="form-group p-2">
-                    <label for="" class="label">Khoảng thời gian </label>
-                    <select id="select-date-serach" class="select-date-serach form-control">
-                        <option class="form-control">---- Thời gian ----</option>
+                    <label for="" class="form-label">Khoảng thời gian </label>
+                    <select id="select-date-serach" class="form-select mb-2 select2-hidden-accessible"
+                        data-control="select2" data-hide-search="true" tabindex="-1" aria-hidden="true">
+                        <option value="/" class="form-control">Chọn thời gian </option>
                         <option class="form-control" @selected(request('day') == 7) value="day-7">7 Ngày </option>
                         <option class="form-control" @selected(request('day') == 14) value="day-14">14 Ngày </option>
                         <option class="form-control" @selected(request('day') == 30) value="day-30">30 Ngày </option>
@@ -76,12 +78,11 @@
             </div>
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="  form-group p-2">
-                    <label>Tìm kiếm </label>
+                    <label class="form-label">Tìm kiếm </label>
                     <input id="searchTeam" type="text" value="{{ request('q') ?? '' }}"
                         placeholder="'*Enter' tìm kiếm ..." class=" ip-search form-control">
                 </div>
             </div>
-
         </div>
         <div class="back">
             <hr>
@@ -114,143 +115,119 @@
             </span>
 
         </div>
-        <div class="table-responsive p-4 card card-flush ">
+        <div class="table-responsive ">
             @if (count($dataTeam) > 0)
-                <table class=" table table-hover table-responsive-md ">
+                <table class="table table-row-bordered table-row-gray-300 gy-7 table-hover">
                     <thead>
                         <tr>
                             <th scope="col">
-                                <span role="button" data-key="id"
-                                    class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
-                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
-                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                        style="width: 14px !important ; height: 14px !important" width="24px" height="24px"
-                                        viewBox="0 0 24 24" version="1.1">
-                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                            <polygon points="0 0 24 0 24 24 0 24" />
-                                            <rect fill="#000000" opacity="0.3"
-                                                transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
-                                                x="5" y="5" width="2" height="12" rx="1" />
-                                            <path
-                                                d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
-                                                fill="#000000" fill-rule="nonzero" />
-                                            <rect fill="#000000" opacity="0.3"
-                                                transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
-                                                x="17" y="7" width="2" height="12" rx="1" />
-                                            <path
-                                                d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
-                                                fill="#000000" fill-rule="nonzero"
-                                                transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
-                                        </g>
-                                    </svg>
-                                    <!--end::Svg Icon-->
-                                </span>
+
+                                <a
+                                    href="{{ route('admin.teams', [
+                                        'sortBy' => request()->has('sortBy') ? (request('sortBy') == 'desc' ? 'asc' : 'desc') : 'asc',
+                                        'orderBy' => 'id',
+                                    ]) }}">
+                                    <span role="button" data-key="id"
+                                        class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
+                                        <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
+                                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                            style="width: 14px !important ; height: 14px !important" width="24px"
+                                            height="24px" viewBox="0 0 24 24" version="1.1">
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <polygon points="0 0 24 0 24 24 0 24" />
+                                                <rect fill="#000000" opacity="0.3"
+                                                    transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
+                                                    x="5" y="5" width="2" height="12" rx="1" />
+                                                <path
+                                                    d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
+                                                    fill="#000000" fill-rule="nonzero" />
+                                                <rect fill="#000000" opacity="0.3"
+                                                    transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
+                                                    x="17" y="7" width="2" height="12" rx="1" />
+                                                <path
+                                                    d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
+                                                    fill="#000000" fill-rule="nonzero"
+                                                    transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
+                                            </g>
+                                        </svg>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                </a>
+
+
                             </th>
                             <th scope="col">Đội Thi
-                                <span role="button" data-key="name"
-                                    class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
-                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
-                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                        style="width: 14px !important ; height: 14px !important" width="24px" height="24px"
-                                        viewBox="0 0 24 24" version="1.1">
-                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                            <polygon points="0 0 24 0 24 24 0 24" />
-                                            <rect fill="#000000" opacity="0.3"
-                                                transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
-                                                x="5" y="5" width="2" height="12" rx="1" />
-                                            <path
-                                                d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
-                                                fill="#000000" fill-rule="nonzero" />
-                                            <rect fill="#000000" opacity="0.3"
-                                                transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
-                                                x="17" y="7" width="2" height="12" rx="1" />
-                                            <path
-                                                d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
-                                                fill="#000000" fill-rule="nonzero"
-                                                transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
-                                        </g>
-                                    </svg>
-                                    <!--end::Svg Icon-->
-                                </span>
+                                <a
+                                    href="{{ route('admin.teams', [
+                                        'sortBy' => request()->has('sortBy') ? (request('sortBy') == 'desc' ? 'asc' : 'desc') : 'asc',
+                                        'orderBy' => 'name',
+                                    ]) }}">
+                                    <span role="button" data-key="name"
+                                        class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
+                                        <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
+                                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                            style="width: 14px !important ; height: 14px !important" width="24px"
+                                            height="24px" viewBox="0 0 24 24" version="1.1">
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <polygon points="0 0 24 0 24 24 0 24" />
+                                                <rect fill="#000000" opacity="0.3"
+                                                    transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
+                                                    x="5" y="5" width="2" height="12" rx="1" />
+                                                <path
+                                                    d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
+                                                    fill="#000000" fill-rule="nonzero" />
+                                                <rect fill="#000000" opacity="0.3"
+                                                    transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
+                                                    x="17" y="7" width="2" height="12" rx="1" />
+                                                <path
+                                                    d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
+                                                    fill="#000000" fill-rule="nonzero"
+                                                    transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
+                                            </g>
+                                        </svg>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                </a>
+
                             </th>
-                            <th scope="col"> Thuộc Cuộc thi <span role="button" data-key="name"
-                                    class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
-                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
-                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                        style="width: 14px !important ; height: 14px !important" width="24px" height="24px"
-                                        viewBox="0 0 24 24" version="1.1">
-                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                            <polygon points="0 0 24 0 24 24 0 24" />
-                                            <rect fill="#000000" opacity="0.3"
-                                                transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
-                                                x="5" y="5" width="2" height="12" rx="1" />
-                                            <path
-                                                d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
-                                                fill="#000000" fill-rule="nonzero" />
-                                            <rect fill="#000000" opacity="0.3"
-                                                transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
-                                                x="17" y="7" width="2" height="12" rx="1" />
-                                            <path
-                                                d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
-                                                fill="#000000" fill-rule="nonzero"
-                                                transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
-                                        </g>
-                                    </svg>
-                                    <!--end::Svg Icon-->
-                                </span> </th>
+                            <th scope="col"> Thuộc Cuộc thi
+                            </th>
                             <th scope="col">Thành Viên
-                                <span role="button" data-key="start_time"
-                                    class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
-                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
-                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                        style="width: 14px !important ; height: 14px !important" width="24px" height="24px"
-                                        viewBox="0 0 24 24" version="1.1">
-                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                            <polygon points="0 0 24 0 24 24 0 24" />
-                                            <rect fill="#000000" opacity="0.3"
-                                                transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
-                                                x="5" y="5" width="2" height="12" rx="1" />
-                                            <path
-                                                d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
-                                                fill="#000000" fill-rule="nonzero" />
-                                            <rect fill="#000000" opacity="0.3"
-                                                transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
-                                                x="17" y="7" width="2" height="12" rx="1" />
-                                            <path
-                                                d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
-                                                fill="#000000" fill-rule="nonzero"
-                                                transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
-                                        </g>
-                                    </svg>
-                                    <!--end::Svg Icon-->
-                                </span>
+
                             </th>
                             <th scope="col">Ngày Tạo
-                                <span role="button" data-key="end_time"
-                                    class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
-                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
-                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                        style="width: 14px !important ; height: 14px !important" width="24px" height="24px"
-                                        viewBox="0 0 24 24" version="1.1">
-                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                            <polygon points="0 0 24 0 24 24 0 24" />
-                                            <rect fill="#000000" opacity="0.3"
-                                                transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
-                                                x="5" y="5" width="2" height="12" rx="1" />
-                                            <path
-                                                d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
-                                                fill="#000000" fill-rule="nonzero" />
-                                            <rect fill="#000000" opacity="0.3"
-                                                transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
-                                                x="17" y="7" width="2" height="12" rx="1" />
-                                            <path
-                                                d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
-                                                fill="#000000" fill-rule="nonzero"
-                                                transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
-                                        </g>
-                                    </svg>
-                                    <!--end::Svg Icon-->
-                                </span>
+                                <a
+                                    href="{{ route('admin.teams', [
+                                        'sortBy' => request()->has('sortBy') ? (request('sortBy') == 'desc' ? 'asc' : 'desc') : 'asc',
+                                        'orderBy' => 'created_at',
+                                    ]) }}">
+                                    <span role="button" data-key="end_time"
+                                        class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
+                                        <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
+                                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                            style="width: 14px !important ; height: 14px !important" width="24px"
+                                            height="24px" viewBox="0 0 24 24" version="1.1">
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <polygon points="0 0 24 0 24 24 0 24" />
+                                                <rect fill="#000000" opacity="0.3"
+                                                    transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
+                                                    x="5" y="5" width="2" height="12" rx="1" />
+                                                <path
+                                                    d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
+                                                    fill="#000000" fill-rule="nonzero" />
+                                                <rect fill="#000000" opacity="0.3"
+                                                    transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
+                                                    x="17" y="7" width="2" height="12" rx="1" />
+                                                <path
+                                                    d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
+                                                    fill="#000000" fill-rule="nonzero"
+                                                    transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
+                                            </g>
+                                        </svg>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                </a>
+
                             </th>
                             <th class="text-center" colspan="2">
 
@@ -324,7 +301,7 @@
                                     Cuộc Thi: {{ $key->contest->name ?? 'Chưa có Cuộc thi ' }}
                                 </td>
                                 <td>
-                                    <button class="badge bg-primary" type="button" data-bs-toggle="modal"
+                                    <button class="btn  btn-primary btn-sm" type="button" data-bs-toggle="modal"
                                         data-bs-target="#exampleModal_{{ $key->id }}">
                                         Xem Thêm
                                     </button>
@@ -498,6 +475,7 @@
 @endsection
 
 @section('page-script')
+    <script src="assets/js/system/formatlist/formatlis.js"></script>
     <script>
         $(document).ready(function() {
             $('#selectContest').change(function() {
@@ -511,27 +489,29 @@
                     // alert(key)
                     window.location = 'admin/teams?keyword=' + key;
                 }
-
             });
             $('#select-date-serach').change(function() {
                 let url = '/admin/teams?';
                 const value = $(this).val();
                 // alert(value);
                 switch (value) {
+                    case "/":
+                        window.location = url;
+                        return false;
                     case "day-7":
-                        window.location = url + "&day=" + 7;
+                        window.location = url + "day=" + 7;
                         return false;
                     case "day-14":
-                        window.location = url + "&day=" + 14;
+                        window.location = url + "day=" + 14;
                         return false;
                     case "day-30":
-                        window.location = url + "&day=" + 30;
+                        window.location = url + "day=" + 30;
                         return false;
                     case "day-60":
-                        window.location = url + "&day=" + 60;
+                        window.location = url + "day=" + 60;
                         return false;
                     case "day-90":
-                        window.location = url + "&day=" + 90;
+                        window.location = url + "day=" + 90;
                         return false;
                     default:
                         break;

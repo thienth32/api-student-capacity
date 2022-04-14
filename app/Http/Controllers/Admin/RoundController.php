@@ -63,7 +63,7 @@ class RoundController extends Controller
                     (request('op_time') == 'sub' ? 'sub' : 'add'),
                     'start_time'
                 )
-                ->hasReuqest([
+                ->hasRequest([
                     'contest_id' => request('contest_id') ?? null,
                     'type_exam_id' => request('type_exam_id') ?? null,
                 ])
@@ -131,8 +131,8 @@ class RoundController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'name' => 'required|max:255',
-                'image' => 'required|mimes:jpeg,png,jpg|max:10000',
+                'name' => 'required|unique:rounds|max:255',
+                'image' => 'required|required|mimes:jpeg,png,jpg|max:10000',
                 'start_time' => 'required',
                 'end_time' => 'required|after:start_time',
                 'description' => 'required',
@@ -142,6 +142,7 @@ class RoundController extends Controller
             [
                 'name.required' => 'Chưa nhập trường này !',
                 'name.max' => 'Độ dài kí tự không phù hợp !',
+                'name.unique' => 'Đã tồn tại trong cơ sở dữ liệu !',
                 'image.mimes' => 'Sai định dạng !',
                 'image.required' => 'Chưa nhập trường này !',
                 'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
@@ -218,12 +219,13 @@ class RoundController extends Controller
     private function updateRound($id)
     {
         try {
+            // dd(request()->all());
             if (!($round = $this->round::find($id))) return false;
             $validator = Validator::make(
                 request()->all(),
                 [
-                    'name' => "required",
-                    'start_time' => "required",
+                    'name' => "required|unique:rounds,name,$round->id|max:255",
+                    'start_time' => "required|before:end_time",
                     'end_time' => "required|after:start_time",
                     'description' => "required",
                     'contest_id' => "required",
@@ -231,8 +233,13 @@ class RoundController extends Controller
                 ],
                 [
                     "name.required" => "Trường name không bỏ trống !",
+                    'name.max' => 'Độ dài kí tự không phù hợp !',
+                    'name.unique' => 'Đã tồn tại trong cơ sở dữ liệu !',
+                    // "start_time.date_format" => "Trường thời gian bắt đầu không đúng định dạng !",
+                    // "end_time.date_format" => "Trường thời gian kết thúc không đúng định dạng !",
                     "start_time.required" => "Trường thời gian bắt đầu  không bỏ trống !",
                     "end_time.required" => "Trường thời gian kết thúc không bỏ trống !",
+                    "start_time.before" => "Trường thời gian bắt đầu  không nhỏ hơn trường kết thúc  !",
                     "end_time.after" => "Trường thời gian kết thúc không nhỏ hơn trường bắt đầu  !",
                     "description.required" => "Trường mô tả không bỏ trống !",
                     "contest_id.required" => "Trường cuộc thi tồn tại !",

@@ -46,7 +46,7 @@ class ContestController extends Controller
                 ->status(request('status'))
                 ->sort((request('sort') == 'desc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'contests')
                 ->hasDateTimeBetween('date_start', request('start_time') ?? null, request('end_time') ?? null)
-                ->hasReuqest(['major_id' => request('major_id') ?? null])
+                ->hasRequest(['major_id' => request('major_id') ?? null])
                 ->with([
                     'major',
                     'teams',
