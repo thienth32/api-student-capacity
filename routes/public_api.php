@@ -60,3 +60,9 @@ Route::get('{slug}', [AdminMajorController::class, 'apiShow'])->name('major.api.
 Route::prefix('enterprise')->group(function () {
     Route::get('', [EnterpriseController::class, 'apiIndex'])->name('enterprise.api.index');
 });
+
+
+Route::prefix('teams')->group(function () {
+    Route::post('add-team', [AdminTeamController::class, "apiAddTeam"])->name('client.api.add.team');
+    Route::put('edit-team/{team_id}', [AdminTeamController::class, "apiEditTeam"])->name('client.api.edit.team');
+});
