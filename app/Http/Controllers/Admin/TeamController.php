@@ -111,7 +111,7 @@ class TeamController extends Controller
     }
     public function store(Request $request)
     {
-        if (!($request->has('user_id'))) return redirect()->back()->with('error', 'Chưa có thành viên trong đội');
+
 
         $validator = Validator::make(
             $request->all(),
@@ -129,9 +129,12 @@ class TeamController extends Controller
                 'contest_id.numeric' => 'Sai định dạng !',
             ]
         );
+
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
+
+        if (!($request->has('user_id'))) return redirect()->back()->with('error', 'Chưa có thành viên trong đội')->withInput();
 
         DB::beginTransaction();
         try {
