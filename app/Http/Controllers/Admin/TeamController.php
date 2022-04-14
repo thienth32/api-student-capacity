@@ -280,6 +280,7 @@ class TeamController extends Controller
         try {
             $today = Carbon::now()->toDateTimeString();
             $user_id = auth('sanctum')->user()->id;
+            // $user_id = $request->user_id;
             $user = User::find($user_id);
             $contest = Contest::find($request->contest_id);
             if (is_null($user) || is_null($contest)) {
