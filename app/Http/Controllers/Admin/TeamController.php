@@ -111,7 +111,7 @@ class TeamController extends Controller
     }
     public function store(Request $request)
     {
-        if (!($request->has('user_id'))) return redirect()->back()->with('error', 'Chưa có thành viên trong đội');
+
 
         $validator = Validator::make(
             $request->all(),
@@ -129,9 +129,12 @@ class TeamController extends Controller
                 'contest_id.numeric' => 'Sai định dạng !',
             ]
         );
+
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
+
+        if (!($request->has('user_id'))) return redirect()->back()->with('error', 'Chưa có thành viên trong đội')->withInput();
 
         DB::beginTransaction();
         try {
@@ -279,8 +282,8 @@ class TeamController extends Controller
         DB::beginTransaction();
         try {
             $today = Carbon::now()->toDateTimeString();
-            // $user_id = auth('sanctum')->user()->id;
-            $user_id = $request->user_id;
+            $user_id = auth('sanctum')->user()->id;
+            // $user_id = $request->user_id;
             $user = User::find($user_id);
             $contest = Contest::find($request->contest_id);
             if (is_null($user) || is_null($contest)) {
