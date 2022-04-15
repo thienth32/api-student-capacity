@@ -47,13 +47,20 @@
                 <div class="form-group p-2">
                     <label>danh sách chuyên ngành </label>
                     <select id="selectContest" class="form-control form-control-solid">
-                        <option>-- chuyên ngành--</option>
-
+                        <option value="">-- chuyên ngành--</option>
                         @foreach ($dataMajor as $itemMajor)
-                            <option @selected(request('major') == $itemMajor->id) value="{{ $itemMajor->id }}">
+                            @php
+                                $dash = '';
+                            @endphp
+                            <option @selected(request('major_id') == $itemMajor->id) value="{{ $itemMajor->id }}">
                                 Ngành: {{ $itemMajor->name }}
                             </option>
+                            @include(
+                                'pages.major.include.listSelecterChislAdd',
+                                ['majorPrent' => $itemMajor]
+                            )
                         @endforeach
+
                     </select>
                 </div>
             </div>
@@ -117,98 +124,104 @@
                     <thead>
                         <tr>
                             <th scope="col">
-                                <a href="{{ route('admin.skill.index',['sortBy'=>request()->has('sortBy') ? (request('sortBy') == 'desc' ? 'asc' : 'desc') : 'asc',
-                                    'orderBy'=>'id'
+                                <a
+                                    href="{{ route('admin.skill.index', [
+                                        'sortBy' => request()->has('sortBy') ? (request('sortBy') == 'desc' ? 'asc' : 'desc') : 'asc',
+                                        'orderBy' => 'id',
                                     ]) }}">
                                     <span role="button" data-key="id"
-                                    class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
-                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
-                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                        style="width: 14px !important ; height: 14px !important" width="24px" height="24px"
-                                        viewBox="0 0 24 24" version="1.1">
-                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                            <polygon points="0 0 24 0 24 24 0 24" />
-                                            <rect fill="#000000" opacity="0.3"
-                                                transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
-                                                x="5" y="5" width="2" height="12" rx="1" />
-                                            <path
-                                                d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
-                                                fill="#000000" fill-rule="nonzero" />
-                                            <rect fill="#000000" opacity="0.3"
-                                                transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
-                                                x="17" y="7" width="2" height="12" rx="1" />
-                                            <path
-                                                d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
-                                                fill="#000000" fill-rule="nonzero"
-                                                transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
-                                        </g>
-                                    </svg>
-                                    <!--end::Svg Icon-->
-                                </span>
+                                        class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
+                                        <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
+                                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                            style="width: 14px !important ; height: 14px !important" width="24px"
+                                            height="24px" viewBox="0 0 24 24" version="1.1">
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <polygon points="0 0 24 0 24 24 0 24" />
+                                                <rect fill="#000000" opacity="0.3"
+                                                    transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
+                                                    x="5" y="5" width="2" height="12" rx="1" />
+                                                <path
+                                                    d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
+                                                    fill="#000000" fill-rule="nonzero" />
+                                                <rect fill="#000000" opacity="0.3"
+                                                    transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
+                                                    x="17" y="7" width="2" height="12" rx="1" />
+                                                <path
+                                                    d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
+                                                    fill="#000000" fill-rule="nonzero"
+                                                    transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
+                                            </g>
+                                        </svg>
+                                        <!--end::Svg Icon-->
+                                    </span>
                                 </a>
 
                             </th>
                             <th scope="col">Mã
-                                <a href="{{ route('admin.skill.index',['sortBy'=>request()->has('sortBy') ? (request('sortBy') == 'desc' ? 'asc' : 'desc') : 'asc',
-                                    'orderBy'=>'short_name'
+                                <a
+                                    href="{{ route('admin.skill.index', [
+                                        'sortBy' => request()->has('sortBy') ? (request('sortBy') == 'desc' ? 'asc' : 'desc') : 'asc',
+                                        'orderBy' => 'short_name',
                                     ]) }}">
                                     <span role="button" data-key="name"
-                                    class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
-                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
-                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                        style="width: 14px !important ; height: 14px !important" width="24px" height="24px"
-                                        viewBox="0 0 24 24" version="1.1">
-                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                            <polygon points="0 0 24 0 24 24 0 24" />
-                                            <rect fill="#000000" opacity="0.3"
-                                                transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
-                                                x="5" y="5" width="2" height="12" rx="1" />
-                                            <path
-                                                d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
-                                                fill="#000000" fill-rule="nonzero" />
-                                            <rect fill="#000000" opacity="0.3"
-                                                transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
-                                                x="17" y="7" width="2" height="12" rx="1" />
-                                            <path
-                                                d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
-                                                fill="#000000" fill-rule="nonzero"
-                                                transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
-                                        </g>
-                                    </svg>
-                                    <!--end::Svg Icon-->
-                                </span>
+                                        class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
+                                        <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
+                                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                            style="width: 14px !important ; height: 14px !important" width="24px"
+                                            height="24px" viewBox="0 0 24 24" version="1.1">
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <polygon points="0 0 24 0 24 24 0 24" />
+                                                <rect fill="#000000" opacity="0.3"
+                                                    transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
+                                                    x="5" y="5" width="2" height="12" rx="1" />
+                                                <path
+                                                    d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
+                                                    fill="#000000" fill-rule="nonzero" />
+                                                <rect fill="#000000" opacity="0.3"
+                                                    transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
+                                                    x="17" y="7" width="2" height="12" rx="1" />
+                                                <path
+                                                    d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
+                                                    fill="#000000" fill-rule="nonzero"
+                                                    transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
+                                            </g>
+                                        </svg>
+                                        <!--end::Svg Icon-->
+                                    </span>
                                 </a>
 
                             </th>
                             <th scope="col">Kỹ năng
-                                <a href="{{ route('admin.skill.index',['sortBy'=>request()->has('sortBy') ? (request('sortBy') == 'desc' ? 'asc' : 'desc') : 'asc',
-                                    'orderBy'=>'name'
+                                <a
+                                    href="{{ route('admin.skill.index', [
+                                        'sortBy' => request()->has('sortBy') ? (request('sortBy') == 'desc' ? 'asc' : 'desc') : 'asc',
+                                        'orderBy' => 'name',
                                     ]) }}">
                                     <span role="button" data-key="name"
-                                    class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
-                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
-                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                        style="width: 14px !important ; height: 14px !important" width="24px" height="24px"
-                                        viewBox="0 0 24 24" version="1.1">
-                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                            <polygon points="0 0 24 0 24 24 0 24" />
-                                            <rect fill="#000000" opacity="0.3"
-                                                transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
-                                                x="5" y="5" width="2" height="12" rx="1" />
-                                            <path
-                                                d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
-                                                fill="#000000" fill-rule="nonzero" />
-                                            <rect fill="#000000" opacity="0.3"
-                                                transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
-                                                x="17" y="7" width="2" height="12" rx="1" />
-                                            <path
-                                                d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
-                                                fill="#000000" fill-rule="nonzero"
-                                                transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
-                                        </g>
-                                    </svg>
-                                    <!--end::Svg Icon-->
-                                </span>
+                                        class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
+                                        <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
+                                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                            style="width: 14px !important ; height: 14px !important" width="24px"
+                                            height="24px" viewBox="0 0 24 24" version="1.1">
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <polygon points="0 0 24 0 24 24 0 24" />
+                                                <rect fill="#000000" opacity="0.3"
+                                                    transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
+                                                    x="5" y="5" width="2" height="12" rx="1" />
+                                                <path
+                                                    d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
+                                                    fill="#000000" fill-rule="nonzero" />
+                                                <rect fill="#000000" opacity="0.3"
+                                                    transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
+                                                    x="17" y="7" width="2" height="12" rx="1" />
+                                                <path
+                                                    d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
+                                                    fill="#000000" fill-rule="nonzero"
+                                                    transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
+                                            </g>
+                                        </svg>
+                                        <!--end::Svg Icon-->
+                                    </span>
                                 </a>
 
                             </th>
@@ -226,12 +239,24 @@
                         </tr>
                     </thead>
                     <tbody>
-
+                        @php
+                            $total = $dataSkill->total();
+                        @endphp
                         @foreach ($dataSkill as $index => $key)
                             <tr>
-                                <th scope="row">
-                                    {{ (request()->has('page') && request('page') !== 1 ? $dataSkill->perPage() * (request('page') - 1) : 0) +$index +1 }}
-                                </th>
+                                @if (request()->has('sortBy'))
+                                    <th scope="row">
+                                        @if (request('sortBy') == 'desc')
+                                            {{ (request()->has('page') && request('page') !== 1 ? $dataSkill->perPage() * (request('page') - 1) : 0) +$index +1 }}
+                                        @else
+                                            {{ request()->has('page') && request('page') !== 1? $total - $dataSkill->perPage() * (request('page') - 1) - $index: ($total -= 1) }}
+                                        @endif
+                                    </th>
+                                @else
+                                    <th scope="row">
+                                        {{ (request()->has('page') && request('page') !== 1 ? $dataSkill->perPage() * (request('page') - 1) : 0) +$index +1 }}
+                                    </th>
+                                @endif
                                 <td>{{ $key->short_name }}</td>
                                 <td>
                                     {{ $key->name }}
@@ -245,12 +270,6 @@
                                         chưa có chuyên ngành
                                     @endif
                                 </td>
-
-                                {{-- <td>
-                                        <img style="width:150px;height:120px"
-                                            src="{{ Storage::disk('google')->has($key->logo)? Storage::disk('google')->url($key->logo): 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
-                                            alt="">
-                                    </td> --}}
                                 <td>
 
                                     <button class="badge bg-primary" type="button" data-bs-toggle="modal"
@@ -324,13 +343,14 @@
                                                 </a>
                                             </li>
                                             <li class="my-3">
-                                                <a href="{{ route('admin.skill.detail', $key->id)  }}">
+                                                <a href="{{ route('admin.skill.detail', $key->id) }}">
                                                     <span class="svg-icon svg-icon-primary svg-icon-2x ">
                                                         <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Text/Redo.svg--><svg
                                                             xmlns="http://www.w3.org/2000/svg"
                                                             xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                                                             height="24px" viewBox="0 0 24 24" version="1.1">
-                                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                            <g stroke="none" stroke-width="1" fill="none"
+                                                                fill-rule="evenodd">
                                                                 <rect x="0" y="0" width="24" height="24" />
                                                                 <path
                                                                     d="M21.4451171,17.7910156 C21.4451171,16.9707031 21.6208984,13.7333984 19.0671874,11.1650391 C17.3484374,9.43652344 14.7761718,9.13671875 11.6999999,9 L11.6999999,4.69307548 C11.6999999,4.27886191 11.3642135,3.94307548 10.9499999,3.94307548 C10.7636897,3.94307548 10.584049,4.01242035 10.4460626,4.13760526 L3.30599678,10.6152626 C2.99921905,10.8935795 2.976147,11.3678924 3.2544639,11.6746702 C3.26907199,11.6907721 3.28437331,11.7062312 3.30032452,11.7210037 L10.4403903,18.333467 C10.7442966,18.6149166 11.2188212,18.596712 11.5002708,18.2928057 C11.628669,18.1541628 11.6999999,17.9721616 11.6999999,17.7831961 L11.6999999,13.5 C13.6531249,13.5537109 15.0443703,13.6779456 16.3083984,14.0800781 C18.1284272,14.6590944 19.5349747,16.3018455 20.5280411,19.0083314 L20.5280247,19.0083374 C20.6363903,19.3036749 20.9175496,19.5 21.2321404,19.5 L21.4499999,19.5 C21.4499999,19.0068359 21.4451171,18.2255859 21.4451171,17.7910156 Z"
@@ -420,7 +440,7 @@
                 '{{ request()->has('sortBy') ? (request('sortBy') == 'desc' ? 'asc' : 'desc') : 'asc' }}';
             $('#selectContest').change(function() {
                 let idContest = $(this).val();
-                window.location = 'admin/skill?major=' + idContest;
+                window.location = 'admin/skill?major_id=' + idContest;
             })
             $('#searchTeam').keypress(function(event) {
                 var keycode = (event.keyCode ? event.keyCode : event.which);

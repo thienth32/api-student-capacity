@@ -75,7 +75,6 @@
         </div>
     </div>
 @endsection
-
 @section('page-script')
     <script src="assets/js/system/preview-file/previewImg.js"></script>
     <script>

@@ -76,7 +76,7 @@ class ContestController extends Controller
 
         return view('pages.contest.index', [
             'contests' => $data,
-            'majors' => $this->major::all(),
+            'majors' =>Major::where('parent_id', 0)->get(),
         ]);
     }
 

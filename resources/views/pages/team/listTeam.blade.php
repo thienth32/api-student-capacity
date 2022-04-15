@@ -236,11 +236,24 @@
                         </tr>
                     </thead>
                     <tbody>
-
+                        @php
+                            $total = $dataTeam->total();
+                        @endphp
                         @forelse ($dataTeam as $index=> $key)
                             <tr>
+                                @if (request()->has('sortBy'))
+                                <th scope="row">
+                                    @if (request('sortBy') == 'desc')
+                                        {{ (request()->has('page') && request('page') !== 1 ? $dataTeam->perPage() * (request('page') - 1) : 0) +$index +1 }}
+                                    @else
+                                        {{ request()->has('page') && request('page') !== 1? $total - $dataTeam->perPage() * (request('page') - 1) - $index: ($total -= 1) }}
+                                    @endif
+                                </th>
+                            @else
                                 <th scope="row">
                                     {{ (request()->has('page') && request('page') !== 1 ? $dataTeam->perPage() * (request('page') - 1) : 0) +$index +1 }}
+                                </th>
+                            @endif
                                 </th>
                                 <td>
 
@@ -250,7 +263,7 @@
                                     </button>
 
                                     <!-- Modal -->
-                                    <div style="margin-left:600px;width:800px" class="modal fade "
+                                    <div style="margin:auto" class="modal fade "
                                         id="deltai_team_{{ $key->id }}" tabindex="-1"
                                         aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">

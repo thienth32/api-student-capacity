@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Models;
-
 use App\Casts\FormatDate;
 use App\Casts\FormatImageGet;
 use App\Services\Builder\Builder;
@@ -33,7 +31,6 @@ class Contest extends Model
             $q->judges()->detach();
         });
     }
-
     public $fillable = [
         'name',
         'date_start',
@@ -61,7 +58,7 @@ class Contest extends Model
 
     public function enterprise()
     {
-        return $this->belongsToMany(Enterprise::class, 'donors', 'contest_id', 'enterprise_id');
+        return $this->belongsToMany(Enterprise::class, 'donors', 'contest_id', 'enterprise_id')->withTimestamps();
     }
 
     public function newEloquentBuilder($query)

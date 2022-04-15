@@ -70,7 +70,8 @@ class MajorController extends Controller
 
     public function index()
     {
-        if ($data = $this->getList()) {
+        $data = $this->getList()->where('parent_id', '=', 0);
+        if ($data) {
             return  view('pages.major.index', [
                 'majors' => $data->paginate(request('limit') ?? 5),
             ]);
@@ -99,7 +100,8 @@ class MajorController extends Controller
 
     public function create()
     {
-        return view('pages.major.create');
+        $dataMajor = $this->getList()->where('parent_id', '=', 0)->get();
+        return view('pages.major.create', compact('dataMajor'));
     }
 
     public function store(Request $request)
@@ -121,14 +123,16 @@ class MajorController extends Controller
         $this->major::create([
             'name' => $request->name,
             'slug' => $slug,
+            'parent_id' => $request->major_id
         ]);
         return redirect()->route('admin.major.list');;
     }
-
     public function edit(Request $request, $slug)
     {
+        $dataMajor = Major::where('parent_id', 0)->get();
         if ($major = $this->getMajor($slug)) {
-            return view('pages.major.edit', ['major' => $major->first()]);
+        //   dd( $major->first()->parent);
+            return view('pages.major.edit', ['major' => $major->first(), 'dataMajor' => $dataMajor]);
         }
         return abort(404);
     }
@@ -136,10 +140,11 @@ class MajorController extends Controller
     public function update(Request $request, $slug)
     {
         if (!($major = $this->getMajor($slug))) return abort(404);
+
         $request->validate(
             [
                 'name' => 'required|min:4',
-                'slug' => 'required|unique:majors,slug'
+                'slug' => 'required|unique:majors,slug,' . $major->first()->id,
             ],
             [
                 'name.required' => 'Không được bỏ trống tên !',
@@ -152,14 +157,19 @@ class MajorController extends Controller
         $major->update([
             'name' => $request->name,
             'slug' => $slug,
+            'parent_id' => $request->parent_id,
         ]);
         return redirect()->route('admin.major.list');
     }
 
     public function destroy($slug)
     {
-        // dd($slug);
+
         if (!($major = $this->getMajor($slug))) return abort(404);
+        // $parent_id = Major::where('parent_id', $major->first()->id)->get();
+        // foreach ($parent_id as $value) {
+        //     Major::destroy($value->id);
+        // }
         $major->delete();
         return redirect()->back();
     }
