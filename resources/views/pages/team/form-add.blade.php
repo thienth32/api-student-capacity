@@ -127,7 +127,6 @@
         </div>
     </div>
 @endsection
-
 @section('page-script')
     <script>
         var userArray = [];

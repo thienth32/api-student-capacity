@@ -47,12 +47,16 @@
                     <label>Chuyên ngành </label>
                     <select id="select-major" class="form-control form-control-solid">
                         <option value="0">-- Chuyên ngành --</option>
-                        @forelse ($majors as $major)
-                            <option @selected(request('major_id') == $major->id) value="{{ $major->id }}">{{ $major->name }}
-                            </option>
-                        @empty
-                            <option>-- Không có chuyên ngành --</option>
-                        @endforelse
+                        @foreach ($majors as $major)
+                            @php
+                                $dash = '';
+                            @endphp
+                            <option @selected(request('major_id') == $major->id) value="{{ $major->id }}">{{ $major->name }}   </option>
+                            @include(
+                                'pages.major.include.listSelecterChislAdd',
+                                ['majorPrent' => $major]
+                            )
+                        @endforeach
                     </select>
                 </div>
             </div>

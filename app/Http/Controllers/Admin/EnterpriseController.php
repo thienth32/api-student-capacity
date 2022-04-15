@@ -83,12 +83,14 @@ class EnterpriseController extends Controller
             [
                 'name' => 'required',
                 'description' => "required",
-
+                'logo' => 'required|required|mimes:jpeg,png,jpg|max:10000',
             ],
             [
                 'name.required' => 'Trường name không bỏ trống',
                 'description.required' => 'Trường mô tả không bỏ trống',
-
+                'logo.mimes' => 'Sai định dạng !',
+                'logo.required' => 'Chưa nhập trường này !',
+                'logo.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
             ]
         );
 

@@ -73,6 +73,30 @@
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
                     </div>
+                    <div class="form-group mb-10">
+
+                        <label for="" class="form-label">Thuộc chuyên ngành</label>
+                        <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                            data-hide-search="false" tabindex="-1" aria-hidden="true" name="major_id"
+                            value="{{ old('major_id') }}">
+                            <option value="0">Không thuộc chuyên ngành nào</option>
+
+                            @foreach ($dataMajor as $Major)
+                                @php
+                                    $dash = '';
+                                @endphp
+                                <option value="{{ $Major->id }}">Chuyên ngành: {{ $Major->name }}</option>
+                                @include(
+                                    'pages.major.include.listSelecterChislAdd',
+                                    ['majorPrent' => $Major]
+                                )
+                            @endforeach
+                        </select>
+
+                        @error('major_id')
+                            <p class="text-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
                     <div class="form-group mb-10 ">
                         <button type="submit" name="" id="" class="btn btn-success btn-lg btn-block">Lưu </button>
                     </div>

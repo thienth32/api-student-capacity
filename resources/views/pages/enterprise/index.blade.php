@@ -199,15 +199,27 @@
                         </tr>
                     </thead>
                     <tbody>
-
+                        @php
+                            $total = $listEnterprise->total();
+                        @endphp
                         @forelse ($listEnterprise as $index=> $key)
                             <tr>
-                                <th scope="row">
-                                    {{ (request()->has('page') && request('page') !== 1 ? $listEnterprise->perPage() * (request('page') - 1) : 0) +$index +1 }}
-                                </th>
+                                @if (request()->has('sortBy'))
+                                    <th scope="row">
+                                        @if (request('sortBy') == 'desc')
+                                            {{ (request()->has('page') && request('page') !== 1 ? $listEnterprise->perPage() * (request('page') - 1) : 0) +$index +1 }}
+                                        @else
+                                            {{ request()->has('page') && request('page') !== 1? $total - $listEnterprise->perPage() * (request('page') - 1) - $index: ($total -= 1) }}
+                                        @endif
+                                    </th>
+                                @else
+                                    <th scope="row">
+                                        {{ (request()->has('page') && request('page') !== 1 ? $listEnterprise->perPage() * (request('page') - 1) : 0) +$index +1 }}
+                                    </th>
+                                @endif
+
                                 <td>
                                     {{ $key->name }}
-
                                 </td>
 
                                 <td>

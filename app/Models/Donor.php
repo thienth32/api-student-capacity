@@ -9,7 +9,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Donor extends Model
 {
     use SoftDeletes;
-  protected $table='donors';
-  protected $fillable=['contest_id','enterprise_id'];
     use HasFactory;
+    protected $table = 'donors';
+    protected $fillable = ['contest_id', 'enterprise_id'];
+
+    public function Enterprise()
+    {
+    return $this->belongsTo(Enterprise::class,'enterprise_id');
+    }
 }

@@ -27,7 +27,7 @@ class TeamController extends Controller
         $contest = $request->has('contest') ? $request->contest : null;
         $orderBy = $request->has('orderBy') ? $request->orderBy : 'id';
         $timeDay = $request->has('day') ? $request->day : Null;
-        $sortBy = $request->has('sortBy') ? $request->sortBy : "desc";
+        $sortBy = $request->has('sortBy') ? $request->sortBy : "asc";
         $softDelete = $request->has('team_soft_delete') ? $request->team_soft_delete : null;
 
         if ($softDelete != null) {

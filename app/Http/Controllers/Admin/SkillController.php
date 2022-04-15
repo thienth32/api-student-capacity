@@ -19,10 +19,10 @@ class SkillController extends Controller
     private function getList(Request $request)
     {
         $keyword = $request->has('keyword') ? $request->keyword : "";
-        $major = $request->has('major') ? $request->major : null;
+        $major = $request->has('major_id') ? $request->major_id : null;
         $orderBy = $request->has('orderBy') ? $request->orderBy : 'id';
         $timeDay = $request->has('day') ? $request->day : Null;
-        $sortBy = $request->has('sortBy') ? $request->sortBy : "desc";
+        $sortBy = $request->has('sortBy') ? $request->sortBy : "asc";
         $softDelete = $request->has('skill_soft_delete') ? $request->skill_soft_delete : null;
 
         if ($softDelete != null) {
@@ -33,6 +33,7 @@ class SkillController extends Controller
         if ($major != null) {
             $query = Major::find($major);
         }
+
         if ($timeDay != null) {
             $current = Carbon::now();
             $query->where('created_at', '>=', $current->subDays($timeDay));
@@ -49,11 +50,11 @@ class SkillController extends Controller
     // Danh sách teams phía view
     public function index(Request $request)
     {
-        DB::beginTransaction();
+     DB::beginTransaction();
         try {
-            $dataMajor = Major::orderBy('id', 'DESC')->get();
+            $dataMajor =Major::where('parent_id', 0)->get();
             $dataSkill = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
-            if ($request->major) {
+            if ($request->major_id) {
                 $dataSkill = $this->getList($request)->Skill()->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
             }
             DB::commit();
@@ -65,7 +66,7 @@ class SkillController extends Controller
             ]);
         };
     }
-    // chi tiết skill
+  // chi tiết skill
     public function detail(Request $request, $id)
     {
         DB::beginTransaction();
@@ -79,12 +80,11 @@ class SkillController extends Controller
             return redirect('error');;
         };
     }
-
     public function create(Request $request)
     {
         DB::beginTransaction();
         try {
-            $dataMajor = Major::orderBy('id', 'DESC')->get();
+            $dataMajor =Major::where('parent_id', 0)->get();
             DB::commit();
             return view('pages.skill.form-add', compact('dataMajor'));
         } catch (\Throwable $th) {
@@ -145,7 +145,7 @@ class SkillController extends Controller
                 MajorSkill::create([
                     'major_id' => $request->major_id,
                     'skill_id' => $newSkill->id,
-                ]);
+              ]);
             }
             Db::commit();
 
@@ -157,13 +157,14 @@ class SkillController extends Controller
     }
     public function edit(Request $request, $id)
     {
+
         $data =  Skills::find($id);
-        $dataMajor = Major::orderBy('id', 'DESC')->get();
+
+        $dataMajor =Major::where('parent_id', 0)->get();
         return view('pages.skill.form-edit', compact('data', 'dataMajor'));
     }
     public function update(Request $request, $id)
     {
-
         $validator = Validator::make(
             $request->all(),
             [

@@ -111,6 +111,7 @@
                                                         accept=".png, .jpg, .jpeg">
                                                     {{-- <input type="hidden" name="avatar_remove"> --}}
                                                     <!--end::Inputs-->
+
                                                     <style>
                                                         label#img-error {
                                                             position: absolute;
@@ -138,9 +139,14 @@
                                                     <i class="bi bi-x fs-2"></i>
                                                 </span>
                                                 <!--end::Remove-->
+
                                             </div>
+
                                             <!--end::Image input-->
                                         </div>
+                                        @error('logo')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
                                         <!--end::Image input wrapper-->
                                     </div>
                                 </div>

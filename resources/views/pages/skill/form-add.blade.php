@@ -36,9 +36,18 @@
                                     <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
                                         data-hide-search="false" tabindex="-1" aria-hidden="true" name="major_id"
                                         value="{{ old('major_id') }}">
-                                        @foreach ($dataMajor as $Major)
-                                            <option value="{{ $Major->id }}">Chuyên ngành: {{ $Major->name }}</option>
-                                        @endforeach
+                                        @foreach ($dataMajor as $itemMajor)
+                                        @php
+                                            $dash = '';
+                                        @endphp
+                                        <option @selected(request('major_id') == $itemMajor->id) value="{{ $itemMajor->id }}">
+                                            Ngành: {{ $itemMajor->name }}
+                                        </option>
+                                        @include(
+                                            'pages.major.include.listSelecterChislAdd',
+                                            ['majorPrent' => $itemMajor]
+                                        )
+                                    @endforeach
                                     </select>
 
                                     @error('major_id')

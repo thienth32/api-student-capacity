@@ -28,6 +28,11 @@ Route::prefix('rounds')->group(function () {
 
     Route::prefix('{id}/detail')->group(function () {
         Route::get('', [RoundController::class, 'adminShow'])->name('admin.round.detail');
+        Route::prefix('enterprise')->group(function () {
+            Route::get('', [RoundController::class, 'roundDetailEnterprise'])->name('admin.round.detail.enterprise');
+            Route::post('attach', [RoundController::class, 'attachEnterprise'])->name('admin.round.detail.enterprise.attach');
+            Route::get('detach/{enterprise_id}', [RoundController::class, 'detachEnterprise'])->name('admin.round.detail.enterprise.detach');
+        });
         Route::prefix('team')->group(function () {
             Route::get('', [RoundController::class, 'roundDetailTeam'])->name('admin.round.detail.team');
             Route::post('attach', [RoundController::class, 'attachTeam'])->name('admin.round.detail.team.attach');

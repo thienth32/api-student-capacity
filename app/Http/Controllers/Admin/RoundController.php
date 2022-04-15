@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Models\Contest;
+use App\Models\Donor;
+use App\Models\DonorRound;
+use App\Models\Enterprise;
 use App\Models\Team;
 use App\Models\TypeExam;
 use Illuminate\Support\Facades\DB;
@@ -311,7 +314,6 @@ class RoundController extends Controller
     /**
      * Destroy round
      */
-
     private function destroyRound($id)
     {
         try {
@@ -378,8 +380,21 @@ class RoundController extends Controller
     }
     public function adminShow($id)
     {
-        if (!($round = $this->round::with(['contest', 'type_exam', 'judges', 'teams'])->where('id', $id)->first())) return abort(404);
+        if (!($round = $this->round::with(['contest', 'type_exam', 'judges', 'teams', 'Donor'])->where('id', $id)->first())) return abort(404);
+
         return view('pages.round.detail.detail', ['round' => $round]);
+    }
+    // chi tiết doanh nghiệp
+    public function roundDetailEnterprise($id)
+    {
+        if (!($round = $this->round->find($id)->load('Donor')->Donor()->paginate(6))) return abort(404);
+
+        //         foreach($round as $item){
+        // var_dump($item->Enterprise->name);
+        // }
+        // die();
+        $enterprise = Enterprise::all();
+        return view('pages.round.detail.enterprise', ['round' => $round, 'roundDeltai' => $this->round->find($id), 'enterprise' => $enterprise]);
     }
 
     public function softDelete()
@@ -389,7 +404,6 @@ class RoundController extends Controller
             'listRoundSofts' => $listRoundSofts
         ]);
     }
-
     public function backUpRound($id)
     {
         try {
@@ -409,14 +423,53 @@ class RoundController extends Controller
             return abort(404);
         }
     }
-
     public function roundDetailTeam($id)
     {
         $round = Round::find($id);
         $teams =  Round::find($id)->load('contest')->contest->teams;
         return view('pages.round.detail.round-team', compact('round', 'teams'));
     }
+    public function attachEnterprise(Request $request, $id)
+    {
+        try {
+            // dd(Round::find($id)->load('Enterprise')->Enterprise->id);
+            foreach ($request->enterprise_id as $item) {
+                $data = Donor::where('contest_id', Round::find($id)->load('Enterprise')->Enterprise->id)->where('enterprise_id', $item)->first();
+                if ($data != null) {
+                    DonorRound::create([
+                        'round_id' => $id,
+                        'donor_id' => $data->id
+                    ]);
+                    return Redirect::back();
+                }
+                $data = Donor::create([
+                    'contest_id' => Round::find($id)->load('Enterprise')->Enterprise->id,
+                    'enterprise_id' => $item
+                ]);
+                DonorRound::create([
+                    'round_id' => $id,
+                    'donor_id' => $data->id
+                ]);
+            }
+            return Redirect::back();
+        } catch (\Throwable $th) {
+            return Redirect::back();
+        }
+    }
+    public function detachEnterprise($id, $donor_id)
+    {
+        try {
+            $data = DonorRound::where('round_id', $id)->where('donor_id', $donor_id)->first();
 
+            if ($data) {
+                $data->delete();
+            }
+
+            return Redirect::back();
+        } catch (\Throwable $th) {
+            return Redirect::back();
+        }
+    }
     public function attachTeam(Request $request, $id)
     {
         try {

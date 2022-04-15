@@ -31,15 +31,34 @@
                                     @enderror
                                 </div>
                                 <div class="form-group mb-10">
-
                                     <label for="" class="form-label">Thuộc chuyên ngành</label>
                                     <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
                                         data-hide-search="false" tabindex="-1" aria-hidden="true" name="major_id"
                                         value="{{ old('major_id') }}">
+
                                         @foreach ($dataMajor as $Major)
+                                            @php
+                                                $dash = '';
+                                            @endphp
+                                            <option @selected($data->majorSkill->first()->id == $Major->id) value="{{ $Major->id }}">Chuyên
+                                                ngành:
+                                                {{ $Major->name }}</option>
+                                            @include(
+                                                'pages.skill.include.listSelecterChisl',
+                                                ['majorPrent' => $Major, 'major' => $data]
+                                            )
+                                        @endforeach
+
+                                        {{-- @foreach ($dataMajor as $Major)
                                             <option @selected($data->majorSkill[0]->id == $Major->id) value="{{ $Major->id }}">Chuyên ngành:
                                                 {{ $Major->name }}</option>
-                                        @endforeach
+                                            @foreach ($Major['parent_chils'] as $child)
+                                                <option @selected($data->majorSkill[0]->id == $child->id) value="{{ $child->id }}">
+                                                    ---- Ngành: {{ $child->name }}
+                                                </option>
+                                                {{-- <li style="padding-left: 15px;padding-top:25px"> {{ $child->slug }}</li> --}}
+                                        {{-- @endforeach --}}
+                                        {{-- @endforeach --}}
                                     </select>
                                     <input type="hidden" value="{{ $data->majorSkill[0]->id }}" name="oldMajor">
                                     @error('major_id')

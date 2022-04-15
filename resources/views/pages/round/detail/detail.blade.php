@@ -164,6 +164,18 @@
                         </a>
                     </div>
 
+                    <div class="col-md-3">
+                        <a href="{{ route('admin.round.detail.enterprise', ['id' => $round->id]) }}">
+                            <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
+                                <div class="m-0">
+                                    <span class="text-gray-700 fw-bold fs-6">Doanh nghiệp tài trợ</span>
+                                </div>
+                                <div class="m-0 badge badge-primary badge-pill">
+                                    <span class=" fs-6 text-white">{{ count($round->Donor) }}</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
