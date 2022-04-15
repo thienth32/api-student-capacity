@@ -310,14 +310,15 @@
                                     src="{{ $slider->image_url ?? 'assets/media/avatars/blank.png' }}" alt="">
                             </td>
                             <td>
-                                @if (!is_null($slider->major_id))
-                                    Chuyên ngành : <b>{{ $slider->major->name }}</b>
-                                @elseif(!is_null($slider->round_id))
-                                    Vòng thi : <b>{{ $slider->round->name }}</b>
+                                @if ($slider->sliderable)
+                                    @if (get_class($slider->sliderable) == \App\Models\Round::class)
+                                        Vòng thi : <b>{{ $slider->sliderable->name }}</b>
+                                    @elseif (get_class($slider->sliderable) == \App\Models\Major::class)
+                                        Chuyên ngành : <b>{{ $slider->sliderable->name }}</b>
+                                    @endif
                                 @else
                                     {{ 'Trang chủ ' }}
                                 @endif
-
                             </td>
 
                             <td>

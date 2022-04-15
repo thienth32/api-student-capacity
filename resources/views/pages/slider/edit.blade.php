@@ -63,14 +63,6 @@
                                 @enderror
                             </div>
                             <div class="col-12">
-                                {{-- <label class="form-label">Chuyên ngành</label>
-                                <select name="major_id" class="form-select " data-control="select2"
-                                    data-placeholder="Chọn chuyên ngành ">
-                                    @foreach ($majors as $major)
-                                        <option @selected(($slider->major ? $slider->major->id : 0) === $major->id) value="{{ $major->id }}">
-                                            {{ $major->name }}</option>
-                                    @endforeach
-                                </select> --}}
 
                             </div>
 
@@ -81,38 +73,40 @@
                         <div class="row pb-2">
                             <div class="col-4">
                                 <button type="button"
-                                    class="btn btn-light {{ $slider->major_id !== null ? 'btn-primary' : 'btn-light' }} btn-major">Chuyên
+                                    class="btn btn-light {{ $slider->sliderable !== null && get_class($slider->sliderable) == \App\Models\Major::class? 'btn-primary': 'btn-light' }} btn-major">Chuyên
                                     ngành </button>
                             </div>
                             <div class="col-4">
                                 <button type="button"
-                                    class="btn {{ $slider->round_id !== null ? 'btn-primary' : 'btn-light' }} btn-round">Vòng
+                                    class="btn {{ $slider->sliderable !== null && get_class($slider->sliderable) == \App\Models\Round::class? 'btn-primary': 'btn-light' }} btn-round">Vòng
                                     thi </button>
                             </div>
                             <div class="col-4">
                                 <button type="button"
-                                    class="btn {{ $slider->round_id == null && $slider->major_id == null ? 'btn-primary' : 'btn-light' }} btn-home">Trang
+                                    class="btn {{ $slider->sliderable == null ? 'btn-primary' : 'btn-light' }} btn-home">Trang
                                     chủ </button>
                             </div>
                         </div>
-                        <div style="{{ $slider->major_id !== null ? '' : 'display: none' }}" id="major">
+                        <div style="{{ $slider->sliderable !== null && get_class($slider->sliderable) == \App\Models\Major::class? '': 'display: none' }}"
+                            id="major">
                             <label class="form-label">Chuyên ngành</label>
                             <select name="major_id" class="form-select form-major" data-control="select2"
                                 data-placeholder="Chọn chuyên ngành ">
                                 <option value="0">Chọn chuyên ngành</option>
                                 @foreach ($majors as $major)
-                                    <option @selected(($slider->major_id != null ? $slider->major_id : 0) === $major->id) value="{{ $major->id }}">{{ $major->name }}
+                                    <option @selected(($slider->sliderable != null ? $slider->sliderable->id : 0) === $major->id) value="{{ $major->id }}">{{ $major->name }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
-                        <div style="{{ $slider->round_id !== null ? '' : 'display: none' }}" id="round">
+                        <div style="{{ $slider->sliderable !== null && get_class($slider->sliderable) == \App\Models\Round::class? '': 'display: none' }}"
+                            id="round">
                             <label class="form-label">Vòng thi </label>
                             <select name="round_id" class="form-select form-round " data-control="select2"
                                 data-placeholder="Chọn vòng thi ">
                                 <option value="0">Chọn vòng thi</option>
                                 @foreach ($rounds as $round)
-                                    <option @selected(($slider->round_id != null ? $slider->round_id : 0) === $major->id) value="{{ $round->id }}">{{ $round->name }}
+                                    <option @selected(($slider->sliderable != null ? $slider->sliderable->id : 0) === $round->id) value="{{ $round->id }}">{{ $round->name }}
                                     </option>
                                 @endforeach
                             </select>

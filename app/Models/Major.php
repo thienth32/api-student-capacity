@@ -32,8 +32,12 @@ class Major extends Model
     }
     public function Skill()
     {
-        return $this->belongsToMany(Skills::class, 'major_skills','major_id','skill_id');
+        return $this->belongsToMany(Skills::class, 'major_skills', 'major_id', 'skill_id');
+    }
 
+    public function sliders()
+    {
+        return $this->morphOne(Slider::class, 'sliderable');
     }
 
     public function newEloquentBuilder($query)

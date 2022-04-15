@@ -114,7 +114,7 @@ class ContestController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'name' => 'required|max:255',
+                'name' => 'required|max:255|unique:contest,name',
                 'img' => 'required|required|mimes:jpeg,png,jpg|max:10000',
                 'date_start' => 'required|date',
                 'register_deadline' => 'required|date|after:date_start',
@@ -122,6 +122,7 @@ class ContestController extends Controller
             ],
             [
                 'name.required' => 'Chưa nhập trường này !',
+                'name.unique' => 'Tên cuộc thi đã tồn tại !',
                 'name.max' => 'Độ dài kí tự không phù hợp !',
                 'img.mimes' => 'Sai định dạng !',
                 'img.required' => 'Chưa nhập trường này !',
@@ -239,7 +240,7 @@ class ContestController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'name' => "required",
+                'name' => "required|unique:contest,name,$id",
                 'date_start' => "required",
                 'register_deadline' => "required|after:date_start",
                 'description' => "required",
@@ -249,6 +250,7 @@ class ContestController extends Controller
             ],
             [
                 "name.required" => "Tường name không bỏ trống !",
+                "name.unique" => "Tên cuộc thi đã tồn tại !",
                 "date_start.required" => "Tường thời gian bắt đầu  không bỏ trống !",
                 "register_deadline.required" => "Tường thời gian kết thúc không bỏ trống !",
                 "register_deadline.after" => "Tường thời gian kết thúc không nhỏ hơn trường bắt đầu  !",

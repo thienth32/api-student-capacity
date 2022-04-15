@@ -44,16 +44,14 @@ class SliderController extends Controller
                 return $q->onlyTrashed();
             })->search(request('q') ?? null, ['link_to', 'image_url'])
                 ->sort((request('sort') == 'desc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'sliders')
-                ->hasRequestNotNull([
-                    'major_id' => request()->has('major') ?? null,
-                    'round_id' => request()->has('round') ?? null,
-                ])
-                ->hasRequest([
-                    'major_id' => request('major_id') ?? null,
-                    'round_id' => request('round_id') ?? null,
-                ])
+                ->when(request()->has('major'), function ($q) {
+                    return $q->where('sliderable_id', request('major_id'))->where('sliderable_type', $this->major::class);
+                })
+                ->when(request()->has('round'), function ($q) {
+                    return $q->where('sliderable_id', request('round_id'))->where('sliderable_type', $this->round::class);
+                })
                 ->when(request()->has('home'), function ($q) {
-                    return $q->whereNull('round_id')->whereNull('major_id');
+                    return $q->whereNull('sliderable_id')->whereNull('sliderable_type');
                 })
                 ->hasDateTimeBetween('start_time', request('start_time') ?? null, request('end_time') ?? null)
                 ->hasSubTime(
@@ -62,10 +60,7 @@ class SliderController extends Controller
                     (request('op_time') == 'sub' ? 'sub' : 'add'),
                     'start_time'
                 )
-                ->with([
-                    'major',
-                    'round'
-                ]);
+                ->with(['sliderable']);
 
             return $sliders;
         } catch (\Throwable $th) {
@@ -155,7 +150,6 @@ class SliderController extends Controller
 
     public function store(Request $request)
     {
-
         $request->validate(
             [
                 'link_to' => 'required',
@@ -173,33 +167,37 @@ class SliderController extends Controller
                 'image_url.max' => 'Trường này kích cỡ quá lớn  !',
             ]
         );
-        try {
-            if ($request->hasFile('image_url')) {
-                $fileImage = $request->file('image_url');
-                $filename = $this->uploadFile($fileImage);
-            }
-            $dataCreate = [
-                'link_to' => $request->link_to,
-                'start_time' => $request->start_time,
-                'end_time' => $request->end_time,
-                'image_url' => $filename,
-                'status' => 1,
-            ];
-            if ($request->major_id != 0) {
-                $dataCreate = array_merge($dataCreate, ['major_id' => $request->major_id]);
-            } elseif ($request->round_id != 0) {
-                $dataCreate = array_merge($dataCreate, ['round_id' => $request->round_id]);
-            }
-            $this->slider::create($dataCreate);
-            return redirect()->route('admin.sliders.list');;
-        } catch (\Throwable $th) {
-            return abort(404);
+        // try {
+        if ($request->hasFile('image_url')) {
+            $fileImage = $request->file('image_url');
+            $filename = $this->uploadFile($fileImage);
         }
+        $dataCreate = [
+            'link_to' => $request->link_to,
+            'start_time' => $request->start_time,
+            'end_time' => $request->end_time,
+            'image_url' => $filename,
+            'status' => 1,
+        ];
+        if ($request->major_id != 0) {
+            $major = $this->major::find($request->major_id);
+            $major->sliders()->create($dataCreate);
+        } elseif ($request->round_id != 0) {
+            $round = $this->round::find($request->round_id);
+            $round->sliders()->create($dataCreate);
+        } else {
+            $dataCreate = array_merge($dataCreate, ['sliderable_id' => null, 'sliderable_type' => null]);
+            $this->slider::create($dataCreate);
+        }
+        return redirect()->route('admin.sliders.list');;
+        // } catch (\Throwable $th) {
+        //     return abort(404);
+        // }
     }
 
     public function edit(Request $request, $id)
     {
-        if ($slider = $this->slider::find($id)->load("major")) {
+        if ($slider = $this->slider::find($id)) {
             return view('pages.slider.edit', ['slider' => $slider, 'majors' => $this->major::all(), 'rounds' => $this->round::all()]);
         }
         return abort(404);
@@ -244,11 +242,11 @@ class SliderController extends Controller
             ]);
         }
         if ($request->major_id != 0) {
-            $data = array_merge($data, ['major_id' => $request->major_id, 'round_id' => null]);
+            $data = array_merge($data, ['sliderable_id' => $request->major_id, 'sliderable_type' => $this->major::class]);
         } elseif ($request->round_id != 0) {
-            $data = array_merge($data, ['round_id' => $request->round_id, 'major_id' => null]);
+            $data = array_merge($data, ['sliderable_id' => $request->round_id, 'sliderable_type' => $this->round::class]);
         } else {
-            $data = array_merge($data, ['round_id' => null, 'major_id' => null]);
+            $data = array_merge($data, ['sliderable_id' => null, 'sliderable_type' => null]);
         }
         $slider->update($data);
         return redirect()->route('admin.sliders.list');

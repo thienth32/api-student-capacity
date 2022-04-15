@@ -82,4 +82,9 @@ class Round extends Model
     {
         return $this->belongsToMany(Team::class, 'round_teams', 'round_id', 'team_id');
     }
+
+    public function sliders()
+    {
+        return $this->morphMany(Slider::class, 'sliderable');
+    }
 }
