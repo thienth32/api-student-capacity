@@ -183,6 +183,9 @@
                         $total = $majors->total();
                     @endphp
                     @forelse ($majors as $key => $major)
+                        @php
+                            $dash = '';
+                        @endphp
                         <tr>
                             @if (request()->has('sort'))
                                 <th scope="row">
@@ -197,9 +200,12 @@
                                     {{ (request()->has('page') && request('page') !== 1 ? $majors->perPage() * (request('page') - 1) : 0) +$key +1 }}
                                 </th>
                             @endif
-                            <td>{{ $major->name }}</td>
-                            <td>{{ $major->slug }}</td>
+                            <td>{{ $major->name }}
 
+                            </td>
+                            <td>{{ $major->slug }}
+
+                            </td>
                             <td>
                                 <div class="btn-group dropstart">
                                     <button type="button" class="btn   btn-sm dropdown-toggle" data-bs-toggle="dropdown"
@@ -293,10 +299,11 @@
 
                                     </ul>
                                 </div>
+
                             </td>
                         </tr>
-                    @empty
-                    @endforelse
+                        @include('pages.major.include.listChirent',['majorPrent'=>$major])
+                    @endforeach
                 </tbody>
             </table>
             {{ $majors->appends(request()->all())->links('pagination::bootstrap-4') }}

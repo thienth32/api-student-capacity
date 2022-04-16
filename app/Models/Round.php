@@ -30,7 +30,6 @@ class Round extends Model
 
     public static function boot()
     {
-
         parent::boot();
         static::deleting(function ($q) {
             // $q->results()->delete();
@@ -38,7 +37,6 @@ class Round extends Model
             $q->judges()->detach();
         });
     }
-
     public function format()
     {
         return [
@@ -62,7 +60,14 @@ class Round extends Model
     {
         return $this->belongsTo(Contest::class, 'contest_id')->with('teams');
     }
-
+    public function Enterprise()
+    {
+        return $this->belongsTo(Contest::class, 'contest_id')->with('enterprise');
+    }
+    public function Donor()
+    {
+        return $this->belongsToMany(Donor::class, 'donor_rounds', 'round_id', 'donor_id')->withPivot('id')->with('Enterprise');
+    }
     public function type_exam()
     {
         return $this->belongsTo(TypeExam::class, 'type_exam_id');

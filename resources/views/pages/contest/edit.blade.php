@@ -57,7 +57,6 @@
                                     @enderror
                                 </div>
                             </div>
-
                             <div class="col-4">
                                 <div class="form-group ">
                                     <label for="" class="form-label">Ảnh cuộc thi</label>
