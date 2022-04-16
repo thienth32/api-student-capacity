@@ -76,80 +76,25 @@
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
-                                <div class="col-4">
-                                    <div class="form-group mb-10 ms-4">
-                                        <!--begin::Label-->
-                                        <label class="fs-6 fw-bold mb-3">
-                                            <span>logo doanh nghiệp</span>
-                                            <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title=""
-                                                data-bs-original-title="Allowed file types: png, jpg, jpeg."
-                                                aria-label="Allowed file types: png, jpg, jpeg."></i>
-                                        </label>
-                                        <!--end::Label-->
-                                        <!--begin::Image input wrapper-->
-                                        <div class="mt-1">
-                                            <!--begin::Image input-->
-                                            <div style="position: relative" class="image-input image-input-outline"
-                                                data-kt-image-input="true"
-                                                style="background-image: url('assets/media/svg/avatars/blank.svg')">
-                                                <!--begin::Preview existing avatar-->
-                                                <div class="image-input-wrapper w-100px h-100px"
-                                                    style="background-image: url('assets/media/svg/avatars/blank.svg')">
-                                                </div>
-                                                <!--end::Preview existing avatar-->
-                                                <!--begin::Edit-->
-                                                <label
-                                                    class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
-                                                    data-kt-image-input-action="change" data-bs-toggle="tooltip" title=""
-                                                    data-bs-original-title="Change avatar">
-                                                    <i class="bi bi-pencil-fill fs-7"></i>
-                                                    <!--begin::Inputs-->
-                                                    <input value="{{ old('logo') }}" type="file" name="logo"
-                                                        accept=".png, .jpg, .jpeg">
-                                                    {{-- <input type="hidden" name="avatar_remove"> --}}
-                                                    <!--end::Inputs-->
-
-                                                    <style>
-                                                        label#img-error {
-                                                            position: absolute;
-                                                            min-width: 150px;
-                                                            top: 500%;
-                                                            right: -100%;
-                                                        }
-
-                                                    </style>
-                                                </label>
-                                                <!--end::Edit-->
-                                                <!--begin::Cancel-->
-                                                <span
-                                                    class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
-                                                    data-kt-image-input-action="cancel" data-bs-toggle="tooltip" title=""
-                                                    data-bs-original-title="Cancel avatar">
-                                                    <i class="bi bi-x fs-2"></i>
-                                                </span>
-                                                <!--end::Cancel-->
-                                                <!--begin::Remove-->
-                                                <span
-                                                    class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
-                                                    data-kt-image-input-action="remove" data-bs-toggle="tooltip" title=""
-                                                    data-bs-original-title="Remove avatar">
-                                                    <i class="bi bi-x fs-2"></i>
-                                                </span>
-                                                <!--end::Remove-->
-
-                                            </div>
-
-                                            <!--end::Image input-->
-                                        </div>
-                                        @error('logo')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
-                                        <!--end::Image input wrapper-->
-                                    </div>
+                                <div class="form-group mb-10 ">
+                                    <button type="submit" name="" id="" class="btn btn-success btn-lg btn-block">Lưu </button>
                                 </div>
                             </div>
+                            <div class="col-4">
+                                <div class="form-group ">
+                                    <label for="" class="form-label">Logo doanh nghiệp</label>
+                                    <input name="logo" type='file' id="file-input" accept=".png, .jpg, .jpeg"
+                                        class="form-control" />
+                                    <img class="w-100 mt-4 border rounded-3" id="image-preview"
+                                        src="https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg" />
 
+                                </div>
+                                @error('logo')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
+                            </div>
                         </div>
+
                     </form>
                 </div>
             </div>

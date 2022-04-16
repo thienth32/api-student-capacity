@@ -74,11 +74,17 @@ Route::prefix('contests')->group(function () {
     Route::post('re-status/{id}', [ContestController::class, 're_status'])->name('admin.contest.re.status');
     Route::delete('{id}', [ContestController::class, 'destroy'])->name('admin.contest.destroy');
 
+
     Route::prefix('{id}/detail')->group(function () {
         Route::get('', [ContestController::class, 'show'])->name('admin.contest.show');
         Route::get('rounds', [RoundController::class, 'contestDetailRound'])->name('admin.contest.detail.round');
         Route::get('teams', [ContestController::class, 'contestDetailTeam'])->name('admin.contest.detail.team');
         Route::post('teams-add', [ContestController::class, 'contestDetailTeamAdd'])->name('admin.contest.detail.team.add');
+        Route::prefix('enterprise')->group(function () {
+            Route::get('', [ContestController::class, 'contestDetailEnterprise'])->name('admin.contest.detail.enterprise');
+            Route::post('attach', [ContestController::class, 'attachEnterprise'])->name('admin.contest.detail.enterprise.attach');
+            Route::get('detach/{enterprise_id}', [ContestController::class, 'detachEnterprise'])->name('admin.contest.detail.enterprise.detach');
+        });
     });
 
     Route::get('contest-soft-delete', [ContestController::class, 'softDelete'])->name('admin.contest.soft.delete');

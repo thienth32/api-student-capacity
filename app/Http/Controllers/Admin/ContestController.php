@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Contest;
+use App\Models\Enterprise;
 use App\Models\Major;
 use App\Models\Team;
 use App\Services\Traits\TResponse;
@@ -76,7 +77,7 @@ class ContestController extends Controller
 
         return view('pages.contest.index', [
             'contests' => $data,
-            'majors' =>Major::where('parent_id', 0)->get(),
+            'majors' => Major::where('parent_id', 0)->get(),
         ]);
     }
 
@@ -394,7 +395,6 @@ class ContestController extends Controller
             return abort(404);
         }
     }
-
     public function deleteContest($id)
     {
         try {
@@ -404,6 +404,34 @@ class ContestController extends Controller
             return abort(404);
         }
     }
+    public function contestDetailEnterprise($id)
+    {
+        if (!($contestEnterprise = Contest::find($id)->load('enterprise')->enterprise()->paginate(5))) return abort(404);
+        $contest =  Contest::find($id);
+        $enterprise = Enterprise::all();
+        return view('pages.contest.detail.enterprise', ['contest' => $contest, 'contestEnterprise' => $contestEnterprise, 'enterprise' => $enterprise]);
+    }
+    public function attachEnterprise(Request $request, $id)
+    {
+        try {
+
+            Contest::find($id)->enterprise()->syncWithoutDetaching($request->enterprise_id);
+            return Redirect::back();
+        } catch (\Throwable $th) {
+            return Redirect::back();
+        }
+    }
+    public function detachEnterprise($id, $enterprise_id)
+    {
+        try {
+            Contest::find($id)->enterprise()->detach([$enterprise_id]);
+            return Redirect::back();
+        } catch (\Throwable $th) {
+            return Redirect::back();
+        }
+    }
 }
+
+
 
 //
