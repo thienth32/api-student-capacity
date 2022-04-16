@@ -11,11 +11,12 @@ class Major extends Model
 {
     use SoftDeletes;
     use HasFactory;
-
+    protected $primaryKey = 'id';
     protected $table = 'majors';
     protected $fillable = [
         'name',
-        'slug'
+        'slug',
+        'parent_id',
     ];
 
     public static function boot()
@@ -30,14 +31,36 @@ class Major extends Model
     {
         return $this->hasMany(Contest::class, 'major_id');
     }
+
     public function Skill()
     {
-        return $this->belongsToMany(Skills::class, 'major_skills','major_id','skill_id');
-
+        return $this->belongsToMany(Skills::class, 'major_skills', 'major_id', 'skill_id');
     }
 
+    public function sliders()
+    {
+        return $this->morphOne(Slider::class, 'sliderable');
+    }
+    // public function parent_chils()
+    // {
+    //     return $this->hasMany(Major::class, 'parent_id', 'id');
+    // }
+    public function parent()
+    {
+        return $this->hasOne(Major::class, 'id', 'parent_id')->with('parent');
+    }
+
+    public function majorChils()
+    {
+        return $this->hasMany(Major::class, 'parent_id', '')->with('majorChils');
+    }
     public function newEloquentBuilder($query)
     {
         return new Builder($query);
     }
 }
+    // public static function tree() {
+
+    //     return static::with('parent_chils')->where('parent_id', '=', 0)->orderByDesc('id');
+
+    // }
