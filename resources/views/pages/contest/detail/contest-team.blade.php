@@ -16,7 +16,7 @@
                         </a>
                     </li>
                     <li class="breadcrumb-item px-3 text-muted">
-                        Danh sách ban giám khảo của {{ $contest->name }}
+                        Danh sách đội thi của cuộc thi : {{ $contest->name }}
                     </li>
                 </ol>
             </div>
@@ -35,12 +35,7 @@
                         @endforeach
                     </select>
                     <button type="submit" class="btn btn-primary"> Thêm </button>
-                    {{-- <select class="form-select mb-2 select2-hidden-accessible" name="tax" data-control="select2" data-hide-search="true" data-placeholder="Select an option" data-select2-id="select2-data-16-c56c" tabindex="-1" aria-hidden="true">
-                        <option data-select2-id="select2-data-18-3pnx"></option>
-                        <option value="0" data-select2-id="select2-data-161-uv2g">Tax Free</option>
-                        <option value="1" data-select2-id="select2-data-162-2cmm">Taxable Goods</option>
-                        <option value="2" data-select2-id="select2-data-163-66t0">Downloadable Product</option>
-                    </select> --}}
+
                 </form>
             </div>
         </div>

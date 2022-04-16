@@ -44,7 +44,6 @@
                                     <ul id="resultUserSearch" class="dropdown-menu dropdown-menu-end w-500px">
                                     </ul>
                                 </div>
-
                                 @if (session()->has('error'))
                                     <p class="text-danger">{{ session()->get('error') }}</p>
                                     @php
@@ -58,24 +57,21 @@
                                 <label for="" class="form-label">Ảnh cuộc thi</label>
                                 <input value="{{ old('image') }}" name="image" type='file' id="file-input"
                                     accept=".png, .jpg, .jpeg" class="form-control" />
+                                @error('image')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
                                 <img class="w-100 mt-4 border rounded-3" id="image-preview"
                                     src="{{ Storage::disk('google')->has($team->image)? Storage::disk('google')->url($team->image): 'https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg' }} " />
                             </div>
                         </div>
-
-
                     </div>
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="form-group list-group mb-5">
-
                                 <div id="resultArrayUser" class=" mt-4">
                                 </div>
-
                             </div>
-
                         </div>
-
                     </div>
                     <div class="form-group mb-10 ">
                         <button type="submit" id="editTeam" class="btn btn-success btn-lg btn-block">Lưu </button>

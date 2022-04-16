@@ -9,19 +9,17 @@ use App\Models\Contest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\Member;
-use App\Models\Result;
+use App\Services\Traits\TCheckUserDrugTeam;
 use App\Services\Traits\TUploadImage;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use phpDocumentor\Reflection\Types\Null_;
 
 class TeamController extends Controller
 {
     use TUploadImage;
-
+    use TCheckUserDrugTeam;
     private $contest;
     private $team;
     private $user;
@@ -111,46 +109,40 @@ class TeamController extends Controller
     }
     public function store(Request $request)
     {
-
-
         $validator = Validator::make(
             $request->all(),
             [
-                'name' => 'required|max:255',
+                'name' => 'required|unique:teams|max:255',
                 'image' => 'required|max:10000',
                 'contest_id' => 'required|numeric',
             ],
             [
                 'name.required' => 'Chưa nhập trường này !',
                 'name.max' => 'Độ dài kí tự không phù hợp !',
+                'name.unique' => 'Tên đã tồn tại !',
                 'image.required' => 'Chưa nhập trường này !',
                 'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
                 'contest_id.required' => 'Chưa nhập trường này !',
                 'contest_id.numeric' => 'Sai định dạng !',
             ]
         );
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+        if ($validator->fails() || !($request->has('user_id'))) {
+            return redirect()->back()->withErrors($validator)->with('error', 'Chưa có thành viên trong đội')->withInput($request->input());
         }
-
-        if (!($request->has('user_id'))) return redirect()->back()->with('error', 'Chưa có thành viên trong đội')->withInput();
-
         DB::beginTransaction();
         try {
+            $result = $this->checkUserDrugTeam($request->contest_id, $request->user_id);
             $team = new Team();
             if ($request->has('image')) {
                 $fileImage =  $request->file('image');
                 $image = $this->uploadFile($fileImage);
                 $team->image = $image;
             }
-            $user_id = $request->user_id;
             $team->name = $request->name;
             $team->contest_id = $request->contest_id;
             $team->save();
-            $team->members()->sync($user_id);
+            $team->members()->syncWithoutDetaching($result['user-pass']);
             Db::commit();
-
             return redirect()->route('admin.teams');
         } catch (Exception $ex) {
             Db::rollBack();
@@ -178,29 +170,29 @@ class TeamController extends Controller
     }
     public function update(Request $request, $id)
     {
-        if (!($request->has('user_id'))) return redirect()->back()->with('error', 'Chưa có thành viên trong đội !')->withInput();
         $validator = Validator::make(
             $request->all(),
             [
-                'name' => 'required|max:255',
-                'image' => 'max:10000',
+                'name' => 'required|unique:teams,name,' . $id . '|max:255',
+                'image' => 'mimes:jpeg,png,jpg|max:10000',
                 'contest_id' => 'required|numeric',
-                // "*.user_id" => 'required',
             ],
             [
-                // "*.user_id" => 'Chưa có thành viên trong đội !',
                 'name.required' => 'Chưa nhập trường này !',
                 'name.max' => 'Độ dài kí tự không phù hợp !',
+                'name.unique' => 'Tên đã tồn tại !',
+                'name.mimes' => 'Sai định dạng ảnh !',
                 'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
                 'contest_id.required' => 'Chưa nhập trường này !',
                 'contest_id.numeric' => 'Sai định dạng !',
             ]
         );
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+        if ($validator->fails() || !($request->has('user_id'))) {
+            return redirect()->back()->withErrors($validator)->with('error', 'Chưa có thành viên trong đội')->withInput($request->input());
         }
         DB::beginTransaction();
         try {
+            $result = $this->checkUserDrugTeam($request->contest_id, $request->user_id);
             $team = Team::find($id);
             if (is_null($team)) {
                 return response()->json([
@@ -212,8 +204,8 @@ class TeamController extends Controller
                     $image = $this->uploadFile($fileImage, $team->image);
                     $team->image = $image;
                 }
-                $user_id = $request->user_id;
-                $team->members()->sync($user_id);
+                $user_id = $result['user-pass'];
+                $team->members()->syncWithoutDetaching($user_id);
                 $team->name = $request->name;
                 $team->contest_id = $request->contest_id;
                 $team->save();
@@ -261,16 +253,18 @@ class TeamController extends Controller
     // Add team phía client
     public function apiAddTeam(Request $request)
     {
+
         $validate = validator::make(
             $request->all(),
             [
                 'contest_id' => 'required',
-                'name' => 'required',
+                'name' => 'required|unique:teams',
                 'image' =>  'mimes:jpeg,png,jpg|max:10000',
             ],
             [
                 'contest_id.required' => 'Chưa nhập trường này !',
                 'name.required' => 'Chưa nhập trường này !',
+                'name.unique' => 'Tên đã tồn tại !',
                 'image.mimes' => 'Sai định dạng !',
                 'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
             ]
@@ -281,8 +275,15 @@ class TeamController extends Controller
         ]);
         DB::beginTransaction();
         try {
-            $today = Carbon::now()->toDateTimeString();
             $user_id = auth('sanctum')->user()->id;
+            $result = $this->checkUserDrugTeam($request->contest_id, $user_id);
+            if (count($result['user-not-pass']) > 0) return response()->json([
+                'status' => false,
+                'payload' => 'Tài khoản này đã tham gia cuộc thi khác !'
+            ]);
+
+
+            $today = Carbon::now()->toDateTimeString();
             // $user_id = $request->user_id;
             $user = User::find($user_id);
             $contest = Contest::find($request->contest_id);
@@ -306,8 +307,7 @@ class TeamController extends Controller
                     $teamModel->name = $request->name;
                     $teamModel->contest_id = $request->contest_id;
                     $teamModel->save();
-                    $teamModel->members()->attach($user_id, ['bot' => config('util.ACTIVE_STATUS')]);
-
+                    $teamModel->members()->syncWithoutDetaching($result['user-pass'], ['bot' => config('util.ACTIVE_STATUS')]);
                     DB::commit();
                     return response()->json([
                         'status' => true,
@@ -338,8 +338,13 @@ class TeamController extends Controller
 
         DB::beginTransaction();
         try {
-            $today = Carbon::now()->toDateTimeString();
             $user_id = auth('sanctum')->user()->id;
+            $result = $this->checkUserDrugTeam($request->contest_id, $user_id);
+            if (count($result['user-not-pass']) > 0) return response()->json([
+                'status' => false,
+                'payload' => 'Tài khoản này đã tham gia cuộc thi khác !'
+            ]);
+            $today = Carbon::now()->toDateTimeString();
             $user = User::find($user_id);
             $teamCheck = $this->team::find($team_id)->load('members');
             $contest = $this->contest::find($teamCheck->contest_id);
@@ -359,7 +364,6 @@ class TeamController extends Controller
                     'status' => false,
                     'payload' => 'Tài khoản đã bị khóa !'
                 ]);
-
                 if (strtotime($contest->register_deadline) > strtotime($today)) {
                     $validate = validator::make(
                         $request->all(),
@@ -386,7 +390,7 @@ class TeamController extends Controller
                     }
                     $team->name = $request->name;
                     $team->save();
-                    $team->members()->syncWithoutDetaching($request->users);
+                    $team->members()->syncWithoutDetaching($result['user-pass']);
 
                     DB::commit();
                     return response()->json([

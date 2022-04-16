@@ -115,7 +115,7 @@ class ContestController extends Controller
             $request->all(),
             [
                 'name' => 'required|max:255|unique:contest,name',
-                'img' => 'required|required|mimes:jpeg,png,jpg|max:10000',
+                'img' => 'required|mimes:jpeg,png,jpg|max:10000',
                 'date_start' => 'required|date',
                 'register_deadline' => 'required|date|after:date_start',
                 'description' => 'required'
@@ -240,7 +240,8 @@ class ContestController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'name' => "required|unique:contest,name,$id",
+                'name' => 'required|unique:contest,name,' . $id . '',
+                'img' => 'required|mimes:jpeg,png,jpg|max:10000',
                 'date_start' => "required",
                 'register_deadline' => "required|after:date_start",
                 'description' => "required",
@@ -249,6 +250,8 @@ class ContestController extends Controller
 
             ],
             [
+                'img.mimes' => 'Sai định dạng !',
+                'img.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
                 "name.required" => "Tường name không bỏ trống !",
                 "name.unique" => "Tên cuộc thi đã tồn tại !",
                 "date_start.required" => "Tường thời gian bắt đầu  không bỏ trống !",
