@@ -34,4 +34,9 @@ class Team extends Model
     {
         return $this->belongsToMany(User::class, 'members', 'team_id', 'user_id')->withPivot('bot');
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'members', 'team_id', 'user_id');
+    }
 }

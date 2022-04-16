@@ -1,11 +1,11 @@
 const teamPage = {
     searchUserDB: function() {
-        // tìm kiếm người dùng trong db và in ra màn  hình để  thêm vô mảng 
+        // tìm kiếm người dùng trong db và in ra màn  hình để  thêm vô mảng
         $(document).on('click', '#searchUser', function(e) {
             e.preventDefault();
             let key = $('input#searchUserValue').val();
-            if (key != '') {
 
+            if (key != '' && key.indexOf(' ') != 0) {
                 $.ajax({
                     type: "post",
                     url: urlSearch,
@@ -14,14 +14,20 @@ const teamPage = {
                         _token: _token,
                     },
                     success: function(response) {
-                        var _html = ``;
-                        $.map(response, function(val, key) {
-                            _html += /*html*/ `
-                                <li><a data-id_user='${val.id}' data-email_user='${val.email}' class="addUserArray dropdown-item py-5" href="javascript:void()">${val.email}</a></li>
-                            `;
-                        });
-                        $('input#searchUserValue').val();
-                        $('#resultUserSearch').html(_html);
+                        if (response.status === true) {
+                            var _html = ``;
+                            $.map(response.payload, function(val, key) {
+                                _html += /*html*/ `
+                                    <li><a data-id_user='${val.id}' data-email_user='${val.email}' class="addUserArray dropdown-item py-5" href="javascript:void()">${val.email}</a></li>
+                                `;
+                            });
+                            $('input#searchUserValue').val();
+                            $('#resultUserSearch').empty();
+                            $('#resultUserSearch').html(_html);
+                        } else {
+                            $('#resultUserSearch').empty();
+                            toastr.info(response.payload)
+                        }
                     }
                 });
                 return;

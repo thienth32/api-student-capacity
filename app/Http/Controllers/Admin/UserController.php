@@ -16,7 +16,17 @@ class UserController extends Controller
     public function TeamUserSearch(Request $request)
     {
         $users = User::search($request->key ?? null, ['name', 'email'])->take(4)->get();
-        return response()->json($users, 200);
+        if (count($users) == 0) {
+            return response()->json([
+                'status' => false,
+                'payload' => "Tài khoản này không tồn tại !"
+            ]);
+        } else {
+            return response()->json([
+                'status' => true,
+                'payload' => $users
+            ]);
+        }
     }
 
     public function list(Request $request)
