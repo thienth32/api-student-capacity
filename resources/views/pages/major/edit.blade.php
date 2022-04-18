@@ -5,7 +5,6 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
-
                 @if (session()->has('error'))
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         <span class="svg-icon svg-icon-danger svg-icon-2x">
@@ -52,15 +51,54 @@
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
                     </div>
-                    <div class="form-group mb-5 ">
+                    <div class="form-group mb-10">
+
+                        <label for="" class="form-label">Thuộc chuyên ngành</label>
+                        <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                            data-hide-search="false" tabindex="-1" aria-hidden="true" name="parent_id"
+                            value="{{ old('parent_id') }}">
+                            @if ($major->parent != null)
+                                <option value="0">Không Thuộc chuyên ngành nào</option>
+                                @foreach ($dataMajor as $Major)
+                                    @php
+                                        $dash = '';
+                                    @endphp
+                                    <option @selected($major->parent->id == $Major->id) value="{{ $Major->id }}">Chuyên ngành:
+                                        {{ $Major->name }}</option>
+                                    @include(
+                                        'pages.major.include.listSelecterChisl',
+                                        ['majorPrent' => $Major, 'major' => $major]
+                                    )
+                                @endforeach
+                            @else
+                                <option value="0">Không Thuộc chuyên ngành nào</option>
+                                @foreach ($dataMajor as $Major)
+                                    @php
+                                        $dash = '';
+                                    @endphp
+                                    <option value="{{ $Major->id }}">Chuyên ngành:
+                                        {{ $Major->name }}</option>
+                                    @include(
+                                        'pages.major.include.listSelecterChisl',
+                                        ['majorPrent' => $Major, 'major' => $major]
+                                    )
+                                @endforeach
+                            @endif
+
+
+                        </select>
+
+                        @error('major_id')
+                            <p class="text-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div class="form-group mb-10 ">
                         <button type="submit" name="" id="" class="btn btn-success btn-lg btn-block">Lưu </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-
-
 @endsection
 
 @section('page-script')

@@ -43,17 +43,20 @@
         <div class="row card-format">
 
             <div class=" col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
-                <div class="form-group">
-                    <label class="form-label">Chuyên ngành </label>
-                    <select id="select-major" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
-                        data-hide-search="true" tabindex="-1" aria-hidden="true">
-                        <option value="0">Chọn chuyên ngành</option>
-                        @forelse ($majors as $major)
-                            <option @selected(request('major_id') == $major->id) value="{{ $major->id }}">{{ $major->name }}
-                            </option>
-                        @empty
-                            <option disabled>Không có chuyên ngành</option>
-                        @endforelse
+                <div class="   form-group p-2">
+                    <label>Chuyên ngành </label>
+                    <select id="select-major" class="form-control form-control-solid">
+                        <option value="0">-- Chuyên ngành --</option>
+                        @foreach ($majors as $major)
+                            @php
+                                $dash = '';
+                            @endphp
+                            <option @selected(request('major_id') == $major->id) value="{{ $major->id }}">{{ $major->name }}   </option>
+                            @include(
+                                'pages.major.include.listSelecterChislAdd',
+                                ['majorPrent' => $major]
+                            )
+                        @endforeach
                     </select>
                 </div>
             </div>

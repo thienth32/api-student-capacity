@@ -10,7 +10,7 @@
                     <div class="row">
                         <div class="col-lg-8">
                             <div class="form-group mb-10">
-                                <label for="">Tên đội thi</label>
+                                <label class="form-label" for="">Tên đội thi</label>
                                 <input type="text" name="name" value="{{ old('name') }}" class=" form-control"
                                     placeholder="">
                                 @error('name')
@@ -32,7 +32,7 @@
                                 @enderror
                             </div>
                             <div class="form-group list-group mb-5">
-                                <label for="">Thành viên nhóm</label>
+                                <label class="form-label" for="">Thành viên nhóm</label>
                                 <div class="input-group mb-3">
                                     <input type="text" class="form-control" id="searchUserValue">
                                     <button id="searchUser" class="btn btn-secondary rounded-end" type="button"
@@ -55,6 +55,9 @@
                                 <label for="" class="form-label">Ảnh cuộc thi</label>
                                 <input value="{{ old('image') }}" name="image" type='file' id="file-input"
                                     accept=".png, .jpg, .jpeg" class="form-control" />
+                                @error('image')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
                                 <img class="w-100 mt-4 border rounded-3" id="image-preview"
                                     src="https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg" />
                             </div>
@@ -75,7 +78,6 @@
         </div>
     </div>
 @endsection
-
 @section('page-script')
     <script src="assets/js/system/preview-file/previewImg.js"></script>
     <script>

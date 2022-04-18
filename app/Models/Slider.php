@@ -13,7 +13,7 @@ class Slider extends Model
 {
     use SoftDeletes;
     protected $table = 'sliders';
-    protected $fillable = ['link_to', 'major_id', 'start_time', 'end_time', 'status', 'image_url', 'round_id'];
+    protected $guarded = [];
     use HasFactory;
 
     protected $casts = [
@@ -25,13 +25,8 @@ class Slider extends Model
         return new Builder($query);
     }
 
-    public function major()
+    public function sliderable()
     {
-        return $this->belongsTo(Major::class, 'major_id');
-    }
-
-    public function round()
-    {
-        return $this->belongsTo(Round::class, 'round_id');
+        return $this->morphTo();
     }
 }

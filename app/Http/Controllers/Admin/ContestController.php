@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Contest;
+use App\Models\Enterprise;
 use App\Models\Major;
 use App\Models\Team;
 use App\Services\Traits\TResponse;
@@ -76,7 +77,7 @@ class ContestController extends Controller
 
         return view('pages.contest.index', [
             'contests' => $data,
-            'majors' => $this->major::all(),
+            'majors' => Major::where('parent_id', 0)->get(),
         ]);
     }
 
@@ -114,14 +115,15 @@ class ContestController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'name' => 'required|max:255',
-                'img' => 'required|required|mimes:jpeg,png,jpg|max:10000',
+                'name' => 'required|max:255|unique:contest,name',
+                'img' => 'required|mimes:jpeg,png,jpg|max:10000',
                 'date_start' => 'required|date',
                 'register_deadline' => 'required|date|after:date_start',
                 'description' => 'required'
             ],
             [
                 'name.required' => 'Chưa nhập trường này !',
+                'name.unique' => 'Tên cuộc thi đã tồn tại !',
                 'name.max' => 'Độ dài kí tự không phù hợp !',
                 'img.mimes' => 'Sai định dạng !',
                 'img.required' => 'Chưa nhập trường này !',
@@ -239,7 +241,8 @@ class ContestController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'name' => "required",
+                'name' => 'required|unique:contest,name,' . $id . '',
+                'img' => 'required|mimes:jpeg,png,jpg|max:10000',
                 'date_start' => "required",
                 'register_deadline' => "required|after:date_start",
                 'description' => "required",
@@ -248,7 +251,10 @@ class ContestController extends Controller
 
             ],
             [
+                'img.mimes' => 'Sai định dạng !',
+                'img.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
                 "name.required" => "Tường name không bỏ trống !",
+                "name.unique" => "Tên cuộc thi đã tồn tại !",
                 "date_start.required" => "Tường thời gian bắt đầu  không bỏ trống !",
                 "register_deadline.required" => "Tường thời gian kết thúc không bỏ trống !",
                 "register_deadline.after" => "Tường thời gian kết thúc không nhỏ hơn trường bắt đầu  !",
@@ -394,7 +400,6 @@ class ContestController extends Controller
             return abort(404);
         }
     }
-
     public function deleteContest($id)
     {
         try {
@@ -404,6 +409,34 @@ class ContestController extends Controller
             return abort(404);
         }
     }
+    public function contestDetailEnterprise($id)
+    {
+        if (!($contestEnterprise = Contest::find($id)->load('enterprise')->enterprise()->paginate(5))) return abort(404);
+        $contest =  Contest::find($id);
+        $enterprise = Enterprise::all();
+        return view('pages.contest.detail.enterprise', ['contest' => $contest, 'contestEnterprise' => $contestEnterprise, 'enterprise' => $enterprise]);
+    }
+    public function attachEnterprise(Request $request, $id)
+    {
+        try {
+
+            Contest::find($id)->enterprise()->syncWithoutDetaching($request->enterprise_id);
+            return Redirect::back();
+        } catch (\Throwable $th) {
+            return Redirect::back();
+        }
+    }
+    public function detachEnterprise($id, $enterprise_id)
+    {
+        try {
+            Contest::find($id)->enterprise()->detach([$enterprise_id]);
+            return Redirect::back();
+        } catch (\Throwable $th) {
+            return Redirect::back();
+        }
+    }
 }
+
+
 
 //
