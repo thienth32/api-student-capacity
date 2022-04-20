@@ -26,6 +26,11 @@ const contestPage = {
                     },
                     success: function (data) {
                         if (!data.status) return alert(data.payload);
+                        loadTast(
+                            "Thành công !",
+                            "toastr-bottom-left",
+                            "success"
+                        );
                     },
                 });
             } else {
@@ -37,6 +42,11 @@ const contestPage = {
                     },
                     success: function (data) {
                         if (!data.status) return alert(data.payload);
+                        loadTast(
+                            "Thành công !",
+                            "toastr-bottom-left",
+                            "success"
+                        );
                     },
                 });
             }

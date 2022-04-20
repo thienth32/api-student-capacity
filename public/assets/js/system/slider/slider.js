@@ -11,6 +11,11 @@ const sliderPage = {
                     },
                     success: function (data) {
                         if (!data.status) return alert(data.payload);
+                        loadTast(
+                            "Thành công !",
+                            "toastr-bottom-left",
+                            "success"
+                        );
                     },
                 });
             } else {
@@ -22,6 +27,11 @@ const sliderPage = {
                     },
                     success: function (data) {
                         if (!data.status) return alert(data.payload);
+                        loadTast(
+                            "Thành công !",
+                            "toastr-bottom-left",
+                            "success"
+                        );
                     },
                 });
             }
@@ -60,7 +70,7 @@ const sliderPage = {
             return false;
         });
     },
-    selectRound: function () {
+    selectRoundChildContest: function () {
         $("#select-contest-p").on("change", function () {
             let id = $(this).val();
             let html = `<option value="0">Chọn vòng thi</option>`;
@@ -83,4 +93,4 @@ sliderPage.getText();
 sliderPage.selectMajor();
 sliderPage.selectRound();
 sliderPage.reHome();
-sliderPage.selectRound();
+sliderPage.selectRoundChildContest();

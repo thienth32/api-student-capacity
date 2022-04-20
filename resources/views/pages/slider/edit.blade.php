@@ -101,15 +101,40 @@
                         </div>
                         <div style="{{ $slider->sliderable !== null && get_class($slider->sliderable) == \App\Models\Round::class? '': 'display: none' }}"
                             id="round">
-                            <label class="form-label">Vòng thi </label>
-                            <select name="round_id" class="form-select form-round " data-control="select2"
+
+                            {{--  --}}
+                            <label class="form-label">Cuộc thi </label>
+                            <select id="select-contest-p" class="form-select form-contest " data-control="select2"
                                 data-placeholder="Chọn vòng thi ">
-                                <option value="0">Chọn vòng thi</option>
-                                @foreach ($rounds as $round)
-                                    <option @selected(($slider->sliderable != null ? $slider->sliderable->id : 0) === $round->id) value="{{ $round->id }}">{{ $round->name }}
+                                <option value="0">Chọn cuộc thi</option>
+                                @foreach ($contests as $contest)
+                                    <option @selected(($round ? $round->contest->id : 0) == $contest->id) value="{{ $contest->id }}">
+                                        {{ $contest->name }} -
+                                        {{ $contest->rounds_count . ' vòng thi ' }}
                                     </option>
                                 @endforeach
                             </select>
+                            <div>
+                                <label class="form-label">Vòng thi </label>
+                                <select id="select-round" name="round_id" class="form-select form-round "
+                                    data-control="select2" data-placeholder="Chọn vòng thi ">
+                                    @if ($slider->sliderable !== null && get_class($slider->sliderable) == \App\Models\Round::class)
+                                        <option value="0">Chọn vòng thi</option>
+                                        @foreach ($rounds as $r)
+                                            @if ($round && ($round->contest ? $round->contest->id : 0) == $r->contest_id)
+                                                <option @selected($slider->sliderable->id == $r->id) value="{{ $r->id }}">
+                                                    {{ $r->name }}
+                                                    -
+                                                    {{ $r->sliders_count . ' banner ' }}
+                                                </option>
+                                            @endif
+                                        @endforeach
+                                    @else
+                                        <option disabled value="0">Không có vòng thi nào ! Hãy chọn cuộc thi </option>
+                                    @endif
+                                </select>
+                            </div>
+                            {{--  --}}
                         </div>
                     </div>
 
@@ -134,6 +159,7 @@
     <script>
         dateAfterEdit('input[type=datetime-local]#begin', 'input[type=datetime-local]#end');
         preview.showFile('.file-change', '#previewImg');
+        const rounds = @json($rounds);
         // $('.btn-home').click();
     </script>
     <script src="assets/js/system/validate/validate.js"></script>

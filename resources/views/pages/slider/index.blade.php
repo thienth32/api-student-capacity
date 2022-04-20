@@ -105,12 +105,14 @@
                         </select>
                     </div>
                     <div style="{{ request()->has('round') ? '' : 'display: none' }}" id="round">
+                        {{--  --}}
+
                         <label class="form-label">Cuộc thi </label>
                         <select id="select-contest-p" class="form-select form-contest " data-control="select2"
                             data-placeholder="Chọn vòng thi ">
                             <option value="0">Chọn cuộc thi</option>
                             @foreach ($contests as $contest)
-                                <option @selected(request('round_id') == $contest->id) value="{{ $contest->id }}">{{ $contest->name }} -
+                                <option @selected(($round ? $round->contest->id : 0) == $contest->id) value="{{ $contest->id }}">{{ $contest->name }} -
                                     {{ $contest->rounds_count . ' vòng thi ' }}
                                 </option>
                             @endforeach
@@ -119,14 +121,24 @@
                             <label class="form-label">Vòng thi </label>
                             <select id="select-round" name="round_id" class="form-select form-round " data-control="select2"
                                 data-placeholder="Chọn vòng thi ">
-                                {{-- <option value="0">Chọn vòng thi</option>
-                                @foreach ($rounds as $round)
-                                    <option @selected(request('round_id') == $round->id) value="{{ $round->id }}">{{ $round->name }} -
-                                        {{ $round->sliders_count . ' banner ' }}
-                                    </option>
-                                @endforeach --}}
+                                @if (request()->has('round') && request()->has('round_id'))
+                                    <option value="0">Chọn vòng thi</option>
+                                    @foreach ($rounds as $r)
+                                        @if (($round ? $round->contest->id : 0) == $r->contest_id)
+                                            <option @selected(request('round_id') == $r->id) value="{{ $r->id }}">
+                                                {{ $r->name }}
+                                                -
+                                                {{ $r->sliders_count . ' banner ' }}
+                                            </option>
+                                        @endif
+                                    @endforeach
+                                @else
+                                    <option disabled value="0">Không có vòng thi nào ! Hãy chọn cuộc thi </option>
+                                @endif
                             </select>
                         </div>
+
+                        {{--  --}}
                     </div>
                 </div>
             </div>
