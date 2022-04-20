@@ -8,8 +8,8 @@ const contestPage = {
 
     selectDateTimeContest: function () {
         $(".select-date-time-contest").on("change", function () {
-            loadTast();
-            window.location = url + $(this).val() + "=" + $(this).val();
+            checkUrlOut($(this).val(), $(this).val());
+            // window.location = url + $(this).val() + "=" + $(this).val();
             return false;
         });
     },

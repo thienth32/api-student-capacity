@@ -22,6 +22,7 @@ const aListQuery = [
     "op_time",
 ];
 
+// Set list query has one
 const aListHasOne = [
     "day",
     "month",
@@ -44,10 +45,6 @@ function checkUrlOut(key, value, valueAdd = "") {
             if (data == key) {
                 url = url + "&" + key + "=" + value;
             } else {
-                // console.log(data);
-                // let checkLength = aListHasOne.filter(function (d) {
-                //     return d === searchParams.has(data);
-                // });
                 if (searchParams.has(data)) {
                     url = url + "&" + data + "=" + searchParams.get(data);
                 }
@@ -56,6 +53,27 @@ function checkUrlOut(key, value, valueAdd = "") {
         return (window.location = url + valueAdd);
     }
     window.location = window.location.href + "?" + key + "=" + value;
+    return false;
+}
+
+// Function check urls
+function checkUrlOuts(key, val) {
+    key.map(function (data, key) {
+        url = url + "&" + data + "=" + val[key];
+    });
+    checkOutUrl();
+}
+
+// Funtion check has url
+function checkOutUrl() {
+    aListQuery.map(function (data) {
+        if (searchParams.has(data)) {
+            if (!aListHasOne.includes(data)) {
+                url = url + "&" + data + "=" + searchParams.get(data);
+            }
+        }
+    });
+    window.location = url;
     return false;
 }
 
@@ -85,7 +103,6 @@ function loadTast(
     if (type === "info") toastr.info(text);
     if (type === "success") toastr.success(text);
 }
-// console.log("Start time ", url);
 
 // Page
 const formatPage = {
@@ -120,8 +137,9 @@ const formatPage = {
                 return alert(
                     "Thời gian kết thúc phải lớn hơn thời gian bắt đầu thời gian bắt đâu !"
                 );
-            window.location =
-                url + "&start_time=" + start_time + "&end_time=" + end_time;
+            checkUrlOuts(["start_time", "end_time"], [start_time, end_time]);
+            // window.location =
+            //     url + "&start_time=" + start_time + "&end_time=" + end_time;
         });
     },
     showPage() {
@@ -153,12 +171,19 @@ const formatPage = {
             },
             function (start, end) {
                 loadTast();
-                window.location =
-                    url +
-                    "&start_time=" +
-                    moment(start).format("YYYY-MM-DDThh:mm") +
-                    "&end_time=" +
-                    moment(end).format("YYYY-MM-DDThh:mm");
+                checkUrlOuts(
+                    ["start_time", "end_time"],
+                    [
+                        moment(start).format("YYYY-MM-DDThh:mm"),
+                        moment(end).format("YYYY-MM-DDThh:mm"),
+                    ]
+                );
+                // window.location =
+                //     url +
+                //     "&start_time=" +
+                //     moment(start).format("YYYY-MM-DDThh:mm") +
+                //     "&end_time=" +
+                //     moment(end).format("YYYY-MM-DDThh:mm");
                 return false;
             }
         );
@@ -183,34 +208,34 @@ const formatPage = {
             const value = $(this).val();
             switch (value) {
                 case "add-day-7":
-                    window.location = url + "&day=" + 7 + "&op_time=add";
+                    checkUrlOuts(["day", "op_time"], [7, "add"]);
                     return false;
                 case "add-day-15":
-                    window.location = url + "&day=" + 15 + "&op_time=add";
+                    checkUrlOuts(["day", "op_time"], [15, "add"]);
                     return false;
                 case "add-month-1":
-                    window.location = url + "&month=" + 1 + "&op_time=add";
+                    checkUrlOuts(["month", "op_time"], [1, "add"]);
                     return false;
                 case "add-month-6":
-                    window.location = url + "&month=" + 6 + "&op_time=add";
+                    checkUrlOuts(["month", "op_time"], [6, "add"]);
                     return false;
                 case "add-year-1":
-                    window.location = url + "&year=" + 1 + "&op_time=add";
+                    checkUrlOuts(["year", "op_time"], [1, "add"]);
                     return false;
                 case "sub-day-7":
-                    window.location = url + "&day=" + 7 + "&op_time=sub";
+                    checkUrlOuts(["day", "op_time"], [7, "sub"]);
                     return false;
                 case "sub-day-15":
-                    window.location = url + "&day=" + 15 + "&op_time=sub";
+                    checkUrlOuts(["day", "op_time"], [15, "sub"]);
                     return false;
                 case "sub-month-1":
-                    window.location = url + "&month=" + 1 + "&op_time=sub";
+                    checkUrlOuts(["month", "op_time"], [1, "sub"]);
                     return false;
                 case "sub-month-6":
-                    window.location = url + "&month=" + 6 + "&op_time=sub";
+                    checkUrlOuts(["month", "op_time"], [6, "sub"]);
                     return false;
                 case "sub-year-1":
-                    window.location = url + "&year=" + 1 + "&op_time=sub";
+                    checkUrlOuts(["year", "op_time"], [1, "sub"]);
                     return false;
                 default:
                     break;
@@ -228,7 +253,6 @@ const formatPage = {
 formatPage.refresh();
 formatPage.formatDatabase();
 formatPage.searchData();
-formatPage.startTime();
 formatPage.showPage();
 formatPage.hidePage();
 formatPage.setUpRangpake();
