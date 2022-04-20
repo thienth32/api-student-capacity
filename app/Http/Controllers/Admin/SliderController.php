@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Contest;
 use App\Models\Major;
 use App\Models\Round;
 use App\Models\Slider;
@@ -14,12 +15,14 @@ class SliderController extends Controller
     use TUploadImage;
     private $slider;
     private $major;
+    private $contest;
     private $round;
-    public function __construct(Slider $slider, Major $major, Round $round)
+    public function __construct(Slider $slider, Major $major, Round $round, Contest $contest)
     {
         $this->slider = $slider;
         $this->major = $major;
         $this->round = $round;
+        $this->contest = $contest;
     }
 
     private function getList()
@@ -70,12 +73,14 @@ class SliderController extends Controller
     public function index()
     {
         $sliders =  $this->getList()->status(request('status') ?? null)->paginate(request('limit') ?? 5);
-        $majors = $this->major::all();
-        $rounds = $this->round::all();
+        $majors = $this->major::withCount('sliders')->get();
+        $rounds = $this->round::withCount('sliders')->get();
+        $contests = $this->contest::withCount('rounds')->get();
         return view('pages.slider.index', [
             'sliders' => $sliders,
             'majors' => $majors,
             'rounds' => $rounds,
+            'contests' => $contests,
         ]);
     }
 

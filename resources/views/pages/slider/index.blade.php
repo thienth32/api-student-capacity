@@ -80,14 +80,16 @@
                 <label class="form-label">Lọc theo thành phần </label>
                 <div class="row col-12 m-auto">
                     <button
-                        class="btn-round {{ request()->has('round') ? 'btn-primary' : '' }} btn col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light">Banner
-                        thuộc vòng thi</button>
+                        class="btn-home-re {{ request()->has('home') ? 'btn-primary' : '' }} btn col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light">Banner
+                        thuộc trang chủ </button>
                     <button
                         class="btn-major {{ request()->has('major') ? 'btn-primary' : '' }} btn col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light">Banner
                         thuộc chuyên ngành</button>
                     <button
-                        class="btn-home-re {{ request()->has('home') ? 'btn-primary' : '' }} btn col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light">Banner
-                        thuộc trang chủ </button>
+                        class="btn-round {{ request()->has('round') ? 'btn-primary' : '' }} btn col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light">Banner
+                        thuộc vòng thi</button>
+
+
                 </div>
                 <div class="col-12 pb-2">
                     <div style="{{ request()->has('major') ? '' : 'display: none' }} " id="major">
@@ -96,21 +98,35 @@
                             data-placeholder="Chọn chuyên ngành ">
                             <option value="0">Chọn chuyên ngành</option>
                             @foreach ($majors as $major)
-                                <option @selected(request('major_id') == $major->id) value="{{ $major->id }}">{{ $major->name }}
+                                <option @selected(request('major_id') == $major->id) value="{{ $major->id }}">{{ $major->name }} -
+                                    {{ $major->sliders_count . ' banner' }}
                                 </option>
                             @endforeach
                         </select>
                     </div>
                     <div style="{{ request()->has('round') ? '' : 'display: none' }}" id="round">
-                        <label class="form-label">Vòng thi </label>
-                        <select id="select-round" name="round_id" class="form-select form-round " data-control="select2"
+                        <label class="form-label">Cuộc thi </label>
+                        <select id="select-contest-p" class="form-select form-contest " data-control="select2"
                             data-placeholder="Chọn vòng thi ">
-                            <option value="0">Chọn vòng thi</option>
-                            @foreach ($rounds as $round)
-                                <option @selected(request('round_id') == $round->id) value="{{ $round->id }}">{{ $round->name }}
+                            <option value="0">Chọn cuộc thi</option>
+                            @foreach ($contests as $contest)
+                                <option @selected(request('round_id') == $contest->id) value="{{ $contest->id }}">{{ $contest->name }} -
+                                    {{ $contest->rounds_count . ' vòng thi ' }}
                                 </option>
                             @endforeach
                         </select>
+                        <div>
+                            <label class="form-label">Vòng thi </label>
+                            <select id="select-round" name="round_id" class="form-select form-round " data-control="select2"
+                                data-placeholder="Chọn vòng thi ">
+                                {{-- <option value="0">Chọn vòng thi</option>
+                                @foreach ($rounds as $round)
+                                    <option @selected(request('round_id') == $round->id) value="{{ $round->id }}">{{ $round->name }} -
+                                        {{ $round->sliders_count . ' banner ' }}
+                                    </option>
+                                @endforeach --}}
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -451,6 +467,7 @@
             '{{ request()->has('start_time')? \Carbon\Carbon::parse(request('start_time'))->format('m/d/Y h:i:s A'): \Carbon\Carbon::now()->format('m/d/Y h:i:s A') }}'
         const end_time =
             '{{ request()->has('end_time')? \Carbon\Carbon::parse(request('end_time'))->format('m/d/Y h:i:s A'): \Carbon\Carbon::now()->format('m/d/Y h:i:s A') }}'
+        const rounds = @json($rounds);
     </script>
     <script src="assets/js/system/formatlist/formatlis.js"></script>
     <script src="assets/js/system/slider/form.js"></script>

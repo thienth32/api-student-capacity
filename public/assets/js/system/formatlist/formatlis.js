@@ -20,6 +20,7 @@ const aListQuery = [
     "month",
     "year",
     "op_time",
+    "home",
 ];
 
 // Set list query has one

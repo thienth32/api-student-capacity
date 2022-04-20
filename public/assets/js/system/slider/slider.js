@@ -60,9 +60,27 @@ const sliderPage = {
             return false;
         });
     },
+    selectRound: function () {
+        $("#select-contest-p").on("change", function () {
+            let id = $(this).val();
+            let html = `<option value="0">Chọn vòng thi</option>`;
+            html =
+                html +
+                rounds.map(function (data) {
+                    if (id == data.contest_id) {
+                        console.log("asasasas");
+
+                        return ` <option value="${data.id}">${data.name} - ${data.sliders_count} banner</option>`;
+                    }
+                    return "";
+                });
+            $("#select-round").html(html);
+        });
+    },
 };
 sliderPage.selectChangeStatus();
 sliderPage.getText();
 sliderPage.selectMajor();
 sliderPage.selectRound();
 sliderPage.reHome();
+sliderPage.selectRound();
