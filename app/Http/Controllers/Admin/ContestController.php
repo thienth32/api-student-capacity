@@ -117,7 +117,7 @@ class ContestController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'name' => 'required|max:255|unique:contest,name',
+                'name' => 'required|max:255|unique:contests,name',
                 'img' => 'required|mimes:jpeg,png,jpg|max:10000',
                 'date_start' => 'required|date',
                 'register_deadline' => 'required|date|after:date_start',
@@ -243,7 +243,7 @@ class ContestController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'name' => 'required|unique:contest,name,' . $id . '',
+                'name' => 'required|unique:contests,name,' . $id . '',
                 'img' => 'required|mimes:jpeg,png,jpg|max:10000',
                 'date_start' => "required",
                 'register_deadline' => "required|after:date_start",
