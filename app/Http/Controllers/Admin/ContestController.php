@@ -97,7 +97,7 @@ class ContestController extends Controller
         return $this->responseApi(
             [
                 "status" => true,
-                "payload" => $data->get(),
+                "payload" => $data->paginate(request('limit') ?? 9),
             ]
         );
     }
