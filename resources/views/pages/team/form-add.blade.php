@@ -34,7 +34,8 @@
                             <div class="form-group list-group mb-5">
                                 <label class="form-label" for="">Thành viên nhóm</label>
                                 <div class="input-group mb-3">
-                                    <input type="text" class="form-control" id="searchUserValue">
+                                    <input placeholder="Hãy nhập email hoặc tên để tìm kiếm..." type="text"
+                                        class="form-control" id="searchUserValue">
                                     <button id="searchUser" class="btn btn-secondary rounded-end" type="button"
                                         data-bs-toggle="dropdown" aria-expanded="false">Tìm</button>
                                     <ul id="resultUserSearch" class="dropdown-menu dropdown-menu-end w-500px">
@@ -48,6 +49,16 @@
                                         Session::forget('error');
                                     @endphp
                                 @endif
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="listUser">
+                                        <h4>Danh sách chờ</h4>
+                                        <div id="resultArrayUser" class=" mt-4">
+                                        </div>
+                                        <p style="color: red" id="mesArrayUser"></p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="col-lg-4">
@@ -64,14 +75,9 @@
                         </div>
 
                     </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div id="resultArrayUser" class=" mt-4">
-                            </div>
-                        </div>
-                    </div>
+
                     <div class="form-group mt-10 ">
-                        <button type="submit" id="addTeam" class="btn btn-success btn-lg btn-block">Lưu </button>
+                        <button type="submit" id="buttonTeam" class="btn btn-success btn-lg btn-block">Lưu </button>
                     </div>
                 </form>
             </div>

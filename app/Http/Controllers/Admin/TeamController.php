@@ -9,6 +9,7 @@ use App\Models\Contest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Services\Traits\TTeamContest;
 use App\Services\Traits\TCheckUserDrugTeam;
 use App\Services\Traits\TUploadImage;
 use Carbon\Carbon;
@@ -19,7 +20,7 @@ use Illuminate\Support\Facades\Validator;
 class TeamController extends Controller
 {
     use TUploadImage;
-    use TCheckUserDrugTeam;
+    use TCheckUserDrugTeam, TTeamContest;
     private $contest;
     private $team;
     private $user;
@@ -36,7 +37,7 @@ class TeamController extends Controller
         $contest = $request->has('contest') ? $request->contest : null;
         $orderBy = $request->has('orderBy') ? $request->orderBy : 'id';
         $timeDay = $request->has('day') ? $request->day : Null;
-        $sortBy = $request->has('sortBy') ? $request->sortBy : "asc";
+        $sortBy = $request->has('sortBy') ? $request->sortBy : "desc";
         $softDelete = $request->has('team_soft_delete') ? $request->team_soft_delete : null;
 
         if ($softDelete != null) {
@@ -107,47 +108,10 @@ class TeamController extends Controller
         $contests = Contest::all();
         return view('pages.team.form-add', compact('contests'));
     }
+
     public function store(Request $request)
     {
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'name' => 'required|unique:teams|max:255',
-                'image' => 'required|max:10000',
-                'contest_id' => 'required|numeric',
-            ],
-            [
-                'name.required' => 'Chưa nhập trường này !',
-                'name.max' => 'Độ dài kí tự không phù hợp !',
-                'name.unique' => 'Tên đã tồn tại !',
-                'image.required' => 'Chưa nhập trường này !',
-                'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
-                'contest_id.required' => 'Chưa nhập trường này !',
-                'contest_id.numeric' => 'Sai định dạng !',
-            ]
-        );
-        if ($validator->fails() || !($request->has('user_id'))) {
-            return redirect()->back()->withErrors($validator)->with('error', 'Chưa có thành viên trong đội')->withInput($request->input());
-        }
-        DB::beginTransaction();
-        try {
-            $result = $this->checkUserDrugTeam($request->contest_id, $request->user_id);
-            $team = new Team();
-            if ($request->has('image')) {
-                $fileImage =  $request->file('image');
-                $image = $this->uploadFile($fileImage);
-                $team->image = $image;
-            }
-            $team->name = $request->name;
-            $team->contest_id = $request->contest_id;
-            $team->save();
-            $team->members()->syncWithoutDetaching($result['user-pass']);
-            Db::commit();
-            return redirect()->route('admin.teams');
-        } catch (Exception $ex) {
-            Db::rollBack();
-            return redirect('error');
-        }
+        return $this->addTeamContest($request, null, Redirect::route('admin.teams'), Redirect::back());
     }
 
     public function edit($id)
@@ -168,58 +132,17 @@ class TeamController extends Controller
         }
         return view('pages.team.form-edit', compact('contests', 'team', 'userArray'));
     }
-    public function update(Request $request, $id)
+    public function update(Request $request, $id_team)
     {
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'name' => 'required|unique:teams,name,' . $id . '|max:255',
-                'image' => 'mimes:jpeg,png,jpg|max:10000',
-                'contest_id' => 'required|numeric',
-            ],
-            [
-                'name.required' => 'Chưa nhập trường này !',
-                'name.max' => 'Độ dài kí tự không phù hợp !',
-                'name.unique' => 'Tên đã tồn tại !',
-                'name.mimes' => 'Sai định dạng ảnh !',
-                'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
-                'contest_id.required' => 'Chưa nhập trường này !',
-                'contest_id.numeric' => 'Sai định dạng !',
-            ]
-        );
-        if ($validator->fails() || !($request->has('user_id'))) {
-            return redirect()->back()->withErrors($validator)->with('error', 'Chưa có thành viên trong đội')->withInput($request->input());
-        }
-        DB::beginTransaction();
-        try {
-            $result = $this->checkUserDrugTeam($request->contest_id, $request->user_id);
-            $team = Team::find($id);
-            if (is_null($team)) {
-                return response()->json([
-                    "payload" => 'Không tồn tại trong cơ sở dữ liệu !'
-                ], 500);
-            } else {
-                if ($request->has('image')) {
-                    $fileImage =  $request->file('image');
-                    $image = $this->uploadFile($fileImage, $team->image);
-                    $team->image = $image;
-                }
-                $user_id = $result['user-pass'];
-                $team->members()->syncWithoutDetaching($user_id);
-                $team->name = $request->name;
-                $team->contest_id = $request->contest_id;
-                $team->save();
-                Db::commit();
-
-                return Redirect::route('admin.teams');
-            }
-        } catch (Exception $ex) {
-            Db::rollBack();
-            return response()->json([
-                "payload" => $ex
-            ], 500);
+        $team = Team::find($id_team);
+        if (!is_null($team)) {
+            return $this->editTeamContest($request, $id_team, null, Redirect::route('admin.teams'), Redirect::back());
+        } else {
+            return Redirect::back();
         }
     }
+
+
 
     public function softDelete(Request $request)
     {
