@@ -51,7 +51,7 @@
                             @php
                                 $dash = '';
                             @endphp
-                            <option @selected(request('major_id') == $major->id) value="{{ $major->id }}">{{ $major->name }}   </option>
+                            <option @selected(request('major_id') == $major->id) value="{{ $major->id }}">{{ $major->name }} </option>
                             @include(
                                 'pages.major.include.listSelecterChislAdd',
                                 ['majorPrent' => $major]
@@ -98,6 +98,8 @@
                             </option> --}}
                             <option class="form-control" @selected(request()->has('pass_date')) value="pass_date"> Sắp và đang diễn
                                 ra
+                            </option>
+                            <option class="form-control" @selected(request()->has('registration_date')) value="registration_date"> Đang mở đăng kí
                             </option>
                             <option class="form-control" @selected(request()->has('miss_date')) value="miss_date">Đã diễn ra
                             </option>
@@ -313,8 +315,12 @@
 
                             </td>
                             <td>
-                                @if (\Carbon\Carbon::parse($contest->date_start)->toDateTimeString() > \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
+                                @if (\Carbon\Carbon::parse($contest->start_register_time)->toDateTimeString() > \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
                                     <span class="badge bg-primary">Sắp diễn ra </span>
+                                @elseif (\Carbon\Carbon::parse($contest->end_register_time)->toDateTimeString() > \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
+                                    <span class="badge bg-success">Đang mở đăng kí </span>
+                                @elseif (\Carbon\Carbon::parse($contest->date_start)->toDateTimeString() > \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
+                                    <span class="badge bg-danger">Đã đóng đăng kí </span>
                                 @elseif (\Carbon\Carbon::parse($contest->register_deadline)->toDateTimeString() > \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
                                     <span class="badge bg-success">Đang diễn ra </span>
                                 @else
