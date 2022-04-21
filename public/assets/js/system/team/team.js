@@ -41,7 +41,22 @@ const teamPage = {
     userArray: function(userArray) {
         loadUserTeam(userArray);
         // function load mảng  user  và in ra màn  hình 
+        function checkUserArray(userArray) {
+            if (userArray.length == 0) {
+                //rỗng
+                $('#mesArrayUser').text('Danh sách còn trống, tìm kiếm để thêm vô !!')
+                $('#buttonTeam').prop("disabled", true);
+            } else {
+                //có
+                $('#mesArrayUser').text('')
+
+                $('#buttonTeam').prop("disabled", false);
+            }
+            console.log(userArray);
+        }
+
         function loadUserTeam(data) {
+            checkUserArray(data)
             var _html = ``;
             $.map(data, function(val, key) {
                 _html += /*html*/ `
@@ -51,7 +66,7 @@ const teamPage = {
                                 ${val.email_user} 
                                 <input hidden type="text" value="${val.id_user}" class="user_id"  name="user_id[]" >
                             </span>
-                            <button data-idUser='${key}' class="deleteUserArray btn btn-danger"   data-bs-toggle="tooltip" data-bs-placement="right" title="Xóa người dùng khỏi danh sách chờ !" data-theme="dark" type="button" >
+                            <button data-idUser='${key}' class="deleteUserArray btn btn-danger"    type="button" >
                                 <span class="svg-icon svg-icon-2x svg-icon-primary "><!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Trash.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                     <rect x="0" y="0" width="24" height="24"/>
@@ -66,6 +81,7 @@ const teamPage = {
             });
             $('#resultArrayUser').html(_html);
         }
+
 
         // thêm người dùng vô mảng  và in  ra màn hình
         $(document).on('click', '.addUserArray', function(e) {
@@ -85,7 +101,7 @@ const teamPage = {
                 });
             }
             loadUserTeam(userArray);
-
+            checkUserArray(userArray)
         });
 
         // xóa user ra khỏi mảng
@@ -94,8 +110,19 @@ const teamPage = {
             let key = $(this).attr('data-idUser');
             userArray.splice(key, 1)
             loadUserTeam(userArray);
+            checkUserArray(userArray)
         });
     },
+    // checkUserArray: function(userArray) {
+    //     if (userArray.length == 0) {
+    //         alert('chưa có')
+    //     } else {
+    //         alert(' có')
+    //     }
+    //     console.log(userArray);
+    // }
+
+
 }
 teamPage.userArray(userArray);
 teamPage.searchUserDB();

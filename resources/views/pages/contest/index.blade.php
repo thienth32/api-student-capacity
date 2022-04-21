@@ -43,15 +43,16 @@
         <div class="row card-format">
 
             <div class=" col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
-                <div class="   form-group p-2">
-                    <label>Chuyên ngành </label>
-                    <select id="select-major" class="form-control form-control-solid">
-                        <option value="0">-- Chuyên ngành --</option>
+                <div class="   form-group ">
+                    <label class="form-label">Chuyên ngành </label>
+                    <select id="select-major" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                        data-hide-search="true" tabindex="-1" aria-hidden="true">
+                        <option value="0">Chọn chuyên ngành</option>
                         @foreach ($majors as $major)
                             @php
                                 $dash = '';
                             @endphp
-                            <option @selected(request('major_id') == $major->id) value="{{ $major->id }}">{{ $major->name }}   </option>
+                            <option @selected(request('major_id') == $major->id) value="{{ $major->id }}">{{ $major->name }} </option>
                             @include(
                                 'pages.major.include.listSelecterChislAdd',
                                 ['majorPrent' => $major]
@@ -65,7 +66,7 @@
                     <label class="form-label">Tình trạng </label>
                     <select id="select-status" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
                         data-hide-search="true" tabindex="-1" aria-hidden="true">
-                        <option value="3" @selected(!request()->has('status'))>-- Tình trạng --</option>
+                        <option value="3" @selected(!request()->has('status'))>Chọn tình trạng</option>
                         <option @selected(request('status') == 1) value="1">Kích họat
                         </option>
                         <option @selected(request()->has('status') && request('status') == 0) value="0">Không kích hoạt

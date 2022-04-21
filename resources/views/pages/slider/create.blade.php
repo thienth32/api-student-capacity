@@ -86,14 +86,26 @@
                                 </select>
                             </div>
                             <div style="display: none" id="round">
-                                <label class="form-label">Vòng thi </label>
-                                <select name="round_id" class="form-select form-round " data-control="select2"
+
+                                <label class="form-label">Cuộc thi </label>
+                                <select id="select-contest-p" class="form-select form-contest " data-control="select2"
                                     data-placeholder="Chọn vòng thi ">
-                                    <option value="0">Chọn vòng thi</option>
-                                    @foreach ($rounds as $round)
-                                        <option value="{{ $round->id }}">{{ $round->name }}</option>
+                                    <option value="0">Chọn cuộc thi</option>
+                                    @foreach ($contests as $contest)
+                                        <option value="{{ $contest->id }}">
+                                            {{ $contest->name }} -
+                                            {{ $contest->rounds_count . ' vòng thi ' }}
+                                        </option>
                                     @endforeach
                                 </select>
+                                <div>
+                                    <label class="form-label">Vòng thi </label>
+                                    <select id="select-round" name="round_id" class="form-select form-round "
+                                        data-control="select2" data-placeholder="Chọn vòng thi ">
+                                        <option value="0" disable>Không có vòng thi nào ! Hãy chọn cuộc thi </option>
+                                    </select>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -124,6 +136,7 @@
         dateAfter('input[type=datetime-local]#begin', 'input[type=datetime-local]#end');
         $('.btn-home').click();
         preview.showFile('.file-change', '#previewImg');
+        const rounds = @json($rounds);
     </script>
     <script src="assets/js/system/validate/validate.js"></script>
 @endsection
