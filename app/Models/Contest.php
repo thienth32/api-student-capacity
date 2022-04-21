@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Models;
+
 use App\Casts\FormatDate;
 use App\Casts\FormatImageGet;
 use App\Services\Builder\Builder;
@@ -38,6 +40,8 @@ class Contest extends Model
         'description',
         'major_id',
         'status',
+        'start_register_time',
+        'end_register_time'
     ];
     public function teams()
     {

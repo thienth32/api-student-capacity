@@ -109,7 +109,6 @@ Route::prefix('enterprise')->group(function () {
     Route::get('enterprise-soft-delete/{id}/backup', [EnterpriseController::class, 'backUpEnterprise'])->name('admin.enterprise.soft.backup');
     Route::get('enterprise-soft-delete/{id}/delete', [EnterpriseController::class, 'delete'])->name('admin.enterprise.soft.destroy');
 });
-
 Route::prefix('majors')->group(function () {
     Route::get('{slug}/edit', [MajorController::class, 'edit'])->name('admin.major.edit');
     Route::put('{slug}', [MajorController::class, 'update'])->name('admin.major.update');
@@ -117,7 +116,11 @@ Route::prefix('majors')->group(function () {
     Route::get('create', [MajorController::class, 'create'])->name('admin.major.create');
     Route::post('store', [MajorController::class, 'store'])->name('admin.major.store');
     Route::delete('{slug}', [MajorController::class, 'destroy'])->name('admin.major.destroy');
-
+    Route::prefix('{slug}/skill')->group(function () {
+        Route::get('', [MajorController::class, 'Skill'])->name('admin.major.skill');
+        Route::post('attach', [MajorController::class, 'attachSkill'])->name('admin.major.skill.attach');
+        Route::get('detach/{skill_id}', [MajorController::class, 'detachSkill'])->name('admin.major.skill.detach');
+    });
     Route::prefix('list-soft-deletes')->group(function () {
         Route::get('', [MajorController::class, 'listRecordSoftDeletes'])->name('admin.major.list.soft.deletes');
         Route::get('{slug}/delete', [MajorController::class, 'permanently_deleted'])->name('admin.major.soft.deletes');
