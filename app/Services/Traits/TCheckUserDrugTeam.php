@@ -7,7 +7,7 @@ use App\Models\Team;
 
 trait TCheckUserDrugTeam
 {
-    public function  checkUserDrugTeam($contest_id, $user_id = [])
+    function  checkUserDrugTeam($contest_id, $user_id = [], $team_id = null)
     {
         $arrUserPass = [];
         $arrUserNotPass = [];
@@ -15,11 +15,11 @@ trait TCheckUserDrugTeam
         $contest = Contest::find($contest_id)->load('teams');
         foreach ($user_id as $userId) {
             $flag = false;
-
             foreach ($contest->teams as  $team) {
-                foreach ($team->members as $user) {
-                    if ($user->id == $userId) $flag = true;
-                    // dump($user);
+                if ($team_id && (Team::find($team_id)->id != $team->id)) {
+                    foreach ($team->members as $user) {
+                        if ($user->id == $userId) $flag = true;
+                    }
                 }
             }
             if ($flag) {

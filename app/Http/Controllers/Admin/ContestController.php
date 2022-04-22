@@ -7,6 +7,8 @@ use App\Models\Contest;
 use App\Models\Enterprise;
 use App\Models\Major;
 use App\Models\Team;
+use App\Models\User;
+use App\Services\Traits\TTeamContest;
 use App\Services\Traits\TResponse;
 use App\Services\Traits\TUploadImage;
 use Carbon\Carbon;
@@ -19,7 +21,7 @@ use Illuminate\Support\Facades\Validator;
 
 class ContestController extends Controller
 {
-    use TUploadImage, TResponse;
+    use TUploadImage, TResponse, TTeamContest;
     private $contest;
     private $major;
     private $team;
@@ -95,7 +97,7 @@ class ContestController extends Controller
         return $this->responseApi(
             [
                 "status" => true,
-                "payload" => $data->get(),
+                "payload" => $data->paginate(request('limit') ?? 9),
             ]
         );
     }
@@ -115,7 +117,7 @@ class ContestController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'name' => 'required|max:255|unique:contest,name',
+                'name' => 'required|max:255|unique:contests,name',
                 'img' => 'required|mimes:jpeg,png,jpg|max:10000',
                 'date_start' => 'required|date',
                 'register_deadline' => 'required|date|after:date_start',
@@ -241,7 +243,7 @@ class ContestController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'name' => 'required|unique:contest,name,' . $id . '',
+                'name' => 'required|unique:contests,name,' . $id . '',
                 'img' => 'required|mimes:jpeg,png,jpg|max:10000',
                 'date_start' => "required",
                 'register_deadline' => "required|after:date_start",
@@ -365,11 +367,11 @@ class ContestController extends Controller
     public function contestDetailTeam($id)
     {
         $contest =  Contest::find($id);
-        $teams = Team::all();
-        return view('pages.contest.detail.contest-team', compact('contest', 'teams'));
+        $teams = Team::get()->load('contest');
+        return view('pages.contest.detail.team.contest-team', compact('contest', 'teams'));
     }
 
-    public function contestDetailTeamAdd(Request  $request, $id)
+    public function contestDetailTeamAddSelect(Request  $request, $id)
     {
         // dd($request->all());
         $contest = Contest::find($id);
@@ -432,6 +434,65 @@ class ContestController extends Controller
             Contest::find($id)->enterprise()->detach([$enterprise_id]);
             return Redirect::back();
         } catch (\Throwable $th) {
+            return Redirect::back();
+        }
+    }
+
+
+    public function addFormTeamContest($id)
+    {
+        $contest =  Contest::find($id);
+        return view('pages.contest.detail.team.form-add-team-contest', compact('contest'));
+    }
+
+    public function addFormTeamContestSave(Request $request, $id)
+    {
+        $contest = Contest::find($id);
+        if (!is_null($contest)) {
+            return $this->addTeamContest($request, $id, Redirect::route('admin.contest.detail.team', ['id' => $id]), Redirect::back());
+        } else {
+            return Redirect::back();
+        }
+    }
+
+    public function editFormTeamContest($id, $id_team)
+    {
+        $contest = Contest::find($id);
+        if (!is_null($contest)) {
+            $userArray = [];
+            $users = User::get();
+
+            $team = Team::find($id_team)->load('users');
+            foreach ($users as $user) {
+                foreach ($team->users as $me) {
+                    if ($user->id == $me->id) {
+                        array_push($userArray, [
+                            'id_user' => $user->id,
+                            'email_user' => $user->email
+                        ]);
+                    }
+                }
+            }
+            // dd($userArray);
+            return view(
+                'pages.contest.detail.team.form-edit-team-contest',
+                [
+                    'contest' => $contest,
+                    'team' => $team,
+                    'userArray' => $userArray
+                ]
+            );
+        } else {
+            return Redirect::back();
+        }
+    }
+
+    public function editFormTeamContestSave(Request $request, $id_contest, $id_team)
+    {
+        $contest = Contest::find($id_contest);
+        if (!is_null($contest)) {
+            return $this->editTeamContest($request, $id_team, $id_contest, Redirect::route('admin.contest.detail.team', ['id' => $id_contest]), Redirect::back());
+        } else {
             return Redirect::back();
         }
     }

@@ -78,8 +78,14 @@ Route::prefix('contests')->group(function () {
     Route::prefix('{id}/detail')->group(function () {
         Route::get('', [ContestController::class, 'show'])->name('admin.contest.show');
         Route::get('rounds', [RoundController::class, 'contestDetailRound'])->name('admin.contest.detail.round');
-        Route::get('teams', [ContestController::class, 'contestDetailTeam'])->name('admin.contest.detail.team');
-        Route::post('teams-add', [ContestController::class, 'contestDetailTeamAdd'])->name('admin.contest.detail.team.add');
+        Route::prefix('teams')->group(function () {
+            Route::get('', [ContestController::class, 'contestDetailTeam'])->name('admin.contest.detail.team');
+            Route::post('update-team-select', [ContestController::class, 'contestDetailTeamAddSelect'])->name('admin.contest.detail.team.addSelect');
+            Route::get('add-team-contest-form.html', [ContestController::class, 'addFormTeamContest'])->name('admin.contest.detail.team.add.form');
+            Route::post('add-team-contest-save', [ContestController::class, 'addFormTeamContestSave'])->name('admin.contest.detail.team.add.save');
+            Route::get('{id_team}/edit-team-contest-form.html', [ContestController::class, 'editFormTeamContest'])->name('admin.contest.detail.team.edit.form');
+            Route::put('{id_team}/edit-team-contest-save', [ContestController::class, 'editFormTeamContestSave'])->name('admin.contest.detail.team.save');
+        });
         Route::prefix('enterprise')->group(function () {
             Route::get('', [ContestController::class, 'contestDetailEnterprise'])->name('admin.contest.detail.enterprise');
             Route::post('attach', [ContestController::class, 'attachEnterprise'])->name('admin.contest.detail.enterprise.attach');

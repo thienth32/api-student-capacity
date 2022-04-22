@@ -8,8 +8,8 @@ const contestPage = {
 
     selectDateTimeContest: function () {
         $(".select-date-time-contest").on("change", function () {
-            loadTast();
-            window.location = url + $(this).val() + "=" + $(this).val();
+            checkUrlOut($(this).val(), $(this).val());
+            // window.location = url + $(this).val() + "=" + $(this).val();
             return false;
         });
     },
@@ -26,6 +26,11 @@ const contestPage = {
                     },
                     success: function (data) {
                         if (!data.status) return alert(data.payload);
+                        loadTast(
+                            "Thành công !",
+                            "toastr-bottom-left",
+                            "success"
+                        );
                     },
                 });
             } else {
@@ -37,6 +42,11 @@ const contestPage = {
                     },
                     success: function (data) {
                         if (!data.status) return alert(data.payload);
+                        loadTast(
+                            "Thành công !",
+                            "toastr-bottom-left",
+                            "success"
+                        );
                     },
                 });
             }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Contest;
 use App\Models\Major;
 use App\Models\Round;
 use App\Models\Slider;
@@ -14,12 +15,14 @@ class SliderController extends Controller
     use TUploadImage;
     private $slider;
     private $major;
+    private $contest;
     private $round;
-    public function __construct(Slider $slider, Major $major, Round $round)
+    public function __construct(Slider $slider, Major $major, Round $round, Contest $contest)
     {
         $this->slider = $slider;
         $this->major = $major;
         $this->round = $round;
+        $this->contest = $contest;
     }
 
     private function getList()
@@ -69,13 +72,19 @@ class SliderController extends Controller
     }
     public function index()
     {
-        $sliders =  $this->getList()->status(request('status') ?? null)->paginate(request('limit') ?? 5);
-        $majors = $this->major::all();
-        $rounds = $this->round::all();
+        $round = null;
+        if (request()->has('round_id')) $round = $this->round::find(request('round_id'))->load('contest');
+        $sliders = $this->getList()->status(request('status') ?? null)->paginate(request('limit') ?? 5);
+        $majors = $this->major::withCount('sliders')->get();
+        $rounds = $this->round::withCount('sliders')->get();
+        $contests = $this->contest::withCount('rounds')->get();
+
         return view('pages.slider.index', [
             'sliders' => $sliders,
             'majors' => $majors,
             'rounds' => $rounds,
+            'contests' => $contests,
+            'round' => $round
         ]);
     }
 
@@ -140,11 +149,13 @@ class SliderController extends Controller
 
     public function create()
     {
-        $majors = $this->major::all();
-        $rounds = $this->round::all();
+        $majors = $this->major::withCount('sliders')->get();
+        $rounds = $this->round::withCount('sliders')->get();
+        $contests = $this->contest::withCount('rounds')->get();
         return view('pages.slider.create', [
             'majors' => $majors,
-            'rounds' => $rounds
+            'rounds' => $rounds,
+            'contests' => $contests
         ]);
     }
 
@@ -197,8 +208,18 @@ class SliderController extends Controller
 
     public function edit(Request $request, $id)
     {
-        if ($slider = $this->slider::find($id)) {
-            return view('pages.slider.edit', ['slider' => $slider, 'majors' => $this->major::all(), 'rounds' => $this->round::all()]);
+        $round = null;
+        if ($slider = $this->slider::find($id)->load('sliderable')) {
+            if ($slider->sliderable && (get_class($slider->sliderable) == $this->round::class)) {
+                $round = $this->round::find($slider->sliderable->id)->load('contest');
+            }
+            return view('pages.slider.edit', [
+                'slider' => $slider,
+                'contests' => $this->contest::all(),
+                'majors' => $this->major::withCount('sliders')->get(),
+                'rounds' => $this->round::withCount('sliders')->get(),
+                'round' => $round
+            ]);
         }
         return abort(404);
     }
