@@ -49,6 +49,7 @@ const sliderPage = {
         $("#select-major").on("change", function () {
             loadTast();
             if ($(this).val() == 0) return (window.location = url);
+            checkUrlHasMatchSelectLocal(checkOutHasMatchTime);
             checkUrlOuts(["major", "major_id"], [1, $(this).val()]);
             return false;
         });
@@ -57,6 +58,7 @@ const sliderPage = {
         $("#select-round").on("change", function () {
             loadTast();
             if ($(this).val() == 0) return (window.location = url);
+            checkUrlHasMatchSelectLocal(checkOutHasMatchTime);
             checkUrlOuts(["round", "round_id"], [1, $(this).val()]);
             return false;
         });

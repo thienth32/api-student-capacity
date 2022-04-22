@@ -38,6 +38,22 @@ const aListHasOne = [
     "round_id",
 ];
 
+const checkOutHasMatchLocal = [
+    "home",
+    "major",
+    "major_id",
+    "round",
+    "round_id",
+];
+const checkOutHasMatchTime = [
+    "day",
+    "month",
+    "year",
+    "op_time",
+    "start_time",
+    "end_time",
+];
+
 // Search params
 let searchParams = new URLSearchParams(window.location.search);
 
@@ -60,6 +76,14 @@ function checkUrlOut(key, value, valueAdd = "") {
     }
     window.location = window.location.href + "?" + key + "=" + value;
     return false;
+}
+
+// Function check match local url
+function checkUrlHasMatchSelectLocal(dataCreate = []) {
+    dataCreate.map(function (data) {
+        if (searchParams.has(data))
+            url = url + "&" + data + "=" + searchParams.get(data);
+    });
 }
 
 // Function check urls
@@ -170,14 +194,13 @@ const formatPage = {
                 timePicker: true,
                 startDate: moment(start_time).format("DD/MM/YYYY hh:mm:ss A"),
                 endDate: moment(end_time).format("DD/MM/YYYY hh:mm:ss A"),
-                // startDate: moment(),
-                // endDate: moment(),
                 locale: {
                     format: "DD/MM/YYYY hh:mm:ss A",
                 },
             },
             function (start, end) {
                 loadTast();
+                checkUrlHasMatchSelectLocal(checkOutHasMatchLocal);
                 checkUrlOuts(
                     ["start_time", "end_time"],
                     [
@@ -185,12 +208,6 @@ const formatPage = {
                         moment(end).format("YYYY-MM-DDThh:mm"),
                     ]
                 );
-                // window.location =
-                //     url +
-                //     "&start_time=" +
-                //     moment(start).format("YYYY-MM-DDThh:mm") +
-                //     "&end_time=" +
-                //     moment(end).format("YYYY-MM-DDThh:mm");
                 return false;
             }
         );
@@ -213,6 +230,7 @@ const formatPage = {
         $(".select-date-serach").on("change", function () {
             loadTast();
             const value = $(this).val();
+            checkUrlHasMatchSelectLocal(checkOutHasMatchLocal);
             switch (value) {
                 case "add-day-7":
                     checkUrlOuts(["day", "op_time"], [7, "add"]);
