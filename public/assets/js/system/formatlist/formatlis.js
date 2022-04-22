@@ -31,6 +31,27 @@ const aListHasOne = [
     "op_time",
     "start_time",
     "end_time",
+    "home",
+    "major",
+    "major_id",
+    "round",
+    "round_id",
+];
+
+const checkOutHasMatchLocal = [
+    "home",
+    "major",
+    "major_id",
+    "round",
+    "round_id",
+];
+const checkOutHasMatchTime = [
+    "day",
+    "month",
+    "year",
+    "op_time",
+    "start_time",
+    "end_time",
 ];
 
 // Search params
@@ -57,11 +78,20 @@ function checkUrlOut(key, value, valueAdd = "") {
     return false;
 }
 
+// Function check match local url
+function checkUrlHasMatchSelectLocal(dataCreate = []) {
+    dataCreate.map(function (data) {
+        if (searchParams.has(data))
+            url = url + "&" + data + "=" + searchParams.get(data);
+    });
+}
+
 // Function check urls
 function checkUrlOuts(key, val) {
     key.map(function (data, key) {
         url = url + "&" + data + "=" + val[key];
     });
+    // Check
     checkOutUrl();
 }
 
@@ -164,14 +194,13 @@ const formatPage = {
                 timePicker: true,
                 startDate: moment(start_time).format("DD/MM/YYYY hh:mm:ss A"),
                 endDate: moment(end_time).format("DD/MM/YYYY hh:mm:ss A"),
-                // startDate: moment(),
-                // endDate: moment(),
                 locale: {
                     format: "DD/MM/YYYY hh:mm:ss A",
                 },
             },
             function (start, end) {
                 loadTast();
+                checkUrlHasMatchSelectLocal(checkOutHasMatchLocal);
                 checkUrlOuts(
                     ["start_time", "end_time"],
                     [
@@ -179,12 +208,6 @@ const formatPage = {
                         moment(end).format("YYYY-MM-DDThh:mm"),
                     ]
                 );
-                // window.location =
-                //     url +
-                //     "&start_time=" +
-                //     moment(start).format("YYYY-MM-DDThh:mm") +
-                //     "&end_time=" +
-                //     moment(end).format("YYYY-MM-DDThh:mm");
                 return false;
             }
         );
@@ -207,6 +230,7 @@ const formatPage = {
         $(".select-date-serach").on("change", function () {
             loadTast();
             const value = $(this).val();
+            checkUrlHasMatchSelectLocal(checkOutHasMatchLocal);
             switch (value) {
                 case "add-day-7":
                     checkUrlOuts(["day", "op_time"], [7, "add"]);
@@ -251,6 +275,7 @@ const formatPage = {
     },
 };
 
+// Run
 formatPage.refresh();
 formatPage.formatDatabase();
 formatPage.searchData();
