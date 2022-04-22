@@ -45,10 +45,11 @@ class ContestController extends Controller
             })->search(request('q') ?? null, ['name', 'description'])
                 ->missingDate('register_deadline', request('miss_date') ?? null, $now->toDateTimeString())
                 ->passDate('register_deadline', request('pass_date') ?? null, $now->toDateTimeString())
-                // ->passDate('date_start', request('upcoming_date') ?? null, $now->toDateTimeString())
+                ->registration_date('end_register_time', request('registration_date') ?? null, $now->toDateTimeString())
                 ->status(request('status'))
                 ->sort((request('sort') == 'desc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'contests')
                 ->hasDateTimeBetween('date_start', request('start_time') ?? null, request('end_time') ?? null)
+                // ->hasDateTimeBetween('end_register_time',request('registration_date'))
                 ->hasRequest(['major_id' => request('major_id') ?? null])
                 ->with([
                     'major',
@@ -121,7 +122,9 @@ class ContestController extends Controller
                 'img' => 'required|mimes:jpeg,png,jpg|max:10000',
                 'date_start' => 'required|date',
                 'register_deadline' => 'required|date|after:date_start',
-                'description' => 'required'
+                'description' => 'required',
+                'start_register_time' => 'required|date|before:end_register_time',
+                'end_register_time' => 'required|date|after:start_register_time|before:date_start',
             ],
             [
                 'name.required' => 'Chưa nhập trường này !',
@@ -132,6 +135,14 @@ class ContestController extends Controller
                 'img.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
                 'date_start.required' => 'Chưa nhập trường này !',
                 'date_start.date' => 'Sai định dạng !',
+                'start_register_time.required' => 'Chưa nhập trường này !',
+                'start_register_time.date' => 'Sai định dạng !',
+                'start_register_time.before' => 'Thời gian bắt đầu đăng kí không được bằng hoặc lớn hơn thời gian kết thúc đăng kí!',
+
+                'end_register_time.required' => 'Chưa nhập trường này !',
+                'end_register_time.date' => 'Sai định dạng !',
+                'end_register_time.after' => 'Thời gian kết thúc đăng kí không được bằng hoặc nhỏ hơn thời gian bắt đầu đăng kí!',
+                'end_register_time.before' => 'Thời gian kết thúc đăng kí không được bằng hoặc lớn hơn thời gian bắt đầu cuộc thi!',
                 'register_deadline.required' => 'Chưa nhập trường này !',
                 'register_deadline.date' => 'Sai định dạng !',
                 'register_deadline.after' => 'Thời gian kết thúc không được bằng thời gian bắt đầu !',
@@ -152,6 +163,8 @@ class ContestController extends Controller
             }
             $contest->name = $request->name;
             $contest->date_start = $request->date_start;
+            $contest->start_register_time = $request->start_register_time;
+            $contest->end_register_time = $request->end_register_time;
             $contest->register_deadline = $request->register_deadline;
             $contest->description = $request->description;
             $contest->major_id = $request->major_id;
@@ -168,8 +181,6 @@ class ContestController extends Controller
             return Redirect::back()->with('error', 'Thêm mới thất bại !');
         }
     }
-
-
     public function un_status($id)
     {
         try {
@@ -208,8 +219,6 @@ class ContestController extends Controller
             ]);
         }
     }
-
-
 
     public function destroy($id)
     {
@@ -250,7 +259,8 @@ class ContestController extends Controller
                 'description' => "required",
                 'major_id' => "required",
                 'status' => "required",
-
+                'start_register_time' => 'required|date|before:end_register_time',
+                'end_register_time' => 'required|date|after:start_register_time|before:date_start',
             ],
             [
                 'img.mimes' => 'Sai định dạng !',
@@ -264,6 +274,14 @@ class ContestController extends Controller
                 "major_id.required" => "Tường cuộc thi tồn tại !",
                 "status.required" => "Tường trạng thái không bỏ trống",
 
+                'end_register_time.required' => 'Chưa nhập trường này !',
+                'end_register_time.date' => 'Sai định dạng !',
+                'end_register_time.after' => 'Thời gian kết thúc đăng kí không được bằng hoặc nhỏ hơn thời gian bắt đầu đăng kí!',
+                'end_register_time.before' => 'Thời gian kết thúc đăng kí không được bằng hoặc lớn hơn thời gian bắt đầu cuộc thi!',
+                'register_deadline.required' => 'Chưa nhập trường này !',
+                'register_deadline.date' => 'Sai định dạng !',
+                'register_deadline.after' => 'Thời gian kết thúc không được bằng thời gian bắt đầu !',
+                'description.required' => 'Chưa nhập trường này !',
             ]
         );
         if ($validator->fails()) {

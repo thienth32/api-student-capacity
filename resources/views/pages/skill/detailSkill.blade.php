@@ -27,8 +27,8 @@
                             <div class="opacity-75">
 
                                 <img style="width:100%"
-                                src="{{ Storage::disk('google')->has($data->image_url)? Storage::disk('google')->url($data->image_url): 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
-                                alt="">
+                                    src="{{ Storage::disk('google')->has($data->image_url)? Storage::disk('google')->url($data->image_url): 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
+                                    alt="">
                             </div>
                         </div>
 
@@ -39,7 +39,7 @@
                                         <h3>Mã Kỹ năng</h3>
                                     </div>
                                     <div class="col-8">
-                                      {{ $data->short_name }}
+                                        {{ $data->short_name }}
                                     </div>
                                 </div>
                             </div>
@@ -51,7 +51,11 @@
                                         <h3>Chuyên Ngành</h3>
                                     </div>
                                     <div class="col-8">
-                                       {{ $data->majorSkill[0]->name }}
+                                        @if (count($data->majorSkill) > 0)
+                                            {{ $data->majorSkill[0]->name }}
+                                        @else
+                                            Chưa có chuyên ngành
+                                        @endif
                                     </div>
                                 </div>
                             </div>
