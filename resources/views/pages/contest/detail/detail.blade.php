@@ -64,6 +64,34 @@
                             <div class="opacity-75">
                                 <div class="row">
                                     <div class="col-4">
+                                        <h3>Thời gian mở đăng kí</h3>
+                                    </div>
+                                    <div class="col-8">
+                                        {{ date('d-m-Y H:i', strtotime($contest->start_register_time)) }}
+                                        <br>
+                                        {{ \Carbon\Carbon::parse($contest->start_register_time)->diffforHumans() }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fs-4 text-white mt-5">
+                            <div class="opacity-75">
+                                <div class="row">
+                                    <div class="col-4">
+                                        <h3>Thời gian đóng đăng kí</h3>
+                                    </div>
+                                    <div class="col-8">
+                                        {{ date('d-m-Y H:i', strtotime($contest->end_register_time)) }}
+                                        <br>
+                                        {{ \Carbon\Carbon::parse($contest->end_register_time)->diffforHumans() }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fs-4 text-white mt-5">
+                            <div class="opacity-75">
+                                <div class="row">
+                                    <div class="col-4">
                                         <h3>Trạng thái</h3>
                                     </div>
                                     <div class="col-8">
