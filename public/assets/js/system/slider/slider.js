@@ -48,25 +48,23 @@ const sliderPage = {
     selectMajor: function () {
         $("#select-major").on("change", function () {
             loadTast();
-            url = url + "&major=1";
             if ($(this).val() == 0) return (window.location = url);
-            window.location = url + "&major_id=" + $(this).val();
+            checkUrlOuts(["major", "major_id"], [1, $(this).val()]);
             return false;
         });
     },
     selectRound: function () {
         $("#select-round").on("change", function () {
             loadTast();
-            url = url + "&round=1";
             if ($(this).val() == 0) return (window.location = url);
-            window.location = url + "&round_id=" + $(this).val();
+            checkUrlOuts(["round", "round_id"], [1, $(this).val()]);
             return false;
         });
     },
     reHome: function () {
         $(".btn-home-re").on("click", function () {
             loadTast();
-            window.location = url + "&home=1";
+            checkUrlOuts(["home"], [1]);
             return false;
         });
     },
@@ -88,6 +86,8 @@ const sliderPage = {
         });
     },
 };
+
+// Run
 sliderPage.selectChangeStatus();
 sliderPage.getText();
 sliderPage.selectMajor();

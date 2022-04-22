@@ -31,6 +31,11 @@ const aListHasOne = [
     "op_time",
     "start_time",
     "end_time",
+    "home",
+    "major",
+    "major_id",
+    "round",
+    "round_id",
 ];
 
 // Search params
@@ -62,6 +67,7 @@ function checkUrlOuts(key, val) {
     key.map(function (data, key) {
         url = url + "&" + data + "=" + val[key];
     });
+    // Check
     checkOutUrl();
 }
 
@@ -251,6 +257,7 @@ const formatPage = {
     },
 };
 
+// Run
 formatPage.refresh();
 formatPage.formatDatabase();
 formatPage.searchData();
