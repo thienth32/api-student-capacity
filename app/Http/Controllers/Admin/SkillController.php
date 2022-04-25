@@ -50,9 +50,9 @@ class SkillController extends Controller
     // Danh sách teams phía view
     public function index(Request $request)
     {
-     DB::beginTransaction();
+        DB::beginTransaction();
         try {
-            $dataMajor =Major::where('parent_id', 0)->get();
+            $dataMajor = Major::where('parent_id', 0)->get();
             $dataSkill = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
             if ($request->major_id) {
                 $dataSkill = $this->getList($request)->Skill()->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
@@ -66,7 +66,7 @@ class SkillController extends Controller
             ]);
         };
     }
-  // chi tiết skill
+    // chi tiết skill
     public function detail(Request $request, $id)
     {
         DB::beginTransaction();
@@ -84,7 +84,7 @@ class SkillController extends Controller
     {
         DB::beginTransaction();
         try {
-            $dataMajor =Major::where('parent_id', 0)->get();
+            $dataMajor = Major::where('parent_id', 0)->get();
             DB::commit();
             return view('pages.skill.form-add', compact('dataMajor'));
         } catch (\Throwable $th) {
@@ -142,10 +142,12 @@ class SkillController extends Controller
             $newSkill = Skills::create($data);
 
             if ($newSkill) {
-                MajorSkill::create([
-                    'major_id' => $request->major_id,
-                    'skill_id' => $newSkill->id,
-              ]);
+                if ($request->major_id != 0) {
+                    MajorSkill::create([
+                        'major_id' => $request->major_id,
+                        'skill_id' => $newSkill->id,
+                    ]);
+                }
             }
             Db::commit();
 
@@ -160,7 +162,7 @@ class SkillController extends Controller
 
         $data =  Skills::find($id);
 
-        $dataMajor =Major::where('parent_id', 0)->get();
+        $dataMajor = Major::where('parent_id', 0)->get();
         return view('pages.skill.form-edit', compact('data', 'dataMajor'));
     }
     public function update(Request $request, $id)
@@ -206,9 +208,15 @@ class SkillController extends Controller
             $skill->save();
             $IdmajorSkill = MajorSkill::where('major_id', $request->oldMajor)->where('skill_id', $id)->first();
             $majorSkill = MajorSkill::find($IdmajorSkill->id);
-            $majorSkill->major_id = $request->major_id;
-            $majorSkill->skill_id = $id;
-            $majorSkill->save();
+            if ($request->major_id != 0) {
+                $majorSkill->major_id = $request->major_id;
+                $majorSkill->skill_id = $id;
+                $majorSkill->save();
+            }
+            else{
+                 $majorSkill->delete();
+            }
+
             Db::commit();
             return redirect()->route('admin.skill.index');
         } catch (\Throwable $th) {

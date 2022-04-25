@@ -262,13 +262,25 @@
                                     {{ $key->name }}
                                 </td>
                                 <td>
-                                    @if (count($key->majorSkill) > 0)
-                                        @foreach ($key->majorSkill as $item)
-                                            {{ $item->name ?? 'chưa có chuyên ngành' }}
-                                        @endforeach
-                                    @else
-                                        chưa có chuyên ngành
-                                    @endif
+                                    <div class="dropdown">
+                                        <button class="badge bg-primary dropdown-toggle" type="button"
+                                            id="triggerId_{{ $key->id }}" data-bs-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">
+                                            Xem thông tin...
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="triggerId_{{ $key->id }}">
+                                            @if (count($key->majorSkill) > 0)
+                                                @foreach ($key->majorSkill as $item)
+                                                 <li style="padding:7px" class="dropdown-item "><a href="{{ route('admin.major.skill',['slug'=>$item->slug]) }}">Ngành: {{ $item->name }}</a>
+                                                 </li>
+                                                @endforeach
+                                            @else
+                                            <li class="dropdown-item">   chưa có chuyên ngành</li>
+
+                                            @endif
+                                        </div>
+                                    </div>
+
                                 </td>
                                 <td>
 

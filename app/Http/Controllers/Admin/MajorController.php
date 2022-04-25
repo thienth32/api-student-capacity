@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Major;
+use App\Models\Skills;
 use App\Services\Traits\TResponse;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 
 class MajorController extends Controller
@@ -131,7 +134,7 @@ class MajorController extends Controller
     {
         $dataMajor = Major::where('parent_id', 0)->get();
         if ($major = $this->getMajor($slug)) {
-        //   dd( $major->first()->parent);
+            //   dd( $major->first()->parent);
             return view('pages.major.edit', ['major' => $major->first(), 'dataMajor' => $dataMajor]);
         }
         return abort(404);
@@ -194,5 +197,33 @@ class MajorController extends Controller
         $major = Major::withTrashed()->where('slug', $slug)->first();
         $major->restore();
         return redirect()->back();
+    }
+    public function skill($slug)
+    {
+        $listSkill = Skills::all();
+        $major = $this->getList()->where('slug', $slug)->first();
+        $skills = $this->getList()->where('slug', $slug)->first()->skill()->paginate(6);
+       $parentSkill=$this->getList()->where('slug', $slug)->first()->skill()->get();
+        return view('pages.major.skill', compact('skills', 'major', 'listSkill','parentSkill'));
+    }
+    public function detachSkill($slug, $skill_id)
+    {
+        try {
+            $major = Major::where('slug', $slug)->first();
+            Major::find($major->id)->skill()->detach([$skill_id]);
+            return Redirect::back();
+        } catch (\Throwable $th) {
+            return Redirect::back();
+        }
+    }
+    public function attachSkill(Request $request,$slug)
+    {
+        try {
+            $major = Major::where('slug', $slug)->first();
+            Major::find($major->id)->skill()->syncWithoutDetaching($request->skill_id);
+            return Redirect::back();
+        } catch (\Throwable $th) {
+            return Redirect::back();
+        }
     }
 }

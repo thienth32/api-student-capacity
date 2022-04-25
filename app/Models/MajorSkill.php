@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class MajorSkill extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory;
     protected $table='major_skills';
     protected $fillable=['major_id','skill_id'];
 }
