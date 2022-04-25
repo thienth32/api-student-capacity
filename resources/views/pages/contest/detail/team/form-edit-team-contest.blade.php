@@ -15,6 +15,11 @@
                             {{ $contest->name }}
                         </a>
                     </li>
+                    <li class="breadcrumb-item px-3 ">
+                        <a href="{{ route('admin.contest.detail.team', ['id' => $contest->id]) }}">
+                            Danh sách đội thi thuộc cuộc thi : {{ $contest->name }}
+                        </a>
+                    </li>
                     <li class="breadcrumb-item px-3 text-muted">
                         Chỉnh sửa đội thi của cuộc thi : {{ $contest->name }}
                     </li>
