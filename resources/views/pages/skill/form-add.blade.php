@@ -36,6 +36,9 @@
                                     <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
                                         data-hide-search="false" tabindex="-1" aria-hidden="true" name="major_id"
                                         value="{{ old('major_id') }}">
+                                        <option value="0">
+                                            Không có chuyên ngành
+                                        </option>
                                         @foreach ($dataMajor as $itemMajor)
                                             @php
                                                 $dash = '';
@@ -95,8 +98,8 @@
 @endsection
 
 @section('page-script')
-<script src="assets/js/system/preview-file/previewImg.js"></script>
-<script>
-      preview.showFile('#file-input', '#image-preview');
-</script>
+    <script src="assets/js/system/preview-file/previewImg.js"></script>
+    <script>
+        preview.showFile('#file-input', '#image-preview');
+    </script>
 @endsection

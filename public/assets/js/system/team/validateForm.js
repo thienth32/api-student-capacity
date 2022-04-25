@@ -8,7 +8,6 @@ const rules = {
     image: {
         required: true,
     },
-
 };
 const messages = {
     name: {

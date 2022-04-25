@@ -79,27 +79,26 @@ trait TTeamContest
     function editTeamContest($request, $id_team, $contest_id = null, $backViewSuccess, $backViewFailure)
     {
         // dd($request->all());
-        // $validator = Validator::make(
-        //     $request->all(),
-        //     [
-        //         'name' => 'required|unique:teams,name,' . $id_team . '|max:255',
-        //         'image' => 'mimes:jpeg,png,jpg|max:10000',
-        //     ],
-        //     [
-        //         'name.required' => 'Chưa nhập trường này !',
-        //         'name.max' => 'Độ dài kí tự không phù hợp !',
-        //         'name.unique' => 'Tên đã tồn tại !',
-        //         'name.mimes' => 'Sai định dạng ảnh !',
-        //         'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
-        //     ]
-        // );
-        // if ($validator->fails() || !($request->has('user_id'))) {
-        //     return redirect()->back()->withErrors($validator)->with('error', 'Chưa có thành viên trong đội')->withInput($request->input());
-        // }
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'name' => 'required|unique:teams,name,' . $id_team . '|max:255',
+                'image' => 'mimes:jpeg,png,jpg|max:10000',
+            ],
+            [
+                'name.required' => 'Chưa nhập trường này !',
+                'name.max' => 'Độ dài kí tự không phù hợp !',
+                'name.unique' => 'Tên đã tồn tại !',
+                'name.mimes' => 'Sai định dạng ảnh !',
+                'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
+            ]
+        );
+        if ($validator->fails() || !($request->has('user_id'))) {
+            return redirect()->back()->withErrors($validator)->with('error', 'Chưa có thành viên trong đội')->withInput($request->input());
+        }
         DB::beginTransaction();
         try {
             $result = $this->checkUserDrugTeam(($contest_id == null ? $request->contest_id : $contest_id), $request->user_id, $id_team ?? null);
-            // dd($result);
             $team = Team::find($id_team);
             if (is_null($team)) {
                 return response()->json([
