@@ -339,4 +339,14 @@ class TeamController extends Controller
             ]);
         }
     }
+    public function checkUserTeamContest($id_contest)
+    {
+
+        $user_id = auth('sanctum')->user()->id;
+        $result = $this->checkUserDrugTeam($id_contest, [$user_id]);
+        if (count($result['user-not-pass']) > 0) return response()->json([
+            'status' => false,
+            'payload' => 'Tài khoản này đã tham gia cuộc thi khác !'
+        ]);
+    }
 }
