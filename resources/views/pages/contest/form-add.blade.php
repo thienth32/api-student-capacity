@@ -87,7 +87,7 @@
                                 </div>
                                 <div class="form-group mb-10">
                                     <label for="" class="form-label">Thời gian bắt đầu đăng ký</label>
-                                    <input max="" value="{{ old('start_register_time') }}" type="datetime-local"
+                                    <input max="" min="" value="{{ old('start_register_time') }}" type="datetime-local"
                                         name="start_register_time" id="start_time" class="form-control" placeholder="">
                                     @error('start_register_time')
                                         <p class="text-danger">{{ $message }}</p>
@@ -95,7 +95,7 @@
                                 </div>
                                 <div class="form-group mb-10">
                                     <label for="" class="form-label">Thời gian kết thúc đăng ký</label>
-                                    <input min="" value="{{ old('end_register_time') }}" type="datetime-local"
+                                    <input min="" max="" value="{{ old('end_register_time') }}" type="datetime-local"
                                         name="end_register_time" id="end_time" class="form-control" placeholder="">
                                     @error('end_register_time')
                                         <p class="text-danger">{{ $message }}</p>
@@ -157,7 +157,8 @@
             required: 'Chưa nhập trường này !',
         };
 
-        dateAfter('input[type=datetime-local]#begin', 'input[type=datetime-local]#end','input[type=datetime-local]#start_time', 'input[type=datetime-local]#end_time')
+        dateAfter('input[type=datetime-local]#begin', 'input[type=datetime-local]#end',
+            'input[type=datetime-local]#start_time', 'input[type=datetime-local]#end_time')
         preview.showFile('#file-input', '#image-preview');
     </script>
     <script src="assets/js/system/validate/validate.js"></script>
