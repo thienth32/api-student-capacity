@@ -43,16 +43,20 @@
                                 </div>
                                 <div class="form-group mb-10">
                                     <label for="" class="form-label">Thời gian bắt đầu đăng ký</label>
-                                    <input max="" value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime($Contest->start_register_time)) }}" type="datetime-local"
-                                        name="start_register_time" id="start_time" class="form-control" placeholder="">
+                                    <input max="" min=""
+                                        value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime($Contest->start_register_time)) }}"
+                                        type="datetime-local" name="start_register_time" id="start_time"
+                                        class="form-control" placeholder="">
                                     @error('start_register_time')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="form-group mb-10">
                                     <label for="" class="form-label">Thời gian kết thúc đăng ký</label>
-                                    <input min="" value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime($Contest->end_register_time)) }}" type="datetime-local"
-                                        name="end_register_time" id="end_time" class="form-control" placeholder="">
+                                    <input min="" max=""
+                                        value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime($Contest->end_register_time)) }}"
+                                        type="datetime-local" name="end_register_time" id="end_time" class="form-control"
+                                        placeholder="">
                                     @error('end_register_time')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
@@ -119,7 +123,8 @@
     <script src="assets/js/system/date-after/date-after.js"></script>
     <script src="assets/js/system/contest/form.js"></script>
     <script>
-        dateAfterEdit('input[type=datetime-local]#begin', 'input[type=datetime-local]#end','input[type=datetime-local]#start_time', 'input[type=datetime-local]#end_time')
+        dateAfterEdit('input[type=datetime-local]#begin', 'input[type=datetime-local]#end',
+            'input[type=datetime-local]#start_time', 'input[type=datetime-local]#end_time')
         preview.showFile('#file-input', '#image-preview');
     </script>
     <script src="assets/js/system/validate/validate.js"></script>
