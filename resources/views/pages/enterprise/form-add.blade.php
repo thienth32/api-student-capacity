@@ -55,7 +55,7 @@
                             Session::forget('error');
                         @endphp
                     @endif
-                    <form id="formAddContest" action="{{ route('admin.enterprise.store') }}" method="post"
+                    <form id="formAddEnterprise" action="{{ route('admin.enterprise.store') }}" method="post"
                         enctype="multipart/form-data">
                         @csrf
                         <div class="row">
@@ -65,28 +65,29 @@
                                     <input type="text" name="name" value="{{ old('name') }}" class=" form-control"
                                         placeholder="">
                                     @error('name')
-                                        <p class="text-danger">{{ $message }}</p>
+                                        <p id="checkname" class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="form-group mb-10">
 
                                     <label for="" class="form-label">Giới thiệu</label>
-                                    <textarea class="form-control" name="description" id="" rows="3"></textarea>
+                                    <textarea class="form-control" name="description" id="" rows="3">{{ old('description') }}</textarea>
                                     @error('description')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="form-group mb-10 ">
-                                    <button type="submit" name="" id="" class="btn btn-success btn-lg btn-block">Lưu </button>
+                                    <button type="submit" name="" id="" class="btn btn-success btn-lg btn-block">Lưu
+                                    </button>
                                 </div>
                             </div>
                             <div class="col-4">
                                 <div class="form-group ">
                                     <label for="" class="form-label">Logo doanh nghiệp</label>
-                                    <input name="logo" type='file' id="file-input" accept=".png, .jpg, .jpeg"
+                                    <input  name="logo" type='file' id="file-input" accept=".png, .jpg, .jpeg"
                                         class="form-control" />
                                     <img class="w-100 mt-4 border rounded-3" id="image-preview"
-                                        src="https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg" />
+                                        src="https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg"  />
 
                                 </div>
                                 @error('logo')
@@ -103,7 +104,16 @@
 @endsection
 @section('page-script')
     <script src="assets/js/system/preview-file/previewImg.js"></script>
+    <script src="assets/js/system/enterprise/form.js"></script>
     <script>
+          rules.logo = {
+            required: true,
+        };
+        messages.logo = {
+            required: 'Chưa nhập trường này !',
+        };
         preview.showFile('#file-input', '#image-preview');
     </script>
+    <script src="assets/js/system/validate/validate.js"></script>
+
 @endsection

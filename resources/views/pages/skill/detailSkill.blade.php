@@ -48,11 +48,14 @@
                             <div class="opacity-75">
                                 <div class="row">
                                     <div class="col-4">
-                                        <h3>Chuyên Ngành</h3>
+                                        <h3>Thuộc chuyên ngành</h3>
                                     </div>
                                     <div class="col-8">
                                         @if (count($data->majorSkill) > 0)
-                                            {{ $data->majorSkill[0]->name }}
+                                        @foreach ($data->majorSkill as $item)
+                                        <li style="padding-bottom: 10px;color:#ffff"><a style="color: #ffff" href="{{ route('admin.major.skill',['slug'=>$item->slug]) }}">Ngành: {{ $item->name }}</a>
+                                        </li>
+                                       @endforeach
                                         @else
                                             Chưa có chuyên ngành
                                         @endif
