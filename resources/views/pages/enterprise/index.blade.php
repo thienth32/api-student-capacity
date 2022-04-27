@@ -274,13 +274,21 @@
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel"> Tài trợ các cuộc thi
+                                                            <h5 class="modal-title" id="exampleModalLabel"> Tài trợ các
+                                                                cuộc thi
                                                             </h5>
                                                             <button type="button" class="btn-close"
                                                                 data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body  ">
-                                                            {{ $key->description }}
+                                                            @if (count($key->donors) > 0)
+                                                                @foreach ($key->donors as $item)
+                                                                    <li><a href="{{ route('admin.contest.show',$item->id) }}"> Cuộc thi :{{ $item->name }}</a></li>
+                                                                @endforeach
+                                                            @else
+                                                                <h3> Chưa tài trợ cuộc thi nào !!!</h3>
+                                                            @endif
+
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary"
