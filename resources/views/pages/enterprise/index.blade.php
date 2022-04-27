@@ -45,7 +45,20 @@
 
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="form-group p-2">
-                    <label class="form-label">Tài trợ cuộc thi </label>
+                    <div class="form-group mb-10">
+                        <label class="form-label">Tài trợ cuộc thi </label>
+                        <select id="selectContest" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                            data-hide-search="false" tabindex="-1" aria-hidden="true" name="" value="">
+                            <option value="">Chọn cuộc thi</option>
+                            @foreach ($contest as $itemContest)
+                                <option @selected(request('contest') == $itemContest->id) value="{{ $itemContest->id }}">
+                                    Cuộc Thi: {{ $itemContest->name }}
+                                </option>
+                            @endforeach
+                        </select>
+
+                    </div>
+                    {{-- <label class="form-label">Tài trợ cuộc thi </label>
                     <select id="selectContest" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
                         data-hide-search="true" tabindex="-1" aria-hidden="true">
                         <option value="0">Chọn cuộc thi</option>
@@ -55,7 +68,7 @@
                                 Cuộc Thi: {{ $itemContest->name }}
                             </option>
                         @endforeach
-                    </select>
+                    </select> --}}
                 </div>
             </div>
             {{-- <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
@@ -188,71 +201,39 @@
                                 </th>
                                 <th scope="col">Tài trợ
 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @php
-                            $total = $listEnterprise->total();
-                        @endphp
-                        @forelse ($listEnterprise as $index=> $key)
-                            <tr>
-                                @if (request()->has('sortBy'))
-                                    <th scope="row">
-                                        @if (request('sortBy') == 'desc')
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php
+                                $total = $listEnterprise->total();
+                            @endphp
+                            @forelse ($listEnterprise as $index=> $key)
+                                <tr>
+                                    @if (request()->has('sortBy'))
+                                        <th scope="row">
+                                            @if (request('sortBy') == 'desc')
+                                                {{ (request()->has('page') && request('page') !== 1 ? $listEnterprise->perPage() * (request('page') - 1) : 0) +$index +1 }}
+                                            @else
+                                                {{ request()->has('page') && request('page') !== 1? $total - $listEnterprise->perPage() * (request('page') - 1) - $index: ($total -= 1) }}
+                                            @endif
+                                        </th>
+                                    @else
+                                        <th scope="row">
                                             {{ (request()->has('page') && request('page') !== 1 ? $listEnterprise->perPage() * (request('page') - 1) : 0) +$index +1 }}
-                                        @else
-                                            {{ request()->has('page') && request('page') !== 1? $total - $listEnterprise->perPage() * (request('page') - 1) - $index: ($total -= 1) }}
-                                        @endif
-                                    </th>
-                                @else
-                                    <th scope="row">
-                                        {{ (request()->has('page') && request('page') !== 1 ? $listEnterprise->perPage() * (request('page') - 1) : 0) +$index +1 }}
-                                    </th>
-                                @endif
+                                        </th>
+                                    @endif
 
-                                <td>
-                                    {{ $key->name }}
-                                </td>
+                                    <td>
+                                        {{ $key->name }}
+                                    </td>
 
-                                <td>
-                                    <img style="width:150px;height:120px"
-                                        src="{{ Storage::disk('google')->has($key->logo)? Storage::disk('google')->url($key->logo): 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
-                                        alt="">
-                                </td>
-                                <td>
+                                    <td>
+                                        <img style="width:150px;height:120px"
+                                            src="{{ Storage::disk('google')->has($key->logo)? Storage::disk('google')->url($key->logo): 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
+                                            alt="">
+                                    </td>
+                                    <td>
 
-                                    <button class="badge bg-primary" type="button" data-bs-toggle="modal"
-                                        data-bs-target="#introduce_{{ $key->id }}">
-                                        Xem thông tin...
-                                    </button>
-
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="introduce_{{ $key->id }}" tabindex="-1"
-                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel"> Giới Thiệu Về
-                                                        Doanh
-                                                        Nghiệp
-                                                    </h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body  ">
-                                                    {{ $key->description }}
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-bs-dismiss="modal">Thoát
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="btn-group dropup">
                                         <button class="badge bg-primary" type="button" data-bs-toggle="modal"
                                             data-bs-target="#introduce_{{ $key->id }}">
                                             Xem thông tin...
@@ -282,6 +263,36 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group dropup">
+                                            <button class="badge bg-primary" type="button" data-bs-toggle="modal"
+                                                data-bs-target="#introduce_{{ $key->id }}">
+                                                Xem thông tin...
+                                            </button>
+
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="introduce_{{ $key->id }}" tabindex="-1"
+                                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel"> Tài trợ các cuộc thi
+                                                            </h5>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body  ">
+                                                            {{ $key->description }}
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Thoát
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                     </td>
                                     <td>
                                         <div class="btn-group dropstart">

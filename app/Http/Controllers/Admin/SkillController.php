@@ -22,7 +22,7 @@ class SkillController extends Controller
         $major = $request->has('major_id') ? $request->major_id : null;
         $orderBy = $request->has('orderBy') ? $request->orderBy : 'id';
         $timeDay = $request->has('day') ? $request->day : Null;
-        $sortBy = $request->has('sortBy') ? $request->sortBy : "asc";
+        $sortBy = $request->has('sortBy') ? $request->sortBy : "desc";
         $softDelete = $request->has('skill_soft_delete') ? $request->skill_soft_delete : null;
 
         if ($softDelete != null) {
