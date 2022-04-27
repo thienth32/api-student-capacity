@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
-                <form id="formAddRound" action="{{ route('admin.skill.update', $data->id) }}" method="post"
+                <form id="formSkill" action="{{ route('admin.skill.update', $data->id) }}" method="post"
                     enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
@@ -13,7 +13,7 @@
                         <label for="">Tên kỹ năng</label>
                         <input type="text" name="name" value="{{ $data->name }}" class=" form-control" placeholder="">
                         @error('name')
-                            <p class="text-danger">{{ $message }}</p>
+                            <p id="checkname" class="text-danger">{{ $message }}</p>
                         @enderror
                     </div>
                     <div class="row">
@@ -27,31 +27,34 @@
                                     <input type="text" name="short_name" value="{{ $data->short_name }}"
                                         class=" form-control" placeholder="">
                                     @error('short_name')
-                                        <p class="text-danger">{{ $message }}</p>
+                                        <p id="checkshort_name" class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="form-group mb-10">
                                     <label for="" class="form-label">Thuộc chuyên ngành</label>
-                                    <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
-                                        data-hide-search="false" tabindex="-1" aria-hidden="true" name="major_id"
-                                        value="{{ old('major_id') }}">
-                                        <option value="0">
-                                            Không thuộc chuyên ngành nào
-                                        </option>
-                                        @foreach ($dataMajor as $Major)
+                                    <select multiple class="form-select mb-2 select2-hidden-accessible"
+                                        data-control="select2" data-hide-search="false" tabindex="-1" aria-hidden="true"
+                                        name="major_id[]" value="{{ old('major_id') }}">
+                                        @foreach ($dataMajor as $itemMajor)
                                             @php
                                                 $dash = '';
                                             @endphp
-                                            <option @selected($data->majorSkill->first()->id == $Major->id) value="{{ $Major->id }}">Chuyên
-                                                ngành:
-                                                {{ $Major->name }}</option>
+                                            <option
+                                                @foreach ($data->majorSkill as $item) @if ($item->id == $itemMajor->id)
+                                        {{ 'selected="selected"' }}
+                                        @endif @endforeach
+                                                value="{{ $itemMajor->id }}">
+                                                Ngành: {{ $itemMajor->name }}
+                                            </option>
                                             @include(
                                                 'pages.skill.include.listSelecterChisl',
-                                                ['majorPrent' => $Major, 'major' => $data]
+                                                ['majorPrent' => $itemMajor, 'major' => $data]
                                             )
                                         @endforeach
                                     </select>
-                                    <input type="hidden" value="{{ $data->majorSkill[0]->id }}" name="oldMajor">
+                                    @if (count($data->majorSkill) > 0)
+                                        <input type="hidden" value="{{ $data->majorSkill }}" name="oldMajor">
+                                    @endif
                                     @error('major_id')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
@@ -93,8 +96,9 @@
 
 @section('page-script')
     <script src="assets/js/system/preview-file/previewImg.js"></script>
-
+    <script src="assets/js/system/skill/form.js"></script>
     <script>
         preview.showFile('#file-input', '#image-preview');
     </script>
+    <script src="assets/js/system/validate/validate.js"></script>
 @endsection

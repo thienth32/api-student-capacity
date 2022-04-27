@@ -41,8 +41,6 @@
             </a>
         </h1>
         <div class="row card-format">
-
-
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="form-group p-2">
                     <div class="form-group mb-10">
@@ -91,7 +89,6 @@
                     <input id="searchTeam" type="text" placeholder="'*Enter' tìm kiếm ..." class=" ip-search form-control">
                 </div>
             </div>
-
         </div>
         <div class="back">
             <hr>
@@ -267,12 +264,12 @@
                                     <td>
                                         <div class="btn-group dropup">
                                             <button class="badge bg-primary" type="button" data-bs-toggle="modal"
-                                                data-bs-target="#introduce_{{ $key->id }}">
+                                                data-bs-target="#donor_{{ $key->id }}">
                                                 Xem thông tin...
                                             </button>
 
                                             <!-- Modal -->
-                                            <div class="modal fade" id="introduce_{{ $key->id }}" tabindex="-1"
+                                            <div class="modal fade" id="donor_{{ $key->id }}" tabindex="-1"
                                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
