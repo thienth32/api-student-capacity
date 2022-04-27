@@ -199,13 +199,11 @@ class TeamController extends Controller
         DB::beginTransaction();
         try {
             $user_id = auth('sanctum')->user()->id;
-            $result = $this->checkUserDrugTeam($request->contest_id, $user_id);
+            $result = $this->checkUserDrugTeam($request->contest_id, [$user_id]);
             if (count($result['user-not-pass']) > 0) return response()->json([
                 'status' => false,
                 'payload' => 'Tài khoản này đã tham gia cuộc thi khác !'
             ]);
-
-
             $today = Carbon::now()->toDateTimeString();
             // $user_id = $request->user_id;
             $user = User::find($user_id);
@@ -247,7 +245,7 @@ class TeamController extends Controller
             DB::rollBack();
             if ($request->hasFile('image')) {
                 $fileImage = $request->file('image');
-                if (Storage::disk('google')->has($filename)) Storage::disk('google')->delete($filename);
+                if (Storage::disk('google')->has($fileImage)) Storage::disk('google')->delete($filename);
             }
             return response()->json([
                 'status' => false,
@@ -262,7 +260,7 @@ class TeamController extends Controller
         DB::beginTransaction();
         try {
             $user_id = auth('sanctum')->user()->id;
-            $result = $this->checkUserDrugTeam($request->contest_id, $user_id);
+            $result = $this->checkUserDrugTeam($request->contest_id, [$user_id]);
             if (count($result['user-not-pass']) > 0) return response()->json([
                 'status' => false,
                 'payload' => 'Tài khoản này đã tham gia cuộc thi khác !'
@@ -331,7 +329,7 @@ class TeamController extends Controller
             DB::rollBack();
             if ($request->hasFile('image')) {
                 $fileImage = $request->file('image');
-                if (Storage::disk('google')->has($filename)) Storage::disk('google')->delete($filename);
+                if (Storage::disk('google')->has($fileImage)) Storage::disk('google')->delete($filename);
             }
             return response()->json([
                 'status' => false,

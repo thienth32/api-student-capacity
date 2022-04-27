@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
-                <form id="formAddRound" action="{{ route('admin.skill.store') }}" method="post"
+                <form id="formSkill" action="{{ route('admin.skill.store') }}" method="post"
                     enctype="multipart/form-data">
                     @csrf
 
@@ -13,7 +13,7 @@
                         <label for="">Tên kỹ năng</label>
                         <input type="text" name="name" value="{{ old('name') }}" class=" form-control" placeholder="">
                         @error('name')
-                            <p class="text-danger">{{ $message }}</p>
+                            <p id="checkname" class="text-danger">{{ $message }}</p>
                         @enderror
                     </div>
                     <div class="row">
@@ -27,18 +27,14 @@
                                     <input type="text" name="short_name" value="{{ old('short_name') }}"
                                         class=" form-control" placeholder="">
                                     @error('short_name')
-                                        <p class="text-danger">{{ $message }}</p>
+                                        <p id="checkshort_name" class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="form-group mb-10">
-
                                     <label for="" class="form-label">Thuộc chuyên ngành</label>
-                                    <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
-                                        data-hide-search="false" tabindex="-1" aria-hidden="true" name="major_id"
-                                        value="{{ old('major_id') }}">
-                                        <option value="0">
-                                            Không có chuyên ngành
-                                        </option>
+                                    <select multiple class="form-select mb-2 select2-hidden-accessible"
+                                        data-control="select2" data-hide-search="false" tabindex="-1" aria-hidden="true"
+                                        name="major_id[]" value="{{ old('major_id') }}">
                                         @foreach ($dataMajor as $itemMajor)
                                             @php
                                                 $dash = '';
@@ -53,9 +49,8 @@
                                         @endforeach
                                     </select>
 
-                                    @error('major_id')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
+
+
                                 </div>
                             </div>
                             <div class="col-4">
@@ -96,10 +91,17 @@
 
 
 @endsection
-
 @section('page-script')
     <script src="assets/js/system/preview-file/previewImg.js"></script>
+    <script src="assets/js/system/skill/form.js"></script>
     <script>
+        rules.image_url = {
+            required: true,
+        };
+        messages.image_url = {
+            required: 'Chưa nhập trường này !',
+        };
         preview.showFile('#file-input', '#image-preview');
     </script>
+    <script src="assets/js/system/validate/validate.js"></script>
 @endsection
