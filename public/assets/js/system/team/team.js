@@ -3,8 +3,8 @@ const teamPage = {
         // tìm kiếm người dùng trong db và in ra màn  hình để  thêm vô mảng
         $(document).on('click', '#searchUser', function(e) {
             e.preventDefault();
-            let key = $('input#searchUserValue').val();
-
+            let key = $('input#searchUserValue').val().trim();
+            $('input#searchUserValue').val(key)
             if (key != '' && key.indexOf(' ') != 0) {
                 $.ajax({
                     type: "post",
@@ -18,7 +18,16 @@ const teamPage = {
                             var _html = ``;
                             $.map(response.payload, function(val, key) {
                                 _html += /*html*/ `
-                                    <li><a data-id_user='${val.id}' data-email_user='${val.email}' class="addUserArray dropdown-item py-5" href="javascript:void()">${val.email}</a></li>
+                                    <li style='cursor: pointer;' class='p-3 mb-2 '>
+                                        <div data-id_user='${val.id}' data-email_user='${val.email}'class="addUserArray d-flex justify-content-between align-items-center">
+                                            <div>
+                                                ${val.name}
+                                            </div>
+                                            <div>
+                                                ${val.email}
+                                            </div>
+                                        </div>
+                                    </li>
                                 `;
                             });
                             $('input#searchUserValue').val();
@@ -49,10 +58,8 @@ const teamPage = {
             } else {
                 //có
                 $('#mesArrayUser').text('')
-
                 $('#buttonTeam').prop("disabled", false);
             }
-            console.log(userArray);
         }
 
         function loadUserTeam(data) {
@@ -113,16 +120,6 @@ const teamPage = {
             checkUserArray(userArray)
         });
     },
-    // checkUserArray: function(userArray) {
-    //     if (userArray.length == 0) {
-    //         alert('chưa có')
-    //     } else {
-    //         alert(' có')
-    //     }
-    //     console.log(userArray);
-    // }
-
-
 }
 teamPage.userArray(userArray);
 teamPage.searchUserDB();

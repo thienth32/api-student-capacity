@@ -29,23 +29,23 @@ const messages = {
     description: {
         required: "Chưa nhập trường này !",
     },
-    register_deadline: {
-        required: "Chưa nhập trường này !",
-        min: "Thời gian kết thúc không được lớn hơn thời gian bắt đầu !",
-    },
     date_start: {
         required: "Chưa nhập trường này !",
-        min: "Thời gian bắt đầu không được nhỏ hơn thời gian hiện tại !",
+        min: "Không được nhỏ hơn thời gian hiện tại !",
         max: "Vui  lòng nhập thời gian bắt đầu nhỏ hơn thời gian kết thúc !",
+    },
+    register_deadline: {
+        required: "Chưa nhập trường này !",
+        min: "Không được nhỏ hơn thời gian hiện tại !",
     },
     start_register_time: {
         required: "Chưa  nhập trường này !",
-        min: "Thời gian bắt đầu không được nhỏ hơn thời gian hiện tại !",
-        max: "Vui  lòng nhập thời gian bắt đầu nhỏ hơn thời gian kết thúc!",
+        min: "Không được nhỏ hơn thời gian hiện tại !",
+        max: "Vui  lòng nhập thời gian đăng kí nhỏ hơn thời gian kết thúc cuộc thi ! ",
     },
     end_register_time: {
         required: "Chưa nhập trường này !",
-        min: "Thời gian kết thúc đăng kí phải lớn hơn thời gian hiện tại và thời gian đăng kí cuộc thi!",
+        min: "Thời gian kết thúc đăng kí phải từ thời gian bắt đầu đăng kí đến thời gian kết thúc cuộc thi !",
         max: "Thời gian kết thúc đăng kí phải nhỏ hơn thời gian bắt đầu cuộc thi!",
     },
 };

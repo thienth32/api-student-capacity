@@ -86,13 +86,19 @@
 @endsection
 @section('page-script')
     <script src="assets/js/system/preview-file/previewImg.js"></script>
+    <script src="{{ asset('assets/js/system/team/validateForm.js') }}"></script>
     <script>
+        rules.image = {
+            required: true,
+        }
+        messages.image = {
+            required: "Chưa nhập trường này !",
+        }
         preview.showFile('#file-input', '#image-preview');
         var userArray = [];
         var _token = "{{ csrf_token() }}"
         var urlSearch = "{{ route('admin.user.TeamUserSearch') }}"
     </script>
-    <script src="{{ asset('assets/js/system/team/validateForm.js') }}"></script>
     <script src="{{ asset('assets/js/system/validate/validate.js') }}"></script>
     <script src="{{ asset('assets/js/system/team/team.js') }}"></script>
 @endsection
