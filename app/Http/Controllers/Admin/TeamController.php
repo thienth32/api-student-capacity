@@ -202,7 +202,7 @@ class TeamController extends Controller
             $result = $this->checkUserDrugTeam($request->contest_id, [$user_id]);
             if (count($result['user-not-pass']) > 0) return response()->json([
                 'status' => false,
-                'payload' => 'Tài khoản này đã tham gia cuộc thi khác !'
+                'payload' => 'Tài khoản này đã tham gia đội thi khác !'
             ]);
             $today = Carbon::now()->toDateTimeString();
             // $user_id = $request->user_id;
@@ -228,7 +228,7 @@ class TeamController extends Controller
                     $teamModel->name = $request->name;
                     $teamModel->contest_id = $request->contest_id;
                     $teamModel->save();
-                    $teamModel->members()->syncWithoutDetaching($result['user-pass'], ['bot' => config('util.ACTIVE_STATUS')]);
+                    $teamModel->members()->attach($result['user-pass'], ['bot' => config('util.ACTIVE_STATUS')]);
                     DB::commit();
                     return response()->json([
                         'status' => true,
@@ -263,7 +263,7 @@ class TeamController extends Controller
             $result = $this->checkUserDrugTeam($request->contest_id, [$user_id]);
             if (count($result['user-not-pass']) > 0) return response()->json([
                 'status' => false,
-                'payload' => 'Tài khoản này đã tham gia cuộc thi khác !'
+                'payload' => 'Tài khoản này đã tham gia đội thi khác !'
             ]);
             $today = Carbon::now()->toDateTimeString();
             $user = User::find($user_id);
@@ -339,12 +339,73 @@ class TeamController extends Controller
     }
     public function checkUserTeamContest($id_contest)
     {
-
         $user_id = auth('sanctum')->user()->id;
         $result = $this->checkUserDrugTeam($id_contest, [$user_id]);
         if (count($result['user-not-pass']) > 0) return response()->json([
             'status' => false,
             'payload' => 'Tài khoản này đã tham gia cuộc thi khác !'
         ]);
+    }
+    public function addUserTeamContest(Request $request, $id_contest, $id_team)
+    {
+        $validate = validator::make(
+            $request->all(),
+            [
+                "user_id"    => "required",
+                "user_id.*"  => "required",
+            ],
+            [
+                'user_id.required' => 'Chưa nhập trường này !',
+            ]
+        );
+        if ($validate->fails()) return response()->json([
+            'status' => false,
+            'payload' => $validate->errors()
+        ]);
+        $team = Team::where('id', $id_team)->where('contest_id', $id_contest)->first();
+        if (is_null($team)) return response()->json([
+            'status' => false,
+            'payload' => 'Đội không tồn tại trong cuộc thi !'
+        ]);
+        $team->load('members');
+
+        foreach ($team->members as $userTeam) {
+            if ($userTeam->pivot->bot != 1) return response()->json([
+                'status' => false,
+                'payload' => 'Không đủ quyền để thêm thành viên !'
+            ]);
+        }
+        $result = $this->checkUserDrugTeam($id_contest, $request->user_id);
+        $team->members()->syncWithoutDetaching($result['user-pass']);
+        if (count($result['user-not-pass']) > 0) {
+            $user = User::select('name', 'email')->whereIn('id', $result['user-not-pass'])->get();
+            return response()->json([
+                'status' => true,
+                'payload' => 'Thêm thành viên thành công !',
+                'users' => $user
+            ]);
+        } else {
+            return response()->json([
+                'status' => true,
+                'payload' => 'Thêm thành viên thành công !',
+            ]);
+        }
+    }
+    public function userTeamSearch($id_contest)
+    {
+        try {
+            $usersNotTeam = User::where('status', config('util.ACTIVE_STATUS'))->pluck('id');
+            $usersNotTeam = $this->checkUserDrugTeam($id_contest, $usersNotTeam);
+            $users = User::select('id', 'name', 'email')
+                ->search(request('key') ?? null, ['name', 'email'])
+                ->whereIn('id', $usersNotTeam['user-pass'])
+                ->limit(5)->get();
+            return response()->json([
+                'status' => true,
+                'payload' => $users,
+            ]);
+        } catch (\Throwable $th) {
+            dd($th);
+        }
     }
 }

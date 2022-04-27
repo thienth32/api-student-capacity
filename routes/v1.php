@@ -37,7 +37,9 @@ Route::group(['prefix' => 'majors'], function () {
 
 
 Route::prefix('teams')->group(function () {
-    Route::post('add-team', [AdminTeamController::class, "apiAddTeam"])->name('client.api.add.team');
-    Route::put('edit-team/{team_id}', [AdminTeamController::class, "apiEditTeam"])->name('client.api.edit.team');
+    Route::post('add-team', [AdminTeamController::class, "apiAddTeam"]);
+    Route::put('edit-team/{team_id}', [AdminTeamController::class, "apiEditTeam"]);
     Route::get('check-user-team-contest/{id_contest}', [AdminTeamController::class, "checkUserTeamContest"]);
+    Route::post('add-user-team-contest/{id_contest}/{id_team}', [AdminTeamController::class, "addUserTeamContest"]);
+    Route::post('user-team-search/{id_contest}', [AdminTeamController::class, "userTeamSearch"]);
 });
