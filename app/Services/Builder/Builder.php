@@ -20,7 +20,7 @@ class Builder extends  EloquentBuilder
     public function registration_date($column = null, $registration_date = null, $time = null)
     {
         if ($registration_date == null) return $this;
-        return $this->whereDate($column, ">", $time)->whereDate('start_register_time',"<",$time);
+        return $this->whereDate($column, ">", $time)->whereDate('start_register_time', "<", $time);
     }
 
 
