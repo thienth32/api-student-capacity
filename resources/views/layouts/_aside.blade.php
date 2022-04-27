@@ -85,7 +85,7 @@
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
-                            <span class="menu-title">Danh sách đội Thi</span>
+                            <span class="menu-title">Danh sách đội thi</span>
                         </a>
                     </div>
                     <div class="menu-item">
@@ -93,7 +93,7 @@
                             <span class="menu-bullet">
                                 <span class="bullet bullet-dot"></span>
                             </span>
-                            <span class="menu-title">Thêm mới đội Thi</span>
+                            <span class="menu-title">Thêm mới đội thi</span>
                         </a>
                     </div>
 

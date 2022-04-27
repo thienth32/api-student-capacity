@@ -48,8 +48,12 @@ trait TTeamContest
                 ]
             );
         }
-        if ($validator->fails() || !($request->has('user_id'))) {
-            return redirect()->back()->withErrors($validator)->with('error', 'Chưa có thành viên trong đội')->withInput($request->input());
+        if ($validator->fails()) {
+            if (!($request->has('user_id'))) {
+                return redirect()->back()->withErrors($validator)->with('error', 'Chưa có thành viên trong đội !!')->withInput($request->input());
+            } else {
+                return redirect()->back()->withErrors($validator)->withInput($request->input());
+            }
         }
         DB::beginTransaction();
         try {
@@ -78,7 +82,7 @@ trait TTeamContest
 
     function editTeamContest($request, $id_team, $contest_id = null, $backViewSuccess, $backViewFailure)
     {
-        // dd($request->all());
+
         $validator = Validator::make(
             $request->all(),
             [
@@ -93,8 +97,12 @@ trait TTeamContest
                 'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
             ]
         );
-        if ($validator->fails() || !($request->has('user_id'))) {
-            return redirect()->back()->withErrors($validator)->with('error', 'Chưa có thành viên trong đội')->withInput($request->input());
+        if ($validator->fails()) {
+            if (!($request->has('user_id'))) {
+                return redirect()->back()->withErrors($validator)->with('error', 'Chưa có thành viên trong đội !!')->withInput($request->input());
+            } else {
+                return redirect()->back()->withErrors($validator)->withInput($request->input());
+            }
         }
         DB::beginTransaction();
         try {

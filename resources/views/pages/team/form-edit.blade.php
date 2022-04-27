@@ -66,7 +66,7 @@
                         <div class="col-lg-4">
                             <div class="form-group ">
                                 <label for="" class="form-label">Ảnh cuộc thi</label>
-                                <input value="{{ old('image') }}" name="image" type='file' id="file-input"
+                                <input value="{{ old('image', $team->image) }}" name="image" type='file' id="file-input"
                                     accept=".png, .jpg, .jpeg" class="form-control" />
                                 @error('image')
                                     <p class="text-danger">{{ $message }}</p>
@@ -88,11 +88,13 @@
 
 @section('page-script')
     <script src="assets/js/system/preview-file/previewImg.js"></script>
+    <script src="{{ asset('assets/js/system/team/validateForm.js') }}"></script>
     <script>
         preview.showFile('#file-input', '#image-preview');
         var userArray = @json($userArray);
         var _token = "{{ csrf_token() }}"
         var urlSearch = "{{ route('admin.user.TeamUserSearch') }}"
     </script>
+    <script src="{{ asset('assets/js/system/validate/validate.js') }}"></script>
     <script src="{{ asset('assets/js/system/team/team.js') }}"></script>
 @endsection
