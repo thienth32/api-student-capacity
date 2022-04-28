@@ -62,6 +62,7 @@
                                 <th>#</th>
                                 <th>Ảnh</th>
                                 <th>Tên đội</th>
+                                <th>Bài làm</th>
                                 <th>Thao tác</th>
                             </tr>
                         </thead>
@@ -76,6 +77,9 @@
                                             src="{{ Storage::disk('google')->has($team->image)? Storage::disk('google')->url($team->image): 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
                                             alt=""></td>
                                     <td>{{ $team->name }}</td>
+                                    <td><a class="badge bg-primary p-3" href="{{ route('admin.round.detail.team.takeExam', ['id' => $round->id, 'teamId' => $team->id]) }}"> Xem thông tin...
+                                        </a>
+                                    </td>
                                     <td>
                                         <a href="{{ route('admin.round.detail.team.detach', ['id' => $round->id, 'team_id' => $team->id]) }}"
                                             class="btn btn-danger deleteTeams"><i class="fas fa-trash-alt"></i></a>
