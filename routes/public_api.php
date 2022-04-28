@@ -8,11 +8,10 @@ use App\Http\Controllers\Admin\MajorController as AdminMajorController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\RoundController;
 use App\Http\Controllers\Admin\SliderController;
-use App\Http\Controllers\Admin\TeamController as AdminTeamController;
 use App\Http\Controllers\Admin\SponsorController as AdminSponsorController;
+use App\Http\Controllers\Admin\TeamController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
-
-
+use App\Models\Team;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,7 +30,10 @@ Route::get('users', [AdminUserController::class, 'index']); // danh sách user
 
 Route::get('company', [AdminCompanyController::class, 'listCompany']); // Doanh nghiệp
 
-
+Route::prefix('team')->group(function () {
+    // Route::get('', [AdminContestController::class, 'apiIndex'])->name('contest.api.index');
+    Route::get('{id}', [TeamController::class, 'apiShow'])->name('team.api.show');
+});
 Route::prefix('contests')->group(function () {
     Route::get('', [AdminContestController::class, 'apiIndex'])->name('contest.api.index');
     Route::get('{id}', [AdminContestController::class, 'apiShow'])->name('contest.api.show');

@@ -173,7 +173,21 @@ class TeamController extends Controller
         }
     }
 
-
+    // chi tiết đội thi phía client
+    public function apiShow($id)
+    {
+        try {
+            $team = Team::find($id);
+            $team->load('members');
+            $team->load('contest');
+            return response()->json([
+                'status' => true,
+                'payload' => $team,
+            ]);
+        } catch (\Throwable $th) {
+            dd($th);
+        }
+    }
     // Add team phía client
     public function apiAddTeam(Request $request)
     {

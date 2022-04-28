@@ -9,7 +9,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class RoundTeam extends Model
 {
     use SoftDeletes;
-    protected $table='round_teams';
-    protected $fillable=['team_id','round_id'];
+    protected $table = 'round_teams';
+    protected $fillable = ['team_id', 'round_id'];
     use HasFactory;
+    public function takeExam()
+    {
+        return $this->hasOne(TakeExams::class, 'round_team_id')->with('exam');
+    }
 }
