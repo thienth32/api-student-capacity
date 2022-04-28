@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\CompanyController as AdminCompanyController;
 use App\Http\Controllers\Admin\ContestController as AdminContestController;
 use App\Http\Controllers\Admin\EnterpriseController;
+use App\Http\Controllers\Admin\ExamController;
 use App\Http\Controllers\Admin\MajorController as AdminMajorController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\RoundController;
@@ -50,4 +51,9 @@ Route::prefix('sliders')->group(function () {
 
 Route::prefix('enterprise')->group(function () {
     Route::get('', [EnterpriseController::class, 'apiIndex'])->name('enterprise.api.index');
+});
+
+
+Route::prefix('exam')->group(function () {
+    Route::put('{id}', [ExamController::class, 'apiUpdate']);
 });
