@@ -44,7 +44,7 @@ class ContestController extends Controller
             $data = $this->contest::when(request()->has('contest_soft_delete'), function ($q) {
                 return $q->onlyTrashed();
             })
-                ->when(auth()->user()->hasRole('judge'), function ($q) {
+                ->when(auth()->check() && auth()->user()->hasRole('judge'), function ($q) {
                     return $q->whereIn('id', array_unique(Judge::where('user_id', auth()->user()->id)->pluck('contest_id')->toArray()));
                 })
                 ->search(request('q') ?? null, ['name', 'description'])
