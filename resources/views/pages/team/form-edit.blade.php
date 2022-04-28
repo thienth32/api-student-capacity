@@ -65,7 +65,7 @@
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group ">
-                                <label for="" class="form-label">Ảnh cuộc thi</label>
+                                <label for="" class="form-label">Ảnh đội thi</label>
                                 <input value="{{ old('image', $team->image) }}" name="image" type='file' id="file-input"
                                     accept=".png, .jpg, .jpeg" class="form-control" />
                                 @error('image')
