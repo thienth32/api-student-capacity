@@ -191,26 +191,26 @@ class TeamController extends Controller
     // Add team phía client
     public function apiAddTeam(Request $request)
     {
-
-        $validate = validator::make(
-            $request->all(),
-            [
-                'contest_id' => 'required',
-                'name' => 'required|unique:teams',
-                'image' =>  'mimes:jpeg,png,jpg|max:10000',
-            ],
-            [
-                'contest_id.required' => 'Chưa nhập trường này !',
-                'name.required' => 'Chưa nhập trường này !',
-                'name.unique' => 'Tên đã tồn tại !',
-                'image.mimes' => 'Sai định dạng !',
-                'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
-            ]
-        );
-        if ($validate->fails()) return response()->json([
-            'status' => false,
-            'payload' => $validate->errors()
-        ]);
+dd($request->all());
+        // $validate = validator::make(
+        //     $request->all(),
+        //     [
+        //         'contest_id' => 'required',
+        //         'name' => 'required|unique:teams',
+        //         'image' =>  'mimes:jpeg,png,jpg|max:10000',
+        //     ],
+        //     [
+        //         'contest_id.required' => 'Chưa nhập trường này !',
+        //         'name.required' => 'Chưa nhập trường này !',
+        //         'name.unique' => 'Tên đã tồn tại !',
+        //         'image.mimes' => 'Sai định dạng !',
+        //         'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
+        //     ]
+        // );
+        // if ($validate->fails()) return response()->json([
+        //     'status' => false,
+        //     'payload' => $validate->errors()
+        // ]);
         DB::beginTransaction();
         try {
             $user_id = auth('sanctum')->user()->id;
@@ -244,10 +244,12 @@ class TeamController extends Controller
                     $teamModel->contest_id = $request->contest_id;
                     $teamModel->save();
                     $teamModel->members()->attach($result['user-pass'], ['bot' => config('util.ACTIVE_STATUS')]);
+                    $teamModelId = $teamModel->id; 
                     DB::commit();
                     return response()->json([
                         'status' => true,
-                        'payload' => 'Tạo đội thành công !'
+                        'payload' => 'Tạo đội thành công !',
+                        'id_team' => $teamModelId,
                     ]);
                 } else {
                     return response()->json([

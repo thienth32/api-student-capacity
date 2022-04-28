@@ -177,6 +177,4 @@ Route::prefix('exam')->group(function () {
     Route::post('store', [ExamController::class, 'store'])->name('admin.exam.store');
     Route::put('{id}', [ExamController::class, 'apiUpdate']);
 });
-Route::group([
-    'middleware' => 'role_admin'
-], function () {
+
