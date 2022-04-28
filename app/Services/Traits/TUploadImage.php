@@ -20,7 +20,7 @@ trait TUploadImage
             // });
             // return  $img;
             // $file =  Image::make($file->getRealPath())->resize(50, 50)->stream();
-            $nameFile = uniqid() . '-' . time() . '_img.' . $file->getClientOriginalExtension();
+            $nameFile = uniqid() . '-' . time() . '.' . $file->getClientOriginalExtension();
 
             Storage::disk('google')->putFileAs('', $file, $nameFile);
             return $nameFile;

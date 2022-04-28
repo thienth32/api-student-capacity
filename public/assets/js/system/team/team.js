@@ -19,7 +19,7 @@ const teamPage = {
                             $.map(response.payload, function(val, key) {
                                 _html += /*html*/ `
                                     <li style='cursor: pointer;' class='p-3 mb-2 '>
-                                        <div data-id_user='${val.id}' data-email_user='${val.email}'class="addUserArray d-flex justify-content-between align-items-center">
+                                        <div data-id_user='${val.id}'data-name_user='${val.name}' data-email_user='${val.email}'class="addUserArray d-flex justify-content-between align-items-center">
                                             <div>
                                                 ${val.name}
                                             </div>
@@ -57,23 +57,31 @@ const teamPage = {
                 $('#buttonTeam').prop("disabled", true);
             } else {
                 //có
+                // userArray.reverse();
                 $('#mesArrayUser').text('')
                 $('#buttonTeam').prop("disabled", false);
             }
         }
 
         function loadUserTeam(data) {
-            checkUserArray(data)
+            data.reverse();
+            checkUserArray(data);
             var _html = ``;
+            _html += /*html*/ `
+                <table class="table table-row-bordered table-row-gray-300 table-hover ">
+                <tbody>
+            `;
             $.map(data, function(val, key) {
                 _html += /*html*/ `
-                    <li class="list-group-item py-4">
-                        <div class='d-flex justify-content-between align-items-center'>
-                            <span>
-                                ${val.email_user} 
-                                <input hidden type="text" value="${val.id_user}" class="user_id"  name="user_id[]" >
-                            </span>
-                            <button data-idUser='${key}' class="deleteUserArray btn btn-danger"    type="button" >
+                    <tr >
+                        <td>${key +1}</td>
+                        <td>${val.email_user}</td>
+                        <td>
+                            ${val.name_user}
+                            <input hidden type="text" value="${val.id_user}" class="user_id"  name="user_id[]" >
+                        </td>
+                        <td>
+                            <button data-idUser='${key}' class="deleteUserArray btn btn-danger" type="button" >
                                 <span class="svg-icon svg-icon-2x svg-icon-primary "><!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Trash.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                     <rect x="0" y="0" width="24" height="24"/>
@@ -82,10 +90,14 @@ const teamPage = {
                                 </g>
                                 </svg><!--end::Svg Icon--></span>    
                             </button>
-                        </div>
-                    </li>
+                        </td>     
+                    </tr>
                 `;
             });
+            _html += /*html*/ `
+                </tbody>
+                </table>
+            `;
             $('#resultArrayUser').html(_html);
         }
 
@@ -95,6 +107,7 @@ const teamPage = {
             e.preventDefault();
             let email = $(this).attr('data-email_user');
             let id = $(this).attr('data-id_user');
+            let name = $(this).attr('data-name_user');
 
             var check = userArray.filter(function(user) {
                 return user.id_user == id;
@@ -104,7 +117,8 @@ const teamPage = {
             } else {
                 userArray.push({
                     'id_user': id,
-                    'email_user': email
+                    'email_user': email,
+                    'name_user': name
                 });
             }
             loadUserTeam(userArray);
@@ -121,5 +135,6 @@ const teamPage = {
         });
     },
 }
+
 teamPage.userArray(userArray);
 teamPage.searchUserDB();
