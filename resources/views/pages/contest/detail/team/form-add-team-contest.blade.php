@@ -1,6 +1,6 @@
 @extends('layouts.main')
-@section('title', 'Thêm đội thi')
-@section('page-title', 'Thêm đội thi')
+@section('title', 'Thêm đội thi trong cuộc thi')
+@section('page-title', 'Thêm đội thi trong cuộc thi')
 @section('content')
     <div class="card card-flush h-lg-100 p-10">
         <div class="row mb-10">
@@ -42,6 +42,12 @@
                                 @error('name')
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
+                                @if (session()->has('errorName'))
+                                    <p class="text-danger">{{ session()->get('errorName') }}</p>
+                                    @php
+                                        Session::forget('errorName');
+                                    @endphp
+                                @endif
                             </div>
                             {{-- <div class="form-group mb-10">
                                 <label for="" class="form-label">Thuộc cuộc thi</label>
@@ -69,12 +75,7 @@
                                 </div>
 
 
-                                @if (session()->has('error'))
-                                    <p class="text-danger">{{ session()->get('error') }}</p>
-                                    @php
-                                        Session::forget('error');
-                                    @endphp
-                                @endif
+
                             </div>
                             <div class="row">
                                 <div class="col-lg-12">
@@ -83,7 +84,14 @@
                                         <h4>Danh sách chờ</h4>
                                         <div id="resultArrayUser" class=" mt-4">
                                         </div>
-                                        <p style="color: red" id="mesArrayUser"></p>
+                                        <p class="text-danger" id="mesArrayUser">
+                                            @if (session()->has('error'))
+                                                {{ session()->get('error') }}
+                                                @php
+                                                    Session::forget('error');
+                                                @endphp
+                                            @endif
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -112,9 +120,16 @@
             </div>
         </div>
     </div>
+    @if (session()->has('userArray'))
+        @php
+            $userArray = session()->get('userArray');
+            Session::forget('userArray');
+        @endphp
+    @endif
 @endsection
 @section('page-script')
     <script src="assets/js/system/preview-file/previewImg.js"></script>
+    <script src="{{ asset('assets/js/system/team/validateForm.js') }}"></script>
     <script>
         rules.image = {
             required: true,
@@ -123,11 +138,12 @@
             required: "Chưa nhập trường này !",
         }
         preview.showFile('#file-input', '#image-preview');
-        var userArray = [];
+        var userArray = @json($userArray ?? []);
+        console.log(userArray);
+
         var _token = "{{ csrf_token() }}"
-        var urlSearch = "{{ route('admin.user.TeamUserSearch') }}"
+        var urlSearch = "{{ route('admin.user.team.search', ['id_contest' => $contest->id]) }}"
     </script>
-    <script src="{{ asset('assets/js/system/team/validateForm.js') }}"></script>
     <script src="{{ asset('assets/js/system/validate/validate.js') }}"></script>
     <script src="{{ asset('assets/js/system/team/team.js') }}"></script>
 @endsection

@@ -2,7 +2,9 @@
 
 namespace App\Services\Traits;
 
+use App\Models\Contest;
 use App\Models\Team;
+use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -14,18 +16,18 @@ trait TTeamContest
     use TCheckUserDrugTeam;
     function addTeamContest($request, $contest_id = null, $backViewSuccess, $backViewFailure)
     {
+
         if ($contest_id == null) {
             $validator = Validator::make(
                 $request->all(),
                 [
-                    'name' => 'required|unique:teams|max:255',
+                    'name' => 'required|max:255',
                     'image' => 'required|max:10000',
                     'contest_id' => 'required|numeric',
                 ],
                 [
                     'name.required' => 'Chưa nhập trường này !',
                     'name.max' => 'Độ dài kí tự không phù hợp !',
-                    'name.unique' => 'Tên đã tồn tại !',
                     'image.required' => 'Chưa nhập trường này !',
                     'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
                     'contest_id.required' => 'Chưa nhập trường này !',
@@ -36,25 +38,38 @@ trait TTeamContest
             $validator = Validator::make(
                 $request->all(),
                 [
-                    'name' => 'required|unique:teams|max:255',
+                    'name' => 'required|max:255',
                     'image' => 'required|max:10000',
                 ],
                 [
                     'name.required' => 'Chưa nhập trường này !',
                     'name.max' => 'Độ dài kí tự không phù hợp !',
-                    'name.unique' => 'Tên đã tồn tại !',
                     'image.required' => 'Chưa nhập trường này !',
                     'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
                 ]
             );
         }
-        if ($validator->fails()) {
-            if (!($request->has('user_id'))) {
+        if (isset($request->user_id)) {
+            $userArr = User::select('id as id_user', 'name as name_user', 'email as email_user')->whereIn('id', $request->user_id)->get();
+        }
+        if ($validator->fails() || !isset($request->user_id)) {
+            if (!isset($request->user_id)) {
                 return redirect()->back()->withErrors($validator)->with('error', 'Chưa có thành viên trong đội !!')->withInput($request->input());
             } else {
-                return redirect()->back()->withErrors($validator)->withInput($request->input());
+                return redirect()->back()->with('userArray', $userArr)->withErrors($validator)->withInput($request->input());
             }
         }
+        $teamCheck = Team::where(
+            'contest_id',
+            ($contest_id == null ? $request->contest_id : $contest_id)
+        )->where('name', trim($request->name))->get();
+        if (count($teamCheck) > 0) return
+            redirect()
+            ->back()
+            ->with('errorName', 'Tên này đã tồn tại trong cuộc thi !!')
+            ->with('userArray', $userArr)
+            ->withInput($request->input());
+        // dd('Dừng');
         DB::beginTransaction();
         try {
             $result = $this->checkUserDrugTeam(($contest_id == null ? $request->contest_id : $contest_id), $request->user_id);
@@ -71,11 +86,11 @@ trait TTeamContest
             DB::commit();
             return $backViewSuccess;
         } catch (Exception $ex) {
+            Db::rollBack();
             if ($request->hasFile('image')) {
                 $fileImage = $request->file('image');
                 if (Storage::disk('google')->has($fileImage)) Storage::disk('google')->delete($filename);
             }
-            Db::rollBack();
             return $backViewFailure;
         }
     }
@@ -86,23 +101,38 @@ trait TTeamContest
         $validator = Validator::make(
             $request->all(),
             [
-                'name' => 'required|unique:teams,name,' . $id_team . '|max:255',
+                'name' => 'required|max:255',
                 'image' => 'mimes:jpeg,png,jpg|max:10000',
             ],
             [
                 'name.required' => 'Chưa nhập trường này !',
                 'name.max' => 'Độ dài kí tự không phù hợp !',
-                'name.unique' => 'Tên đã tồn tại !',
+
                 'name.mimes' => 'Sai định dạng ảnh !',
                 'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
             ]
         );
-        if ($validator->fails()) {
-            if (!($request->has('user_id'))) {
+        if (isset($request->user_id)) {
+            $userArr = User::select('id as id_user', 'name as name_user', 'email as email_user')->whereIn('id', $request->user_id)->get();
+        }
+        if ($validator->fails() || !isset($request->user_id)) {
+            if (!isset($request->user_id)) {
                 return redirect()->back()->withErrors($validator)->with('error', 'Chưa có thành viên trong đội !!')->withInput($request->input());
             } else {
-                return redirect()->back()->withErrors($validator)->withInput($request->input());
+                return redirect()->back()->with('userArray', $userArr)->withErrors($validator)->withInput($request->input());
             }
+        }
+        $teamChecks = Team::where(
+            'contest_id',
+            ($contest_id == null ? $request->contest_id : $contest_id)
+        )->where('name', trim($request->name))->get();
+        foreach ($teamChecks as $teamCheck) {
+            if ($teamCheck->id != $id_team) return
+                redirect()
+                ->back()
+                ->with('errorName', 'Tên này đã tồn tại trong cuộc thi !!')
+                ->with('userArray', $userArr)
+                ->withInput($request->input());
         }
         DB::beginTransaction();
         try {

@@ -125,7 +125,8 @@ class TeamController extends Controller
                 if ($user->id == $me->id) {
                     array_push($userArray, [
                         'id_user' => $user->id,
-                        'email_user' => $user->email
+                        'email_user' => $user->email,
+                        'name_user' => $user->name
                     ]);
                 }
             }

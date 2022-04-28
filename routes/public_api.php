@@ -52,8 +52,3 @@ Route::prefix('sliders')->group(function () {
 Route::prefix('enterprise')->group(function () {
     Route::get('', [EnterpriseController::class, 'apiIndex'])->name('enterprise.api.index');
 });
-
-
-Route::prefix('exam')->group(function () {
-    Route::put('{id}', [ExamController::class, 'apiUpdate']);
-});
