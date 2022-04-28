@@ -1,6 +1,6 @@
 @extends('layouts.main')
-@section('title', 'Chỉnh sửa đội thi')
-@section('page-title', 'Chỉnh sửa đội thi')
+@section('title', 'Chỉnh sửa đội thi : ' . $team->name)
+@section('page-title', 'Chỉnh sửa đội thi : ' . $team->name)
 @section('content')
     <div class="card card-flush h-lg-100 p-10">
         <div class="row mb-10">
@@ -44,6 +44,12 @@
                                 @error('name')
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
+                                @if (session()->has('errorName'))
+                                    <p class="text-danger">{{ session()->get('errorName') }}</p>
+                                    @php
+                                        Session::forget('errorName');
+                                    @endphp
+                                @endif
                             </div>
 
                             <div class="form-group list-group mb-5">
@@ -76,7 +82,7 @@
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group ">
-                                <label for="" class="form-label">Ảnh cuộc thi</label>
+                                <label for="" class="form-label">Ảnh đội thi</label>
                                 <input value="{{ old('image') }}" name="image" type='file' id="file-input"
                                     accept=".png, .jpg, .jpeg" class="form-control" />
                                 @error('image')
@@ -98,13 +104,19 @@
     </div>
 @endsection
 @section('page-script')
+    @if (session()->has('userArray'))
+        @php
+            $userArray = session()->get('userArray');
+            Session::forget('userArray');
+        @endphp
+    @endif
     <script src="assets/js/system/preview-file/previewImg.js"></script>
     <script>
         preview.showFile('#file-input', '#image-preview');
         var userArray = @json($userArray);
 
         var _token = "{{ csrf_token() }}"
-        var urlSearch = "{{ route('admin.user.TeamUserSearch') }}"
+        var urlSearch = "{{ route('admin.user.team.search', ['id_contest' => $contest->id]) }}"
     </script>
     <script src="{{ asset('assets/js/system/team/validateForm.js') }}"></script>
     <script src="{{ asset('assets/js/system/validate/validate.js') }}"></script>

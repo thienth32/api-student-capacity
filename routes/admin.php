@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\RoundController;
 use App\Http\Controllers\Admin\ContestController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EnterpriseController;
+use App\Http\Controllers\Admin\ExamController;
 use App\Http\Controllers\Admin\JudgesController;
 use App\Http\Controllers\Admin\MajorController;
 use App\Http\Controllers\Admin\SliderController;
@@ -60,6 +61,7 @@ Route::prefix('teams')->group(function () {
 
 Route::prefix('users')->group(function () {
     Route::post('team-user-search', [UserController::class, 'TeamUserSearch'])->name('admin.user.TeamUserSearch');
+    Route::post('user-team-search/{id_contest}', [TeamController::class, "userTeamSearch"])->name('admin.user.team.search');
 });
 
 
@@ -165,3 +167,10 @@ Route::prefix('skill')->group(function () {
     Route::get('skill-soft-delete/{id}/backup', [SkillController::class, 'backUpSkill'])->name('admin.skill.soft.backup');
     Route::get('skill-soft-delete/{id}/delete', [SkillController::class, 'delete'])->name('admin.skill.soft.destroy');
 });
+Route::prefix('exam')->group(function () {
+    Route::post('store', [ExamController::class, 'store'])->name('admin.exam.store');
+    Route::put('{id}', [ExamController::class, 'apiUpdate']);
+});
+Route::group([
+    'middleware' => 'role_admin'
+], function () {

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\CompanyController as AdminCompanyController;
 use App\Http\Controllers\Admin\ContestController as AdminContestController;
 use App\Http\Controllers\Admin\EnterpriseController;
+use App\Http\Controllers\Admin\ExamController;
 use App\Http\Controllers\Admin\MajorController as AdminMajorController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\RoundController;
@@ -59,4 +60,8 @@ Route::get('{slug}', [AdminMajorController::class, 'apiShow'])->name('major.api.
 
 Route::prefix('enterprise')->group(function () {
     Route::get('', [EnterpriseController::class, 'apiIndex'])->name('enterprise.api.index');
+});
+Route::prefix('exam')->group(function () {
+    Route::post('store', [ExamController::class, 'store'])->name('exam.api.store');
+    Route::get('download', [ExamController::class, 'download'])->name('exam.api.download');
 });

@@ -16,3 +16,7 @@ label#img-error {
 #img_contain>img {
     width: 100%;
 }
+
+#resultUserSearch li:hover {
+    background-color: rgb(175, 175, 175);
+}

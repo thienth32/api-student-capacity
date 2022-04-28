@@ -16,14 +16,20 @@
                                 @error('name')
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
+                                @if (session()->has('errorName'))
+                                    <p class="text-danger">{{ session()->get('errorName') }}</p>
+                                    @php
+                                        Session::forget('errorName');
+                                    @endphp
+                                @endif
                             </div>
                             <div class="form-group mb-10">
                                 <label for="" class="form-label">Thuộc cuộc thi</label>
                                 <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
-                                    data-hide-search="false" tabindex="-1" aria-hidden="true" name="contest_id"
-                                    value="{{ old('contest_id') }}">
+                                    data-hide-search="false" tabindex="-1" aria-hidden="true" name="contest_id">
                                     @foreach ($contests as $contest)
-                                        <option value="{{ $contest->id }}">
+                                        <option {{ old('contest_id') == $contest->id ? 'selected' : '' }}
+                                            value="{{ $contest->id }}">
                                             {{ $contest->name }}</option>
                                     @endforeach
                                 </select>
@@ -41,29 +47,29 @@
                                     <ul id="resultUserSearch" class="dropdown-menu dropdown-menu-end w-500px">
                                     </ul>
                                 </div>
-
-
-                                @if (session()->has('error'))
-                                    <p class="text-danger">{{ session()->get('error') }}</p>
-                                    @php
-                                        Session::forget('error');
-                                    @endphp
-                                @endif
                             </div>
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="listUser">
                                         <h4>Danh sách chờ</h4>
                                         <div id="resultArrayUser" class=" mt-4">
+
                                         </div>
-                                        <p style="color: red" id="mesArrayUser"></p>
+                                        <p class="text-danger" id="mesArrayUser">
+                                            @if (session()->has('error'))
+                                                {{ session()->get('error') }}
+                                                @php
+                                                    Session::forget('error');
+                                                @endphp
+                                            @endif
+                                        </p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group ">
-                                <label for="" class="form-label">Ảnh cuộc thi</label>
+                                <label for="" class="form-label">Ảnh đội thi</label>
                                 <input value="{{ old('image') }}" name="image" type='file' id="file-input"
                                     accept=".png, .jpg, .jpeg" class="form-control" />
                                 @error('image')
@@ -83,6 +89,14 @@
             </div>
         </div>
     </div>
+
+    @if (session()->has('userArray'))
+        @php
+            $userArray = session()->get('userArray');
+            Session::forget('userArray');
+        @endphp
+    @endif
+
 @endsection
 @section('page-script')
     <script src="assets/js/system/preview-file/previewImg.js"></script>
@@ -95,7 +109,7 @@
             required: "Chưa nhập trường này !",
         }
         preview.showFile('#file-input', '#image-preview');
-        var userArray = [];
+        var userArray = @json($userArray ?? []);
         var _token = "{{ csrf_token() }}"
         var urlSearch = "{{ route('admin.user.TeamUserSearch') }}"
     </script>
