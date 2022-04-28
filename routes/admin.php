@@ -171,6 +171,9 @@ Route::prefix('exam')->group(function () {
     Route::post('store', [ExamController::class, 'store'])->name('admin.exam.store');
     Route::put('{id}', [ExamController::class, 'apiUpdate']);
 });
+
+// Middleware phân quyền ban giám khảo chấm thi , khi nào gộp code sẽ chỉnh sửa lại route để phân quyền route
 Route::group([
     'middleware' => 'role_admin'
 ], function () {
+});
