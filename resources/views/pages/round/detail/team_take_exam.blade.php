@@ -74,6 +74,7 @@
                                     <th>Trạng thái</th>
                                     <th>Thang điểm</th>
                                     <th>Ghi chú</th>
+                                    <th>Chấm bài </th>
 
                                 </tr>
                             </thead>
@@ -104,6 +105,11 @@
                                     </td>
                                     <td>{{ $takeExam->final_point }}</td>
                                     <td>{{ $takeExam->mark_comment }}</td>
+                                    <td>
+                                        <a
+                                            href="{{ route('admin.round.detail.team.make.exam', ['id' => $round->id, 'teamId' => $team->id]) }}">Chấm
+                                            bài</a>
+                                    </td>
                                 </tr>
 
                             </tbody>
@@ -120,7 +126,7 @@
 @endsection
 @section('page-script')
     <script>
-        var URL = window.location.href;
+        var URL = '{{ url()->current() }}' + '?';
         var userArray = [];
         var _token = "{{ csrf_token() }}"
     </script>

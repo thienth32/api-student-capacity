@@ -16,4 +16,8 @@ class TakeExams extends Model
     {
         return $this->belongsTo(Exams::class, 'exam_id');
     }
+    public function evaluations()
+    {
+        return $this->hasMany(Evaluation::class, 'exams_team_id');
+    }
 }

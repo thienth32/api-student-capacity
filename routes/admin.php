@@ -40,8 +40,11 @@ Route::prefix('rounds')->group(function () {
             Route::post('attach', [RoundController::class, 'attachTeam'])->name('admin.round.detail.team.attach');
             Route::post('sync', [RoundController::class, 'syncTeam'])->name('admin.round.detail.team.sync');
             Route::get('detach/{team_id}', [RoundController::class, 'detachTeam'])->name('admin.round.detail.team.detach');
-            Route::prefix('take_exam')->group(function () {
+            Route::prefix('take-exam')->group(function () {
                 Route::get('{teamId}', [RoundController::class, 'roundDetailTeamTakeExam'])->name('admin.round.detail.team.takeExam');
+                Route::get('{teamId}/make', [RoundController::class, 'roundDetailTeamMakeExam'])->name('admin.round.detail.team.make.exam');
+                Route::post('{teamId}/make', [RoundController::class, 'roundDetailFinalTeamMakeExam'])->name('admin.round.detail.team.final.make.exam');
+                Route::put('{teamId}/make', [RoundController::class, 'roundDetailUpdateTeamMakeExam'])->name('admin.round.detail.team.update.make.exam');
                 // Route::post('attach', [RoundController::class, 'attachTeam'])->name('admin.round.detail.team.attach');
                 // Route::post('sync', [RoundController::class, 'syncTeam'])->name('admin.round.detail.team.sync');
                 // Route::get('detach/{team_id}', [RoundController::class, 'detachTeam'])->name('admin.round.detail.team.detach');

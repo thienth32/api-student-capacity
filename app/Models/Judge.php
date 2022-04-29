@@ -20,6 +20,11 @@ class Judge extends Model
         return $this->belongsToMany(Round::class, 'judges_rounds', 'judge_id', 'round_id');
     }
 
+    public function judge_rounds()
+    {
+        return $this->hasMany(Judges_round::class, 'judge_id');
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');

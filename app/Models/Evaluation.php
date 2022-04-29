@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Evaluation extends Model
 {
     use SoftDeletes;
-    protected $table='evaluations';
-    protected $fillable=['ponit','exams_team_id','judge_round_id'];
+    protected $table = 'evaluations';
+    protected $guarded = [];
     use HasFactory;
 }
