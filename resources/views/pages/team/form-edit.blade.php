@@ -18,6 +18,12 @@
                                 @error('name')
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
+                                @if (session()->has('errorName'))
+                                    <p class="text-danger">{{ session()->get('errorName') }}</p>
+                                    @php
+                                        Session::forget('errorName');
+                                    @endphp
+                                @endif
                             </div>
                             <div class="form-group mb-10">
                                 <label for="" class="form-label">Thuộc cuộc thi</label>
@@ -45,12 +51,7 @@
                                     <ul id="resultUserSearch" class="dropdown-menu dropdown-menu-end w-500px">
                                     </ul>
                                 </div>
-                                @if (session()->has('error'))
-                                    <p class="text-danger">{{ session()->get('error') }}</p>
-                                    @php
-                                        Session::forget('error');
-                                    @endphp
-                                @endif
+
                             </div>
                             <div class="row">
                                 <div class="col-lg-12">
@@ -58,7 +59,14 @@
                                         <h4>Danh sách chờ</h4>
                                         <div id="resultArrayUser" class=" mt-4">
                                         </div>
-                                        <p style="color: red" id="mesArrayUser"></p>
+                                        <p class="text-danger" id="mesArrayUser">
+                                            @if (session()->has('error'))
+                                                {{ session()->get('error') }}
+                                                @php
+                                                    Session::forget('error');
+                                                @endphp
+                                            @endif
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -84,6 +92,12 @@
             </div>
         </div>
     </div>
+    @if (session()->has('userArray'))
+        @php
+            $userArray = session()->get('userArray');
+            Session::forget('userArray');
+        @endphp
+    @endif
 @endsection
 
 @section('page-script')
@@ -91,7 +105,7 @@
     <script src="{{ asset('assets/js/system/team/validateForm.js') }}"></script>
     <script>
         preview.showFile('#file-input', '#image-preview');
-        var userArray = @json($userArray);
+        var userArray = @json($userArray ?? []);
         var _token = "{{ csrf_token() }}"
         var urlSearch = "{{ route('admin.user.TeamUserSearch') }}"
     </script>

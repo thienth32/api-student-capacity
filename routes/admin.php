@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\RoundController;
 use App\Http\Controllers\Admin\ContestController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EnterpriseController;
+use App\Http\Controllers\Admin\ExamController;
 use App\Http\Controllers\Admin\JudgesController;
 use App\Http\Controllers\Admin\MajorController;
 use App\Http\Controllers\Admin\SliderController;
@@ -39,6 +40,19 @@ Route::prefix('rounds')->group(function () {
             Route::post('attach', [RoundController::class, 'attachTeam'])->name('admin.round.detail.team.attach');
             Route::post('sync', [RoundController::class, 'syncTeam'])->name('admin.round.detail.team.sync');
             Route::get('detach/{team_id}', [RoundController::class, 'detachTeam'])->name('admin.round.detail.team.detach');
+            Route::prefix('take_exam')->group(function () {
+                Route::get('{teamId}', [RoundController::class, 'roundDetailTeamTakeExam'])->name('admin.round.detail.team.takeExam');
+                // Route::post('attach', [RoundController::class, 'attachTeam'])->name('admin.round.detail.team.attach');
+                // Route::post('sync', [RoundController::class, 'syncTeam'])->name('admin.round.detail.team.sync');
+                // Route::get('detach/{team_id}', [RoundController::class, 'detachTeam'])->name('admin.round.detail.team.detach');
+            });
+        });
+        Route::prefix('exam')->group(function () {
+            Route::get('', [ExamController::class, 'index'])->name('admin.exam.index');
+            Route::get('create', [ExamController::class, 'create'])->name('admin.exam.create');
+            Route::post('store', [ExamController::class, 'store'])->name('admin.exam.store');
+            Route::get('{id_exam}/edit', [ExamController::class, 'edit'])->name('admin.exam.edit');
+            Route::put('{id_exam}', [ExamController::class, 'update'])->name('admin.exam.update');
         });
     });
 });
@@ -60,6 +74,7 @@ Route::prefix('teams')->group(function () {
 
 Route::prefix('users')->group(function () {
     Route::post('team-user-search', [UserController::class, 'TeamUserSearch'])->name('admin.user.TeamUserSearch');
+    Route::post('user-team-search/{id_contest}', [TeamController::class, "userTeamSearch"])->name('admin.user.team.search');
 });
 
 

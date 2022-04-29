@@ -133,56 +133,59 @@
         <div class="col-lg-12">
             <div class=" card card-flush ">
                 <div class="row p-5 d-flex justify-content-center align-items-center ">
-
-                    <div class="col-md-3">
-                        <a
-                            href="{{ route('admin.contest.detail.round', ['id' => $contest->id], 'contest_id=' . $contest->id) }}">
-                            <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
-                                <div class="m-0">
-                                    <span class="text-gray-700 fw-bold fs-6">Vòng thi</span>
+                    @hasanyrole(config('util.ROLE_ADMINS') . '|judge')
+                        <div class="col-md-3">
+                            <a
+                                href="{{ route('admin.contest.detail.round', ['id' => $contest->id], 'contest_id=' . $contest->id) }}">
+                                <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
+                                    <div class="m-0">
+                                        <span class="text-gray-700 fw-bold fs-6">Vòng thi</span>
+                                    </div>
+                                    <div class="m-0 badge badge-primary badge-pill">
+                                        <span class=" fs-6 text-white">{{ count($contest->rounds) }}</span>
+                                    </div>
                                 </div>
-                                <div class="m-0 badge badge-primary badge-pill">
-                                    <span class=" fs-6 text-white">{{ count($contest->rounds) }}</span>
+                            </a>
+                        </div>
+                    @endhasanyrole
+                    @hasanyrole(config('util.ROLE_ADMINS'))
+                        <div class="col-md-3">
+                            <a href="{{ route('admin.contest.detail.team', ['id' => $contest->id]) }}">
+                                <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
+                                    <div class="m-0">
+                                        <span class="text-gray-700 fw-bold fs-6">Đội thi</span>
+                                    </div>
+                                    <div class="m-0 badge badge-primary badge-pill">
+                                        <span class=" fs-6 text-white">{{ count($contest->teams) }}</span>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-3">
-                        <a href="{{ route('admin.contest.detail.team', ['id' => $contest->id]) }}">
-                            <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
-                                <div class="m-0">
-                                    <span class="text-gray-700 fw-bold fs-6">Đội thi</span>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="{{ route('admin.judges.contest', ['contest_id' => $contest->id]) }}">
+                                <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
+                                    <div class="m-0">
+                                        <span class="text-gray-700 fw-bold fs-6">Ban giám khảo</span>
+                                    </div>
+                                    <div class="m-0 badge badge-primary badge-pill">
+                                        <span class=" fs-6 text-white">{{ count($contest->judges) }}</span>
+                                    </div>
                                 </div>
-                                <div class="m-0 badge badge-primary badge-pill">
-                                    <span class=" fs-6 text-white">{{ count($contest->teams) }}</span>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="{{ route('admin.contest.detail.enterprise', ['id' => $contest->id]) }}">
+                                <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
+                                    <div class="m-0">
+                                        <span class="text-gray-700 fw-bold fs-6">Doanh nghiệp tài trợ</span>
+                                    </div>
+                                    <div class="m-0 badge badge-primary badge-pill">
+                                        <span class=" fs-6 text-white">{{ count($contest->enterprise) }}</span>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-3">
-                        <a href="{{ route('admin.judges.contest', ['contest_id' => $contest->id]) }}">
-                            <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
-                                <div class="m-0">
-                                    <span class="text-gray-700 fw-bold fs-6">Ban giám khảo</span>
-                                </div>
-                                <div class="m-0 badge badge-primary badge-pill">
-                                    <span class=" fs-6 text-white">{{ count($contest->judges) }}</span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-3">
-                        <a href="{{ route('admin.contest.detail.enterprise', ['id' => $contest->id]) }}">
-                            <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
-                                <div class="m-0">
-                                    <span class="text-gray-700 fw-bold fs-6">Doanh nghiệp tài trợ</span>
-                                </div>
-                                <div class="m-0 badge badge-primary badge-pill">
-                                    <span class=" fs-6 text-white">{{ count($contest->enterprise) }}</span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
+                            </a>
+                        </div>
+                    @endhasanyrole
                 </div>
             </div>
         </div>

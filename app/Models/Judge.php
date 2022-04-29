@@ -17,7 +17,7 @@ class Judge extends Model
 
     public function judge_round()
     {
-        return $this->belongsToMany(Round::class, 'judges_rounds', 'round_id', 'judge_id');
+        return $this->belongsToMany(Round::class, 'judges_rounds', 'judge_id', 'round_id');
     }
 
     public function user()

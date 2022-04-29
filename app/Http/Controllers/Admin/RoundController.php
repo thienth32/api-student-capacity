@@ -12,6 +12,8 @@ use App\Models\Contest;
 use App\Models\Donor;
 use App\Models\DonorRound;
 use App\Models\Enterprise;
+use App\Models\RoundTeam;
+use App\Models\TakeExams;
 use App\Models\Team;
 use App\Models\TypeExam;
 use Illuminate\Support\Facades\DB;
@@ -387,8 +389,7 @@ class RoundController extends Controller
     }
     public function adminShow($id)
     {
-        if (!($round = $this->round::with(['contest', 'type_exam', 'judges', 'teams', 'Donor'])->where('id', $id)->first())) return abort(404);
-
+        if (!($round = $this->round::with(['contest', 'type_exam', 'judges', 'teams', 'Donor', 'exams'])->where('id', $id)->first())) return abort(404);
         return view('pages.round.detail.detail', ['round' => $round]);
     }
     // chi tiết doanh nghiệp
@@ -491,6 +492,28 @@ class RoundController extends Controller
         try {
             Round::find($id)->teams()->detach([$team_id]);
             return Redirect::back();
+        } catch (\Throwable $th) {
+            return Redirect::back();
+        }
+    }
+
+    /**
+     *   chi tiết bài thi của đội thi theo vòng thi
+     */
+    public function roundDetailTeamTakeExam($id, $teamId)
+    {
+        try {
+            $round = Round::find($id);
+            $team = Team::where('id', $teamId)->first();
+            $takeExam = RoundTeam::where('round_id', $id)->where('team_id', $teamId)->first();
+            return view(
+                'pages.round.detail.team_take_exam',
+                [
+                    'takeExam' => $takeExam->takeExam,
+                    'round' => $round,
+                    'team'=>$team
+                ]
+            );
         } catch (\Throwable $th) {
             return Redirect::back();
         }

@@ -8,8 +8,10 @@ return [
     'SUPER_ADMIN_ROLE' => 1,
     'ADMIN_ROLE' => 2,
     'STUDENT_ROLE' => 3,
+    'JUDGE_ROLE' => 4,
     "CONTEST_STATUS_REGISTERING" => 1,
     "CONTEST_STATUS_GOING_ON" => 2,
     "CONTEST_STATUS_DONE" => 3,
     "ROLE_DELETE" => "super admin",
+    "ROLE_ADMINS" => 'admin|super admin'
 ];
