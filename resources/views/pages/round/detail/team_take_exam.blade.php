@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title', 'bài làm của đội thi')
+@section('title', 'Bài làm của đội thi')
 @section('page-title', 'Bài làm của đội thi')
 @section('content')
     <div class=" card card-flush p-5">
@@ -25,7 +25,7 @@
                             </a>
                         </li>
                         <li class="breadcrumb-item px-3 text-muted">
-                            <a href="{{ route('admin.round.detail.team', ['id' => $round->id]) }}"> đội thi</a>
+                            <a href="{{ route('admin.round.detail.team', ['id' => $round->id]) }}"> Đội thi</a>
                         </li>
                         <li class="breadcrumb-item px-3 text-muted">
                             {{ $team->name }}
@@ -102,8 +102,8 @@
                                             <span class="badge bg-danger  p-3"> Đã hủy bài </span>
                                         @endif
                                     </td>
-<td>{{ $takeExam->final_point }}</td>
-<td>{{ $takeExam->mark_comment }}</td>
+                                    <td>{{ $takeExam->final_point }}</td>
+                                    <td>{{ $takeExam->mark_comment }}</td>
                                 </tr>
 
                             </tbody>

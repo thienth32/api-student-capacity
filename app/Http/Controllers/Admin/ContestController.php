@@ -382,7 +382,19 @@ class ContestController extends Controller
 
     public function show(Request $request, $id)
     {
-        $contest =  Contest::find($id);
+        $contest =  Contest::find($id)->load(['rounds' => function ($q) use ($id) {
+            return $q->when(
+                auth()->check() && auth()->user()->hasRole('judge'),
+                function ($q) use ($id) {
+                    $judge = Judge::where('contest_id', $id)->where('user_id', auth()->user()->id)->with('judge_round')->first('id');
+                    $arrId = [];
+                    foreach ($judge->judge_round as $judge_round) {
+                        array_push($arrId, $judge_round->id);
+                    }
+                    return $q->whereIn('id', $arrId);
+                }
+            );
+        }]);
         return view('pages.contest.detail.detail', compact('contest'));
     }
 
