@@ -401,8 +401,7 @@ class RoundController extends Controller
     }
     public function adminShow($id)
     {
-        if (!($round = $this->round::with(['contest', 'type_exam', 'judges', 'teams', 'Donor'])->where('id', $id)->first())) return abort(404);
-
+        if (!($round = $this->round::with(['contest', 'type_exam', 'judges', 'teams', 'Donor', 'exams'])->where('id', $id)->first())) return abort(404);
         return view('pages.round.detail.detail', ['round' => $round]);
     }
     // chi tiết doanh nghiệp

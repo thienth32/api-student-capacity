@@ -480,6 +480,7 @@ class ContestController extends Controller
 
     public function editFormTeamContest($id, $id_team)
     {
+
         $contest = Contest::find($id);
         if (!is_null($contest)) {
             $userArray = [];
