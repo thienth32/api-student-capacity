@@ -30,10 +30,7 @@ Route::get('users', [AdminUserController::class, 'index']); // danh sách user
 
 Route::get('company', [AdminCompanyController::class, 'listCompany']); // Doanh nghiệp
 
-Route::prefix('team')->group(function () {
-    // Route::get('', [AdminContestController::class, 'apiIndex'])->name('contest.api.index');
-    Route::get('{id}', [TeamController::class, 'apiShow'])->name('team.api.show');
-});
+
 Route::prefix('contests')->group(function () {
     Route::get('', [AdminContestController::class, 'apiIndex'])->name('contest.api.index');
     Route::get('{id}', [AdminContestController::class, 'apiShow'])->name('contest.api.show');
