@@ -178,6 +178,18 @@
                                 </div>
                             </a>
                         </div>
+                        <div class="col-md-3">
+                            <a href="{{ route('admin.exam.index', ['id' => $round->id]) }}">
+                                <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
+                                    <div class="m-0">
+                                        <span class="text-gray-700 fw-bold fs-6">Đề bài</span>
+                                    </div>
+                                    <div class="m-0 badge badge-primary badge-pill">
+                                        <span class=" fs-6 text-white">{{ count($round->exams) }}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
                     @endhasanyrole
                 </div>
             </div>
