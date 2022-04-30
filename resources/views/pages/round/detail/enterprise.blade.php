@@ -135,7 +135,7 @@
 @endsection
 @section('page-script')
     <script>
-        var URL = window.location.href;
+        var URL = '{{ url()->current() }}' + '?';
         var userArray = [];
         var _token = "{{ csrf_token() }}"
     </script>
