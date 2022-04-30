@@ -14,9 +14,10 @@ class RoleHasAdmins
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next, $role = null)
     {
-        if (auth()->user()->hasAnyRole(config('util.ROLE_ADMINS'))) {
+        if (!$role)  $role = config('util.ROLE_ADMINS');
+        if (auth()->user()->hasAnyRole($role)) {
             return $next($request);
         } else {
             return abort(404);

@@ -39,8 +39,6 @@ Route::prefix('rounds')->group(function () {
 
     Route::prefix('{id}/detail')->group(function () {
         Route::get('', [RoundController::class, 'adminShow'])->name('admin.round.detail');
-
-
         Route::group([
             'middleware' => 'role_admin'
         ], function () {
