@@ -97,7 +97,6 @@ trait TTeamContest
 
     function editTeamContest($request, $id_team, $contest_id = null, $backViewSuccess, $backViewFailure)
     {
-
         $validator = Validator::make(
             $request->all(),
             [

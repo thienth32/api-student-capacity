@@ -47,6 +47,13 @@ Route::prefix('rounds')->group(function () {
                 // Route::get('detach/{team_id}', [RoundController::class, 'detachTeam'])->name('admin.round.detail.team.detach');
             });
         });
+        Route::prefix('exam')->group(function () {
+            Route::get('', [ExamController::class, 'index'])->name('admin.exam.index');
+            Route::get('create', [ExamController::class, 'create'])->name('admin.exam.create');
+            Route::post('store', [ExamController::class, 'store'])->name('admin.exam.store');
+            Route::get('{id_exam}/edit', [ExamController::class, 'edit'])->name('admin.exam.edit');
+            Route::put('{id_exam}', [ExamController::class, 'update'])->name('admin.exam.update');
+        });
     });
 });
 
@@ -172,6 +179,7 @@ Route::prefix('skill')->group(function () {
     Route::get('skill-soft-delete', [SkillController::class, 'softDelete'])->name('admin.skill.soft.delete');
     Route::get('skill-soft-delete/{id}/backup', [SkillController::class, 'backUpSkill'])->name('admin.skill.soft.backup');
     Route::get('skill-soft-delete/{id}/delete', [SkillController::class, 'delete'])->name('admin.skill.soft.destroy');
+<<<<<<< HEAD
 });
 Route::prefix('exam')->group(function () {
     Route::post('store', [ExamController::class, 'store'])->name('admin.exam.store');
@@ -183,3 +191,6 @@ Route::group([
     'middleware' => 'role_admin'
 ], function () {
 });
+=======
+});
+>>>>>>> 52d31d628bd948ee41f282317c2ec48dee0e50df
