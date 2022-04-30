@@ -91,4 +91,9 @@ class Round extends Model
     {
         return $this->morphMany(Slider::class, 'sliderable');
     }
+
+    public function exams()
+    {
+        return $this->hasMany(Exams::class, 'round_id');
+    }
 }

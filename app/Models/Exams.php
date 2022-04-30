@@ -12,4 +12,11 @@ class Exams extends Model
     protected $table = 'exams';
     protected $fillable = ['name', 'description', 'max_ponit', 'ponit', 'external_url', 'round_id', 'time', 'time_type'];
     use HasFactory;
+
+
+
+    public function round()
+    {
+        return $this->hasOne(Round::class, 'id', 'round_id');
+    }
 }
