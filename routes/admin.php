@@ -46,7 +46,6 @@ Route::prefix('rounds')->group(function () {
             Route::get('{teamId}', [RoundController::class, 'roundDetailTeamDetail'])->name('admin.round.detail.team.detail');
             Route::prefix('judge')->group(function () {
                 Route::get('{teamId}', [RoundController::class, 'roundDetailTeamJudge'])->name('admin.round.detail.team.judge');
-
             });
             Route::prefix('exam')->group(function () {
                 Route::get('{teamId}', [RoundController::class, 'roundDetailTeamExam'])->name('admin.round.detail.team.Exam');
@@ -188,11 +187,6 @@ Route::prefix('skill')->group(function () {
     Route::get('skill-soft-delete', [SkillController::class, 'softDelete'])->name('admin.skill.soft.delete');
     Route::get('skill-soft-delete/{id}/backup', [SkillController::class, 'backUpSkill'])->name('admin.skill.soft.backup');
     Route::get('skill-soft-delete/{id}/delete', [SkillController::class, 'delete'])->name('admin.skill.soft.destroy');
-<<<<<<< HEAD
-});
-Route::prefix('exam')->group(function () {
-    Route::post('store', [ExamController::class, 'store'])->name('admin.exam.store');
-    Route::put('{id}', [ExamController::class, 'apiUpdate']);
 });
 
 // Middleware phân quyền ban giám khảo chấm thi , khi nào gộp code sẽ chỉnh sửa lại route để phân quyền route
@@ -200,6 +194,3 @@ Route::group([
     'middleware' => 'role_admin'
 ], function () {
 });
-=======
-});
->>>>>>> 52d31d628bd948ee41f282317c2ec48dee0e50df
