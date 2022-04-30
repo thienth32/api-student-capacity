@@ -17,7 +17,8 @@
                             </a>
                         </li>
                         <li class="breadcrumb-item pe-3">
-                            <a href="{{ route('admin.round.list') }}" class="pe-3">Vòng thi </a>
+                            <a href="{{ route('admin.contest.detail.round', ['id' => $round->contest_id]) }}"
+                                class="pe-3">Vòng thi </a>
                         </li>
                         <li class="breadcrumb-item px-3 text-muted">
                             <a href="{{ route('admin.round.detail', ['id' => $round->id]) }}">
@@ -77,7 +78,9 @@
                                             src="{{ Storage::disk('google')->has($team->image)? Storage::disk('google')->url($team->image): 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
                                             alt=""></td>
                                     <td>{{ $team->name }}</td>
-                                    <td><a class="badge bg-primary p-3" href="{{ route('admin.round.detail.team.takeExam', ['id' => $round->id, 'teamId' => $team->id]) }}"> Xem thông tin...
+                                    <td><a class="badge bg-primary p-3"
+                                            href="{{ route('admin.round.detail.team.takeExam', ['id' => $round->id, 'teamId' => $team->id]) }}">
+                                            Xem thông tin...
                                         </a>
                                     </td>
                                     <td>

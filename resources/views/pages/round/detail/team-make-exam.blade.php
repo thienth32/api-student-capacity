@@ -18,7 +18,8 @@
                             </a>
                         </li>
                         <li class="breadcrumb-item pe-3">
-                            <a href="{{ route('admin.round.list') }}" class="pe-3">Vòng thi </a>
+                            <a href="{{ route('admin.contest.detail.round', ['id' => $round->contest_id]) }}"
+                                class="pe-3">Vòng thi </a>
                         </li>
                         <li class="breadcrumb-item px-3 text-muted">
                             <a href="{{ route('admin.round.detail', ['id' => $round->id]) }}">
@@ -42,7 +43,9 @@
         <div>
             <div class="row mb-4">
                 <div class="col-6">
-                    <h2>Đề bài {{ $takeExam->exam->name }}</h2>
+                    <h2>Đề bài {{ $takeExam->exam->name }} <button
+                            data-url="{{ Storage::disk('google')->url($takeExam->exam->external_url) }}"
+                            class="dowloadfile btn btn-outline-primary">Tải về </button></h2>
                     <iframe width="100%" height="100%"
                         src="https://drive.google.com/file/d/{{ explode(
                             '=',
@@ -66,7 +69,9 @@
             <br>
             <div class="row mt-4">
                 <div class="col-6">
-                    <h2>Bài làm :</h2>
+                    <h2>Bài làm đội thi : {{ $team->name }} <button
+                            data-url="{{ Storage::disk('google')->url($takeExam->result_url) }}"
+                            class="dowloadfile btn btn-outline-primary">Tải về </button></h2>
                     @if (Storage::disk('google')->has($takeExam->result_url))
                         <iframe width="100%" height="100%"
                             src="https://drive.google.com/file/d/{{ explode('=', explode('&', explode('?', Storage::disk('google')->url($takeExam->result_url))[1])[0])[1] }}/preview"></iframe>
@@ -162,7 +167,11 @@
         var _token = "{{ csrf_token() }}";
     </script>
     <script>
-
+        $('.dowloadfile').on('click', function(e) {
+            e.preventDefault();
+            window.location = $(this).data('url');
+            return false;
+        })
     </script>
     <script src="assets/js/system/validate/validate.js"></script>
     <script src="{{ asset('assets/js/system/round/round-team.js') }}"></script>

@@ -519,7 +519,7 @@ class RoundController extends Controller
         try {
             $round = Round::find($id);
             $team = Team::where('id', $teamId)->first();
-            $takeExam = RoundTeam::where('round_id', $id)->where('team_id', $teamId)->first();
+            $takeExam = RoundTeam::where('round_id', $id)->where('team_id', $teamId)->with('takeExam')->first();
             return view(
                 'pages.round.detail.team_take_exam',
                 [
