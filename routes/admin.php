@@ -35,16 +35,25 @@ Route::prefix('rounds')->group(function () {
             Route::post('attach', [RoundController::class, 'attachEnterprise'])->name('admin.round.detail.enterprise.attach');
             Route::get('detach/{enterprise_id}', [RoundController::class, 'detachEnterprise'])->name('admin.round.detail.enterprise.detach');
         });
+        Route::prefix('roundTeam')->group(function () {
+            Route::get('', [RoundController::class, 'roundDetailUpdateRoundTeam'])->name('admin.round.detail.updateRoundTeam');
+        });
         Route::prefix('team')->group(function () {
             Route::get('', [RoundController::class, 'roundDetailTeam'])->name('admin.round.detail.team');
             Route::post('attach', [RoundController::class, 'attachTeam'])->name('admin.round.detail.team.attach');
             Route::post('sync', [RoundController::class, 'syncTeam'])->name('admin.round.detail.team.sync');
             Route::get('detach/{team_id}', [RoundController::class, 'detachTeam'])->name('admin.round.detail.team.detach');
+            Route::get('{teamId}', [RoundController::class, 'roundDetailTeamDetail'])->name('admin.round.detail.team.detail');
+            Route::prefix('judge')->group(function () {
+                Route::get('{teamId}', [RoundController::class, 'roundDetailTeamJudge'])->name('admin.round.detail.team.judge');
+
+            });
+            Route::prefix('exam')->group(function () {
+                Route::get('{teamId}', [RoundController::class, 'roundDetailTeamExam'])->name('admin.round.detail.team.Exam');
+            });
             Route::prefix('take_exam')->group(function () {
                 Route::get('{teamId}', [RoundController::class, 'roundDetailTeamTakeExam'])->name('admin.round.detail.team.takeExam');
-                // Route::post('attach', [RoundController::class, 'attachTeam'])->name('admin.round.detail.team.attach');
-                // Route::post('sync', [RoundController::class, 'syncTeam'])->name('admin.round.detail.team.sync');
-                // Route::get('detach/{team_id}', [RoundController::class, 'detachTeam'])->name('admin.round.detail.team.detach');
+                Route::put('{teamId}/update/{takeExamId}', [RoundController::class, 'roundDetailTeamTakeExamUpdate'])->name('admin.round.detail.team.takeExam.update');
             });
         });
     });

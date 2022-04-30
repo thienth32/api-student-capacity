@@ -172,7 +172,6 @@ class TeamController extends Controller
             return abort(404);
         }
     }
-
     // chi tiết đội thi phía client
     public function apiShow($id)
     {

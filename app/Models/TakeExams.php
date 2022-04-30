@@ -16,4 +16,8 @@ class TakeExams extends Model
     {
         return $this->belongsTo(Exams::class, 'exam_id');
     }
+    public function evaluation()
+    {
+        return $this->hasMany(Evaluation::class, 'exams_team_id')->with('judge_round');
+    }
 }

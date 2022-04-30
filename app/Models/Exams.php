@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Exams extends Model
 {
     use SoftDeletes;
-    protected $table='exams';
-protected $fillable=['name','description','max_ponit','ponit','external_url','round_id'];
+    protected $table = 'exams';
+    protected $fillable = ['name', 'description', 'max_ponit', 'ponit', 'external_url', 'round_id', 'time', 'time_type'];
     use HasFactory;
 }

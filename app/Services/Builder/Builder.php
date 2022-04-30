@@ -22,8 +22,6 @@ class Builder extends  EloquentBuilder
         if ($registration_date == null) return $this;
         return $this->whereDate($column, ">", $time)->whereDate('start_register_time', "<", $time);
     }
-
-
     // public function upComingDate($column = null, $pass_date = null, $time = null)
     // {
     //     if ($pass_date == null) return $this;

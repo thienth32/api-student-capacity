@@ -389,9 +389,32 @@ class RoundController extends Controller
     }
     public function adminShow($id)
     {
-        if (!($round = $this->round::with(['contest', 'type_exam', 'judges', 'teams', 'Donor'])->where('id', $id)->first())) return abort(404);
 
-        return view('pages.round.detail.detail', ['round' => $round]);
+        if (!($round = $this->round::with(['contest', 'type_exam', 'judges', 'teams', 'Donor'])->where('id', $id)->first())) return abort(404);
+        $roundTeam = RoundTeam::where('round_id', $id)->where('status', 2)->get();
+
+        return view('pages.round.detail.detail', ['round' => $round, 'roundTeam' => $roundTeam]);
+    }
+
+    /**
+     * Update trạng thái đội thi trong vòng thi tiếp theo
+     */
+    public function roundDetailUpdateRoundTeam($id)
+    {
+        try {
+            $roundTeam = RoundTeam::where('round_id', $id)->where('status', 2)->get();
+            if (count($roundTeam) > 0) {
+                foreach ($roundTeam as $item) {
+                    $updateRoundTeam = RoundTeam::find($item->id);
+                    $updateRoundTeam->status = 1;
+                    $updateRoundTeam->save();
+                }
+            }
+
+            return Redirect::back();
+        } catch (\Throwable $th) {
+            return Redirect::back();
+        }
     }
     // chi tiết doanh nghiệp
     public function roundDetailEnterprise($id)
@@ -499,8 +522,30 @@ class RoundController extends Controller
     }
 
     /**
+     *  Chi tiết đội thi ở vòng thi
+     */
+    public function roundDetailTeamDetail($id, $teamId)
+    {
+
+        try {
+            $round = Round::find($id);
+            $team = Team::where('id', $teamId)->first();
+            return view(
+                'pages.round.detail.team.index',
+                [
+                    'round' => $round,
+                    'team' => $team
+                ]
+            );
+        } catch (\Throwable $th) {
+            return Redirect::back();
+        }
+    }
+
+    /**
      *   chi tiết bài thi của đội thi theo vòng thi
      */
+
     public function roundDetailTeamTakeExam($id, $teamId)
     {
         try {
@@ -508,15 +553,85 @@ class RoundController extends Controller
             $team = Team::where('id', $teamId)->first();
             $takeExam = RoundTeam::where('round_id', $id)->where('team_id', $teamId)->first();
             return view(
-                'pages.round.detail.team_take_exam',
+                'pages.round.detail.team.team_take_exam',
                 [
                     'takeExam' => $takeExam->takeExam,
                     'round' => $round,
-                    'team'=>$team
+                    'team' => $team
                 ]
             );
         } catch (\Throwable $th) {
             return Redirect::back();
         }
+    }
+    /**
+     * UPdate điểm bài thi cho đội thi
+     */
+    public function roundDetailTeamTakeExamUpdate(Request $request, $id, $teamId, $takeExamId)
+    {
+        try {
+            // $round = Round::find($id);
+            // $team = Team::where('id', $teamId)->first();
+            $takeExam = TakeExams::find($takeExamId);
+            if ($takeExam) {
+                $takeExam->final_point = $request->final_point;
+                $takeExam->mark_comment = $request->has('mark_comment') ? $request->mark_comment : null;
+                $takeExam->save();
+            }
+
+            if ($request->has('roundId') &&  $request->final_point >= $request->ponit) {
+                RoundTeam::create([
+                    'round_id' => $request->roundId,
+                    'team_id' => $teamId,
+                    'status' => 2 // Chưa công bố
+                ]);
+            }
+
+            return Redirect::back();
+        } catch (\Throwable $th) {
+            return Redirect::back();
+        }
+    }
+    /**
+     * chi tiết đề thi theo từng đội thi trong vòng thi
+     */
+    public function roundDetailTeamExam($id, $teamId)
+    {
+        try {
+            $round = Round::find($id);
+            $team = Team::where('id', $teamId)->first();
+            $takeExam = RoundTeam::where('round_id', $id)->where('team_id', $teamId)->first();
+            // dd($takeExam->takeExam->exam);
+            return view(
+                'pages.round.detail.team.team_exam',
+                [
+                    'Exam' => $takeExam->takeExam,
+                    'round' => $round,
+                    'team' => $team
+                ]
+            );
+        } catch (\Throwable $th) {
+            return Redirect::back();
+        }
+    }
+    /**
+     * Danh sách BGk kèm điểm và đánh giá bài thi
+     */
+    public function roundDetailTeamJudge($id, $teamId)
+    {
+
+        $round = Round::find($id);
+        $team = Team::where('id', $teamId)->first();
+        $takeExam = RoundTeam::where('round_id', $id)->where('team_id', $teamId)->first()->takeExam;
+        // dd($takeExam);
+        return view(
+            'pages.round.detail.team.team_judges_result',
+            [
+
+                'judgesResult' => $takeExam,
+                'round' => $round,
+                'team' => $team
+            ]
+        );
     }
 }

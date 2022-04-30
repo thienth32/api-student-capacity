@@ -19,7 +19,10 @@ class Judge extends Model
     {
         return $this->belongsToMany(Round::class, 'judges_rounds', 'judge_id', 'round_id');
     }
-
+    public function evaluation()
+    {
+        return $this->hasManyThrough(Evaluation::class,Judges_round::class,'judge_id','judge_round_id','id');
+    }
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
