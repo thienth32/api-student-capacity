@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\EnterpriseController;
 use App\Http\Controllers\Admin\ExamController;
 use App\Http\Controllers\Admin\JudgesController;
 use App\Http\Controllers\Admin\MajorController;
+use App\Http\Controllers\Admin\ResultController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\SkillController;
 
@@ -93,6 +94,9 @@ Route::prefix('rounds')->group(function () {
             Route::post('store', [ExamController::class, 'store'])->name('admin.exam.store');
             Route::get('{id_exam}/edit', [ExamController::class, 'edit'])->name('admin.exam.edit');
             Route::put('{id_exam}', [ExamController::class, 'update'])->name('admin.exam.update');
+        });
+        Route::prefix('result')->group(function () {
+            Route::get('', [ResultController::class, 'index'])->name('admin.result.index');
         });
     });
 });
