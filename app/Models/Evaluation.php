@@ -12,4 +12,9 @@ class Evaluation extends Model
     protected $table = 'evaluations';
     protected $guarded = [];
     use HasFactory;
+
+    public function judge_round()
+    {
+        return $this->belongsTo(Judges_round::class, 'judge_round_id')->with('judge');
+    }
 }

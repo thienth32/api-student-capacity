@@ -35,19 +35,36 @@ Route::prefix('rounds')->group(function () {
             Route::post('attach', [RoundController::class, 'attachEnterprise'])->name('admin.round.detail.enterprise.attach');
             Route::get('detach/{enterprise_id}', [RoundController::class, 'detachEnterprise'])->name('admin.round.detail.enterprise.detach');
         });
+        Route::prefix('roundTeam')->group(function () {
+            Route::get('', [RoundController::class, 'roundDetailUpdateRoundTeam'])->name('admin.round.detail.updateRoundTeam');
+        });
         Route::prefix('team')->group(function () {
             Route::get('', [RoundController::class, 'roundDetailTeam'])->name('admin.round.detail.team');
             Route::post('attach', [RoundController::class, 'attachTeam'])->name('admin.round.detail.team.attach');
             Route::post('sync', [RoundController::class, 'syncTeam'])->name('admin.round.detail.team.sync');
             Route::get('detach/{team_id}', [RoundController::class, 'detachTeam'])->name('admin.round.detail.team.detach');
-            Route::prefix('take-exam')->group(function () {
+            // Route::prefix('take-exam')->group(function () {
+            //     Route::get('{teamId}', [RoundController::class, 'roundDetailTeamTakeExam'])->name('admin.round.detail.team.takeExam');
+            //     Route::get('{teamId}/make', [RoundController::class, 'roundDetailTeamMakeExam'])->name('admin.round.detail.team.make.exam');
+            //     Route::post('{teamId}/make', [RoundController::class, 'roundDetailFinalTeamMakeExam'])->name('admin.round.detail.team.final.make.exam');
+            //     Route::put('{teamId}/make', [RoundController::class, 'roundDetailUpdateTeamMakeExam'])->name('admin.round.detail.team.update.make.exam');
+            //     // Route::post('attach', [RoundController::class, 'attachTeam'])->name('admin.round.detail.team.attach');
+            //     // Route::post('sync', [RoundController::class, 'syncTeam'])->name('admin.round.detail.team.sync');
+            //     // Route::get('detach/{team_id}', [RoundController::class, 'detachTeam'])->name('admin.round.detail.team.detach');
+            // });
+            Route::get('{teamId}', [RoundController::class, 'roundDetailTeamDetail'])->name('admin.round.detail.team.detail');
+            Route::prefix('judge')->group(function () {
+                Route::get('{teamId}', [RoundController::class, 'roundDetailTeamJudge'])->name('admin.round.detail.team.judge');
+            });
+            Route::prefix('exam')->group(function () {
+                Route::get('{teamId}', [RoundController::class, 'roundDetailTeamExam'])->name('admin.round.detail.team.Exam');
+            });
+            Route::prefix('take_exam')->group(function () {
                 Route::get('{teamId}', [RoundController::class, 'roundDetailTeamTakeExam'])->name('admin.round.detail.team.takeExam');
+                Route::put('{teamId}/update/{takeExamId}', [RoundController::class, 'roundDetailTeamTakeExamUpdate'])->name('admin.round.detail.team.takeExam.update');
                 Route::get('{teamId}/make', [RoundController::class, 'roundDetailTeamMakeExam'])->name('admin.round.detail.team.make.exam');
                 Route::post('{teamId}/make', [RoundController::class, 'roundDetailFinalTeamMakeExam'])->name('admin.round.detail.team.final.make.exam');
                 Route::put('{teamId}/make', [RoundController::class, 'roundDetailUpdateTeamMakeExam'])->name('admin.round.detail.team.update.make.exam');
-                // Route::post('attach', [RoundController::class, 'attachTeam'])->name('admin.round.detail.team.attach');
-                // Route::post('sync', [RoundController::class, 'syncTeam'])->name('admin.round.detail.team.sync');
-                // Route::get('detach/{team_id}', [RoundController::class, 'detachTeam'])->name('admin.round.detail.team.detach');
             });
         });
         Route::prefix('exam')->group(function () {
@@ -182,4 +199,14 @@ Route::prefix('skill')->group(function () {
     Route::get('skill-soft-delete', [SkillController::class, 'softDelete'])->name('admin.skill.soft.delete');
     Route::get('skill-soft-delete/{id}/backup', [SkillController::class, 'backUpSkill'])->name('admin.skill.soft.backup');
     Route::get('skill-soft-delete/{id}/delete', [SkillController::class, 'delete'])->name('admin.skill.soft.destroy');
+});
+// Route::prefix('exam')->group(function () {
+//     Route::post('store', [ExamController::class, 'store'])->name('admin.exam.store');
+//     Route::put('{id}', [ExamController::class, 'apiUpdate']);
+// });
+
+// Middleware phân quyền ban giám khảo chấm thi , khi nào gộp code sẽ chỉnh sửa lại route để phân quyền route
+Route::group([
+    'middleware' => 'role_admin'
+], function () {
 });

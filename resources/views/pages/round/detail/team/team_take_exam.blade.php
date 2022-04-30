@@ -39,22 +39,7 @@
             </div>
         </div>
         <div class="row">
-            {{-- <div class="col-lg-12">
-                <form id="formTeam" action="{{ route('admin.round.detail.team.attach', ['id' => $round->id]) }}"
-                    method="POST">
-                    @csrf
-                    <label for="" class="form-label">Đội thi</label>
-                    <select multiple class="form-select mb-2 select2-hidden-accessible" data-control="select2"
-                        data-hide-search="false" tabindex="-1" aria-hidden="true" name="team_id[]"
-                        value="{{ old('team_id') }}">
-                        @foreach ($teams as $teamSelect)
-                            <option value="{{ $teamSelect->id }}"> {{ $teamSelect->name }}</option>
-                        @endforeach
-                    </select>
-                    <button type="submit" class="btn btn-primary"> Thêm </button>
 
-                </form>
-            </div> --}}
         </div>
 
     </div>
@@ -71,9 +56,11 @@
                                 <tr class="fw-bolder fs-6 text-gray-800">
                                     <th></th>
                                     <th>Đề bài</th>
-                                    <th>link bài làm</th>
+                                    <th>link bài </th>
+                                    <th>Quá trình</th>
+                                    <th>Điểm Qua vòng</th>
+                                    <th>Điểm thi</th>
                                     <th>Trạng thái</th>
-                                    <th>Thang điểm</th>
                                     <th>Ghi chú</th>
                                     <th>Chấm bài </th>
 
@@ -104,7 +91,21 @@
                                             <span class="badge bg-danger  p-3"> Đã hủy bài </span>
                                         @endif
                                     </td>
-                                    <td>{{ $takeExam->final_point }}</td>
+                                    <td>{{ $takeExam->exam->ponit }}</td>
+                                    <td>
+                                        @if ($takeExam->status == 2)
+                                            {{ $takeExam->final_point ?? 0 }}/{{ $takeExam->exam->max_ponit }}
+                                        @else
+                                            0/{{ $takeExam->exam->max_ponit }}
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if ($takeExam->status == 2 && $takeExam->final_point >= $takeExam->exam->ponit)
+                                            <span class="badge bg-success  p-3"> Passed </span>
+                                        @else
+                                            <span class="badge bg-danger  p-3"> Failed</span>
+                                        @endif
+                                    </td>
                                     <td>{{ $takeExam->mark_comment }}</td>
                                     <td>
                                         <a

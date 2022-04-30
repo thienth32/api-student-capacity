@@ -9,9 +9,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Exams extends Model
 {
     use SoftDeletes;
-    use HasFactory;
     protected $table = 'exams';
-    protected $fillable = ['name', 'description', 'max_ponit', 'ponit', 'external_url', 'round_id'];
+    protected $fillable = ['name', 'description', 'max_ponit', 'ponit', 'external_url', 'round_id', 'time', 'time_type'];
+    use HasFactory;
+
 
 
     public function round()
