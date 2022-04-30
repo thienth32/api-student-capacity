@@ -129,9 +129,6 @@
     </div>
 @endsection
 @section('page-script')
-    <script>
-        var url = "{{ route('admin.exam.download', ['id' => $round->id]) }}";
-    </script>
     <script src="assets/js/system/exam/exam.js"></script>
 
 @endsection
