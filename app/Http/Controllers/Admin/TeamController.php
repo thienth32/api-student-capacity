@@ -172,6 +172,7 @@ class TeamController extends Controller
             return abort(404);
         }
     }
+
     // chi tiết đội thi phía client
     public function apiShow($id)
     {
@@ -195,11 +196,12 @@ class TeamController extends Controller
             [
                 'contest_id' => 'required',
                 'name' => 'required',
-                'image' =>  'mimes:jpeg,png,jpg|max:10000',
+                'image' =>  'required|mimes:jpeg,png,jpg|max:10000',
             ],
             [
                 'contest_id.required' => 'Chưa nhập trường này !',
                 'name.required' => 'Chưa nhập trường này !',
+                'image.required' => 'Chưa nhập trường này !',
                 'image.mimes' => 'Sai định dạng !',
                 'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
             ]
@@ -277,15 +279,27 @@ class TeamController extends Controller
 
     public function apiEditTeam(Request $request, $team_id)
     {
-
         DB::beginTransaction();
         try {
+            $validate = Validator::make(
+                $request->all(),
+                [
+                    'name' => 'required',
+                    'image' =>  'mimes:jpeg,png,jpg|max:10000',
+                ],
+                [
+                    'name.required' => 'Chưa nhập trường này !',
+                    'image.mimes' => 'Sai định dạng !',
+                    'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
+                ]
+            );
+            if ($validate->fails()) return response()->json([
+                'status' => false,
+                'payload' => $validate->errors()
+            ]);
             $user_id = auth('sanctum')->user()->id;
-
-            $today = Carbon::now()->toDateTimeString();
             $user = User::find($user_id);
             $teamCheck = $this->team::find($team_id)->load('members');
-            $contest = $this->contest::find($teamCheck->contest_id);
             if (is_null($user) || is_null($teamCheck)) {
                 return response()->json([
                     'status' => false,
@@ -302,23 +316,7 @@ class TeamController extends Controller
                     'status' => false,
                     'payload' => 'Tài khoản đã bị khóa !'
                 ]);
-                // if (strtotime($contest->register_deadline) > strtotime($today)) {
-                $validate = Validator::make(
-                    $request->all(),
-                    [
-                        'name' => 'required',
-                        'image' =>  'mimes:jpeg,png,jpg|max:10000',
-                    ],
-                    [
-                        'name.required' => 'Chưa nhập trường này !',
-                        'image.mimes' => 'Sai định dạng !',
-                        'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
-                    ]
-                );
-                if ($validate->fails()) return response()->json([
-                    'status' => false,
-                    'payload' => $validate->errors()
-                ]);
+
                 $teamChecks = Team::where(
                     'contest_id',
                     $request->contest_id
@@ -337,18 +335,12 @@ class TeamController extends Controller
                 }
                 $team->name = $request->name;
                 $team->save();
+
                 DB::commit();
                 return response()->json([
                     'status' => true,
-                    'msg' => 'Chỉnh sửa thành công !!',
-                    'data' => $team
+                    'payload' => $team
                 ]);
-                // } else {
-                //     return response()->json([
-                //         'status' => false,
-                //         'payload' => 'Đã quá thời hạn đăng kí cuộc thi !'
-                //     ]);
-                // }
             }
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -356,11 +348,10 @@ class TeamController extends Controller
                 $fileImage = $request->file('image');
                 if (Storage::disk('google')->has($fileImage)) Storage::disk('google')->delete($filename);
             }
-            // return response()->json([
-            //     'status' => false,
-            //     'payload' =>  $th
-            // ]);
-            dd($th);
+            return response()->json([
+                'status' => false,
+                'payload' =>  $th
+            ]);
         }
     }
     public function checkUserTeamContest($id_contest)
@@ -424,7 +415,7 @@ class TeamController extends Controller
             $usersNotTeam = User::where('status', config('util.ACTIVE_STATUS'))->pluck('id');
             $usersNotTeam = $this->checkUserDrugTeam($id_contest, $usersNotTeam);
             $users = User::select('id', 'name', 'email')
-                ->search(trim(request('key'))  ?? null, ['name', 'email'])
+                ->search(request('key') ?? null, ['name', 'email'])
                 ->whereIn('id', $usersNotTeam['user-pass'])
                 ->limit(5)->get();
             return response()->json([
