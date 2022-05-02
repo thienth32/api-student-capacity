@@ -11,7 +11,7 @@ trait TCheckUserDrugTeam
     {
         $arrUserPass = [];
         $arrUserNotPass = [];
-        $contest = Contest::where('contest_id', $contest_id)->first()->load('teams');
+        $contest = Contest::find($contest_id)->load('teams');
         foreach ($user_id as $userId) {
             $flag = false;
             foreach ($contest->teams as  $team) {
