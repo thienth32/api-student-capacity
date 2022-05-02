@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\ContestController as AdminContestController;
 use App\Http\Controllers\Admin\EnterpriseController;
 use App\Http\Controllers\Admin\ExamController;
 use App\Http\Controllers\Admin\MajorController as AdminMajorController;
+use App\Http\Controllers\Admin\ResultController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\RoundController;
 use App\Http\Controllers\Admin\SliderController;
@@ -63,4 +64,8 @@ Route::prefix('enterprise')->group(function () {
 Route::prefix('exam')->group(function () {
     Route::post('store', [ExamController::class, 'store'])->name('exam.api.store');
     Route::get('download', [ExamController::class, 'download'])->name('exam.api.download');
+});
+
+Route::prefix('contest/round/{id_round}/result')->group(function () {
+    Route::get('', [ResultController::class, 'indexApi']);
 });

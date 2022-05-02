@@ -172,7 +172,6 @@ class TeamController extends Controller
             return abort(404);
         }
     }
-
     // chi tiết đội thi phía client
     public function apiShow($id)
     {
@@ -189,90 +188,94 @@ class TeamController extends Controller
         }
     }
 
-
     // Add team phía client
-   // Add team phía client
-   public function apiAddTeam(Request $request)
-   {
+    public function apiAddTeam(Request $request)
+    {
+        $validate = validator::make(
+            $request->all(),
+            [
+                'contest_id' => 'required',
+                'name' => 'required',
+                'image' =>  'mimes:jpeg,png,jpg|max:10000',
+            ],
+            [
+                'contest_id.required' => 'Chưa nhập trường này !',
+                'name.required' => 'Chưa nhập trường này !',
+                'image.mimes' => 'Sai định dạng !',
+                'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
+            ]
+        );
+        if ($validate->fails()) return response()->json([
+            'status' => false,
+            'payload' => $validate->errors()
+        ]);
+        $teamCheck = Team::where(
+            'contest_id',
+            $request->contest_id
+        )->where('name', trim($request->name))->get();
+        if (count($teamCheck) > 0) return response()->json([
+            'status' => false,
+            'payload' => 'Tên đã tồn tại trong cuộc thi !!'
+        ]);
+        DB::beginTransaction();
+        try {
+            $user_id = auth('sanctum')->user()->id;
+            $result = $this->checkUserDrugTeam($request->contest_id, [$user_id]);
+            if (count($result['user-not-pass']) > 0) return response()->json([
+                'status' => false,
+                'payload' => 'Tài khoản này đã tham gia đội thi khác !!'
+            ]);
+            $today = Carbon::now()->toDateTimeString();
+            $user = User::find($user_id);
+            $contest = Contest::find($request->contest_id);
+            if (is_null($user) || is_null($contest)) {
+                return response()->json([
+                    'status' => false,
+                    'payload' => 'Không tồn tại trong cơ sở dữ liệu !'
+                ]);
+            } else {
+                if ($user->status != config('util.ACTIVE_STATUS')) return response()->json([
+                    'status' => false,
+                    'payload' => 'Tài khoản đã bị khóa !'
+                ]);
+                if (strtotime($contest->register_deadline) > strtotime($today)) {
+                    $teamModel = new Team();
+                    if ($request->hasFile('image')) {
+                        $fileImage = $request->file('image');
+                        $filename = $this->uploadFile($fileImage);
+                        $teamModel->image = $filename;
+                    }
+                    $teamModel->name = $request->name;
+                    $teamModel->contest_id = $request->contest_id;
+                    $teamModel->save();
+                    $teamModel->members()->syncWithoutDetaching($result['user-pass'], ['bot' => config('util.ACTIVE_STATUS')]);
+                    DB::commit();
+                    $modelTeamId =  $teamModel->id;
+                    return response()->json([
+                        'status' => true,
+                        'payload' => 'Tạo đội thành công !',
+                        'id_team' => $modelTeamId,
+                    ]);
+                } else {
+                    return response()->json([
+                        'status' => false,
+                        'payload' => 'Đã quá thời hạn đăng kí cuộc thi !'
+                    ]);
+                }
+            }
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            if ($request->hasFile('image')) {
+                $fileImage = $request->file('image');
+                if (Storage::disk('google')->has($fileImage)) Storage::disk('google')->delete($filename);
+            }
+            return response()->json([
+                'status' => false,
+                'payload' =>  $th
+            ]);
+        }
+    }
 
-       $validate = validator::make(
-           $request->all(),
-           [
-               'contest_id' => 'required',
-               'name' => 'required|unique:teams',
-               'image' =>  'mimes:jpeg,png,jpg|max:10000',
-           ],
-           [
-               'contest_id.required' => 'Chưa nhập trường này !',
-               'name.required' => 'Chưa nhập trường này !',
-               'name.unique' => 'Tên đã tồn tại !',
-               'image.mimes' => 'Sai định dạng !',
-               'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
-           ]
-       );
-       if ($validate->fails()) return response()->json([
-           'status' => false,
-           'payload' => $validate->errors()
-       ]);
-       DB::beginTransaction();
-       try {
-           $user_id = auth('sanctum')->user()->id;
-           $result = $this->checkUserDrugTeam($request->contest_id, [$user_id]);
-           if (count($result['user-not-pass']) > 0) return response()->json([
-               'status' => false,
-               'payload' => 'Tài khoản này đã tham gia cuộc thi khác !'
-           ]);
-           $today = Carbon::now()->toDateTimeString();
-           // $user_id = $request->user_id;
-           $user = User::find($user_id);
-           $contest = Contest::find($request->contest_id);
-           if (is_null($user) || is_null($contest)) {
-               return response()->json([
-                   'status' => false,
-                   'payload' => 'Không tồn tại trong cơ sở dữ liệu !'
-               ]);
-           } else {
-               if ($user->status != config('util.ACTIVE_STATUS')) return response()->json([
-                   'status' => false,
-                   'payload' => 'Tài khoản đã bị khóa !'
-               ]);
-               if (strtotime($contest->register_deadline) > strtotime($today)) {
-                   $teamModel = new Team();
-                   if ($request->hasFile('image')) {
-                       $fileImage = $request->file('image');
-                       $filename = $this->uploadFile($fileImage);
-                       $teamModel->image = $filename;
-                   }
-                   $teamModel->name = $request->name;
-                   $teamModel->contest_id = $request->contest_id;
-                   $teamModel->save();
-                   $teamModel->members()->syncWithoutDetaching($result['user-pass'], ['bot' => config('util.ACTIVE_STATUS')]);
-                   DB::commit();
-                   $modelTeamId =  $teamModel->id;
-                   return response()->json([
-                       'status' => true,
-                       'payload' => 'Tạo đội thành công !',
-                       'id_team' => $modelTeamId,
-                   ]);
-               } else {
-                   return response()->json([
-                       'status' => false,
-'payload' => 'Đã quá thời hạn đăng kí cuộc thi !'
-                   ]);
-               }
-           }
-       } catch (\Throwable $th) {
-           DB::rollBack();
-           if ($request->hasFile('image')) {
-               $fileImage = $request->file('image');
-               if (Storage::disk('google')->has($fileImage)) Storage::disk('google')->delete($filename);
-           }
-           return response()->json([
-               'status' => false,
-               'payload' =>  $th
-           ]);
-       }
-   }
 
     public function apiEditTeam(Request $request, $team_id)
     {
@@ -280,10 +283,10 @@ class TeamController extends Controller
         DB::beginTransaction();
         try {
             $user_id = auth('sanctum')->user()->id;
-            $result = $this->checkUserDrugTeam($request->contest_id, [$user_id]);
+            $result = $this->checkUserDrugTeam($request->contest_id, $user_id);
             if (count($result['user-not-pass']) > 0) return response()->json([
                 'status' => false,
-                'payload' => 'Tài khoản này đã tham gia đội thi khác !'
+                'payload' => 'Tài khoản này đã tham gia cuộc thi khác !'
             ]);
             $today = Carbon::now()->toDateTimeString();
             $user = User::find($user_id);
@@ -336,7 +339,7 @@ class TeamController extends Controller
                     DB::commit();
                     return response()->json([
                         'status' => true,
-                       'payload' => $team
+                        'payload' => $team
                     ]);
                 } else {
                     return response()->json([
@@ -349,7 +352,7 @@ class TeamController extends Controller
             DB::rollBack();
             if ($request->hasFile('image')) {
                 $fileImage = $request->file('image');
-                if (Storage::disk('google')->has($fileImage)) Storage::disk('google')->delete($filename);
+                if (Storage::disk('google')->has($filename)) Storage::disk('google')->delete($filename);
             }
             return response()->json([
                 'status' => false,
@@ -357,6 +360,7 @@ class TeamController extends Controller
             ]);
         }
     }
+
 
     public function checkUserTeamContest($id_contest)
     {
@@ -421,7 +425,7 @@ class TeamController extends Controller
             $usersNotTeam = User::where('status', config('util.ACTIVE_STATUS'))->pluck('id');
             $usersNotTeam = $this->checkUserDrugTeam($id_contest, $usersNotTeam);
             $users = User::select('id', 'name', 'email')
-                ->search(request('key') ?? null, ['name', 'email'])
+                ->search(trim(request('key'))  ?? null, ['name', 'email'])
                 ->whereIn('id', $usersNotTeam['user-pass'])
                 ->limit(5)->get();
             return response()->json([

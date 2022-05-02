@@ -19,7 +19,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('get-user-by-token', [UserController::class, 'get_user_by_token']);
 
 Route::group(['middleware' => ['role:super admin']], function () {
-
     Route::group(['prefix' => 'account'], function () {
         Route::post('/', [UserController::class, 'list']);
         Route::post('add', [UserController::class, 'add_user']);
@@ -37,6 +36,7 @@ Route::group(['prefix' => 'majors'], function () {
 
 
 Route::prefix('teams')->group(function () {
+    Route::get('{id}', [AdminTeamController::class, 'apiShow']);
     Route::post('add-team', [AdminTeamController::class, "apiAddTeam"]);
     Route::put('edit-team/{team_id}', [AdminTeamController::class, "apiEditTeam"]);
     Route::get('{id}', [AdminTeamController::class, 'apiShow'])->name('team.api.show');

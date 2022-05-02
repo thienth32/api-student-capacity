@@ -11,7 +11,8 @@ use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
-    public function adminLogin(){
+    public function adminLogin()
+    {
         return view('auth.login');
     }
 
@@ -24,7 +25,7 @@ class AuthController extends Controller
     {
         $ggUser = Socialite::driver('google')->user();
         $user = User::where('email', $ggUser->email)->first();
-        if($user && $user->hasRole([config('util.SUPER_ADMIN_ROLE'), config('util.ADMIN_ROLE')])){
+        if ($user && $user->hasRole([config('util.SUPER_ADMIN_ROLE'), config('util.ADMIN_ROLE'), config('util.JUDGE_ROLE')])) {
             Auth::login($user);
             return redirect(route('dashboard'));
         }

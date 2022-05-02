@@ -12,7 +12,8 @@
                         </li>
 
                         <li class="breadcrumb-item pe-3">
-                            <a href="{{ route('admin.round.list') }}" class="pe-3">Vòng thi </a>
+                            <a href="{{ route('admin.contest.detail.round', ['id' => $round->contest_id]) }}"
+                                class="pe-3">Vòng thi </a>
                         </li>
                         <li class="breadcrumb-item px-3 text-muted">
                             <a href="{{ route('admin.round.detail', ['id' => $roundDeltai->id]) }}">
@@ -36,8 +37,8 @@
                         value="{{ old('enterprise_id') }}">
 
                         @php
-                        $index =-1;
-                    @endphp
+                            $index = -1;
+                        @endphp
                         @foreach ($enterprise as $key => $itemEnterprise)
                             @foreach ($round as $item)
                                 @if ($itemEnterprise->id == $item->Enterprise->id)
@@ -82,19 +83,19 @@
                                 <tr>
                                     <td>{{ $key++ }}</td>
                                     <td><img class='w-100px'
-                                        src="{{ Storage::disk('google')->has($item->Enterprise->logo)? Storage::disk('google')->url($item->Enterprise->logo): 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
+                                            src="{{ Storage::disk('google')->has($item->Enterprise->logo)? Storage::disk('google')->url($item->Enterprise->logo): 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
                                             alt=""></td>
                                     <td>{{ $item->Enterprise->name }}</td>
                                     <td>
 
                                         <button class="badge bg-primary" type="button" data-bs-toggle="modal"
-                                            data-bs-target="#introduce_{{  $item->Enterprise->id }}">
+                                            data-bs-target="#introduce_{{ $item->Enterprise->id }}">
                                             Xem thông tin...
                                         </button>
 
                                         <!-- Modal -->
-                                        <div class="modal fade" id="introduce_{{ $item->Enterprise->id }}" tabindex="-1"
-                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal fade" id="introduce_{{ $item->Enterprise->id }}"
+                                            tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -106,7 +107,7 @@
                                                             aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body  ">
-                                                        {{  $item->Enterprise->description }}
+                                                        {{ $item->Enterprise->description }}
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary"
@@ -118,7 +119,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <a href="{{ route('admin.round.detail.enterprise.detach', ['id' => $roundDeltai->id, 'enterprise_id' =>  $item->id]) }}"
+                                        <a href="{{ route('admin.round.detail.enterprise.detach', ['id' => $roundDeltai->id, 'enterprise_id' => $item->id]) }}"
                                             class="btn btn-danger deleteTeams"><i class="fas fa-trash-alt"></i></a>
                                     </td>
 
@@ -134,7 +135,7 @@
 @endsection
 @section('page-script')
     <script>
-        var URL = window.location.href;
+        var URL = '{{ url()->current() }}' + '?';
         var userArray = [];
         var _token = "{{ csrf_token() }}"
     </script>
