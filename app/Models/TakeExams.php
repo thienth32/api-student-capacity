@@ -10,6 +10,18 @@ class TakeExams extends Model
 {
     use SoftDeletes;
     protected $table = 'take_exams';
-    protected $fillable = ['exam_id', 'round_team_id'];
+    protected $fillable = ['exam_id', 'round_team_id', 'mark_comment', 'final_point', 'result_url', 'status'];
     use HasFactory;
+    public function exam()
+    {
+        return $this->belongsTo(Exams::class, 'exam_id');
+    }
+    public function evaluations()
+    {
+        return $this->hasMany(Evaluation::class, 'exams_team_id');
+    }
+    public function evaluation()
+    {
+        return $this->hasMany(Evaluation::class, 'exams_team_id')->with('judge_round');
+    }
 }

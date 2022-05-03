@@ -16,7 +16,6 @@ class EnterpriseController extends Controller
     use TUploadImage;
     private function getList(Request $request)
     {
-
         $keyword = $request->has('keyword') ? $request->keyword : "";
         $contest = $request->has('contest') ? $request->contest : null;
         $orderBy = $request->has('orderBy') ? $request->orderBy : 'id';
@@ -81,13 +80,14 @@ class EnterpriseController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'name' => 'required',
+                'name' => 'required|unique:enterprises,name',
                 'description' => "required",
                 'logo' => 'required|required|mimes:jpeg,png,jpg|max:10000',
             ],
             [
-                'name.required' => 'Trường name không bỏ trống',
-                'description.required' => 'Trường mô tả không bỏ trống',
+                'name.required' => 'Chưa nhập trường này !',
+                'name.unique' => 'Đã tồn tại trường này',
+                'description.required' => 'Chưa nhập trường này !',
                 'logo.mimes' => 'Sai định dạng !',
                 'logo.required' => 'Chưa nhập trường này !',
                 'logo.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
@@ -104,7 +104,6 @@ class EnterpriseController extends Controller
                 'name' => $request->name,
                 'description' => $request->description,
             ];
-
             if ($request->has('logo')) {
                 $fileImage =  $request->file('logo');
                 $logo = $this->uploadFile($fileImage);
@@ -131,17 +130,17 @@ class EnterpriseController extends Controller
     }
     public function update(Request $request, $id)
     {
+        // dd($request->all());
         $validator = Validator::make(
             $request->all(),
             [
-                'name' => 'required',
+                'name' => 'required|unique:enterprises,name,' . $id,
                 'description' => "required",
-
             ],
             [
-                'name.required' => 'Trường name không bỏ trống',
-                'description.required' => 'Trường mô tả không bỏ trống',
-
+                'name.required' => 'Chưa nhập trường này !',
+                'name.unique' => 'Đã tồn tại trường này',
+                'description.required' => 'Chưa nhập trường này !',
             ]
         );
 

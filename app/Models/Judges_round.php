@@ -12,4 +12,8 @@ class Judges_round extends Model
     protected $table = 'judges_rounds';
     protected $fillable = ['judge_id', 'round_id'];
     use HasFactory;
+    public function judge()
+    {
+        return $this->belongsTo(Judge::class, 'judge_id')->with('user');
+    }
 }

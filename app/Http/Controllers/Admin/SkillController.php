@@ -22,7 +22,7 @@ class SkillController extends Controller
         $major = $request->has('major_id') ? $request->major_id : null;
         $orderBy = $request->has('orderBy') ? $request->orderBy : 'id';
         $timeDay = $request->has('day') ? $request->day : Null;
-        $sortBy = $request->has('sortBy') ? $request->sortBy : "asc";
+        $sortBy = $request->has('sortBy') ? $request->sortBy : "desc";
         $softDelete = $request->has('skill_soft_delete') ? $request->skill_soft_delete : null;
 
         if ($softDelete != null) {
@@ -96,7 +96,7 @@ class SkillController extends Controller
     }
     public function store(Request $request)
     {
-        // dd($request->all);
+
         $validator = Validator::make(
             $request->all(),
             [
@@ -142,11 +142,16 @@ class SkillController extends Controller
             $newSkill = Skills::create($data);
 
             if ($newSkill) {
-                if ($request->major_id != 0) {
-                    MajorSkill::create([
-                        'major_id' => $request->major_id,
-                        'skill_id' => $newSkill->id,
-                    ]);
+
+                if ($request->major_id != null) {
+
+                    foreach ($request->major_id as $item) {
+
+                        MajorSkill::create([
+                            'major_id' => $item,
+                            'skill_id' => $newSkill->id,
+                        ]);
+                    }
                 }
             }
             Db::commit();
@@ -161,12 +166,13 @@ class SkillController extends Controller
     {
 
         $data =  Skills::find($id);
-
         $dataMajor = Major::where('parent_id', 0)->get();
+
         return view('pages.skill.form-edit', compact('data', 'dataMajor'));
     }
     public function update(Request $request, $id)
     {
+
         $validator = Validator::make(
             $request->all(),
             [
@@ -178,11 +184,11 @@ class SkillController extends Controller
 
                 'name.required' => 'Chưa nhập trường này !',
                 'name.max' => 'Độ dài kí tự không phù hợp !',
-                'name.unique' => 'trường name đã tồn tại !',
+                'name.unique' => 'Đã tồn tại trường này !',
                 'short_name.required' => 'Chưa nhập trường này !',
                 'short_name.max' => 'Độ dài kí tự không phù hợp !',
                 'short_name.unique' => 'Đã tồn tại trường này !',
-                'short_name.regex' => 'Phải viết hoa trường này!',
+
 
                 'description.required' => 'Chưa nhập trường này !',
             ]
@@ -206,17 +212,18 @@ class SkillController extends Controller
                 $skill->image_url = $logo;
             }
             $skill->save();
-            $IdmajorSkill = MajorSkill::where('major_id', $request->oldMajor)->where('skill_id', $id)->first();
-            $majorSkill = MajorSkill::find($IdmajorSkill->id);
-            if ($request->major_id != 0) {
-                $majorSkill->major_id = $request->major_id;
-                $majorSkill->skill_id = $id;
-                $majorSkill->save();
-            }
-            else{
-                 $majorSkill->delete();
-            }
+            if ($request->major_id != null) {
 
+                MajorSkill::where('skill_id', $id)->delete();
+                foreach ($request->major_id as $item) {
+                    MajorSkill::create([
+                        'major_id' => $item,
+                        'skill_id' => $id,
+                    ]);
+                }
+            } else {
+                MajorSkill::where('skill_id', $id)->delete();
+            }
             Db::commit();
             return redirect()->route('admin.skill.index');
         } catch (\Throwable $th) {

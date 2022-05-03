@@ -55,7 +55,7 @@
                             Session::forget('error');
                         @endphp
                     @endif
-                    <form id="formAddContest" action="{{ route('admin.enterprise.update', $enterprise->id) }}"
+                    <form id="formAddEnterprise" action="{{ route('admin.enterprise.update', $enterprise->id) }}"
                         method="post" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
@@ -69,7 +69,7 @@
                                     <input type="text" name="name" value="{{ $enterprise->name }}" class=" form-control"
                                         placeholder="">
                                     @error('name')
-                                        <p class="text-danger">{{ $message }}</p>
+                                        <p id="checkname" class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="form-group mb-10">
@@ -104,7 +104,9 @@
 @endsection
 @section('page-script')
     <script src="assets/js/system/preview-file/previewImg.js"></script>
+    <script src="assets/js/system/enterprise/form.js"></script>
     <script>
         preview.showFile('#file-input', '#image-preview');
     </script>
+    <script src="assets/js/system/validate/validate.js"></script>
 @endsection

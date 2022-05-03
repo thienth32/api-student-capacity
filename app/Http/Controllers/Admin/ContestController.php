@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Contest;
 use App\Models\Enterprise;
+use App\Models\Judge;
 use App\Models\Major;
 use App\Models\Team;
 use App\Models\User;
@@ -42,7 +43,11 @@ class ContestController extends Controller
             $now = Carbon::now('Asia/Ho_Chi_Minh');
             $data = $this->contest::when(request()->has('contest_soft_delete'), function ($q) {
                 return $q->onlyTrashed();
-            })->search(request('q') ?? null, ['name', 'description'])
+            })
+                ->when(auth()->check() && auth()->user()->hasRole('judge'), function ($q) {
+                    return $q->whereIn('id', array_unique(Judge::where('user_id', auth()->user()->id)->pluck('contest_id')->toArray()));
+                })
+                ->search(request('q') ?? null, ['name', 'description'])
                 ->missingDate('register_deadline', request('miss_date') ?? null, $now->toDateTimeString())
                 ->passDate('register_deadline', request('pass_date') ?? null, $now->toDateTimeString())
                 ->registration_date('end_register_time', request('registration_date') ?? null, $now->toDateTimeString())
@@ -377,7 +382,19 @@ class ContestController extends Controller
 
     public function show(Request $request, $id)
     {
-        $contest =  Contest::find($id);
+        $contest =  Contest::find($id)->load(['rounds' => function ($q) use ($id) {
+            return $q->when(
+                auth()->check() && auth()->user()->hasRole('judge'),
+                function ($q) use ($id) {
+                    $judge = Judge::where('contest_id', $id)->where('user_id', auth()->user()->id)->with('judge_round')->first('id');
+                    $arrId = [];
+                    foreach ($judge->judge_round as $judge_round) {
+                        array_push($arrId, $judge_round->id);
+                    }
+                    return $q->whereIn('id', $arrId);
+                }
+            );
+        }]);
         return view('pages.contest.detail.detail', compact('contest'));
     }
 
@@ -475,6 +492,7 @@ class ContestController extends Controller
 
     public function editFormTeamContest($id, $id_team)
     {
+
         $contest = Contest::find($id);
         if (!is_null($contest)) {
             $userArray = [];

@@ -15,7 +15,8 @@
                         </a>
                     </li>
                     <li class="breadcrumb-item pe-3">
-                        <a href="{{ route('admin.round.list') }}" class="pe-3">Vòng thi </a>
+                        <a href="{{ route('admin.contest.detail.round', ['id' => $round->contest_id]) }}"
+                            class="pe-3">Vòng thi </a>
                     </li>
                     <li class="breadcrumb-item px-3 text-muted">{{ $round->name }}</li>
                 </ol>
@@ -131,51 +132,101 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class=" card card-flush ">
+                        <div class="row p-5 d-flex justify-content-center align-items-center ">
+
+                            @if (count($roundTeam) > 0)
+                                <div class="col-md-3">
+                                    <a href="{{ route('admin.round.detail.updateRoundTeam', ['id' => $round->id]) }}">
+                                        <div
+                                            class="badge badge-primary badge-pill bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
+                                            <div class="m-0  ">
+                                                <span class="text-white-700 fw-bold fs-6">Công bố đội thi</span>
+                                            </div>
+
+                                        </div>
+                                    </a>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
     </div>
 
     <div class="row">
         <div class="col-lg-12">
             <div class=" card card-flush ">
                 <div class="row p-5 d-flex justify-content-center align-items-center ">
+                    @hasanyrole(config('util.ROLE_ADMINS') . '|judge')
+                        <div class="col-md-3 mb-5">
+                            <a href="{{ route('admin.round.detail.team', ['id' => $round->id]) }}">
+                                <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
+                                    <div class="m-0">
+                                        <span class="text-gray-700 fw-bold fs-6">Đội thi</span>
+                                    </div>
+                                    <div class="m-0 badge badge-primary badge-pill">
+                                        <span class=" fs-6 text-white">{{ count($round->teams) }}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    @endhasanyrole
+                    @hasanyrole(config('util.ROLE_ADMINS'))
+                        <div class="col-md-3 mb-5">
+                            <a href="{{ route('admin.judges.round', ['round_id' => $round->id]) }}">
+                                <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
+                                    <div class="m-0">
+                                        <span class="text-gray-700 fw-bold fs-6">Ban giám khảo</span>
+                                    </div>
+                                    <div class="m-0 badge badge-primary badge-pill">
+                                        <span class=" fs-6 text-white">{{ count($round->judges) }}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
 
-                    <div class="col-md-3">
-                        <a href="{{ route('admin.round.detail.team', ['id' => $round->id]) }}">
-                            <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
-                                <div class="m-0">
-                                    <span class="text-gray-700 fw-bold fs-6">Đội thi</span>
+                        <div class="col-md-3 mb-5">
+                            <a href="{{ route('admin.round.detail.enterprise', ['id' => $round->id]) }}">
+                                <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
+                                    <div class="m-0">
+                                        <span class="text-gray-700 fw-bold fs-6">Doanh nghiệp tài trợ</span>
+                                    </div>
+                                    <div class="m-0 badge badge-primary badge-pill">
+                                        <span class=" fs-6 text-white">{{ count($round->Donor) }}</span>
+                                    </div>
                                 </div>
-                                <div class="m-0 badge badge-primary badge-pill">
-                                    <span class=" fs-6 text-white">{{ count($round->teams) }}</span>
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-5">
+                            <a href="{{ route('admin.exam.index', ['id' => $round->id]) }}">
+                                <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
+                                    <div class="m-0">
+                                        <span class="text-gray-700 fw-bold fs-6">Đề bài</span>
+                                    </div>
+                                    <div class="m-0 badge badge-primary badge-pill">
+                                        <span class=" fs-6 text-white">{{ count($round->exams) }}</span>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-md-3">
-                        <a href="{{ route('admin.judges.round', ['round_id' => $round->id]) }}">
-                            <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
-                                <div class="m-0">
-                                    <span class="text-gray-700 fw-bold fs-6">Ban giám khảo</span>
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-5">
+                            <a href="{{ route('admin.result.index', ['id' => $round->id]) }}">
+                                <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
+                                    <div class="m-0">
+                                        <span class="text-gray-700 fw-bold fs-6">Danh sách kết quả</span>
+                                    </div>
+                                    {{-- <div class="m-0 badge badge-primary badge-pill">
+                                        <span class=" fs-6 text-white">{{ count($round->exams) }}</span>
+                                    </div> --}}
                                 </div>
-                                <div class="m-0 badge badge-primary badge-pill">
-                                    <span class=" fs-6 text-white">{{ count($round->judges) }}</span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="col-md-3">
-                        <a href="{{ route('admin.round.detail.enterprise', ['id' => $round->id]) }}">
-                            <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
-                                <div class="m-0">
-                                    <span class="text-gray-700 fw-bold fs-6">Doanh nghiệp tài trợ</span>
-                                </div>
-                                <div class="m-0 badge badge-primary badge-pill">
-                                    <span class=" fs-6 text-white">{{ count($round->Donor) }}</span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
+                            </a>
+                        </div>
+                    @endhasanyrole
                 </div>
             </div>
         </div>

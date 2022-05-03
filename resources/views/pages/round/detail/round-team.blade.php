@@ -17,7 +17,8 @@
                             </a>
                         </li>
                         <li class="breadcrumb-item pe-3">
-                            <a href="{{ route('admin.round.list') }}" class="pe-3">Vòng thi </a>
+                            <a href="{{ route('admin.contest.detail.round', ['id' => $round->contest_id]) }}"
+                                class="pe-3">Vòng thi </a>
                         </li>
                         <li class="breadcrumb-item px-3 text-muted">
                             <a href="{{ route('admin.round.detail', ['id' => $round->id]) }}">
@@ -62,6 +63,7 @@
                                 <th>#</th>
                                 <th>Ảnh</th>
                                 <th>Tên đội</th>
+
                                 <th>Thao tác</th>
                             </tr>
                         </thead>
@@ -75,7 +77,12 @@
                                     <td><img class='w-100px'
                                             src="{{ Storage::disk('google')->has($team->image)? Storage::disk('google')->url($team->image): 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
                                             alt=""></td>
-                                    <td>{{ $team->name }}</td>
+                                    <td> <a
+                                            href="{{ route('admin.round.detail.team.detail', ['id' => $round->id, 'teamId' => $team->id]) }}">
+                                            {{ $team->name }}</a>
+
+                                    </td>
+
                                     <td>
                                         <a href="{{ route('admin.round.detail.team.detach', ['id' => $round->id, 'team_id' => $team->id]) }}"
                                             class="btn btn-danger deleteTeams"><i class="fas fa-trash-alt"></i></a>
@@ -94,7 +101,7 @@
 @endsection
 @section('page-script')
     <script>
-        var URL = window.location.href;
+        var URL = '{{ url()->current() }}' + '?';
         var userArray = [];
         var _token = "{{ csrf_token() }}"
         // var URL_ATTACH = "{{ route('admin.judges.attach', ['contest_id' => $round->id]) }}"

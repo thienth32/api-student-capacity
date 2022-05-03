@@ -47,18 +47,24 @@
 
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="form-group p-2">
-                    <label class="form-label">Cuộc thi </label>
-                    <select id="selectContest" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
-                        data-hide-search="true" tabindex="-1" aria-hidden="true">
-                        <option value="0">Chọn cuộc thi</option>
-                        @forelse ($Contest as $itemContest)
-                            <option @selected(request('contest') == $itemContest->id) value="{{ $itemContest->id }}">
-                                Cuộc Thi : {{ $itemContest->name }}
-                            </option>
-                        @empty
-                            <option>Không có cuộc thi</option>
-                        @endforelse
-                    </select>
+
+                    <div class="form-group mb-10">
+                        <label for="" class="form-label">Thuộc cuộc thi</label>
+                        <select id="selectContest" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                            data-hide-search="false" tabindex="-1" aria-hidden="true" name=""
+                            value="">
+                            <option value="">Chọn cuộc thi</option>
+                            @forelse ($Contest as $itemContest)
+                                <option @selected(request('contest') == $itemContest->id) value="{{ $itemContest->id }}">
+                                    Cuộc Thi : {{ $itemContest->name }}
+                                </option>
+                            @empty
+                                <option>Không có cuộc thi</option>
+                            @endforelse
+                        </select>
+
+                    </div>
+
                 </div>
             </div>
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
@@ -257,7 +263,7 @@
                                 </th>
                                 <td>
 
-                                    <button style="border:none;background:#ffff" type="button" data-bs-toggle="modal"
+                                    <button style="border:none;background:#ffff; text-align: left;" type="button" data-bs-toggle="modal"
                                         data-bs-target="#deltai_team_{{ $key->id }}">
                                         {{ $key->name }}
                                     </button>
@@ -281,8 +287,9 @@
                                                                 alt="">
                                                             <h4 class="mt-3">Ngày Tạo : {{ $key->created_at }}
                                                             </h4>
-                                                            <h5>Tham gia cuộc thi
-                                                                :{{ $key->contest->name ?? 'Chưa có cuộc thi ' }}</h5>
+                                                            <h5>Tham gia cuộc thi :
+                                                                <a href="{{ route('admin.contest.show', $key->contest->id) }}"> {{ $key->contest->name ?? 'Chưa có Cuộc thi ' }}</a>
+                                                               </h5>
                                                         </div>
                                                         <div class="col md-6">
                                                             <h3>Tên Đội : {{ $key->name }}</h3>
@@ -310,7 +317,8 @@
                                 </td>
 
                                 <td>
-                                    Cuộc Thi: {{ $key->contest->name ?? 'Chưa có Cuộc thi ' }}
+                                    Cuộc Thi:  <a href="{{ route('admin.contest.show', $key->contest->id) }}"> {{ $key->contest->name ?? 'Chưa có Cuộc thi ' }}</a>
+
                                 </td>
                                 <td>
                                     <button class="btn  btn-primary btn-sm" type="button" data-bs-toggle="modal"

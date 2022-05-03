@@ -26,7 +26,7 @@
                     thi</a>
             </div>
         </div>
-        <div class="row">
+        {{-- <div class="row">
             <div class="col-lg-12">
                 <form id="formTeam" action="{{ route('admin.contest.detail.team.addSelect', ['id' => $contest->id]) }}"
                     method="POST">
@@ -47,7 +47,7 @@
 
                 </form>
             </div>
-        </div>
+        </div> --}}
 
     </div>
 
