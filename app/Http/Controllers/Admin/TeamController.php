@@ -424,7 +424,7 @@ class TeamController extends Controller
         try {
             $usersNotTeam = User::where('status', config('util.ACTIVE_STATUS'))->pluck('id');
             $usersNotTeam = $this->checkUserDrugTeam($id_contest, $usersNotTeam);
-            $users = User::select('id', 'name', 'email')
+            $users = User::select('id', 'name', 'email', 'avatar')
                 ->search(request('key') ?? null, ['name', 'email'])
                 ->whereIn('id', $usersNotTeam['user-pass'])
                 ->limit(5)->get();
