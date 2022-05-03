@@ -366,7 +366,7 @@ class TeamController extends Controller
 
     public function addUserTeamContest(Request $request, $id_contest, $id_team)
     {
-        $validate = validator::make(
+        $validate = Validator::make(
             $request->all(),
             [
                 "user_id"    => "required",
@@ -380,33 +380,43 @@ class TeamController extends Controller
             'status' => false,
             'payload' => $validate->errors()
         ]);
-        $team = Team::where('id', $id_team)->where('contest_id', $id_contest)->first();
-        if (is_null($team)) return response()->json([
-            'status' => false,
-            'payload' => 'Đội không tồn tại trong cuộc thi !'
-        ]);
-        $team->load('members');
-
-        foreach ($team->members as $userTeam) {
-            if ($userTeam->pivot->bot != 1) return response()->json([
+        DB::beginTransaction();
+        try {
+            $user_id = auth('sanctum')->user()->id;
+            $team = Team::where('id', $id_team)->where('contest_id', $id_contest)->first();
+            if (is_null($team)) return response()->json([
                 'status' => false,
-                'payload' => 'Không đủ quyền để thêm thành viên !'
+                'payload' => 'Đội không tồn tại trong cuộc thi !'
             ]);
-        }
-        $result = $this->checkUserDrugTeam($id_contest, $request->user_id);
-        $team->members()->syncWithoutDetaching($result['user-pass']);
-        if (count($result['user-not-pass']) > 0) {
-            $user = User::select('name', 'email')->whereIn('id', $result['user-not-pass'])->get();
-            return response()->json([
-                'status' => true,
-                'payload' => 'Thêm thành viên thành công !',
-                'users' => $user
-            ]);
-        } else {
-            return response()->json([
-                'status' => true,
-                'payload' => 'Thêm thành viên thành công !',
-            ]);
+            $team->load('members');
+            $result = $this->checkUserDrugTeam($id_contest, $request->user_id);
+            foreach ($team->members as $userTeam) {
+                if ($userTeam->id === $user_id && $userTeam->pivot->bot == 1) {
+                    $team->members()->syncWithoutDetaching($result['user-pass']);
+                    DB::commit();
+                    if (count($result['user-not-pass']) > 0) {
+                        $user = User::select('name', 'email')->whereIn('id', $result['user-not-pass'])->get();
+                        return response()->json([
+                            'status' => true,
+                            'payload' => 'Thêm thành viên thành công !',
+                            'users' => $user
+                        ]);
+                    } else {
+                        return response()->json([
+                            'status' => true,
+                            'payload' => 'Thêm thành viên thành công !',
+                        ]);
+                    }
+                } else {
+                    return response()->json([
+                        'status' => false,
+                        'payload' => 'Không đủ quyền để thêm thành viên !'
+                    ]);
+                }
+            }
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            dd($th);
         }
     }
     public function userTeamSearch($id_contest)
