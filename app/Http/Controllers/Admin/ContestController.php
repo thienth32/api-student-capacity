@@ -254,14 +254,14 @@ class ContestController extends Controller
             $request->all(),
             [
                 'name' => 'required|unique:contests,name,' . $id . '',
-                'img' => 'required|mimes:jpeg,png,jpg|max:10000',
+                // 'img' => 'required|mimes:jpeg,png,jpg|max:10000',
                 'date_start' => "required",
                 'register_deadline' => "required|after:date_start",
                 'description' => "required",
                 'major_id' => "required",
                 'status' => "required",
                 'start_register_time' => 'required|date|before:end_register_time',
-                'end_register_time' => 'required|date|after:start_register_time|before:date_start',
+                'end_register_time' => 'required|date|after:start_register_time',
             ],
             [
                 'img.mimes' => 'Sai định dạng !',
