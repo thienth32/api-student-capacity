@@ -254,7 +254,7 @@ class ContestController extends Controller
             $request->all(),
             [
                 'name' => 'required|unique:contests,name,' . $id . '',
-                // 'img' => 'required|mimes:jpeg,png,jpg|max:10000',
+                'img' => 'mimes:jpeg,png,jpg|max:10000',
                 'date_start' => "required",
                 'register_deadline' => "required|after:date_start",
                 'description' => "required",
