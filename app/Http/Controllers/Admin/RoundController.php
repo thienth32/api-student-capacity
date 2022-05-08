@@ -295,6 +295,7 @@ class RoundController extends Controller
     public function update($id)
     {
         if ($data = $this->updateRound($id)) {
+        // dd($data);
             if (isset($data['status']) && $data['status'] == false) return redirect()->back()->withErrors($data['errors']);
             return redirect(route('admin.round.list'));
         }
@@ -405,7 +406,7 @@ class RoundController extends Controller
     {
 
         if (!($round = $this->round::with(['contest', 'type_exam', 'judges', 'teams', 'Donor'])->where('id', $id)->first())) return abort(404);
-        $roundTeam = RoundTeam::where('round_id', $id)->where('status', 2)->get();
+        $roundTeam = RoundTeam::where('round_id', $id)->where('status', config('util.ROUND_TEAM_STATUS_NOT_ANNOUNCED'))->get();
 
         return view('pages.round.detail.detail', ['round' => $round, 'roundTeam' => $roundTeam]);
     }
@@ -416,11 +417,11 @@ class RoundController extends Controller
     public function roundDetailUpdateRoundTeam($id)
     {
         try {
-            $roundTeam = RoundTeam::where('round_id', $id)->where('status', 2)->get();
+            $roundTeam = RoundTeam::where('round_id', $id)->where('status', config('util.ROUND_TEAM_STATUS_NOT_ANNOUNCED'))->get();
             if (count($roundTeam) > 0) {
                 foreach ($roundTeam as $item) {
                     $updateRoundTeam = RoundTeam::find($item->id);
-                    $updateRoundTeam->status = 1;
+                    $updateRoundTeam->status = config('util.ROUND_TEAM_STATUS_ANNOUNCED');
                     $updateRoundTeam->save();
                 }
             }
@@ -698,12 +699,11 @@ class RoundController extends Controller
                 $takeExam->mark_comment = $request->has('mark_comment') ? $request->mark_comment : null;
                 $takeExam->save();
             }
-
             if ($request->has('roundId') &&  $request->final_point >= $request->ponit) {
                 RoundTeam::create([
                     'round_id' => $request->roundId,
                     'team_id' => $teamId,
-                    'status' => 2 // Chưa công bố
+                    'status' =>config('util.ROUND_TEAM_STATUS_NOT_ANNOUNCED') // Chưa công bố
                 ]);
             }
 
@@ -743,7 +743,7 @@ class RoundController extends Controller
         $round = Round::find($id);
         $team = Team::where('id', $teamId)->first();
         $takeExam = RoundTeam::where('round_id', $id)->where('team_id', $teamId)->first()->takeExam;
-        // dd($takeExam);
+        // dd($round->judges);
         return view(
             'pages.round.detail.team.team_judges_result',
             [
