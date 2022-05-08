@@ -68,11 +68,11 @@
 
                                 <tr>
                                     <td></td>
-                                    <td>{{ $takeExam->exam->name }}</td>
+                                    <td> <a href="{{ route('admin.round.detail.team.Exam', ['id' => $round->id, 'teamId' => $team->id]) }}">{{ $takeExam->exam->name }}</a> </td>
                                     <td>
-                                        @if ($takeExam->status == 1)
+                                        @if ($takeExam->status == config('util.TAKE_EXAM_STATUS_UNFINISHED'))
                                             <span class="badge bg-primary p-3"> Chưa có bài </span>
-                                        @elseif($takeExam->status == 0)
+                                        @elseif($takeExam->status == config('util.TAKE_EXAM_STATUS_CANCEL'))
                                             <span class="badge bg-danger  p-3"> Bài thi bị hủy </span>
                                         @else
                                             <a class="badge bg-primary p-3" href="{{ $takeExam->result_url }}">
@@ -81,9 +81,9 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @if ($takeExam->status == 1)
+                                        @if ($takeExam->status == config('util.TAKE_EXAM_STATUS_UNFINISHED'))
                                             <span class="badge bg-success  p-3"> Đang làm bài </span>
-                                        @elseif($takeExam->status == 2)
+                                        @elseif($takeExam->status == config('util.TAKE_EXAM_STATUS_COMPLETE'))
                                             <span class="badge bg-success  p-3"> Đã nộp bài </span>
                                         @else
                                             <span class="badge bg-danger  p-3"> Đã hủy bài </span>
@@ -91,15 +91,17 @@
                                     </td>
                                     <td>{{ $takeExam->exam->ponit }}</td>
                                     <td>
-                                        @if ($takeExam->status == 2)
+                                        @if ($takeExam->status == config('util.TAKE_EXAM_STATUS_COMPLETE'))
                                             {{ $takeExam->final_point ?? 0 }}/{{ $takeExam->exam->max_ponit }}
                                         @else
                                             0/{{ $takeExam->exam->max_ponit }}
                                         @endif
                                     </td>
                                     <td>
-                                        @if ($takeExam->status == 2 && $takeExam->final_point >= $takeExam->exam->ponit)
+                                        @if ($takeExam->status == config('util.TAKE_EXAM_STATUS_COMPLETE') && $takeExam->final_point >= $takeExam->exam->ponit)
                                             <span class="badge bg-success  p-3"> Passed </span>
+                                        @elseif($takeExam->status == config('util.TAKE_EXAM_STATUS_COMPLETE') && $takeExam->final_point ==null)
+                                        <span class="badge bg-success  p-3">Đang đợi điểm</span>
                                         @else
                                             <span class="badge bg-danger  p-3"> Failed</span>
                                         @endif
