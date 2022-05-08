@@ -15,7 +15,8 @@
                         </a>
                     </li>
                     <li class="breadcrumb-item pe-3">
-                        <a href="{{ route('admin.round.list') }}" class="pe-3">Vòng thi </a>
+                        <a href="{{ route('admin.contest.detail.round', ['id' => $round->contest_id]) }}"
+                            class="pe-3">Vòng thi </a>
                     </li>
                     <li class="breadcrumb-item px-3 text-muted">
                         <a href="{{ route('admin.round.detail', ['id' => $round->id]) }}">
@@ -23,7 +24,7 @@
                         </a>
                     </li>
                     <li class="breadcrumb-item px-3 text-muted">
-                        <a href="{{ route('admin.round.detail.team', ['id' => $round->id]) }}"> đội thi</a>
+                        <a href="{{ route('admin.round.detail.team', ['id' => $round->id]) }}"> Đội thi</a>
                     </li>
                     <li class="breadcrumb-item px-3 text-muted">
                         {{ $team->name }}
@@ -184,7 +185,8 @@
                 <div class="row p-5 d-flex justify-content-center align-items-center ">
 
                     <div class="col-md-3">
-                        <a href="{{ route('admin.round.detail.team.Exam', ['id' => $round->id, 'teamId' => $team->id]) }}">
+                        <a
+                            href="{{ route('admin.round.detail.team.Exam', ['id' => $round->id, 'teamId' => $team->id]) }}">
                             <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
                                 <div class="m-0">
                                     <span class="text-gray-700 fw-bold fs-6">Đề bài</span>
@@ -194,7 +196,8 @@
                         </a>
                     </div>
                     <div class="col-md-3">
-                        <a href="{{ route('admin.round.detail.team.takeExam', ['id' => $round->id , 'teamId' => $team->id]) }}">
+                        <a
+                            href="{{ route('admin.round.detail.team.takeExam', ['id' => $round->id, 'teamId' => $team->id]) }}">
                             <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
                                 <div class="m-0">
                                     <span class="text-gray-700 fw-bold fs-6">Bài làm và kết quả</span>
@@ -204,7 +207,8 @@
                         </a>
                     </div>
                     <div class="col-md-3">
-                        <a href="{{ route('admin.round.detail.team.judge', ['id' => $round->id ,'teamId' => $team->id]) }}">
+                        <a
+                            href="{{ route('admin.round.detail.team.judge', ['id' => $round->id, 'teamId' => $team->id]) }}">
                             <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
                                 <div class="m-0">
                                     <span class="text-gray-700 fw-bold fs-6">Điểm và đánh giá của ban giám khảo</span>

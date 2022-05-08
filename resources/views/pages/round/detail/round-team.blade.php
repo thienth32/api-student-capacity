@@ -17,7 +17,8 @@
                             </a>
                         </li>
                         <li class="breadcrumb-item pe-3">
-                            <a href="{{ route('admin.round.list') }}" class="pe-3">Vòng thi </a>
+                            <a href="{{ route('admin.contest.detail.round', ['id' => $round->contest_id]) }}"
+                                class="pe-3">Vòng thi </a>
                         </li>
                         <li class="breadcrumb-item px-3 text-muted">
                             <a href="{{ route('admin.round.detail', ['id' => $round->id]) }}">
@@ -100,7 +101,7 @@
 @endsection
 @section('page-script')
     <script>
-        var URL = window.location.href;
+        var URL = '{{ url()->current() }}' + '?';
         var userArray = [];
         var _token = "{{ csrf_token() }}"
         // var URL_ATTACH = "{{ route('admin.judges.attach', ['contest_id' => $round->id]) }}"

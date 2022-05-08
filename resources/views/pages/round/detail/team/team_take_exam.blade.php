@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title', 'bài làm của đội thi')
+@section('title', 'Bài làm của đội thi')
 @section('page-title', 'Bài làm của đội thi')
 @section('content')
     <div class=" card card-flush p-5">
@@ -17,7 +17,8 @@
                             </a>
                         </li>
                         <li class="breadcrumb-item pe-3">
-                            <a href="{{ route('admin.round.list') }}" class="pe-3">Vòng thi </a>
+                            <a href="{{ route('admin.contest.detail.round', ['id' => $round->contest_id]) }}"
+                                class="pe-3">Vòng thi </a>
                         </li>
                         <li class="breadcrumb-item px-3 text-muted">
                             <a href="{{ route('admin.round.detail', ['id' => $round->id]) }}">
@@ -25,7 +26,7 @@
                             </a>
                         </li>
                         <li class="breadcrumb-item px-3 text-muted">
-                            <a href="{{ route('admin.round.detail.team', ['id' => $round->id]) }}"> đội thi</a>
+                            <a href="{{ route('admin.round.detail.team', ['id' => $round->id]) }}"> Đội thi</a>
                         </li>
                         <li class="breadcrumb-item px-3 text-muted">
                             {{ $team->name }}
@@ -61,6 +62,7 @@
                                     <th>Điểm thi</th>
                                     <th>Trạng thái</th>
                                     <th>Ghi chú</th>
+                                    <th>Chấm bài </th>
 
                                 </tr>
                             </thead>
@@ -107,6 +109,11 @@
                                         @endif
                                     </td>
                                     <td>{{ $takeExam->mark_comment }}</td>
+                                    <td>
+                                        <a
+                                            href="{{ route('admin.round.detail.team.make.exam', ['id' => $round->id, 'teamId' => $team->id]) }}">Chấm
+                                            bài</a>
+                                    </td>
                                 </tr>
 
                             </tbody>
@@ -123,7 +130,7 @@
 @endsection
 @section('page-script')
     <script>
-        var URL = window.location.href;
+        var URL = '{{ url()->current() }}' + '?';
         var userArray = [];
         var _token = "{{ csrf_token() }}"
     </script>

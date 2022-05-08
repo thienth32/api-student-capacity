@@ -10,8 +10,9 @@ class Evaluation extends Model
 {
     use SoftDeletes;
     protected $table = 'evaluations';
-    protected $fillable = ['ponit', 'exams_team_id', 'judge_round_id'];
+    protected $guarded = [];
     use HasFactory;
+
     public function judge_round()
     {
         return $this->belongsTo(Judges_round::class, 'judge_round_id')->with('judge');

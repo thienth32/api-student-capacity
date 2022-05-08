@@ -17,7 +17,8 @@
                             </a>
                         </li>
                         <li class="breadcrumb-item pe-3">
-                            <a href="{{ route('admin.round.list') }}" class="pe-3">Vòng thi </a>
+                            <a href="{{ route('admin.contest.detail.round', ['id' => $round->contest_id]) }}"
+                                class="pe-3">Vòng thi </a>
                         </li>
                         <li class="breadcrumb-item px-3 text-muted">
                             <a href="{{ route('admin.round.detail', ['id' => $round->id]) }}">
@@ -25,7 +26,7 @@
                             </a>
                         </li>
                         <li class="breadcrumb-item px-3 text-muted">
-                            <a href="{{ route('admin.round.detail.team', ['id' => $round->id]) }}"> đội thi</a>
+                            <a href="{{ route('admin.round.detail.team', ['id' => $round->id]) }}"> Đội thi</a>
                         </li>
                         <li class="breadcrumb-item px-3 text-muted">
                             <a

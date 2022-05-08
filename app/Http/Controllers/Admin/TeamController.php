@@ -172,6 +172,7 @@ class TeamController extends Controller
             return abort(404);
         }
     }
+
     // chi tiết đội thi phía client
     public function apiShow($id)
     {
@@ -195,11 +196,12 @@ class TeamController extends Controller
             [
                 'contest_id' => 'required',
                 'name' => 'required',
-                'image' =>  'mimes:jpeg,png,jpg|max:10000',
+                'image' =>  'required|mimes:jpeg,png,jpg|max:10000',
             ],
             [
                 'contest_id.required' => 'Chưa nhập trường này !',
                 'name.required' => 'Chưa nhập trường này !',
+                'image.required' => 'Chưa nhập trường này !',
                 'image.mimes' => 'Sai định dạng !',
                 'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
             ]
@@ -277,19 +279,27 @@ class TeamController extends Controller
 
     public function apiEditTeam(Request $request, $team_id)
     {
-
         DB::beginTransaction();
         try {
-            $user_id = auth('sanctum')->user()->id;
-            $result = $this->checkUserDrugTeam($request->contest_id, [$user_id]);
-            if (count($result['user-not-pass']) > 0) return response()->json([
+            $validate = Validator::make(
+                $request->all(),
+                [
+                    'name' => 'required',
+                    'image' =>  'mimes:jpeg,png,jpg|max:10000',
+                ],
+                [
+                    'name.required' => 'Chưa nhập trường này !',
+                    'image.mimes' => 'Sai định dạng !',
+                    'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
+                ]
+            );
+            if ($validate->fails()) return response()->json([
                 'status' => false,
-                'payload' => 'Tài khoản này đã tham gia đội thi khác !'
+                'payload' => $validate->errors()
             ]);
-            $today = Carbon::now()->toDateTimeString();
+            $user_id = auth('sanctum')->user()->id;
             $user = User::find($user_id);
             $teamCheck = $this->team::find($team_id)->load('members');
-            $contest = $this->contest::find($teamCheck->contest_id);
             if (is_null($user) || is_null($teamCheck)) {
                 return response()->json([
                     'status' => false,
@@ -306,54 +316,31 @@ class TeamController extends Controller
                     'status' => false,
                     'payload' => 'Tài khoản đã bị khóa !'
                 ]);
-                if (strtotime($contest->register_deadline) > strtotime($today)) {
-                    $validate = validator::make(
-                        $request->all(),
-                        [
-                            'name' => 'required',
-                            'image' =>  'mimes:jpeg,png,jpg|max:10000',
-                        ],
-                        [
-                            'name.required' => 'Chưa nhập trường này !',
-                            'image.mimes' => 'Sai định dạng !',
-                            'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
-                        ]
-                    );
-                    if ($validate->fails()) return response()->json([
-                        'status' => false,
-                        'payload' => $validate->errors()
-                    ]);
-                    $teamChecks = Team::where(
-                        'contest_id',
-                        $request->contest_id
-                    )->where('name', trim($request->name))->get();
-                    foreach ($teamChecks as $teamCheck) {
-                        if ($teamCheck->id != $team_id) return response()->json([
-                            'status' => false,
-                            'payload' => 'Tài khoản này đã tham gia đội thi khác !!'
-                        ]);
-                    }
-                    $team =  $this->team::find($team_id);
-                    if ($request->hasFile('image')) {
-                        $fileImage = $request->file('image');
-                        $filename = $this->uploadFile($fileImage);
-                        $team->image = $filename;
-                    }
-                    $team->name = $request->name;
-                    $team->save();
-                    $team->members()->syncWithoutDetaching($result['user-pass']);
 
-                    DB::commit();
-                    return response()->json([
-                        'status' => true,
-                        'payload' => $team
-                    ]);
-                } else {
-                    return response()->json([
+                $teamChecks = Team::where(
+                    'contest_id',
+                    $request->contest_id
+                )->where('name', trim($request->name))->get();
+                foreach ($teamChecks as $teamCheck) {
+                    if ($teamCheck->id != $team_id) return response()->json([
                         'status' => false,
-                        'payload' => 'Đã quá thời hạn đăng kí cuộc thi !'
+                        'payload' => 'Tài khoản này đã tham gia đội thi khác !!'
                     ]);
                 }
+                $team =  $this->team::find($team_id);
+                if ($request->hasFile('image')) {
+                    $fileImage = $request->file('image');
+                    $filename = $this->uploadFile($fileImage);
+                    $team->image = $filename;
+                }
+                $team->name = $request->name;
+                $team->save();
+
+                DB::commit();
+                return response()->json([
+                    'status' => true,
+                    'payload' => $team
+                ]);
             }
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -379,7 +366,7 @@ class TeamController extends Controller
 
     public function addUserTeamContest(Request $request, $id_contest, $id_team)
     {
-        $validate = validator::make(
+        $validate = Validator::make(
             $request->all(),
             [
                 "user_id"    => "required",
@@ -393,33 +380,43 @@ class TeamController extends Controller
             'status' => false,
             'payload' => $validate->errors()
         ]);
-        $team = Team::where('id', $id_team)->where('contest_id', $id_contest)->first();
-        if (is_null($team)) return response()->json([
-            'status' => false,
-            'payload' => 'Đội không tồn tại trong cuộc thi !'
-        ]);
-        $team->load('members');
-
-        foreach ($team->members as $userTeam) {
-            if ($userTeam->pivot->bot != 1) return response()->json([
+        DB::beginTransaction();
+        try {
+            $user_id = auth('sanctum')->user()->id;
+            $team = Team::where('id', $id_team)->where('contest_id', $id_contest)->first();
+            if (is_null($team)) return response()->json([
                 'status' => false,
-                'payload' => 'Không đủ quyền để thêm thành viên !'
+                'payload' => 'Đội không tồn tại trong cuộc thi !'
             ]);
-        }
-        $result = $this->checkUserDrugTeam($id_contest, $request->user_id);
-        $team->members()->syncWithoutDetaching($result['user-pass']);
-        if (count($result['user-not-pass']) > 0) {
-            $user = User::select('name', 'email')->whereIn('id', $result['user-not-pass'])->get();
-            return response()->json([
-                'status' => true,
-                'payload' => 'Thêm thành viên thành công !',
-                'users' => $user
-            ]);
-        } else {
-            return response()->json([
-                'status' => true,
-                'payload' => 'Thêm thành viên thành công !',
-            ]);
+            $team->load('members');
+            $result = $this->checkUserDrugTeam($id_contest, $request->user_id);
+            foreach ($team->members as $userTeam) {
+                if ($userTeam->id === $user_id && $userTeam->pivot->bot == 1) {
+                    $team->members()->syncWithoutDetaching($result['user-pass']);
+                    DB::commit();
+                    if (count($result['user-not-pass']) > 0) {
+                        $user = User::select('name', 'email')->whereIn('id', $result['user-not-pass'])->get();
+                        return response()->json([
+                            'status' => true,
+                            'payload' => 'Thêm thành viên thành công !',
+                            'users' => $user
+                        ]);
+                    } else {
+                        return response()->json([
+                            'status' => true,
+                            'payload' => 'Thêm thành viên thành công !',
+                        ]);
+                    }
+                } else {
+                    return response()->json([
+                        'status' => false,
+                        'payload' => 'Không đủ quyền để thêm thành viên !'
+                    ]);
+                }
+            }
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            dd($th);
         }
     }
     public function userTeamSearch($id_contest)
@@ -427,7 +424,7 @@ class TeamController extends Controller
         try {
             $usersNotTeam = User::where('status', config('util.ACTIVE_STATUS'))->pluck('id');
             $usersNotTeam = $this->checkUserDrugTeam($id_contest, $usersNotTeam);
-            $users = User::select('id', 'name', 'email')
+            $users = User::select('id', 'name', 'email', 'avatar')
                 ->search(request('key') ?? null, ['name', 'email'])
                 ->whereIn('id', $usersNotTeam['user-pass'])
                 ->limit(5)->get();

@@ -15,7 +15,6 @@ trait TCheckUserDrugTeam
         foreach ($user_id as $userId) {
             $flag = false;
             foreach ($contest->teams as  $team) {
-
                 if (!is_null($team_id)) {
                     if (Team::find($team_id)->id != $team->id) {
                         foreach ($team->members as $user) {

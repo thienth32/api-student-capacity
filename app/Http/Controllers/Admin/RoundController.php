@@ -12,8 +12,9 @@ use App\Models\Contest;
 use App\Models\Donor;
 use App\Models\DonorRound;
 use App\Models\Enterprise;
+use App\Models\Evaluation;
+use App\Models\Judge;
 use App\Models\RoundTeam;
-use App\Models\TakeExams;
 use App\Models\Team;
 use App\Models\TypeExam;
 use Illuminate\Support\Facades\DB;
@@ -136,7 +137,7 @@ class RoundController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'name' => 'required|unique:rounds|max:255',
+                'name' => 'required|unique:rounds|max:255|regex:/^[0-9a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễếệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\ ]+$/u',
                 'image' => 'required|required|mimes:jpeg,png,jpg|max:10000',
                 'start_time' => 'required',
                 'end_time' => 'required|after:start_time',
@@ -148,6 +149,7 @@ class RoundController extends Controller
                 'name.required' => 'Chưa nhập trường này !',
                 'name.max' => 'Độ dài kí tự không phù hợp !',
                 'name.unique' => 'Đã tồn tại trong cơ sở dữ liệu !',
+                'name.regex' => 'Trường name không chứ kí tự đặc biệt !',
                 'image.mimes' => 'Sai định dạng !',
                 'image.required' => 'Chưa nhập trường này !',
                 'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
@@ -229,7 +231,7 @@ class RoundController extends Controller
             $validator = Validator::make(
                 request()->all(),
                 [
-                    'name' => "required|unique:rounds,name,$round->id|max:255",
+                    'name' => "required|unique:rounds,name,$round->id|max:255|regex:/^[0-9a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễếệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\ ]+$/u",
                     'start_time' => "required|before:end_time",
                     'end_time' => "required|after:start_time",
                     'description' => "required",
@@ -240,6 +242,7 @@ class RoundController extends Controller
                     "name.required" => "Trường name không bỏ trống !",
                     'name.max' => 'Độ dài kí tự không phù hợp !',
                     'name.unique' => 'Đã tồn tại trong cơ sở dữ liệu !',
+                    'name.regex' => 'Trường name không chứ kí tự đặc biệt !',
                     // "start_time.date_format" => "Trường thời gian bắt đầu không đúng định dạng !",
                     // "end_time.date_format" => "Trường thời gian kết thúc không đúng định dạng !",
                     "start_time.required" => "Trường thời gian bắt đầu  không bỏ trống !",
@@ -382,7 +385,18 @@ class RoundController extends Controller
         $contest = $this->contest->find($id);
         $rounds = $this->getList();
         return view('pages.contest.detail.contest-round', [
-            'rounds' => $rounds->where('contest_id', $id)->paginate(request('limit') ?? 5),
+            'rounds' => $rounds->where('contest_id', $id)
+                ->when(
+                    auth()->check() &&  auth()->user()->hasRole('judge'),
+                    function ($q) use ($id) {
+                        $judge = Judge::where('contest_id', $id)->where('user_id', auth()->user()->id)->with('judge_round')->first('id');
+                        $arrId = [];
+                        foreach ($judge->judge_round as $judge_round) {
+                            array_push($arrId, $judge_round->id);
+                        }
+                        return $q->whereIn('id', $arrId);
+                    }
+                )->paginate(request('limit') ?? 5),
             'contests' => $this->contest::withCount(['teams', 'rounds'])->get(),
             'type_exams' => $this->type_exam::all(),
             'contest' =>  $contest
@@ -552,7 +566,7 @@ class RoundController extends Controller
         try {
             $round = Round::find($id);
             $team = Team::where('id', $teamId)->first();
-            $takeExam = RoundTeam::where('round_id', $id)->where('team_id', $teamId)->first();
+            $takeExam = RoundTeam::where('round_id', $id)->where('team_id', $teamId)->with('takeExam')->first();
             return view(
                 'pages.round.detail.team.team_take_exam',
                 [
@@ -562,9 +576,115 @@ class RoundController extends Controller
                 ]
             );
         } catch (\Throwable $th) {
-            return Redirect::back();
+            return abort(404);
         }
     }
+
+    public function roundDetailTeamMakeExam($id, $teamId)
+    {
+        try {
+            $round = Round::find($id);
+            $team = Team::where('id', $teamId)->first();
+            $takeExam = RoundTeam::where('round_id', $id)->where('team_id', $teamId)->with('takeExam', function ($q) use ($round) {
+                return $q->with(['exam', 'evaluations' => function ($q) use ($round) {
+                    $judge = Judge::where('contest_id', $round->contest_id)->where('user_id', auth()->user()->id)->with('judge_rounds', function ($q) use ($round) {
+                        return $q->where('round_id', $round->id);
+                    })->first('id');
+                    return $q->where('judge_round_id', $judge->judge_rounds[0]->id);
+                }]);
+            })->first();
+            return view(
+                'pages.round.detail.team-make-exam',
+                [
+                    'takeExam' => $takeExam->takeExam,
+                    'round' => $round,
+                    'team' => $team
+                ]
+            );
+        } catch (\Throwable $th) {
+            return abort(404);
+        }
+    }
+
+    public function roundDetailFinalTeamMakeExam(Request $request, $id, $teamId)
+    {
+        $round = Round::find($id);
+        $team = Team::where('id', $teamId)->first();
+        $roundTeam = RoundTeam::where('round_id', $id)
+            ->where('team_id', $teamId)
+            ->with('takeExam', function ($q) use ($round) {
+                return $q->with(['exam', 'evaluations']);
+            })->first();
+        $request->validate([
+            'ponit' => 'required|numeric|min:0|max:' . $roundTeam->takeExam->exam->max_ponit,
+            'comment' => 'required',
+            'status' => 'required',
+        ], [
+            'ponit.required' => 'Trường điểm không bỏ trống !',
+            'ponit.numeric' => 'Trường điểm đúng định dạng !',
+            'ponit.min' => 'Trường điểm phải thuộc số dương  !',
+            'ponit.max' => 'Trường điểm không lớn hơn thang điểm ' . $roundTeam->takeExam->exam->max_ponit . '!',
+            'comment.required' => 'Trường nhận xét không bỏ trống !',
+        ]);
+        $judge = Judge::where('contest_id', $round->contest_id)->where('user_id', auth()->user()->id)->with('judge_rounds', function ($q) use ($round) {
+            return $q->where('round_id', $round->id);
+        })->first('id');
+        $dataCreate = array_merge($request->only([
+            'ponit',
+            'comment',
+            'status'
+        ]), [
+            'exams_team_id' => $roundTeam->takeExam->id,
+            'judge_round_id' =>  $judge->judge_rounds[0]->id
+        ]);
+        try {
+            Evaluation::create($dataCreate);
+            return redirect()->route('admin.round.detail.team', ['id' => $round->id]);
+        } catch (\Throwable $th) {
+            return redirect()->back();
+        }
+    }
+
+    public function roundDetailUpdateTeamMakeExam(Request $request, $id, $teamId)
+    {
+        $round = Round::find($id);
+        $roundTeam = RoundTeam::where('round_id', $id)
+            ->where('team_id', $teamId)
+            ->with('takeExam', function ($q) use ($round) {
+                return $q->with(['exam', 'evaluations']);
+            })->first();
+        $request->validate([
+            'ponit' => 'required|numeric|min:0|max:' . $roundTeam->takeExam->exam->max_ponit,
+            'comment' => 'required',
+            'status' => 'required',
+        ], [
+            'ponit.required' => 'Trường điểm không bỏ trống !',
+            'ponit.numeric' => 'Trường điểm đúng định dạng !',
+            'ponit.min' => 'Trường điểm phải thuộc số dương  !',
+            'ponit.max' => 'Trường điểm không lớn hơn thang điểm ' . $roundTeam->takeExam->exam->max_ponit . '!',
+            'comment.required' => 'Trường nhận xét không bỏ trống !',
+        ]);
+        $judge = Judge::where('contest_id', $round->contest_id)->where('user_id', auth()->user()->id)->with('judge_rounds', function ($q) use ($round) {
+            return $q->where('round_id', $round->id);
+        })->first('id');
+        $dataCreate = array_merge($request->only([
+            'ponit',
+            'comment',
+            'status'
+        ]), [
+            'exams_team_id' => $roundTeam->takeExam->id,
+            'judge_round_id' =>  $judge->judge_rounds[0]->id
+        ]);
+        try {
+            Evaluation::where('exams_team_id', $roundTeam->takeExam->id)
+                ->where('judge_round_id', $judge->judge_rounds[0]->id)
+                ->update($dataCreate);
+            return redirect()->route('admin.round.detail.team', ['id' => $round->id]);
+        } catch (\Throwable $th) {
+            return redirect()->back();
+        }
+    }
+
     /**
      * UPdate điểm bài thi cho đội thi
      */
