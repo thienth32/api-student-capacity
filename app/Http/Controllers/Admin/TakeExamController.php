@@ -34,14 +34,11 @@ class TakeExamController extends Controller
             'payload' => $validate->errors()
         ]);
         $round = Round::find($request->round_id)->load('teams');
-
         DB::beginTransaction();
         try {
             foreach ($round->teams as $team) {
                 foreach ($team->users as $user) {
-                    // dump($user->toArray());
                     if ($user->id == $user_id) {
-                        // dump($team->toArray());
                         $checkUserTeam = true;
                         $team_id = $team->id;
                     }
@@ -59,9 +56,8 @@ class TakeExamController extends Controller
                 'status' => false,
                 'payload' => 'Đội thi của bạn chưa được phê duyệt để được vào vòng thi !!'
             ]);
-
-            $takeExamCheck = TakeExams::where('round_team_id', $teamRound->team_id)->first();
-            if (is_null($takeExamCheck)) {
+            $takeExamCheck = TakeExams::where('round_team_id', $teamRound->id)->get();
+            if (count($takeExamCheck) == 0) {
                 $exams = Exams::all()->random()->id;
                 if (is_null($exams)) return response()->json([
                     'status' => false,
@@ -72,17 +68,16 @@ class TakeExamController extends Controller
                     'round_team_id' => $teamRound->id,
                     'status' => config('util.TAKE_EXAM_STATUS_UNFINISHED')
                 ]);
+                DB::commit();
                 return response()->json([
                     'status' => true,
                     'payload' => $takeExamModel
                 ]);
-            } else {
-                return response()->json([
-                    'status' => true,
-                    'payload' => $takeExamCheck
-                ]);
             }
-            DB::commit();
+            return response()->json([
+                'status' => true,
+                'payload' => $takeExamCheck
+            ]);
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::info('..--..');
