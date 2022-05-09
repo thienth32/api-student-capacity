@@ -69,7 +69,7 @@ class TakeExamController extends Controller
                 ]);
                 $takeExamModel = TakeExams::create([
                     'exam_id' => $exams,
-                    'round_team_id' => $teamRound->team_id,
+                    'round_team_id' => $teamRound->id,
                     'status' => config('util.TAKE_EXAM_STATUS_UNFINISHED')
                 ]);
                 return response()->json([
