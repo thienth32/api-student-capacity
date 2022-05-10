@@ -58,21 +58,6 @@ const exam = {
                 window.location.href = href
 
             }
-            // if (date_time.getTime() > datetimeToday.getTime()) {
-            //     Swal.fire({
-            //         title: 'Thời gian thi đã bắt đầu không thể chỉnh sửa đề thi !!',
-            //         icon: "warning",
-            //         buttonsStyling: false,
-            //         confirmButtonText: "Ok !!",
-            //         customClass: {
-            //             confirmButton: "btn btn-warning "
-            //         }
-            //     });
-            //     return;
-            // } else {
-            //     window.location.href = href
-            // }
-
         });
     }
 }
