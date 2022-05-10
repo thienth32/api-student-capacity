@@ -70,7 +70,9 @@
 
                                 <tr>
                                     <td></td>
-                                    <td> <a href="{{ route('admin.round.detail.team.Exam', ['id' => $round->id, 'teamId' => $team->id]) }}">{{ $takeExam->exam->name }}</a> </td>
+                                    <td> <a
+                                            href="{{ route('admin.round.detail.team.Exam', ['id' => $round->id, 'teamId' => $team->id]) }}">{{ $takeExam->exam->name }}</a>
+                                    </td>
                                     <td>
                                         @if ($takeExam->status == config('util.TAKE_EXAM_STATUS_UNFINISHED'))
                                             <span class="badge bg-primary p-3"> Chưa có bài </span>
@@ -102,18 +104,25 @@
                                     <td>
                                         @if ($takeExam->status == config('util.TAKE_EXAM_STATUS_COMPLETE') && $takeExam->final_point >= $takeExam->exam->ponit)
                                             <span class="badge bg-success  p-3"> Passed </span>
-                                        @elseif($takeExam->status == config('util.TAKE_EXAM_STATUS_COMPLETE') && $takeExam->final_point ==null)
-                                        <span class="badge bg-success  p-3">Đang đợi điểm</span>
+                                        @elseif($takeExam->status == config('util.TAKE_EXAM_STATUS_COMPLETE') && $takeExam->final_point == null)
+                                            <span class="badge bg-success  p-3">Đang đợi điểm</span>
                                         @else
                                             <span class="badge bg-danger  p-3"> Failed</span>
                                         @endif
                                     </td>
                                     <td>{{ $takeExam->mark_comment }}</td>
-                                    <td>
-                                        <a
-                                            href="{{ route('admin.round.detail.team.make.exam', ['id' => $round->id, 'teamId' => $team->id]) }}">Chấm
-                                            bài</a>
-                                    </td>
+                                    @if ($takeExam->status == config('util.TAKE_EXAM_STATUS_CANCEL'))
+                                        <td>
+                                            <a
+                                                href="{{ route('admin.round.detail.team.make.exam', ['id' => $round->id, 'teamId' => $team->id]) }}">Chấm
+                                                bài</a>
+                                        </td>
+                                    @else
+                                        <td>
+                                            <p>Đã hủy bài !</p>
+                                        </td>
+                                    @endif
+
                                 </tr>
 
                             </tbody>
@@ -134,9 +143,7 @@
         var userArray = [];
         var _token = "{{ csrf_token() }}"
     </script>
-    <script>
-
-    </script>
+    <script></script>
     <script src="assets/js/system/validate/validate.js"></script>
     <script src="{{ asset('assets/js/system/round/round-team.js') }}"></script>
 @endsection
