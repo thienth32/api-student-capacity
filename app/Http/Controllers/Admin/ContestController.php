@@ -126,10 +126,10 @@ class ContestController extends Controller
                 'name' => 'required|max:255|unique:contests,name',
                 'img' => 'required|mimes:jpeg,png,jpg|max:10000',
                 'date_start' => 'required|date',
-                'register_deadline' => 'required|date|after:date_start',
+                'register_deadline' => 'required|date',
                 'description' => 'required',
-                'start_register_time' => 'required|date|before:end_register_time',
-                'end_register_time' => 'required|date|after:start_register_time|before:date_start',
+                'start_register_time' => 'required|date',
+                'end_register_time' => 'required|date',
             ],
             [
                 'name.required' => 'Chưa nhập trường này !',
@@ -142,15 +142,11 @@ class ContestController extends Controller
                 'date_start.date' => 'Sai định dạng !',
                 'start_register_time.required' => 'Chưa nhập trường này !',
                 'start_register_time.date' => 'Sai định dạng !',
-                'start_register_time.before' => 'Thời gian bắt đầu đăng kí không được bằng hoặc lớn hơn thời gian kết thúc đăng kí!',
 
                 'end_register_time.required' => 'Chưa nhập trường này !',
                 'end_register_time.date' => 'Sai định dạng !',
-                'end_register_time.after' => 'Thời gian kết thúc đăng kí không được bằng hoặc nhỏ hơn thời gian bắt đầu đăng kí!',
-                'end_register_time.before' => 'Thời gian kết thúc đăng kí không được bằng hoặc lớn hơn thời gian bắt đầu cuộc thi!',
                 'register_deadline.required' => 'Chưa nhập trường này !',
                 'register_deadline.date' => 'Sai định dạng !',
-                'register_deadline.after' => 'Thời gian kết thúc không được bằng thời gian bắt đầu !',
                 'description.required' => 'Chưa nhập trường này !',
             ]
         );
@@ -258,14 +254,14 @@ class ContestController extends Controller
             $request->all(),
             [
                 'name' => 'required|unique:contests,name,' . $id . '',
-                'img' => 'required|mimes:jpeg,png,jpg|max:10000',
+                'img' => 'mimes:jpeg,png,jpg|max:10000',
                 'date_start' => "required",
                 'register_deadline' => "required|after:date_start",
                 'description' => "required",
                 'major_id' => "required",
                 'status' => "required",
                 'start_register_time' => 'required|date|before:end_register_time',
-                'end_register_time' => 'required|date|after:start_register_time|before:date_start',
+                'end_register_time' => 'required|date|after:start_register_time',
             ],
             [
                 'img.mimes' => 'Sai định dạng !',

@@ -10,7 +10,7 @@
                     @csrf
                     @method('put')
                     <div class="form-group mb-10">
-                        <label class="form-label" for="">Tên vòng thi</label>
+                        <label class="form-label" for="">Tên cuộc thi</label>
                         <input type="text" name="name" value="{{ $Contest->name }}" class=" form-control" placeholder="">
                         @error('name')
                             <p class="text-danger">{{ $message }}</p>
@@ -83,7 +83,7 @@
                                     <input value="{{ old('img') }}" name="img" type='file' id="file-input"
                                         class="form-control" accept=".png, .jpg, .jpeg" />
                                     <img class="w-100 mt-4 border rounded-3" id="image-preview"
-                                        src="{{ $Contest->img? $Contest->img: 'https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg' }} " />
+                                        src="{{ $Contest->img ? $Contest->img : 'https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg' }} " />
                                 </div>
                             </div>
 

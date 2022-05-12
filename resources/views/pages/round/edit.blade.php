@@ -84,7 +84,7 @@
                                         <p class="text-danger">{{ $message }} </p>
                                     @enderror
                                     <img class="w-100 mt-4 border rounded-3" id="image-preview"
-                                        src="{{ $round['image'] !== null? $round['image']: 'https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg' }} " />
+                                        src="{{ $round['image'] !== null ? $round['image'] : 'https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg' }} " />
                                 </div>
                             </div>
 
@@ -111,10 +111,12 @@
     </div>
 @endsection
 @section('page-script')
+    <script src="assets/js/system/preview-file/previewImg.js"></script>
     <script src="assets/js/system/date-after/date-after.js"></script>
     <script src="assets/js/system/round/form.js"></script>
     <script>
-        dateAfterEdit('input[type=datetime-local]#begin', 'input[type=datetime-local]#end')
+        dateAfterEdit('input[type=datetime-local]#begin', 'input[type=datetime-local]#end');
+        preview.showFile('#file-input', '#image-preview');
     </script>
     <script src="assets/js/system/validate/validate.js"></script>
 

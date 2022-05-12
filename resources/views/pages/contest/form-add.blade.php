@@ -129,7 +129,9 @@
                     </div>
                     <div class="form-group mb-10">
                         <label for="" class="form-label">Mô tả cuộc thi</label>
-                        <textarea class="form-control" name="description" id="" rows="3"></textarea>
+                        <textarea class="form-control" name="description" id="" rows="3">
+                            {{ old('description') }}
+                        </textarea>
                         @error('description')
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
