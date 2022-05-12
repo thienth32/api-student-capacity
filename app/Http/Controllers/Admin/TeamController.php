@@ -383,7 +383,6 @@ class TeamController extends Controller
             ]
         );
     
-    
         if ($validate->fails()) return response()->json([
             'status' => false,
             'payload' => $validate->errors()
@@ -400,7 +399,7 @@ class TeamController extends Controller
             $result = $this->checkUserDrugTeam($id_contest, $request->user_id);
             foreach ($team->members as $userTeam) {
                 if ($userTeam->id === $user_id && $userTeam->pivot->bot == 1) {
-                    $team->members()->syncWithoutDetaching($result['user-pass']);
+                    $team->members()->attach($result['user-pass']);
                     DB::commit();
                     if (count($result['user-not-pass']) > 0) {
                         $user = User::select('name', 'email')->whereIn('id', $result['user-not-pass'])->get();
