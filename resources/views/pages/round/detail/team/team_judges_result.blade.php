@@ -115,33 +115,37 @@
                                                         placeholder="Lý do thay đổi điểm ( không bắt buộc)">
                                                 </div>
                                                 <div class="mb-3">
-                                                    @if ($tong / count($judgesResult->evaluation) >= $judgesResult->exam->ponit)
-                                                        <div id="select-round" class="form-group ">
-                                                            <label class="form-label">Thêm vào vòng thi sau </label>
-                                                            <select class="form-select mb-2 select2-hidden-accessible"
-                                                                data-control="select2" name="roundId"
-                                                                value="{{ old('roundId') }}" data-hide-search="true"
-                                                                tabindex="-1" aria-hidden="true">
+                                                    {{-- @if ($tong / count($judgesResult->evaluation) >= $judgesResult->exam->ponit) --}}
+                                                    <div id="select-round" style="display:none" class="form-group ">
+                                                        <label class="form-label"> ( Đội đã đủ điểm qua vòng ,chọn vòng
+                                                            thi sau cho đội thi )</label>
+                                                        <select class="form-select mb-2 select2-hidden-accessible"
+                                                            data-control="select2" name="roundId"
+                                                            value="{{ old('roundId') }}" data-hide-search="true"
+                                                            tabindex="-1" aria-hidden="true">
 
-                                                                @foreach ($round->contest->rounds as $value)
-                                                                    @if ($round->id != $value->id || \Carbon\Carbon::parse($value->start_time)->toDateTimeString() > \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
-                                                                        <option value="{{ $value->id }}">
-                                                                            {{ $value->name }}
-                                                                        </option>
-                                                                    @endif
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                    @endif
+                                                            @foreach ($round->contest->rounds as $value)
+                                                                @if ($round->id != $value->id && \Carbon\Carbon::parse($value->start_time)->toDateTimeString() > \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
+                                                                    <option value="{{ $value->id }}">
+                                                                        {{ $value->name }}
+                                                                    </option>
+                                                                @endif
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    {{-- @endif --}}
 
                                                 </div>
                                                 <div class="form-group mb-10 ">
                                                     @if ($judgesResult->final_point != null)
-                                                        <button type="button" name="" id=""
+                                                        <button onclick="return alert('Điểm thi đã được xác nhận .')"
+                                                            type="button" name="" id=""
                                                             class="btn btn-success btn-lg btn-block">Đã xác nhận
                                                         </button>
                                                     @else
-                                                        <button type="submit" name="" id=""
+                                                        <button
+                                                            onclick="waitingNotice({{ count($judgesResult->evaluation) }}, {{ count($round->judges) }})"
+                                                            type="button" name="" id="submitResult"
                                                             class="btn btn-success btn-lg btn-block">Xác nhận điểm
                                                         </button>
                                                     @endif
@@ -150,9 +154,9 @@
                                             </form>
                                         </td>
                                         <td> <label for="" class="form-label"> Trạng thái:
-                                                @if ($judgesResult->status == 2 && $judgesResult->final_point >= $judgesResult->exam->ponit)
+                                                @if ($judgesResult->status == config('util.TAKE_EXAM_STATUS_COMPLETE') && $judgesResult->final_point >= $judgesResult->exam->ponit)
                                                     <span class="badge bg-success  p-3"> Passed </span>
-                                                @elseif($judgesResult->status == 2 && $judgesResult->final_point < $judgesResult->exam->ponit && $judgesResult->final_point != null)
+                                                @elseif($judgesResult->status == config('util.TAKE_EXAM_STATUS_COMPLETE') && $judgesResult->final_point < $judgesResult->exam->ponit && $judgesResult->final_point != null)
                                                     <span class="badge bg-danger  p-3"> Failed</span>
                                                 @else
                                                     <span class="badge bg-primary p-3"> Chờ xác nhận</span>
@@ -169,31 +173,45 @@
                     @endif
                 </div>
             </div>
-
-
         </div>
     </div>
 @endsection
 @section('page-script')
-    <script>
-        var URL = window.location.href;
-        var userArray = [];
-        var _token = "{{ csrf_token() }}"
-    </script>
+
     <script>
         $(document).ready(function() {
             // alert($("input[name=ponit]").val())
             $("input[name=final_point]").keyup(function() {
                 $("input[name=final_point]").mouseleave(function() {
-                    $("input[name=mark_comment]").show(100);
 
+                    $("input[name=mark_comment]").show(100);
+                    if (parseFloat($("input[name=final_point]").val()) >= parseFloat($(
+                            "input[name=ponit]").val())) {
+                        $('#select-round').show(100);
+                    } else {
+                        $('#select-round').hide(100);
+                    }
                 })
 
             });
+            // $('#select-round').hide();
+            if (parseFloat($("input[name=final_point]").val()) >= parseFloat($("input[name=ponit]").val())) {
+                $('#select-round').show(100);
+            } else {
+                $('#select-round').hide(100);
+            }
 
-            $('#select-round').show(100);
 
         });
+
+        function waitingNotice(a, b) {
+            if (a < b) {
+                alert('Vẫn còn ban giám khảo đang chấm , vui lòng đợi điểm .');
+                return false;
+            }
+            return $('form').submit()
+
+        }
     </script>
     <script src="assets/js/system/validate/validate.js"></script>
     <script src="{{ asset('assets/js/system/round/round-team.js') }}"></script>

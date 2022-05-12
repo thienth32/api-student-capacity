@@ -288,7 +288,7 @@ class TeamController extends Controller
             'status' => false,
             'payload' => $validate->errors()
         ]);
-        dd($request->all());
+        // dd($request->all());
         $teamCheck = Team::where(
             'contest_id',
             $request->contest_id
@@ -328,7 +328,7 @@ class TeamController extends Controller
                     $teamModel->name = $request->name;
                     $teamModel->contest_id = $request->contest_id;
                     $teamModel->save();
-                    $teamModel->members()->syncWithoutDetaching($result['user-pass'], ['bot' => config('util.ACTIVE_STATUS')]);
+                    $teamModel->members()->attach($result['user-pass'], ['bot' => config('util.ACTIVE_STATUS')]);
                     DB::commit();
                     $modelTeamId =  $teamModel->id;
                     return response()->json([

@@ -44,22 +44,23 @@
 
 
 
-                    <div class="col-12 col-lg-2 col-sx-12 col-md-12 col-sm-12 ">
-                        <div class=" ">
-                            <label class="form-label">Loại vòng thi </label>
-                            <select id="select-type-exam" class="form-control form-control-solid">
-                                <option>-- Loại vòng thi --</option>
+                    <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 ">
+                        <div class="  form-group ">
+                            <label class="form-label">Kiểu thi </label>
+                            <select id="select-type-exam" class="form-select mb-2 select2-hidden-accessible"
+                                data-control="select2" data-hide-search="true" tabindex="-1" aria-hidden="true">
+                                <option value="0">Chọn kiểu thi</option>
                                 @forelse ($type_exams as $type_exam)
                                     <option @selected(request('type_exam_id') == $type_exam->id) value="{{ $type_exam->id }}">
                                         {{ $type_exam->name }}
                                     </option>
                                 @empty
-                                    <option>-- Không có loại vòng thi --</option>
+                                    <option disabled>Không có kiểu thi</option>
                                 @endforelse
                             </select>
                         </div>
                     </div>
-                    <div class="col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 ">
+                    <div class="col-12 col-lg-8 col-sx-12 col-md-12 col-sm-12 ">
                         <div class=" form-label ">
                             <label class="form-label">Tìm kiếm </label>
                             <input type="text" value="{{ request('q') ?? '' }}" placeholder="'*Enter' tìm kiếm ..."
@@ -67,25 +68,72 @@
                         </div>
                     </div>
 
-
-                    <div class="col-12 col-lg-5 col-sx-12 col-md-12 col-sm-12">
-                        <label class="form-label">Thời gian </label>
-                        <input class="form-control form-control-solid" placeholder="Pick date rage"
-                            id="kt_daterangepicker_2" />
-                    </div>
-
-
-                    <div class="col-12 col-lg-2 col-sx-12 col-md-12 col-sm-12">
-                        <label for="" class="form-label">Khoảng thời gian </label>
-                        <select class="select-date-serach form-control">
-                            <option class="form-control">---- Thời gian ----</option>
-
-                            <option class="form-control" @selected(request('day') == 7) value="day-7">7 Ngày </option>
-                            <option class="form-control" @selected(request('day') == 15) value="day-15">15 Ngày </option>
-                            <option class="form-control" @selected(request('month') == 1) value="month-1">1 Tháng </option>
-                            <option class="form-control" @selected(request('month') == 6) value="month-6">6 Tháng </option>
-                            <option class="form-control" @selected(request('year') == 1) value="year-1">1 Năm</option>
-                        </select>
+                    <div class="col-lg-12 mt-4 col-12">
+                        <button
+                            class="click-time-local {{ request()->has('start_time') && request()->has('end_time') ? ' btn-primary' : ' btn-default' }} btn ">
+                            Thời
+                            gian cụ thể </button>
+                        <button
+                            class="click-time {{ (request()->has('day') || request()->has('month') || request()->has('year')) && request()->has('op_time') ? 'btn-primary' : 'btn-default' }} btn ">Khoảng
+                            thời gian</button>
+                        <div class="show-time mt-4">
+                            <div style="{{ request()->has('start_time') && request()->has('end_time') ? '' : 'display : none' }}"
+                                id="time-local">
+                                <div class="col-12  ">
+                                    <label class="form-label">Thời gian </label>
+                                    <input class="form-control " placeholder="Pick date rage" id="kt_daterangepicker_2" />
+                                </div>
+                            </div>
+                            <div style="{{ (request()->has('day') || request()->has('month') || request()->has('year')) && request()->has('op_time') ? '' : 'display : none' }}"
+                                id="time">
+                                <div class="col-12  ">
+                                    <label for="" class="form-label">Khoảng thời gian </label>
+                                    <select
+                                        class="select-date-serach form-control form-select mb-2 select2-hidden-accessible"
+                                        data-control="select2" data-hide-search="true" tabindex="-1" aria-hidden="true">
+                                        <option class="form-control">Chọn thời gian</option>
+                                        <option class="form-control" @selected(request('day') == 7 && request('op_time') == 'add') value="add-day-7">7 Ngày
+                                            tới
+                                        </option>
+                                        <option class="form-control" @selected(request('day') == 15 && request('op_time') == 'add') value="add-day-15">15
+                                            Ngày
+                                            tới </option>
+                                        <option class="form-control" @selected(request('month') == 1 && request('op_time') == 'add') value="add-month-1">1
+                                            Tháng
+                                            tới
+                                        </option>
+                                        <option class="form-control" @selected(request('month') == 6 && request('op_time') == 'add') value="add-month-6">6
+                                            Tháng
+                                            tới
+                                        </option>
+                                        <option class="form-control" @selected(request('year') == 1 && request('op_time') == 'add') value="add-year-1">1 Năm
+                                            tới
+                                        </option>
+                                        <option class="form-control" disabled>
+                                            <hr>
+                                        </option>
+                                        <option class="form-control" @selected(request('day') == 7 && request('op_time') == 'sub') value="sub-day-7">7 Ngày
+                                            trước </option>
+                                        <option class="form-control" @selected(request('day') == 15 && request('op_time') == 'sub') value="sub-day-15">15
+                                            Ngày
+                                            trước
+                                        </option>
+                                        <option class="form-control" @selected(request('month') == 1 && request('op_time') == 'sub') value="sub-month-1">1
+                                            Tháng
+                                            trước
+                                        </option>
+                                        <option class="form-control" @selected(request('month') == 6 && request('op_time') == 'sub') value="sub-month-6">6
+                                            Tháng
+                                            trước
+                                        </option>
+                                        <option class="form-control" @selected(request('year') == 1 && request('op_time') == 'sub') value="sub-year-1">1
+                                            Năm
+                                            trước
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
 
@@ -291,7 +339,7 @@
                             @forelse ($rounds as $key => $round)
                                 <tr>
                                     <th scope="row">
-                                        {{ (request()->has('page') && request('page') !== 1 ? $rounds->perPage() * (request('page') - 1) : 0) +$key +1 }}
+                                        {{ (request()->has('page') && request('page') !== 1 ? $rounds->perPage() * (request('page') - 1) : 0) + $key + 1 }}
                                     </th>
                                     <td>
                                         <a href="{{ route('admin.round.detail', ['id' => $round->id]) }}">
@@ -496,9 +544,9 @@
         const _token = "{{ csrf_token() }}";
         const sort = '{{ request()->has('sort') ? (request('sort') == 'desc' ? 'asc' : 'desc') : 'desc' }}';
         const start_time =
-            '{{ request()->has('start_time')? \Carbon\Carbon::parse(request('start_time'))->format('m/d/Y h:i:s A'): \Carbon\Carbon::now()->format('m/d/Y h:i:s A') }}'
+            '{{ request()->has('start_time') ? \Carbon\Carbon::parse(request('start_time'))->format('m/d/Y h:i:s A') : \Carbon\Carbon::now()->format('m/d/Y h:i:s A') }}'
         const end_time =
-            '{{ request()->has('end_time')? \Carbon\Carbon::parse(request('end_time'))->format('m/d/Y h:i:s A'): \Carbon\Carbon::now()->format('m/d/Y h:i:s A') }}'
+            '{{ request()->has('end_time') ? \Carbon\Carbon::parse(request('end_time'))->format('m/d/Y h:i:s A') : \Carbon\Carbon::now()->format('m/d/Y h:i:s A') }}'
     </script>
     <script src="assets/js/system/formatlist/formatlis.js"></script>
     <script src="assets/js/system/round/round.js"></script>
