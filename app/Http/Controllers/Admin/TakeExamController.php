@@ -56,7 +56,7 @@ class TakeExamController extends Controller
                 'status' => false,
                 'payload' => 'Đội thi của bạn chưa được phê duyệt để được vào vòng thi !!'
             ]);
-            $takeExamCheck = TakeExams::where('round_team_id', $teamRound->id)->get();
+            $takeExamCheck = TakeExams::where('round_team_id', $teamRound->id)->get()->load('exam');
             if (count($takeExamCheck) == 0) {
                 $exams = Exams::all()->random()->id;
                 if (is_null($exams)) return response()->json([
@@ -69,9 +69,10 @@ class TakeExamController extends Controller
                     'status' => config('util.TAKE_EXAM_STATUS_UNFINISHED')
                 ]);
                 DB::commit();
+                $takeExam = TakeExams::find('id', $takeExamModel->id)->load('exam');
                 return response()->json([
                     'status' => true,
-                    'payload' => $takeExamModel
+                    'payload' => $takeExam
                 ]);
             }
             return response()->json([
