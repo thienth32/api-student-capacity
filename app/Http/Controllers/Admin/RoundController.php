@@ -61,7 +61,7 @@ class RoundController extends Controller
             $data = $this->round::when(request()->has('round_soft_delete'), function ($q) {
                 return $q->onlyTrashed();
             })->search(request('q') ?? null, ['name', 'description'])
-                ->sort((request('sort') == 'desc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'rounds')
+                ->sort((request('sort') == 'asc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'rounds')
                 ->hasDateTimeBetween('start_time', request('start_time') ?? null, request('end_time') ?? null)
                 ->hasSubTime(
                     $key,
@@ -295,7 +295,7 @@ class RoundController extends Controller
     public function update($id)
     {
         if ($data = $this->updateRound($id)) {
-        // dd($data);
+            // dd($data);
             if (isset($data['status']) && $data['status'] == false) return redirect()->back()->withErrors($data['errors']);
             return redirect(route('admin.round.list'));
         }
@@ -703,7 +703,7 @@ class RoundController extends Controller
                 RoundTeam::create([
                     'round_id' => $request->roundId,
                     'team_id' => $teamId,
-                    'status' =>config('util.ROUND_TEAM_STATUS_NOT_ANNOUNCED') // Chưa công bố
+                    'status' => config('util.ROUND_TEAM_STATUS_NOT_ANNOUNCED') // Chưa công bố
                 ]);
             }
 

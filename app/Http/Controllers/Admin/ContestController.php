@@ -54,7 +54,7 @@ class ContestController extends Controller
                 ->passDate('register_deadline', request('pass_date') ?? null, $now->toDateTimeString())
                 ->registration_date('end_register_time', request('registration_date') ?? null, $now->toDateTimeString())
                 ->status(request('status'))
-                ->sort((request('sort') == 'desc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'contests')
+                ->sort((request('sort') == 'asc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'contests')
                 ->hasDateTimeBetween('date_start', request('start_time') ?? null, request('end_time') ?? null)
                 // ->hasDateTimeBetween('end_register_time',request('registration_date'))
                 ->hasRequest(['major_id' => request('major_id') ?? null])
