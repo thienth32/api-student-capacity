@@ -2,22 +2,24 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\Contest;
-use App\Models\Enterprise;
-use App\Models\Judge;
-use App\Models\Major;
+use Exception;
+use Carbon\Carbon;
 use App\Models\Team;
 use App\Models\User;
-use App\Services\Traits\TTeamContest;
-use App\Services\Traits\TResponse;
-use App\Services\Traits\TUploadImage;
-use Carbon\Carbon;
-use Exception;
+use App\Models\Judge;
+use App\Models\Major;
+use App\Models\Contest;
+use App\Models\Enterprise;
 use Illuminate\Http\Request;
+use App\Services\Traits\TResponse;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use App\Models\Round;
+use App\Services\Traits\TTeamContest;
+use App\Services\Traits\TUploadImage;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 
 class ContestController extends Controller
@@ -526,6 +528,39 @@ class ContestController extends Controller
             return $this->editTeamContest($request, $id_team, $id_contest, Redirect::route('admin.contest.detail.team', ['id' => $id_contest]), Redirect::back());
         } else {
             return Redirect::back();
+        }
+    }
+    public function userTeamContest($contestId)
+    {
+        $team_id = 0;
+        $user_id = auth('sanctum')->user()->id;
+        $rounds = Round::where('contest_id', $contestId)->with('teams')->get();
+        try {
+            foreach ($rounds as $round) {
+                if ($round->teams) {
+                    foreach ($round->teams as $team) {
+                        foreach ($team->users as $user) {
+                            if ($user->id == $user_id) {
+                                $team_id = $team->id;
+                            }
+                        }
+                    }
+                }
+            }
+            if ($team_id == 0)  return response()->json([
+                'status' => true,
+                'payload' => [],
+            ]);
+            $team = Team::find($team_id)->load('members');
+            return response()->json([
+                'status' => true,
+                'payload' => $team,
+            ]);
+        } catch (\Throwable $th) {
+            Log::info('..--..');
+            Log::info($th->getMessage());
+            Log::info('..--..');
+            dd($th);
         }
     }
 }

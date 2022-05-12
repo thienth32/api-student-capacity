@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ContestController;
 use App\Http\Controllers\Admin\TakeExamController as AdminTakeExamController;
 use App\Http\Controllers\Admin\TeamController as AdminTeamController;
 use App\Http\Controllers\Admin\UserController;
@@ -47,4 +48,8 @@ Route::prefix('teams')->group(function () {
 });
 Route::prefix('take-exam')->group(function () {
     Route::post('student', [AdminTakeExamController::class, 'takeExamStudent']);
+});
+
+Route::prefix('contest')->group(function () {
+    Route::get('{id_contest}/team-me', [ContestController::class, 'userTeamContest']);
 });
