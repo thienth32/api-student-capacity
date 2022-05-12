@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class TakeExamController extends Controller
@@ -56,8 +57,9 @@ class TakeExamController extends Controller
                 'status' => false,
                 'payload' => 'Đội thi của bạn chưa được phê duyệt để được vào vòng thi !!'
             ]);
-            $takeExamCheck = TakeExams::where('round_team_id', $teamRound->id)->get()->load('exam');
-            if (count($takeExamCheck) == 0) {
+            $takeExamCheck = TakeExams::where('round_team_id', $teamRound->id)->first();
+            // dd($takeExamCheck);
+            if (is_null($takeExamCheck)) {
                 $exams = Exams::all()->random()->id;
                 if (is_null($exams)) return response()->json([
                     'status' => false,
@@ -69,15 +71,30 @@ class TakeExamController extends Controller
                     'status' => config('util.TAKE_EXAM_STATUS_UNFINISHED')
                 ]);
                 DB::commit();
-                $takeExam = TakeExams::find('id', $takeExamModel->id)->load('exam');
+                $takeExam = TakeExams::find($takeExamModel->id);
+                // dd($takeExam);
+                if (Storage::disk('google')->has($takeExam->exam->external_url)) {
+                    # code...
+                    $urlExam = Storage::disk('google')->url($takeExam->exam->external_url);
+                } else {
+                    $urlExam = $takeExam->exam->external_url;
+                }
                 return response()->json([
                     'status' => true,
-                    'payload' => $takeExam
+                    'payload' => $takeExam,
+                    'exam' => $urlExam
                 ]);
+            }
+            if (Storage::disk('google')->has($takeExamCheck->exam->external_url)) {
+                # code...
+                $urlExam = Storage::disk('google')->url($takeExamCheck->exam->external_url);
+            } else {
+                $urlExam = $takeExamCheck->exam->external_url;
             }
             return response()->json([
                 'status' => true,
-                'payload' => $takeExamCheck
+                'payload' => $takeExamCheck,
+                'exam' => $urlExam
             ]);
         } catch (\Throwable $th) {
             DB::rollBack();

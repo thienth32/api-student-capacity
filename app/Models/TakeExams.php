@@ -14,7 +14,7 @@ class TakeExams extends Model
     use HasFactory;
     public function exam()
     {
-        return $this->belongsTo(Exams::class, 'exam_id');
+        return $this->belongsTo(Exams::class, 'exam_id', 'id');
     }
     public function evaluations()
     {
