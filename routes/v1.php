@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\ContestController;
+use App\Http\Controllers\Admin\TakeExamController as AdminTakeExamController;
 use App\Http\Controllers\Admin\TeamController as AdminTeamController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Http\Request;
@@ -42,4 +44,11 @@ Route::prefix('teams')->group(function () {
     Route::get('check-user-team-contest/{id_contest}', [AdminTeamController::class, "checkUserTeamContest"]);
     Route::post('add-user-team-contest/{id_contest}/{id_team}', [AdminTeamController::class, "addUserTeamContest"]);
     Route::post('user-team-search/{id_contest}', [AdminTeamController::class, "userTeamSearch"]);
+});
+Route::prefix('take-exam')->group(function () {
+    Route::post('student', [AdminTakeExamController::class, 'takeExamStudent']);
+});
+
+Route::prefix('contest')->group(function () {
+    Route::get('{id_contest}/team-me', [ContestController::class, 'userTeamContest']);
 });

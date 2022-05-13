@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title', 'Chi tiết cuộc thi')
+@section('title', 'Danh sách đội thi ')
 @section('page-title', 'Danh sách đội thi ')
 @section('content')
     <div class=" card card-flush p-5">
@@ -30,25 +30,26 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <form id="formTeam" action="{{ route('admin.round.detail.team.attach', ['id' => $round->id]) }}"
-                    method="POST">
-                    @csrf
-                    <label for="" class="form-label">Đội thi</label>
-                    <select multiple class="form-select mb-2 select2-hidden-accessible" data-control="select2"
-                        data-hide-search="false" tabindex="-1" aria-hidden="true" name="team_id[]"
-                        value="{{ old('team_id') }}">
-                        @foreach ($teams as $teamSelect)
-                            <option value="{{ $teamSelect->id }}"> {{ $teamSelect->name }}</option>
-                        @endforeach
-                    </select>
-                    <button type="submit" class="btn btn-primary"> Thêm </button>
+        @hasanyrole(config('util.ROLE_ADMINS'))
+            <div class="row">
+                <div class="col-lg-12">
+                    <form id="formTeam" action="{{ route('admin.round.detail.team.attach', ['id' => $round->id]) }}"
+                        method="POST">
+                        @csrf
+                        <label for="" class="form-label">Đội thi</label>
+                        <select multiple class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                            data-hide-search="false" tabindex="-1" aria-hidden="true" name="team_id[]"
+                            value="{{ old('team_id') }}">
+                            @foreach ($teams as $teamSelect)
+                                <option value="{{ $teamSelect->id }}"> {{ $teamSelect->name }}</option>
+                            @endforeach
+                        </select>
+                        <button type="submit" class="btn btn-primary"> Thêm </button>
 
-                </form>
+                    </form>
+                </div>
             </div>
-        </div>
-
+        @endhasanyrole
     </div>
 
     <div class="row">
@@ -63,8 +64,9 @@
                                 <th>#</th>
                                 <th>Ảnh</th>
                                 <th>Tên đội</th>
-
-                                <th>Thao tác</th>
+                                @hasanyrole(config('util.ROLE_ADMINS'))
+                                    <th>Thao tác</th>
+                                @endhasanyrole
                             </tr>
                         </thead>
                         <tbody>
@@ -74,20 +76,19 @@
                             @foreach ($round->teams as $team)
                                 <tr>
                                     <td>{{ $key++ }}</td>
-                                    <td><img class='w-100px'
-                                            src="{{ Storage::disk('google')->has($team->image)? Storage::disk('google')->url($team->image): 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
-                                            alt=""></td>
+
+                                    <td><img class='w-100px' src="{{ $team->image }}" alt=""></td>
                                     <td> <a
                                             href="{{ route('admin.round.detail.team.detail', ['id' => $round->id, 'teamId' => $team->id]) }}">
                                             {{ $team->name }}</a>
 
                                     </td>
-
-                                    <td>
-                                        <a href="{{ route('admin.round.detail.team.detach', ['id' => $round->id, 'team_id' => $team->id]) }}"
-                                            class="btn btn-danger deleteTeams"><i class="fas fa-trash-alt"></i></a>
-                                    </td>
-
+                                    @hasanyrole(config('util.ROLE_ADMINS'))
+                                        <td>
+                                            <a href="{{ route('admin.round.detail.team.detach', ['id' => $round->id, 'team_id' => $team->id]) }}"
+                                                class="btn btn-danger deleteTeams"><i class="fas fa-trash-alt"></i></a>
+                                        </td>
+                                    @endhasanyrole
                                 </tr>
                             @endforeach
                         </tbody>

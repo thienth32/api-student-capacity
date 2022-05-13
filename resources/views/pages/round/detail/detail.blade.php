@@ -1,6 +1,6 @@
 @extends('layouts.main')
-@section('title', 'Chi tiết vòng thi thi')
-@section('page-title', 'Chi tiết vòng thi thi')
+@section('title', 'Chi tiết vòng thi ')
+@section('page-title', 'Chi tiết vòng thi ')
 @section('content')
     <div class=" mb-4">
         <div class="row">
@@ -36,7 +36,7 @@
                         <div class="fs-4 text-white mt-5">
                             <div class="opacity-75">
                                 <img style="width:100%"
-                                    src="{{ Storage::disk('google')->has($round['image'])? Storage::disk('google')->url($round['image']): 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
+                                    src="{{ Storage::disk('google')->has($round['image']) ? Storage::disk('google')->url($round['image']) : 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
                                     alt="">
                             </div>
                         </div>
