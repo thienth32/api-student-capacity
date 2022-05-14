@@ -530,19 +530,17 @@ class ContestController extends Controller
             return Redirect::back();
         }
     }
-    public function userTeamContest($contestId)
+    public function userTeamRound($roundId)
     {
         $team_id = 0;
         $user_id = auth('sanctum')->user()->id;
-        $rounds = Round::where('contest_id', $contestId)->with('teams')->get();
+        $round = Round::find($roundId)->load('teams');
         try {
-            foreach ($rounds as $round) {
-                if ($round->teams) {
-                    foreach ($round->teams as $team) {
-                        foreach ($team->users as $user) {
-                            if ($user->id == $user_id) {
-                                $team_id = $team->id;
-                            }
+            if ($round->teams) {
+                foreach ($round->teams as $team) {
+                    foreach ($team->users as $user) {
+                        if ($user->id == $user_id) {
+                            $team_id = $team->id;
                         }
                     }
                 }
