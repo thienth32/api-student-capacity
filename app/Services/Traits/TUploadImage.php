@@ -12,7 +12,7 @@ trait TUploadImage
     {
         try {
 
-            if ($nameOld) if (Storage::disk('google')->has($nameOld)) Storage::disk('google')->delete($nameOld);
+            if ($nameOld) if (Storage::disk('s3')->has($nameOld)) Storage::disk('s3')->delete($nameOld);
 
             // $img = Image::make($file);
             // $img->resize(100, 100, function ($constraint) {
@@ -22,7 +22,7 @@ trait TUploadImage
             // $file =  Image::make($file->getRealPath())->resize(50, 50)->stream();
             $nameFile = uniqid() . '-' . time() . '.' . $file->getClientOriginalExtension();
 
-            Storage::disk('google')->putFileAs('', $file, $nameFile);
+            Storage::disk('s3')->putFileAs('', $file, $nameFile);
             return $nameFile;
         } catch (\Throwable $th) {
             return false;

@@ -91,7 +91,7 @@ class TeamController extends Controller
             if (!(auth()->user()->hasRole(config('util.ROLE_DELETE')))) return false;
             DB::transaction(function () use ($id) {
                 if (!($data = Team::find($id))) return false;
-                if (Storage::disk('google')->has($data->image)) Storage::disk('google')->delete($data->image);
+                if (Storage::disk('s3')->has($data->image)) Storage::disk('s3')->delete($data->image);
                 $data->delete();
             });
             return redirect()->back();
@@ -257,7 +257,7 @@ class TeamController extends Controller
             DB::rollBack();
             if ($request->hasFile('image')) {
                 $fileImage = $request->file('image');
-                if (Storage::disk('google')->has($fileImage)) Storage::disk('google')->delete($filename);
+                if (Storage::disk('s3')->has($fileImage)) Storage::disk('s3')->delete($filename);
             }
             return response()->json([
                 'status' => false,

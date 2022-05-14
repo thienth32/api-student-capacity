@@ -75,7 +75,7 @@
                                 <tr>
                                     <td>{{ $key++ }}</td>
                                     <td><img class='w-100px'
-                                            src="{{ Storage::disk('google')->has($team->image) ? Storage::disk('google')->url($team->image) : 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
+                                            src="{{ Storage::disk('s3')->has($team->image) ? Storage::disk('s3')->temporaryUrl($team->image, now()->addMinutes(5)) : 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
                                             alt=""></td>
                                     <td>{{ $team->name }}</td>
                                     <td>

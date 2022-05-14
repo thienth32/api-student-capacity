@@ -61,7 +61,7 @@ class RoundController extends Controller
             $data = $this->round::when(request()->has('round_soft_delete'), function ($q) {
                 return $q->onlyTrashed();
             })->search(request('q') ?? null, ['name', 'description'])
-                ->sort((request('sort') == 'desc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'rounds')
+                ->sort((request('sort') == 'asc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'rounds')
                 ->hasDateTimeBetween('start_time', request('start_time') ?? null, request('end_time') ?? null)
                 ->hasSubTime(
                     $key,
@@ -186,7 +186,7 @@ class RoundController extends Controller
         } catch (Exception $ex) {
             if ($request->hasFile('image')) {
                 $fileImage = $request->file('image');
-                if (Storage::disk('google')->has($filename)) Storage::disk('google')->delete($filename);
+                if (Storage::disk('s3')->has($filename)) Storage::disk('s3')->delete($filename);
             }
             Db::rollBack();
             return Redirect::back()->with(['error' => 'Thêm mới thất bại !']);
@@ -295,7 +295,7 @@ class RoundController extends Controller
     public function update($id)
     {
         if ($data = $this->updateRound($id)) {
-        // dd($data);
+            // dd($data);
             if (isset($data['status']) && $data['status'] == false) return redirect()->back()->withErrors($data['errors']);
             return redirect(route('admin.round.list'));
         }
@@ -333,7 +333,7 @@ class RoundController extends Controller
             if (!(auth()->user()->hasRole(config('util.ROLE_DELETE')))) return false;
             DB::transaction(function () use ($id) {
                 if (!($data = $this->round::find($id))) return false;
-                if (Storage::disk('google')->has($data->image)) Storage::disk('google')->delete($data->image);
+                if (Storage::disk('s3')->has($data->image)) Storage::disk('s3')->delete($data->image);
                 $data->delete();
             });
             return true;
@@ -703,7 +703,7 @@ class RoundController extends Controller
                 RoundTeam::create([
                     'round_id' => $request->roundId,
                     'team_id' => $teamId,
-                    'status' =>config('util.ROUND_TEAM_STATUS_NOT_ANNOUNCED') // Chưa công bố
+                    'status' => config('util.ROUND_TEAM_STATUS_NOT_ANNOUNCED') // Chưa công bố
                 ]);
             }
 

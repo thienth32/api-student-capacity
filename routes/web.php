@@ -22,3 +22,11 @@ Route::group(['prefix' => 'auth'], function () {
     Route::get('google/callback', [AuthController::class, 'adminGoogleCallback'])->name('google-auth.callback');
 });
 Route::any('logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('download-file', function () {
+    $fileName = request('page') ?? '' . request('url') ?? '';
+    $headers = [
+        'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
+    ];
+    if (!\Storage::disk('s3')->has($fileName)) return 'Không tồn tại file trong hệ thống ';
+    return \Response::make(\Storage::disk('s3')->get($fileName), 200, $headers);
+})->name('dowload.file');

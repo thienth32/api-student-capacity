@@ -215,14 +215,14 @@
                                     @if (request()->has('sortBy'))
                                         <th scope="row">
                                             @if (request('sortBy') == 'desc')
-                                                {{ (request()->has('page') && request('page') !== 1 ? $listEnterprise->perPage() * (request('page') - 1) : 0) +$index +1 }}
+                                                {{ (request()->has('page') && request('page') !== 1 ? $listEnterprise->perPage() * (request('page') - 1) : 0) + $index + 1 }}
                                             @else
-                                                {{ request()->has('page') && request('page') !== 1? $total - $listEnterprise->perPage() * (request('page') - 1) - $index: ($total -= 1) }}
+                                                {{ request()->has('page') && request('page') !== 1 ? $total - $listEnterprise->perPage() * (request('page') - 1) - $index : ($total -= 1) }}
                                             @endif
                                         </th>
                                     @else
                                         <th scope="row">
-                                            {{ (request()->has('page') && request('page') !== 1 ? $listEnterprise->perPage() * (request('page') - 1) : 0) +$index +1 }}
+                                            {{ (request()->has('page') && request('page') !== 1 ? $listEnterprise->perPage() * (request('page') - 1) : 0) + $index + 1 }}
                                         </th>
                                     @endif
 
@@ -232,7 +232,7 @@
 
                                     <td>
                                         <img style="width:150px;height:120px"
-                                            src="{{ Storage::disk('google')->has($key->logo)? Storage::disk('google')->url($key->logo): 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
+                                            src="{{ Storage::disk('s3')->has($key->logo) ? Storage::disk('s3')->temporaryUrl($key->logo, now()->addMinutes(5)) : 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
                                             alt="">
                                     </td>
                                     <td>
