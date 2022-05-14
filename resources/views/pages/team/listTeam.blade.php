@@ -51,8 +51,7 @@
                     <div class="form-group mb-10">
                         <label for="" class="form-label">Thuộc cuộc thi</label>
                         <select id="selectContest" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
-                            data-hide-search="false" tabindex="-1" aria-hidden="true" name=""
-                            value="">
+                            data-hide-search="false" tabindex="-1" aria-hidden="true" name="" value="">
                             <option value="">Chọn cuộc thi</option>
                             @forelse ($Contest as $itemContest)
                                 <option @selected(request('contest') == $itemContest->id) value="{{ $itemContest->id }}">
@@ -250,21 +249,21 @@
                                 @if (request()->has('sortBy'))
                                     <th scope="row">
                                         @if (request('sortBy') == 'desc')
-                                            {{ (request()->has('page') && request('page') !== 1 ? $dataTeam->perPage() * (request('page') - 1) : 0) +$index +1 }}
+                                            {{ (request()->has('page') && request('page') !== 1 ? $dataTeam->perPage() * (request('page') - 1) : 0) + $index + 1 }}
                                         @else
-                                            {{ request()->has('page') && request('page') !== 1? $total - $dataTeam->perPage() * (request('page') - 1) - $index: ($total -= 1) }}
+                                            {{ request()->has('page') && request('page') !== 1 ? $total - $dataTeam->perPage() * (request('page') - 1) - $index : ($total -= 1) }}
                                         @endif
                                     </th>
                                 @else
                                     <th scope="row">
-                                        {{ (request()->has('page') && request('page') !== 1 ? $dataTeam->perPage() * (request('page') - 1) : 0) +$index +1 }}
+                                        {{ (request()->has('page') && request('page') !== 1 ? $dataTeam->perPage() * (request('page') - 1) : 0) + $index + 1 }}
                                     </th>
                                 @endif
                                 </th>
                                 <td>
 
-                                    <button style="border:none;background:#ffff; text-align: left;" type="button" data-bs-toggle="modal"
-                                        data-bs-target="#deltai_team_{{ $key->id }}">
+                                    <button style="border:none;background:#ffff; text-align: left;" type="button"
+                                        data-bs-toggle="modal" data-bs-target="#deltai_team_{{ $key->id }}">
                                         {{ $key->name }}
                                     </button>
 
@@ -283,13 +282,15 @@
                                                     <div class="row">
                                                         <div class="col md-6">
                                                             <img style="width:200px;height:200px"
-                                                                src="{{ Storage::disk('google')->has($key->image)? Storage::disk('google')->url($key->image): 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
+                                                                src="{{ Storage::disk('s3')->has($key->image) ? Storage::disk('s3')->temporaryUrl($key->image, now()->addMinutes(5)) : 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
                                                                 alt="">
                                                             <h4 class="mt-3">Ngày Tạo : {{ $key->created_at }}
                                                             </h4>
                                                             <h5>Tham gia cuộc thi :
-                                                                <a href="{{ route('admin.contest.show', $key->contest->id) }}"> {{ $key->contest->name ?? 'Chưa có Cuộc thi ' }}</a>
-                                                               </h5>
+                                                                <a
+                                                                    href="{{ route('admin.contest.show', $key->contest->id) }}">
+                                                                    {{ $key->contest->name ?? 'Chưa có Cuộc thi ' }}</a>
+                                                            </h5>
                                                         </div>
                                                         <div class="col md-6">
                                                             <h3>Tên Đội : {{ $key->name }}</h3>
@@ -317,7 +318,8 @@
                                 </td>
 
                                 <td>
-                                    Cuộc Thi:  <a href="{{ route('admin.contest.show', $key->contest->id) }}"> {{ $key->contest->name ?? 'Chưa có Cuộc thi ' }}</a>
+                                    Cuộc Thi: <a href="{{ route('admin.contest.show', $key->contest->id) }}">
+                                        {{ $key->contest->name ?? 'Chưa có Cuộc thi ' }}</a>
 
                                 </td>
                                 <td>

@@ -74,11 +74,12 @@
                             @php
                                 $key = 1;
                             @endphp
-                            @foreach ($contestEnterprise as $key=> $item)
+                            @foreach ($contestEnterprise as $key => $item)
                                 <tr>
-                                    <td>   {{ (request()->has('page') && request('page') !== 1 ? $contestEnterprise->perPage() * (request('page') - 1) : 0) +$key +1 }}</td>
+                                    <td> {{ (request()->has('page') && request('page') !== 1 ? $contestEnterprise->perPage() * (request('page') - 1) : 0) + $key + 1 }}
+                                    </td>
                                     <td><img class='w-100px'
-                                            src="{{ Storage::disk('google')->has($item->logo)? Storage::disk('google')->url($item->logo): 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
+                                            src="{{ Storage::disk('s3')->has($item->logo) ? Storage::disk('s3')->temporaryUrl($item->logo, now()->addMinutes(5)) : 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
                                             alt=""></td>
                                     <td>{{ $item->name }}</td>
                                     <td>
@@ -89,8 +90,8 @@
                                         </button>
 
                                         <!-- Modal -->
-                                        <div class="modal fade" id="introduce_{{ $item->id }}"
-                                            tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal fade" id="introduce_{{ $item->id }}" tabindex="-1"
+                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">

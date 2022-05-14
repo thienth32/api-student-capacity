@@ -178,7 +178,7 @@ class ContestController extends Controller
         } catch (Exception $ex) {
             if ($request->hasFile('img')) {
                 $fileImage = $request->file('img');
-                if (Storage::disk('google')->has($filename)) Storage::disk('google')->delete($filename);
+                if (Storage::disk('s3')->has($filename)) Storage::disk('s3')->delete($filename);
             }
             DB::rollBack();
             return Redirect::back()->with('error', 'Thêm mới thất bại !');
@@ -229,7 +229,7 @@ class ContestController extends Controller
             if (!(auth()->user()->hasRole(config('util.ROLE_DELETE')))) return abort(404);
             DB::transaction(function () use ($id) {
                 $contest = $this->contest::find($id);
-                if (Storage::disk('google')->has($contest->image)) Storage::disk('google')->delete($contest->image);
+                if (Storage::disk('s3')->has($contest->image)) Storage::disk('s3')->delete($contest->image);
                 $contest->delete();
             });
             return redirect()->back();

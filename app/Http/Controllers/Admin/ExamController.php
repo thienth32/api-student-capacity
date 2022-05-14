@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Round;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
@@ -26,6 +27,7 @@ class ExamController extends Controller
     {
         $round = Round::find($id_round);
         $exams = $this->exam::where('round_id', $id_round)->orderByDesc('id')->get()->load('round');
+
         return view(
             'pages.round.detail.exam.index',
             [
@@ -97,12 +99,12 @@ class ExamController extends Controller
                 'round_id' => $id_round,
                 'external_url' => $filename
             ]);
+
             $this->exam::create($dataCreate);
             return Redirect::route('admin.exam.index', ['id' => $id_round]);
         } catch (\Throwable $th) {
-            // dd($th->getMessage());
-            // return abort(404);
-
+            Log::info($th->getMessage());
+            return abort(404);
         }
     }
 

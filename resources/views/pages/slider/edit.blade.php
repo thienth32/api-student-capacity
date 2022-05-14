@@ -56,7 +56,7 @@
                         <div class="col-4 row ">
                             <div class="col-12">
                                 <label class="form-label">URL chuyển hướng </label>
-                                <input type=" text" value="{{ $slider->link_to }}" name="link_to"
+                                <input type="text" value="{{ $slider->link_to }}" name="link_to"
                                     value="{{ old('link_to') }}" class=" form-control" placeholder="">
                                 @error('link_to')
                                     <p class="text-danger">{{ $message }}</p>
@@ -73,12 +73,12 @@
                         <div class="row pb-2">
                             <div class="col-4">
                                 <button type="button"
-                                    class="btn btn-light {{ $slider->sliderable !== null && get_class($slider->sliderable) == \App\Models\Major::class? 'btn-primary': 'btn-light' }} btn-major">Chuyên
+                                    class="btn btn-light {{ $slider->sliderable !== null && get_class($slider->sliderable) == \App\Models\Major::class ? 'btn-primary' : 'btn-light' }} btn-major">Chuyên
                                     ngành </button>
                             </div>
                             <div class="col-4">
                                 <button type="button"
-                                    class="btn {{ $slider->sliderable !== null && get_class($slider->sliderable) == \App\Models\Round::class? 'btn-primary': 'btn-light' }} btn-round">Vòng
+                                    class="btn {{ $slider->sliderable !== null && get_class($slider->sliderable) == \App\Models\Round::class ? 'btn-primary' : 'btn-light' }} btn-round">Vòng
                                     thi </button>
                             </div>
                             <div class="col-4">
@@ -87,7 +87,7 @@
                                     chủ </button>
                             </div>
                         </div>
-                        <div style="{{ $slider->sliderable !== null && get_class($slider->sliderable) == \App\Models\Major::class? '': 'display: none' }}"
+                        <div style="{{ $slider->sliderable !== null && get_class($slider->sliderable) == \App\Models\Major::class ? '' : 'display: none' }}"
                             id="major">
                             <label class="form-label">Chuyên ngành</label>
                             <select name="major_id" class="form-select form-major" data-control="select2"
@@ -99,7 +99,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div style="{{ $slider->sliderable !== null && get_class($slider->sliderable) == \App\Models\Round::class? '': 'display: none' }}"
+                        <div style="{{ $slider->sliderable !== null && get_class($slider->sliderable) == \App\Models\Round::class ? '' : 'display: none' }}"
                             id="round">
 
                             {{--  --}}

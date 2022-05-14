@@ -113,13 +113,13 @@
                                     <td>{{ $takeExam->mark_comment }}</td>
                                     @if ($takeExam->status == config('util.TAKE_EXAM_STATUS_CANCEL'))
                                         <td>
-                                            <a
-                                                href="{{ route('admin.round.detail.team.make.exam', ['id' => $round->id, 'teamId' => $team->id]) }}">Chấm
-                                                bài</a>
+                                            <p>Đã hủy bài !</p>
                                         </td>
                                     @else
                                         <td>
-                                            <p>Đã hủy bài !</p>
+                                            <a
+                                                href="{{ route('admin.round.detail.team.make.exam', ['id' => $round->id, 'teamId' => $team->id]) }}">Chấm
+                                                bài</a>
                                         </td>
                                     @endif
 

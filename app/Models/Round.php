@@ -42,7 +42,7 @@ class Round extends Model
         return [
             "id" => $this->id,
             "name" => $this->name,
-            "image" => Storage::disk('google')->has($this->image) ? Storage::disk('google')->url($this->image) : null,
+            "image" => Storage::disk('s3')->has($this->image) ? Storage::disk('s3')->temporaryUrl($this->image, now()->addMinutes(5)) : null,
             "start_time" => $this->start_time,
             "end_time" => $this->end_time,
             "description" => $this->description,
@@ -58,7 +58,7 @@ class Round extends Model
 
     public function contest()
     {
-        return $this->belongsTo(Contest::class, 'contest_id')->with(['teams','rounds']);
+        return $this->belongsTo(Contest::class, 'contest_id')->with(['teams', 'rounds']);
     }
     public function Enterprise()
     {
@@ -80,12 +80,12 @@ class Round extends Model
 
     public function judges() // Giám khảo
     {
-        return $this->belongsToMany(Judge::class, 'judges_rounds', 'round_id', 'judge_id')->with(['user','evaluation']);
+        return $this->belongsToMany(Judge::class, 'judges_rounds', 'round_id', 'judge_id')->with(['user', 'evaluation']);
     }
 
     public function teams()
     {
-        return $this->belongsToMany(Team::class, 'round_teams', 'round_id', 'team_id')->wherePivot('status',1);
+        return $this->belongsToMany(Team::class, 'round_teams', 'round_id', 'team_id')->wherePivot('status', 1);
     }
     public function sliders()
     {

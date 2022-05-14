@@ -73,9 +73,9 @@ class TakeExamController extends Controller
                 DB::commit();
                 $takeExam = TakeExams::find($takeExamModel->id);
                 // dd($takeExam);
-                if (Storage::disk('google')->has($takeExam->exam->external_url)) {
+                if (Storage::disk('s3')->has($takeExam->exam->external_url)) {
                     # code...
-                    $urlExam = Storage::disk('google')->url($takeExam->exam->external_url);
+                    $urlExam = Storage::disk('s3')->temporaryUrl($takeExam->exam->external_url, now()->addMinutes(5));
                 } else {
                     $urlExam = $takeExam->exam->external_url;
                 }
@@ -85,9 +85,9 @@ class TakeExamController extends Controller
                     'exam' => $urlExam
                 ]);
             }
-            if (Storage::disk('google')->has($takeExamCheck->exam->external_url)) {
+            if (Storage::disk('s3')->has($takeExamCheck->exam->external_url)) {
                 # code...
-                $urlExam = Storage::disk('google')->url($takeExamCheck->exam->external_url);
+                $urlExam = Storage::disk('s3')->temporaryUrl($takeExamCheck->exam->external_url, now()->addMinutes(5));
             } else {
                 $urlExam = $takeExamCheck->exam->external_url;
             }
