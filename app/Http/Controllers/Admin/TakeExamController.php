@@ -104,4 +104,52 @@ class TakeExamController extends Controller
             dd($th);
         }
     }
+    public function takeExamStudentSubmit(Request $request)
+    {
+        $validate = Validator::make(
+            $request->all(),
+            [
+                'id' => 'required',
+                'result_url' => 'url',
+                'file_url' => 'mimes:zip,docx,word|file'
+            ],
+            [
+                'result_url.url' => 'Sai định dạng !!!',
+                'file_url.mimes' => 'Định dạng phải là : zip, docx, word !!!',
+                'file_url.file' => 'Sai định dạng !!!',
+                'id.required' => 'Thiếu id !',
+            ]
+        );
+        if ($validate->fails()) return response()->json([
+            'status' => false,
+            'payload' => $validate->errors()
+        ]);
+
+        try {
+            $takeExam = TakeExams::find($request->id);
+            if (is_null($takeExam)) return response()->json([
+                'status' => false,
+                'payload' => 'Không tồn tại trên hệ thống !!',
+            ]);
+            if ($request->hasFile('file_url')) {
+                $fileUrl = $request->file('file_url');
+                $filename = $this->uploadFile($fileUrl);
+                $takeExam->file_url = $filename;
+            }
+            if (request('result_url')) {
+                $takeExam->result_url = $request->result_url;
+            }
+            $takeExam->save();
+            return response()->json([
+                'status' => true,
+                'payload' => 'Nộp bài thành công !!',
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::info('..--..');
+            Log::info($th->getMessage());
+            Log::info('..--..');
+            dd($th);
+        }
+    }
 }

@@ -47,7 +47,9 @@ Route::prefix('teams')->group(function () {
 });
 Route::prefix('take-exam')->group(function () {
     Route::post('student', [AdminTakeExamController::class, 'takeExamStudent']);
+    Route::put('student-submit', [AdminTakeExamController::class, 'takeExamStudentSubmit']);
 });
+
 
 Route::prefix('round')->group(function () {
     Route::get('{id_round}/team-me', [ContestController::class, 'userTeamRound']);
