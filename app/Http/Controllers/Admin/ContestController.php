@@ -54,7 +54,7 @@ class ContestController extends Controller
                 ->passDate('register_deadline', request('pass_date') ?? null, $now->toDateTimeString())
                 ->registration_date('end_register_time', request('registration_date') ?? null, $now->toDateTimeString())
                 ->status(request('status'))
-                ->sort((request('sort') == 'desc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'contests')
+                ->sort((request('sort') == 'asc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'contests')
                 ->hasDateTimeBetween('date_start', request('start_time') ?? null, request('end_time') ?? null)
                 // ->hasDateTimeBetween('end_register_time',request('registration_date'))
                 ->hasRequest(['major_id' => request('major_id') ?? null])
@@ -178,7 +178,7 @@ class ContestController extends Controller
         } catch (Exception $ex) {
             if ($request->hasFile('img')) {
                 $fileImage = $request->file('img');
-                if (Storage::disk('google')->has($filename)) Storage::disk('google')->delete($filename);
+                if (Storage::disk('s3')->has($filename)) Storage::disk('s3')->delete($filename);
             }
             DB::rollBack();
             return Redirect::back()->with('error', 'Thêm mới thất bại !');
@@ -229,7 +229,7 @@ class ContestController extends Controller
             if (!(auth()->user()->hasRole(config('util.ROLE_DELETE')))) return abort(404);
             DB::transaction(function () use ($id) {
                 $contest = $this->contest::find($id);
-                if (Storage::disk('google')->has($contest->image)) Storage::disk('google')->delete($contest->image);
+                if (Storage::disk('s3')->has($contest->image)) Storage::disk('s3')->delete($contest->image);
                 $contest->delete();
             });
             return redirect()->back();

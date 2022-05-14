@@ -237,7 +237,7 @@ class SkillController extends Controller
             if (!(auth()->user()->hasRole('super admin'))) return false;
             DB::transaction(function () use ($id) {
                 if (!($data = Skills::find($id))) return false;
-                if (Storage::disk('google')->has($data->image_url)) Storage::disk('google')->delete($data->image_url);
+                if (Storage::disk('s3')->has($data->image_url)) Storage::disk('s3')->delete($data->image_url);
                 $data->delete();
             });
             return redirect()->back();

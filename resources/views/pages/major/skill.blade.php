@@ -75,12 +75,12 @@
                             <tbody>
                                 @foreach ($skills as $key => $item)
                                     <tr>
-                                        <td> {{ (request()->has('page') && request('page') !== 1 ? $skills->perPage() * (request('page') - 1) : 0) +$key +1 }}
+                                        <td> {{ (request()->has('page') && request('page') !== 1 ? $skills->perPage() * (request('page') - 1) : 0) + $key + 1 }}
                                         </td>
                                         <td>{{ $item->short_name }}</td>
                                         <td>{{ $item->name }}</td>
                                         <td><img class='w-100px'
-                                                src="{{ Storage::disk('google')->has($item->image_url)? Storage::disk('google')->url($item->image_url): 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
+                                                src="{{ Storage::disk('s3')->has($item->image_url) ? Storage::disk('s3')->temporaryUrl($item->image_url, now()->addMinutes(5)) : 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
                                                 alt=""></td>
 
                                         <td>
