@@ -106,12 +106,13 @@ class TakeExamController extends Controller
     }
     public function takeExamStudentSubmit(Request $request)
     {
+
         $validate = Validator::make(
             $request->all(),
             [
                 'id' => 'required',
                 'result_url' => 'url',
-                'file_url' => 'mimes:zip,docx,word|file'
+                'file_url' => 'file|mimes:zip,docx,word'
             ],
             [
                 'result_url.url' => 'Sai định dạng !!!',
