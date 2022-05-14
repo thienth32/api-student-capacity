@@ -22,7 +22,7 @@ class RoundFactory extends Factory
     {
         return [
             'name' => $this->faker->name,
-            'image' => $this->faker->imageUrl($width = 640, $height = 480, $category = "image"),
+            'image' => $this->faker->name,
             'start_time' => date("Y-m-d H:i:s"),
             'end_time' => date("Y-m-d H:i:s"),
             'description' => $this->faker->sentence(15),

@@ -4,7 +4,6 @@ const rules = {
     name: {
         required: true,
         maxlength: 255,
-        hasSpecial:true
     },
     description: {
         required: true,
@@ -37,20 +36,6 @@ $.validator.addMethod(
         return  /^[A-Z]*$/.test(value);
     },
     "Trường yêu cầu viết hoa không dấu!!!"
-);
-$.validator.addMethod(
-    "hasSpecial",
-    function (value, element) {
-        if (this.optional(element)) {
-            return true;
-        }
-        if(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(value)){
-            return false;
-          } else {
-            return true;
-          }
-    },
-    "Trường yêu cầu không có kí tự đặc biệt!!!"
 );
 $(document).ready(function () {
     $("input[name=name]").change(function (e) {
