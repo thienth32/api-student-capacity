@@ -140,6 +140,7 @@ class TakeExamController extends Controller
             if (request('result_url')) {
                 $takeExam->result_url = $request->result_url;
             }
+            $takeExam->status = config('util.TAKE_EXAM_STATUS_COMPLETE');
             $takeExam->save();
             return response()->json([
                 'status' => true,
