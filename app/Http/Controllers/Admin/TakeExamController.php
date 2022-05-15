@@ -138,6 +138,7 @@ class TakeExamController extends Controller
                 $filename = $this->uploadFile($fileUrl);
                 $takeExam->file_url = $filename;
             } else {
+                if (Storage::disk('s3')->has($takeExam->file_url)) Storage::disk('s3')->delete($takeExam->file_url);
                 $takeExam->file_url = null;
             }
             if (request('result_url')) {
