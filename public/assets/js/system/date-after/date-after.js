@@ -51,9 +51,9 @@ function dateAfterEdit(begin, end, start_time = null, end_time = null) {
     // $(this.begin).prop("min", function() {
     //     return getTimeToday;
     // });
-    $(this.end).prop("min", function () {
-        return getTimeToday;
-    });
+    // $(this.end).prop("min", function () {
+    //     return getTimeToday;
+    // });
     // $(this.start_time).prop("min", function() {
     //     return getTimeToday;
     // });
