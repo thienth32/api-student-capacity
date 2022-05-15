@@ -10,12 +10,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Services\Traits\TUploadImage;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class TakeExamController extends Controller
 {
-
+    use TUploadImage;
     public function takeExamStudent(Request $request)
     {
         $checkUserTeam = false;
@@ -132,7 +133,7 @@ class TakeExamController extends Controller
                 'status' => false,
                 'payload' => 'Không tồn tại trên hệ thống !!',
             ]);
-            if ($request->hasFile('file_url')) {
+            if ($request->has('file_url')) {
                 $fileUrl = $request->file('file_url');
                 $filename = $this->uploadFile($fileUrl);
                 $takeExam->file_url = $filename;
