@@ -137,11 +137,19 @@ class TakeExamController extends Controller
                 $fileUrl = $request->file('file_url');
                 $filename = $this->uploadFile($fileUrl);
                 $takeExam->file_url = $filename;
+            } else {
+                if (Storage::disk('s3')->has($takeExam->file_url)) Storage::disk('s3')->delete($takeExam->file_url);
+                $takeExam->file_url = null;
             }
             if (request('result_url')) {
                 $takeExam->result_url = $request->result_url;
+            } else {
+                $takeExam->result_url = null;
             }
-            $takeExam->status = config('util.TAKE_EXAM_STATUS_COMPLETE');
+            if (!$request->has('file_url') && !request('result_url')) {
+                $takeExam->status = config('util.TAKE_EXAM_STATUS_COMPLETE');
+            }
+            $takeExam->status = config('util.TAKE_EXAM_STATUS_UNFINISHED');
             $takeExam->save();
             return response()->json([
                 'status' => true,
