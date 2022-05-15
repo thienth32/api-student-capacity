@@ -137,9 +137,13 @@ class TakeExamController extends Controller
                 $fileUrl = $request->file('file_url');
                 $filename = $this->uploadFile($fileUrl);
                 $takeExam->file_url = $filename;
+            } else {
+                $takeExam->file_url = null;
             }
             if (request('result_url')) {
                 $takeExam->result_url = $request->result_url;
+            } else {
+                $takeExam->result_url = null;
             }
             $takeExam->status = config('util.TAKE_EXAM_STATUS_COMPLETE');
             $takeExam->save();
