@@ -62,7 +62,7 @@ class EnterpriseController extends Controller
             if (!(auth()->user()->hasRole(config('util.ROLE_DELETE')))) return false;
             DB::transaction(function () use ($id) {
                 if (!($data = Enterprise::find($id))) return false;
-                if (Storage::disk('google')->has($data->logo)) Storage::disk('google')->delete($data->logo);
+                if (Storage::disk('s3')->has($data->logo)) Storage::disk('s3')->delete($data->logo);
                 $data->delete();
             });
             return redirect()->back();

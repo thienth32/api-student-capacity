@@ -43,14 +43,20 @@
         <div>
             <div class="row mb-4">
                 <div class="col-6">
-                    <h2>Đề bài {{ $takeExam->exam->name }} <button
-                            data-url="{{ Storage::disk('google')->url($takeExam->exam->external_url) }}"
-                            class="dowloadfile btn btn-outline-primary">Tải về </button></h2>
-                    <iframe width="100%" height="100%"
-                        src="https://drive.google.com/file/d/{{ explode(
-                            '=',
-                            explode('&', explode('?', Storage::disk('google')->url($takeExam->exam->external_url))[1])[0],
-                        )[1] }}/preview"></iframe>
+                    <h2>Đề bài {{ $takeExam->exam->name }}
+                        @if (\Storage::disk('s3')->has($takeExam->exam->external_url))
+                            <a href="{{ route('dowload.file') }}?url={{ $takeExam->exam->external_url }}"
+                                target="_blank" class="  btn btn-outline-primary">Tải về </a>
+                        @endif
+                    </h2>
+                    <div>
+                        @if (!\Storage::disk('s3')->has($takeExam->exam->external_url))
+                            <b>Đề bài: </b>
+                            {{ $takeExam->exam->external_url }}
+                        @endif
+                    </div>
+                    {{-- <iframe width="100%" height="100%"
+                        src="https://drive.google.com/file/d/{{                         src="https://drive.google.com/file/d/explode('=', explode('&', explode('?', Storage::disk('s3')->temporaryUrl($takeExam->exam->external_url))[1])[0])[1] }}/preview"></iframe> --}}
                 </div>
                 <div class="col-6 row ">
                     <div class="col-12">
@@ -69,13 +75,13 @@
             <br>
             <div class="row mt-4">
                 <div class="col-6">
-                    <h2>Bài làm đội thi : {{ $team->name }} <button
-                            data-url="{{ Storage::disk('google')->url($takeExam->result_url) }}"
-                            class="dowloadfile btn btn-outline-primary">Tải về </button></h2>
-                    @if (Storage::disk('google')->has($takeExam->result_url))
-                        <iframe width="100%" height="100%"
-                            src="https://drive.google.com/file/d/{{ explode('=', explode('&', explode('?', Storage::disk('google')->url($takeExam->result_url))[1])[0])[1] }}/preview"></iframe>
-                    @else
+                    <h2>Bài làm đội thi : {{ $team->name }}
+                        @if (\Storage::disk('s3')->has($takeExam->result_url))
+                            <a target="_blank" href="{{ route('dowload.file') }}?url={{ $takeExam->result_url }}"
+                                class="  btn btn-outline-primary">Tải về </a>
+                        @endif
+                    </h2>
+                    @if (!\Storage::disk('s3')->has($takeExam->result_url))
                         {{ $takeExam->result_url }}
                     @endif
                 </div>
@@ -167,11 +173,11 @@
         var _token = "{{ csrf_token() }}";
     </script>
     <script>
-        $('.dowloadfile').on('click', function(e) {
-            e.preventDefault();
-            window.location = $(this).data('url');
-            return false;
-        })
+        // $('.dowloadfile').on('click', function(e) {
+        //     e.preventDefault();
+        //     window.location = '{{ route('dowload.file') }}' + '?url=' + $(this).data('url');
+        //     return false;
+        // })
     </script>
     <script src="assets/js/system/validate/validate.js"></script>
     <script src="{{ asset('assets/js/system/round/round-team.js') }}"></script>

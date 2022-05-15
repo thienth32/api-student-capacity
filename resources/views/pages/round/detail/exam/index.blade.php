@@ -102,10 +102,8 @@
                                     <td>
 
                                         <button data-id="{{ $exam->id }}"
-                                            data-external_url="{{ Storage::disk('google')->url($exam->external_url) }}"
+                                            data-external_url="{{ route('dowload.file') . '?url=' . $exam->external_url }}"
                                             type="button" class="download_file btn btn-success">Tải xuống</button>
-                                        {{-- <iframe width="50%" height="100%"
-                                            src="https://drive.google.com/file/d/{{ explode('=', explode('&', explode('?', Storage::disk('google')->url($exam->external_url))[1])[0])[1] }}/preview"></iframe> --}}
                                     </td>
 
                                     <td>

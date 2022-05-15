@@ -186,7 +186,7 @@ class RoundController extends Controller
         } catch (Exception $ex) {
             if ($request->hasFile('image')) {
                 $fileImage = $request->file('image');
-                if (Storage::disk('google')->has($filename)) Storage::disk('google')->delete($filename);
+                if (Storage::disk('s3')->has($filename)) Storage::disk('s3')->delete($filename);
             }
             Db::rollBack();
             return Redirect::back()->with(['error' => 'Thêm mới thất bại !']);
@@ -333,7 +333,7 @@ class RoundController extends Controller
             if (!(auth()->user()->hasRole(config('util.ROLE_DELETE')))) return false;
             DB::transaction(function () use ($id) {
                 if (!($data = $this->round::find($id))) return false;
-                if (Storage::disk('google')->has($data->image)) Storage::disk('google')->delete($data->image);
+                if (Storage::disk('s3')->has($data->image)) Storage::disk('s3')->delete($data->image);
                 $data->delete();
             });
             return true;

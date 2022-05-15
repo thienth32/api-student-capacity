@@ -89,7 +89,7 @@ trait TTeamContest
             Db::rollBack();
             if ($request->hasFile('image')) {
                 $fileImage = $request->file('image');
-                if (Storage::disk('google')->has($fileImage)) Storage::disk('google')->delete($filename);
+                if (Storage::disk('s3')->has($fileImage)) Storage::disk('s3')->delete($filename);
             }
             return $backViewFailure;
         }
@@ -159,7 +159,7 @@ trait TTeamContest
         } catch (Exception $ex) {
             if ($request->hasFile('image')) {
                 $fileImage = $request->file('image');
-                if (Storage::disk('google')->has($fileImage)) Storage::disk('google')->delete($filename);
+                if (Storage::disk('s3')->has($fileImage)) Storage::disk('s3')->delete($filename);
             }
             Db::rollBack();
             return $backViewFailure;

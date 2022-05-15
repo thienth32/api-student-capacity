@@ -18,7 +18,7 @@
                 <th scope="row">{{ $index += 1 }}</th>
                 <td>{{ $valueTeam->name }}</td>
                 <td><img style="width:200px;height:200px"
-                        src="{{ Storage::disk('google')->has($valueTeam->image)? Storage::disk('google')->url($valueTeam->image): 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
+                        src="{{ Storage::disk('s3')->has($valueTeam->image) ? Storage::disk('s3')->temporaryUrl($valueTeam->image, now()->addMinutes(5)) : 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
                         alt=""></td>
                 <td>{{ $valueTeam->contest->name }}</td>
                 <td>{{ date('d-m-Y', strtotime($valueTeam->created_at)) }}</td>

@@ -27,7 +27,7 @@
                             <div class="opacity-75">
 
                                 <img style="width:100%"
-                                    src="{{ Storage::disk('google')->has($data->image_url)? Storage::disk('google')->url($data->image_url): 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
+                                    src="{{ Storage::disk('s3')->has($data->image_url) ? Storage::disk('s3')->temporaryUrl($data->image_url, now()->addMinutes(5)) : 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
                                     alt="">
                             </div>
                         </div>
@@ -52,10 +52,12 @@
                                     </div>
                                     <div class="col-8">
                                         @if (count($data->majorSkill) > 0)
-                                        @foreach ($data->majorSkill as $item)
-                                        <li style="padding-bottom: 10px;color:#ffff"><a style="color: #ffff" href="{{ route('admin.major.skill',['slug'=>$item->slug]) }}">Ngành: {{ $item->name }}</a>
-                                        </li>
-                                       @endforeach
+                                            @foreach ($data->majorSkill as $item)
+                                                <li style="padding-bottom: 10px;color:#ffff"><a style="color: #ffff"
+                                                        href="{{ route('admin.major.skill', ['slug' => $item->slug]) }}">Ngành:
+                                                        {{ $item->name }}</a>
+                                                </li>
+                                            @endforeach
                                         @else
                                             Chưa có chuyên ngành
                                         @endif
