@@ -145,7 +145,10 @@ class TakeExamController extends Controller
             } else {
                 $takeExam->result_url = null;
             }
-            $takeExam->status = config('util.TAKE_EXAM_STATUS_COMPLETE');
+            if (!$request->has('file_url') && !request('result_url')) {
+                $takeExam->status = config('util.TAKE_EXAM_STATUS_COMPLETE');
+            }
+            $takeExam->status = config('util.TAKE_EXAM_STATUS_UNFINISHED');
             $takeExam->save();
             return response()->json([
                 'status' => true,
