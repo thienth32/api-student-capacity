@@ -27,7 +27,7 @@
                         <div class="fs-4 text-white mt-5">
                             <div class="opacity-75">
                                 <img style="width:100%"
-                                    src="{{ $contest->img? $contest->img: 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
+                                    src="{{ $contest->img ? $contest->img : 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
                                     alt="">
                             </div>
                         </div>
@@ -122,6 +122,25 @@
                         <h2 class="my-6">Mô tả cuộc thi</h2>
                         <div class=" fs-3 pb-5">
                             {!! $contest->description !!}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container-fluid mt-1 card card-flush">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h2 class="my-6">Ban giám khảo</h2>
+                        <div class=" fs-3 pb-5">
+                            <ul class="list-group">
+                                @forelse ($contest -> judges as $judge)
+                                    <li class="list-group-item"> {{ $judge->name }}
+                                        <small class="badge bg-success">{{ $judge->email }}</small>
+                                    </li>
+                                @empty
+                                    Không có ban giám khảo !
+                                @endforelse
+                            </ul>
                         </div>
                     </div>
                 </div>

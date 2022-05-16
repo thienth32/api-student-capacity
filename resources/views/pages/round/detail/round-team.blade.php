@@ -77,7 +77,9 @@
                                 <tr>
                                     <td>{{ $key++ }}</td>
 
-                                    <td><img class='w-100px' src="{{ $team->image }}" alt=""></td>
+                                    <td><img class='w-100px'
+                                            src="{{ Storage::disk('s3')->has($team->image) ? Storage::disk('s3')->temporaryUrl($team->image, now()->addMinutes(5)) : 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
+                                            alt=""></td>
                                     <td> <a
                                             href="{{ route('admin.round.detail.team.detail', ['id' => $round->id, 'teamId' => $team->id]) }}">
                                             {{ $team->name }}</a>
