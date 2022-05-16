@@ -407,7 +407,6 @@ class RoundController extends Controller
 
         if (!($round = $this->round::with(['contest', 'type_exam', 'judges', 'teams', 'Donor'])->where('id', $id)->first())) return abort(404);
         $roundTeam = RoundTeam::where('round_id', $id)->where('status', config('util.ROUND_TEAM_STATUS_NOT_ANNOUNCED'))->get();
-
         return view('pages.round.detail.detail', ['round' => $round, 'roundTeam' => $roundTeam]);
     }
 

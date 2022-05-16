@@ -380,7 +380,7 @@ class ContestController extends Controller
 
     public function show(Request $request, $id)
     {
-        $contest =  Contest::find($id)->load(['rounds' => function ($q) use ($id) {
+        $contest =  Contest::find($id)->load(['judges', 'rounds' => function ($q) use ($id) {
             return $q->when(
                 auth()->check() && auth()->user()->hasRole('judge'),
                 function ($q) use ($id) {
