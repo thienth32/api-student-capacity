@@ -220,4 +220,20 @@ class UserController extends Controller
             }
         }
     }
+
+    public function contestJoined()
+    {
+        $contestArr = [];
+        $user_id = auth('sanctum')->user()->id;
+        $user = User::find($user_id)->load('teams');
+        foreach ($user->teams as $team) {
+            if ($team->contest) {
+                array_push($contestArr, $team->contest);
+            }
+        }
+        return response()->json([
+            'status' => true,
+            'payload' =>  $contestArr
+        ]);
+    }
 }
