@@ -191,9 +191,13 @@
                                     <th>Tên đội</th>
                                     <th>Đề bài</th>
                                     <th>Bài làm</th>
+<<<<<<< Updated upstream
                                     @hasanyrole(config('util.ROLE_ADMINS'))
                                         <th>Xác Nhận Điểm</th>
                                     @endhasanyrole
+=======
+                                    <th>Xác Nhận Điểm</th>
+>>>>>>> Stashed changes
                                 </tr>
                             </thead>
                             <tbody>
@@ -216,6 +220,7 @@
                                                 class="badge bg-primary p-3"> Xem thêm.
                                             </a>
                                         </td>
+<<<<<<< Updated upstream
                                         @hasanyrole(config('util.ROLE_ADMINS'))
                                             <td>
                                                 <a href="{{ route('admin.round.detail.team.judge', ['id' => $round->id, 'teamId' => $team->id]) }}"
@@ -223,6 +228,13 @@
                                                 </a>
                                             </td>
                                         @endhasanyrole
+=======
+                                        <td>
+                                         <a   href="{{ route('admin.round.detail.team.judge', ['id' => $round->id, 'teamId' => $team->id]) }}"
+                                                class="badge bg-primary p-3"> Xem thêm.
+                                            </a>
+                                        </td>
+>>>>>>> Stashed changes
                                     </tr>
                                 @endforeach
                             </tbody>
