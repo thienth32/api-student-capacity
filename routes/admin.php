@@ -153,6 +153,7 @@ Route::prefix('contests')->group(function () {
         'middleware' => 'role_admin'
     ], function () {
         Route::get('form-add', [ContestController::class, 'create'])->name('admin.contest.create');
+        Route::get('{id}/form-send-mail', [ContestController::class, 'sendMail'])->name('admin.contest.send.mail');
         Route::post('form-add-save', [ContestController::class, 'store'])->name('admin.contest.store');
         Route::post('un-status/{id}', [ContestController::class, 'un_status'])->name('admin.contest.un.status');
         Route::post('re-status/{id}', [ContestController::class, 're_status'])->name('admin.contest.re.status');
@@ -271,4 +272,6 @@ Route::group([
     });
 });
 
-Route::get('end-mail', [SendMailController::class, 'sendMail']);
+Route::post('contests/send-mail/{id}', [SendMailController::class, 'sendMailRoundUser']);
+Route::post('rounds/end-mail/{id}', [SendMailController::class, 'sendMailContestUser']);
+//81

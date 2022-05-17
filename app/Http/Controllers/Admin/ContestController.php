@@ -561,6 +561,16 @@ class ContestController extends Controller
             dd($th);
         }
     }
+
+    public function sendMail($id)
+    {
+        $contest = Contest::findOrFail($id)->load([
+            'teams' => function ($q) {
+                return $q->with(['members']);
+            }
+        ]);
+        return view('pages.contest.add-mail', ['contest' => $contest]);
+    }
 }
 
 

@@ -1,12 +1,24 @@
-@component('mail::message')
-# Introduction
+<!DOCTYPE html>
+<html lang="en">
 
-The body of your message.
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{ $subject }}</title>
+    <style>
+        h1 {
+            color: red;
+        }
 
-@component('mail::button', ['url' => ''])
-Button Text
-@endcomponent
+    </style>
+</head>
 
-Thanks,<br>
-{{ config('app.name') }}
-@endcomponent
+<body>
+    {{-- Content --}}
+    <div>
+        {!! $data['content'] ?? '' !!}
+    </div>
+</body>
+
+</html>

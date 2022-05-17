@@ -16,9 +16,10 @@ class FinnalPass extends Mailable
      *
      * @return void
      */
-    public function __construct()
+    private $data;
+    public function __construct($data)
     {
-        //
+        $this->data = $data;
     }
 
     /**
@@ -28,6 +29,7 @@ class FinnalPass extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.final-pass');
+        $subject = $this->data['subject'] ?? '';
+        return $this->subject($subject)->view('emails.final-pass', ['data' => $this->data, 'subject' => $subject]);
     }
 }
