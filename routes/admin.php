@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\ExamController;
 use App\Http\Controllers\Admin\JudgesController;
 use App\Http\Controllers\Admin\MajorController;
 use App\Http\Controllers\Admin\ResultController;
+use App\Http\Controllers\Admin\SendMailController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\SkillController;
 
@@ -269,3 +270,5 @@ Route::group([
         Route::get('skill-soft-delete/{id}/delete', [SkillController::class, 'delete'])->name('admin.skill.soft.destroy');
     });
 });
+
+Route::get('end-mail', [SendMailController::class, 'sendMail']);
