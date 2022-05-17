@@ -12,7 +12,6 @@ use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\SponsorController as AdminSponsorController;
 use App\Http\Controllers\Admin\TeamController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
-use App\Models\Team;
 
 /*
 |--------------------------------------------------------------------------
