@@ -56,7 +56,7 @@
                                 <tr class="fw-bolder fs-6 text-gray-800">
                                     <th></th>
                                     <th>Đề bài</th>
-                                    <th>link bài </th>
+                                    <th>Bài làm </th>
                                     <th>Quá trình</th>
                                     <th>Điểm Qua vòng</th>
                                     <th>Điểm thi</th>

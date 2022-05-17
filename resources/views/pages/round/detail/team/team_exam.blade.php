@@ -201,7 +201,7 @@
                                     <td></td>
                                     <td>{{ $Exam->exam->name }}</td>
                                     <td> <a class="badge bg-primary p-3" href="{{ route('dowload.file').'?url='. $Exam->exam->external_url }}">
-                                            xem tại đây</a></td>
+                                         Tải về</a></td>
                                     <td>
                                         <button style="border: none" class="badge bg-primary p-3" type="button"
                                             data-bs-toggle="modal" data-bs-target="#introduce_{{ $Exam->exam->id }}">

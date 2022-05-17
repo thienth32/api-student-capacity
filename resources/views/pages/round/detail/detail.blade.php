@@ -190,10 +190,10 @@
                                     <th>#</th>
                                     <th>Tên đội</th>
                                     <th>Đề bài</th>
-                                    <th>Quá trình</th>
                                     <th>Bài làm</th>
-                                    <th>Chấm bài</th>
-                                    <th>Xác Nhận Điểm</th>
+                                    @hasanyrole(config('util.ROLE_ADMINS'))
+                                        <th>Xác Nhận Điểm</th>
+                                    @endhasanyrole
                                 </tr>
                             </thead>
                             <tbody>
@@ -206,7 +206,23 @@
                                         <td> <a
                                                 href="{{ route('admin.round.detail.team.detail', ['id' => $round->id, 'teamId' => $team->id]) }}">
                                                 {{ $team->name }}</a></td>
-                                        <td></td>
+                                        <td>
+                                            <a href="{{ route('admin.round.detail.team.Exam', ['id' => $round->id, 'teamId' => $team->id]) }}"
+                                                class="badge bg-primary p-3"> Xem thêm.
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('admin.round.detail.team.takeExam', ['id' => $round->id, 'teamId' => $team->id]) }}"
+                                                class="badge bg-primary p-3"> Xem thêm.
+                                            </a>
+                                        </td>
+                                        @hasanyrole(config('util.ROLE_ADMINS'))
+                                            <td>
+                                                <a href="{{ route('admin.round.detail.team.judge', ['id' => $round->id, 'teamId' => $team->id]) }}"
+                                                    class="badge bg-primary p-3"> Xem thêm.
+                                                </a>
+                                            </td>
+                                        @endhasanyrole
                                     </tr>
                                 @endforeach
                             </tbody>
