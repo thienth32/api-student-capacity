@@ -41,7 +41,8 @@ class Contest extends Model
         'major_id',
         'status',
         'start_register_time',
-        'end_register_time'
+        'end_register_time',
+        'max_user'
     ];
     public function teams()
     {
