@@ -196,19 +196,17 @@
                                 </tr>
                             </thead>
                             <tbody>
-
                                 <tr>
+
                                     <td></td>
                                     <td>{{ $Exam->exam->name }}</td>
-                                    <td> <a class="badge bg-primary p-3" href="{{ $Exam->exam->external_url }}">
+                                    <td> <a class="badge bg-primary p-3" href="{{ route('dowload.file').'?url='. $Exam->exam->external_url }}">
                                             xem tại đây</a></td>
-
                                     <td>
                                         <button style="border: none" class="badge bg-primary p-3" type="button"
                                             data-bs-toggle="modal" data-bs-target="#introduce_{{ $Exam->exam->id }}">
                                             Xem thông tin...
                                         </button>
-
                                         <!-- Modal -->
                                         <div class="modal fade" id="introduce_{{ $Exam->exam->id }}" tabindex="-1"
                                             aria-labelledby="exampleModalLabel" aria-hidden="true">

@@ -214,7 +214,11 @@ return [
          * Set this to `true` in development mode so that docs would be regenerated on each request
          * Set this to `false` to disable swagger generation on production
         */
+<<<<<<< Updated upstream
         'generate_always' => env('L5_SWAGGER_GENERATE_ALWAYS', false),
+=======
+        'generate_always' => env('L5_SWAGGER_GENERATE_ALWAYS', true),
+>>>>>>> Stashed changes
 
         /*
          * Set this to `true` to generate a copy of documentation in yaml format
@@ -258,7 +262,10 @@ return [
                  * 'none' (expands nothing).
                  */
                 'doc_expansion' => env('L5_SWAGGER_UI_DOC_EXPANSION', 'none'),
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
                 /**
                  * If set, enables filtering. The top bar will show an edit box that
                  * you can use to filter the tagged operations that are shown. Can be

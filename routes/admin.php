@@ -65,7 +65,6 @@ Route::prefix('rounds')->group(function () {
             });
 
             Route::get('', [RoundController::class, 'roundDetailTeam'])->name('admin.round.detail.team');
-
             // Route::prefix('take-exam')->group(function () {
             //     Route::get('{teamId}', [RoundController::class, 'roundDetailTeamTakeExam'])->name('admin.round.detail.team.takeExam');
             //     Route::get('{teamId}/make', [RoundController::class, 'roundDetailTeamMakeExam'])->name('admin.round.detail.team.make.exam');

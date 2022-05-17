@@ -63,7 +63,6 @@
                                     <th>Trạng thái</th>
                                     <th>Ghi chú</th>
                                     <th>Chấm bài </th>
-
                                 </tr>
                             </thead>
                             <tbody>
@@ -79,9 +78,14 @@
                                         @elseif($takeExam->status == config('util.TAKE_EXAM_STATUS_CANCEL'))
                                             <span class="badge bg-danger  p-3"> Bài thi bị hủy </span>
                                         @else
-                                            <a class="badge bg-primary p-3" href="{{ $takeExam->result_url }}">
-                                                Xem tại đây...
-                                            </a>
+                                            {{-- @if (\Storage::disk('s3')->has($takeExam->result_url)) --}}
+                                            <a href="{{ route('dowload.file') }}?url={{ $takeExam->result_url }}"
+                                                class="badge bg-primary p-3">Tải về</a>
+                                            {{-- @endif --}}
+                                            @if ($takeExam->file_url != null)
+                                                <a href="{{ route('dowload.file') }}?url={{ $takeExam->file_url }}"
+                                                    class="badge bg-primary p-3">link dự phòng</a>
+                                            @endif
                                         @endif
                                     </td>
                                     <td>

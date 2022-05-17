@@ -96,7 +96,7 @@
                                                 {{ $judgesResult->exam->ponit }}</label>
 
                                             <form
-                                                action="{{ route('admin.round.detail.team.takeExam.update', ['id' => $round->id,'teamId' => $team->id,'takeExamId' => $judgesResult->id]) }}"
+                                                action="{{ route('admin.round.detail.team.takeExam.update', ['id' => $round->id, 'teamId' => $team->id, 'takeExamId' => $judgesResult->id]) }}"
                                                 method="post">
                                                 @csrf
                                                 @method('put')
@@ -104,12 +104,12 @@
                                                     value=" {{ $judgesResult->exam->ponit }}">
                                                 <div class="mb-3">
                                                     <label for="" class="form-label"> Điểm trung bình:</label>
-                                                    <input type="number"  min="0" max="10" step="0.1" size="5"
+                                                    <input type="number" min="0" max="10" step="0.1" size="5"
                                                         value="{{ $judgesResult->final_point ?? $tong / count($judgesResult->evaluation) }}"
                                                         class="form-control" name="final_point" id="" placeholder="">
                                                 </div>
                                                 <div id="mark_comment" class="mb-3">
-                                                    <input style="display:none" size="5"  value="" type="text"
+                                                    <input style="display:none" size="5" value="" type="text"
                                                         class="form-control" name="mark_comment" id=""
                                                         aria-describedby="helpId"
                                                         placeholder="Lý do thay đổi điểm ( không bắt buộc)">
@@ -166,7 +166,7 @@
                                 </tbody>
                             </table>
                         @else
-                            <h3>Đội thi chưa có điểm thi !!!</h3>
+                        <h3>Đội thi chưa có điểm thi !!!</h3>
                         @endif
                     @else
                         <h3>Đội thi chưa có điểm thi !!!</h3>
@@ -177,7 +177,6 @@
     </div>
 @endsection
 @section('page-script')
-
     <script>
         $(document).ready(function() {
             // alert($("input[name=ponit]").val())
