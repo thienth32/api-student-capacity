@@ -14,6 +14,10 @@ const rules = {
     description: {
         required: true,
     },
+    max_user: {
+        required: true,
+        number: true
+    },
     start_register_time: {
         required: true,
     },
@@ -22,6 +26,10 @@ const rules = {
     },
 };
 const messages = {
+    max_user: {
+        required: "Chưa nhập trường này !",
+        number: 'Sai định dạng !!'
+    },
     name: {
         required: "Chưa nhập trường này !",
         maxlength: "Tối đa là 255 kí tự !",

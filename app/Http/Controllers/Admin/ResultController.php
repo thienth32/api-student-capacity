@@ -13,7 +13,7 @@ class ResultController extends Controller
     protected function getList($id_round)
     {
         $query = Result::where('round_id', $id_round)
-            ->sort((request('sort') == 'desc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'results')
+            // ->sort((request('sort') == 'desc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'results')
             ->orderBy('point', 'desc')
             ->orderBy('created_at', 'asc');
 
@@ -24,6 +24,7 @@ class ResultController extends Controller
     public function indexApi($id_round)
     {
         $data = $this->getList($id_round)->get();
+        // dd($data->toArray());
         return response()->json([
             'status' => true,
             'payload' => $data

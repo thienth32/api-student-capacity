@@ -27,6 +27,7 @@
                                 <label for="" class="form-label">Thuộc cuộc thi</label>
                                 <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
                                     data-hide-search="false" tabindex="-1" aria-hidden="true" name="contest_id">
+                                    <option value="">Chọn cuộc thi</option>
                                     @foreach ($contests as $contest)
                                         <option {{ old('contest_id') == $contest->id ? 'selected' : '' }}
                                             value="{{ $contest->id }}">
@@ -37,32 +38,34 @@
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
                             </div>
-                            <div class="form-group list-group mb-5">
-                                <label class="form-label" for="">Thành viên nhóm</label>
-                                <div class="input-group mb-3">
-                                    <input placeholder="Hãy nhập email hoặc tên để tìm kiếm..." type="text"
-                                        class="form-control" id="searchUserValue">
-                                    <button id="searchUser" class="btn btn-secondary rounded-end" type="button"
-                                        data-bs-toggle="dropdown" aria-expanded="false">Tìm</button>
-                                    <ul id="resultUserSearch" class="dropdown-menu dropdown-menu-end w-500px">
+                            <div id="member" style="display: none">
+                                <div class="form-group list-group mb-5">
+                                    <label class="form-label" for="">Thành viên nhóm</label>
+                                    <div class="input-group mb-3">
+                                        <input placeholder="Hãy nhập email hoặc tên để tìm kiếm..." type="text"
+                                            class="form-control" id="searchUserValue">
+                                        {{-- <button id="searchUser" class="btn btn-secondary rounded-end" type="button">Tìm</button> --}}
+                                        <button id="searchUser" type="button" class="btn btn-primary">Tìm</button>
+                                    </div>
+                                    <ul id="resultUserSearch">
                                     </ul>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="listUser">
-                                        <h4>Danh sách chờ</h4>
-                                        <div id="resultArrayUser" class=" mt-4">
-
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <hr>
+                                        <div>
+                                            <h4>Danh sách chờ</h4>
+                                            <div id="resultArrayUser" class=" mt-4">
+                                            </div>
+                                            <p class="text-danger" id="mesArrayUser">
+                                                @if (session()->has('error'))
+                                                    {{ session()->get('error') }}
+                                                    @php
+                                                        Session::forget('error');
+                                                    @endphp
+                                                @endif
+                                            </p>
                                         </div>
-                                        <p class="text-danger" id="mesArrayUser">
-                                            @if (session()->has('error'))
-                                                {{ session()->get('error') }}
-                                                @php
-                                                    Session::forget('error');
-                                                @endphp
-                                            @endif
-                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -111,8 +114,12 @@
         preview.showFile('#file-input', '#image-preview');
         var userArray = @json($userArray ?? []);
         var _token = "{{ csrf_token() }}"
+
         var urlSearch = "{{ route('admin.user.TeamUserSearch') }}"
+        var max_user = 0
+        var urlShowContest = "{{ route('admin.teams.add.contest.show') }}";
     </script>
-    <script src="{{ asset('assets/js/system/validate/validate.js') }}"></script>
+    <script src="{{ asset('assets/js/system/team/add.js') }}"></script>
     <script src="{{ asset('assets/js/system/team/team.js') }}"></script>
+    <script src="{{ asset('assets/js/system/validate/validate.js') }}"></script>
 @endsection

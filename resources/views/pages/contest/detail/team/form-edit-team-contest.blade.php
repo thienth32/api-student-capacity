@@ -52,15 +52,14 @@
                                 @endif
                             </div>
 
+
                             <div class="form-group list-group mb-5">
                                 <label class="form-label" for="">Thành viên nhóm</label>
                                 <div class="input-group mb-3">
                                     <input placeholder="Hãy nhập email hoặc tên để tìm kiếm..." type="text"
                                         class="form-control" id="searchUserValue">
-                                    <button id="searchUser" class="btn btn-secondary rounded-end" type="button"
-                                        data-bs-toggle="dropdown" aria-expanded="false">Tìm</button>
-                                    <ul id="resultUserSearch" class="dropdown-menu dropdown-menu-end w-500px">
-                                    </ul>
+                                    {{-- <button id="searchUser" class="btn btn-secondary rounded-end" type="button">Tìm</button> --}}
+                                    <button id="searchUser" type="button" class="btn btn-primary">Tìm</button>
                                 </div>
                                 @if (session()->has('error'))
                                     <p class="text-danger">{{ session()->get('error') }}</p>
@@ -68,10 +67,13 @@
                                         Session::forget('error');
                                     @endphp
                                 @endif
+                                <ul id="resultUserSearch">
+                                </ul>
                             </div>
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <div class="listUser">
+                                    <hr>
+                                    <div>
                                         <h4>Danh sách chờ</h4>
                                         <div id="resultArrayUser" class=" mt-4">
                                         </div>
@@ -114,8 +116,9 @@
     <script>
         preview.showFile('#file-input', '#image-preview');
         var userArray = @json($userArray);
-
+        console.log(userArray);
         var _token = "{{ csrf_token() }}"
+        var max_user = "{{ $contest->max_user }}"
         var urlSearch = "{{ route('admin.user.team.search', ['id_contest' => $contest->id]) }}"
     </script>
     <script src="{{ asset('assets/js/system/team/validateForm.js') }}"></script>
