@@ -53,10 +53,9 @@
                                 $dash = '';
                             @endphp
                             <option @selected(request('major_id') == $major->id) value="{{ $major->id }}">{{ $major->name }} </option>
-                            @include(
-                                'pages.major.include.listSelecterChislAdd',
-                                ['majorPrent' => $major]
-                            )
+                            @include('pages.major.include.listSelecterChislAdd', [
+                                'majorPrent' => $major,
+                            ])
                         @endforeach
                     </select>
                 </div>
@@ -279,14 +278,14 @@
                             @if (request()->has('sort'))
                                 <th scope="row">
                                     @if (request('sort') == 'desc')
-                                        {{ (request()->has('page') && request('page') !== 1 ? $contests->perPage() * (request('page') - 1) : 0) +$key +1 }}
+                                        {{ (request()->has('page') && request('page') !== 1 ? $contests->perPage() * (request('page') - 1) : 0) + $key + 1 }}
                                     @else
-                                        {{ request()->has('page') && request('page') !== 1? $total - $contests->perPage() * (request('page') - 1) - $key: ($total -= 1) }}
+                                        {{ request()->has('page') && request('page') !== 1 ? $total - $contests->perPage() * (request('page') - 1) - $key : ($total -= 1) }}
                                     @endif
                                 </th>
                             @else
                                 <th scope="row">
-                                    {{ (request()->has('page') && request('page') !== 1 ? $contests->perPage() * (request('page') - 1) : 0) +$key +1 }}
+                                    {{ (request()->has('page') && request('page') !== 1 ? $contests->perPage() * (request('page') - 1) : 0) + $key + 1 }}
                                 </th>
                             @endif
                             <td>
@@ -474,9 +473,9 @@
         const _token = "{{ csrf_token() }}";
         const sort = '{{ request()->has('sort') ? (request('sort') == 'desc' ? 'asc' : 'desc') : 'asc' }}';
         const start_time =
-            '{{ request()->has('start_time')? \Carbon\Carbon::parse(request('start_time'))->format('m/d/Y h:i:s A'): \Carbon\Carbon::now()->format('m/d/Y h:i:s A') }}'
+            '{{ request()->has('start_time') ? \Carbon\Carbon::parse(request('start_time'))->format('m/d/Y h:i:s A') : \Carbon\Carbon::now()->format('m/d/Y h:i:s A') }}'
         const end_time =
-            '{{ request()->has('end_time')? \Carbon\Carbon::parse(request('end_time'))->format('m/d/Y h:i:s A'): \Carbon\Carbon::now()->format('m/d/Y h:i:s A') }}'
+            '{{ request()->has('end_time') ? \Carbon\Carbon::parse(request('end_time'))->format('m/d/Y h:i:s A') : \Carbon\Carbon::now()->format('m/d/Y h:i:s A') }}'
     </script>
     <script src="assets/js/system/formatlist/formatlis.js"></script>
     <script src="assets/js/system/contest/contest.js"></script>

@@ -174,7 +174,7 @@ class ContestController extends Controller
             $contest->status = config('util.ACTIVE_STATUS');
             $contest->save();
             DB::commit();
-            return Redirect::route('admin.contest.list')->with('success', 'Thêm mới thành công !');
+            return Redirect::route('admin.contest.show', ['id' => $contest->id])->with('success', 'Thêm mới thành công !');
         } catch (Exception $ex) {
             if ($request->hasFile('img')) {
                 $fileImage = $request->file('img');
