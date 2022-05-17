@@ -39,15 +39,10 @@
             </div>
         </div>
         <div class="row">
-
         </div>
-
     </div>
-
     <div class="row">
-
         <div class="col-lg-12">
-
             <div class=" card card-flush  p-5">
                 <div class="table-responsive">
                     @if ($takeExam != null)
@@ -62,11 +57,12 @@
                                     <th>Điểm thi</th>
                                     <th>Trạng thái</th>
                                     <th>Ghi chú</th>
-                                    <th>Chấm bài </th>
+                                    @hasanyrole('judge')
+                                        <th>Chấm bài </th>
+                                    @endhasanyrole
                                 </tr>
                             </thead>
                             <tbody>
-
                                 <tr>
                                     <td></td>
                                     <td> <a
@@ -118,12 +114,6 @@
                                     @if ($takeExam->status == config('util.TAKE_EXAM_STATUS_CANCEL'))
                                         <td>
                                             <p>Đã hủy bài !</p>
-                                        </td>
-                                    @else
-                                        <td>
-                                            <a
-                                                href="{{ route('admin.round.detail.team.make.exam', ['id' => $round->id, 'teamId' => $team->id]) }}">Chấm
-                                                bài</a>
                                         </td>
                                     @endif
 

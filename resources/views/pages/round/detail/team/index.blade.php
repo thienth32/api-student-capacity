@@ -183,7 +183,6 @@
         <div class="col-lg-12">
             <div class=" card card-flush ">
                 <div class="row p-5 d-flex justify-content-center align-items-center ">
-
                     <div class="col-md-3">
                         <a
                             href="{{ route('admin.round.detail.team.Exam', ['id' => $round->id, 'teamId' => $team->id]) }}">
@@ -210,7 +209,7 @@
                             href="{{ route('admin.round.detail.team.judge', ['id' => $round->id, 'teamId' => $team->id]) }}">
                             <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
                                 <div class="m-0">
-                                    <span class="text-gray-700 fw-bold fs-6">Điểm và đánh giá của ban giám khảo</span>
+                                    <span class="text-gray-700 fw-bold fs-6">Xác nhận điểm</span>
                                 </div>
                             </div>
                         </a>

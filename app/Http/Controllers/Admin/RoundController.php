@@ -579,8 +579,10 @@ class RoundController extends Controller
 
     public function roundDetailTeamMakeExam($id, $teamId)
     {
-        try {
+        // try {
+
             $round = Round::find($id);
+
             $team = Team::where('id', $teamId)->first();
             $takeExam = RoundTeam::where('round_id', $id)->where('team_id', $teamId)->with('takeExam', function ($q) use ($round) {
                 return $q->with(['exam', 'evaluations' => function ($q) use ($round) {
@@ -590,6 +592,7 @@ class RoundController extends Controller
                     return $q->where('judge_round_id', $judge->judge_rounds[0]->id);
                 }]);
             })->first();
+            // dd($takeExam);
             return view(
                 'pages.round.detail.team-make-exam',
                 [
@@ -598,9 +601,9 @@ class RoundController extends Controller
                     'team' => $team
                 ]
             );
-        } catch (\Throwable $th) {
-            return abort(404);
-        }
+        // } catch (\Throwable $th) {
+        //     return abort(404);
+        // }
     }
     public function roundDetailFinalTeamMakeExam(Request $request, $id, $teamId)
     {

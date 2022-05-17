@@ -137,18 +137,17 @@
 
                                                 </div>
                                                 <div class="form-group mb-10 ">
-                                                    {{-- @if ($judgesResult->final_point != null)
-                                                        <button onclick="return alert('Điểm thi đã được xác nhận .')"
-                                                            type="button" name="" id=""
+                                                    @if ($judgesResult->final_point != null)
+                                                        <button onclick="notification()" type="button" name="" id=""
                                                             class="btn btn-success btn-lg btn-block">Đã xác nhận
                                                         </button>
-                                                    @else --}}
+                                                    @else
                                                         <button
                                                             onclick="waitingNotice({{ count($judgesResult->evaluation) }}, {{ count($round->judges) }})"
                                                             type="button" name="" id="submitResult"
                                                             class="btn btn-success btn-lg btn-block">Xác nhận điểm
                                                         </button>
-                                                    {{-- @endif --}}
+                                                    @endif
 
                                                 </div>
                                             </form>
@@ -166,7 +165,7 @@
                                 </tbody>
                             </table>
                         @else
-                        <h3>Đội thi chưa có điểm thi !!!</h3>
+                            <h3>Đội thi chưa có điểm thi !!!</h3>
                         @endif
                     @else
                         <h3>Đội thi chưa có điểm thi !!!</h3>
@@ -200,7 +199,6 @@
                 $('#select-round').hide(100);
             }
 
-
         });
 
         function waitingNotice(a, b) {
@@ -210,6 +208,15 @@
             }
             return $('form').submit()
 
+        }
+
+        function notification() {
+            let choice = confirm("Điểm đã xác nhận. bạn có muốn thay đổi không!");
+            if (choice == true) {
+                return $('form').submit()
+            } else {
+                return false
+            }
         }
     </script>
     <script src="assets/js/system/validate/validate.js"></script>
