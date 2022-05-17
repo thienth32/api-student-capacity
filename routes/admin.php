@@ -128,7 +128,10 @@ Route::group([
         Route::get('', [TeamController::class, 'ListTeam'])->name('admin.teams'); // Api list Danh sách teams theo cuộc thi. phía view
         // end lisst
         Route::delete('{id}', [TeamController::class, 'deleteTeam'])->name('admin.delete.teams'); // Api xóa teams phía view
-        Route::get('form-add', [TeamController::class, 'create'])->name('admin.teams.create');
+        Route::prefix('form-add')->group(function () {
+            Route::get('', [TeamController::class, 'create'])->name('admin.teams.create');
+            Route::post('contest', [TeamController::class, 'getContest'])->name('admin.teams.add.contest.show');
+        });
         Route::post('form-add-save', [TeamController::class, 'store'])->name('admin.teams.store');
         Route::get('form-edit/{id}', [TeamController::class, 'edit'])->name('admin.teams.edit');
         Route::put('form-edit-save/{id}', [TeamController::class, 'update'])->name('admin.teams.update');

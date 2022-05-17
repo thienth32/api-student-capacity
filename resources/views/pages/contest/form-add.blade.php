@@ -116,6 +116,11 @@
                                 </div>
                             </div>
                             <div class="col-4">
+                                <div class="form-group mb-10">
+                                    <label for="" class="form-label">Giới hạn thành viên trong đội</label>
+                                    <input name="max_user" type='number' class="form-control" />
+
+                                </div>
                                 <div class="form-group ">
                                     <label for="" class="form-label">Ảnh cuộc thi</label>
                                     <input name="img" type='file' id="file-input" accept=".png, .jpg, .jpeg"
@@ -143,7 +148,6 @@
             </div>
         </div>
     </div>
-
 
 @endsection
 @section('page-script')

@@ -11,7 +11,8 @@
                     @method('put')
                     <div class="form-group mb-10">
                         <label class="form-label" for="">Tên cuộc thi</label>
-                        <input type="text" name="name" value="{{ $Contest->name }}" class=" form-control" placeholder="">
+                        <input type="text" name="name" value="{{ old('name', $Contest->name) }}" class=" form-control"
+                            placeholder="">
                         @error('name')
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
@@ -78,6 +79,11 @@
                                 </div>
                             </div>
                             <div class="col-4">
+                                <div class="form-group mb-10">
+                                    <label for="" class="form-label">Giới hạn thành viên trong đội</label>
+                                    <input value="{{ old('max_user', $Contest->max_user) }}" name="max_user"
+                                        type='number' class="form-control" />
+                                </div>
                                 <div class="form-group ">
                                     <label for="" class="form-label">Ảnh cuộc thi</label>
                                     <input value="{{ old('img') }}" name="img" type='file' id="file-input"
