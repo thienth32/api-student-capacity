@@ -182,7 +182,8 @@ class RoundController extends Controller
             $round->type_exam_id = $request->type_exam_id;
             $round->save();
             Db::commit();
-            return Redirect::route('admin.round.list');
+            if ($request->has('contestHasId')) return Redirect::route('admin.contest.detail.round', ['id' => $request->contestHasId]);
+            return Redirect::route('admin.round.detail', ['id' => $round->id]);
         } catch (Exception $ex) {
             if ($request->hasFile('image')) {
                 $fileImage = $request->file('image');
