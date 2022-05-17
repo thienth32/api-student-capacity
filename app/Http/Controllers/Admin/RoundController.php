@@ -15,6 +15,7 @@ use App\Models\Enterprise;
 use App\Models\Evaluation;
 use App\Models\Judge;
 use App\Models\RoundTeam;
+use App\Models\TakeExams;
 use App\Models\Team;
 use App\Models\TypeExam;
 use Illuminate\Support\Facades\DB;
@@ -615,6 +616,15 @@ class RoundController extends Controller
             ->with('takeExam', function ($q) use ($round) {
                 return $q->with(['exam', 'evaluations']);
             })->first();
+        $poinHas = $request->ponit;
+        $count = 1;
+        if (count($roundTeam->takeExam->evaluations) > 0) {
+            foreach ($roundTeam->takeExam->evaluations as $evaluation) {
+                $poinHas += $evaluation->ponit;
+                $count++;
+            }
+        }
+        $final_fonit = $poinHas / $count;
         $request->validate([
             'ponit' => 'required|numeric|min:0|max:' . $roundTeam->takeExam->exam->max_ponit,
             'comment' => 'required',
@@ -638,10 +648,16 @@ class RoundController extends Controller
             'judge_round_id' =>  $judge->judge_rounds[0]->id
         ]);
         try {
-            Evaluation::create($dataCreate);
+            DB::transaction(function () use ($dataCreate, $roundTeam, $final_fonit) {
+                Evaluation::create($dataCreate);
+                TakeExams::find($roundTeam->takeExam->id)->update([
+                    'final_point' => $final_fonit,
+                ]);
+            });
+            return redirect()->back();
             return redirect()->route('admin.round.detail.team', ['id' => $round->id]);
         } catch (\Throwable $th) {
-            return redirect()->back();
+            return abort(404);
         }
     }
 
@@ -653,6 +669,7 @@ class RoundController extends Controller
             ->with('takeExam', function ($q) use ($round) {
                 return $q->with(['exam', 'evaluations']);
             })->first();
+
         $request->validate([
             'ponit' => 'required|numeric|min:0|max:' . $roundTeam->takeExam->exam->max_ponit,
             'comment' => 'required',
@@ -667,6 +684,23 @@ class RoundController extends Controller
         $judge = Judge::where('contest_id', $round->contest_id)->where('user_id', auth()->user()->id)->with('judge_rounds', function ($q) use ($round) {
             return $q->where('round_id', $round->id);
         })->first('id');
+
+        $ev = Evaluation::where('exams_team_id', $roundTeam->takeExam->id)
+            ->where('judge_round_id', $judge->judge_rounds[0]->id)->first();
+
+        $poinHas = $request->ponit;
+        $count = 1;
+        if (count($roundTeam->takeExam->evaluations) > 0) {
+            foreach ($roundTeam->takeExam->evaluations as $evaluation) {
+                if ($ev->id != $evaluation->id) {
+
+                    $poinHas += $evaluation->ponit;
+                    $count++;
+                }
+            }
+        }
+        $final_fonit = $poinHas / $count;
+
         $dataCreate = array_merge($request->only([
             'ponit',
             'comment',
@@ -675,13 +709,19 @@ class RoundController extends Controller
             'exams_team_id' => $roundTeam->takeExam->id,
             'judge_round_id' =>  $judge->judge_rounds[0]->id
         ]);
+
         try {
-            Evaluation::where('exams_team_id', $roundTeam->takeExam->id)
-                ->where('judge_round_id', $judge->judge_rounds[0]->id)
-                ->update($dataCreate);
+            DB::transaction(function () use ($dataCreate, $roundTeam, $judge, $ev, $final_fonit) {
+                $ev->update($dataCreate);
+
+                TakeExams::find($roundTeam->takeExam->id)->update([
+                    'final_point' => $final_fonit,
+                ]);
+            });
+            return redirect()->back();
             return redirect()->route('admin.round.detail.team', ['id' => $round->id]);
         } catch (\Throwable $th) {
-            return redirect()->back();
+            return abort(404);
         }
     }
 
