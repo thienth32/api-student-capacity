@@ -15,6 +15,7 @@ use App\Models\Enterprise;
 use App\Models\Evaluation;
 use App\Models\Judge;
 use App\Models\RoundTeam;
+use App\Models\TakeExams;
 use App\Models\Team;
 use App\Models\TypeExam;
 use Illuminate\Support\Facades\DB;
@@ -182,8 +183,7 @@ class RoundController extends Controller
             $round->type_exam_id = $request->type_exam_id;
             $round->save();
             Db::commit();
-            if ($request->has('contestHasId')) return Redirect::route('admin.contest.detail.round', ['id' => $request->contestHasId]);
-            return Redirect::route('admin.round.detail', ['id' => $round->id]);
+            return Redirect::route('admin.round.list');
         } catch (Exception $ex) {
             if ($request->hasFile('image')) {
                 $fileImage = $request->file('image');
@@ -350,7 +350,6 @@ class RoundController extends Controller
         if ($this->destroyRound($id)) return redirect()->back();
         return redirect('error');
     }
-
     // Response
     // public function apiDestroy($id)
     // {
@@ -405,12 +404,10 @@ class RoundController extends Controller
     }
     public function adminShow($id)
     {
-
         if (!($round = $this->round::with(['contest', 'type_exam', 'judges', 'teams', 'Donor'])->where('id', $id)->first())) return abort(404);
         $roundTeam = RoundTeam::where('round_id', $id)->where('status', config('util.ROUND_TEAM_STATUS_NOT_ANNOUNCED'))->get();
         return view('pages.round.detail.detail', ['round' => $round, 'roundTeam' => $roundTeam]);
     }
-
     /**
      * Update trạng thái đội thi trong vòng thi tiếp theo
      */
@@ -605,7 +602,6 @@ class RoundController extends Controller
             return abort(404);
         }
     }
-
     public function roundDetailFinalTeamMakeExam(Request $request, $id, $teamId)
     {
         $round = Round::find($id);

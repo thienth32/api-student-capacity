@@ -78,14 +78,13 @@ Route::prefix('rounds')->group(function () {
 
 
             Route::group([
-                'middleware' => 'role_admin:judge'
+                'middleware' => 'role_admin:admin'
             ], function () {
 
                 // Ban giám khảo
                 Route::prefix('judge')->group(function () {
                     Route::get('{teamId}', [RoundController::class, 'roundDetailTeamJudge'])->name('admin.round.detail.team.judge');
                 });
-
                 // Chấm điểm thi
                 Route::prefix('take_exam')->group(function () {
                     Route::get('{teamId}', [RoundController::class, 'roundDetailTeamTakeExam'])->name('admin.round.detail.team.takeExam');

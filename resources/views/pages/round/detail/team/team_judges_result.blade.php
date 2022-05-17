@@ -137,18 +137,18 @@
 
                                                 </div>
                                                 <div class="form-group mb-10 ">
-                                                    @if ($judgesResult->final_point != null)
+                                                    {{-- @if ($judgesResult->final_point != null)
                                                         <button onclick="return alert('Điểm thi đã được xác nhận .')"
                                                             type="button" name="" id=""
                                                             class="btn btn-success btn-lg btn-block">Đã xác nhận
                                                         </button>
-                                                    @else
+                                                    @else --}}
                                                         <button
                                                             onclick="waitingNotice({{ count($judgesResult->evaluation) }}, {{ count($round->judges) }})"
                                                             type="button" name="" id="submitResult"
                                                             class="btn btn-success btn-lg btn-block">Xác nhận điểm
                                                         </button>
-                                                    @endif
+                                                    {{-- @endif --}}
 
                                                 </div>
                                             </form>

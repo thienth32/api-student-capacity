@@ -152,6 +152,7 @@
                 </div>
             </div>
 
+
             <div class="row">
                 <div class="col-lg-12">
                     <div class=" card card-flush ">
@@ -177,7 +178,44 @@
         </div>
 
     </div>
-
+    @if (count($round->teams) > 0)
+        <div class="container-fluid mt-1 mb-2 card card-flush">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="my-6">Đội thi</h2>
+                    <div class=" fs-3 pb-5">
+                        <table class="table table-row-dashed table-row-gray-300 gy-7">
+                            <thead>
+                                <tr class="fw-bolder fs-6 text-gray-800">
+                                    <th>#</th>
+                                    <th>Tên đội</th>
+                                    <th>Đề bài</th>
+                                    <th>Quá trình</th>
+                                    <th>Bài làm</th>
+                                    <th>Chấm bài</th>
+                                    <th>Xác Nhận Điểm</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php
+                                    $key = 1;
+                                @endphp
+                                @foreach ($round->teams as $team)
+                                    <tr>
+                                        <td>{{ $key++ }}</td>
+                                        <td> <a
+                                                href="{{ route('admin.round.detail.team.detail', ['id' => $round->id, 'teamId' => $team->id]) }}">
+                                                {{ $team->name }}</a></td>
+                                        <td></td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
     <div class="row">
         <div class="col-lg-12">
             <div class=" card card-flush ">
