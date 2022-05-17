@@ -616,15 +616,7 @@ class RoundController extends Controller
             ->with('takeExam', function ($q) use ($round) {
                 return $q->with(['exam', 'evaluations']);
             })->first();
-        $poinHas = $request->ponit;
-        $count = 1;
-        if (count($roundTeam->takeExam->evaluations) > 0) {
-            foreach ($roundTeam->takeExam->evaluations as $evaluation) {
-                $poinHas += $evaluation->ponit;
-                $count++;
-            }
-        }
-        $final_fonit = $poinHas / $count;
+
         $request->validate([
             'ponit' => 'required|numeric|min:0|max:' . $roundTeam->takeExam->exam->max_ponit,
             'comment' => 'required',
@@ -648,12 +640,7 @@ class RoundController extends Controller
             'judge_round_id' =>  $judge->judge_rounds[0]->id
         ]);
         try {
-            DB::transaction(function () use ($dataCreate, $roundTeam, $final_fonit) {
-                Evaluation::create($dataCreate);
-                TakeExams::find($roundTeam->takeExam->id)->update([
-                    'final_point' => $final_fonit,
-                ]);
-            });
+            Evaluation::create($dataCreate);
             return redirect()->back();
             return redirect()->route('admin.round.detail.team', ['id' => $round->id]);
         } catch (\Throwable $th) {
@@ -688,19 +675,6 @@ class RoundController extends Controller
         $ev = Evaluation::where('exams_team_id', $roundTeam->takeExam->id)
             ->where('judge_round_id', $judge->judge_rounds[0]->id)->first();
 
-        $poinHas = $request->ponit;
-        $count = 1;
-        if (count($roundTeam->takeExam->evaluations) > 0) {
-            foreach ($roundTeam->takeExam->evaluations as $evaluation) {
-                if ($ev->id != $evaluation->id) {
-
-                    $poinHas += $evaluation->ponit;
-                    $count++;
-                }
-            }
-        }
-        $final_fonit = $poinHas / $count;
-
         $dataCreate = array_merge($request->only([
             'ponit',
             'comment',
@@ -711,13 +685,7 @@ class RoundController extends Controller
         ]);
 
         try {
-            DB::transaction(function () use ($dataCreate, $roundTeam, $judge, $ev, $final_fonit) {
-                $ev->update($dataCreate);
-
-                TakeExams::find($roundTeam->takeExam->id)->update([
-                    'final_point' => $final_fonit,
-                ]);
-            });
+            $ev->update($dataCreate);
             return redirect()->back();
             return redirect()->route('admin.round.detail.team', ['id' => $round->id]);
         } catch (\Throwable $th) {
