@@ -611,6 +611,7 @@ class RoundController extends Controller
             ->with('takeExam', function ($q) use ($round) {
                 return $q->with(['exam', 'evaluations']);
             })->first();
+
         $request->validate([
             'ponit' => 'required|numeric|min:0|max:' . $roundTeam->takeExam->exam->max_ponit,
             'comment' => 'required',
@@ -635,9 +636,10 @@ class RoundController extends Controller
         ]);
         try {
             Evaluation::create($dataCreate);
+            return redirect()->back();
             return redirect()->route('admin.round.detail.team', ['id' => $round->id]);
         } catch (\Throwable $th) {
-            return redirect()->back();
+            return abort(404);
         }
     }
 
@@ -649,6 +651,7 @@ class RoundController extends Controller
             ->with('takeExam', function ($q) use ($round) {
                 return $q->with(['exam', 'evaluations']);
             })->first();
+
         $request->validate([
             'ponit' => 'required|numeric|min:0|max:' . $roundTeam->takeExam->exam->max_ponit,
             'comment' => 'required',
@@ -663,6 +666,10 @@ class RoundController extends Controller
         $judge = Judge::where('contest_id', $round->contest_id)->where('user_id', auth()->user()->id)->with('judge_rounds', function ($q) use ($round) {
             return $q->where('round_id', $round->id);
         })->first('id');
+
+        $ev = Evaluation::where('exams_team_id', $roundTeam->takeExam->id)
+            ->where('judge_round_id', $judge->judge_rounds[0]->id)->first();
+
         $dataCreate = array_merge($request->only([
             'ponit',
             'comment',
@@ -671,13 +678,13 @@ class RoundController extends Controller
             'exams_team_id' => $roundTeam->takeExam->id,
             'judge_round_id' =>  $judge->judge_rounds[0]->id
         ]);
+
         try {
-            Evaluation::where('exams_team_id', $roundTeam->takeExam->id)
-                ->where('judge_round_id', $judge->judge_rounds[0]->id)
-                ->update($dataCreate);
+            $ev->update($dataCreate);
+            return redirect()->back();
             return redirect()->route('admin.round.detail.team', ['id' => $round->id]);
         } catch (\Throwable $th) {
-            return redirect()->back();
+            return abort(404);
         }
     }
 
