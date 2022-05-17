@@ -43,6 +43,7 @@
         <div>
             <div class="row mb-4">
                 <div class="col-6">
+                    {{ dd($takeExam->exam->external_url) }}
                     <h2>Đề bài {{ $takeExam->exam->name }}
                         @if (\Storage::disk('s3')->has($takeExam->exam->external_url))
                             <a href="{{ route('dowload.file') }}?url={{ $takeExam->exam->external_url }}"
