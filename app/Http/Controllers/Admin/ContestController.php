@@ -121,7 +121,6 @@ class ContestController extends Controller
     }
     public function store(Request $request)
     {
-        dd($request->all());
         $validator = Validator::make(
             $request->all(),
             [
@@ -569,6 +568,24 @@ class ContestController extends Controller
             Log::info('..--..');
             dd($th);
         }
+    }
+
+    public function sendMail($id)
+    {
+        $contest = Contest::findOrFail($id)->load([
+            'teams' => function ($q) {
+                return $q->with(['members']);
+            }
+        ]);
+        $users = [];
+        if (count($contest->teams) > 0) {
+            foreach ($contest->teams as $team) {
+                foreach ($team->members as $user) {
+                    array_push($users, $user);
+                }
+            }
+        }
+        return view('pages.contest.add-mail', ['contest' => $contest, 'users' => array_unique($users)]);
     }
 }
 

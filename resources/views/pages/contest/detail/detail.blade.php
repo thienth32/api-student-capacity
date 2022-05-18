@@ -168,7 +168,7 @@
                         </div>
                     @endhasanyrole
                     @hasanyrole(config('util.ROLE_ADMINS'))
-                        <div class="col-md-3">
+                        <div class="col-md-3  mb-5">
                             <a href="{{ route('admin.contest.detail.team', ['id' => $contest->id]) }}">
                                 <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
                                     <div class="m-0">
@@ -180,7 +180,7 @@
                                 </div>
                             </a>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-3  mb-5">
                             <a href="{{ route('admin.judges.contest', ['contest_id' => $contest->id]) }}">
                                 <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
                                     <div class="m-0">
@@ -192,7 +192,7 @@
                                 </div>
                             </a>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-3  mb-5">
                             <a href="{{ route('admin.contest.detail.enterprise', ['id' => $contest->id]) }}">
                                 <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
                                     <div class="m-0">
@@ -200,6 +200,15 @@
                                     </div>
                                     <div class="m-0 badge badge-primary badge-pill">
                                         <span class=" fs-6 text-white">{{ count($contest->enterprise) }}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-5">
+                            <a href="{{ route('admin.contest.send.mail', ['id' => $contest->id]) }}">
+                                <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
+                                    <div class="m-0">
+                                        <span class="text-gray-700 fw-bold fs-6">Thông báo </span>
                                     </div>
                                 </div>
                             </a>

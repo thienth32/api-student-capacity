@@ -26,6 +26,8 @@ Route::prefix('rounds')->group(function () {
     Route::group([
         'middleware' => 'role_admin'
     ], function () {
+        Route::post('end-mail/{id}', [SendMailController::class, 'sendMailRoundUser'])->name('round.send.mail.pass');
+        Route::get('{id}/form-send-mail', [RoundController::class, 'sendMail'])->name('admin.round.send.mail');
         Route::get('form-add', [RoundController::class, 'create'])->name('admin.round.create');
         Route::post('form-add-save', [RoundController::class, 'store'])->name('admin.round.store');
         Route::get('{id}/edit', [RoundController::class, 'edit'])->name('admin.round.edit');
@@ -151,11 +153,15 @@ Route::group([
 Route::prefix('contests')->group(function () {
 
     Route::get('', [ContestController::class, 'index'])->name('admin.contest.list');
+    // Send mail method poss
 
     Route::group([
         'middleware' => 'role_admin'
     ], function () {
         Route::get('form-add', [ContestController::class, 'create'])->name('admin.contest.create');
+        Route::post('send-mail/{id}', [SendMailController::class, 'sendMailContestUser'])->name('contest.send.mail.pass');
+        // Send mail method Get
+        Route::get('{id}/form-send-mail', [ContestController::class, 'sendMail'])->name('admin.contest.send.mail');
         Route::post('form-add-save', [ContestController::class, 'store'])->name('admin.contest.store');
         Route::post('un-status/{id}', [ContestController::class, 'un_status'])->name('admin.contest.un.status');
         Route::post('re-status/{id}', [ContestController::class, 're_status'])->name('admin.contest.re.status');
@@ -274,4 +280,6 @@ Route::group([
     });
 });
 
-Route::get('end-mail', [SendMailController::class, 'sendMail']);
+
+
+//81

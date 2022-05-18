@@ -762,4 +762,22 @@ class RoundController extends Controller
             ]
         );
     }
+
+    public function sendMail($id)
+    {
+        $round = Round::findOrFail($id)->load([
+            'teams' => function ($q) {
+                return $q->with(['members']);
+            }
+        ]);
+        $users = [];
+        if (count($round->teams) > 0) {
+            foreach ($round->teams as $team) {
+                foreach ($team->members as $user) {
+                    array_push($users, $user);
+                }
+            }
+        }
+        return view('pages.round.add-mail', ['round' => $round, 'users' => array_unique($users)]);
+    }
 }
