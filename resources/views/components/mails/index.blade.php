@@ -90,6 +90,25 @@
 
                             <div class="form-group mb-10">
                                 <label for="" class="form-label">Nội dung gửi mail </label>
+
+                                <!--begin::Alert-->
+                                <div class="alert alert-primary">
+
+                                    <!--begin::Wrapper-->
+                                    <div class="d-flex flex-column">
+                                        <!--begin::Title-->
+                                        <h4 class="mb-1 text-dark">Note</h4>
+                                        <!--end::Title-->
+                                        <!--begin::Content-->
+                                        <p>$name = Tên người nhận</p>
+                                        <p>$email = Email người nhận</p>
+                                        <!--end::Content-->
+                                    </div>
+                                    <!--end::Wrapper-->
+                                </div>
+                                <!--end::Alert-->
+
+
                                 <textarea name="content" id="kt_docs_tinymce_hidden"> {{ old('content') }}</textarea>
                                 @error('content')
                                     <p class="text-danger">{{ $message }}</p>
@@ -108,9 +127,13 @@
                                     data-placeholder="Select an option" data-allow-clear="true" name="users[]"
                                     multiple="multiple">
                                     <option></option>
+                                    @foreach ($judges as $judge)
+                                        <option value="{{ $judge->email }}">{{ $judge->name }}
+                                            -- {{ $judge->email }} (Ban giám khảo )</option>
+                                    @endforeach
                                     @foreach ($users as $user)
                                         <option selected value="{{ $user->email }}">{{ $user->name }}
-                                            -- {{ $user->email }}</option>
+                                            -- {{ $user->email }} (Sinh viên)</option>
                                     @endforeach
                                 </select>
                                 @error('users')

@@ -573,10 +573,12 @@ class ContestController extends Controller
     public function sendMail($id)
     {
         $contest = Contest::findOrFail($id)->load([
+            'judges',
             'teams' => function ($q) {
                 return $q->with(['members']);
             }
         ]);
+        $judges = $contest->judges;
         $users = [];
         if (count($contest->teams) > 0) {
             foreach ($contest->teams as $team) {
@@ -585,7 +587,7 @@ class ContestController extends Controller
                 }
             }
         }
-        return view('pages.contest.add-mail', ['contest' => $contest, 'users' => array_unique($users)]);
+        return view('pages.contest.add-mail', ['contest' => $contest, 'judges' => $judges, 'users' => array_unique($users)]);
     }
 }
 

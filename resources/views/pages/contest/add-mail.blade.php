@@ -1,4 +1,4 @@
-@component('components.mails.index', ['contest' => $contest, 'users' => $users])
+@component('components.mails.index', ['contest' => $contest, 'users' => $users, 'judges' => $judges])
     @slot('bred')
         <div class=" mb-4">
             <div class="row">

@@ -766,10 +766,17 @@ class RoundController extends Controller
     public function sendMail($id)
     {
         $round = Round::findOrFail($id)->load([
+            'judges',
             'teams' => function ($q) {
                 return $q->with(['members']);
             }
         ]);
+        $judges = [];
+        if (count($round->judges) > 0) {
+            foreach ($round->judges as $judge) {
+                array_push($judges, $judge->user);
+            }
+        }
         $users = [];
         if (count($round->teams) > 0) {
             foreach ($round->teams as $team) {
@@ -778,6 +785,6 @@ class RoundController extends Controller
                 }
             }
         }
-        return view('pages.round.add-mail', ['round' => $round, 'users' => array_unique($users)]);
+        return view('pages.round.add-mail', ['round' => $round, 'judges' => $judges, 'users' => array_unique($users)]);
     }
 }
