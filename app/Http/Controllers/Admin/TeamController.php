@@ -402,9 +402,11 @@ class TeamController extends Controller
                             'users' => $user
                         ]);
                     } else {
+                        $user = User::select('name', 'email')->whereIn('id', $result['user-pass'])->get();
                         return response()->json([
                             'status' => true,
                             'payload' => 'Thêm thành viên thành công !',
+                            'users' => $user
                         ]);
                     }
                 } else {
