@@ -56,6 +56,6 @@ Route::prefix('round')->group(function () {
 });
 
 
-Route::prefix('user')->group(function () {
+Route::prefix('users')->group(function () {
     Route::get('contest-joined', [UserController::class, 'contestJoined']);
 });

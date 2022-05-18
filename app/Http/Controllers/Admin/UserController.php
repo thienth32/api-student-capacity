@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Contest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Exception;
@@ -223,17 +224,27 @@ class UserController extends Controller
 
     public function contestJoined()
     {
-        $contestArr = [];
+        // user đã đăng nhập vô 
+        //tổng quan url  http://127.0.0.1:8000/api/v1/users/contest-joined?sort=asc&status=1&q=Nguyen Bich test
+        // sort : asc/desc 
+        // q : tìm kiếm
+
+        $contestID = [];
         $user_id = auth('sanctum')->user()->id;
         $user = User::find($user_id)->load('teams');
         foreach ($user->teams as $team) {
             if ($team->contest) {
-                array_push($contestArr, $team->contest);
+                array_push($contestID, $team->contest->id);
             }
         }
+        $contest = Contest::whereIn('id', $contestID)
+            ->search(request('q') ?? null, ['name', 'description'])
+            ->status(request('status'))
+            ->sort((request('sort') == 'asc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'contests')
+            ->get();
         return response()->json([
             'status' => true,
-            'payload' =>  $contestArr
+            'payload' => $contest
         ]);
     }
 }
