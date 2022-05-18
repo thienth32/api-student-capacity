@@ -13,7 +13,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles,SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, SoftDeletes;
     protected $table = 'users';
 
     /**
@@ -49,5 +49,10 @@ class User extends Authenticatable
     public function newEloquentBuilder($query)
     {
         return new Builder($query);
+    }
+
+    public function teams()
+    {
+        return $this->belongsToMany(Team::class, 'members', 'user_id', 'team_id')->with('contest');
     }
 }
