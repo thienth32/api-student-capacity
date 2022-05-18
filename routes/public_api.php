@@ -8,11 +8,11 @@ use App\Http\Controllers\Admin\MajorController as AdminMajorController;
 use App\Http\Controllers\Admin\ResultController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\RoundController;
+use App\Http\Controllers\Admin\SendMailController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\SponsorController as AdminSponsorController;
 use App\Http\Controllers\Admin\TeamController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
-use App\Models\Team;
 
 /*
 |--------------------------------------------------------------------------

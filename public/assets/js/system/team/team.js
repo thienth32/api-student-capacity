@@ -1,7 +1,7 @@
 const teamPage = {
     searchUserDB: function() {
         // tìm kiếm người dùng trong db và in ra màn  hình để  thêm vô mảng
-        $(document).on('click', '#searchUser', function(e) {
+        $('#searchUser', ).on('click', function(e) {
             e.preventDefault();
             let key = $('input#searchUserValue').val().trim();
             $('input#searchUserValue').val(key)
@@ -18,8 +18,8 @@ const teamPage = {
                             var _html = ``;
                             $.map(response.payload, function(val, key) {
                                 _html += /*html*/ `
-                                    <li style='cursor: pointer;' class='p-3 mb-2 '>
-                                        <div data-id_user='${val.id}'data-name_user='${val.name}' data-email_user='${val.email}'class="addUserArray d-flex justify-content-between align-items-center">
+                                    <li style='cursor: pointer;' data-key='${key}' data-id_user='${val.id}'data-name_user='${val.name}' data-email_user='${val.email}' class='addUserArray p-3 mb-2 '>
+                                        <div  class=" d-flex justify-content-between align-items-center">
                                             <div>
                                                 ${val.name}
                                             </div>
@@ -30,7 +30,7 @@ const teamPage = {
                                     </li>
                                 `;
                             });
-                            $('input#searchUserValue').val();
+                            // $('input#searchUserValue').val();
                             $('#resultUserSearch').empty();
                             $('#resultUserSearch').html(_html);
                         } else {
@@ -46,14 +46,14 @@ const teamPage = {
             }
         });
     },
-
     userArray: function(userArray) {
         loadUserTeam(userArray);
-        // function load mảng  user  và in ra màn  hình 
+        //     // function load mảng  user  và in ra màn  hình 
         function checkUserArray(userArray) {
             if (userArray.length == 0) {
                 //rỗng
-                $('#mesArrayUser').text('Danh sách còn trống, tìm kiếm để thêm vô !!')
+                // $('#mesArrayUser').text('Danh sách còn trống, tìm kiếm để thêm vô !!')
+                $('#mesArrayUser').text('Giới hạn chỉ được ' + max_user + ' thành viên !!')
                 $('#buttonTeam').prop("disabled", true);
             } else {
                 //có
@@ -73,7 +73,7 @@ const teamPage = {
             `;
             $.map(data, function(val, key) {
                 _html += /*html*/ `
-                    <tr >
+                    <tr>
                         <td>${key +1}</td>
                         <td>${val.email_user}</td>
                         <td>
@@ -102,25 +102,33 @@ const teamPage = {
         }
 
 
-        // thêm người dùng vô mảng  và in  ra màn hình
+        //     // thêm người dùng vô mảng  và in  ra màn hình
         $(document).on('click', '.addUserArray', function(e) {
             e.preventDefault();
+            let key = $(this).attr('data-key');
             let email = $(this).attr('data-email_user');
             let id = $(this).attr('data-id_user');
             let name = $(this).attr('data-name_user');
 
-            var check = userArray.filter(function(user) {
-                return user.id_user == id;
-            })
-            if (check.length > 0) {
-                toastr.warning('Thành viên này đã có trong nhóm !')
+
+            if (userArray.length >= max_user) {
+                toastr.warning(`Giới hạn chỉ được  ${ max_user } thành viên !`)
+                $('#resultUserSearch').empty();
             } else {
-                userArray.push({
-                    'id_user': id,
-                    'email_user': email,
-                    'name_user': name
-                });
+                var check = userArray.filter(function(user) {
+                    return user.id_user == id;
+                })
+                if (check.length > 0) {
+                    toastr.warning('Thành viên này đã có trong nhóm !')
+                } else {
+                    userArray.push({
+                        'id_user': id,
+                        'email_user': email,
+                        'name_user': name
+                    });
+                }
             }
+
             loadUserTeam(userArray);
             checkUserArray(userArray)
         });

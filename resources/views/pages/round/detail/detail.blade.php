@@ -132,6 +132,26 @@
                     </div>
                 </div>
             </div>
+
+            <div class="container-fluid mt-1 card card-flush">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h2 class="my-6">Ban giám khảo</h2>
+                        <div class=" fs-3 pb-5">
+                            <ul class="list-group">
+                                @forelse ($round -> judges as $judge)
+                                    <li class="list-group-item"> {{ $judge->user->name }}
+                                        <small class="badge bg-success">{{ $judge->user->email }}</small>
+                                    </li>
+                                @empty
+                                    Không có ban giám khảo !
+                                @endforelse
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-lg-12">
                     <div class=" card card-flush ">
@@ -175,6 +195,18 @@
                                 </div>
                             </a>
                         </div>
+                        <div class="col-md-3 mb-5">
+                            <a href="{{ route('admin.result.index', ['id' => $round->id]) }}">
+                                <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
+                                    <div class="m-0">
+                                        <span class="text-gray-700 fw-bold fs-6">Danh sách kết quả</span>
+                                    </div>
+                                    {{-- <div class="m-0 badge badge-primary badge-pill">
+                                        <span class=" fs-6 text-white">{{ count($round->exams) }}</span>
+                                    </div> --}}
+                                </div>
+                            </a>
+                        </div>
                     @endhasanyrole
                     @hasanyrole(config('util.ROLE_ADMINS'))
                         <div class="col-md-3 mb-5">
@@ -215,14 +247,11 @@
                             </a>
                         </div>
                         <div class="col-md-3 mb-5">
-                            <a href="{{ route('admin.result.index', ['id' => $round->id]) }}">
+                            <a href="{{ route('admin.round.send.mail', ['id' => $round->id]) }}">
                                 <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
                                     <div class="m-0">
-                                        <span class="text-gray-700 fw-bold fs-6">Danh sách kết quả</span>
+                                        <span class="text-gray-700 fw-bold fs-6">Thông báo </span>
                                     </div>
-                                    {{-- <div class="m-0 badge badge-primary badge-pill">
-                                        <span class=" fs-6 text-white">{{ count($round->exams) }}</span>
-                                    </div> --}}
                                 </div>
                             </a>
                         </div>

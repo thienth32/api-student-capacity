@@ -444,4 +444,13 @@ class TeamController extends Controller
             dd($th);
         }
     }
+
+    public function getContest(Request $request)
+    {
+        $max_user = Contest::find($request->id)->max_user;
+        return response()->json([
+            'status' => true,
+            'payload' =>  $max_user,
+        ]);
+    }
 }

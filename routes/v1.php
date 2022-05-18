@@ -55,3 +55,8 @@ Route::prefix('take-exam')->group(function () {
 Route::prefix('round')->group(function () {
     Route::get('{id_round}/team-me', [ContestController::class, 'userTeamRound']);
 });
+
+
+Route::prefix('user')->group(function () {
+    Route::get('contest-joined', [UserController::class, 'contestJoined']);
+});

@@ -181,8 +181,8 @@ return [
 
 
         App\Providers\GoogleServiceProvider::class,
-        Intervention\Image\ImageServiceProvider::class
-
+        Intervention\Image\ImageServiceProvider::class,
+        // L5Swagger\L5SwaggerServiceProvider::class,
     ],
 
     /*
