@@ -17,20 +17,6 @@ class SendMailController extends Controller
         Mail::to('kopopi593@gmail.com')->cc($users)->send(new FinnalPass($data));
     }
 
-    private function getUser($data)
-    {
-        $users = [];
-        if (count($data->teams) > 0) {
-            foreach ($data->teams as $team) {
-                if (count($team->members) == 0) break;
-                foreach ($team->members as $user) {
-                    array_push($users, $user->email);
-                }
-            }
-        }
-        return $users;
-    }
-
     public function sendMailRoundUser(Request $request, $id)
     {
         $request->validate(
@@ -45,12 +31,8 @@ class SendMailController extends Controller
                 'subject.required' => 'Trường tiêu đề không được bỏ trống !',
             ]
         );
-        $round = Round::findOrFail($id)->load(['teams' => function ($q) {
-            return $q->with([
-                'members'
-            ]);
-        }]);
-        $users = $this->getUser($round);
+        if (!$request->has('users')) return redirect()->back()->withErrors(['users' => 'Tài khoản nhận mail không thể bỏ trống !'])->withInput($request->input());
+        $users = $request->users;
         $this->senMail(
             array_unique($users),
             [
@@ -58,11 +40,12 @@ class SendMailController extends Controller
                 'subject' => $request->subject,
             ]
         );
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Gửi mail thành công ');
     }
 
     public function sendMailContestUser(Request $request, $id)
     {
+
         $request->validate(
             [
                 'content' => 'required|min:2',
@@ -75,12 +58,8 @@ class SendMailController extends Controller
                 'subject.required' => 'Trường tiêu đề không được bỏ trống !',
             ]
         );
-        $contest = Contest::findOrFail($id)->load([
-            'teams' => function ($q) {
-                return $q->with(['members']);
-            }
-        ]);
-        $users = $this->getUser($contest);
+        if (!$request->has('users')) return redirect()->back()->withErrors(['users' => 'Tài khoản nhận mail không thể bỏ trống !'])->withInput($request->input());
+        $users = $request->users;
         $this->senMail(
             array_unique($users),
             [
@@ -88,7 +67,6 @@ class SendMailController extends Controller
                 'subject' => $request->subject,
             ]
         );
-        dd('Final');
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Gửi mail thành công ');
     }
 }

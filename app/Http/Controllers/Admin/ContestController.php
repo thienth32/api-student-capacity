@@ -121,7 +121,6 @@ class ContestController extends Controller
     }
     public function store(Request $request)
     {
-        dd($request->all());
         $validator = Validator::make(
             $request->all(),
             [
@@ -578,7 +577,15 @@ class ContestController extends Controller
                 return $q->with(['members']);
             }
         ]);
-        return view('pages.contest.add-mail', ['contest' => $contest]);
+        $users = [];
+        if (count($contest->teams) > 0) {
+            foreach ($contest->teams as $team) {
+                foreach ($team->members as $user) {
+                    array_push($users, $user);
+                }
+            }
+        }
+        return view('pages.contest.add-mail', ['contest' => $contest, 'users' => array_unique($users)]);
     }
 }
 
