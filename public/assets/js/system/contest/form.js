@@ -7,9 +7,12 @@ const rules = {
     },
     date_start: {
         required: true,
+        beginLessEnd: true
     },
     register_deadline: {
         required: true,
+        checkBeginNull: true
+
     },
     description: {
         required: true,
@@ -20,6 +23,9 @@ const rules = {
     },
     start_register_time: {
         required: true,
+        startTimeCheckBegin: true,
+        startTimeCheckEnd: true,
+        startTimeCheckLessEnd: true
     },
     end_register_time: {
         required: true,
