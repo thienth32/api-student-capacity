@@ -6,15 +6,33 @@ use App\Http\Controllers\Controller;
 use App\Mail\FinnalPass;
 use App\Models\Contest;
 use App\Models\Round;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 class SendMailController extends Controller
 {
+    private $user;
+    private $mail;
+    public function __construct(User $user, Mail $mail)
+    {
+        $this->user = $user;
+        $this->mail = $mail;
+    }
     private function senMail($users = [], $data = [])
     {
-        Mail::to('kopopi593@gmail.com')->cc($users)->send(new FinnalPass($data));
+        // Mail::to('kopopi593@gmail.com')->cc($users)->send(new FinnalPass($data));
+        foreach ($users as $user) {
+            $contentNew = '';
+            $userFind = $this->user::where('email', $user)->first();
+            $contentNew = str_replace('$name', $userFind->name, $data['content']);
+            $contentNew = str_replace('$email', $userFind->email, $contentNew);
+            $this->mail::to($userFind->email)->send(new FinnalPass([
+                'subject' => $data['subject'],
+                'content' => $contentNew,
+            ]));
+        }
     }
 
     public function sendMailRoundUser(Request $request, $id)
