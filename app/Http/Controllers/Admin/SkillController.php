@@ -33,12 +33,10 @@ class SkillController extends Controller
         if ($major != null) {
             $query = Major::find($major);
         }
-
         if ($timeDay != null) {
             $current = Carbon::now();
             $query->where('created_at', '>=', $current->subDays($timeDay));
         }
-
         if ($sortBy == "desc") {
             $query->orderByDesc($orderBy);
         } else {

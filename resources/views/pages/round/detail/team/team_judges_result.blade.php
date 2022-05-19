@@ -54,6 +54,118 @@
             <div class=" card card-flush  p-5">
                 <div class="table-responsive">
                     @if ($judgesResult != null)
+                        <button class="btn btn-success btn-lg btn-block" type="button" data-bs-toggle="modal"
+                            data-bs-target="#history_Point">
+                            Lịch sử điểm
+                        </button>
+
+                        <!-- Modal -->
+                        <div style="margin:auto;width:100%" class="modal fade " id="history_Point" tabindex="-1"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Lịch sử thay đổi điểm
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body  ">
+                                        <div class="col-12 row">
+
+                                            <div class="row col-12 m-auto">
+
+                                                <button
+                                                    class="click-admin btn col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light">
+                                                    Admin</button>
+                                                <button
+                                                    class="click-judges  btn col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light">
+                                                    Ban giám khảo</button>
+                                            </div>
+                                            <div class="col-12 pb-2">
+                                                <div style="display:none" id="admin">
+                                                    <table class="table table-row-dashed table-row-gray-300 gy-7">
+                                                        <thead>
+                                                            <tr class="fw-bolder fs-6 text-gray-800">
+                                                                <th></th>
+                                                                <th>Email</th>
+                                                                <th>Họ tên</th>
+                                                                <th>Điểm thay đổi</th>
+                                                                <th>Lý do </th>
+                                                                <th>Thời gian</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            @foreach ($historyPoint as $item)
+                                                                <tr>
+                                                                    <td></td>
+
+                                                                    <td>
+                                                                        {{ $item->user->email }}
+                                                                    </td>
+                                                                    <td> {{ $item->user->name }}</td>
+
+                                                                    <td>{{ $item->point }}</td>
+                                                                    <td>{{ $item->reason }}</td>
+                                                                    <td> {{ date('d-m-Y H:i:s', strtotime($item->created_at)) }}
+                                                                        <br>
+                                                                        {{ \Carbon\Carbon::parse($item->created_at)->diffforHumans() }}
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+
+                                                </div>
+                                                <div style="display:none" id="judges">
+                                                    <table class="table table-row-dashed table-row-gray-300 gy-7">
+                                                        <thead>
+                                                            <tr class="fw-bolder fs-6 text-gray-800">
+                                                                <th></th>
+                                                                <th>Email</th>
+                                                                <th>Họ tên</th>
+                                                                <th>Điểm thay đổi</th>
+                                                                <th>Lý do </th>
+                                                                <th>Thời gian</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            @foreach ($historyPoint2 as $item)
+                                                                <tr>
+                                                                    <td></td>
+
+                                                                    <td>
+                                                                        {{ $item->user->email }}
+                                                                    </td>
+                                                                    <td> {{ $item->user->name }}</td>
+
+                                                                    <td>{{ $item->point }}</td>
+                                                                    <td>{{ $item->reason }}</td>
+                                                                    <td> {{ date('d-m-Y H:i:s', strtotime($item->created_at)) }}
+                                                                        <br>
+                                                                        {{ \Carbon\Carbon::parse($item->created_at)->diffforHumans() }}
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                    @if ($judgesResult != null)
                         @if (count($judgesResult->evaluation) > 0)
                             <table class="table table-row-dashed table-row-gray-300 gy-7">
                                 <thead>
@@ -74,7 +186,6 @@
                                             <td></td>
                                             <td>{{ $item->judge_round->judge->user->email }}</td>
                                             <td>{{ $item->judge_round->judge->user->name }}</td>
-
                                             <td>
                                                 {{ $item->ponit }}
                                             </td>
@@ -105,14 +216,19 @@
                                                 <div class="mb-3">
                                                     <label for="" class="form-label"> Điểm trung bình:</label>
                                                     <input type="number" min="0" max="10" step="0.1" size="5"
-                                                        value="{{ $judgesResult->final_point ?? $tong / count($judgesResult->evaluation) }}"
+                                                        value="{{ $judgesResult->final_point ?? round($tong / count($judgesResult->evaluation), 2) }}"
                                                         class="form-control" name="final_point" id="" placeholder="">
+
                                                 </div>
                                                 <div id="mark_comment" class="mb-3">
-                                                    <input style="display:none" size="5" value="" type="text"
-                                                        class="form-control" name="mark_comment" id=""
+                                                    <textarea style="display:none" size="5" value="" type="text" class="form-control" name="reason" id=""
                                                         aria-describedby="helpId"
-                                                        placeholder="Lý do thay đổi điểm ( không bắt buộc)">
+                                                        placeholder="Lý do thay đổi điểm ( không bắt buộc)"></textarea>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="" class="form-label">Nhận xét</label>
+                                                    <textarea name="mark_comment" class="textarea form-control">{{ $judgesResult->mark_comment ?? '' }}</textarea>
+
                                                 </div>
                                                 <div class="mb-3">
                                                     {{-- @if ($tong / count($judgesResult->evaluation) >= $judgesResult->exam->ponit) --}}
@@ -139,7 +255,7 @@
                                                 <div class="form-group mb-10 ">
                                                     @if ($judgesResult->final_point != null)
                                                         <button onclick="notification()" type="button" name="" id=""
-                                                            class="btn btn-success btn-lg btn-block">Đã xác nhận
+                                                            class="btn btn-success btn-lg btn-block">Cập nhật điểm
                                                         </button>
                                                     @else
                                                         <button
@@ -176,49 +292,7 @@
     </div>
 @endsection
 @section('page-script')
-    <script>
-        $(document).ready(function() {
-            // alert($("input[name=ponit]").val())
-            $("input[name=final_point]").keyup(function() {
-                $("input[name=final_point]").mouseleave(function() {
-
-                    $("input[name=mark_comment]").show(100);
-                    if (parseFloat($("input[name=final_point]").val()) >= parseFloat($(
-                            "input[name=ponit]").val())) {
-                        $('#select-round').show(100);
-                    } else {
-                        $('#select-round').hide(100);
-                    }
-                })
-
-            });
-            // $('#select-round').hide();
-            if (parseFloat($("input[name=final_point]").val()) >= parseFloat($("input[name=ponit]").val())) {
-                $('#select-round').show(100);
-            } else {
-                $('#select-round').hide(100);
-            }
-
-        });
-
-        function waitingNotice(a, b) {
-            if (a < b) {
-                alert('Vẫn còn ban giám khảo đang chấm , vui lòng đợi điểm .');
-                return false;
-            }
-            return $('form').submit()
-
-        }
-
-        function notification() {
-            let choice = confirm("Điểm đã xác nhận. bạn có muốn thay đổi không!");
-            if (choice == true) {
-                return $('form').submit()
-            } else {
-                return false
-            }
-        }
-    </script>
+    <script src="assets/js/system/round/round-team-judges-result.js"></script>
     <script src="assets/js/system/validate/validate.js"></script>
     <script src="{{ asset('assets/js/system/round/round-team.js') }}"></script>
 @endsection

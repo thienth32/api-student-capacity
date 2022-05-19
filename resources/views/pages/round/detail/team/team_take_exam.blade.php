@@ -57,16 +57,14 @@
                                     <th>Điểm thi</th>
                                     <th>Trạng thái</th>
                                     <th>Ghi chú</th>
-                                    @hasanyrole('judge')
-                                        <th>Chấm bài </th>
-                                    @endhasanyrole
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td></td>
-                                    <td> <a
-                                            href="{{ route('admin.round.detail.team.Exam', ['id' => $round->id, 'teamId' => $team->id]) }}">{{ $takeExam->exam->name }}</a>
+                                    <td>
+                                              <a href="{{ route('dowload.file') }}?url={{  $takeExam->exam->external_url }}"
+                                                class="badge bg-primary p-3">Tải về</a>
                                     </td>
                                     <td>
                                         @if ($takeExam->status == config('util.TAKE_EXAM_STATUS_UNFINISHED'))

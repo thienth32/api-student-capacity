@@ -76,21 +76,26 @@ Route::prefix('rounds')->group(function () {
             //     // Route::get('detach/{team_id}', [RoundController::class, 'detachTeam'])->name('admin.round.detail.team.detach');
             // });
 
-
             Route::group([
                 'middleware' => 'role_admin'
             ], function () {
-                // Ban giám khảo
-                Route::prefix('judge')->group(function () {
-                    Route::get('{teamId}', [RoundController::class, 'roundDetailTeamJudge'])->name('admin.round.detail.team.judge');
-                });
                 // Chấm điểm thi
                 Route::prefix('take_exam')->group(function () {
-                    Route::get('{teamId}', [RoundController::class, 'roundDetailTeamTakeExam'])->name('admin.round.detail.team.takeExam');
                     Route::put('{teamId}/update/{takeExamId}', [RoundController::class, 'roundDetailTeamTakeExamUpdate'])->name('admin.round.detail.team.takeExam.update');
                     Route::get('{teamId}/make', [RoundController::class, 'roundDetailTeamMakeExam'])->name('admin.round.detail.team.make.exam');
                     Route::post('{teamId}/make', [RoundController::class, 'roundDetailFinalTeamMakeExam'])->name('admin.round.detail.team.final.make.exam');
                     Route::put('{teamId}/make', [RoundController::class, 'roundDetailUpdateTeamMakeExam'])->name('admin.round.detail.team.update.make.exam');
+                });
+            });
+            Route::group([
+                'middleware' => 'role_admin'
+            ], function () {
+                // Ban giám khảo
+                Route::prefix('take_exam')->group(function () {
+                    Route::get('{teamId}', [RoundController::class, 'roundDetailTeamTakeExam'])->name('admin.round.detail.team.takeExam');
+                });
+                Route::prefix('judge')->group(function () {
+                    Route::get('{teamId}', [RoundController::class, 'roundDetailTeamJudge'])->name('admin.round.detail.team.judge');
                 });
             });
 

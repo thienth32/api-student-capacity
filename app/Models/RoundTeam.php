@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class RoundTeam extends Model
 {
-    use SoftDeletes;
+    // use SoftDeletes;
     protected $table = 'round_teams';
     protected $fillable = ['team_id', 'round_id','status'];
     use HasFactory;

@@ -40,6 +40,8 @@
             </div>
         </div>
         {{-- Main --}}
+        @if($takeExam != null)
+
         <div>
             <div class="row mb-4">
                 <div class="col-6">
@@ -109,11 +111,15 @@
                             <div class="form-input">
                                 <label for="" class="form-label">Điểm </label>
                                 <input value="{{ $takeExam->evaluations[0]->ponit }}" min="0"
-                                    max="{{ $takeExam->exam->max_ponit }}" type="number" name="ponit"
+                                    max="{{ $takeExam->exam->max_ponit }}" step="0.1" type="number" name="ponit"
                                     placeholder="Nhập điểm" class="form-control">
                                 @error('ponit')
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
+                            </div>
+                            <div class="form-input">
+                                <label for="" class="form-label">Lý do thay đổi điểm</label>
+                                <textarea name="reason"  placeholder="Lý do thay đổi điểm ( không bắt buộc)" class="textarea form-control"></textarea>
                             </div>
                             <div class="form-input">
                                 <label for="" class="form-label">Nhận xét</label>
@@ -177,6 +183,9 @@
             </div>
 
         </div>
+        @else
+        <h3>Đội thi chưa có bài làm.</h3>
+        @endif
     </div>
 @endsection
 @section('page-script')

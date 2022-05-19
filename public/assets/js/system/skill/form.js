@@ -8,11 +8,11 @@ const rules = {
     },
     description: {
         required: true,
-        maxlength: 20,
     },
     short_name: {
         required: true,
-        hasUppercase:true
+        hasUppercase:true,
+        maxlength: 20,
     },
 };
 const messages = {
@@ -34,7 +34,7 @@ $.validator.addMethod(
         if (this.optional(element)) {
             return true;
         }
-        return  /^[A-Z]*$/.test(value);
+        return  /^[A-Z0-9]*$/.test(value);
     },
     "Trường yêu cầu viết hoa không dấu!!!"
 );
