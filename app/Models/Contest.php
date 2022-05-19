@@ -22,6 +22,7 @@ class Contest extends Model
     ];
     protected $appends = [
         'slug_name',
+        'status_user_has_join_contest',
     ];
     public static function boot()
     {
@@ -41,7 +42,8 @@ class Contest extends Model
         'major_id',
         'status',
         'start_register_time',
-        'end_register_time'
+        'end_register_time',
+        'max_user'
     ];
     public function teams()
     {

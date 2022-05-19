@@ -39,15 +39,10 @@
             </div>
         </div>
         <div class="row">
-
         </div>
-
     </div>
-
     <div class="row">
-
         <div class="col-lg-12">
-
             <div class=" card card-flush  p-5">
                 <div class="table-responsive">
                     @if ($takeExam != null)
@@ -56,22 +51,20 @@
                                 <tr class="fw-bolder fs-6 text-gray-800">
                                     <th></th>
                                     <th>Đề bài</th>
-                                    <th>link bài </th>
+                                    <th>Bài làm </th>
                                     <th>Quá trình</th>
                                     <th>Điểm Qua vòng</th>
                                     <th>Điểm thi</th>
                                     <th>Trạng thái</th>
                                     <th>Ghi chú</th>
-                                    <th>Chấm bài </th>
-
                                 </tr>
                             </thead>
                             <tbody>
-
                                 <tr>
                                     <td></td>
-                                    <td> <a
-                                            href="{{ route('admin.round.detail.team.Exam', ['id' => $round->id, 'teamId' => $team->id]) }}">{{ $takeExam->exam->name }}</a>
+                                    <td>
+                                              <a href="{{ route('dowload.file') }}?url={{  $takeExam->exam->external_url }}"
+                                                class="badge bg-primary p-3">Tải về</a>
                                     </td>
                                     <td>
                                         @if ($takeExam->status == config('util.TAKE_EXAM_STATUS_UNFINISHED'))
@@ -79,9 +72,14 @@
                                         @elseif($takeExam->status == config('util.TAKE_EXAM_STATUS_CANCEL'))
                                             <span class="badge bg-danger  p-3"> Bài thi bị hủy </span>
                                         @else
-                                            <a class="badge bg-primary p-3" href="{{ $takeExam->result_url }}">
-                                                Xem tại đây...
-                                            </a>
+                                            {{-- @if (\Storage::disk('s3')->has($takeExam->result_url)) --}}
+                                            <a href="{{ route('dowload.file') }}?url={{ $takeExam->result_url }}"
+                                                class="badge bg-primary p-3">Tải về</a>
+                                            {{-- @endif --}}
+                                            @if ($takeExam->file_url != null)
+                                                <a href="{{ route('dowload.file') }}?url={{ $takeExam->file_url }}"
+                                                    class="badge bg-primary p-3">link dự phòng</a>
+                                            @endif
                                         @endif
                                     </td>
                                     <td>
@@ -114,12 +112,6 @@
                                     @if ($takeExam->status == config('util.TAKE_EXAM_STATUS_CANCEL'))
                                         <td>
                                             <p>Đã hủy bài !</p>
-                                        </td>
-                                    @else
-                                        <td>
-                                            <a
-                                                href="{{ route('admin.round.detail.team.make.exam', ['id' => $round->id, 'teamId' => $team->id]) }}">Chấm
-                                                bài</a>
                                         </td>
                                     @endif
 

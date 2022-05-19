@@ -49,37 +49,24 @@
                                     @endphp
                                 @endif
                             </div>
-                            {{-- <div class="form-group mb-10">
-                                <label for="" class="form-label">Thuộc cuộc thi</label>
-                                <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
-                                    data-hide-search="false" tabindex="-1" aria-hidden="true" name="contest_id"
-                                    value="{{ old('contest_id') }}">
-                                    @foreach ($contests as $contest)
-                                        <option value="{{ $contest->id }}">
-                                            {{ $contest->name }}</option>
-                                    @endforeach
-                                </select>
-                                @error('contest_id')
-                                    <p class="text-danger">{{ $message }}</p>
-                                @enderror
-                            </div> --}}
+
                             <div class="form-group list-group mb-5">
                                 <label class="form-label" for="">Thành viên nhóm</label>
                                 <div class="input-group mb-3">
                                     <input placeholder="Hãy nhập email hoặc tên để tìm kiếm..." type="text"
                                         class="form-control" id="searchUserValue">
-                                    <button id="searchUser" class="btn btn-secondary rounded-end" type="button"
-                                        data-bs-toggle="dropdown" aria-expanded="false">Tìm</button>
-                                    <ul id="resultUserSearch" class="dropdown-menu dropdown-menu-end w-500px">
-                                    </ul>
+                                    {{-- <button id="searchUser" class="btn btn-secondary rounded-end" type="button">Tìm</button> --}}
+                                    <button id="searchUser" type="button" class="btn btn-primary">Tìm</button>
+
                                 </div>
-
-
+                                <ul id="resultUserSearch">
+                                </ul>
 
                             </div>
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <div class="listUser">
+                                    <hr>
+                                    <div>
 
                                         <h4>Danh sách chờ</h4>
                                         <div id="resultArrayUser" class=" mt-4">
@@ -139,9 +126,9 @@
         }
         preview.showFile('#file-input', '#image-preview');
         var userArray = @json($userArray ?? []);
-        console.log(userArray);
 
         var _token = "{{ csrf_token() }}"
+        var max_user = "{{ $contest->max_user }}"
         var urlSearch = "{{ route('admin.user.team.search', ['id_contest' => $contest->id]) }}"
     </script>
     <script src="{{ asset('assets/js/system/validate/validate.js') }}"></script>

@@ -17,4 +17,8 @@ class Evaluation extends Model
     {
         return $this->belongsTo(Judges_round::class, 'judge_round_id')->with('judge');
     }
+    public function history_point()
+    {
+        return $this->morphOne(HistoryPoints::class, 'historiable');
+    }
 }

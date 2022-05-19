@@ -183,7 +183,6 @@
         <div class="col-lg-12">
             <div class=" card card-flush ">
                 <div class="row p-5 d-flex justify-content-center align-items-center ">
-
                     <div class="col-md-3">
                         <a
                             href="{{ route('admin.round.detail.team.Exam', ['id' => $round->id, 'teamId' => $team->id]) }}">
@@ -202,20 +201,21 @@
                                 <div class="m-0">
                                     <span class="text-gray-700 fw-bold fs-6">Bài làm và kết quả</span>
                                 </div>
-
                             </div>
                         </a>
                     </div>
-                    <div class="col-md-3">
-                        <a
-                            href="{{ route('admin.round.detail.team.judge', ['id' => $round->id, 'teamId' => $team->id]) }}">
-                            <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
-                                <div class="m-0">
-                                    <span class="text-gray-700 fw-bold fs-6">Điểm và đánh giá của ban giám khảo</span>
+                    @hasanyrole(config('util.ROLE_ADMINS'))
+                        <div class="col-md-3">
+                            <a
+                                href="{{ route('admin.round.detail.team.judge', ['id' => $round->id, 'teamId' => $team->id]) }}">
+                                <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
+                                    <div class="m-0">
+                                        <span class="text-gray-700 fw-bold fs-6">Xác nhận điểm</span>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                    </div>
+                            </a>
+                        </div>
+                    @endhasanyrole
                 </div>
             </div>
         </div>

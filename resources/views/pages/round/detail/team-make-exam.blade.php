@@ -40,11 +40,14 @@
             </div>
         </div>
         {{-- Main --}}
+        @if($takeExam != null)
+
         <div>
             <div class="row mb-4">
                 <div class="col-6">
+
                     <h2>Đề bài {{ $takeExam->exam->name }}
-                        @if (\Storage::disk('s3')->has($takeExam->exam->external_url))
+                        @if (Storage::disk('s3')->has($takeExam->exam->external_url))
                             <a href="{{ route('dowload.file') }}?url={{ $takeExam->exam->external_url }}"
                                 target="_blank" class="  btn btn-outline-primary">Tải về </a>
                         @endif
@@ -55,8 +58,7 @@
                             {{ $takeExam->exam->external_url }}
                         @endif
                     </div>
-                    {{-- <iframe width="100%" height="100%"
-                        src="https://drive.google.com/file/d/{{                         src="https://drive.google.com/file/d/explode('=', explode('&', explode('?', Storage::disk('s3')->temporaryUrl($takeExam->exam->external_url))[1])[0])[1] }}/preview"></iframe> --}}
+
                 </div>
                 <div class="col-6 row ">
                     <div class="col-12">
@@ -76,14 +78,27 @@
             <div class="row mt-4">
                 <div class="col-6">
                     <h2>Bài làm đội thi : {{ $team->name }}
-                        @if (\Storage::disk('s3')->has($takeExam->result_url))
-                            <a target="_blank" href="{{ route('dowload.file') }}?url={{ $takeExam->result_url }}"
-                                class="  btn btn-outline-primary">Tải về </a>
+                        @if ($takeExam->result_url == null)
+                            @if (\Storage::disk('s3')->has($takeExam->file_url ?? ''))
+                                <a target="_blank" href="{{ route('dowload.file') }}?url={{ $takeExam->file_url }}"
+                                    class="  btn btn-outline-primary">Tải về </a>
+                            @endif
                         @endif
                     </h2>
-                    @if (!\Storage::disk('s3')->has($takeExam->result_url))
-                        {{ $takeExam->result_url }}
+                    @if ($takeExam->result_url)
+                        <div>
+                            {{ $takeExam->result_url }}
+                        </div>
+                    @else
+                        @if (!\Storage::disk('s3')->has($takeExam->file_url ?? ''))
+                            {{ $takeExam->result_url }}
+                        @else
+                            <a target="_blank"
+                                href="{{ route('dowload.file') }}?url={{ $takeExam->file_url }}">{{ $takeExam->file_url }}
+                            </a>
+                        @endif
                     @endif
+
                 </div>
                 <div class="col-6">
                     @if (count($takeExam->evaluations) > 0)
@@ -96,11 +111,15 @@
                             <div class="form-input">
                                 <label for="" class="form-label">Điểm </label>
                                 <input value="{{ $takeExam->evaluations[0]->ponit }}" min="0"
-                                    max="{{ $takeExam->exam->max_ponit }}" type="number" name="ponit"
+                                    max="{{ $takeExam->exam->max_ponit }}" step="0.1" type="number" name="ponit"
                                     placeholder="Nhập điểm" class="form-control">
                                 @error('ponit')
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
+                            </div>
+                            <div class="form-input">
+                                <label for="" class="form-label">Lý do thay đổi điểm</label>
+                                <textarea name="reason"  placeholder="Lý do thay đổi điểm ( không bắt buộc)" class="textarea form-control"></textarea>
                             </div>
                             <div class="form-input">
                                 <label for="" class="form-label">Nhận xét</label>
@@ -164,6 +183,9 @@
             </div>
 
         </div>
+        @else
+        <h3>Đội thi chưa có bài làm.</h3>
+        @endif
     </div>
 @endsection
 @section('page-script')

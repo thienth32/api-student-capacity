@@ -16,7 +16,7 @@
                         </a>
                     </li>
                     <li class="breadcrumb-item px-3 text-muted">
-                        Danh sách đội thi của cuộc thi : {{ $contest->name }}
+                        Danh sách đội thi
                     </li>
                 </ol>
             </div>

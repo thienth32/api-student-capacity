@@ -121,11 +121,11 @@ class ContestController extends Controller
     }
     public function store(Request $request)
     {
-        // dd($request->all());
         $validator = Validator::make(
             $request->all(),
             [
                 'name' => 'required|max:255|unique:contests,name',
+                'max_user' => 'required|numeric',
                 'img' => 'required|mimes:jpeg,png,jpg|max:10000',
                 'date_start' => 'required|date',
                 'register_deadline' => 'required|date',
@@ -135,6 +135,8 @@ class ContestController extends Controller
             ],
             [
                 'name.required' => 'Chưa nhập trường này !',
+                'max_user.required' => 'Chưa nhập trường này !',
+                'max_user.numeric' =>  'Sai định dạng !',
                 'name.unique' => 'Tên cuộc thi đã tồn tại !',
                 'name.max' => 'Độ dài kí tự không phù hợp !',
                 'img.mimes' => 'Sai định dạng !',
@@ -165,6 +167,7 @@ class ContestController extends Controller
                 $contest->img = $filename;
             }
             $contest->name = $request->name;
+            $contest->max_user = $request->max_user;
             $contest->date_start = $request->date_start;
             $contest->start_register_time = $request->start_register_time;
             $contest->end_register_time = $request->end_register_time;
@@ -174,7 +177,7 @@ class ContestController extends Controller
             $contest->status = config('util.ACTIVE_STATUS');
             $contest->save();
             DB::commit();
-            return Redirect::route('admin.contest.list')->with('success', 'Thêm mới thành công !');
+            return Redirect::route('admin.contest.show', ['id' => $contest->id])->with('success', 'Thêm mới thành công !');
         } catch (Exception $ex) {
             if ($request->hasFile('img')) {
                 $fileImage = $request->file('img');
@@ -255,6 +258,7 @@ class ContestController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
+                'max_user' => 'required|numeric',
                 'name' => 'required|unique:contests,name,' . $id . '',
                 'img' => 'mimes:jpeg,png,jpg|max:10000',
                 'date_start' => "required",
@@ -266,6 +270,9 @@ class ContestController extends Controller
                 'end_register_time' => 'required|date|after:start_register_time',
             ],
             [
+                'max_user.required' => 'Chưa nhập trường này !',
+                'max_user.numeric' =>  'Sai định dạng !',
+
                 'img.mimes' => 'Sai định dạng !',
                 'img.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
                 "name.required" => "Tường name không bỏ trống !",
@@ -502,7 +509,8 @@ class ContestController extends Controller
                     if ($user->id == $me->id) {
                         array_push($userArray, [
                             'id_user' => $user->id,
-                            'email_user' => $user->email
+                            'email_user' => $user->email,
+                            'name_user' => $user->name
                         ]);
                     }
                 }
@@ -560,6 +568,26 @@ class ContestController extends Controller
             Log::info('..--..');
             dd($th);
         }
+    }
+
+    public function sendMail($id)
+    {
+        $contest = Contest::findOrFail($id)->load([
+            'judges',
+            'teams' => function ($q) {
+                return $q->with(['members']);
+            }
+        ]);
+        $judges = $contest->judges;
+        $users = [];
+        if (count($contest->teams) > 0) {
+            foreach ($contest->teams as $team) {
+                foreach ($team->members as $user) {
+                    array_push($users, $user);
+                }
+            }
+        }
+        return view('pages.contest.add-mail', ['contest' => $contest, 'judges' => $judges, 'users' => array_unique($users)]);
     }
 }
 

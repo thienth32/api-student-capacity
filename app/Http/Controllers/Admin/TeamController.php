@@ -399,12 +399,14 @@ class TeamController extends Controller
                         return response()->json([
                             'status' => true,
                             'payload' => 'Thêm thành viên thành công !',
-                            'users' => $user
+                            'user_not_pass' => $user
                         ]);
                     } else {
+                        $user = User::select('name', 'email')->whereIn('id', $result['user-pass'])->get();
                         return response()->json([
                             'status' => true,
                             'payload' => 'Thêm thành viên thành công !',
+                            'user_pass' => $user
                         ]);
                     }
                 } else {
@@ -435,5 +437,14 @@ class TeamController extends Controller
         } catch (\Throwable $th) {
             dd($th);
         }
+    }
+
+    public function getContest(Request $request)
+    {
+        $max_user = Contest::find($request->id)->max_user;
+        return response()->json([
+            'status' => true,
+            'payload' =>  $max_user,
+        ]);
     }
 }
