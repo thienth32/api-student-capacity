@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title', 'Chi tiết cuộc thi')
+@section('title', 'Danh sách giám khảo ')
 @section('page-title', 'Danh sách giám khảo ')
 @section('content')
     <div class=" card card-flush p-5">
@@ -29,11 +29,10 @@
                         <div class="input-group mb-3">
                             <input type="text" placeholder="Tìm ban giám khảo thêm vô cuộc thi ..." class="form-control"
                                 id="searchUserValue">
-                            <button id="searchUser" class="btn btn-secondary " type="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">Tìm</button>
-                            <ul id="resultUserSearch" class="dropdown-menu dropdown-menu-end w-500px">
-                            </ul>
+                            <button id="searchUser" type="button" class="btn btn-primary">Tìm</button>
                         </div>
+                        <ul id="resultUserSearch">
+                        </ul>
                         <div id="resultArrayUser" class=" mt-4">
                         </div>
 
@@ -134,6 +133,7 @@
     <script>
         var URL = window.location.href;
         var userArray = [];
+        var max_user = 100;
         var _token = "{{ csrf_token() }}"
         var urlSearch = "{{ route('admin.user.TeamUserSearch') }}"
         var URL_ATTACH = "{{ route('admin.judges.attach', ['contest_id' => $contest->id]) }}"

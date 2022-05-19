@@ -29,7 +29,7 @@
                                 <label for="" class="form-label">Thuộc cuộc thi</label>
                                 <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
                                     data-hide-search="false" data-placeholder="Select an option" tabindex="-1"
-                                    aria-hidden="true" name="contest_id" value="{{ old('contest_id') }}">
+                                    aria-hidden="true" name="contest_id">
                                     <option data-select2-id="select2-data-130-vofb"></option>
                                     @foreach ($contests as $contest)
                                         <option value="{{ $contest->id }}"
@@ -107,8 +107,11 @@
         preview.showFile('#file-input', '#image-preview');
         var userArray = @json($userArray ?? []);
         var _token = "{{ csrf_token() }}"
+        var max_user = "{{ $contest->max_user }}"
         var urlSearch = "{{ route('admin.user.TeamUserSearch') }}"
+        var urlShowContest = "{{ route('admin.teams.add.contest.show') }}";
     </script>
     <script src="{{ asset('assets/js/system/validate/validate.js') }}"></script>
+    <script src="{{ asset('assets/js/system/team/add.js') }}"></script>
     <script src="{{ asset('assets/js/system/team/team.js') }}"></script>
 @endsection

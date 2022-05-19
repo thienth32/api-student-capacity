@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class SendMail extends Mailable
+class FinnalPass extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -16,9 +16,10 @@ class SendMail extends Mailable
      *
      * @return void
      */
-    public function __construct()
+    private $data;
+    public function __construct($data)
     {
-        //
+        $this->data = $data;
     }
 
     /**
@@ -28,6 +29,7 @@ class SendMail extends Mailable
      */
     public function build()
     {
-        return $this->view('view.name');
+        $subject = $this->data['subject'] ?? '';
+        return $this->subject($subject)->view('emails.final-pass', ['data' => $this->data, 'subject' => $subject]);
     }
 }

@@ -7,21 +7,35 @@ const rules = {
     },
     date_start: {
         required: true,
+        beginLessEnd: true
     },
     register_deadline: {
         required: true,
+        checkBeginNull: true
+
     },
     description: {
         required: true,
     },
+    max_user: {
+        required: true,
+        number: true
+    },
     start_register_time: {
         required: true,
+        startTimeCheckBegin: true,
+        startTimeCheckEnd: true,
+        startTimeCheckLessEnd: true
     },
     end_register_time: {
         required: true,
     },
 };
 const messages = {
+    max_user: {
+        required: "Chưa nhập trường này !",
+        number: 'Sai định dạng !!'
+    },
     name: {
         required: "Chưa nhập trường này !",
         maxlength: "Tối đa là 255 kí tự !",

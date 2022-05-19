@@ -71,7 +71,7 @@
                             <div class="col-8">
                                 <div class="form-group mb-10">
                                     <label for="" class="form-label">Thời gian bắt đầu </label>
-                                    <input max="" id="begin" value="{{ old('date_start') }}" type="datetime-local"
+                                    <input id="begin" value="{{ old('date_start') }}" type="datetime-local"
                                         name="date_start" class="form-control" placeholder="">
                                     @error('date_start')
                                         <p class="text-danger">{{ $message }}</p>
@@ -79,7 +79,7 @@
                                 </div>
                                 <div class="form-group mb-10">
                                     <label for="" class="form-label">Thời gian kết thúc</label>
-                                    <input min="" value="{{ old('register_deadline') }}" type="datetime-local"
+                                    <input value="{{ old('register_deadline') }}" type="datetime-local"
                                         name="register_deadline" id="end" class="form-control" placeholder="">
                                     @error('register_deadline')
                                         <p class="text-danger">{{ $message }}</p>
@@ -87,7 +87,7 @@
                                 </div>
                                 <div class="form-group mb-10">
                                     <label for="" class="form-label">Thời gian bắt đầu đăng ký</label>
-                                    <input max="" min="" value="{{ old('start_register_time') }}" type="datetime-local"
+                                    <input value="{{ old('start_register_time') }}" type="datetime-local"
                                         name="start_register_time" id="start_time" class="form-control" placeholder="">
                                     @error('start_register_time')
                                         <p class="text-danger">{{ $message }}</p>
@@ -95,7 +95,7 @@
                                 </div>
                                 <div class="form-group mb-10">
                                     <label for="" class="form-label">Thời gian kết thúc đăng ký</label>
-                                    <input min="" max="" value="{{ old('end_register_time') }}" type="datetime-local"
+                                    <input value="{{ old('end_register_time') }}" type="datetime-local"
                                         name="end_register_time" id="end_time" class="form-control" placeholder="">
                                     @error('end_register_time')
                                         <p class="text-danger">{{ $message }}</p>
@@ -116,6 +116,11 @@
                                 </div>
                             </div>
                             <div class="col-4">
+                                <div class="form-group mb-10">
+                                    <label for="" class="form-label">Giới hạn thành viên trong đội</label>
+                                    <input name="max_user" type='number' class="form-control" />
+
+                                </div>
                                 <div class="form-group ">
                                     <label for="" class="form-label">Ảnh cuộc thi</label>
                                     <input name="img" type='file' id="file-input" accept=".png, .jpg, .jpeg"
@@ -143,7 +148,6 @@
             </div>
         </div>
     </div>
-
 
 @endsection
 @section('page-script')
