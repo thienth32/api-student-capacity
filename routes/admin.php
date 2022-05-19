@@ -26,7 +26,7 @@ Route::prefix('rounds')->group(function () {
     Route::group([
         'middleware' => 'role_admin'
     ], function () {
-        Route::post('end-mail/{id}', [SendMailController::class, 'sendMailRoundUser'])->name('round.send.mail.pass');
+        Route::post('send-mail/{id}', [SendMailController::class, 'sendMailRoundUser'])->name('round.send.mail.pass');
         Route::get('{id}/form-send-mail', [RoundController::class, 'sendMail'])->name('admin.round.send.mail');
         Route::get('form-add', [RoundController::class, 'create'])->name('admin.round.create');
         Route::post('form-add-save', [RoundController::class, 'store'])->name('admin.round.store');
@@ -79,7 +79,7 @@ Route::prefix('rounds')->group(function () {
             // });
 
             Route::group([
-                'middleware' => 'role_admin'
+                'middleware' => 'role_admin:judge'
             ], function () {
                 // Chấm điểm thi
                 Route::prefix('take_exam')->group(function () {
@@ -90,7 +90,7 @@ Route::prefix('rounds')->group(function () {
                 });
             });
             Route::group([
-                'middleware' => 'role_admin'
+                'middleware' => 'role_admin:judge'
             ], function () {
                 // Ban giám khảo
                 Route::prefix('take_exam')->group(function () {
@@ -282,7 +282,7 @@ Route::group([
     });
 });
 
-Route::get('end-mail', [SendMailController::class, 'sendMail']);
+// Route::get('end-mail', [SendMailController::class, 'sendMail']);
 
 
 //81
