@@ -50,7 +50,10 @@
                                         <option data-select2-id="select2-data-130-vofb"></option>
                                         @foreach ($contests as $contest)
                                             <option @selected($round['contest_id'] == $contest->id) value="{{ $contest->id }}">
-                                                {{ $contest->name }}</option>
+                                                {{ $contest->name }} -
+                                                {{ $contest->date_start }}
+                                                ->
+                                                {{ $contest->register_deadline }}</option>
                                         @endforeach
                                     </select>
 
