@@ -406,12 +406,14 @@ class TeamController extends Controller
                         return response()->json([
                             'status' => true,
                             'payload' => 'Thêm thành viên thành công !',
-                            'users' => $user
+                            'user_not_pass' => $user
                         ]);
                     } else {
+                        $user = User::select('name', 'email')->whereIn('id', $result['user-pass'])->get();
                         return response()->json([
                             'status' => true,
                             'payload' => 'Thêm thành viên thành công !',
+                            'user_pass' => $user
                         ]);
                     }
                 } else {

@@ -100,7 +100,6 @@
                                     <td>{{ $exam->ponit }}</td>
                                     <td>{{ $exam->max_ponit }}</td>
                                     <td>
-
                                         <button data-id="{{ $exam->id }}"
                                             data-external_url="{{ route('dowload.file') . '?url=' . $exam->external_url }}"
                                             type="button" class="download_file btn btn-success">Tải xuống</button>

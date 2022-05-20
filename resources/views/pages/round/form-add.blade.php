@@ -30,6 +30,7 @@
                                     @error('start_time')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
+
                                 </div>
                                 <div class="form-group mb-10">
 
@@ -49,7 +50,11 @@
                                         value="{{ old('contest_id') }}">
                                         @foreach ($contests as $contest)
                                             <option @selected(request()->has('contest_id') && request('contest_id') == $contest->id) value="{{ $contest->id }}">
-                                                {{ $contest->name }}</option>
+                                                {{ $contest->name }} -
+                                                {{ $contest->date_start }}
+                                                ->
+                                                {{ $contest->register_deadline }}
+                                            </option>
                                         @endforeach
                                     </select>
 

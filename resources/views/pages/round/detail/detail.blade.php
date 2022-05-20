@@ -152,6 +152,7 @@
                 </div>
             </div>
 
+
             <div class="row">
                 <div class="col-lg-12">
                     <div class=" card card-flush ">
@@ -174,6 +175,98 @@
                     </div>
                 </div>
             </div>
+            @if (count($round->teams) > 0)
+                <div class="container-fluid mt-1 mb-2 card card-flush">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h2 class="my-6">Đội thi</h2>
+                            <div class="back">
+                                <hr>
+                                <span class="btn-hide svg-icon svg-icon-primary svg-icon-2x">
+                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Stockholm-icons/Navigation/Angle-up.svg--><svg
+                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <polygon points="0 0 24 0 24 24 0 24" />
+                                            <path
+                                                d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z"
+                                                fill="#000000" fill-rule="nonzero" />
+                                        </g>
+                                    </svg>
+                                </span>
+
+                                <span style="display: none" class="btn-show svg-icon svg-icon-primary svg-icon-2x">
+                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Angle-down.svg--><svg
+                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <polygon points="0 0 24 0 24 24 0 24" />
+                                            <path
+                                                d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z"
+                                                fill="#000000" fill-rule="nonzero"
+                                                transform="translate(12.000003, 11.999999) rotate(-180.000000) translate(-12.000003, -11.999999) " />
+                                        </g>
+                                    </svg>
+                                    <!--end::Svg Icon-->
+                                </span>
+
+                            </div>
+                            <div class="list-team fs-3 pb-5">
+                                <table class="table table-row-dashed table-row-gray-300 gy-7">
+                                    <thead>
+                                        <tr class="fw-bolder fs-6 text-gray-800">
+                                            <th>#</th>
+                                            <th>Tên đội</th>
+                                            <th>Bài làm</th>
+                                            @hasanyrole(config('util.ROLE_ADMINS').'|judge')
+                                                <th>
+                                                    Chấm bài
+                                                </th>
+                                            @endhasanyrole
+                                            @hasanyrole(config('util.ROLE_ADMINS'))
+                                                <th>Xác Nhận Điểm</th>
+                                            @endhasanyrole
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php
+                                            $key = 1;
+                                        @endphp
+                                        @foreach ($round->teams as $team)
+                                            <tr>
+                                                <td>{{ $key++ }}</td>
+                                                <td> <a
+                                                        href="{{ route('admin.round.detail.team.detail', ['id' => $round->id, 'teamId' => $team->id]) }}">
+                                                        {{ $team->name }}</a></td>
+
+                                                <td>
+                                                    <a href="{{ route('admin.round.detail.team.takeExam', ['id' => $round->id, 'teamId' => $team->id]) }}"
+                                                        class="badge bg-primary p-3"> Xem thêm.
+                                                    </a>
+                                                </td>
+                                                @hasanyrole(config('util.ROLE_ADMINS').'|judge')
+                                                    <td>
+                                                        <a class="badge bg-primary p-3"
+                                                            href="{{ route('admin.round.detail.team.make.exam', ['id' => $round->id, 'teamId' => $team->id]) }}">Chấm
+                                                            bài</a>
+                                                    </td>
+                                                @endhasanyrole
+                                                @hasanyrole(config('util.ROLE_ADMINS'))
+                                                    <td>
+                                                        <a href="{{ route('admin.round.detail.team.judge', ['id' => $round->id, 'teamId' => $team->id]) }}"
+                                                            class="badge bg-primary p-3"> Vào xác nhận.
+                                                        </a>
+                                                    </td>
+                                                @endhasanyrole
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
 
     </div>
@@ -262,4 +355,21 @@
     </div>
 @endsection
 @section('page-script')
+    <script>
+        $(document).ready(function() {
+            $(".btn-show").hide();
+            $(".btn-hide").on("click", function() {
+                $(".list-team").hide(1000);
+                $(this).hide();
+                $(".btn-show").show(500);
+            });
+
+
+            $(".btn-show").on("click", function() {
+                $(".list-team").show(1000);
+                $(".btn-hide").show(500);
+                $(this).hide();
+            });
+        })
+    </script>
 @endsection

@@ -24,4 +24,8 @@ class TakeExams extends Model
     {
         return $this->hasMany(Evaluation::class, 'exams_team_id')->with('judge_round');
     }
+    public function history_point()
+    {
+        return $this->morphOne(HistoryPoints::class, 'historiable');
+    }
 }
