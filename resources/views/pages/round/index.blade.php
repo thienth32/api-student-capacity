@@ -317,7 +317,7 @@
                 </thead>
                 <tbody>
                     @php
-                        
+
                         $total = $rounds->total();
                     @endphp
                     @forelse ($rounds as $key => $round)
