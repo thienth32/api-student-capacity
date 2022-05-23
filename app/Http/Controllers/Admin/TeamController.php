@@ -395,14 +395,14 @@ class TeamController extends Controller
                     $team->members()->syncWithoutDetaching($result['user-pass']);
                     DB::commit();
                     if (count($result['user-not-pass']) > 0) {
-                        $user = User::select('name', 'email')->whereIn('id', $result['user-not-pass'])->get();
+                        $user = User::whereIn('id', $result['user-not-pass'])->get();
                         return response()->json([
                             'status' => true,
                             'payload' => 'Thêm thành viên thành công !',
                             'user_not_pass' => $user
                         ]);
                     } else {
-                        $user = User::select('name', 'email')->whereIn('id', $result['user-pass'])->get();
+                        $user = User::whereIn('id', $result['user-pass'])->get();
                         return response()->json([
                             'status' => true,
                             'payload' => 'Thêm thành viên thành công !',

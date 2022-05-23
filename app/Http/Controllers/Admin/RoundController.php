@@ -19,6 +19,7 @@ use App\Models\RoundTeam;
 use App\Models\TakeExams;
 use App\Models\Team;
 use App\Models\TypeExam;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Image;
 use Exception;
@@ -165,9 +166,16 @@ class RoundController extends Controller
                 'type_exam_id.numeric' => 'Sai định dạng !',
             ]
         );
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
+
+        if ($validator->fails())  redirect()->back()->withErrors($validator)->withInput();
+        $contest = $this->contest::find($request->contest_id ?? 0);
+        if (Carbon::parse($request->start_time)->toDateTimeString() < Carbon::parse($contest->date_start)->toDateTimeString()) {
+            return redirect()->back()->withErrors(['start_time' => 'Thời gian bắt đầu không được bé hơn thời gian bắt đầu của cuộc thi !'])->withInput();
+        };
+        if (Carbon::parse($request->end_time)->toDateTimeString() > Carbon::parse($contest->register_deadline)->toDateTimeString()) {
+            return redirect()->back()->withErrors(['end_time' => 'Thời gian kết thúc không được bé hơn thời gian kết thúc của cuộc thi !'])->withInput();
+        };
+
         DB::beginTransaction();
         try {
             if ($request->hasFile('image')) {
@@ -261,6 +269,19 @@ class RoundController extends Controller
                 'status' => false,
                 'errors' => $validator,
             ];
+            $contest = $this->contest::find(request()->contest_id ?? 0);
+            if (Carbon::parse(request()->start_time)->toDateTimeString() < Carbon::parse($contest->date_start)->toDateTimeString()) {
+                return [
+                    'status' => false,
+                    'errors' => ['start_time' => 'Thời gian bắt đầu không được bé hơn thời gian bắt đầu của cuộc thi !'],
+                ];
+            };
+            if (Carbon::parse(request()->end_time)->toDateTimeString() > Carbon::parse($contest->register_deadline)->toDateTimeString()) {
+                return [
+                    'status' => false,
+                    'errors' => ['end_time' => 'Thời gian kết thúc không được bé hơn thời gian kết thúc của cuộc thi !'],
+                ];
+            };
             $data = null;
             if (request()->has('image')) {
 
@@ -298,7 +319,7 @@ class RoundController extends Controller
     {
         if ($data = $this->updateRound($id)) {
             // dd($data);
-            if (isset($data['status']) && $data['status'] == false) return redirect()->back()->withErrors($data['errors']);
+            if (isset($data['status']) && $data['status'] == false) return redirect()->back()->withErrors($data['errors'])->withInput();
             return redirect(route('admin.round.list'));
         }
         return redirect('error');
@@ -775,31 +796,31 @@ class RoundController extends Controller
     public function roundDetailTeamJudge($id, $teamId)
     {
         try {
-        $round = Round::find($id);
-        $team = Team::where('id', $teamId)->first();
-        $takeExam = RoundTeam::where('round_id', $id)->where('team_id', $teamId)->first()->takeExam;
-        if ($takeExam != null) {
-            foreach ($takeExam->evaluation as $key => $item) {
-                $data[$key] = $item->id;
+            $round = Round::find($id);
+            $team = Team::where('id', $teamId)->first();
+            $takeExam = RoundTeam::where('round_id', $id)->where('team_id', $teamId)->first()->takeExam;
+            if ($takeExam != null) {
+                foreach ($takeExam->evaluation as $key => $item) {
+                    $data[$key] = $item->id;
+                }
+                $historyPoint2 = HistoryPoints::whereIn('historiable_id', $data)->orderByDesc('id')->get();
+                // dd($historyPoint2);
+                $historyPoint = HistoryPoints::where('historiable_id', $takeExam->id)->orderByDesc('id')->get();
             }
-            $historyPoint2 = HistoryPoints::whereIn('historiable_id', $data)->orderByDesc('id')->get();
-            // dd($historyPoint2);
-            $historyPoint = HistoryPoints::where('historiable_id', $takeExam->id)->orderByDesc('id')->get();
-        }
 
-        return view(
-            'pages.round.detail.team.team_judges_result',
-            [
-                'judgesResult' => $takeExam,
-                'round' => $round,
-                'team' => $team,
-                'historyPoint2' => isset($historyPoint2) ? $historyPoint2 : null,
-                'historyPoint' => isset($historyPoint) ? $historyPoint :null
-            ]
-        );
-    } catch (\Throwable $th) {
-     return abort(404);
-    }
+            return view(
+                'pages.round.detail.team.team_judges_result',
+                [
+                    'judgesResult' => $takeExam,
+                    'round' => $round,
+                    'team' => $team,
+                    'historyPoint2' => isset($historyPoint2) ? $historyPoint2 : null,
+                    'historyPoint' => isset($historyPoint) ? $historyPoint : null
+                ]
+            );
+        } catch (\Throwable $th) {
+            return abort(404);
+        }
     }
     public function sendMail($id)
     {
