@@ -48,7 +48,7 @@
                         <div class=" d-flex flex-row-reverse bd-highlight">
                             @hasanyrole(config('util.ROLE_ADMINS'))
 
-                                <a href="{{ route('admin.round.create', '?contest_id=' . $contest->id) }}"
+                                <a href="{{ route('admin.round.create', 'contest_id=' . $contest->id) }}"
                                     class=" btn btn-primary">Tạo mới vòng
                                     thi
                                 </a>
