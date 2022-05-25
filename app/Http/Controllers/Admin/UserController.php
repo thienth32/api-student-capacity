@@ -80,7 +80,7 @@ class UserController extends Controller
         try {
             $limit = 10;
             $users = User::status(request('status') ?? null)
-                ->sort(request('sort') == 'desc' ? 'desc' : 'asc', request('sort_by') ?? null, 'users')
+                ->sort(request('sort') == 'asc' ? 'asc' : 'desc', request('sort_by') ?? null, 'users')
                 ->search(request('q') ?? null, ['name', 'email'])
                 ->has_role(request('role') ?? null)
                 ->paginate(request('limit') ?? $limit);
