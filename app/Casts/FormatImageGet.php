@@ -18,8 +18,8 @@ class FormatImageGet implements CastsAttributes
      */
     public function get($model, string $key, $value, array $attributes)
     {
-        if (Storage::disk('s3')->has($value)) return Storage::disk('s3')->temporaryUrl($value, now()->addMinutes(5));
-        return null;
+        if (Storage::disk('s3')->has($value ?? ' ')) return Storage::disk('s3')->temporaryUrl($value, now()->addMinutes(5));
+        return ( $model->getTable() == 'users') ? $value : null;
     }
 
     /**
