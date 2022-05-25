@@ -21,6 +21,7 @@ const aListQuery = [
     "year",
     "op_time",
     "home",
+    "role"
 ];
 
 // Set list query has one

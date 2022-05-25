@@ -83,24 +83,16 @@
                             </span>
                             <!--end::Svg Icon-->
                         </span>
-                        <span class="menu-title">Account</span>
+                        <span class="menu-title">Quản lý tài khoản </span>
                         <span class="menu-arrow"></span>
                     </span>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
-                            <a class="menu-link" href="#">
+                            <a class="menu-link" href="{{ route('admin.acount.list') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
                                 <span class="menu-title">Tổng quan</span>
-                            </a>
-                        </div>
-                        <div class="menu-item">
-                            <a class="menu-link" href="#">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title">Tạo mới</span>
                             </a>
                         </div>
 

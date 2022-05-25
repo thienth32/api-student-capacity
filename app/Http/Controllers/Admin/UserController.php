@@ -75,48 +75,149 @@ class UserController extends Controller
         ]);
     }
 
-    public function index()
+    private function getUser()
     {
-        // List
         try {
             $limit = 10;
             $users = User::status(request('status') ?? null)
                 ->sort(request('sort') == 'desc' ? 'desc' : 'asc', request('sort_by') ?? null, 'users')
-                ->search(request('search') ?? null, ['name', 'email'])
+                ->search(request('q') ?? null, ['name', 'email'])
                 ->has_role(request('role') ?? null)
                 ->paginate(request('limit') ?? $limit);
 
-            $users = array_merge(
-                $users->toArray(),
-                [
-                    'roles' => Role::all()
-                        ->map(function ($role) {
-                            return [
-                                'value' => $role->id,
-                                'slug_name' => \Str::slug($role->name, " "),
-                                'name' => \Str::title($role->name),
-                            ];
-                        })
-                ]
-            );
-
-            return response()->json(
-                [
-                    'status' => true,
-                    'payload' => $users
-                ],
-                200
-            );
-        } catch (\Throwable $e) {
-
-            return response()->json(
-                [
-                    'status' => false,
-                    'payload' => 'Máy chủ bị lỗi , liên hệ quản trị viên để khắc phục sự cố  !'
-                ],
-                506
-            );
+            return $users;
+        }catch (\Throwable $e) {
+            return false;
         }
+    }
+
+    public function index()
+    {
+        if(!$users = $this -> getUser())    return response()->json(
+            [
+                'status' => false,
+                'payload' => 'Trang không tồn tại !'
+            ],
+            404
+        );
+        $users = array_merge(
+            $users->toArray(),
+            [
+                'roles' => Role::all()
+                    ->map(function ($role) {
+                        return [
+                            'value' => $role->id,
+                            'slug_name' => \Str::slug($role->name, " "),
+                            'name' => \Str::title($role->name),
+                        ];
+                    })
+            ]
+        );
+        return response()->json(
+            [
+                'status' => true,
+                'payload' => $users
+            ],
+            200
+        );
+    }
+
+    public function listAdmin()
+    {
+        if(!$users = $this -> getUser()) return abort(404);
+        $roles =  Role::all();
+        return view('pages.auth.index' , ['users' => $users , 'roles' => $roles]);
+    }
+
+    private function checkRole()
+    {
+        if(auth()->user()->hasAnyRole(['admin','super admin'])) return true;
+        return false;
+    }
+
+    public function un_status($id)
+    {
+        if(!$this ->checkRole())   return response()->json([
+            'status' => false,
+            'payload' => 'Không thể câp nhật trạng thái !',
+        ]);
+        try {
+            $user = User::find($id);
+            $user->update([
+                'status' => 0,
+            ]);
+
+            return response()->json([
+                'status' => true,
+                'payload' => 'Success'
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'payload' => 'Không thể câp nhật trạng thái !',
+            ]);
+        }
+    }
+
+    public function re_status($id)
+    {
+        if(!$this ->checkRole())   return response()->json([
+            'status' => false,
+            'payload' => 'Không thể câp nhật trạng thái !',
+        ]);
+        try {
+            $user = User::find($id);
+            $user->update([
+                'status' => 1,
+            ]);
+            return response()->json([
+                'status' => true,
+                'payload' => 'Success'
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'payload' => 'Không thể câp nhật trạng thái !',
+            ]);
+        }
+    }
+
+
+    public function changeRole(Request $request)
+    {
+
+        $data = explode("&&&&", $request->role);
+
+        if(!$role = Role::whereName($data[0])->first()) return response()->json([
+            'status' => false,
+            'payload' => 'Không có quyền  !',
+        ]);
+        if(!$user = User::find($data[1])) return response()->json([
+            'status' => false,
+            'payload' => 'Không tìm thấy tài khoản  !',
+        ]);
+        if(auth()->user()->id == $user->id) return response()->json([
+            'status' => false,
+            'payload' => 'Không thể câp nhật quyền của chính mình !',
+        ]);
+        if(auth()->user()->roles[0]->name == 'super admin'){
+            $user->syncRoles($role);
+        }else{
+            if($role->name == 'super admin') return response()->json([
+                'status' => false,
+                'payload' => 'Không thể câp nhật quyền cao hơn mình cho người khác  !',
+            ]);
+            if($user->roles[0]->name == 'super admin') return response()->json([
+                'status' => false,
+                'payload' => 'Không thể câp nhật quyền cao nhất  !',
+            ]);
+            $user->syncRoles($role);
+        }
+        return response()->json([
+            'status' => true,
+            'payload' => 'Cập nhật thành công  !',
+        ]);
+
     }
 
     public function get_user_by_token(Request $request)
