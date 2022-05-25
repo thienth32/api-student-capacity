@@ -44,6 +44,7 @@ Route::prefix('teams')->group(function () {
     Route::get('check-user-team-contest/{id_contest}', [AdminTeamController::class, "checkUserTeamContest"]);
     Route::post('add-user-team-contest/{id_contest}/{id_team}', [AdminTeamController::class, "addUserTeamContest"]);
     Route::post('user-team-search/{id_contest}', [AdminTeamController::class, "userTeamSearch"]);
+    Route::post('delete-user-team-contest', [AdminTeamController::class, "deleteUserTeamContest"]);
 });
 Route::prefix('take-exam')->group(function () {
     Route::post('student', [AdminTakeExamController::class, 'takeExamStudent']);

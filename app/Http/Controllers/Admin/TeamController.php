@@ -447,4 +447,18 @@ class TeamController extends Controller
             'payload' =>  $max_user,
         ]);
     }
+    public function deleteUserTeamContest(Request $request)
+    {
+        $team = Team::find($request->team_id);
+        if (is_null($team))  return response()->json([
+            'status' => false,
+            'payload' => "Thông tin đội bị lỗi !!",
+        ]);
+        $userID = User::whereIn('id', $request->user_id)->get()->pluck('id');
+        $team->members()->detach($userID);
+        return response()->json([
+            'status' => true,
+            'payload' => "Xóa thành viên thành công !!",
+        ]);
+    }
 }
