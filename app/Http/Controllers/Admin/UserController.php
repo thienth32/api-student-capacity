@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Contest;
 use App\Models\User;
+use App\Services\Traits\TUploadImage;
 use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Support\Facades\Validator;
@@ -14,6 +15,7 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
+    use TUploadImage;
     public function TeamUserSearch(Request $request)
     {
         $users = User::search($request->key ?? null, ['name', 'email'])->take(4)->get();
@@ -224,9 +226,9 @@ class UserController extends Controller
 
     public function contestJoined()
     {
-        // user đã đăng nhập vô 
+        // user đã đăng nhập vô
         //tổng quan url  http://127.0.0.1:8000/api/v1/users/contest-joined?sort=asc&status=1&q=Nguyen Bich test
-        // sort : asc/desc 
+        // sort : asc/desc
         // q : tìm kiếm
 
         $contestID = [];
@@ -245,6 +247,59 @@ class UserController extends Controller
         return response()->json([
             'status' => true,
             'payload' => $contest
+        ]);
+    }
+
+    public function updateDetailUser(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'name' => 'required|min:4|max:50',
+        ],
+        [
+            'name.required' => 'Tên không được bỏ trống !',
+            'name.min' => 'Tên không nhỏ hơn 4 ký tự !',
+            'name.max' => 'Tên không lớn hơn 50 ký tự !',
+        ]);
+        if($validator->fails()){
+            return response()->json([
+                'status' => false,
+                'payload' => $validator->errors(),
+            ]);
+        }
+        $user = auth('sanctum')->user();
+
+        if($request->has('avatar'))
+        {
+            $validatorImage = Validator::make($request->all(),[
+                'avatar' => 'image|mimes:jpeg,png,jpg|max:10000',
+            ],
+                [
+                    'avatar.image' => 'Ảnh không được bỏ trống  !',
+                    'avatar.mimes' => 'Ảnh không đúng định dạng  !',
+                    'avatar.max' => 'Ảnh này kích cỡ quá lớn  !',
+                ]);
+            if($validatorImage->fails()){
+                return response()->json([
+                    'status' => false,
+                    'payload' => $validatorImage->errors(),
+                ]);
+            }
+            $nameAvatar = $this -> uploadFile($request -> avatar , $user -> avatar ?? '');
+            $user -> update([
+                'name' => $request ->name,
+                'avatar' => $nameAvatar,
+            ]);
+            return response()->json([
+                'status' => true,
+                'payload' => $user,
+            ]);
+        }
+        $user -> update([
+            'name' => $request ->name,
+        ]);
+        return response()->json([
+            'status' => true,
+            'payload' => $user,
         ]);
     }
 }
