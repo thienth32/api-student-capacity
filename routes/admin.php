@@ -205,6 +205,11 @@ Route::prefix('contests')->group(function () {
 //     Route::put('{id}', [ExamController::class, 'apiUpdate']);
 // });
 
+
+// Route::group([
+//     'middleware' => 'role_admin'
+// ], function () {
+
 // Middleware phân quyền ban giám khảo chấm thi , khi nào gộp code sẽ chỉnh sửa lại route để phân quyền route
 Route::group([
     'middleware' => 'role_admin'
@@ -286,8 +291,3 @@ Route::group([
         Route::post('change-role', [UserController::class, 'changeRole'])->name('admin.acount.change.role');
     });
 });
-
-// Route::get('end-mail', [SendMailController::class, 'sendMail']);
-
-
-//81
