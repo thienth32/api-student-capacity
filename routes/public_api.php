@@ -56,8 +56,6 @@ Route::get('', [AdminMajorController::class, 'apiIndex'])->name('major.api.index
 
 Route::get('{slug}', [AdminMajorController::class, 'apiShow'])->name('major.api.show');
 
-Route::get('{slug}', [AdminMajorController::class, 'apiShow'])->name('major.api.name');
-
 Route::prefix('enterprise')->group(function () {
     Route::get('', [EnterpriseController::class, 'apiIndex'])->name('enterprise.api.index');
 });
