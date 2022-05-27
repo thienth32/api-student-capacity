@@ -15,6 +15,6 @@ class RoundSeeder extends Seeder
      */
     public function run()
     {
-        Round::factory(10)->create();
+        Round::factory(20)->create();
     }
 }

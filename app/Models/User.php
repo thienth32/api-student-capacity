@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\FormatImageGet;
 use App\Services\Builder\Builder;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -44,6 +45,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'avatar' => FormatImageGet::class,
     ];
 
     public function newEloquentBuilder($query)

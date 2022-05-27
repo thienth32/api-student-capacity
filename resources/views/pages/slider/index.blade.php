@@ -325,8 +325,8 @@
                             @endif
                             <td width="20%">
                                 <p><span id="text_{{ $slider->id }}">{{ $slider->link_to }}
-                                        <span class="coppyText" data-key="{{ $slider->id }}" role="button">
-                                            <span class="svg-icon svg-icon-dark svg-icon-xx">
+                                        <span class="coppyText p-3" data-key="{{ $slider->id }}" role="button">
+                                            <span class="svg-icon svg-icon-dark svg-icon-2x">
                                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Design/Substract.svg--><svg
                                                     xmlns="http://www.w3.org/2000/svg"
                                                     xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Contest;
 use App\Models\User;
+use App\Services\Traits\TUploadImage;
 use Illuminate\Http\Request;
 use Exception;
 use Illuminate\Support\Facades\Validator;
@@ -14,6 +15,7 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
+    use TUploadImage;
     public function TeamUserSearch(Request $request)
     {
         $users = User::search($request->key ?? null, ['name', 'email'])->take(4)->get();
@@ -73,48 +75,149 @@ class UserController extends Controller
         ]);
     }
 
-    public function index()
+    private function getUser()
     {
-        // List
         try {
             $limit = 10;
             $users = User::status(request('status') ?? null)
-                ->sort(request('sort') == 'desc' ? 'desc' : 'asc', request('sort_by') ?? null, 'users')
-                ->search(request('search') ?? null, ['name', 'email'])
+                ->sort(request('sort') == 'asc' ? 'asc' : 'desc', request('sort_by') ?? null, 'users')
+                ->search(request('q') ?? null, ['name', 'email'])
                 ->has_role(request('role') ?? null)
                 ->paginate(request('limit') ?? $limit);
 
-            $users = array_merge(
-                $users->toArray(),
-                [
-                    'roles' => Role::all()
-                        ->map(function ($role) {
-                            return [
-                                'value' => $role->id,
-                                'slug_name' => \Str::slug($role->name, " "),
-                                'name' => \Str::title($role->name),
-                            ];
-                        })
-                ]
-            );
-
-            return response()->json(
-                [
-                    'status' => true,
-                    'payload' => $users
-                ],
-                200
-            );
-        } catch (\Throwable $e) {
-
-            return response()->json(
-                [
-                    'status' => false,
-                    'payload' => 'Máy chủ bị lỗi , liên hệ quản trị viên để khắc phục sự cố  !'
-                ],
-                506
-            );
+            return $users;
+        }catch (\Throwable $e) {
+            return false;
         }
+    }
+
+    public function index()
+    {
+        if(!$users = $this -> getUser())    return response()->json(
+            [
+                'status' => false,
+                'payload' => 'Trang không tồn tại !'
+            ],
+            404
+        );
+        $users = array_merge(
+            $users->toArray(),
+            [
+                'roles' => Role::all()
+                    ->map(function ($role) {
+                        return [
+                            'value' => $role->id,
+                            'slug_name' => \Str::slug($role->name, " "),
+                            'name' => \Str::title($role->name),
+                        ];
+                    })
+            ]
+        );
+        return response()->json(
+            [
+                'status' => true,
+                'payload' => $users
+            ],
+            200
+        );
+    }
+
+    public function listAdmin()
+    {
+        if(!$users = $this -> getUser()) return abort(404);
+        $roles =  Role::all();
+        return view('pages.auth.index' , ['users' => $users , 'roles' => $roles]);
+    }
+
+    private function checkRole()
+    {
+        if(auth()->user()->hasAnyRole(['admin','super admin'])) return true;
+        return false;
+    }
+
+    public function un_status($id)
+    {
+        if(!$this ->checkRole())   return response()->json([
+            'status' => false,
+            'payload' => 'Không thể câp nhật trạng thái !',
+        ]);
+        try {
+            $user = User::find($id);
+            $user->update([
+                'status' => 0,
+            ]);
+
+            return response()->json([
+                'status' => true,
+                'payload' => 'Success'
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'payload' => 'Không thể câp nhật trạng thái !',
+            ]);
+        }
+    }
+
+    public function re_status($id)
+    {
+        if(!$this ->checkRole())   return response()->json([
+            'status' => false,
+            'payload' => 'Không thể câp nhật trạng thái !',
+        ]);
+        try {
+            $user = User::find($id);
+            $user->update([
+                'status' => 1,
+            ]);
+            return response()->json([
+                'status' => true,
+                'payload' => 'Success'
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'payload' => 'Không thể câp nhật trạng thái !',
+            ]);
+        }
+    }
+
+
+    public function changeRole(Request $request)
+    {
+
+        $data = explode("&&&&", $request->role);
+
+        if(!$role = Role::whereName($data[0])->first()) return response()->json([
+            'status' => false,
+            'payload' => 'Không có quyền  !',
+        ]);
+        if(!$user = User::find($data[1])) return response()->json([
+            'status' => false,
+            'payload' => 'Không tìm thấy tài khoản  !',
+        ]);
+        if(auth()->user()->id == $user->id) return response()->json([
+            'status' => false,
+            'payload' => 'Không thể câp nhật quyền của chính mình !',
+        ]);
+        if(auth()->user()->roles[0]->name == 'super admin'){
+            $user->syncRoles($role);
+        }else{
+            if($role->name == 'super admin') return response()->json([
+                'status' => false,
+                'payload' => 'Không thể câp nhật quyền cao hơn mình cho người khác  !',
+            ]);
+            if($user->roles[0]->name == 'super admin') return response()->json([
+                'status' => false,
+                'payload' => 'Không thể câp nhật quyền cao nhất  !',
+            ]);
+            $user->syncRoles($role);
+        }
+        return response()->json([
+            'status' => true,
+            'payload' => 'Cập nhật thành công  !',
+        ]);
+
     }
 
     public function get_user_by_token(Request $request)
@@ -224,9 +327,9 @@ class UserController extends Controller
 
     public function contestJoined()
     {
-        // user đã đăng nhập vô 
+        // user đã đăng nhập vô
         //tổng quan url  http://127.0.0.1:8000/api/v1/users/contest-joined?sort=asc&status=1&q=Nguyen Bich test
-        // sort : asc/desc 
+        // sort : asc/desc
         // q : tìm kiếm
 
         $contestID = [];
@@ -245,6 +348,59 @@ class UserController extends Controller
         return response()->json([
             'status' => true,
             'payload' => $contest
+        ]);
+    }
+
+    public function updateDetailUser(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'name' => 'required|min:4|max:50',
+        ],
+        [
+            'name.required' => 'Tên không được bỏ trống !',
+            'name.min' => 'Tên không nhỏ hơn 4 ký tự !',
+            'name.max' => 'Tên không lớn hơn 50 ký tự !',
+        ]);
+        if($validator->fails()){
+            return response()->json([
+                'status' => false,
+                'payload' => $validator->errors(),
+            ]);
+        }
+        $user = auth('sanctum')->user();
+
+        if($request->has('avatar'))
+        {
+            $validatorImage = Validator::make($request->all(),[
+                'avatar' => 'image|mimes:jpeg,png,jpg|max:10000',
+            ],
+                [
+                    'avatar.image' => 'Ảnh không được bỏ trống  !',
+                    'avatar.mimes' => 'Ảnh không đúng định dạng  !',
+                    'avatar.max' => 'Ảnh này kích cỡ quá lớn  !',
+                ]);
+            if($validatorImage->fails()){
+                return response()->json([
+                    'status' => false,
+                    'payload' => $validatorImage->errors(),
+                ]);
+            }
+            $nameAvatar = $this -> uploadFile($request -> avatar , $user -> avatar ?? '');
+            $user -> update([
+                'name' => $request ->name,
+                'avatar' => $nameAvatar,
+            ]);
+            return response()->json([
+                'status' => true,
+                'payload' => $user,
+            ]);
+        }
+        $user -> update([
+            'name' => $request ->name,
+        ]);
+        return response()->json([
+            'status' => true,
+            'payload' => $user,
         ]);
     }
 }

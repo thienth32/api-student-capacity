@@ -131,6 +131,7 @@ const teamPage = {
 
             loadUserTeam(userArray);
             checkUserArray(userArray)
+            $(this).remove();
         });
 
         // xóa user ra khỏi mảng

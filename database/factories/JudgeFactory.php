@@ -23,7 +23,7 @@ class JudgeFactory extends Factory
     {
         return [
             'user_id' => User::all()->random()->id,
-            'contest_id' => Contest::all()->random()->id,
+            'contest_id' => 79,
         ];
     }
 }

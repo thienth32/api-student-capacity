@@ -213,7 +213,7 @@
                                 <th scope="col">Logo
 
                                 </th>
-                                <th scope="col"> Giới Thiệu
+                                <th scope="col">Giới thiệu
                                 </th>
                                 <th scope="col">Tài trợ
 
@@ -250,9 +250,9 @@
                                     </td>
                                     <td>
 
-                                        <button class="badge bg-primary" type="button" data-bs-toggle="modal"
+                                        <button class="btn  btn-primary btn-sm" type="button" data-bs-toggle="modal"
                                             data-bs-target="#introduce_{{ $key->id }}">
-                                            Xem thông tin...
+                                            Xem
                                         </button>
 
                                         <!-- Modal -->
@@ -261,9 +261,8 @@
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel"> Giới Thiệu Về
-                                                            Doanh
-                                                            Nghiệp
+                                                        <h5 class="modal-title" id="exampleModalLabel">
+                                                            Giới thiệu về doanh nghiệp
                                                         </h5>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                             aria-label="Close"></button>
@@ -282,9 +281,9 @@
                                     </td>
                                     <td>
                                         <div class="btn-group dropup">
-                                            <button class="badge bg-primary" type="button" data-bs-toggle="modal"
-                                                data-bs-target="#donor_{{ $key->id }}">
-                                                Xem thông tin...
+                                            <button class="btn  btn-primary btn-sm rounded-end" type="button"
+                                                data-bs-toggle="modal" data-bs-target="#donor_{{ $key->id }}">
+                                                Xem
                                             </button>
 
                                             <!-- Modal -->

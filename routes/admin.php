@@ -205,6 +205,11 @@ Route::prefix('contests')->group(function () {
 //     Route::put('{id}', [ExamController::class, 'apiUpdate']);
 // });
 
+
+// Route::group([
+//     'middleware' => 'role_admin'
+// ], function () {
+
 // Middleware phân quyền ban giám khảo chấm thi , khi nào gộp code sẽ chỉnh sửa lại route để phân quyền route
 Route::group([
     'middleware' => 'role_admin'
@@ -278,9 +283,11 @@ Route::group([
         Route::get('skill-soft-delete/{id}/backup', [SkillController::class, 'backUpSkill'])->name('admin.skill.soft.backup');
         Route::get('skill-soft-delete/{id}/delete', [SkillController::class, 'delete'])->name('admin.skill.soft.destroy');
     });
+
+    Route::prefix('acount')->group(function () {
+        Route::get('', [UserController::class, 'listAdmin'])->name('admin.acount.list');
+        Route::post('un-status/{id}', [UserController::class, 'un_status'])->name('admin.acount.un.status');
+        Route::post('re-status/{id}', [UserController::class, 're_status'])->name('admin.acount.re.status');
+        Route::post('change-role', [UserController::class, 'changeRole'])->name('admin.acount.change.role');
+    });
 });
-
-// Route::get('end-mail', [SendMailController::class, 'sendMail']);
-
-
-//81

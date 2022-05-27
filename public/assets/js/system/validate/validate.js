@@ -10,3 +10,4 @@ $("input[type=datetime-local]").on("change", function() {
         $(this).val(moment().format("DD/MM/YYYY hh:mm:ss A"));
     }
 });
+$('textarea').val($('textarea').val().trim());

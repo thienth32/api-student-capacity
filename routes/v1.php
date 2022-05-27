@@ -41,9 +41,11 @@ Route::prefix('teams')->group(function () {
     Route::get('{id}', [AdminTeamController::class, 'apiShow']);
     Route::post('add-team', [AdminTeamController::class, "apiAddTeam"]);
     Route::put('edit-team/{team_id}', [AdminTeamController::class, "apiEditTeam"]);
+    Route::get('{id}', [AdminTeamController::class, 'apiShow'])->name('team.api.show');
     Route::get('check-user-team-contest/{id_contest}', [AdminTeamController::class, "checkUserTeamContest"]);
     Route::post('add-user-team-contest/{id_contest}/{id_team}', [AdminTeamController::class, "addUserTeamContest"]);
     Route::post('user-team-search/{id_contest}', [AdminTeamController::class, "userTeamSearch"]);
+    Route::post('delete-user-team-contest', [AdminTeamController::class, "deleteUserTeamContest"]);
 });
 Route::prefix('take-exam')->group(function () {
     Route::post('student', [AdminTakeExamController::class, 'takeExamStudent']);
@@ -58,4 +60,5 @@ Route::prefix('round')->group(function () {
 
 Route::prefix('users')->group(function () {
     Route::get('contest-joined', [UserController::class, 'contestJoined']);
+    Route::post('edit', [UserController::class,'updateDetailUser']);
 });

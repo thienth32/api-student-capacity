@@ -38,33 +38,39 @@
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
                             </div>
-                            <div id="member" style="display: none">
-                                <div class="form-group list-group mb-5">
-                                    <label class="form-label" for="">Thành viên nhóm</label>
-                                    <div class="input-group mb-3">
-                                        <input placeholder="Hãy nhập email hoặc tên để tìm kiếm..." type="text"
-                                            class="form-control" id="searchUserValue">
-                                        {{-- <button id="searchUser" class="btn btn-secondary rounded-end" type="button">Tìm</button> --}}
-                                        <button id="searchUser" type="button" class="btn btn-primary">Tìm</button>
-                                    </div>
-                                    <ul id="resultUserSearch">
-                                    </ul>
+                            <div class="parent-loading">
+                                <div id="loading" class="loading">
+
+                                    <div id="circle-loading" class="circle-loading"></div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <hr>
-                                        <div>
-                                            <h4>Danh sách chờ</h4>
-                                            <div id="resultArrayUser" class=" mt-4">
+                                <div id="member" style="display: none">
+                                    <div class="form-group list-group mb-5">
+                                        <label class="form-label" for="">Thành viên nhóm</label>
+                                        <div class="input-group mb-3">
+                                            <input placeholder="Hãy nhập email hoặc tên để tìm kiếm..." type="text"
+                                                class="form-control" id="searchUserValue">
+                                            {{-- <button id="searchUser" class="btn btn-secondary rounded-end" type="button">Tìm</button> --}}
+                                            <button id="searchUser" type="button" class="btn btn-primary">Tìm</button>
+                                        </div>
+                                        <ul id="resultUserSearch">
+                                        </ul>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <hr>
+                                            <div>
+                                                <h4>Danh sách chờ</h4>
+                                                <div id="resultArrayUser" class=" mt-4">
+                                                </div>
+                                                <p class="text-danger" id="mesArrayUser">
+                                                    @if (session()->has('error'))
+                                                        {{ session()->get('error') }}
+                                                        @php
+                                                            Session::forget('error');
+                                                        @endphp
+                                                    @endif
+                                                </p>
                                             </div>
-                                            <p class="text-danger" id="mesArrayUser">
-                                                @if (session()->has('error'))
-                                                    {{ session()->get('error') }}
-                                                    @php
-                                                        Session::forget('error');
-                                                    @endphp
-                                                @endif
-                                            </p>
                                         </div>
                                     </div>
                                 </div>

@@ -6,6 +6,8 @@ use App\Services\Traits\TGetAttributeColumn;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Casts\FormatDate;
+use App\Casts\FormatImageGet;
 
 class Team extends Model
 {
@@ -17,6 +19,12 @@ class Team extends Model
         'name',
         'image',
         'contest_id',
+    ];
+
+    protected $casts = [
+        'created_at' => FormatDate::class,
+        'updated_at' =>  FormatDate::class,
+        'image' => FormatImageGet::class,
     ];
 
     public static function boot()
