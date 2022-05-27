@@ -279,10 +279,10 @@
                                 </td>
                                 <td>
                                     <div class="dropdown">
-                                        <button class="badge bg-primary dropdown-toggle" type="button"
+                                        <button class="btn  btn-primary btn-sm dropdown-toggle" type="button"
                                             id="triggerId_{{ $key->id }}" data-bs-toggle="dropdown"
                                             aria-haspopup="true" aria-expanded="false">
-                                            Xem thông tin...
+                                            Xem
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="triggerId_{{ $key->id }}">
                                             @if (count($key->majorSkill) > 0)
@@ -301,9 +301,9 @@
                                 </td>
                                 <td>
 
-                                    <button class="badge bg-primary" type="button" data-bs-toggle="modal"
+                                    <button class="btn  btn-primary btn-sm" type="button" data-bs-toggle="modal"
                                         data-bs-target="#introduce_{{ $key->id }}">
-                                        Xem thông tin...
+                                        Xem
                                     </button>
 
                                     <!-- Modal -->
@@ -312,7 +312,7 @@
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel"> Giới Thiệu về kỹ năng
+                                                    <h5 class="modal-title" id="exampleModalLabel"> Giới thiệu về kỹ năng
                                                     </h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>

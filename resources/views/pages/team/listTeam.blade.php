@@ -176,7 +176,7 @@
 
 
                             </th>
-                            <th scope="col">Đội Thi
+                            <th scope="col">Đội thi
                                 <a
                                     href="{{ route('admin.teams', [
                                         'sortBy' => request()->has('sortBy') ? (request('sortBy') == 'desc' ? 'asc' : 'desc') : 'asc',
@@ -210,12 +210,12 @@
                                 </a>
 
                             </th>
-                            <th scope="col"> Thuộc Cuộc thi
+                            <th scope="col">Thuộc cuộc thi
                             </th>
-                            <th scope="col">Thành Viên
+                            <th scope="col">Thành viên
 
                             </th>
-                            <th scope="col">Ngày Tạo
+                            <th scope="col">Ngày tạo
                                 <a
                                     href="{{ route('admin.teams', [
                                         'sortBy' => request()->has('sortBy') ? (request('sortBy') == 'desc' ? 'asc' : 'desc') : 'asc',
@@ -277,8 +277,9 @@
                                 </th>
                                 <td>
 
-                                    <button style="border:none;background:#ffff; text-align: left;" type="button"
-                                        data-bs-toggle="modal" data-bs-target="#deltai_team_{{ $key->id }}">
+                                    <button class="p-3" style="border:none;background:none; text-align: left;"
+                                        type="button" data-bs-toggle="modal"
+                                        data-bs-target="#deltai_team_{{ $key->id }}">
                                         {{ $key->name }}
                                     </button>
 
@@ -299,7 +300,7 @@
                                                             <img style="width:200px;height:200px"
                                                                 src="{{ Storage::disk('s3')->has($key->image) ? Storage::disk('s3')->temporaryUrl($key->image, now()->addMinutes(5)) : 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
                                                                 alt="">
-                                                            <h4 class="mt-3">Ngày Tạo : {{ $key->created_at }}
+                                                            <h4 class="mt-3">Ngày tạo : {{ $key->created_at }}
                                                             </h4>
                                                             <h5>Tham gia cuộc thi :
                                                                 <a
@@ -308,7 +309,7 @@
                                                             </h5>
                                                         </div>
                                                         <div class="col md-6">
-                                                            <h3>Tên Đội : {{ $key->name }}</h3>
+                                                            <h3>Tên đội : {{ $key->name }}</h3>
                                                             <h4 class="mt-3"> Danh sách thành viên </h4>
                                                             <ul>
                                                                 @if (count($key->members) > 0)
@@ -333,14 +334,15 @@
                                 </td>
 
                                 <td>
-                                    Cuộc Thi: <a href="{{ route('admin.contest.show', $key->contest->id) }}">
-                                        {{ $key->contest->name ?? 'Chưa có Cuộc thi ' }}</a>
+                                    <a href="{{ route('admin.contest.show', $key->contest->id) }}">
+                                        {{ $key->contest->name ?? 'Chưa có Cuộc thi ' }}
+                                    </a>
 
                                 </td>
                                 <td>
                                     <button class="btn  btn-primary btn-sm" type="button" data-bs-toggle="modal"
                                         data-bs-target="#exampleModal_{{ $key->id }}">
-                                        Xem Thêm
+                                        Xem thêm
                                     </button>
 
                                     <!-- Modal -->
@@ -349,8 +351,8 @@
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">Các Thành Viên Trong
-                                                        Team
+                                                    <h5 class="modal-title" id="exampleModalLabel">
+                                                        Các thành viên trong đội
                                                     </h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
@@ -362,7 +364,7 @@
                                                             <thead>
                                                                 <tr>
                                                                     <th></th>
-                                                                    <th>Họ Tên</th>
+                                                                    <th>Họ tên</th>
                                                                     <th>Email</th>
                                                                 </tr>
 

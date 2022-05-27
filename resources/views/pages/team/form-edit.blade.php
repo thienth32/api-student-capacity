@@ -25,12 +25,27 @@
                                     @endphp
                                 @endif
                             </div>
-                            <div class="form-group mb-10">
+                            {{-- <div class="form-group mb-10">
                                 <label for="" class="form-label">Thuộc cuộc thi</label>
                                 <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
                                     data-hide-search="false" data-placeholder="Select an option" tabindex="-1"
                                     aria-hidden="true" name="contest_id">
-                                    <option data-select2-id="select2-data-130-vofb"></option>
+                                    <option value="">Chọn cuộc thi</option>
+                                    @foreach ($contests as $contest)
+                                        <option value="{{ $contest->id }}"
+                                            {{ $team->contest_id === $contest->id ? 'selected' : '' }}>
+                                            {{ $contest->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('contest_id')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
+                            </div> --}}
+                            <div class="form-group mb-10">
+                                <label for="" class="form-label">Thuộc cuộc thi</label>
+                                <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                                    data-hide-search="false" tabindex="-1" aria-hidden="true" name="contest_id">
+                                    <option value="">Chọn cuộc thi</option>
                                     @foreach ($contests as $contest)
                                         <option value="{{ $contest->id }}"
                                             {{ $team->contest_id === $contest->id ? 'selected' : '' }}>
@@ -41,32 +56,40 @@
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
                             </div>
-                            <div class="form-group list-group mb-5">
-                                <label class="form-label" for="">Thành viên nhóm</label>
-                                <div class="input-group mb-3">
-                                    <input placeholder="Hãy nhập email hoặc tên để tìm kiếm..." type="text"
-                                        class="form-control" id="searchUserValue">
-                                    <button id="searchUser" class="btn btn-secondary rounded-end" type="button"
-                                        data-bs-toggle="dropdown" aria-expanded="false">Tìm</button>
-                                    <ul id="resultUserSearch" class="dropdown-menu dropdown-menu-end w-500px">
-                                    </ul>
-                                </div>
+                            <div class="parent-loading">
+                                <div id="loading" class="loading">
 
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="listUser">
-                                        <h4>Danh sách chờ</h4>
-                                        <div id="resultArrayUser" class=" mt-4">
+                                    <div id="circle-loading" class="circle-loading"></div>
+                                </div>
+                                <div id="member" style="">
+
+                                    <div class="form-group list-group mb-5">
+                                        <label class="form-label" for="">Thành viên nhóm</label>
+                                        <div class="input-group mb-3">
+                                            <input placeholder="Hãy nhập email hoặc tên để tìm kiếm..." type="text"
+                                                class="form-control" id="searchUserValue">
+                                            {{-- <button id="searchUser" class="btn btn-secondary rounded-end" type="button">Tìm</button> --}}
+                                            <button id="searchUser" type="button" class="btn btn-primary">Tìm</button>
                                         </div>
-                                        <p class="text-danger" id="mesArrayUser">
-                                            @if (session()->has('error'))
-                                                {{ session()->get('error') }}
-                                                @php
-                                                    Session::forget('error');
-                                                @endphp
-                                            @endif
-                                        </p>
+                                        <ul id="resultUserSearch">
+                                        </ul>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div>
+                                                <h4>Danh sách chờ</h4>
+                                                <div id="resultArrayUser" class=" mt-4">
+                                                </div>
+                                                <p class="text-danger" id="mesArrayUser">
+                                                    @if (session()->has('error'))
+                                                        {{ session()->get('error') }}
+                                                        @php
+                                                            Session::forget('error');
+                                                        @endphp
+                                                    @endif
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
