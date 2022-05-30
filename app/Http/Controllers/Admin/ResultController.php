@@ -23,7 +23,7 @@ class ResultController extends Controller
     }
     public function indexApi($id_round)
     {
-        $data = $this->getList($id_round)->get();
+        $data = $this->getList($id_round)->paginate(request('limit') ?? 10);
         // dd($data->toArray());
         return response()->json([
             'status' => true,
