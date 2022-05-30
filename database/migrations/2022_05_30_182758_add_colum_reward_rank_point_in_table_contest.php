@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('contests', function (Blueprint $table) {
-          $table->integer('reward_rank_point')->nullable();
+          $table->json('reward_rank_point')->nullable();
         });
     }
 
