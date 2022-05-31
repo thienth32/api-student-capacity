@@ -67,6 +67,11 @@ class Contest extends Model
         return $this->belongsToMany(Enterprise::class, 'donors', 'contest_id', 'enterprise_id')->withTimestamps();
     }
 
+    public function contest_users()
+    {
+        return $this->hasMany(ContestUser::class, 'contest_id');
+    }
+
     public function newEloquentBuilder($query)
     {
         return new Builder($query);

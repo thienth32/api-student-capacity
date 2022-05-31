@@ -6,14 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Member extends Model
+class ContestUser extends Model
 {
-    use SoftDeletes;
-    protected $table = 'members';
-    protected $fillable = ['user_id', 'team_id'];
+    use HasFactory;
+    protected $table = 'contest_users';
+    protected $guarded = [];
+    protected $with = ['user'];
+
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class);
     }
-    use HasFactory;
 }

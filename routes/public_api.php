@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\ContestController as AdminContestController;
 use App\Http\Controllers\Admin\EnterpriseController;
 use App\Http\Controllers\Admin\ExamController;
 use App\Http\Controllers\Admin\MajorController as AdminMajorController;
+use App\Http\Controllers\Admin\RankUserController;
 use App\Http\Controllers\Admin\ResultController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\RoundController;
@@ -67,3 +68,5 @@ Route::prefix('exam')->group(function () {
 Route::prefix('contest/round/{id_round}/result')->group(function () {
     Route::get('', [ResultController::class, 'indexApi']);
 });
+
+Route::get('rating-major/{slug}', [RankUserController::class, 'getRatingUser']);
