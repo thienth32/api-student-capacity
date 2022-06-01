@@ -17,4 +17,8 @@ class ContestUser extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function contest()
+    {
+        return $this->belongsTo(Contest::class);
+    }
 }
