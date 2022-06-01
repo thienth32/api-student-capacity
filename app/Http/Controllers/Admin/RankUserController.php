@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ContestUser;
 use App\Models\Major;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class RankUserController extends Controller
 {
@@ -31,10 +32,17 @@ class RankUserController extends Controller
 
             $users = [];
             $members = $major->members->unique()->toArray();
+
             foreach ($members as $member) {
                 array_push($users, $member['user']);
             }
-            $ratingUser = $this->climbingRating(array_unique($users, SORT_REGULAR));
+            if (!$ratingUser = $this->climbingRating(array_unique($users, SORT_REGULAR))) return response()->json(
+                [
+                    'status' => false,
+                    'payload' => 'Có lỗi đã xảy ra !'
+                ]
+            );
+
             return response()->json([
                 'status' => true,
                 'payload' => $ratingUser,
@@ -50,21 +58,24 @@ class RankUserController extends Controller
 
     private function climbingRating($ranked)
     {
-        $arrResult = $this->fomatRatingU($ranked, $this->getArrRankPoint($ranked));
-        usort($arrResult, function ($a, $b) {
-            return $a['rank_has'] <=> $b['rank_has'];
-        });
-        return $arrResult;
+        try {
+            $arrResult = $this->fomatRatingU($ranked, $this->getArrRankPoint($ranked));
+            usort($arrResult, function ($a, $b) {
+                return $a['rank_has'] <=> $b['rank_has'];
+            });
+            return $arrResult;
+        } catch (\Throwable $th) {
+            Log::info($th->getMessage());
+            return false;
+        }
     }
 
     private function getArrRankPoint($ranked)
     {
         $arrRankPoint = [];
-        foreach ($ranked as $rank) {
-            array_push($arrRankPoint, $rank['sum_point']);
-            $arrRankPoint = array_unique($arrRankPoint);
-            sort($arrRankPoint, SORT_NUMERIC);
-        }
+        foreach ($ranked as $rank) array_push($arrRankPoint, $rank['sum_point']);
+        $arrRankPoint = array_unique($arrRankPoint);
+        sort($arrRankPoint, SORT_NUMERIC);
         return $arrRankPoint;
     }
 
