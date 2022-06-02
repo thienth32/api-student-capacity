@@ -1,6 +1,6 @@
 @extends('layouts.main')
-@section('title', 'Chi tiết đội thi')
-@section('page-title', 'Chi tiết đội thi')
+@section('title', 'Kết quả vòng thi')
+@section('page-title', 'Kết quả vòng thi')
 @section('content')
     <div class=" mb-4">
         <div class="row">
@@ -77,39 +77,51 @@
                             </thead>
                             <tbody>
                                 @php
-                                    $total = $results->total();
+                                    $total = $teams->total();
                                 @endphp
-                                @foreach ($results as $key => $result)
+                                @foreach ($teams as $key => $team)
                                     <tr>
                                         @if (request()->has('sort'))
                                             <th scope="row">
                                                 @if (request('sort') == 'desc')
-                                                    {{ (request()->has('page') && request('page') !== 1 ? $results->perPage() * (request('page') - 1) : 0) +$key +1 }}
+                                                    {{ (request()->has('page') && request('page') !== 1 ? $teams->perPage() * (request('page') - 1) : 0) + $key + 1 }}
                                                 @else
-                                                    {{ request()->has('page') && request('page') !== 1? $total - $results->perPage() * (request('page') - 1) - $key: ($total -= 1) }}
+                                                    {{ request()->has('page') && request('page') !== 1 ? $total - $teams->perPage() * (request('page') - 1) - $key : ($total -= 1) }}
                                                 @endif
                                             </th>
                                         @else
                                             <th scope="row">
-                                                {{ (request()->has('page') && request('page') !== 1 ? $results->perPage() * (request('page') - 1) : 0) +$key +1 }}
+                                                {{ (request()->has('page') && request('page') !== 1 ? $results->perPage() * (request('page') - 1) : 0) + $key + 1 }}
                                             </th>
                                         @endif
                                         <td>
-                                            {{ $result->team->name }}
+                                            {{ $team->name }}
                                         </td>
                                         <td>
+                                            @foreach ($team->result as $result)
+                                                {{ date('d-m-Y H:i:s', strtotime($result->created_at)) }}
+                                                <br>
+                                                {{ \Carbon\Carbon::parse($result->created_at)->diffforHumans() }}
+                                            @endforeach
+                                        </td>
+                                        <td>
+                                            @foreach ($team->result as $result)
+                                                {{ $result->point }}
+                                            @endforeach
+                                        </td>
+                                        {{-- <td>
                                             {{ date('d-m-Y H:i:s', strtotime($result->created_at)) }}
                                             <br>
                                             {{ \Carbon\Carbon::parse($result->created_at)->diffforHumans() }}
                                         </td>
                                         <td>
                                             {{ $result->point }}
-                                        </td>
+                                        </td> --}}
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
-                        {{ $results->appends(request()->all())->links('pagination::bootstrap-4') }}
+                        {{-- {{ $results->appends(request()->all())->links('pagination::bootstrap-4') }} --}}
                     </div>
 
 
