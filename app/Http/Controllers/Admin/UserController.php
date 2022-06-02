@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Contest;
 use App\Models\User;
 use App\Services\Traits\TUploadImage;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Exception;
+use Google\Service\Script\Content;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -86,14 +88,14 @@ class UserController extends Controller
                 ->paginate(request('limit') ?? $limit);
 
             return $users;
-        }catch (\Throwable $e) {
+        } catch (\Throwable $e) {
             return false;
         }
     }
 
     public function index()
     {
-        if(!$users = $this -> getUser())    return response()->json(
+        if (!$users = $this->getUser())    return response()->json(
             [
                 'status' => false,
                 'payload' => 'Trang không tồn tại !'
@@ -124,20 +126,20 @@ class UserController extends Controller
 
     public function listAdmin()
     {
-        if(!$users = $this -> getUser()) return abort(404);
+        if (!$users = $this->getUser()) return abort(404);
         $roles =  Role::all();
-        return view('pages.auth.index' , ['users' => $users , 'roles' => $roles]);
+        return view('pages.auth.index', ['users' => $users, 'roles' => $roles]);
     }
 
     private function checkRole()
     {
-        if(auth()->user()->hasAnyRole(['admin','super admin'])) return true;
+        if (auth()->user()->hasAnyRole(['admin', 'super admin'])) return true;
         return false;
     }
 
     public function un_status($id)
     {
-        if(!$this ->checkRole())   return response()->json([
+        if (!$this->checkRole())   return response()->json([
             'status' => false,
             'payload' => 'Không thể câp nhật trạng thái !',
         ]);
@@ -161,7 +163,7 @@ class UserController extends Controller
 
     public function re_status($id)
     {
-        if(!$this ->checkRole())   return response()->json([
+        if (!$this->checkRole())   return response()->json([
             'status' => false,
             'payload' => 'Không thể câp nhật trạng thái !',
         ]);
@@ -188,26 +190,26 @@ class UserController extends Controller
 
         $data = explode("&&&&", $request->role);
 
-        if(!$role = Role::whereName($data[0])->first()) return response()->json([
+        if (!$role = Role::whereName($data[0])->first()) return response()->json([
             'status' => false,
             'payload' => 'Không có quyền  !',
         ]);
-        if(!$user = User::find($data[1])) return response()->json([
+        if (!$user = User::find($data[1])) return response()->json([
             'status' => false,
             'payload' => 'Không tìm thấy tài khoản  !',
         ]);
-        if(auth()->user()->id == $user->id) return response()->json([
+        if (auth()->user()->id == $user->id) return response()->json([
             'status' => false,
             'payload' => 'Không thể câp nhật quyền của chính mình !',
         ]);
-        if(auth()->user()->roles[0]->name == 'super admin'){
+        if (auth()->user()->roles[0]->name == 'super admin') {
             $user->syncRoles($role);
-        }else{
-            if($role->name == 'super admin') return response()->json([
+        } else {
+            if ($role->name == 'super admin') return response()->json([
                 'status' => false,
                 'payload' => 'Không thể câp nhật quyền cao hơn mình cho người khác  !',
             ]);
-            if($user->roles[0]->name == 'super admin') return response()->json([
+            if ($user->roles[0]->name == 'super admin') return response()->json([
                 'status' => false,
                 'payload' => 'Không thể câp nhật quyền cao nhất  !',
             ]);
@@ -217,7 +219,6 @@ class UserController extends Controller
             'status' => true,
             'payload' => 'Cập nhật thành công  !',
         ]);
-
     }
 
     public function get_user_by_token(Request $request)
@@ -325,6 +326,7 @@ class UserController extends Controller
         }
     }
 
+
     public function contestJoined()
     {
         // user đã đăng nhập vô
@@ -353,15 +355,18 @@ class UserController extends Controller
 
     public function updateDetailUser(Request $request)
     {
-        $validator = Validator::make($request->all(),[
-            'name' => 'required|min:4|max:50',
-        ],
-        [
-            'name.required' => 'Tên không được bỏ trống !',
-            'name.min' => 'Tên không nhỏ hơn 4 ký tự !',
-            'name.max' => 'Tên không lớn hơn 50 ký tự !',
-        ]);
-        if($validator->fails()){
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'name' => 'required|min:4|max:50',
+            ],
+            [
+                'name.required' => 'Tên không được bỏ trống !',
+                'name.min' => 'Tên không nhỏ hơn 4 ký tự !',
+                'name.max' => 'Tên không lớn hơn 50 ký tự !',
+            ]
+        );
+        if ($validator->fails()) {
             return response()->json([
                 'status' => false,
                 'payload' => $validator->errors(),
@@ -369,25 +374,27 @@ class UserController extends Controller
         }
         $user = auth('sanctum')->user();
 
-        if($request->has('avatar'))
-        {
-            $validatorImage = Validator::make($request->all(),[
-                'avatar' => 'image|mimes:jpeg,png,jpg|max:10000',
-            ],
+        if ($request->has('avatar')) {
+            $validatorImage = Validator::make(
+                $request->all(),
+                [
+                    'avatar' => 'image|mimes:jpeg,png,jpg|max:10000',
+                ],
                 [
                     'avatar.image' => 'Ảnh không được bỏ trống  !',
                     'avatar.mimes' => 'Ảnh không đúng định dạng  !',
                     'avatar.max' => 'Ảnh này kích cỡ quá lớn  !',
-                ]);
-            if($validatorImage->fails()){
+                ]
+            );
+            if ($validatorImage->fails()) {
                 return response()->json([
                     'status' => false,
                     'payload' => $validatorImage->errors(),
                 ]);
             }
-            $nameAvatar = $this -> uploadFile($request -> avatar , $user -> avatar ?? '');
-            $user -> update([
-                'name' => $request ->name,
+            $nameAvatar = $this->uploadFile($request->avatar, $user->avatar ?? '');
+            $user->update([
+                'name' => $request->name,
                 'avatar' => $nameAvatar,
             ]);
             return response()->json([
@@ -395,8 +402,8 @@ class UserController extends Controller
                 'payload' => $user,
             ]);
         }
-        $user -> update([
-            'name' => $request ->name,
+        $user->update([
+            'name' => $request->name,
         ]);
         return response()->json([
             'status' => true,
