@@ -15,9 +15,6 @@ class RankUserController extends Controller
     {
         try {
             if (!$major = Major::whereSlug($slug)
-                ->with(['contest_user' => function ($q) {
-                    return $q->orderByDesc('reward_point')->with('contest');
-                }])
                 ->first())
                 return response()->json(
                     [
@@ -29,21 +26,26 @@ class RankUserController extends Controller
             $maxPoin = 0;
             return response()->json([
                 'status' => true,
-                'payload' => $major->contest_user->map(function ($q, $index) use (&$rank, &$maxPoin) {
-                    if ($index == 0) $maxPoin = $q->reward_point; // **
-                    if ($index == 0) $rank =  1; // **
-                    if ($q->reward_point == $maxPoin) $rank = $rank; // **
-                    if ($q->reward_point < $maxPoin) $rank += 1; // **
-                    if ($q->reward_point < $maxPoin) $maxPoin = $q->reward_point; // **
-                    return [
-                        'user_name' => $q->user->name,
-                        'rank' => $rank,
-                        'reward_point' => $q->reward_point,
-                        'contest_name' => $q->contest->name,
-                        'contest' => $q->contest,
-                        'user' => $q->user
-                    ];
-                }),
+                'payload' => $major
+                    ->contest_user()
+                    ->orderByDesc('reward_point')
+                    ->with('contest')
+                    ->get()
+                    ->map(function ($q, $index) use (&$rank, &$maxPoin) {
+                        if ($index == 0) $maxPoin = $q->reward_point; // **
+                        if ($index == 0) $rank =  1; // **
+                        if ($q->reward_point == $maxPoin) $rank = $rank; // **
+                        if ($q->reward_point < $maxPoin) $rank += 1; // **
+                        if ($q->reward_point < $maxPoin) $maxPoin = $q->reward_point; // **
+                        return [
+                            'user_name' => $q->user->name,
+                            'rank' => $rank,
+                            'reward_point' => $q->reward_point,
+                            'contest_name' => $q->contest->name,
+                            'contest' => $q->contest,
+                            'user' => $q->user
+                        ];
+                    }),
             ]);
         } catch (\Throwable $th) {
             Log::info($th->getMessage());
