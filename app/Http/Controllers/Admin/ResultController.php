@@ -12,18 +12,23 @@ class ResultController extends Controller
 {
     protected function getList($id_round)
     {
-        $query = Result::where('round_id', $id_round)
-            // ->sort((request('sort') == 'desc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'results')
-            ->orderBy('point', 'desc')
-            ->orderBy('created_at', 'asc');
 
-        $query->with(['team', 'round']);
+        $query = Round::find($id_round)
+            ->teams()
+            ->with('result', function ($q) use ($id_round) {
+                return $q->where('round_id', $id_round)->orderBy('point', 'desc')->sort((request('sort') == 'desc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'results')
+
+                    ->orderBy('created_at', 'asc');
+            })
+            ->search(request('q') ?? null, ['name']);
+
 
         return $query;
     }
     public function indexApi($id_round)
     {
-        $data = $this->getList($id_round)->paginate(request('limit') ?? 10);
+        $data = $this->getList($id_round)->paginate(request('limit') ?? 6);
+        // $data = $this->getList($id_round);
         // dd($data->toArray());
         return response()->json([
             'status' => true,
