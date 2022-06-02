@@ -279,7 +279,7 @@ class RoundController extends Controller
             if (Carbon::parse(request()->end_time)->toDateTimeString() > Carbon::parse($contest->register_deadline)->toDateTimeString()) {
                 return [
                     'status' => false,
-                    'errors' => ['end_time' => 'Thời gian kết thúc không được bé hơn thời gian kết thúc của cuộc thi !'],
+                    'errors' => ['end_time' => 'Thời gian kết thúc không được lớn hơn thời gian kết thúc của cuộc thi !'],
                 ];
             };
             $data = null;
