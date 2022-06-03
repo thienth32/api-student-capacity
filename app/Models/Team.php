@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Casts\FormatDate;
 use App\Casts\FormatImageGet;
+use App\Services\Builder\Builder;
 
 class Team extends Model
 {
@@ -46,5 +47,15 @@ class Team extends Model
     public function users()
     {
         return $this->belongsToMany(User::class, 'members', 'team_id', 'user_id');
+    }
+
+    public function result()
+    {
+        return $this->hasMany(Result::class);
+    }
+
+    public function newEloquentBuilder($query)
+    {
+        return new Builder($query);
     }
 }

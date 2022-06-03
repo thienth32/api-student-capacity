@@ -355,7 +355,7 @@ class TeamController extends Controller
             ]);
         }
     }
-  
+
 
     public function checkUserTeamContest($id_contest)
     {
@@ -382,7 +382,7 @@ class TeamController extends Controller
                 'user_id.required' => 'Chưa nhập trường này !',
             ]
         );
-    
+
         if ($validate->fails()) return response()->json([
             'status' => false,
             'payload' => $validate->errors()
@@ -401,21 +401,15 @@ class TeamController extends Controller
                 if ($userTeam->id === $user_id && $userTeam->pivot->bot == 1) {
                     $team->members()->attach($result['user-pass']);
                     DB::commit();
-                    if (count($result['user-not-pass']) > 0) {
-                        $user = User::whereIn('id', $result['user-not-pass'])->get();
-                        return response()->json([
-                            'status' => true,
-                            'payload' => 'Thêm thành viên thành công !',
-                            'user_not_pass' => $user
-                        ]);
-                    } else {
-                        $user = User::whereIn('id', $result['user-pass'])->get();
-                        return response()->json([
-                            'status' => true,
-                            'payload' => 'Thêm thành viên thành công !',
-                            'user_pass' => $user
-                        ]);
-                    }
+
+                    $user_pass = User::whereIn('id', $result['user-pass'])->get();
+                    $use_not_pass = User::whereIn('id', $result['user-not-pass'])->get();
+                    return response()->json([
+                        'status' => true,
+                        'payload' => 'Thêm thành viên thành công !',
+                        'user_pass' => $user_pass ?? null,
+                        'user_not_pass' => $use_not_pass ?? null
+                    ]);
                 } else {
                     return response()->json([
                         'status' => false,
@@ -455,7 +449,7 @@ class TeamController extends Controller
             'payload' =>  $max_user,
         ]);
     }
-    
+
     public function deleteUserTeamContest(Request $request)
     {
         $team = Team::find($request->team_id);

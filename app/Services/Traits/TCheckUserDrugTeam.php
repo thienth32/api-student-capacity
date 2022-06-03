@@ -34,8 +34,8 @@ trait TCheckUserDrugTeam
             }
         }
         return [
-            'user-pass' => $arrUserPass, // không có trong team trong cuộc thi
-            'user-not-pass' => $arrUserNotPass, // có trong team trong cuộc thi
+            'user-pass' => $arrUserPass, // được thêm
+            'user-not-pass' => $arrUserNotPass, // ko dc thêm
         ];
     }
 }

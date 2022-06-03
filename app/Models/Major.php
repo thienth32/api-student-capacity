@@ -11,6 +11,7 @@ class Major extends Model
 {
     use SoftDeletes;
     use HasFactory;
+    use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
     protected $primaryKey = 'id';
     protected $table = 'majors';
     protected $fillable = [
@@ -54,6 +55,23 @@ class Major extends Model
     {
         return $this->hasMany(Major::class, 'parent_id', '')->with('majorChils');
     }
+
+    public function contest_user()
+    {
+        return $this->hasManyThrough(ContestUser::class, Contest::class);
+    }
+
+    public function teams()
+    {
+        return $this->hasManyThrough(Team::class, Contest::class);
+    }
+
+
+    public function members()
+    {
+        return $this->hasManyDeep(Member::class, [Contest::class, Team::class]);
+    }
+
     public function newEloquentBuilder($query)
     {
         return new Builder($query);
