@@ -3,6 +3,9 @@
 @section('page-title', 'Thêm mới cuộc thi')
 @section('content')
     <div class="row">
+
+
+
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
                 @if (session()->has('success'))
@@ -160,7 +163,7 @@
                     </div>
                     <div class="form-group mb-10">
                         <label for="" class="form-label">Mô tả cuộc thi</label>
-                        <textarea class="form-control" name="description" id="" rows="3">
+                        <textarea class="form-control" name="description" id="kt_docs_ckeditor_classic" rows="3">
                             {{ old('description') }}
                         </textarea>
                         @error('description')
@@ -177,6 +180,10 @@
 
 @endsection
 @section('page-script')
+    <script src="assets/plugins/custom/tinymce/tinymce.bundle.js"></script>
+    <script src="assets/plugins/custom/ckeditor/ckeditor-classic.bundle.js"></script>
+    <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
+    <script src="assets/js/system/ckeditor/ckeditor.js"></script>
 
     <script src="assets/js/system/preview-file/previewImg.js"></script>
     <script src="assets/js/system/date-after/date-after.js"></script>
