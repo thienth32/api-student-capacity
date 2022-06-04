@@ -43,7 +43,8 @@ class Contest extends Model
         'status',
         'start_register_time',
         'end_register_time',
-        'max_user'
+        'max_user',
+        'reward_rank_point'
     ];
     public function teams()
     {
