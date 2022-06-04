@@ -43,7 +43,8 @@ class Contest extends Model
         'status',
         'start_register_time',
         'end_register_time',
-        'max_user'
+        'max_user',
+        'reward_rank_point'
     ];
     public function teams()
     {
@@ -65,6 +66,11 @@ class Contest extends Model
     public function enterprise()
     {
         return $this->belongsToMany(Enterprise::class, 'donors', 'contest_id', 'enterprise_id')->withTimestamps();
+    }
+
+    public function contest_users()
+    {
+        return $this->hasMany(ContestUser::class, 'contest_id');
     }
 
     public function newEloquentBuilder($query)

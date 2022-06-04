@@ -121,11 +121,16 @@ class ContestController extends Controller
     }
     public function store(Request $request)
     {
+
         $validator = Validator::make(
             $request->all(),
             [
                 'name' => 'required|max:255|unique:contests,name',
                 'max_user' => 'required|numeric',
+                'top1' => 'required|numeric',
+                'top2' => 'required|numeric',
+                'top3' => 'required|numeric',
+                'leave' => 'required|numeric',
                 'img' => 'required|mimes:jpeg,png,jpg|max:10000',
                 'date_start' => 'required|date',
                 'register_deadline' => 'required|date',
@@ -134,6 +139,15 @@ class ContestController extends Controller
                 'end_register_time' => 'required|date',
             ],
             [
+                'top1.required' => 'Chưa nhập trường này !',
+                'top1.numeric' =>  'Sai định dạng !',
+                'top2.required' => 'Chưa nhập trường này !',
+                'top2.numeric' =>  'Sai định dạng !',
+                'top3.required' => 'Chưa nhập trường này !',
+                'top3.numeric' =>  'Sai định dạng !',
+                'leave.required' => 'Chưa nhập trường này !',
+                'leave.numeric' =>  'Sai định dạng !',
+
                 'name.required' => 'Chưa nhập trường này !',
                 'max_user.required' => 'Chưa nhập trường này !',
                 'max_user.numeric' =>  'Sai định dạng !',
@@ -175,6 +189,13 @@ class ContestController extends Controller
             $contest->description = $request->description;
             $contest->major_id = $request->major_id;
             $contest->status = config('util.ACTIVE_STATUS');
+            $rewardRankPoint = json_encode(array(
+                'top1' => $request->top1,
+                'top2' => $request->top2,
+                'top3' => $request->top3,
+                'leave' => $request->leave,
+            ));
+            $contest->reward_rank_point =  $rewardRankPoint;
             $contest->save();
             DB::commit();
             return Redirect::route('admin.contest.show', ['id' => $contest->id])->with('success', 'Thêm mới thành công !');
@@ -186,6 +207,10 @@ class ContestController extends Controller
             DB::rollBack();
             return Redirect::back()->with('error', 'Thêm mới thất bại !');
         }
+
+
+
+        // dd($request->all());
     }
     public function un_status($id)
     {
@@ -244,10 +269,10 @@ class ContestController extends Controller
     {
         $major = Major::orderBy('id', 'desc')->get();
 
-        $Contest = $this->getContest($id)->first();
-        // dd($Contest);
-        if ($Contest) {
-            return view('pages.contest.edit', compact('Contest', 'major'));
+        $contest = $this->getContest($id)->first();
+        $rewardRankPoint = json_decode($contest->reward_rank_point);
+        if ($contest) {
+            return view('pages.contest.edit', compact('contest', 'major', 'rewardRankPoint'));
         } else {
             return view('error');
         }
@@ -311,6 +336,13 @@ class ContestController extends Controller
                 $img = $this->uploadFile($fileImage, $contest->img);
                 $contest->img = $img;
             }
+            $rewardRankPoint = json_encode(array(
+                'top1' => $request->top1,
+                'top2' => $request->top2,
+                'top3' => $request->top3,
+                'leave' => $request->leave,
+            ));
+            $contest->reward_rank_point =  $rewardRankPoint;
             $contest->update($request->all());
 
             Db::commit();

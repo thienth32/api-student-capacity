@@ -12,19 +12,24 @@ class ResultController extends Controller
 {
     protected function getList($id_round)
     {
-        $query = Result::where('round_id', $id_round)
-            // ->sort((request('sort') == 'desc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'results')
-            ->orderBy('point', 'desc')
-            ->orderBy('created_at', 'asc');
 
-        $query->with(['team', 'round']);
+        $query = Round::find($id_round)
+            ->teams()
+            ->with('result', function ($q) use ($id_round) {
+                return $q->where('round_id', $id_round)
+                    ->orderBy('point', 'desc')
+                    ->orderBy('created_at', 'asc');
+            })
+            ->sort((request('sort') == 'desc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'results')
+            ->search(request('q') ?? null, ['name']);
+
 
         return $query;
     }
     public function indexApi($id_round)
     {
-        $data = $this->getList($id_round)->get();
-        // dd($data->toArray());
+        $data = $this->getList($id_round)->paginate(request('limit') ?? 10);
+
         return response()->json([
             'status' => true,
             'payload' => $data
@@ -33,7 +38,8 @@ class ResultController extends Controller
     public function index($id_round)
     {
         $round = Round::find($id_round);
-        $results = $this->getList($id_round)->paginate(request('limit') ?? 10);
-        return view('pages.round.detail.result.index', compact('round', 'results'));
+        $teams = $this->getList($id_round)->paginate(request('limit') ?? 10);
+        // dd($teams);
+        return view('pages.round.detail.result.index', compact('round', 'teams'));
     }
 }

@@ -48,6 +48,15 @@ class User extends Authenticatable
         'avatar' => FormatImageGet::class,
     ];
 
+    protected $appends = [
+        'sum_point'
+    ];
+
+    public function getSumPointAttribute()
+    {
+        return $this->contest_user()->sum('reward_point');
+    }
+
     public function newEloquentBuilder($query)
     {
         return new Builder($query);
@@ -56,5 +65,10 @@ class User extends Authenticatable
     public function teams()
     {
         return $this->belongsToMany(Team::class, 'members', 'user_id', 'team_id')->with('contest');
+    }
+
+    public function contest_user()
+    {
+        return $this->hasMany(ContestUser::class, 'user_id');
     }
 }
