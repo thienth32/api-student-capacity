@@ -279,6 +279,7 @@
                                 <!--end::Svg Icon-->
                             </span>
                         </th>
+                        <th colspan="2"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -320,11 +321,15 @@
                             <td>{{ $contest->major->name ?? 'Chưa có chuyên ngành ' }}</td>
                             <td>
                                 @hasanyrole('admin|super admin')
-                                    <div class="form-check form-switch">
-                                        <input value="{{ $contest->status }}" data-id="{{ $contest->id }}"
-                                            class="form-select-status form-check-input" @checked($contest->status == 1)
-                                            type="checkbox" role="switch">
-                                    </div>
+                                    @if ($contest->status <= 1)
+                                        <div class="form-check form-switch">
+                                            <input value="{{ $contest->status }}" data-id="{{ $contest->id }}"
+                                                class="form-select-status form-check-input" @checked($contest->status == 1)
+                                                type="checkbox" role="switch">
+                                        </div>
+                                    @else
+                                        {{ 'Cuộc thi đã kết thúc ' }}
+                                    @endif
                                 @else
                                     <div class="form-check form-switch">
                                         <input value="{{ $contest->status }}" data-id="{{ $contest->id }}"

@@ -15,6 +15,7 @@ use App\Services\Traits\TResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\ContestUser;
 use App\Models\Round;
 use App\Services\Traits\TTeamContest;
 use App\Services\Traits\TUploadImage;
@@ -620,6 +621,51 @@ class ContestController extends Controller
             }
         }
         return view('pages.contest.add-mail', ['contest' => $contest, 'judges' => $judges, 'users' => array_unique($users)]);
+    }
+
+    public function register_deadline($id)
+    {
+        if (!$contest = $this->contest::find($id)) abort(404);
+        $take_exams = $contest->take_exams()->with(['teams' => function ($q) use ($contest) {
+            return $q->where('contest_id', $contest->id)->with('users');
+        }])->orderByDesc('final_point')->orderByDesc('updated_at')->get();
+        $pointAdd = json_decode($contest->reward_rank_point);
+        try {
+            DB::transaction(function () use ($contest, $pointAdd, $take_exams) {
+                foreach ($take_exams as $key => $take_exam) {
+                    if ($key == 0) {
+                        if ($take_exam->teams) $this->updateUserAddPoint($take_exam->teams->users, $contest->id, $pointAdd->top1 ?? 0);
+                    } elseif ($key == 1) {
+                        if ($take_exam->teams) $this->updateUserAddPoint($take_exam->teams->users, $contest->id, $pointAdd->top2 ?? 0);
+                    } elseif ($key == 2) {
+                        if ($take_exam->teams) $this->updateUserAddPoint($take_exam->teams->users, $contest->id, $pointAdd->top3 ?? 0);
+                    } else {
+                        if ($take_exam->teams) $this->updateUserAddPoint($take_exam->teams->users, $contest->id, $pointAdd->leave ?? 0);
+                    }
+                }
+                $contest->update([
+                    'status' => 2,
+                ]);
+            });
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            return abort(404);
+        }
+    }
+
+    private function updateUserAddPoint($users, $id, $point)
+    {
+        foreach ($users as $user) {
+            if (!$contestUser = ContestUser::where('contest_id', $id)
+                ->where('user_id', $user->id)
+                ->first()) $contestUser = ContestUser::create([
+                'contest_id' => $id,
+                'user_id' => $user->id,
+                'reward_point' => 0
+            ]);
+            $contestUser->reward_point = $contestUser->reward_point + $point;
+            $contestUser->save();
+        };
     }
 }
 

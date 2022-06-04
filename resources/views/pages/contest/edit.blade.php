@@ -101,29 +101,29 @@
                         <div class="col-3">
                             <div class="form-group mt-4 ">
                                 <label for="" class="form-label">Top 1</label>
-                                <input value="{{ old('top1', $rewardRankPoint->top1) }}" name="top1" type='number'
-                                    class="form-control" />
+                                <input value="{{ old('top1', $rewardRankPoint->top1 ?? null) }}" name="top1"
+                                    type='number' class="form-control" />
                             </div>
                         </div>
                         <div class="col-3">
                             <div class="form-group mt-4 ">
                                 <label for="" class="form-label">Top 2</label>
-                                <input value="{{ old('top2', $rewardRankPoint->top2) }}" name="top2" type='number'
-                                    class="form-control" />
+                                <input value="{{ old('top2', $rewardRankPoint->top2 ?? null) }}" name="top2"
+                                    type='number' class="form-control" />
                             </div>
                         </div>
                         <div class="col-3">
                             <div class="form-group mt-4 ">
                                 <label for="" class="form-label">Top 3</label>
-                                <input value="{{ old('top3', $rewardRankPoint->top3) }}" name="top3" type='number'
-                                    class="form-control" />
+                                <input value="{{ old('top3', $rewardRankPoint->top3 ?? null) }}" name="top3"
+                                    type='number' class="form-control" />
                             </div>
                         </div>
                         <div class="col-3">
                             <div class="form-group mt-4 ">
                                 <label for="" class="form-label">Còn lại</label>
-                                <input value="{{ old('leave', $rewardRankPoint->leave) }}" name="leave" type='number'
-                                    class="form-control" />
+                                <input value="{{ old('leave', $rewardRankPoint->leave ?? null) }}" name="leave"
+                                    type='number' class="form-control" />
                             </div>
                         </div>
 
