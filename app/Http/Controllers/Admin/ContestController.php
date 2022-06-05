@@ -291,7 +291,6 @@ class ContestController extends Controller
                 'register_deadline' => "required|after:date_start",
                 'description' => "required",
                 'major_id' => "required",
-                'status' => "required",
                 'start_register_time' => 'required|date|before:end_register_time',
                 'end_register_time' => 'required|date|after:start_register_time',
             ],
@@ -308,7 +307,6 @@ class ContestController extends Controller
                 "register_deadline.after" => "Tường thời gian kết thúc không nhỏ hơn trường bắt đầu  !",
                 "description.required" => "Tường mô tả không bỏ trống !",
                 "major_id.required" => "Tường cuộc thi tồn tại !",
-                "status.required" => "Tường trạng thái không bỏ trống",
 
                 'end_register_time.required' => 'Chưa nhập trường này !',
                 'end_register_time.date' => 'Sai định dạng !',

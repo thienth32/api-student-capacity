@@ -1,32 +1,31 @@
 const pageCkeditor = {
-    classicCk: function () {
+    classicCk: function() {
         ClassicEditor.create(
-            document.querySelector("#kt_docs_ckeditor_classic"),
-            {
-                toolbar: [
-                    "heading",
-                    "undo",
-                    "redo",
-                    "bold",
-                    "italic",
-                    "blockQuote",
-                    "ckfinder",
-                    "imageTextAlternative",
-                    "imageUpload",
-                    "heading",
-                    "imageStyle:full",
-                    "imageStyle:side",
-                    "link",
-                    "numberedList",
-                    "bulletedList",
-                    "mediaEmbed",
-                    "insertTable",
-                    "tableColumn",
-                    "tableRow",
-                    "mergeTableCells",
-                ],
-            }
-        )
+                document.querySelector("#kt_docs_ckeditor_classic"), {
+                    toolbar: [
+                        "heading",
+                        "undo",
+                        "redo",
+                        "bold",
+                        "italic",
+                        "blockQuote",
+                        "ckfinder",
+                        "imageTextAlternative",
+                        // "imageUpload",
+                        "heading",
+                        "imageStyle:full",
+                        "imageStyle:side",
+                        "link",
+                        "numberedList",
+                        "bulletedList",
+                        "mediaEmbed",
+                        "insertTable",
+                        "tableColumn",
+                        "tableRow",
+                        "mergeTableCells",
+                    ],
+                }
+            )
             .then((editor) => {
                 console.log(editor);
             })

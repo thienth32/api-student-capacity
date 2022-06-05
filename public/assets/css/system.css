@@ -67,3 +67,7 @@ label#img-error {
         transform: rotate(360deg);
     }
 }
+
+figure.image img {
+    width: 100% !important;
+}

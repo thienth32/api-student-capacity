@@ -137,16 +137,16 @@
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
                     </div>
-                    <div class="form-group mb-10">
+                    {{-- <div class="form-group mb-10">
                         <label class="form-label" for="">Trạng thái cuộc thi</label>
                         <select class="form-control" name="status" id="">
                             <option @selected($contest->status == 0) value="0"> Đóng Cuộc thi </option>
                             <option @selected($contest->status == 1) value="1"> Mở đang Mở </option>
                         </select>
-                    </div>
-                    @error('status')
+                    </div> --}}
+                    {{-- @error('status')
                         <p class="text-danger">{{ $message }}</p>
-                    @enderror
+                    @enderror --}}
                     <div class="form-group mb-10 ">
                         <button type="submit" name="" id="" class="btn btn-success btn-lg btn-block">Lưu </button>
                     </div>

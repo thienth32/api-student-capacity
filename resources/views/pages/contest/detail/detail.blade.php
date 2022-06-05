@@ -140,7 +140,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h2 class="my-6">Mô tả cuộc thi</h2>
-                        <div class=" fs-3 pb-5">
+                        <div style="width:100%" class=" fs-3 pb-5">
                             {!! $contest->description !!}
                         </div>
                     </div>
