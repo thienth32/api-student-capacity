@@ -10,10 +10,14 @@
                         <li class="breadcrumb-item pe-3">
                             <a href="{{ route('admin.contest.list') }}" class="pe-3">Cuộc thi </a>
                         </li>
-
+                        <li class="breadcrumb-item px-3 ">
+                            <a href="{{ route('admin.contest.show', ['id' => $roundDeltai->contest->id]) }}"
+                                class="pe-3">
+                                {{ $roundDeltai->contest->name }}
+                            </a>
+                        </li>
                         <li class="breadcrumb-item pe-3">
-                            <a href="{{ route('admin.contest.detail.round', ['id' => $round->contest_id]) }}"
-                                class="pe-3">Vòng thi </a>
+                            Vòng thi
                         </li>
                         <li class="breadcrumb-item px-3 text-muted">
                             <a href="{{ route('admin.round.detail', ['id' => $roundDeltai->id]) }}">
