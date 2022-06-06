@@ -279,6 +279,7 @@
                                 <!--end::Svg Icon-->
                             </span>
                         </th>
+                        <th colspan="2"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -320,11 +321,15 @@
                             <td>{{ $contest->major->name ?? 'Chưa có chuyên ngành ' }}</td>
                             <td>
                                 @hasanyrole('admin|super admin')
-                                    <div class="form-check form-switch">
-                                        <input value="{{ $contest->status }}" data-id="{{ $contest->id }}"
-                                            class="form-select-status form-check-input" @checked($contest->status == 1)
-                                            type="checkbox" role="switch">
-                                    </div>
+                                    @if ($contest->status <= 1)
+                                        <div class="form-check form-switch">
+                                            <input value="{{ $contest->status }}" data-id="{{ $contest->id }}"
+                                                class="form-select-status form-check-input" @checked($contest->status == 1)
+                                                type="checkbox" role="switch">
+                                        </div>
+                                    @else
+                                        {{ config('util.CONTEST_STATUS_2') }}
+                                    @endif
                                 @else
                                     <div class="form-check form-switch">
                                         <input value="{{ $contest->status }}" data-id="{{ $contest->id }}"
@@ -335,17 +340,22 @@
 
                             </td>
                             <td>
-                                @if (\Carbon\Carbon::parse($contest->start_register_time)->toDateTimeString() > \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
-                                    <span class="badge bg-primary">Sắp diễn ra </span>
-                                @elseif (\Carbon\Carbon::parse($contest->end_register_time)->toDateTimeString() > \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
-                                    <span class="badge bg-success">Đang mở đăng kí </span>
-                                @elseif (\Carbon\Carbon::parse($contest->date_start)->toDateTimeString() > \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
-                                    <span class="badge bg-danger">Đã đóng đăng kí </span>
-                                @elseif (\Carbon\Carbon::parse($contest->register_deadline)->toDateTimeString() > \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
-                                    <span class="badge bg-success">Đang diễn ra </span>
+                                @if ($contest->status <= 1)
+                                    @if (\Carbon\Carbon::parse($contest->start_register_time)->toDateTimeString() > \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
+                                        <span class="badge bg-primary">Sắp diễn ra </span>
+                                    @elseif (\Carbon\Carbon::parse($contest->end_register_time)->toDateTimeString() > \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
+                                        <span class="badge bg-success">Đang mở đăng kí </span>
+                                    @elseif (\Carbon\Carbon::parse($contest->date_start)->toDateTimeString() > \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
+                                        <span class="badge bg-danger">Đã đóng đăng kí </span>
+                                    @elseif (\Carbon\Carbon::parse($contest->register_deadline)->toDateTimeString() > \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
+                                        <span class="badge bg-success">Đang diễn ra </span>
+                                    @else
+                                        <span class="badge bg-danger"> Đã diễn ra </span>
+                                    @endif
                                 @else
                                     <span class="badge bg-danger"> Đã diễn ra </span>
                                 @endif
+
                             </td>
                             <td>{{ $contest->date_start }}</td>
                             <td>{{ $contest->register_deadline }}</td>

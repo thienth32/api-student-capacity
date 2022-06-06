@@ -70,3 +70,7 @@ Route::prefix('contest/round/{id_round}/result')->group(function () {
 });
 
 Route::get('rating-major/{slug}', [RankUserController::class, 'getRatingUser']);
+
+Route::post('upload-file', function () {
+    return "https://htmlcolorcodes.com/assets/images/html-color-codes-color-palette-generators.jpg";
+});

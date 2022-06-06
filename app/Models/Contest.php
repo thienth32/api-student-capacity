@@ -14,6 +14,8 @@ class Contest extends Model
 {
     use SoftDeletes;
     use HasFactory, TGetAttributeColumn;
+    use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
+
     protected $table = 'contests';
     protected $casts = [
         'created_at' => FormatDate::class,
@@ -43,7 +45,8 @@ class Contest extends Model
         'status',
         'start_register_time',
         'end_register_time',
-        'max_user'
+        'max_user',
+        'reward_rank_point'
     ];
     public function teams()
     {
@@ -70,6 +73,20 @@ class Contest extends Model
     public function contest_users()
     {
         return $this->hasMany(ContestUser::class, 'contest_id');
+    }
+
+
+    public function take_exams()
+    {
+        return $this->hasManyDeep(
+            TakeExams::class,
+            [Round::class, Exams::class],
+            [
+                'contest_id',
+                'round_id',
+                'exam_id',
+            ]
+        );
     }
 
     public function newEloquentBuilder($query)
