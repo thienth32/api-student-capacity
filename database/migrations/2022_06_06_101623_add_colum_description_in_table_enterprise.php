@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('type_exams', function (Blueprint $table) {
-        $table->dropColumn('abc');
+        Schema::table('enterprises', function (Blueprint $table) {
+            $table->longText('description')->nullable();
         });
     }
 
@@ -25,8 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('type_exams', function (Blueprint $table) {
-          $table->string('abc');
+        Schema::table('enterprises', function (Blueprint $table) {
+            $table->dropColumn('description');
         });
     }
 };
