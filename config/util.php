@@ -19,4 +19,5 @@ return [
     "CONTEST_STATUS_DONE" => 3,
     "ROLE_DELETE" => "super admin",
     "ROLE_ADMINS" => 'admin|super admin',
+    "CONTEST_STATUS_2" => "Cuộc thi đã kết thúc",
 ];

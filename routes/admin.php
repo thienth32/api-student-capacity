@@ -159,6 +159,7 @@ Route::prefix('contests')->group(function () {
         'middleware' => 'role_admin'
     ], function () {
         Route::get('form-add', [ContestController::class, 'create'])->name('admin.contest.create');
+        Route::get('register-deadline/{id}', [ContestController::class, 'register_deadline'])->name('contest.register.deadline');
         Route::post('send-mail/{id}', [SendMailController::class, 'sendMailContestUser'])->name('contest.send.mail.pass');
         // Send mail method Get
         Route::get('{id}/form-send-mail', [ContestController::class, 'sendMail'])->name('admin.contest.send.mail');

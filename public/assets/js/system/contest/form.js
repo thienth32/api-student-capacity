@@ -30,8 +30,41 @@ const rules = {
     end_register_time: {
         required: true,
     },
+
+    top1: {
+        required: true,
+        number: true
+    },
+    top2: {
+        required: true,
+        number: true
+    },
+    top3: {
+        required: true,
+        number: true
+    },
+    leave: {
+        required: true,
+        number: true
+    },
 };
 const messages = {
+    top1: {
+        required: "Chưa nhập trường này !",
+        number: 'Sai định dạng !!'
+    },
+    top2: {
+        required: "Chưa nhập trường này !",
+        number: 'Sai định dạng !!'
+    },
+    top3: {
+        required: "Chưa nhập trường này !",
+        number: 'Sai định dạng !!'
+    },
+    leave: {
+        required: "Chưa nhập trường này !",
+        number: 'Sai định dạng !!'
+    },
     max_user: {
         required: "Chưa nhập trường này !",
         number: 'Sai định dạng !!'

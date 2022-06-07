@@ -19,6 +19,7 @@ class TakeExamController extends Controller
     use TUploadImage;
     public function takeExamStudent(Request $request)
     {
+
         $checkUserTeam = false;
         $team_id = 0;
         $user_id = auth('sanctum')->user()->id;
@@ -35,17 +36,22 @@ class TakeExamController extends Controller
             'status' => false,
             'payload' => $validate->errors()
         ]);
+
         $round = Round::find($request->round_id)->load('teams');
+        // dd($round->toArray());
         DB::beginTransaction();
         try {
             foreach ($round->teams as $team) {
-                foreach ($team->users as $user) {
-                    if ($user->id == $user_id) {
-                        $checkUserTeam = true;
-                        $team_id = $team->id;
+                if ($team->users) {
+                    foreach ($team->users as $user) {
+                        if ($user->id == $user_id) {
+                            $checkUserTeam = true;
+                            $team_id = $team->id;
+                        }
                     }
                 }
             }
+
             if ($checkUserTeam == false)
                 return response()->json([
                     'status' => false,
@@ -54,28 +60,31 @@ class TakeExamController extends Controller
             $teamRound = RoundTeam::where('team_id', $team_id)
                 ->where('round_id', $request->round_id)
                 ->first();
+
             if (is_null($teamRound)) return response()->json([
                 'status' => false,
-                'payload' => 'Đội thi của bạn chưa được phê duyệt để được vào vòng thi !!'
+                'payload' => 'Đội thi của bạn đang chờ phê duyệt !!'
             ]);
             $takeExamCheck = TakeExams::where('round_team_id', $teamRound->id)->first();
-            // dd($takeExamCheck);
+
             if (is_null($takeExamCheck)) {
+                if (count(Exams::all()) == 0) return response()->json([
+                    'status' => false,
+                    'payload' => "Đề thi chưa cập nhập !!"
+                ]);
                 $exams = Exams::all()->random()->id;
                 if (is_null($exams)) return response()->json([
                     'status' => false,
                     'payload' => "Đề thi chưa cập nhập !!"
                 ]);
-                $takeExamModel = TakeExams::create([
-                    'exam_id' => $exams,
-                    'round_team_id' => $teamRound->id,
-                    'status' => config('util.TAKE_EXAM_STATUS_UNFINISHED')
-                ]);
+                $takeExamModel = new TakeExams();
+                $takeExamModel->exam_id = $exams;
+                $takeExamModel->round_team_id = $teamRound->id;
+                $takeExamModel->status = config('util.TAKE_EXAM_STATUS_UNFINISHED');
+                $takeExamModel->save();
                 DB::commit();
                 $takeExam = TakeExams::find($takeExamModel->id);
-                // dd($takeExam);
                 if (Storage::disk('s3')->has($takeExam->exam->external_url)) {
-                    # code...
                     $urlExam = Storage::disk('s3')->temporaryUrl($takeExam->exam->external_url, now()->addMinutes(5));
                 } else {
                     $urlExam = $takeExam->exam->external_url;
@@ -87,7 +96,6 @@ class TakeExamController extends Controller
                 ]);
             }
             if (Storage::disk('s3')->has($takeExamCheck->exam->external_url)) {
-                # code...
                 $urlExam = Storage::disk('s3')->temporaryUrl($takeExamCheck->exam->external_url, now()->addMinutes(5));
             } else {
                 $urlExam = $takeExamCheck->exam->external_url;
@@ -102,7 +110,10 @@ class TakeExamController extends Controller
             Log::info('..--..');
             Log::info($th->getMessage());
             Log::info('..--..');
-            dd($th);
+            return response()->json([
+                'status' => false,
+                'payload' => "Đang lỗi !!"
+            ]);
         }
     }
     public function takeExamStudentSubmit(Request $request)

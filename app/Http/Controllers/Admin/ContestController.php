@@ -15,6 +15,7 @@ use App\Services\Traits\TResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\ContestUser;
 use App\Models\Round;
 use App\Services\Traits\TTeamContest;
 use App\Services\Traits\TUploadImage;
@@ -121,11 +122,16 @@ class ContestController extends Controller
     }
     public function store(Request $request)
     {
+
         $validator = Validator::make(
             $request->all(),
             [
                 'name' => 'required|max:255|unique:contests,name',
                 'max_user' => 'required|numeric',
+                'top1' => 'required|numeric',
+                'top2' => 'required|numeric',
+                'top3' => 'required|numeric',
+                'leave' => 'required|numeric',
                 'img' => 'required|mimes:jpeg,png,jpg|max:10000',
                 'date_start' => 'required|date',
                 'register_deadline' => 'required|date',
@@ -134,6 +140,15 @@ class ContestController extends Controller
                 'end_register_time' => 'required|date',
             ],
             [
+                'top1.required' => 'Chưa nhập trường này !',
+                'top1.numeric' =>  'Sai định dạng !',
+                'top2.required' => 'Chưa nhập trường này !',
+                'top2.numeric' =>  'Sai định dạng !',
+                'top3.required' => 'Chưa nhập trường này !',
+                'top3.numeric' =>  'Sai định dạng !',
+                'leave.required' => 'Chưa nhập trường này !',
+                'leave.numeric' =>  'Sai định dạng !',
+
                 'name.required' => 'Chưa nhập trường này !',
                 'max_user.required' => 'Chưa nhập trường này !',
                 'max_user.numeric' =>  'Sai định dạng !',
@@ -175,6 +190,13 @@ class ContestController extends Controller
             $contest->description = $request->description;
             $contest->major_id = $request->major_id;
             $contest->status = config('util.ACTIVE_STATUS');
+            $rewardRankPoint = json_encode(array(
+                'top1' => $request->top1,
+                'top2' => $request->top2,
+                'top3' => $request->top3,
+                'leave' => $request->leave,
+            ));
+            $contest->reward_rank_point =  $rewardRankPoint;
             $contest->save();
             DB::commit();
             return Redirect::route('admin.contest.show', ['id' => $contest->id])->with('success', 'Thêm mới thành công !');
@@ -186,6 +208,10 @@ class ContestController extends Controller
             DB::rollBack();
             return Redirect::back()->with('error', 'Thêm mới thất bại !');
         }
+
+
+
+        // dd($request->all());
     }
     public function un_status($id)
     {
@@ -244,10 +270,10 @@ class ContestController extends Controller
     {
         $major = Major::orderBy('id', 'desc')->get();
 
-        $Contest = $this->getContest($id)->first();
-        // dd($Contest);
-        if ($Contest) {
-            return view('pages.contest.edit', compact('Contest', 'major'));
+        $contest = $this->getContest($id)->first();
+        $rewardRankPoint = json_decode($contest->reward_rank_point);
+        if ($contest) {
+            return view('pages.contest.edit', compact('contest', 'major', 'rewardRankPoint'));
         } else {
             return view('error');
         }
@@ -265,7 +291,6 @@ class ContestController extends Controller
                 'register_deadline' => "required|after:date_start",
                 'description' => "required",
                 'major_id' => "required",
-                'status' => "required",
                 'start_register_time' => 'required|date|before:end_register_time',
                 'end_register_time' => 'required|date|after:start_register_time',
             ],
@@ -282,7 +307,6 @@ class ContestController extends Controller
                 "register_deadline.after" => "Tường thời gian kết thúc không nhỏ hơn trường bắt đầu  !",
                 "description.required" => "Tường mô tả không bỏ trống !",
                 "major_id.required" => "Tường cuộc thi tồn tại !",
-                "status.required" => "Tường trạng thái không bỏ trống",
 
                 'end_register_time.required' => 'Chưa nhập trường này !',
                 'end_register_time.date' => 'Sai định dạng !',
@@ -311,6 +335,13 @@ class ContestController extends Controller
                 $img = $this->uploadFile($fileImage, $contest->img);
                 $contest->img = $img;
             }
+            $rewardRankPoint = json_encode(array(
+                'top1' => $request->top1,
+                'top2' => $request->top2,
+                'top3' => $request->top3,
+                'leave' => $request->leave,
+            ));
+            $contest->reward_rank_point =  $rewardRankPoint;
             $contest->update($request->all());
 
             Db::commit();
@@ -588,6 +619,51 @@ class ContestController extends Controller
             }
         }
         return view('pages.contest.add-mail', ['contest' => $contest, 'judges' => $judges, 'users' => array_unique($users)]);
+    }
+
+    public function register_deadline($id)
+    {
+        if (!$contest = $this->contest::find($id)) abort(404);
+        $take_exams = $contest->take_exams()->with(['teams' => function ($q) use ($contest) {
+            return $q->where('contest_id', $contest->id)->with('users');
+        }])->orderByDesc('final_point')->orderByDesc('updated_at')->get();
+        $pointAdd = json_decode($contest->reward_rank_point);
+        try {
+            DB::transaction(function () use ($contest, $pointAdd, $take_exams) {
+                foreach ($take_exams as $key => $take_exam) {
+                    if ($key == 0) {
+                        if ($take_exam->teams) $this->updateUserAddPoint($take_exam->teams->users, $contest->id, $pointAdd->top1 ?? 0);
+                    } elseif ($key == 1) {
+                        if ($take_exam->teams) $this->updateUserAddPoint($take_exam->teams->users, $contest->id, $pointAdd->top2 ?? 0);
+                    } elseif ($key == 2) {
+                        if ($take_exam->teams) $this->updateUserAddPoint($take_exam->teams->users, $contest->id, $pointAdd->top3 ?? 0);
+                    } else {
+                        if ($take_exam->teams) $this->updateUserAddPoint($take_exam->teams->users, $contest->id, $pointAdd->leave ?? 0);
+                    }
+                }
+                $contest->update([
+                    'status' => 2,
+                ]);
+            });
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            return abort(404);
+        }
+    }
+
+    private function updateUserAddPoint($users, $id, $point)
+    {
+        foreach ($users as $user) {
+            if (!$contestUser = ContestUser::where('contest_id', $id)
+                ->where('user_id', $user->id)
+                ->first()) $contestUser = ContestUser::create([
+                'contest_id' => $id,
+                'user_id' => $user->id,
+                'reward_point' => 0
+            ]);
+            $contestUser->reward_point = $contestUser->reward_point + $point;
+            $contestUser->save();
+        };
     }
 }
 

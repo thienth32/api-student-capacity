@@ -99,10 +99,30 @@
                                             <button type="button" class="btn btn-primary">
                                                 Kích hoạt
                                             </button>
+                                        @elseif ($contest->status == 2)
+                                            <button type="button" class="btn btn-primary">
+                                                Đã kết thúc
+                                            </button>
                                         @else
                                             <button type="button" class="btn btn-danger">
                                                 Không kích hoạt
                                             </button>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fs-4 text-white mt-5">
+                            <div class="opacity-75">
+                                <hr>
+                                <div class="row">
+                                    <div class="col-12 text-center">
+                                        @if ($contest->status == 1 && strtotime($contest->register_deadline) > strtotime(now()))
+                                            <a style="background-color: red !important" type="button"
+                                                href="{{ route('contest.register.deadline', ['id' => $contest->id]) }}"
+                                                class="btn btn-primary">
+                                                Kết thúc cuộc thi
+                                            </a>
                                         @endif
                                     </div>
                                 </div>
@@ -120,7 +140,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h2 class="my-6">Mô tả cuộc thi</h2>
-                        <div class=" fs-3 pb-5">
+                        <div style="width:100%" class=" fs-3 pb-5">
                             {!! $contest->description !!}
                         </div>
                     </div>

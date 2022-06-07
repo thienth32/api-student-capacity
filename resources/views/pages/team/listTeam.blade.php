@@ -276,7 +276,6 @@
                                 @endif
                                 </th>
                                 <td>
-
                                     <button class="p-3" style="border:none;background:none; text-align: left;"
                                         type="button" data-bs-toggle="modal"
                                         data-bs-target="#deltai_team_{{ $key->id }}">
@@ -298,7 +297,7 @@
                                                     <div class="row">
                                                         <div class="col md-6">
                                                             <img style="width:200px;height:200px"
-                                                                src="{{ Storage::disk('s3')->has($key->image) ? Storage::disk('s3')->temporaryUrl($key->image, now()->addMinutes(5)) : 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
+                                                                src="{{ $key->image ? $key->image : 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
                                                                 alt="">
                                                             <h4 class="mt-3">Ngày tạo : {{ $key->created_at }}
                                                             </h4>

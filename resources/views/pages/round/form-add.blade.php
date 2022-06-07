@@ -80,7 +80,7 @@
                             </div>
                             <div class="col-4">
                                 <div class="form-group ">
-                                    <label for="" class="form-label">Ảnh cuộc thi</label>
+                                    <label for="" class="form-label">Ảnh vòng thi</label>
                                     <input name="image" type='file' id="file-input" accept=".png, .jpg, .jpeg"
                                         class="form-control" />
                                     <img class="w-100 mt-4 border rounded-3" id="image-preview"
@@ -94,8 +94,9 @@
                     </div>
 
                     <div class="form-group mb-10">
-                        <label class="form-label" for="">Mô tả cuộc thi</label>
-                        <textarea class="form-control" name="description" id="" rows="3">{{ old('description') }}</textarea>
+                        <label class="form-label" for="">Mô tả vòng thi</label>
+                        <textarea class="form-control" name="description" id="kt_docs_ckeditor_classic"
+                            rows="3">{{ old('description') }}</textarea>
                         @error('description')
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
@@ -113,6 +114,11 @@
 @endsection
 
 @section('page-script')
+    <script src="assets/plugins/custom/tinymce/tinymce.bundle.js"></script>
+    <script src="assets/plugins/custom/ckeditor/ckeditor-classic.bundle.js"></script>
+    <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
+    <script src="assets/js/system/ckeditor/ckeditor.js"></script>
+
     <script src="assets/js/system/preview-file/previewImg.js"></script>
     <script src="assets/js/system/date-after/date-after.js"></script>
     <script src="assets/js/system/round/form.js"></script>
