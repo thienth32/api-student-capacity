@@ -11,7 +11,15 @@ class TakeExams extends Model
     use SoftDeletes;
     use \Znck\Eloquent\Traits\BelongsToThrough;
     protected $table = 'take_exams';
-    protected $fillable = ['exam_id', 'round_team_id', 'mark_comment', 'final_point', 'result_url', 'file_url', 'status'];
+    protected $fillable = [
+        'exam_id',
+        'round_team_id',
+        'mark_comment',
+        'final_point',
+        'result_url',
+        'file_url',
+        'status'
+    ];
     use HasFactory;
     public function exam()
     {

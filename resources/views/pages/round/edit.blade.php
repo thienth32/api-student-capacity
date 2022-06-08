@@ -80,7 +80,7 @@
                             </div>
                             <div class="col-4">
                                 <div class="form-group ">
-                                    <label for="" class="form-label">Ảnh cuộc thi</label>
+                                    <label for="" class="form-label">Ảnh vòng thi</label>
                                     <input value="{{ old('image') }}" name="image" type='file' id="file-input"
                                         class="form-control" accept=".png, .jpg, .jpeg" />
                                     @error('image')

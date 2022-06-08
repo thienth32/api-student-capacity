@@ -81,7 +81,7 @@
                             </div>
                             <div class="col-4">
                                 <div class="form-group ">
-                                    <label for="" class="form-label">Ảnh cuộc thi</label>
+                                    <label for="" class="form-label">Ảnh vòng thi</label>
                                     <input name="image" type='file' id="file-input" accept=".png, .jpg, .jpeg"
                                         class="form-control" />
                                     <img class="w-100 mt-4 border rounded-3" id="image-preview"
@@ -95,7 +95,7 @@
                     </div>
 
                     <div class="form-group mb-10">
-                        <label class="form-label" for="">Mô tả cuộc thi</label>
+                        <label class="form-label" for="">Mô tả vòng thi</label>
                         <textarea class="form-control" name="description" id="kt_docs_ckeditor_classic" rows="3">{{ old('description') }}</textarea>
                         @error('description')
                             <p class="text-danger">{{ $message }}</p>
