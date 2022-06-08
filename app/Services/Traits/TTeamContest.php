@@ -11,8 +11,10 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
+
 trait TTeamContest
 {
+
     use TCheckUserDrugTeam;
     function addTeamContest($request, $contest_id = null, $backViewSuccess, $backViewFailure)
     {
@@ -76,7 +78,9 @@ trait TTeamContest
             $team = new Team();
             if ($request->has('image')) {
                 $fileImage =  $request->file('image');
+                // dd($this->uploadFile($fileImage));
                 $image = $this->uploadFile($fileImage);
+
                 $team->image = $image;
             }
             $team->name = $request->name;
@@ -89,7 +93,7 @@ trait TTeamContest
             Db::rollBack();
             if ($request->hasFile('image')) {
                 $fileImage = $request->file('image');
-                if (Storage::disk('s3')->has($fileImage)) Storage::disk('s3')->delete($filename);
+                if (Storage::disk('s3')->has($fileImage)) Storage::disk('s3')->delete($fileImage);
             }
             return $backViewFailure;
         }
@@ -159,7 +163,7 @@ trait TTeamContest
         } catch (Exception $ex) {
             if ($request->hasFile('image')) {
                 $fileImage = $request->file('image');
-                if (Storage::disk('s3')->has($fileImage)) Storage::disk('s3')->delete($filename);
+                if (Storage::disk('s3')->has($fileImage)) Storage::disk('s3')->delete($fileImage);
             }
             Db::rollBack();
             return $backViewFailure;

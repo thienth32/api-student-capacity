@@ -13,6 +13,7 @@
                     <div class="form-group mb-10">
                         <label class="form-label" for="">Tên vòng thi</label>
                         <input type="text" name="name" value="{{ old('name') }}" class=" form-control" placeholder="">
+
                         @error('name')
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
@@ -95,8 +96,7 @@
 
                     <div class="form-group mb-10">
                         <label class="form-label" for="">Mô tả cuộc thi</label>
-                        <textarea class="form-control" name="description" id="kt_docs_ckeditor_classic"
-                            rows="3">{{ old('description') }}</textarea>
+                        <textarea class="form-control" name="description" id="kt_docs_ckeditor_classic" rows="3">{{ old('description') }}</textarea>
                         @error('description')
                             <p class="text-danger">{{ $message }}</p>
                         @enderror

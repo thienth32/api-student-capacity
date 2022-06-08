@@ -218,7 +218,7 @@
                                             <th>#</th>
                                             <th>Tên đội</th>
                                             <th>Bài làm</th>
-                                            @hasanyrole(config('util.ROLE_ADMINS').'|judge')
+                                            @hasanyrole(config('util.ROLE_ADMINS') . '|judge')
                                                 <th>
                                                     Chấm bài
                                                 </th>
@@ -244,7 +244,7 @@
                                                         class="badge bg-primary p-3"> Xem thêm.
                                                     </a>
                                                 </td>
-                                                @hasanyrole(config('util.ROLE_ADMINS').'|judge')
+                                                @hasanyrole(config('util.ROLE_ADMINS') . '|judge')
                                                     <td>
                                                         <a class="badge bg-primary p-3"
                                                             href="{{ route('admin.round.detail.team.make.exam', ['id' => $round->id, 'teamId' => $team->id]) }}">Chấm
