@@ -2,11 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Round;
-use App\Services\Traits\TResponse;
-use App\Services\Traits\TUploadImage;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Models\Contest;
 use App\Models\Donor;
@@ -15,16 +10,21 @@ use App\Models\Enterprise;
 use App\Models\Evaluation;
 use App\Models\HistoryPoints;
 use App\Models\Judge;
+use App\Models\Round;
 use App\Models\RoundTeam;
 use App\Models\TakeExams;
 use App\Models\Team;
 use App\Models\TypeExam;
+use App\Services\Traits\TResponse;
+use App\Services\Traits\TUploadImage;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
-use Image;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Image;
 
 class RoundController extends Controller
 {
@@ -82,7 +82,7 @@ class RoundController extends Controller
                 ]);
 
             return $data;
-        } catch (\Throwable $th) {
+        } catch (\Throwable$th) {
             return false;
         }
     }
@@ -90,7 +90,9 @@ class RoundController extends Controller
     //  View round
     public function index()
     {
-        if (!($rounds = $this->getList())) return view('not_found');
+        if (!($rounds = $this->getList())) {
+            return view('not_found');
+        }
 
         $rounds = $this->getList();
         return view('pages.round.index', [
@@ -104,13 +106,15 @@ class RoundController extends Controller
     public function apiIndex()
     {
 
-        if (!($data = $this->getList())) return $this->responseApi(
-            [
-                "status" => false,
-                "payload" => "Server not found",
-            ],
-            404
-        );
+        if (!($data = $this->getList())) {
+            return $this->responseApi(
+                [
+                    "status" => false,
+                    "payload" => "Server not found",
+                ],
+                404
+            );
+        }
 
         return $this->responseApi(
             [
@@ -123,7 +127,6 @@ class RoundController extends Controller
     /**
      *  End list round
      */
-
 
     /**
      *  Store round
@@ -167,7 +170,10 @@ class RoundController extends Controller
             ]
         );
 
-        if ($validator->fails())  redirect()->back()->withErrors($validator)->withInput();
+        if ($validator->fails()) {
+            redirect()->back()->withErrors($validator)->withInput();
+        }
+
         $contest = $this->contest::find($request->contest_id ?? 0);
         if (Carbon::parse($request->start_time)->toDateTimeString() < Carbon::parse($contest->date_start)->toDateTimeString()) {
             return redirect()->back()->withErrors(['start_time' => 'Thời gian bắt đầu không được bé hơn thời gian bắt đầu của cuộc thi !'])->withInput();
@@ -196,7 +202,10 @@ class RoundController extends Controller
         } catch (Exception $ex) {
             if ($request->hasFile('image')) {
                 $fileImage = $request->file('image');
-                if (Storage::disk('s3')->has($filename)) Storage::disk('s3')->delete($filename);
+                if (Storage::disk('s3')->has($filename)) {
+                    Storage::disk('s3')->delete($filename);
+                }
+
             }
             Db::rollBack();
             return Redirect::back()->with(['error' => 'Thêm mới thất bại !']);
@@ -205,8 +214,6 @@ class RoundController extends Controller
     /**
      *  End store round
      */
-
-
 
     /**
      *  Edit
@@ -220,7 +227,7 @@ class RoundController extends Controller
                 'contests' => $this->contest::all(),
                 'type_exams' => $this->type_exam::all(),
             ]);
-        } catch (\Throwable $th) {
+        } catch (\Throwable$th) {
             return view('error');
         }
     }
@@ -237,7 +244,10 @@ class RoundController extends Controller
     {
         try {
             // dd(request()->all());
-            if (!($round = $this->round::find($id))) return false;
+            if (!($round = $this->round::find($id))) {
+                return false;
+            }
+
             $validator = Validator::make(
                 request()->all(),
                 [
@@ -265,10 +275,13 @@ class RoundController extends Controller
                 ]
             );
 
-            if ($validator->fails()) return [
-                'status' => false,
-                'errors' => $validator,
-            ];
+            if ($validator->fails()) {
+                return [
+                    'status' => false,
+                    'errors' => $validator,
+                ];
+            }
+
             $contest = $this->contest::find(request()->contest_id ?? 0);
             if (Carbon::parse(request()->start_time)->toDateTimeString() < Carbon::parse($contest->date_start)->toDateTimeString()) {
                 return [
@@ -285,10 +298,10 @@ class RoundController extends Controller
             $data = null;
             if (request()->has('image')) {
 
-                $validator  =  Validator::make(
+                $validator = Validator::make(
                     request()->all(),
                     [
-                        'image' => 'file|mimes:jpeg,jpg,png|max:10000'
+                        'image' => 'file|mimes:jpeg,jpg,png|max:10000',
                     ],
                     [
                         'image.max' => 'Ảnh không quá 10000 kb  !',
@@ -296,20 +309,23 @@ class RoundController extends Controller
                     ]
                 );
 
-                if ($validator->fails()) return [
-                    'status' => false,
-                    'errors' => $validator,
-                ];
+                if ($validator->fails()) {
+                    return [
+                        'status' => false,
+                        'errors' => $validator,
+                    ];
+                }
+
                 $nameFile = $this->uploadFile(request()->image, $round->image);
                 $data = array_merge(request()->except('image'), [
-                    'image' => $nameFile
+                    'image' => $nameFile,
                 ]);
             } else {
                 $data = request()->all();
             }
             $round->update($data);
             return $round;
-        } catch (\Throwable $th) {
+        } catch (\Throwable$th) {
             return false;
         }
     }
@@ -319,7 +335,10 @@ class RoundController extends Controller
     {
         if ($data = $this->updateRound($id)) {
             // dd($data);
-            if (isset($data['status']) && $data['status'] == false) return redirect()->back()->withErrors($data['errors'])->withInput();
+            if (isset($data['status']) && $data['status'] == false) {
+                return redirect()->back()->withErrors($data['errors'])->withInput();
+            }
+
             return redirect(route('admin.round.list'));
         }
         return redirect('error');
@@ -353,14 +372,23 @@ class RoundController extends Controller
     private function destroyRound($id)
     {
         try {
-            if (!(auth()->user()->hasRole(config('util.ROLE_DELETE')))) return false;
+            if (!(auth()->user()->hasRole(config('util.ROLE_DELETE')))) {
+                return false;
+            }
+
             DB::transaction(function () use ($id) {
-                if (!($data = $this->round::find($id))) return false;
-                if (Storage::disk('s3')->has($data->image)) Storage::disk('s3')->delete($data->image);
+                if (!($data = $this->round::find($id))) {
+                    return false;
+                }
+
+                if (Storage::disk('s3')->has($data->image)) {
+                    Storage::disk('s3')->delete($data->image);
+                }
+
                 $data->delete();
             });
             return true;
-        } catch (\Throwable $th) {
+        } catch (\Throwable$th) {
             return false;
         }
     }
@@ -368,8 +396,14 @@ class RoundController extends Controller
     // View round
     public function destroy($id)
     {
-        if (!(auth()->user()->hasRole(config('util.ROLE_DELETE')))) return redirect()->back()->with('error', 'Không thể xóa ');
-        if ($this->destroyRound($id)) return redirect()->back();
+        if (!(auth()->user()->hasRole(config('util.ROLE_DELETE')))) {
+            return redirect()->back()->with('error', 'Không thể xóa ');
+        }
+
+        if ($this->destroyRound($id)) {
+            return redirect()->back();
+        }
+
         return redirect('error');
     }
     // Response
@@ -392,7 +426,7 @@ class RoundController extends Controller
         $round = Round::find($id);
         if (is_null($round)) {
             return response()->json(['payload' => 'Không tồn tại trong hệ thống !'], 200);
-        } {
+        }{
             $round->load('contest');
             $round->load('type_exam');
             $round->load('judges');
@@ -404,13 +438,16 @@ class RoundController extends Controller
     }
     public function contestDetailRound($id)
     {
-        if (!($rounds = $this->getList())) return view('not_found');
+        if (!($rounds = $this->getList())) {
+            return view('not_found');
+        }
+
         $contest = $this->contest->find($id);
         $rounds = $this->getList();
         return view('pages.contest.detail.contest-round', [
             'rounds' => $rounds->where('contest_id', $id)
                 ->when(
-                    auth()->check() &&  auth()->user()->hasRole('judge'),
+                    auth()->check() && auth()->user()->hasRole('judge'),
                     function ($q) use ($id) {
                         $judge = Judge::where('contest_id', $id)->where('user_id', auth()->user()->id)->with('judge_round')->first('id');
                         $arrId = [];
@@ -422,12 +459,15 @@ class RoundController extends Controller
                 )->paginate(request('limit') ?? 5),
             'contests' => $this->contest::withCount(['teams', 'rounds'])->get(),
             'type_exams' => $this->type_exam::all(),
-            'contest' =>  $contest
+            'contest' => $contest
         ]);
     }
     public function adminShow($id)
     {
-        if (!($round = $this->round::with(['contest', 'type_exam', 'judges', 'teams', 'Donor'])->where('id', $id)->first())) return abort(404);
+        if (!($round = $this->round::with(['contest', 'type_exam', 'judges', 'teams', 'Donor'])->where('id', $id)->first())) {
+            return abort(404);
+        }
+
         $roundTeam = RoundTeam::where('round_id', $id)->where('status', config('util.ROUND_TEAM_STATUS_NOT_ANNOUNCED'))->get();
         return view('pages.round.detail.detail', ['round' => $round, 'roundTeam' => $roundTeam]);
     }
@@ -447,14 +487,16 @@ class RoundController extends Controller
             }
 
             return Redirect::back();
-        } catch (\Throwable $th) {
+        } catch (\Throwable$th) {
             return Redirect::back();
         }
     }
     // chi tiết doanh nghiệp
     public function roundDetailEnterprise($id)
     {
-        if (!($round = $this->round->find($id)->load('Donor')->Donor()->paginate(6))) return abort(404);
+        if (!($round = $this->round->find($id)->load('Donor')->Donor()->paginate(6))) {
+            return abort(404);
+        }
 
         //         foreach($round as $item){
         // var_dump($item->Enterprise->name);
@@ -468,7 +510,7 @@ class RoundController extends Controller
     {
         $listRoundSofts = $this->getList()->paginate(request('limit') ?? 5);
         return view('pages.round.round-soft-delete', [
-            'listRoundSofts' => $listRoundSofts
+            'listRoundSofts' => $listRoundSofts,
         ]);
     }
     public function backUpRound($id)
@@ -476,7 +518,7 @@ class RoundController extends Controller
         try {
             $this->round::withTrashed()->where('id', $id)->restore();
             return redirect()->back();
-        } catch (\Throwable $th) {
+        } catch (\Throwable$th) {
             return abort(404);
         }
     }
@@ -486,14 +528,14 @@ class RoundController extends Controller
         try {
             $this->round::withTrashed()->where('id', $id)->forceDelete();
             return redirect()->back();
-        } catch (\Throwable $th) {
+        } catch (\Throwable$th) {
             return abort(404);
         }
     }
     public function roundDetailTeam($id)
     {
         $round = Round::find($id);
-        $teams =  Round::find($id)->load('contest')->contest->teams;
+        $teams = Round::find($id)->load('contest')->contest->teams;
         return view('pages.round.detail.round-team', compact('round', 'teams'));
     }
     public function attachEnterprise(Request $request, $id)
@@ -505,21 +547,21 @@ class RoundController extends Controller
                 if ($data != null) {
                     DonorRound::create([
                         'round_id' => $id,
-                        'donor_id' => $data->id
+                        'donor_id' => $data->id,
                     ]);
                     return Redirect::back();
                 }
                 $data = Donor::create([
                     'contest_id' => Round::find($id)->load('Enterprise')->Enterprise->id,
-                    'enterprise_id' => $item
+                    'enterprise_id' => $item,
                 ]);
                 DonorRound::create([
                     'round_id' => $id,
-                    'donor_id' => $data->id
+                    'donor_id' => $data->id,
                 ]);
             }
             return Redirect::back();
-        } catch (\Throwable $th) {
+        } catch (\Throwable$th) {
             return Redirect::back();
         }
     }
@@ -533,7 +575,7 @@ class RoundController extends Controller
             }
 
             return Redirect::back();
-        } catch (\Throwable $th) {
+        } catch (\Throwable$th) {
             return Redirect::back();
         }
     }
@@ -542,7 +584,7 @@ class RoundController extends Controller
         try {
             Round::find($id)->teams()->syncWithoutDetaching($request->team_id);
             return Redirect::back();
-        } catch (\Throwable $th) {
+        } catch (\Throwable$th) {
             return Redirect::back();
         }
     }
@@ -551,7 +593,7 @@ class RoundController extends Controller
         try {
             Round::find($id)->teams()->detach([$team_id]);
             return Redirect::back();
-        } catch (\Throwable $th) {
+        } catch (\Throwable$th) {
             return Redirect::back();
         }
     }
@@ -569,10 +611,10 @@ class RoundController extends Controller
                 'pages.round.detail.team.index',
                 [
                     'round' => $round,
-                    'team' => $team
+                    'team' => $team,
                 ]
             );
-        } catch (\Throwable $th) {
+        } catch (\Throwable$th) {
             return Redirect::back();
         }
     }
@@ -592,10 +634,10 @@ class RoundController extends Controller
                 [
                     'takeExam' => $takeExam->takeExam,
                     'round' => $round,
-                    'team' => $team
+                    'team' => $team,
                 ]
             );
-        } catch (\Throwable $th) {
+        } catch (\Throwable$th) {
             return abort(404);
         }
     }
@@ -621,10 +663,10 @@ class RoundController extends Controller
                 [
                     'takeExam' => $takeExam->takeExam,
                     'round' => $round,
-                    'team' => $team
+                    'team' => $team,
                 ]
             );
-        } catch (\Throwable $th) {
+        } catch (\Throwable$th) {
             return abort(404);
         }
     }
@@ -655,10 +697,10 @@ class RoundController extends Controller
         $dataCreate = array_merge($request->only([
             'ponit',
             'comment',
-            'status'
+            'status',
         ]), [
             'exams_team_id' => $roundTeam->takeExam->id,
-            'judge_round_id' =>  $judge->judge_rounds[0]->id
+            'judge_round_id' => $judge->judge_rounds[0]->id,
         ]);
         try {
             $evaluetion = Evaluation::create($dataCreate);
@@ -671,7 +713,7 @@ class RoundController extends Controller
             $findEvaluation->history_point()->create($data);
             return redirect()->back();
             return redirect()->route('admin.round.detail.team', ['id' => $round->id]);
-        } catch (\Throwable $th) {
+        } catch (\Throwable$th) {
             return abort(404);
         }
     }
@@ -706,10 +748,10 @@ class RoundController extends Controller
         $dataCreate = array_merge($request->only([
             'ponit',
             'comment',
-            'status'
+            'status',
         ]), [
             'exams_team_id' => $roundTeam->takeExam->id,
-            'judge_round_id' =>  $judge->judge_rounds[0]->id
+            'judge_round_id' => $judge->judge_rounds[0]->id,
         ]);
         $data = [
             'point' => $request->ponit,
@@ -723,7 +765,7 @@ class RoundController extends Controller
             $findEvaluation->history_point()->create($data);
             return redirect()->back();
             return redirect()->route('admin.round.detail.team', ['id' => $round->id]);
-        } catch (\Throwable $th) {
+        } catch (\Throwable$th) {
             return abort(404);
         }
     }
@@ -752,20 +794,19 @@ class RoundController extends Controller
             }
             $check = RoundTeam::where('round_id', $request->roundId)->where('team_id', $teamId)->first();
 
-            if ($check == null &&  $request->final_point >= $request->ponit) {
+            if ($check == null && $request->final_point >= $request->ponit) {
                 RoundTeam::create([
                     'round_id' => $request->roundId,
                     'team_id' => $teamId,
-                    'status' => config('util.ROUND_TEAM_STATUS_NOT_ANNOUNCED') // Chưa công bố
+                    'status' => config('util.ROUND_TEAM_STATUS_NOT_ANNOUNCED'), // Chưa công bố
                 ]);
-            } elseif ($check &&  $request->final_point < $request->ponit) {
+            } elseif ($check && $request->final_point < $request->ponit) {
                 //   dd($check);
                 $check->delete();
             }
 
-
             return Redirect::back();
-        } catch (\Throwable $th) {
+        } catch (\Throwable$th) {
             return Redirect::back();
         }
     }
@@ -784,10 +825,10 @@ class RoundController extends Controller
                 [
                     'Exam' => $takeExam->takeExam,
                     'round' => $round,
-                    'team' => $team
+                    'team' => $team,
                 ]
             );
-        } catch (\Throwable $th) {
+        } catch (\Throwable$th) {
             return Redirect::back();
         }
     }
@@ -816,10 +857,10 @@ class RoundController extends Controller
                     'round' => $round,
                     'team' => $team,
                     'historyPoint2' => isset($historyPoint2) ? $historyPoint2 : null,
-                    'historyPoint' => isset($historyPoint) ? $historyPoint : null
+                    'historyPoint' => isset($historyPoint) ? $historyPoint : null,
                 ]
             );
-        } catch (\Throwable $th) {
+        } catch (\Throwable$th) {
             return abort(404);
         }
     }
@@ -829,7 +870,7 @@ class RoundController extends Controller
             'judges',
             'teams' => function ($q) {
                 return $q->with(['members']);
-            }
+            },
         ]);
         $judges = [];
         if (count($round->judges) > 0) {
