@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\ContestUser;
 use App\Models\Major;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class RankUserController extends Controller
@@ -15,13 +13,15 @@ class RankUserController extends Controller
     {
         try {
             if (!$major = Major::whereSlug($slug)
-                ->first())
+                ->first()) {
                 return response()->json(
                     [
                         'status' => false,
-                        'payload' => 'Không tìm thấy chuyên ngành ' . $slug . '!'
+                        'payload' => 'Không tìm thấy chuyên ngành ' . $slug . '!',
                     ]
                 );
+            }
+
             $rank = 0;
             $maxPoin = 0;
             return response()->json([
@@ -32,22 +32,37 @@ class RankUserController extends Controller
                     ->with('contest')
                     ->get()
                     ->map(function ($q, $index) use (&$rank, &$maxPoin) {
-                        if ($index == 0) $maxPoin = $q->reward_point; // **
-                        if ($index == 0) $rank =  1; // **
-                        if ($q->reward_point == $maxPoin) $rank = $rank; // **
-                        if ($q->reward_point < $maxPoin) $rank += 1; // **
-                        if ($q->reward_point < $maxPoin) $maxPoin = $q->reward_point; // **
+                        if ($index == 0) {
+                            $maxPoin = $q->reward_point;
+                        }
+                        // **
+                        if ($index == 0) {
+                            $rank = 1;
+                        }
+                        // **
+                        if ($q->reward_point == $maxPoin) {
+                            $rank = $rank;
+                        }
+                        // **
+                        if ($q->reward_point < $maxPoin) {
+                            $rank += 1;
+                        }
+                        // **
+                        if ($q->reward_point < $maxPoin) {
+                            $maxPoin = $q->reward_point;
+                        }
+                        // **
                         return [
                             'user_name' => $q->user->name,
                             'rank' => $rank,
                             'reward_point' => $q->reward_point,
                             'contest_name' => $q->contest->name,
                             'contest' => $q->contest,
-                            'user' => $q->user
+                            'user' => $q->user,
                         ];
                     }),
             ]);
-        } catch (\Throwable $th) {
+        } catch (\Throwable$th) {
             Log::info($th->getMessage());
             dd($th->getMessage());
             return response()->json([
