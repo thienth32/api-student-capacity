@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
@@ -43,9 +44,13 @@ class AuthController extends Controller
 
             return response()->json([
                 'status' => false,
-                'payload' => "Tài khoản không tồn tại hoặc xác thực thất bại"
+                'payload' => "Tài khoản không tồn tại hoặc xác thực thất bại",
             ]);
         }
+        if (!Str::contains($googleUser->email, config('util.END_EMAIL_FPT'))) return response()->json([
+                'status' => false,
+                'payload' => "Tài khoản không tồn tại hoặc xác thực thất bại",
+            ]);
 
         $user = User::with('roles')->where('email', $googleUser->email)->first();
         if ($user) {
@@ -57,14 +62,16 @@ class AuthController extends Controller
                 'payload' => [
                     "token" => $token,
                     "token_type" => 'Bearer',
-                    'user' => $user->toArray()
-                ]
+                    'user' => $user->toArray(),
+                ],
             ]);
         }
 
+        $email = \Str::of($googleUser->email)->before(config('util.END_EMAIL_FPT'))->toString();
+
         return response()->json([
             'status' => false,
-            'payload' => "Tài khoản không tồn tại hoặc xác thực thất bại"
+            'payload' => "Tài khoản không tồn tại hoặc xác thực thất bại",
         ]);
     }
 
@@ -77,14 +84,14 @@ class AuthController extends Controller
                 'status' => true,
                 'payload' => [
                     'token' => $token,
-                    'user' => $user->toArray()
-                ]
+                    'user' => $user->toArray(),
+                ],
             ]);
         }
 
         return response()->json([
             'status' => false,
-            'payload' => "email không tồn tại"
+            'payload' => "email không tồn tại",
         ]);
     }
 

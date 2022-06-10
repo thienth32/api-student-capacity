@@ -17,9 +17,9 @@ use Illuminate\Support\Facades\Validator;
 class TakeExamController extends Controller
 {
     use TUploadImage;
+
     public function takeExamStudent(Request $request)
     {
-
         $checkUserTeam = false;
         $team_id = 0;
         $user_id = auth('sanctum')->user()->id;
@@ -36,9 +36,7 @@ class TakeExamController extends Controller
             'status' => false,
             'payload' => $validate->errors()
         ]);
-
         $round = Round::find($request->round_id)->load('teams');
-        // dd($round->toArray());
         DB::beginTransaction();
         try {
             foreach ($round->teams as $team) {
@@ -51,7 +49,6 @@ class TakeExamController extends Controller
                     }
                 }
             }
-
             if ($checkUserTeam == false)
                 return response()->json([
                     'status' => false,
@@ -60,7 +57,6 @@ class TakeExamController extends Controller
             $teamRound = RoundTeam::where('team_id', $team_id)
                 ->where('round_id', $request->round_id)
                 ->first();
-
             if (is_null($teamRound)) return response()->json([
                 'status' => false,
                 'payload' => 'Đội thi của bạn đang chờ phê duyệt !!'
@@ -92,7 +88,8 @@ class TakeExamController extends Controller
                 return response()->json([
                     'status' => true,
                     'payload' => $takeExam,
-                    'exam' => $urlExam
+                    'exam' => $urlExam,
+                    'status_take_exam' => $takeExam->status
                 ]);
             }
             if (Storage::disk('s3')->has($takeExamCheck->exam->external_url)) {
@@ -157,10 +154,10 @@ class TakeExamController extends Controller
             } else {
                 $takeExam->result_url = null;
             }
-            if (!$request->has('file_url') && !request('result_url')) {
-                $takeExam->status = config('util.TAKE_EXAM_STATUS_COMPLETE');
+            if (!request('file_url') && !request('result_url')) {
+                $takeExam->status = config('util.TAKE_EXAM_STATUS_UNFINISHED');
             }
-            $takeExam->status = config('util.TAKE_EXAM_STATUS_UNFINISHED');
+            $takeExam->status = config('util.TAKE_EXAM_STATUS_COMPLETE');
             $takeExam->save();
             return response()->json([
                 'status' => true,
@@ -171,7 +168,10 @@ class TakeExamController extends Controller
             Log::info('..--..');
             Log::info($th->getMessage());
             Log::info('..--..');
-            dd($th);
+            return response()->json([
+                'status' => false,
+                'payload' => 'Lỗi hệ thống !!',
+            ]);
         }
     }
 }

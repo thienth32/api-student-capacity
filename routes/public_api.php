@@ -7,13 +7,11 @@ use App\Http\Controllers\Admin\ExamController;
 use App\Http\Controllers\Admin\MajorController as AdminMajorController;
 use App\Http\Controllers\Admin\RankUserController;
 use App\Http\Controllers\Admin\ResultController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\RoundController;
-use App\Http\Controllers\Admin\SendMailController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\SponsorController as AdminSponsorController;
-use App\Http\Controllers\Admin\TeamController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,15 +21,13 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
-*/
-
+ */
 
 Route::get('sponsors', [AdminSponsorController::class, 'list']);
 
 Route::get('users', [AdminUserController::class, 'index']); // danh sách user
 
 Route::get('company', [AdminCompanyController::class, 'listCompany']); // Doanh nghiệp
-
 
 Route::prefix('contests')->group(function () {
     Route::get('', [AdminContestController::class, 'apiIndex'])->name('contest.api.index');
@@ -50,10 +46,7 @@ Route::prefix('sliders')->group(function () {
     Route::get('', [SliderController::class, 'apiIndex'])->name('slider.api.index');
 });
 
-
-
 // Route::get('', [AdminMajorController::class, 'apiIndex'])->name('major.api.index');
-
 
 // Route::get('{slug}', [AdminMajorController::class, 'apiShow'])->name('major.api.show');
 

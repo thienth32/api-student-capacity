@@ -20,4 +20,5 @@ return [
     "ROLE_DELETE" => "super admin",
     "ROLE_ADMINS" => 'admin|super admin',
     "CONTEST_STATUS_2" => "Cuộc thi đã kết thúc",
+    "END_EMAIL_FPT" => "@fpt.edu.vn",
 ];
