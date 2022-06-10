@@ -423,17 +423,34 @@ class RoundController extends Controller
      */
     public function show(Round $round, $id)
     {
-        $round = Round::find($id);
+        $round = Round::whereId($id);
         if (is_null($round)) {
-            return response()->json(['payload' => 'Không tồn tại trong hệ thống !'], 200);
+            return response()->json([ 'status' => false ,'payload' => 'Không tồn tại trong hệ thống !'], 404);
         }{
-            $round->load('contest');
-            $round->load('type_exam');
-            $round->load('judges');
-            $round->load(['teams' => function ($q) {
+            $round->with('contest');
+            $round->with('type_exam');
+            $round->with(['judges']);
+            $round->with(['teams' => function ($q) {
                 return $q->with('members');
             }]);
-            return response()->json(['payload' => $round], 200);
+            return response()->json([
+                'status' => true,
+                'payload' => $round
+                    ->get()
+                    -> map(function ($col,$key){
+                        if($key > 0) return ;
+                        $col = $col -> toArray();
+                        $user = [];
+                        foreach ($col['judges'] as $judge)
+                        {
+                            array_push($user, $judge['user']);
+                        }
+                        $arrResult = array_merge($col, [
+                            'judges' => $user
+                        ]);
+                        return $arrResult;
+                    })[0]],
+                200);
         }
     }
     public function contestDetailRound($id)
