@@ -90,6 +90,7 @@ class AuthController extends Controller
                 ]);
             });
             if($flagRoleAdmin && $user) $user->assignRole('admin');
+            if(!$flagRoleAdmin && $user) $user->assignRole('student');
             $token = $user->createToken('auth_token')->plainTextToken;
             return response()->json([
                 'status' => true,
