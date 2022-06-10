@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('history_points', function (Blueprint $table) {
-           $table->integer('historiable_id')->nullable();
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('mssv')->nullable()->unique();
         });
     }
 
@@ -25,8 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('history_points', function (Blueprint $table) {
-            $table->dropColumn('historiable_id');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('mssv');
         });
     }
 };
