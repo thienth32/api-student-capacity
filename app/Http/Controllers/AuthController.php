@@ -6,6 +6,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
@@ -54,7 +55,7 @@ class AuthController extends Controller
 
         $user = User::with('roles')->where('email', $googleUser->email)->first();
         if ($user) {
-            $user->avatar = $googleUser->avatar;
+//            $user->avatar = $googleUser->avatar;
             $user->save();
             $token = $user->createToken('auth_token')->plainTextToken;
             return response()->json([
@@ -66,13 +67,45 @@ class AuthController extends Controller
                 ],
             ]);
         }
-
-        $email = \Str::of($googleUser->email)->before(config('util.END_EMAIL_FPT'))->toString();
-
-        return response()->json([
-            'status' => false,
-            'payload' => "Tài khoản không tồn tại hoặc xác thực thất bại",
-        ]);
+        $flagRoleAdmin = false;
+        $MSSV = null;
+        if(strlen($googleUser->email) < 8 ) $flagRoleAdmin = true ;
+        if(!$flagRoleAdmin) foreach(config('util.MS_SV') as $ks) {
+                $MSSV = \Str::lower($ks) . \Str::afterLast(
+                    \Str::of($googleUser->email)
+                        ->before(config('util.END_EMAIL_FPT'))
+                        ->toString(),
+                    \Str::lower($ks)
+                );
+        };
+        try {
+            $user = null;
+            DB::transaction(function () use ($MSSV , $googleUser ,&$user){
+                $user = User::create([
+                    'mssv' => $MSSV,
+                    'name' => $googleUser -> name ?? 'no name',
+                    'email' => $googleUser -> email,
+                    'status' => 1,
+                    'avatar' => null
+                ]);
+            });
+            if($flagRoleAdmin && $user) $user->assignRole('admin');
+            if(!$flagRoleAdmin && $user) $user->assignRole('student');
+            $token = $user->createToken('auth_token')->plainTextToken;
+            return response()->json([
+                'status' => true,
+                'payload' => [
+                    "token" => $token,
+                    "token_type" => 'Bearer',
+                    'user' => $user->toArray(),
+                ],
+            ]);
+        }catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'payload' => "Xác thực thất bại",
+            ]);
+        }
     }
 
     public function fake_login(Request $request)
