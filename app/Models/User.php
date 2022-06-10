@@ -26,7 +26,8 @@ class User extends Authenticatable
         'name',
         'email',
         'status',
-        'avatar'
+        'avatar',
+        'mssv'
     ];
 
     /**

@@ -71,27 +71,25 @@ class AuthController extends Controller
         $MSSV = null;
         if(strlen($googleUser->email) < 8 ) $flagRoleAdmin = true ;
         if(!$flagRoleAdmin) foreach(config('util.MS_SV') as $ks) {
-                $MSSV =  Str::afterLast(
+                $MSSV = \Str::lower($ks) . \Str::afterLast(
                     \Str::of($googleUser->email)
                         ->before(config('util.END_EMAIL_FPT'))
                         ->toString(),
-                    $ks
-                )->toString();
+                    \Str::lower($ks)
+                );
         };
         try {
             $user = null;
-            DB::transaction(function () use ($MSSV , $googleUser , $flagRoleAdmin ,&$user){
+            DB::transaction(function () use ($MSSV , $googleUser ,&$user){
                 $user = User::create([
                     'mssv' => $MSSV,
                     'name' => $googleUser -> name ?? 'no name',
                     'email' => $googleUser -> email,
                     'status' => 1,
                     'avatar' => null
-
                 ]);
-                if($flagRoleAdmin) $user->assignRole('admin');
-
             });
+            if($flagRoleAdmin && $user) $user->assignRole('admin');
             $token = $user->createToken('auth_token')->plainTextToken;
             return response()->json([
                 'status' => true,

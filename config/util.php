@@ -22,6 +22,6 @@ return [
     "CONTEST_STATUS_2" => "Cuộc thi đã kết thúc",
     "END_EMAIL_FPT" => "@fpt.edu.vn",
     "MS_SV" => [
-        "PH"
+        "ph"
     ]
 ];
