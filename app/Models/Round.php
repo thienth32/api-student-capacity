@@ -85,7 +85,11 @@ class Round extends Model
 
     public function teams()
     {
-        return $this->belongsToMany(Team::class, 'round_teams', 'round_id', 'team_id')->wherePivot('status', 1);
+        return $this->belongsToMany(Team::class, 'round_teams', 'round_id', 'team_id')->wherePivot('status', 1); //đã công bố
+    }
+    public function add_Teams()
+    {
+        return $this->belongsToMany(Team::class, 'round_teams', 'round_id', 'team_id')->wherePivot('status', 2); //chưa công bố
     }
     public function sliders()
     {

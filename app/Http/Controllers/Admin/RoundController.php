@@ -499,7 +499,9 @@ class RoundController extends Controller
     public function roundDetailTeam($id)
     {
         $round = Round::find($id);
+        // dd(count($round->add_Teams));
         $teams =  Round::find($id)->load('contest')->contest->teams;
+
         return view('pages.round.detail.round-team', compact('round', 'teams'));
     }
     public function attachEnterprise(Request $request, $id)

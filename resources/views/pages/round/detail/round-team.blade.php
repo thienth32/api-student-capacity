@@ -40,9 +40,15 @@
                         <select multiple class="form-select mb-2 select2-hidden-accessible" data-control="select2"
                             data-hide-search="false" tabindex="-1" aria-hidden="true" name="team_id[]"
                             value="{{ old('team_id') }}">
+                            {{-- @if (count($round->add_Teams) > 0 || count($round->teams) > 0)
+                                @foreach ($round->add_Teams as $teamSelect)
+                                    <option value="{{ $teamSelect->id }}"> {{ $teamSelect->name }}</option>
+                                @endforeach
+                            @else --}}
                             @foreach ($teams as $teamSelect)
                                 <option value="{{ $teamSelect->id }}"> {{ $teamSelect->name }}</option>
                             @endforeach
+
                         </select>
                         <button type="submit" class="btn btn-primary"> Thêm </button>
 
