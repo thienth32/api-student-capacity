@@ -13,6 +13,8 @@ class Round extends Model
 {
     use SoftDeletes;
     use HasFactory, TGetAttributeColumn;
+    use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
+
     protected $table = "rounds";
     protected $primaryKey = "id";
     protected $appends = [
