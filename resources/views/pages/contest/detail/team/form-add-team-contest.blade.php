@@ -126,6 +126,7 @@
         }
         preview.showFile('#file-input', '#image-preview');
         var userArray = @json($userArray ?? []);
+        var id_contest = 0;
 
         var _token = "{{ csrf_token() }}"
         var max_user = "{{ $contest->max_user }}"

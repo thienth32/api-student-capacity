@@ -16,7 +16,6 @@ trait TTeamContest
     use TCheckUserDrugTeam;
     function addTeamContest($request, $contest_id = null, $backViewSuccess, $backViewFailure)
     {
-
         if ($contest_id == null) {
             $validator = Validator::make(
                 $request->all(),

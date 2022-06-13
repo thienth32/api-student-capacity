@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Contest;
 use App\Models\User;
+use App\Services\Traits\TCheckUserDrugTeam;
 use App\Services\Traits\TUploadImage;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -17,20 +18,24 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    use TUploadImage;
+    use TUploadImage, TCheckUserDrugTeam;
     public function TeamUserSearch(Request $request)
     {
-        $users = User::search($request->key ?? null, ['name', 'email'])->take(4)->get();
-        if (count($users) == 0) {
-            return response()->json([
-                'status' => false,
-                'payload' => "Tài khoản này không tồn tại !"
-            ]);
-        } else {
+
+        try {
+            $usersNotTeam = User::where('status', config('util.ACTIVE_STATUS'))->pluck('id');
+            $usersTeamNot = $this->checkUserDrugTeam($request->id_contest, $usersNotTeam);
+
+            $users = User::select('id', 'name', 'email', 'avatar')
+                ->search($request->key, ['name', 'email'])
+                ->whereIn('id', $usersTeamNot['user-pass'])
+                ->limit(5)->get();
             return response()->json([
                 'status' => true,
-                'payload' => $users
+                'payload' => $users,
             ]);
+        } catch (\Throwable $th) {
+            dd($th);
         }
     }
 

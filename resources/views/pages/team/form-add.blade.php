@@ -119,10 +119,10 @@
         }
         preview.showFile('#file-input', '#image-preview');
         var userArray = @json($userArray ?? []);
-        var _token = "{{ csrf_token() }}"
-
-        var urlSearch = "{{ route('admin.user.TeamUserSearch') }}"
-        var max_user = 0
+        var _token = "{{ csrf_token() }}";
+        var id_contest = 0;
+        var urlSearch = "{{ route('admin.user.TeamUserSearch') }}";
+        var max_user = 0;
         var urlShowContest = "{{ route('admin.teams.add.contest.show') }}";
     </script>
     <script src="{{ asset('assets/js/system/team/add.js') }}"></script>
