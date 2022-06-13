@@ -118,6 +118,7 @@
         var userArray = @json($userArray);
         console.log(userArray);
         var _token = "{{ csrf_token() }}"
+        var id_contest = "{{ $contest->id }}";
         var max_user = "{{ $contest->max_user }}"
         var urlSearch = "{{ route('admin.user.team.search', ['id_contest' => $contest->id]) }}"
     </script>

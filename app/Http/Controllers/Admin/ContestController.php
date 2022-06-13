@@ -188,6 +188,7 @@ class ContestController extends Controller
             $contest->end_register_time = $request->end_register_time;
             $contest->register_deadline = $request->register_deadline;
             $contest->description = $request->description;
+            $contest->post_new = $request->post_new;
             $contest->major_id = $request->major_id;
             $contest->status = config('util.ACTIVE_STATUS');
             $rewardRankPoint = json_encode(array(

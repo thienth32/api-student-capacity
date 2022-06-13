@@ -137,6 +137,15 @@
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
                     </div>
+                    <div class="form-group mb-10">
+                        <label class="form-label" for="">Tin tức</label>
+                        <textarea class="form-control" name="post_new" id="kt_docs_ckeditor_classic2" rows="3">
+                            {{ $contest->post_new }}
+                        </textarea>
+                        @error('post_new')
+                            <p class="text-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
                     {{-- <div class="form-group mb-10">
                         <label class="form-label" for="">Trạng thái cuộc thi</label>
                         <select class="form-control" name="status" id="">
@@ -167,6 +176,8 @@
     <script src="assets/js/system/date-after/date-after.js"></script>
     <script src="assets/js/system/contest/form.js"></script>
     <script>
+        pageCkeditor.classicCk2();
+
         dateAfterEdit('input[type=datetime-local]#begin', 'input[type=datetime-local]#end',
             'input[type=datetime-local]#start_time', 'input[type=datetime-local]#end_time')
         preview.showFile('#file-input', '#image-preview');

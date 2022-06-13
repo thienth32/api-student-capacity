@@ -6,14 +6,22 @@ const teamPage = {
             let key = $('input#searchUserValue').val().trim();
             $('input#searchUserValue').val(key)
             if (key != '' && key.indexOf(' ') != 0) {
+                $('#resultUserSearch').text('Đang tìm kiếm .....');
                 $.ajax({
                     type: "post",
                     url: urlSearch,
                     data: {
                         key: key,
+                        id_contest: Number(id_contest),
                         _token: _token,
                     },
                     success: function(response) {
+                        if (response.payload.length == 0) {
+                            $('#resultUserSearch').empty();
+                            toastr.warning('Người dùng này đã gia nhập cuộc thi hoặc không tìm thấy !!');
+                            $('input#searchUserValue').val('')
+                            return;
+                        }
                         if (response.status === true) {
                             var _html = ``;
                             $.map(response.payload, function(val, key) {
@@ -80,6 +88,13 @@ const teamPage = {
                             ${val.name_user}
                             <input hidden type="text" value="${val.id_user}" class="user_id"  name="user_id[]" >
                         </td>
+                        <td>
+                            <label class="form-label" for="${val.id_user}">
+                                <input checked type="radio" id="${val.id_user}" value="${val.id_user}"  name="bot_user" >
+                                    Trưởng nhóm
+                            </label>
+                        </td>
+
                         <td>
                             <button data-idUser='${key}' class="deleteUserArray btn btn-danger" type="button" >
                                 <span class="svg-icon svg-icon-2x svg-icon-primary "><!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Trash.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
