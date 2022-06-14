@@ -23,5 +23,7 @@ return [
     "END_EMAIL_FPT" => "@fpt.edu.vn",
     "MS_SV" => [
         "ph"
-    ]
+    ],
+    "TYPE_CONTEST" => 0,
+    "TYPE_TEST" => 1,
 ];
