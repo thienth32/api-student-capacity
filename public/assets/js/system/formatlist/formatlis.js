@@ -21,7 +21,10 @@ const aListQuery = [
     "year",
     "op_time",
     "home",
-    "role"
+    "role",
+    "skill",
+    "level",
+    "type"
 ];
 
 // Set list query has one
@@ -271,6 +274,60 @@ const formatPage = {
             if ($(this).val() == 3) return (window.location = url);
             checkUrlOut("status", $(this).val());
         });
+    },
+    selectChangeStatus: function(url_un_status, url_re_status, select = ".form-select-status") {
+        function removeDisabled(val, element, time) {
+            $(element).val(val);
+            return setTimeout(() => {
+                $(element).prop('disabled', false);
+            }, time);
+        }
+        $(select).on("change", function() {
+            var that = this;
+            let id = $(this).data("id");
+            $(this).prop('disabled', true);
+            if ($(this).val() == 1) {
+                $.ajax({
+                    url: url_un_status,
+                    method: "POST",
+                    data: {
+                        _token: _token,
+                        id: id
+                    },
+                    success: function(data) {
+                        if (!data.status) return alert(data.payload);
+                        loadTast(
+                            "Thành công !",
+                            "toastr-bottom-left",
+                            "success"
+                        );
+                        removeDisabled(0, that, 3000)
+
+                    },
+                });
+            } else {
+                $.ajax({
+                    url: url_re_status,
+                    method: "POST",
+                    data: {
+                        _token: _token,
+                        id: id
+                    },
+                    success: function(data) {
+                        if (!data.status) return alert(data.payload);
+                        loadTast(
+                            "Thành công !",
+                            "toastr-bottom-left",
+                            "success"
+                        );
+                        removeDisabled(1, that, 3000)
+                    },
+                });
+            }
+        });
+
+
+
     },
 };
 

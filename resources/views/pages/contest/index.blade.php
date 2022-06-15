@@ -326,6 +326,7 @@
                                             <input value="{{ $contest->status }}" data-id="{{ $contest->id }}"
                                                 class="form-select-status form-check-input" @checked($contest->status == 1)
                                                 type="checkbox" role="switch">
+
                                         </div>
                                     @else
                                         {{ config('util.CONTEST_STATUS_2') }}

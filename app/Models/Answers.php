@@ -10,4 +10,14 @@ class Answers extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = 'answers';
+    protected $primaryKey = "id";
+    public $fillable = [
+        'content',
+        'question_id',
+        'is_correct',
+    ];
+    // public function questions()
+    // {
+    //     return $this->belongsTo(Question::class, 'question_id')->with('answers');
+    // }
 }

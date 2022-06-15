@@ -71,3 +71,8 @@ label#img-error {
 figure.image img {
     width: 100% !important;
 }
+
+.format-database {
+    cursor: pointer;
+    padding: 10px;
+}
