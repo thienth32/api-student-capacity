@@ -50,7 +50,7 @@ class ContestController extends Controller
                 ->when(auth()->check() && auth()->user()->hasRole('judge'), function ($q) {
                     return $q->whereIn('id', array_unique(Judge::where('user_id', auth()->user()->id)->pluck('contest_id')->toArray()));
                 })
-                ->search(request('q') ?? null, ['name', 'description'])
+                ->search(request('q') ?? null, ['name'])
                 ->missingDate('register_deadline', request('miss_date') ?? null, $now->toDateTimeString())
                 ->passDate('register_deadline', request('pass_date') ?? null, $now->toDateTimeString())
                 ->registration_date('end_register_time', request('registration_date') ?? null, $now->toDateTimeString())
@@ -80,15 +80,19 @@ class ContestController extends Controller
             return false;
         }
     }
-
+    private function checkTypeContest()
+    {
+        if(request('type') != config('util.TYPE_CONTEST') && request('type') != config('util.TYPE_TEST')) abort(404);
+    }
     //  View contest
     public function index()
     {
-        if (!($data = $this->getList()->paginate(request('limit') ?? 10))) return abort(404);
-
+        $this->checkTypeContest();
+        if (!($data = $this->getList()->where('type',request('type') ?? 0)->paginate(request('limit') ?? 10))) return abort(404);
         return view('pages.contest.index', [
             'contests' => $data,
             'majors' => Major::where('parent_id', 0)->get(),
+            'contest_type_text' =>  request('type') == 1 ? 'test năng lực' : 'cuộc thi'
         ]);
     }
 
@@ -117,17 +121,16 @@ class ContestController extends Controller
 
     public function create()
     {
+        $this->checkTypeContest();
         $majors = Major::all();
-        return view('pages.contest.form-add', compact('majors'));
+        $contest_type_text = request('type') == 1 ? 'test năng lực' : 'cuộc thi';
+        return view('pages.contest.form-add', compact('majors','contest_type_text'));
     }
     public function store(Request $request)
     {
-
-        $validator = Validator::make(
-            $request->all(),
-            [
+        $this->checkTypeContest();
+        $rule =   [
                 'name' => 'required|max:255|unique:contests,name',
-                'max_user' => 'required|numeric',
                 'top1' => 'required|numeric',
                 'top2' => 'required|numeric',
                 'top3' => 'required|numeric',
@@ -136,9 +139,15 @@ class ContestController extends Controller
                 'date_start' => 'required|date',
                 'register_deadline' => 'required|date',
                 'description' => 'required',
+        ];
+        if(request('type') == config('util.TYPE_CONTEST')) $rule = array_merge($rule , [
+                'max_user' => 'required|numeric',
                 'start_register_time' => 'required|date',
                 'end_register_time' => 'required|date',
-            ],
+        ]);
+        $validator = Validator::make(
+            $request->all(),
+            $rule,
             [
                 'top1.required' => 'Chưa nhập trường này !',
                 'top1.numeric' =>  'Sai định dạng !',
@@ -182,14 +191,15 @@ class ContestController extends Controller
                 $contest->img = $filename;
             }
             $contest->name = $request->name;
-            $contest->max_user = $request->max_user;
+            $contest->max_user = $request->max_user ?? 9999;
             $contest->date_start = $request->date_start;
-            $contest->start_register_time = $request->start_register_time;
-            $contest->end_register_time = $request->end_register_time;
+            $contest->start_register_time = $request->start_register_time ?? null;
+            $contest->end_register_time = $request->end_register_time ?? null;
             $contest->register_deadline = $request->register_deadline;
             $contest->description = $request->description;
             $contest->post_new = $request->post_new;
             $contest->major_id = $request->major_id;
+            $contest->type = request('type') ?? 0;
             $contest->status = config('util.ACTIVE_STATUS');
             $rewardRankPoint = json_encode(array(
                 'top1' => $request->top1,
@@ -269,12 +279,15 @@ class ContestController extends Controller
     }
     public function edit($id)
     {
-        $major = Major::orderBy('id', 'desc')->get();
 
+        $this->checkTypeContest();
+        $major = Major::orderBy('id', 'desc')->get();
+        $contest_type_text = request('type') == 1 ? 'test năng lực' : 'cuộc thi';
         $contest = $this->getContest($id)->first();
+        if($contest->type != request('type') ) abort(404);
         $rewardRankPoint = json_decode($contest->reward_rank_point);
         if ($contest) {
-            return view('pages.contest.edit', compact('contest', 'major', 'rewardRankPoint'));
+            return view('pages.contest.edit', compact('contest', 'major', 'rewardRankPoint' ,'contest_type_text'));
         } else {
             return view('error');
         }
@@ -282,19 +295,24 @@ class ContestController extends Controller
 
     public function update(Request $request, $id)
     {
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'max_user' => 'required|numeric',
+         $this->checkTypeContest();
+        $rule = [
                 'name' => 'required|unique:contests,name,' . $id . '',
                 'img' => 'mimes:jpeg,png,jpg|max:10000',
                 'date_start' => "required",
                 'register_deadline' => "required|after:date_start",
                 'description' => "required",
                 'major_id' => "required",
+
+        ];
+        if(request('type') == config('util.TYPE_CONTEST')) $rule = array_merge($rule , [
+                'max_user' => 'required|numeric',
                 'start_register_time' => 'required|date|before:end_register_time',
                 'end_register_time' => 'required|date|after:start_register_time',
-            ],
+        ]);
+        $validator = Validator::make(
+            $request->all(),
+            $rule,
             [
                 'max_user.required' => 'Chưa nhập trường này !',
                 'max_user.numeric' =>  'Sai định dạng !',
@@ -346,7 +364,8 @@ class ContestController extends Controller
             $contest->update($request->all());
 
             Db::commit();
-            return Redirect::route('admin.contest.list');
+            // return Redirect::route('admin.contest.list');
+            return redirect(route('admin.contest.list') . '?type=' . request('type') ?? 0);
         }
     }
 

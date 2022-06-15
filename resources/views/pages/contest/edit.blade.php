@@ -1,16 +1,17 @@
 @extends('layouts.main')
-@section('title', 'Cập nhật cuộc thi ')
-@section('page-title', 'Cập nhật cuộc thi')
+@section('title', 'Cập nhật ' . $contest_type_text)
+@section('page-title', 'Cập nhật ' . $contest_type_text)
 @section('content')
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
-                <form id="formContest" action="{{ route('admin.contest.update', ['id' => $contest->id]) }}" method="post"
-                    enctype="multipart/form-data">
+                <form id="formContest"
+                    action="{{ route('admin.contest.update', ['id' => $contest->id]) . '?type=' . request('type') ?? 0 }}"
+                    method="post" enctype="multipart/form-data">
                     @csrf
                     @method('put')
                     <div class="form-group mb-10">
-                        <label class="form-label" for="">Tên cuộc thi</label>
+                        <label class="form-label" for="">Tên {{ $contest_type_text }}</label>
                         <input type="text" name="name" value="{{ old('name', $contest->name) }}" class=" form-control"
                             placeholder="">
                         @error('name')
@@ -42,26 +43,28 @@
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
-                                <div class="form-group mb-10">
-                                    <label for="" class="form-label">Thời gian bắt đầu đăng ký</label>
-                                    <input max="" min=""
-                                        value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime($contest->start_register_time)) }}"
-                                        type="datetime-local" name="start_register_time" id="start_time"
-                                        class="form-control" placeholder="">
-                                    @error('start_register_time')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="form-group mb-10">
-                                    <label for="" class="form-label">Thời gian kết thúc đăng ký</label>
-                                    <input min="" max=""
-                                        value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime($contest->end_register_time)) }}"
-                                        type="datetime-local" name="end_register_time" id="end_time" class="form-control"
-                                        placeholder="">
-                                    @error('end_register_time')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
-                                </div>
+                                @if (request('type') != config('util.TYPE_TEST'))
+                                    <div class="form-group mb-10">
+                                        <label for="" class="form-label">Thời gian bắt đầu đăng ký</label>
+                                        <input max="" min=""
+                                            value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime($contest->start_register_time)) }}"
+                                            type="datetime-local" name="start_register_time" id="start_time"
+                                            class="form-control" placeholder="">
+                                        @error('start_register_time')
+                                            <p class="text-danger">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group mb-10">
+                                        <label for="" class="form-label">Thời gian kết thúc đăng ký</label>
+                                        <input min="" max=""
+                                            value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime($contest->end_register_time)) }}"
+                                            type="datetime-local" name="end_register_time" id="end_time"
+                                            class="form-control" placeholder="">
+                                        @error('end_register_time')
+                                            <p class="text-danger">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                @endif
                                 <div class="form-group mb-10">
                                     <label for="" class="form-label">Thuộc Chuyên Ngành</label>
                                     <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
@@ -79,13 +82,15 @@
                                 </div>
                             </div>
                             <div class="col-4">
-                                <div class="form-group mb-10">
-                                    <label for="" class="form-label">Giới hạn thành viên trong đội</label>
-                                    <input value="{{ old('max_user', $contest->max_user) }}" name="max_user"
-                                        type='number' class="form-control" />
-                                </div>
+                                @if (request('type') != config('util.TYPE_TEST'))
+                                    <div class="form-group mb-10">
+                                        <label for="" class="form-label">Giới hạn thành viên trong đội</label>
+                                        <input value="{{ old('max_user', $contest->max_user) }}" name="max_user"
+                                            type='number' class="form-control" />
+                                    </div>
+                                @endif
                                 <div class="form-group ">
-                                    <label for="" class="form-label">Ảnh cuộc thi</label>
+                                    <label for="" class="form-label">Ảnh {{ $contest_type_text }}</label>
                                     <input value="{{ old('img') }}" name="img" type='file' id="file-input"
                                         class="form-control" accept=".png, .jpg, .jpeg" />
                                     <img class="w-100 mt-4 border rounded-3" id="image-preview"
@@ -129,7 +134,7 @@
 
                     </div>
                     <div class="form-group mb-10">
-                        <label class="form-label" for="">Mô tả cuộc thi</label>
+                        <label class="form-label" for="">Mô tả {{ $contest_type_text }}</label>
                         <textarea class="form-control" name="description" id="kt_docs_ckeditor_classic" rows="3">
                             {{ $contest->description }}
                         </textarea>
@@ -147,9 +152,9 @@
                         @enderror
                     </div>
                     {{-- <div class="form-group mb-10">
-                        <label class="form-label" for="">Trạng thái cuộc thi</label>
+                        <label class="form-label" for="">Trạng thái {{ $contest_type_text }}</label>
                         <select class="form-control" name="status" id="">
-                            <option @selected($contest->status == 0) value="0"> Đóng Cuộc thi </option>
+                            <option @selected($contest->status == 0) value="0"> Đóng {{ $contest_type_text }} </option>
                             <option @selected($contest->status == 1) value="1"> Mở đang Mở </option>
                         </select>
                     </div> --}}
