@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\ContestController as AdminContestController;
 use App\Http\Controllers\Admin\EnterpriseController;
 use App\Http\Controllers\Admin\ExamController;
 use App\Http\Controllers\Admin\MajorController as AdminMajorController;
+use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\RankUserController;
 use App\Http\Controllers\Admin\ResultController;
 use App\Http\Controllers\Admin\RoundController;
@@ -58,6 +59,11 @@ Route::prefix('exam')->group(function () {
     Route::get('download', [ExamController::class, 'download'])->name('exam.api.download');
     Route::get('get-by-round/{id}', [ExamController::class, 'get_by_round'])->name('exam.api.get.round');
     Route::get('get-question-by-exam/{id}', [ExamController::class, 'showQuestionAnswerExams'])->name('exam.api.get.questions.exam');
+});
+Route::prefix('questions')->group(function () {
+    Route::get('' , [QuestionController::class , 'indexApi'])->name('questions.api.list');
+    Route::post('save-question' , [QuestionController::class , 'save_questions'])->name('questions.api.save.question');
+    Route::post('dettach-question' , [QuestionController::class , 'remove_question_by_exams'])->name('questions.api.dettach.question');
 });
 
 Route::prefix('contest/round/{id_round}/result')->group(function () {

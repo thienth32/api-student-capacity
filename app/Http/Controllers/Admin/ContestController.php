@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Judge;
 use App\Models\Major;
 use App\Models\Contest;
+use App\Models\Skills;
 use App\Models\Enterprise;
 use Illuminate\Http\Request;
 use App\Services\Traits\TResponse;
@@ -466,8 +467,10 @@ class ContestController extends Controller
                                     }
                                 ])
                                 ->first();
+        $skills = Skills::all();
         return view('pages.contest.detail-capacity.detail',[
-            'test_capacity' => $test_capacity
+            'test_capacity' => $test_capacity,
+            'skills' => $skills
         ]);
     }
 

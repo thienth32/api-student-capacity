@@ -23,8 +23,8 @@
         <div class="d-flex flex-column flex-md-row rounded border p-10">
             <ul class="nav nav-tabs nav-pills flex-row border-0 flex-md-column me-5 mb-3 mb-md-0 fs-6">
                 <li class="nav-item me-0 mb-md-2">
-                    <a class="nav-link nav-list btn btn-flex btn-active-light-success active" data-bs-toggle="tab"
-                        href="#kt_vtab_pane_4">
+                    <a style="width: 100%" class="nav-link nav-list btn btn-flex btn-active-light-success active"
+                        data-bs-toggle="tab" href="#kt_vtab_pane_4">
                         <!--begin::Svg Icon | path: icons/duotune/general/gen001.svg-->
                         <span class="svg-icon svg-icon-2 svg-icon-primary me-3">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -35,12 +35,12 @@
                         </span>
                         <!--end::Svg Icon-->
                         <span class="d-flex flex-column align-items-start">
-                            <span class="fs-4 fw-bolder">Danh sách các bài làm </span>
+                            <span class="fs-4 fw-bolder">Danh sách bài làm </span>
                         </span>
                     </a>
                 </li>
                 <li class="nav-item me-0 mb-md-2">
-                    <a class="nav-link nav-ql btn btn-flex btn-active-light-info">
+                    <a style="width: 100%" class="nav-link nav-ql btn btn-flex btn-active-light-info">
                         <!--begin::Svg Icon | path: icons/duotune/general/gen003.svg-->
                         <span class="svg-icon svg-icon-2 svg-icon-primary">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -51,7 +51,7 @@
                         </span>
                         <!--end::Svg Icon-->
                         <span class="d-flex flex-column align-items-start">
-                            <span class="fs-4 fw-bolder">Quản lý câu hỏi câu trả lời </span>
+                            <span class="fs-4 fw-bolder">Câu hỏi câu trả lời </span>
                         </span>
                     </a>
                 </li>
@@ -70,6 +70,7 @@
                                 <tr>
                                     <th>Tên bài làm </th>
                                     <th>Tổng số đề bài</th>
+                                    <th>Đề bài</th>
                                     <th style="text-align: center">Thao tác </th>
                                 </tr>
                             </thead>
@@ -79,6 +80,11 @@
                                         <tr>
                                             <td>
                                                 {{ $round->name }}
+                                            </td>
+                                            <td>
+                                                <a target="_blank"
+                                                    href="{{ route('admin.exam.create', ['id' => $round->id]) . '?type=1' }}">Thêm
+                                                    đề bài</a>
                                             </td>
                                             <td>
                                                 {{ $round->exams_count }}
@@ -136,177 +142,161 @@
                     </div>
 
                     <div class="modal-body">
-                        <div class="" id="show-add-questions">
+                        <div id="show-tast-qs">
+                            <div class="row card-format">
 
+                                <div class="col-12 col-lg-2 col-sx-12 col-md-12 col-sm-12 col-xxl-2 col-xl-2">
+                                    <div class="   form-group ">
+                                        <label class="form-label">Skill</label>
+                                        <select id="selectSkill" class="form-select mb-2 select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="true" tabindex="-1" aria-hidden="true">
+                                            <option value="-1">Chọn skill</option>
+                                            @foreach ($skills as $skill)
+                                                <option @selected(request('skill') == $skill->id) value="{{ $skill->id }}">
+                                                    {{ $skill->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-2 col-sx-12 col-md-12 col-sm-12 col-xxl-2 col-xl-2">
+                                    <div class="form-group">
+                                        <label class="form-label">Level</label>
+                                        <select id="select-level" class="form-select mb-2 select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="true" tabindex="-1" aria-hidden="true">
+                                            <option value="-1" @selected(!request()->has('level'))>Chọn level</option>
+                                            <option @selected(request()->has('level') && request('level') == 0) value="0">Dễ</option>
+                                            <option @selected(request()->has('level') && request('level') == 1) value="1">Trung bình</option>
+                                            <option @selected(request()->has('level') && request('level') == 2) value="2">Khó</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-2 col-sx-12 col-md-12 col-sm-12 col-xxl-2 col-xl-2">
+                                    <div class="form-group">
+                                        <label class="form-label">Loại</label>
+                                        <select id="select-type" class="form-select mb-2 select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="true" tabindex="-1" aria-hidden="true">
+                                            <option value="-1" @selected(!request()->has('type'))>Chọn loại</option>
+                                            <option @selected(request()->has('type') && request('type') == 0) value="0">Một đáp án</option>
+                                            <option @selected(request()->has('type') && request('type') == 1) value="1">Nhiều đáp án</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-6 col-sx-12 col-md-12 col-sm-12 col-xxl-6 col-xl-6">
+                                    <div class="  form-group">
+                                        <label class="form-label">Tìm kiếm </label>
+                                        <input type="text" value="{{ request('q') ?? '' }}"
+                                            placeholder="*Enter tìm kiếm ..." id="ip-search"
+                                            class=" ip-search form-control">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div id="show-add-questions" class="mt-2 mb-2"></div>
+                            <div id="data-save" class="mt-2">
+                                <div id="show-data-save"></div>
+                                <button class="btn btn-primary" id="save-qs">Lưu </button>
+                                <button class="btn-reload btn btn-success">
+                                    <i class="bi bi-arrow-counterclockwise"></i>
+                                </button>
+                                <button class="btn-back btn btn-warning">
+                                    <i class="bi bi-backspace"></i>
+                                </button>
+                            </div>
                         </div>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Câu hỏi </th>
-                                    <th>Độ khó </th>
-                                    <th>Đáp án </th>
-                                    <th>Tình trạng</th>
-                                    <th> <i role="button" class="btn-add-question-answ bi bi-plus-square-fill fs-2x"></i>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody id="show-ques-anw">
 
-                            </tbody>
-                        </table>
+                        <div id="show-list-qs">
+
+                            <div class="row m-1">
+
+                                <div class="col-12 col-lg-2 col-sx-12 col-md-12 col-sm-12 col-xxl-2 col-xl-2">
+                                    <div class="   form-group ">
+                                        <label class="form-label">Skill</label>
+                                        <select id="selectSkillQs" class="form-select mb-2 select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="true" tabindex="-1" aria-hidden="true">
+                                            <option value="-1">Chọn skill</option>
+                                            @foreach ($skills as $skill)
+                                                <option @selected(request('skill') == $skill->id) value="{{ $skill->id }}">
+                                                    {{ $skill->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-2 col-sx-12 col-md-12 col-sm-12 col-xxl-2 col-xl-2">
+                                    <div class="form-group">
+                                        <label class="form-label">Level</label>
+                                        <select id="select-levelQs" class="form-select mb-2 select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="true" tabindex="-1" aria-hidden="true">
+                                            <option value="-1" @selected(!request()->has('level'))>Chọn level</option>
+                                            <option @selected(request()->has('level') && request('level') == 0) value="0">Dễ</option>
+                                            <option @selected(request()->has('level') && request('level') == 1) value="1">Trung bình</option>
+                                            <option @selected(request()->has('level') && request('level') == 2) value="2">Khó</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-2 col-sx-12 col-md-12 col-sm-12 col-xxl-2 col-xl-2">
+                                    <div class="form-group">
+                                        <label class="form-label">Loại</label>
+                                        <select id="select-typeQs" class="form-select mb-2 select2-hidden-accessible"
+                                            data-control="select2" data-hide-search="true" tabindex="-1" aria-hidden="true">
+                                            <option value="-1" @selected(!request()->has('type'))>Chọn loại</option>
+                                            <option @selected(request()->has('type') && request('type') == 0) value="0">Một đáp án</option>
+                                            <option @selected(request()->has('type') && request('type') == 1) value="1">Nhiều đáp án</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-6 col-sx-12 col-md-12 col-sm-12 col-xxl-6 col-xl-6">
+                                    <div class="  form-group">
+                                        <label class="form-label">Tìm kiếm </label>
+                                        <input type="text" value="{{ request('q') ?? '' }}"
+                                            placeholder="*Enter tìm kiếm ..." id="ip-searchQs"
+                                            class=" ip-search form-control">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <table class="table table-row-bordered table-row-gray-300 gy-7  table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Câu hỏi </th>
+                                        <th>Độ khó </th>
+                                        <th>Đáp án </th>
+                                        <th>Tình trạng</th>
+                                        <th> <i role="button"
+                                                class="btn-add-question-answ bi bi-plus-square-fill fs-2x"></i>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="show-ques-anw">
+
+                                </tbody>
+                            </table>
+                        </div>
+
                     </div>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Thoát </button>
-                        <button type="button" class="btn btn-primary">Lưu</button>
                     </div>
                 </div>
             </div>
         </div>
-
-
     </div>
 @endsection
 @section('page-script')
     <script>
+        const urlApiPublic = "http://127.0.0.1:8000/api/public/";
         let questions = null;
-
-        function backClass(navs, tabs) {
-            $(navs[0]).removeClass('active');
-            $(tabs[0]).removeClass('active');
-            $(tabs[0]).removeClass('show');
-            $(navs[1]).addClass('active');
-            $(tabs[1]).addClass('active');
-            $(tabs[1]).addClass('show');
-        }
-
-        function fetchRoundGet(id) {
-            $('#show-exams').html(`<h2>Đang load ...</h2>`);
-            $.ajax({
-                type: "GET",
-                url: `http://127.0.0.1:8000/api/public/exam/get-by-round/${id}`,
-                success: function(res) {
-                    console.log(res);
-                    if (res.payload.length == 0) return $('#show-exams').html(`<h2>Không có đề bài nào !</h2>`);
-                    var html = res.payload.map(function(data) {
-                        return `
-                            <tr>
-                                <td>${data.name}</td>
-                                <td>${data.max_ponit}</td>
-                                <td>${data.time ?? 'Chưa có thời gian '}</td>
-                                <td>${data.status}</td>
-                                <td>
-                                     <button type="button" data-exam_name="${data.name}" data-exam_id="${data.id}" class="btn-click-show-exams btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_2">
-                                        <i class="bi bi-ui-checks-grid"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        `;
-                    }).join(" ");
-                    $('#show-exams').html(html);
-                },
-                error: function(res) {
-                    alert('Đã xảy ra lỗi !');
-                    backClass([
-                        '.nav-ql',
-                        '.nav-list',
-                    ], [
-                        '.tab-ql',
-                        '.tab-list',
-                    ]);
-                }
-            });
-        }
-        $('.add-exam').on('click', function() {
-            backClass([
-                '.nav-list',
-                '.nav-ql'
-            ], [
-                '.tab-list',
-                '.tab-ql'
-            ]);
-
-            $('#show-exam-round').html(`Danh sách các đề bài của bài làm ${$(this).data('round_name')}`);
-            fetchRoundGet($(this).data('round_id'));
-        });
-        $(document).on('click', '.btn-click-show-exams', function() {
-            const id = $(this).data('exam_id');
-            const name = $(this).data('exam_name');
-            $('#show-ques-anw').html(`<h2>Đang load ... </h2>`);
-            $('.modal-title').html('Quản lý câu hỏi ' + name);
-            $.ajax({
-                type: "GET",
-                url: "http://127.0.0.1:8000/api/public/exam/get-question-by-exam/" + id,
-                success: function(res) {
-                    if (res.payload.length == 0) $('#show-ques-anw').html(
-                        `<h2>Không có câu hỏi câu trả lời nào </h2>`);
-                    questions = res.question;
-                    let html = res.payload.map(function(data, index) {
-                        var htmlChild = data.answers.map(function(val) {
-                            return `
-                                <p> ${val.content} ${val.is_correct == 1 ? ' - Đáp án đúng ' : ''} </p>
-                            `;
-                        }).join(" ");
-                        return `
-                            <tr>
-                                <td>
-                                    <a  data-bs-toggle="collapse" href="#multiCollapseExample${index}"
-                                    role="button"
-                                    aria-expanded="false"
-                                    aria-controls="multiCollapseExample${index}">
-                                    ${data.content}
-                                    </a>
-
-                                    <div class="collapse multi-collapse" id="multiCollapseExample${index}">
-                                        <div class="card card-body">
-                                            ${htmlChild}
-                                        </div>
-                                    </div>
-
-                                    </td>
-                                <td>${data.rank == 0 ? 'Dễ' : data.rank == 1 ? 'Trung bình ' : data.rank == 2 ? 'Khó' : 'No ' }</td>
-                                <td>${data.type == 0 ? 'Một đáp án' : data.type == 1 ? 'Nhiều đáp án ' : 'No'}</td>
-                                <td>${data.status == 0 ? 'Đóng ' : data.status == 1 ? 'Mở' : 'No'}</td>
-                                <td>
-                                    <i role="button" class="bi bi-backspace-reverse-fill fs-2x"></i>
-                                </td>
-                            </tr>
-                        `;
-                    }).join(" ");
-                    $('#show-ques-anw').html(html);
-                }
-            });
-        });
-        $('.btn-add-question-answ').on('click', function() {
-
-        });
-
-        function fetchShowQues(dataQ) {
-            var html = dataQ.map(function(data, index) {
-                var htmlChild = data.answers.map(function(val) {
-                    return `
-                                <p> ${val.content} ${val.is_correct == 1 ? ' - Đáp án đúng ' : ''} </p>
-                            `;
-                }).join(" ");
-
-                return `
-                 <li data-bs-toggle="collapse" href="#multiCollapseExample${index}"
-                                    role="button"
-                                    aria-expanded="false"
-                                    aria-controls="multiCollapseExample${index}" class="list-group-item">
-                    <input class="form-check-input me-1" type="checkbox"  name="q-${index}" value="${data.id}">
-                    ${data.content}- Mức độ : ${data.rank == 0 ? 'Dễ' : data.rank == 1 ? 'Trung bình ' : data.rank == 2 ? 'Khó' : 'No ' }
-                        - Dạng : ${data.type == 0 ? 'Một đáp án' : data.type == 1 ? 'Nhiều đáp án ' : 'No'} -
-                        Tình trạng : ${data.status == 0 ? 'Đóng ' : data.status == 1 ? 'Mở' : 'No'}
-                </li>
-                <div class="collapse multi-collapse" id="multiCollapseExample${index}">
-                    <div class="card card-body">
-                        ${htmlChild}
-                    </div>
-                </div>
-                `;
-            });
-            $('#show-add-questions').html(html);
-        }
+        let listSave = [];
+        let exam_id = null;
+        $('#show-tast-qs').hide();
+        let skill = '';
+        let level = '';
+        let type = '';
+        let q = '';
     </script>
+    <script src="assets/js/system/capacity/main.js"></script>
+
 @endsection
