@@ -56,6 +56,8 @@ Route::prefix('enterprise')->group(function () {
 Route::prefix('exam')->group(function () {
     Route::post('store', [ExamController::class, 'store'])->name('exam.api.store');
     Route::get('download', [ExamController::class, 'download'])->name('exam.api.download');
+    Route::get('get-by-round/{id}', [ExamController::class, 'get_by_round'])->name('exam.api.get.round');
+    Route::get('get-question-by-exam/{id}', [ExamController::class, 'showQuestionAnswerExams'])->name('exam.api.get.questions.exam');
 });
 
 Route::prefix('contest/round/{id_round}/result')->group(function () {

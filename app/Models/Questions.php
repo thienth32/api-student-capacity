@@ -10,4 +10,14 @@ class Questions extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = 'questions';
+
+    public function answers()
+    {
+        return $this -> hasMany(Answers::class,'question_id');
+    }
+
+    public function skill()
+    {
+        return $this -> belongsToMany(Skills::class,'question_skills' , 'question_id' ,'skill_id');
+    }
 }

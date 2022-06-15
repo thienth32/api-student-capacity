@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Exams;
+use App\Models\Questions;
 use App\Services\Traits\TUploadImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Round;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
@@ -199,5 +201,50 @@ class ExamController extends Controller
                 'payload' => $th
             ]);
         }
+    }
+
+    public function get_by_round($id)
+    {
+        try {
+            $exams = Exams::where('round_id',$id)->where('type',1)->with(['questions' => function ($q) {
+                return $q -> with('answers');
+            }])->get();
+            $questions = Questions::with([
+                'answers'
+            ])->take(10)->get();
+            return response() -> json([
+                'status' => true,
+                'payload' => $exams,
+                'question' => $questions
+            ]);
+        } catch (\Throwable $th) {
+             return response() -> json([
+                'status' => false,
+                'payload' => 'Hệ thống đã xảy ra lỗi '
+            ],404);
+        }
+
+    }
+
+    public function showQuestionAnswerExams($id)
+    {
+        //  try {
+            $exam = Exams::whereId($id)->where('type',1)->with(['questions' => function ($q) {
+                return $q -> with('answers');
+            }])->first();
+            $questions = Questions::with([
+                'answers','skill'
+            ])->take(10)->get();
+            return response() -> json([
+                'status' => true,
+                'payload' => $exam->questions,
+                'question' => $questions
+            ]);
+        // } catch (\Throwable $th) {
+        //      return response() -> json([
+        //         'status' => false,
+        //         'payload' => 'Hệ thống đã xảy ra lỗi '
+        //     ],404);
+        // }
     }
 }

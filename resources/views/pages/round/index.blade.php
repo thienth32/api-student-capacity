@@ -228,7 +228,7 @@
                                 <!--end::Svg Icon-->
                             </span>
                         </th>
-                        <th scope="col">Vòng thi
+                        <th scope="col">Vòng thi (VT) && bài làm (BL)
                             <span role="button" data-key="name"
                                 class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
@@ -339,9 +339,15 @@
                                 </th>
                             @endif
                             <td>
-                                <a href="{{ route('admin.round.detail', ['id' => $round->id]) }}">
-                                    {{ $round->name }}
-                                </a>
+                                @if ($round->contest->type == 0)
+                                    <a href="{{ route('admin.round.detail', ['id' => $round->id]) }}">
+                                        VT-{{ $round->name }}
+                                    </a>
+                                @else
+                                    <a href="{{ route('admin.contest.show.capatity', ['id' => $round->id]) }}">
+                                        BL-{{ $round->name }}
+                                    </a>
+                                @endif
                             </td>
 
                             <td>{{ $round->contest->type == 0 ? $round->contest->name ?? 'Chưa có cuộc thi ' : $round->contest->name ?? 'Chưa có test năng lực  ' }}
@@ -371,7 +377,8 @@
                                     </button>
                                     <ul class="dropdown-menu ps-3">
                                         <li class="my-3">
-                                            <a href="{{ route('admin.round.edit', ['id' => $round->id]) }}">
+                                            <a
+                                                href="{{ route('admin.round.edit', ['id' => $round->id]) . '?type=' . $round->contest->type }}">
                                                 <span role="button" class="svg-icon svg-icon-success svg-icon-2x">
                                                     <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Design/Edit.svg--><svg
                                                         xmlns="http://www.w3.org/2000/svg"
@@ -392,7 +399,10 @@
                                             </a>
                                         </li>
                                         <li class="my-3">
-                                            <a href="{{ route('admin.round.detail', ['id' => $round->id]) }}">
+                                            <a
+                                                href="{{ $round->contest->type == 0
+                                                    ? route('admin.round.detail', ['id' => $round->id])
+                                                    : route('admin.contest.show.capatity', ['id' => $round->id]) }}">
                                                 <span class="svg-icon svg-icon-primary svg-icon-2x ">
                                                     <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Text/Redo.svg--><svg
                                                         xmlns="http://www.w3.org/2000/svg"

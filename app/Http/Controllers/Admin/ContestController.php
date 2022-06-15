@@ -454,6 +454,22 @@ class ContestController extends Controller
         return view('pages.contest.detail.detail', compact('contest'));
     }
 
+    public function show_test_capacity(Request $request, Contest $contest , $id)
+    {
+        if(!$contest::where('type' , 1)->whereId($id)->exists()) abort(404);
+        $test_capacity = $contest::where('type' , 1)
+                                ->whereId($id)
+                                ->with([
+                                    'rounds' => function ($q)
+                                    {
+                                        return $q -> with(['exams']) -> withCount('exams');
+                                    }
+                                ])
+                                ->first();
+        return view('pages.contest.detail-capacity.detail',[
+            'test_capacity' => $test_capacity
+        ]);
+    }
 
     public function contestDetailTeam($id)
     {

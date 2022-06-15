@@ -289,4 +289,8 @@ Route::group([
         Route::post('re-status/{id}', [UserController::class, 're_status'])->name('admin.acount.re.status');
         Route::post('change-role', [UserController::class, 'changeRole'])->name('admin.acount.change.role');
     });
+
+    Route::prefix('capacity')->group(function () {
+        Route::get('{id}',[ContestController::class,'show_test_capacity'])->name('admin.contest.show.capatity');
+    });
 });

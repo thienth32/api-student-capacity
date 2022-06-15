@@ -315,7 +315,9 @@
                                         {{ $contest->name }}
                                     </a>
                                 @else
-                                    {{ $contest->name }}
+                                    <a href="{{ route('admin.contest.show.capatity', ['id' => $contest->id]) }}">
+                                        {{ $contest->name }}
+                                    </a>
                                 @endif
 
                             </td>
