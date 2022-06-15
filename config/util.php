@@ -26,4 +26,8 @@ return [
     ],
     "TYPE_CONTEST" => 0,
     "TYPE_TEST" => 1,
+
+    "RANK_QUESTION_EASY" => 0,
+    "RANK_QUESTION_MEDIUM" => 1,
+    "RANK_QUESTION_DIFFICULT" => 2,
 ];

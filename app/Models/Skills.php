@@ -17,4 +17,8 @@ class Skills extends Model
         return $this->belongsToMany(Major::class, 'major_skills', 'skill_id', 'major_id');
     }
 
+    public function questions()
+    {
+        return $this->belongsToMany(Questions::class, 'question_skills', 'skill_id', 'question_id');
+    }
 }

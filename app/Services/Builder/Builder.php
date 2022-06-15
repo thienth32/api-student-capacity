@@ -108,7 +108,7 @@ class Builder extends  EloquentBuilder
     {
         if ($search == null) return $this;
         // if (!(\Str::contains($search, '@'))) $search = \Str::slug($search, " ");
-        $this->where('type',request('type') ?? 0)->where($search_by[0], 'LIKE', "%" . $search . "%");
+        $this->where('type', request('type') ?? 0)->where($search_by[0], 'LIKE', "%" . $search . "%");
         foreach ($search_by as $key => $item) {
             if ($key !== 0) $this->orWhere($item, 'LIKE', "%" . $search . "%");
         }
@@ -158,5 +158,14 @@ class Builder extends  EloquentBuilder
         $role = \Str::slug($role, " ");
         if (!(\Spatie\Permission\Models\Role::where('name', $role)->exists())) $role = \Spatie\Permission\Models\Role::first()->name;
         return $this->role($role);
+    }
+    public function whenWhereHasRelationship($value = null, $relation = null, $tableColumn = null)
+    {
+        if ($value == null) return $this;
+        if ($relation == null) return $this;
+        if ($tableColumn == null) return $this;
+        return $this->whereHas($relation, function ($query) use ($value,  $tableColumn) {
+            $query->where($tableColumn, $value);
+        });
     }
 }

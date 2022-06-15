@@ -1,19 +1,20 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\ExamController;
 use App\Http\Controllers\Admin\TeamController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\MajorController;
 use App\Http\Controllers\Admin\RoundController;
+use App\Http\Controllers\Admin\SkillController;
+use App\Http\Controllers\Admin\JudgesController;
+use App\Http\Controllers\Admin\ResultController;
+use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\ContestController;
+use App\Http\Controllers\Admin\QuestionController;
+use App\Http\Controllers\Admin\SendMailController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EnterpriseController;
-use App\Http\Controllers\Admin\ExamController;
-use App\Http\Controllers\Admin\JudgesController;
-use App\Http\Controllers\Admin\MajorController;
-use App\Http\Controllers\Admin\ResultController;
-use App\Http\Controllers\Admin\SendMailController;
-use App\Http\Controllers\Admin\SliderController;
-use App\Http\Controllers\Admin\SkillController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('dashboard/api-cuoc-thi', [DashboardController::class, 'chartCompetity'])->name('dashboard.chart-competity');
@@ -293,4 +294,15 @@ Route::group([
     Route::prefix('capacity')->group(function () {
         Route::get('{id}',[ContestController::class,'show_test_capacity'])->name('admin.contest.show.capatity');
     });
+});
+
+Route::prefix('questions')->group(function () {
+    Route::get('', [QuestionController::class, 'index'])->name('admin.question.index');
+    Route::get('add', [QuestionController::class, 'create'])->name('admin.question.create');
+    Route::post('add', [QuestionController::class, 'store'])->name('admin.question.store');
+    Route::get('edit/{id}', [QuestionController::class, 'edit'])->name('admin.question.edit');
+    Route::post('update/{id}', [QuestionController::class, 'update'])->name('admin.question.update');
+    Route::delete('destroy', [QuestionController::class, 'destroy'])->name('admin.question.destroy');
+    Route::post('un-status', [QuestionController::class, 'un_status'])->name('admin.question.un.status');
+    Route::post('re-status', [QuestionController::class, 're_status'])->name('admin.question.re.status');
 });
