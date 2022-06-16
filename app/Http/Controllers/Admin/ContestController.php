@@ -41,9 +41,36 @@ class ContestController extends Controller
     /**
      *  Get list contest
      */
-    private function getList()
+    private function getList($flagCapacity = false)
     {
         try {
+            $with = [];
+            if(!$flagCapacity) $with = [
+                    'major',
+                    'teams',
+                    'rounds' => function ($q) {
+                        return $q->with([
+                            'teams' => function ($q) {
+                                return $q->with('members');
+                            }
+                        ]);
+                    },
+                    'enterprise',
+                    'judges'
+                ];
+            if($flagCapacity) $with = [
+                'rounds' => function ($q) {
+                    return $q -> with([
+                        'exams' => function ($q) {
+                            return $q -> with ([
+                                'questions' => function ($q) {
+                                    return $q -> with('answers');
+                                }
+                            ]);
+                        }
+                    ]);
+                }
+            ];
             $now = Carbon::now('Asia/Ho_Chi_Minh');
             $data = $this->contest::when(request()->has('contest_soft_delete'), function ($q) {
                 return $q->onlyTrashed();
@@ -60,22 +87,8 @@ class ContestController extends Controller
                 ->hasDateTimeBetween('date_start', request('start_time') ?? null, request('end_time') ?? null)
                 // ->hasDateTimeBetween('end_register_time',request('registration_date'))
                 ->hasRequest(['major_id' => request('major_id') ?? null])
-                ->with([
-                    'major',
-                    'teams',
-                    'rounds' => function ($q) {
-                        return $q->with([
-                            'teams' => function ($q) {
-                                return $q->with('members');
-                            }
-                        ]);
-                    },
-                    'enterprise',
-                    'judges'
-                ])
+                ->with($with)
                 ->withCount('teams');
-            // ->paginate(request('limit') ?? 10);
-            // if(request()->ajax()){}
             return $data;
         } catch (\Throwable $th) {
             return false;
@@ -111,13 +124,31 @@ class ContestController extends Controller
         return $this->responseApi(
             [
                 "status" => true,
-                "payload" => $data->paginate(request('limit') ?? 9),
+                "payload" => $data->where('type',config('util.TYPE_CONTEST'))->paginate(request('limit') ?? 9),
             ]
         );
     }
     /**
      *  End contest
      */
+
+      public function apiIndexCapacity()
+    {
+
+        if (!($data = $this->getList(true))) return $this->responseApi(
+            [
+                "status" => false,
+                "payload" => "Not found",
+            ],
+            404
+        );
+        return $this->responseApi(
+            [
+                "status" => true,
+                "payload" => $data->where('type',config('util.TYPE_TEST'))->paginate(request('limit') ?? 9),
+            ]
+        );
+    }
 
 
     public function create()

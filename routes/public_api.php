@@ -34,6 +34,10 @@ Route::prefix('contests')->group(function () {
     Route::get('', [AdminContestController::class, 'apiIndex'])->name('contest.api.index');
     Route::get('{id}', [AdminContestController::class, 'apiShow'])->name('contest.api.show');
 });
+Route::prefix('capacity')->group(function () {
+    Route::get('', [AdminContestController::class, 'apiIndexCapacity'])->name('capacity.api.index');
+});
+
 Route::prefix('rounds')->group(function () {
     Route::get('', [RoundController::class, 'apiIndex'])->name('round.api.index');
     Route::get('{id}', [RoundController::class, 'show'])->name('round.api.show');
