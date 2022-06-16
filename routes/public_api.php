@@ -36,6 +36,7 @@ Route::prefix('contests')->group(function () {
 });
 Route::prefix('capacity')->group(function () {
     Route::get('', [AdminContestController::class, 'apiIndexCapacity'])->name('capacity.api.index');
+    Route::get('{id}', [AdminContestController::class, 'apiShowCapacity'])->name('capacity.api.show');
 });
 
 Route::prefix('rounds')->group(function () {
@@ -65,9 +66,9 @@ Route::prefix('exam')->group(function () {
     Route::get('get-question-by-exam/{id}', [ExamController::class, 'showQuestionAnswerExams'])->name('exam.api.get.questions.exam');
 });
 Route::prefix('questions')->group(function () {
-    Route::get('' , [QuestionController::class , 'indexApi'])->name('questions.api.list');
-    Route::post('save-question' , [QuestionController::class , 'save_questions'])->name('questions.api.save.question');
-    Route::post('dettach-question' , [QuestionController::class , 'remove_question_by_exams'])->name('questions.api.dettach.question');
+    Route::get('', [QuestionController::class, 'indexApi'])->name('questions.api.list');
+    Route::post('save-question', [QuestionController::class, 'save_questions'])->name('questions.api.save.question');
+    Route::post('dettach-question', [QuestionController::class, 'remove_question_by_exams'])->name('questions.api.dettach.question');
 });
 
 Route::prefix('contest/round/{id_round}/result')->group(function () {

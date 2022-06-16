@@ -45,26 +45,26 @@ class ContestController extends Controller
     {
         try {
             $with = [];
-            if(!$flagCapacity) $with = [
-                    'major',
-                    'teams',
-                    'rounds' => function ($q) {
-                        return $q->with([
-                            'teams' => function ($q) {
-                                return $q->with('members');
-                            }
-                        ]);
-                    },
-                    'enterprise',
-                    'judges'
-                ];
-            if($flagCapacity) $with = [
+            if (!$flagCapacity) $with = [
+                'major',
+                'teams',
                 'rounds' => function ($q) {
-                    return $q -> with([
+                    return $q->with([
+                        'teams' => function ($q) {
+                            return $q->with('members');
+                        }
+                    ]);
+                },
+                'enterprise',
+                'judges'
+            ];
+            if ($flagCapacity) $with = [
+                'rounds' => function ($q) {
+                    return $q->with([
                         'exams' => function ($q) {
-                            return $q -> with ([
+                            return $q->with([
                                 'questions' => function ($q) {
-                                    return $q -> with('answers');
+                                    return $q->with('answers');
                                 }
                             ]);
                         }
@@ -124,7 +124,7 @@ class ContestController extends Controller
         return $this->responseApi(
             [
                 "status" => true,
-                "payload" => $data->where('type',config('util.TYPE_CONTEST'))->paginate(request('limit') ?? 9),
+                "payload" => $data->where('type', config('util.TYPE_CONTEST'))->paginate(request('limit') ?? 9),
             ]
         );
     }
@@ -132,7 +132,7 @@ class ContestController extends Controller
      *  End contest
      */
 
-      public function apiIndexCapacity()
+    public function apiIndexCapacity()
     {
 
         if (!($data = $this->getList(true))) return $this->responseApi(
@@ -145,7 +145,7 @@ class ContestController extends Controller
         return $this->responseApi(
             [
                 "status" => true,
-                "payload" => $data->where('type',config('util.TYPE_TEST'))->paginate(request('limit') ?? 9),
+                "payload" => $data->where('type', config('util.TYPE_TEST'))->paginate(request('limit') ?? 9),
             ]
         );
     }
@@ -316,7 +316,7 @@ class ContestController extends Controller
         $major = Major::orderBy('id', 'desc')->get();
         $contest_type_text = request('type') == 1 ? 'test năng lực' : 'cuộc thi';
         $contest = $this->getContest($id, request('type') ?? 0)->first();
-        if(!$contest) abort(404);
+        if (!$contest) abort(404);
         if ($contest->type != request('type')) abort(404);
         $rewardRankPoint = json_decode($contest->reward_rank_point);
         if ($contest) {
@@ -402,10 +402,10 @@ class ContestController extends Controller
         }
     }
 
-    private function getContest($id,$type = 0)
+    private function getContest($id, $type = 0)
     {
         try {
-            $contest = $this->contest::where('id', $id)->where('type' ,$type);
+            $contest = $this->contest::where('id', $id)->where('type', $type);
             return $contest;
         } catch (\Throwable $th) {
             return false;
@@ -437,13 +437,13 @@ class ContestController extends Controller
     {
         try {
             //
-            if (!($contest = $this->getContest($id,config('util.TYPE_CONTEST')))) return $this->responseApi(
+            if (!($contest = $this->getContest($id, config('util.TYPE_CONTEST')))) return $this->responseApi(
                 [
                     'status' => false,
                     'payload' => 'Không tìm thấy cuộc thi !',
                 ]
             );
-            if (!($contest2 = $this->addCollectionApiContest($contest))) return $this->responseApi(
+            if (!($contest2 = $this->addCollectionApiContest($contest)->first())) return $this->responseApi(
                 [
                     'status' => false,
                     'payload' => 'Không thể lấy thông tin cuộc thi  !',
@@ -453,7 +453,7 @@ class ContestController extends Controller
             return $this->responseApi(
                 [
                     "status" => true,
-                    "payload" => $contest2->first(),
+                    "payload" => $contest2,
                 ]
             );
         } catch (\Throwable $th) {
@@ -468,10 +468,35 @@ class ContestController extends Controller
         }
     }
 
+    public function apiShowCapacity($id)
+    {
+        try {
+            if (!($contest = $this->getContest($id, config('util.TYPE_TEST'))->first())) return $this->responseApi(
+                [
+                    'status' => false,
+                    'payload' => 'Không tìm thấy bài test năng lực !',
+                ]
+            );
+            return $this->responseApi(
+                [
+                    "status" => true,
+                    "payload" => $contest,
+                ]
+            );
+        } catch (\Throwable $th) {
+            return $this->responseApi(
+                [
+                    "status" => false,
+                    "payload" => 'Not found ',
+                ],
+                404
+            );
+        }
+    }
 
     public function show(Request $request, $id)
     {
-        $contest =  Contest::whereId($id)->where('type',config('util.TYPE_CONTEST'))->load(['judges', 'rounds' => function ($q) use ($id) {
+        $contest =  Contest::whereId($id)->where('type', config('util.TYPE_CONTEST'))->load(['judges', 'rounds' => function ($q) use ($id) {
             return $q->when(
                 auth()->check() && auth()->user()->hasRole('judge'),
                 function ($q) use ($id) {
@@ -487,20 +512,19 @@ class ContestController extends Controller
         return view('pages.contest.detail.detail', compact('contest'));
     }
 
-    public function show_test_capacity(Request $request, Contest $contest , $id)
+    public function show_test_capacity(Request $request, Contest $contest, $id)
     {
-        if(!$contest::where('type' , 1)->whereId($id)->exists()) abort(404);
-        $test_capacity = $contest::where('type' , 1)
-                                ->whereId($id)
-                                ->with([
-                                    'rounds' => function ($q)
-                                    {
-                                        return $q -> with(['exams']) -> withCount('exams');
-                                    }
-                                ])
-                                ->first();
+        if (!$contest::where('type', 1)->whereId($id)->exists()) abort(404);
+        $test_capacity = $contest::where('type', 1)
+            ->whereId($id)
+            ->with([
+                'rounds' => function ($q) {
+                    return $q->with(['exams'])->withCount('exams');
+                }
+            ])
+            ->first();
         $skills = Skills::all();
-        return view('pages.contest.detail-capacity.detail',[
+        return view('pages.contest.detail-capacity.detail', [
             'test_capacity' => $test_capacity,
             'skills' => $skills
         ]);
