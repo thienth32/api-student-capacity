@@ -82,13 +82,13 @@ class ContestController extends Controller
     }
     private function checkTypeContest()
     {
-        if(request('type') != config('util.TYPE_CONTEST') && request('type') != config('util.TYPE_TEST')) abort(404);
+        if (request('type') != config('util.TYPE_CONTEST') && request('type') != config('util.TYPE_TEST')) abort(404);
     }
     //  View contest
     public function index()
     {
         $this->checkTypeContest();
-        if (!($data = $this->getList()->where('type',request('type') ?? 0)->paginate(request('limit') ?? 10))) return abort(404);
+        if (!($data = $this->getList()->where('type', request('type') ?? 0)->paginate(request('limit') ?? 10))) return abort(404);
         return view('pages.contest.index', [
             'contests' => $data,
             'majors' => Major::where('parent_id', 0)->get(),
@@ -124,26 +124,26 @@ class ContestController extends Controller
         $this->checkTypeContest();
         $majors = Major::all();
         $contest_type_text = request('type') == 1 ? 'test năng lực' : 'cuộc thi';
-        return view('pages.contest.form-add', compact('majors','contest_type_text'));
+        return view('pages.contest.form-add', compact('majors', 'contest_type_text'));
     }
     public function store(Request $request)
     {
         $this->checkTypeContest();
         $rule =   [
-                'name' => 'required|max:255|unique:contests,name',
-                'top1' => 'required|numeric',
-                'top2' => 'required|numeric',
-                'top3' => 'required|numeric',
-                'leave' => 'required|numeric',
-                'img' => 'required|mimes:jpeg,png,jpg|max:10000',
-                'date_start' => 'required|date',
-                'register_deadline' => 'required|date',
-                'description' => 'required',
+            'name' => 'required|max:255|unique:contests,name',
+            'top1' => 'required|numeric',
+            'top2' => 'required|numeric',
+            'top3' => 'required|numeric',
+            'leave' => 'required|numeric',
+            'img' => 'required|mimes:jpeg,png,jpg|max:10000',
+            'date_start' => 'required|date',
+            'register_deadline' => 'required|date',
+            'description' => 'required',
         ];
-        if(request('type') == config('util.TYPE_CONTEST')) $rule = array_merge($rule , [
-                'max_user' => 'required|numeric',
-                'start_register_time' => 'required|date',
-                'end_register_time' => 'required|date',
+        if (request('type') == config('util.TYPE_CONTEST')) $rule = array_merge($rule, [
+            'max_user' => 'required|numeric',
+            'start_register_time' => 'required|date',
+            'end_register_time' => 'required|date',
         ]);
         $validator = Validator::make(
             $request->all(),
@@ -284,10 +284,10 @@ class ContestController extends Controller
         $major = Major::orderBy('id', 'desc')->get();
         $contest_type_text = request('type') == 1 ? 'test năng lực' : 'cuộc thi';
         $contest = $this->getContest($id)->first();
-        if($contest->type != request('type') ) abort(404);
+        if ($contest->type != request('type')) abort(404);
         $rewardRankPoint = json_decode($contest->reward_rank_point);
         if ($contest) {
-            return view('pages.contest.edit', compact('contest', 'major', 'rewardRankPoint' ,'contest_type_text'));
+            return view('pages.contest.edit', compact('contest', 'major', 'rewardRankPoint', 'contest_type_text'));
         } else {
             return view('error');
         }
@@ -295,20 +295,20 @@ class ContestController extends Controller
 
     public function update(Request $request, $id)
     {
-         $this->checkTypeContest();
+        $this->checkTypeContest();
         $rule = [
-                'name' => 'required|unique:contests,name,' . $id . '',
-                'img' => 'mimes:jpeg,png,jpg|max:10000',
-                'date_start' => "required",
-                'register_deadline' => "required|after:date_start",
-                'description' => "required",
-                'major_id' => "required",
+            'name' => 'required|unique:contests,name,' . $id . '',
+            'img' => 'mimes:jpeg,png,jpg|max:10000',
+            'date_start' => "required",
+            'register_deadline' => "required|after:date_start",
+            'description' => "required",
+            'major_id' => "required",
 
         ];
-        if(request('type') == config('util.TYPE_CONTEST')) $rule = array_merge($rule , [
-                'max_user' => 'required|numeric',
-                'start_register_time' => 'required|date|before:end_register_time',
-                'end_register_time' => 'required|date|after:start_register_time',
+        if (request('type') == config('util.TYPE_CONTEST')) $rule = array_merge($rule, [
+            'max_user' => 'required|numeric',
+            'start_register_time' => 'required|date|before:end_register_time',
+            'end_register_time' => 'required|date|after:start_register_time',
         ]);
         $validator = Validator::make(
             $request->all(),

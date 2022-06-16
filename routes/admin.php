@@ -298,7 +298,10 @@ Route::prefix('questions')->group(function () {
     Route::post('add', [QuestionController::class, 'store'])->name('admin.question.store');
     Route::get('edit/{id}', [QuestionController::class, 'edit'])->name('admin.question.edit');
     Route::post('update/{id}', [QuestionController::class, 'update'])->name('admin.question.update');
-    Route::delete('destroy', [QuestionController::class, 'destroy'])->name('admin.question.destroy');
+    Route::delete('destroy/{id}', [QuestionController::class, 'destroy'])->name('admin.question.destroy');
     Route::post('un-status', [QuestionController::class, 'un_status'])->name('admin.question.un.status');
     Route::post('re-status', [QuestionController::class, 're_status'])->name('admin.question.re.status');
+    Route::get('soft-delete', [QuestionController::class, 'softDeleteList'])->name('admin.question.soft.delete');
+    Route::delete('delete/{id}', [QuestionController::class, 'delete'])->name('admin.question.delete');
+    Route::get('restore-delete/{id}', [QuestionController::class, 'restoreDelete'])->name('admin.question.restore');
 });

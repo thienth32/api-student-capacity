@@ -204,7 +204,12 @@
                                         </div>
                                     @endfor
                                 @endif
-
+                                @if (session()->has('errorAnswerConten'))
+                                    <p class="text-danger">{{ session()->get('errorAnswerConten') }}</p>
+                                    @php
+                                        Session::forget('errorAnswerConten');
+                                    @endphp
+                                @endif
                             </div>
                         </div>
                         <!--end::Form group-->

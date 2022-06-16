@@ -33,7 +33,10 @@ class QuestionController extends Controller
     {
         try {
             $now = Carbon::now('Asia/Ho_Chi_Minh');
-            $data = $this->questionModel::status(request('status'))
+            $data = $this->questionModel::when(request()->has('question_soft_delete'), function ($q) {
+                return $q->onlyTrashed();
+            })
+                ->status(request('status'))
                 ->search(request('q') ?? null, ['content'])
                 ->sort((request('sort') == 'asc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'questions')
                 ->whenWhereHasRelationship(request('skill') ?? null, 'skills', 'skills.id')
@@ -51,7 +54,7 @@ class QuestionController extends Controller
             //     });
             // });
 
-            $data->with('skills');
+            $data->with(['skills', 'answers']);
             return $data;
         } catch (\Throwable $th) {
             dd($th);
@@ -94,6 +97,7 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
+        // dump(count($request->answers));
         // dd($request->all());
         $validator = Validator::make(
             $request->all(),
@@ -123,7 +127,10 @@ class QuestionController extends Controller
             ]
         );
         // dd($validator->messages());
-        if ($validator->fails()) {
+        if ($validator->fails() || count($request->answers) <= 2) {
+            if (count($request->answers) <= 2) {
+                return redirect()->back()->withErrors($validator)->with('errorAnswerConten', 'Phải ít nhất 3 đáp án !!')->withInput($request->input());
+            }
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
@@ -193,7 +200,8 @@ class QuestionController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'content' => 'required|unique:questions,content,' . $id . '',
+                // 'content' => 'required|unique:questions,content,' . $id . '',
+                'content' => 'required',
                 'type' => 'required|numeric',
                 'status' => 'required|numeric',
                 'rank' => 'required|numeric',
@@ -204,7 +212,7 @@ class QuestionController extends Controller
             [
                 'answers.*.content.required' => 'Chưa nhập trường này !',
                 'content.required' => 'Chưa nhập trường này !',
-                'content.unique' => 'Nội dung đã tồn tại !',
+                // 'content.unique' => 'Nội dung đã tồn tại !',
                 'type.required' => 'Chưa nhập trường này !',
                 'type.numeric' => 'Sai định dạng !',
                 'status.required' => 'Chưa nhập trường này !',
@@ -216,7 +224,10 @@ class QuestionController extends Controller
             ]
         );
 
-        if ($validator->fails()) {
+        if ($validator->fails() || count($request->answers) <= 2) {
+            if (count($request->answers) <= 2) {
+                return redirect()->back()->withErrors($validator)->with('errorAnswerConten', 'Phải ít nhất 3 đáp án !!')->withInput($request->input());
+            }
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
@@ -259,9 +270,10 @@ class QuestionController extends Controller
      * @param  \App\Models\Questions  $questions
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Questions $questions)
+    public function destroy(Questions $questions, $id)
     {
-        //
+        $this->questionModel::find($id)->delete();
+        return Redirect::route('admin.question.index');
     }
 
 
@@ -301,6 +313,35 @@ class QuestionController extends Controller
                 'status' => false,
                 'payload' => 'Không thể câp nhật trạng thái !',
             ]);
+        }
+    }
+
+    public function softDeleteList()
+    {
+        $skills = $this->skillModel::all();
+        if (!($questions = $this->getList()->paginate(request('limit') ?? 5))) return abort(404);
+        // dd($questions);
+        return view('pages.question.list-soft-delete', [
+            'questions' => $questions,
+            'skills' => $skills,
+        ]);
+    }
+    public function delete($id)
+    {
+        try {
+            $this->questionModel::withTrashed()->where('id', $id)->forceDelete();
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            return abort(404);
+        }
+    }
+    public function restoreDelete($id)
+    {
+        try {
+            $this->questionModel::withTrashed()->where('id', $id)->restore();
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            return abort(404);
         }
     }
 }

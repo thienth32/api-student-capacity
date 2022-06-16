@@ -29,6 +29,14 @@ class Questions extends Model
     {
         return new Builder($query);
     }
+    public static function boot()
+    {
+        parent::boot();
+        static::deleting(function ($q) {
+            $q->answers()->delete();
+            $q->skills()->detach();
+        });
+    }
     public function skills()
     {
         return $this->belongsToMany(Skills::class, 'question_skills', 'question_id', 'skill_id');

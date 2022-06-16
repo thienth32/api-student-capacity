@@ -117,7 +117,7 @@
                         <!--begin::Form group-->
                         <div class="form-group">
                             <div data-repeater-list="answers">
-                                @for ($i = 0; $i <= 4; $i++)
+                                @for ($i = 0; $i < 4; $i++)
                                     <div data-repeater-item>
                                         <div class="form-group row pb-5">
                                             <div class="col-md-6">
@@ -139,19 +139,25 @@
                                                     </label>
                                                 </div>
                                             </div>
-                                            @if ($i == 0)
-                                                <div class="col-md-4">
-                                                    <a href="javascript:;" data-repeater-delete
-                                                        class="btn btn-sm btn-light-danger mt-3 mt-md-8">
-                                                        <i class="la la-trash-o"></i>Xóa
-                                                    </a>
-                                                </div>
-                                            @endif
+
+                                            <div class="col-md-4">
+                                                <a href="javascript:;" data-repeater-delete
+                                                    class="btn btn-sm btn-light-danger mt-3 mt-md-8">
+                                                    <i class="la la-trash-o"></i>Xóa
+                                                </a>
+                                            </div>
+
                                         </div>
                                     </div>
                                 @endfor
 
                             </div>
+                            @if (session()->has('errorAnswerConten'))
+                                <p class="text-danger">{{ session()->get('errorAnswerConten') }}</p>
+                                @php
+                                    Session::forget('errorAnswerConten');
+                                @endphp
+                            @endif
                         </div>
                         <!--end::Form group-->
                         <!--begin::Form group-->
