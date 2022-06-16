@@ -68,7 +68,7 @@ class QuestionController extends Controller
     public function indexApi()
     {
         try {
-            if (!($questions = $this->getList()->take(5)->get())) return abort(404);
+            if (!($questions = $this->getList()->take(10)->get())) return abort(404);
             return response() -> json([
                 'status' => true,
                 'payload' => $questions,
@@ -322,7 +322,7 @@ class QuestionController extends Controller
         try {
             $ids = [];
             $exams = Exams::whereId($request->exam_id)->first();
-            foreach($request -> question_ids as $question_id)
+            foreach($request -> question_ids ?? [] as $question_id)
             {
                 array_push($ids,(int)$question_id['id']);
             }
