@@ -50,6 +50,7 @@ class Round extends Model
             "description" => $this->description,
             "contest_id" => $this->contest_id,
             "type_exam_id" => $this->type_exam_id,
+            "contest" => $this->contest->toArray()
         ];
     }
 

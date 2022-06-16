@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Answers;
+use App\Models\Exams;
 use App\Models\Questions;
 use App\Models\Skills;
 use Carbon\Carbon;
@@ -47,13 +48,6 @@ class QuestionController extends Controller
                 ->when(request()->has('type'), function ($q) {
                     $q->where('type', request('type'));
                 });
-
-            // ->when(request()->has('skill'), function ($q) {
-            //     $q->whereHas('skills', function ($query) {
-            //         $query->where('skills.id', request('skill'));
-            //     });
-            // });
-
             $data->with(['skills', 'answers']);
             return $data;
         } catch (\Throwable $th) {
@@ -70,6 +64,23 @@ class QuestionController extends Controller
             'questions' => $questions,
             'skills' => $skills,
         ]);
+    }
+
+    public function indexApi()
+    {
+        try {
+            if (!($questions = $this->getList()->take(10)->get())) return abort(404);
+            return response() -> json([
+                'status' => true,
+                'payload' => $questions,
+            ]);
+        } catch (\Throwable $th) {
+            return response() -> json([
+                'status' => false,
+                'payload' => 'Hệ thống đã xảy ra lỗi ! ',
+            ],404);
+        }
+
     }
 
     /**
@@ -342,6 +353,42 @@ class QuestionController extends Controller
             return redirect()->back();
         } catch (\Throwable $th) {
             return abort(404);
+    public function save_questions(Request $request)
+    {
+        try {
+            $ids = [];
+            $exams = Exams::whereId($request->exam_id)->first();
+            foreach($request -> question_ids ?? [] as $question_id)
+            {
+                array_push($ids,(int)$question_id['id']);
+            }
+            $exams -> questions() -> sync($ids);
+            return response()->json([
+                'status' => true,
+                'payload' => 'Cập nhật trạng thái thành công  !',
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'payload' => 'Không thể câp nhật trạng câu hỏi  !',
+            ]);
+        }
+    }
+
+    public function remove_question_by_exams(Request $request)
+    {
+        try {
+            $exams = Exams::whereId($request->exam_id)->first();
+            $exams -> questions()->detach($request->questions_id);
+            return response()->json([
+                'status' => true,
+                'payload' => 'Cập nhật trạng thái thành công  !',
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'payload' => 'Không thể xóa câu hỏi  !',
+            ]);
         }
     }
 }

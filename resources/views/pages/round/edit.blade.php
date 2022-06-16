@@ -1,6 +1,6 @@
 @extends('layouts.main')
-@section('title', 'Cập nhật vòng thi ')
-@section('page-title', 'Cập nhật vòng thi')
+@section('title', 'Cập nhật ' . $nameContestType)
+@section('page-title', 'Cập nhật ' . $nameContestType)
 @section('content')
 
     <div class="row">
@@ -12,7 +12,7 @@
                     @csrf
                     @method('put')
                     <div class="form-group mb-10">
-                        <label class="form-label" for="">Tên vòng thi</label>
+                        <label class="form-label" for="">Tên {{ $nameContestType }}</label>
                         <input type="text" name="name" value="{{ $round['name'] }}" class=" form-control" placeholder="">
                         @error('name')
                             <p class="text-danger">{{ $message }}</p>
@@ -80,7 +80,7 @@
                             </div>
                             <div class="col-4">
                                 <div class="form-group ">
-                                    <label for="" class="form-label">Ảnh vòng thi</label>
+                                    <label for="" class="form-label">Ảnh {{ $nameContestType }}</label>
                                     <input value="{{ old('image') }}" name="image" type='file' id="file-input"
                                         class="form-control" accept=".png, .jpg, .jpeg" />
                                     @error('image')
@@ -97,7 +97,7 @@
                     </div>
 
                     <div class="form-group mb-10">
-                        <label class="form-label" for="">Mô tả vòng thi</label>
+                        <label class="form-label" for="">Mô tả {{ $nameContestType }}</label>
                         <textarea class="form-control" name="description" id="kt_docs_ckeditor_classic" rows="3">
                             {{ $round['description'] }}
                         </textarea>

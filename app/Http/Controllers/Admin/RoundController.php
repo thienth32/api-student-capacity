@@ -136,7 +136,8 @@ class RoundController extends Controller
     {
         $contests = Contest::all();
         $typeexams = TypeExam::all();
-        return view('pages.round.form-add', compact('contests', 'typeexams'));
+        $nameTypeContest = request('type') == 1 ? ' bài làm  ' : ' cuộc thi ';
+        return view('pages.round.form-add', compact('contests', 'typeexams','nameTypeContest'));
     }
     public function store(Request $request)
     {
@@ -182,7 +183,7 @@ class RoundController extends Controller
             return redirect()->back()->withErrors(['start_time' => 'Thời gian bắt đầu không được bé hơn thời gian bắt đầu của cuộc thi !'])->withInput();
         };
         if (Carbon::parse($request->end_time)->toDateTimeString() > Carbon::parse($contest->register_deadline)->toDateTimeString()) {
-            return redirect()->back()->withErrors(['end_time' => 'Thời gian kết thúc không được bé hơn thời gian kết thúc của cuộc thi !'])->withInput();
+            return redirect()->back()->withErrors(['end_time' => 'Thời gian kết thúc không được lớn hơn thời gian kết thúc của cuộc thi !'])->withInput();
         };
 
         DB::beginTransaction();
@@ -224,13 +225,16 @@ class RoundController extends Controller
     public function edit($id)
     {
         try {
+            $round = $this->round::where('id', $id)->with('contest')->get()->map->format()[0];
+            if($round['contest']['type'] != request('type')) abort(404);
             return view('pages.round.edit', [
-                'round' => $this->round::where('id', $id)->get()->map->format()[0],
+                'round' => $round,
                 'contests' => $this->contest::all(),
                 'type_exams' => $this->type_exam::all(),
+                'nameContestType' => request('type') == 1 ? ' bài làm ' : ' vòng thi'
             ]);
         } catch (\Throwable $th) {
-            return view('error');
+            return abort(404);
         }
     }
 
@@ -431,10 +435,12 @@ class RoundController extends Controller
         } {
             $round->with('contest');
             $round->with('type_exam');
+            $round->with('exams');
             $round->with(['judges']);
             $round->with(['teams' => function ($q) {
                 return $q->with('members');
             }]);
+
             return response()->json(
                 [
                     'status' => true,

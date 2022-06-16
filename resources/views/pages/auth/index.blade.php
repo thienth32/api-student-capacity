@@ -107,7 +107,6 @@
                 <tbody>
                     @php
                         $total = $users->total();
-                        
                     @endphp
                     @forelse ($users as $key => $user)
                         <tr>
@@ -131,34 +130,10 @@
                             <td>
                                 {{ $user->email }}
                             </td>
-                            <td>
-                                @if (auth()->user()->roles[0]->name == 'super admin')
-                                    @if (auth()->user()->id == $user->id)
-                                        <span class="svg-icon svg-icon-primary svg-icon-2x">
-                                            <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Code/Stop.svg--><svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                                                viewBox="0 0 24 24" version="1.1">
-                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                    <rect x="0" y="0" width="24" height="24" />
-                                                    <path
-                                                        d="M12,22 C6.4771525,22 2,17.5228475 2,12 C2,6.4771525 6.4771525,2 12,2 C17.5228475,2 22,6.4771525 22,12 C22,17.5228475 17.5228475,22 12,22 Z M12,20 C16.418278,20 20,16.418278 20,12 C20,7.581722 16.418278,4 12,4 C7.581722,4 4,7.581722 4,12 C4,16.418278 7.581722,20 12,20 Z M19.0710678,4.92893219 L19.0710678,4.92893219 C19.4615921,5.31945648 19.4615921,5.95262146 19.0710678,6.34314575 L6.34314575,19.0710678 C5.95262146,19.4615921 5.31945648,19.4615921 4.92893219,19.0710678 L4.92893219,19.0710678 C4.5384079,18.6805435 4.5384079,18.0473785 4.92893219,17.6568542 L17.6568542,4.92893219 C18.0473785,4.5384079 18.6805435,4.5384079 19.0710678,4.92893219 Z"
-                                                        fill="#000000" fill-rule="nonzero" opacity="0.3" />
-                                                </g>
-                                            </svg>
-                                            <!--end::Svg Icon-->
-                                        </span>
-                                        {{ $user->status == 1 ? 'Hoạt động ' : 'Đã gỡ ' }}
-                                    @else
-                                        <div class="form-check form-switch">
-                                            <input value="{{ $user->status }}" data-id="{{ $user->id }}"
-                                                class="form-select-status form-check-input" @checked($user->status == 1)
-                                                type="checkbox" role="switch">
-                                        </div>
-                                    @endif
-                                @else
-                                    @if (auth()->user()->roles[0]->name == 'admin')
-                                        @if ($user->roles[0]->name == 'super admin' || auth()->user()->id == $user->id)
+                            @if (count($user->roles) > 0)
+                                <td>
+                                    @if (auth()->user()->roles[0]->name == 'super admin')
+                                        @if (auth()->user()->id == $user->id)
                                             <span class="svg-icon svg-icon-primary svg-icon-2x">
                                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Code/Stop.svg--><svg
                                                     xmlns="http://www.w3.org/2000/svg"
@@ -181,45 +156,38 @@
                                                     type="checkbox" role="switch">
                                             </div>
                                         @endif
-                                    @endif
-                                @endif
-
-                            </td>
-                            <td>
-
-                                @if (auth()->user()->roles[0]->name == 'super admin')
-
-                                    @if (auth()->user()->id == $user->id)
-                                        <span class="svg-icon svg-icon-primary svg-icon-2x">
-                                            <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Code/Stop.svg--><svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                                                viewBox="0 0 24 24" version="1.1">
-                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                    <rect x="0" y="0" width="24" height="24" />
-                                                    <path
-                                                        d="M12,22 C6.4771525,22 2,17.5228475 2,12 C2,6.4771525 6.4771525,2 12,2 C17.5228475,2 22,6.4771525 22,12 C22,17.5228475 17.5228475,22 12,22 Z M12,20 C16.418278,20 20,16.418278 20,12 C20,7.581722 16.418278,4 12,4 C7.581722,4 4,7.581722 4,12 C4,16.418278 7.581722,20 12,20 Z M19.0710678,4.92893219 L19.0710678,4.92893219 C19.4615921,5.31945648 19.4615921,5.95262146 19.0710678,6.34314575 L6.34314575,19.0710678 C5.95262146,19.4615921 5.31945648,19.4615921 4.92893219,19.0710678 L4.92893219,19.0710678 C4.5384079,18.6805435 4.5384079,18.0473785 4.92893219,17.6568542 L17.6568542,4.92893219 C18.0473785,4.5384079 18.6805435,4.5384079 19.0710678,4.92893219 Z"
-                                                        fill="#000000" fill-rule="nonzero" opacity="0.3" />
-                                                </g>
-                                            </svg>
-                                            <!--end::Svg Icon-->
-                                        </span>
-
-                                        {{ $user->roles[0]->name }}
                                     @else
-                                        <select class="select-role form-select mb-2 select2-hidden-accessible"
-                                            data-control="select2" data-hide-search="true" tabindex="-1" aria-hidden="true">
-                                            <option value="">Không có quyền</option>
-                                            @foreach ($roles as $role)
-                                                <option @selected((count($user->roles) > 0 ? $user->roles[0]->name : '') == $role->name)
-                                                    value="{{ $role->name }}&&&&{{ $user->id }}">
-                                                    {{ $role->name }} </option>
-                                            @endforeach
-                                        </select>
+                                        @if (auth()->user()->roles[0]->name == 'admin')
+                                            @if ($user->roles[0]->name == 'super admin' || auth()->user()->id == $user->id)
+                                                <span class="svg-icon svg-icon-primary svg-icon-2x">
+                                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Code/Stop.svg--><svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                                        height="24px" viewBox="0 0 24 24" version="1.1">
+                                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                            <rect x="0" y="0" width="24" height="24" />
+                                                            <path
+                                                                d="M12,22 C6.4771525,22 2,17.5228475 2,12 C2,6.4771525 6.4771525,2 12,2 C17.5228475,2 22,6.4771525 22,12 C22,17.5228475 17.5228475,22 12,22 Z M12,20 C16.418278,20 20,16.418278 20,12 C20,7.581722 16.418278,4 12,4 C7.581722,4 4,7.581722 4,12 C4,16.418278 7.581722,20 12,20 Z M19.0710678,4.92893219 L19.0710678,4.92893219 C19.4615921,5.31945648 19.4615921,5.95262146 19.0710678,6.34314575 L6.34314575,19.0710678 C5.95262146,19.4615921 5.31945648,19.4615921 4.92893219,19.0710678 L4.92893219,19.0710678 C4.5384079,18.6805435 4.5384079,18.0473785 4.92893219,17.6568542 L17.6568542,4.92893219 C18.0473785,4.5384079 18.6805435,4.5384079 19.0710678,4.92893219 Z"
+                                                                fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                                                        </g>
+                                                    </svg>
+                                                    <!--end::Svg Icon-->
+                                                </span>
+                                                {{ $user->status == 1 ? 'Hoạt động ' : 'Đã gỡ ' }}
+                                            @else
+                                                <div class="form-check form-switch">
+                                                    <input value="{{ $user->status }}" data-id="{{ $user->id }}"
+                                                        class="form-select-status form-check-input"
+                                                        @checked($user->status == 1) type="checkbox" role="switch">
+                                                </div>
+                                            @endif
+                                        @endif
                                     @endif
-                                @else
-                                    @if (auth()->user()->roles[0]->name == 'admin')
-                                        @if ($user->roles[0]->name == 'super admin' || auth()->user()->id == $user->id)
+                                </td>
+                                <td>
+                                    @if (auth()->user()->roles[0]->name == 'super admin')
+
+                                        @if (auth()->user()->id == $user->id)
                                             <span class="svg-icon svg-icon-primary svg-icon-2x">
                                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Code/Stop.svg--><svg
                                                     xmlns="http://www.w3.org/2000/svg"
@@ -234,6 +202,7 @@
                                                 </svg>
                                                 <!--end::Svg Icon-->
                                             </span>
+
                                             {{ $user->roles[0]->name }}
                                         @else
                                             <select class="select-role form-select mb-2 select2-hidden-accessible"
@@ -241,21 +210,53 @@
                                                 aria-hidden="true">
                                                 <option value="">Không có quyền</option>
                                                 @foreach ($roles as $role)
-                                                    @if ($role->name !== 'super admin')
-                                                        <option @selected((count($user->roles) > 0 ? $user->roles[0]->name : '') == $role->name)
-                                                            value="{{ $role->name }}&&&&{{ $user->id }}">
-                                                            {{ $role->name }} </option>
-                                                    @endif
+                                                    <option @selected((count($user->roles) > 0 ? $user->roles[0]->name : '') == $role->name)
+                                                        value="{{ $role->name }}&&&&{{ $user->id }}">
+                                                        {{ $role->name }} </option>
                                                 @endforeach
                                             </select>
                                         @endif
+                                    @else
+                                        @if (auth()->user()->roles[0]->name == 'admin')
+                                            @if ($user->roles[0]->name == 'super admin' || auth()->user()->id == $user->id)
+                                                <span class="svg-icon svg-icon-primary svg-icon-2x">
+                                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Code/Stop.svg--><svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                                        height="24px" viewBox="0 0 24 24" version="1.1">
+                                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                            <rect x="0" y="0" width="24" height="24" />
+                                                            <path
+                                                                d="M12,22 C6.4771525,22 2,17.5228475 2,12 C2,6.4771525 6.4771525,2 12,2 C17.5228475,2 22,6.4771525 22,12 C22,17.5228475 17.5228475,22 12,22 Z M12,20 C16.418278,20 20,16.418278 20,12 C20,7.581722 16.418278,4 12,4 C7.581722,4 4,7.581722 4,12 C4,16.418278 7.581722,20 12,20 Z M19.0710678,4.92893219 L19.0710678,4.92893219 C19.4615921,5.31945648 19.4615921,5.95262146 19.0710678,6.34314575 L6.34314575,19.0710678 C5.95262146,19.4615921 5.31945648,19.4615921 4.92893219,19.0710678 L4.92893219,19.0710678 C4.5384079,18.6805435 4.5384079,18.0473785 4.92893219,17.6568542 L17.6568542,4.92893219 C18.0473785,4.5384079 18.6805435,4.5384079 19.0710678,4.92893219 Z"
+                                                                fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                                                        </g>
+                                                    </svg>
+                                                    <!--end::Svg Icon-->
+                                                </span>
+                                                {{ $user->roles[0]->name }}
+                                            @else
+                                                <select class="select-role form-select mb-2 select2-hidden-accessible"
+                                                    data-control="select2" data-hide-search="true" tabindex="-1"
+                                                    aria-hidden="true">
+                                                    <option value="">Không có quyền</option>
+                                                    @foreach ($roles as $role)
+                                                        @if ($role->name !== 'super admin')
+                                                            <option @selected((count($user->roles) > 0 ? $user->roles[0]->name : '') == $role->name)
+                                                                value="{{ $role->name }}&&&&{{ $user->id }}">
+                                                                {{ $role->name }} </option>
+                                                        @endif
+                                                    @endforeach
+                                                </select>
+                                            @endif
+                                        @endif
+
                                     @endif
 
-                                @endif
-
-
-
-                            </td>
+                                </td>
+                            @else
+                                <td>Không có quyền !</td>
+                                <td>Không có quyền !</td>
+                            @endif
                         </tr>
                     @empty
                     @endforelse
