@@ -193,8 +193,8 @@
 
                             </div>
                             <div id="show-add-questions" class="mt-2 mb-2"></div>
-                            <div id="data-save" class="mt-2">
-                                <div id="show-data-save"></div>
+                            <div id="data-save" class="mt-1">
+                                <div id="show-data-save" class="mb-5"></div>
                                 <button class="btn btn-primary" id="save-qs">Lưu </button>
                                 <button class="btn-reload btn btn-success">
                                     <i class="bi bi-arrow-counterclockwise"></i>

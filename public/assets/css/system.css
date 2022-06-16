@@ -76,3 +76,14 @@ figure.image img {
     cursor: pointer;
     padding: 10px;
 }
+
+#show-add-questions {
+    max-height: 500px;
+    overflow: auto;
+    padding-bottom: 20px;
+}
+
+#show-add-questions .list-group-item i {
+    padding: 5px;
+    font-size: 1.3rem;
+}

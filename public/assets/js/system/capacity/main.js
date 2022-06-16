@@ -1,3 +1,29 @@
+function loadTast(
+    text = "Đang chạy ...",
+    type = "info"
+) {
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": true,
+        "progressBar": true,
+        "positionClass": "toastr-top-left",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    };
+
+    if (type === "info") toastr.info(text);
+    if (type === "success") toastr.success(text);
+}
+
 function backClass(navs, tabs) {
     $(navs[0]).removeClass("active");
     $(tabs[0]).removeClass("active");
@@ -12,13 +38,13 @@ function fetchRoundGet(id) {
     $.ajax({
         type: "GET",
         url: `${urlApiPublic}exam/get-by-round/${id}`,
-        success: function (res) {
+        success: function(res) {
             // console.log(res);
             if (res.payload.length == 0)
                 return $("#show-exams").html(`<h2>Không có đề bài nào !</h2>`);
             exam = res.payload;
             var html = res.payload
-                .map(function (data) {
+                .map(function(data) {
                     return `
                             <tr>
                                 <td>${data.name}</td>
@@ -38,7 +64,7 @@ function fetchRoundGet(id) {
                 .join(" ");
             $("#show-exams").html(html);
         },
-        error: function (res) {
+        error: function(res) {
             alert("Đã xảy ra lỗi !");
             backClass([".nav-ql", ".nav-list"], [".tab-ql", ".tab-list"]);
         },
@@ -50,22 +76,22 @@ function fecthQuestionByExams(id, param = "?") {
     $.ajax({
         type: "GET",
         url: `${urlApiPublic}exam/get-question-by-exam/${id}${param}`,
-        success: function (res) {
+        success: function(res) {
             if (res.payload.length == 0)
                 $("#show-ques-anw").html(
                     `<h2>Không có câu hỏi câu trả lời nào </h2>`
                 );
             questions = res.question;
             let html = res.payload
-                .map(function (data, index) {
+                .map(function(data, index) {
                     var skillChill = data.skills
-                        .map(function (val_skill) {
+                        .map(function(val_skill) {
                             return `
                         <span style="background: #ccc ; color : white , padding : 2px ; margin : 1px"> ${val_skill.name} </span>
                     `;
                         })
                         .join(" ");
-                    let result = listSave.filter(function (dt) {
+                    let result = listSave.filter(function(dt) {
                         return dt.id == data.id;
                     });
                     if (result.length == 0)
@@ -75,11 +101,11 @@ function fecthQuestionByExams(id, param = "?") {
                         });
 
                     var htmlChild = data.answers
-                        .map(function (val) {
+                        .map(function(val) {
                             return `
                                 <p> ${
                                     val.content
-                                } ${val.is_correct == 1 ? " - Đáp án đúng " : ""} </p>
+                                } ${val.is_correct == 1 ? " <strong>- Đáp án đúng </strong> " : ""} </p>
                             `;
                         })
                         .join(" ");
@@ -142,7 +168,7 @@ function getApiShowQues(url) {
     $.ajax({
         type: "GET",
         url: url,
-        success: function (res) {
+        success: function(res) {
             if (!res.status) return;
             fetchShowQues(res.payload);
         },
@@ -150,81 +176,99 @@ function getApiShowQues(url) {
 }
 
 function fetchShowQues(dataQ) {
-    var html = dataQ.map(function (data, index) {
+    var html = dataQ.map(function(data, index) {
         var htmlChild = data.answers
-            .map(function (val) {
+            .map(function(val) {
                 return `
                                 <p> ${
                                     val.content
-                                } ${val.is_correct == 1 ? " - Đáp án đúng " : ""} </p>
+                                } ${val.is_correct == 1 ? "<strong>- Đáp án đúng</strong>  " : ""} </p>
                             `;
             })
             .join(" ");
-        var skillChill = data.skills
-            .map(function (val_skill) {
-                return `
-                        <span style="background: #ccc ; color : white , padding : 2px ; margin : 1px"> ${val_skill.name} </span>
-                    `;
-            })
-            .join(" ");
+        var skillChill = data.skills.map(function(val_skill) {
+            return `
+                <span style="background: #ccc ; color : white , padding : 2px ; margin : 1px"> ${val_skill.name} </span>
+            `;
+        }).join(" ");
 
         return `
-                 <li class="list-group-item">
-                    <i role="button" class="bi bi-save-fill btn-click-save" data-name="${
-                        data.content
-                    }" data-id="${data.id}"></i>
-                    <a
-                        data-bs-toggle="collapse"
-                        href="#multiCollapseExample${index}"
-                        role="button"
-                        aria-expanded="false"
-                        aria-controls="multiCollapseExample${index}">
-                        ${
-                            data.content
-                        }- Mức độ : ${data.rank == 0 ? "Dễ" : data.rank == 1 ? "Trung bình " : data.rank == 2 ? "Khó" : "No "}
-                            - Dạng : ${
-                                data.type == 0
-                                    ? "Một đáp án"
-                                    : data.type == 1
-                                    ? "Nhiều đáp án "
-                                    : "No"
-                            } -
-                            Tình trạng : ${
-                                data.status == 0
-                                    ? "Đóng "
-                                    : data.status == 1
-                                    ? "Mở"
-                                    : "No"
-                            }
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <a 
+                    data-bs-toggle="collapse"
+                    href="#multiCollapseExample${index}"
+                    role="button"
+                    aria-expanded="false"
+                    aria-controls="multiCollapseExample${index}">
+                    ${data.content}
+                    
+                    
                     </a>
+                    <p>
+                    - Mức độ : ${data.rank == 0 ? "Dễ" : data.rank == 1 ? "Trung bình " : data.rank == 2 ? "Khó" : "No "}
+                    - Dạng : ${
+                        data.type == 0
+                            ? "Một đáp án"
+                            : data.type == 1
+                            ? "Nhiều đáp án "
+                            : "No"
+                    } -
+                    Tình trạng : ${
+                        data.status == 0
+                            ? "Đóng "
+                            : data.status == 1
+                            ? "Mở"
+                            : "No"
+                    }
+                    </p>
                     ${skillChill}
-                </li>
-                <div class="collapse multi-collapse" id="multiCollapseExample${index}">
-                    <div class="card card-body">
-                        ${htmlChild}
-                    </div>
                 </div>
-                `;
+                <div>
+                    <button 
+                        class="btn-click-save btn btn-outline btn-outline-dashed btn-outline-dark btn-active-light-dark btn-sm p-1"
+                        data-bs-toggle="tooltip" data-bs-html="true" title="Thêm vào danh sách câu hỏi"
+                        data-name="${data.content}" 
+                        data-id="${data.id}"
+                    >
+                        <i class="bi bi-plus-square-fill"></i>
+                    </button>
+                </div>
+                
+                
+            </li>
+            <div class="collapse multi-collapse" id="multiCollapseExample${index}">
+                <div class="card card-body">
+                    ${htmlChild}
+                </div>
+            </div>
+        `;
     });
     $("#show-add-questions").html(html);
 }
 
 function showListSave() {
+
     let html = listSave
-        .map(function (data, index) {
+        .map(function(data, index) {
+            var titleTable = ``;
+            if (index == 0) titleTable = `<h2> Danh sách câu hỏi chờ </h2>`;
             return `
-                    <div class="p-1 m-1" style="background: #d7d7d7 ;border-radius: 10px ; position: relative">${data.name}
-                        <i style="    right: 1vh; position: absolute; top: 50%; transform: translateY(-50%);" data-key="${index}" class="click-rm-list bi bi-clipboard-x fs-2x"></i>
-                    </div>
-                `;
+                ${titleTable}
+                <div class="p-1 m-1" style="background: #d7d7d7 ;border-radius: 10px ; position: relative   ;  padding-top: 15px !important;
+                ">
+                ${data.name}
+                    <i style=" cursor: pointer;   right: 1vh; position: absolute; top: 50%; transform: translateY(-50%);" data-key="${index}" class="click-rm-list bi bi-x fs-2x"></i>
+                </div>
+            `;
         })
         .join(" ");
     $("#show-data-save").html(html);
 }
 
 const mainPage = {
-    addExam: function () {
-        $(".add-exam").on("click", function () {
+    addExam: function() {
+        $(".add-exam").on("click", function() {
             backClass([".nav-list", ".nav-ql"], [".tab-list", ".tab-ql"]);
             $("#show-exam-round").html(
                 `Danh sách các đề bài của bài làm ${$(this).data("round_name")}`
@@ -232,8 +276,8 @@ const mainPage = {
             fetchRoundGet($(this).data("round_id"));
         });
     },
-    showExam: function () {
-        $(document).on("click", ".btn-click-show-exams", function () {
+    showExam: function() {
+        $(document).on("click", ".btn-click-show-exams", function() {
             exam_id = $(this).data("exam_id");
             const name = $(this).data("exam_name");
             listSave = [];
@@ -241,21 +285,25 @@ const mainPage = {
             fecthQuestionByExams(exam_id);
         });
     },
-    addQuestionSave: function () {
-        $(".btn-add-question-answ").on("click", function () {
+    addQuestionSave: function() {
+        $(".btn-add-question-answ").on("click", function() {
             $("#show-tast-qs").show();
             $("#show-list-qs").hide();
             showListSave();
             getApiShowQues("http://127.0.0.1:8000/api/public/questions");
         });
     },
-    saveQuestion: function () {
-        $(document).on("click", ".btn-click-save", function () {
+    saveQuestion: function() {
+        $(document).on("click", ".btn-click-save", function() {
             var id = $(this).data("id");
-            let result = listSave.filter(function (data) {
+            let result = listSave.filter(function(data) {
                 return data.id == id;
             });
-            if (result.length > 0) return;
+            if (result.length > 0) {
+                loadTast('Đã tồn tại trong danh sách chờ ')
+                return;
+            }
+
             listSave.push({
                 name: $(this).data("name"),
                 id: id,
@@ -263,27 +311,28 @@ const mainPage = {
             // console.log(listSave);
 
             showListSave();
+            loadTast('Thêm vào danh sách chờ thành công', 'success')
         });
     },
-    removeListQuestion: function () {
-        $(document).on("click", ".click-rm-list", function () {
+    removeListQuestion: function() {
+        $(document).on("click", ".click-rm-list", function() {
             listSave.splice($(this).data("key"), 1);
             showListSave();
         });
     },
-    reload: function () {
-        $(".btn-reload").on("click", function () {
+    reload: function() {
+        $(".btn-reload").on("click", function() {
             getApiShowQues("http://127.0.0.1:8000/api/public/questions?");
         });
     },
-    back: function () {
-        $(".btn-back").on("click", function () {
+    back: function() {
+        $(".btn-back").on("click", function() {
             $("#show-tast-qs").hide();
             $("#show-list-qs").show();
         });
     },
-    saveQuestionApi: function () {
-        $("#save-qs").on("click", function () {
+    saveQuestionApi: function() {
+        $("#save-qs").on("click", function() {
             $(this).html(`<h2>Đang load ...</h2>`);
             var that = this;
             $.ajax({
@@ -293,7 +342,7 @@ const mainPage = {
                     exam_id: exam_id,
                     question_ids: listSave,
                 },
-                success: function (response) {
+                success: function(response) {
                     if (!response.status) alert("Đã xảy ra lỗi ");
                     fecthQuestionByExams(exam_id);
                     $("#show-tast-qs").hide();
@@ -303,8 +352,8 @@ const mainPage = {
             });
         });
     },
-    detachQuestion: function () {
-        $(document).on("click", ".btn-dettach", function () {
+    detachQuestion: function() {
+        $(document).on("click", ".btn-dettach", function() {
             $.ajax({
                 type: "POST",
                 url: "http://127.0.0.1:8000/api/public/questions/dettach-question",
@@ -312,7 +361,7 @@ const mainPage = {
                     exam_id: exam_id,
                     questions_id: $(this).data("id"),
                 },
-                success: function (response) {
+                success: function(response) {
                     if (!response.status) alert("Đã xảy ra lỗi ");
                     fecthQuestionByExams(exam_id);
                 },
@@ -330,25 +379,25 @@ mainPage.back();
 mainPage.saveQuestionApi();
 mainPage.detachQuestion();
 
-$("#selectSkill").on("change", function () {
+$("#selectSkill").on("change", function() {
     var value = $(this).val();
     if (value == -1) return getApiShowQues(urlApiPublic + "questions?");
     skill = "&skill=" + value;
     getApiShowQues(urlApiPublic + "questions?" + skill + type + level + q);
 });
-$("#select-level").on("change", function () {
+$("#select-level").on("change", function() {
     var value = $(this).val();
     if (value == -1) return getApiShowQues(urlApiPublic + "questions?");
     skill = "&level=" + value;
     getApiShowQues(urlApiPublic + "questions?" + skill + type + level + q);
 });
-$("#select-type").on("change", function () {
+$("#select-type").on("change", function() {
     var value = $(this).val();
     if (value == -1) return getApiShowQues(urlApiPublic + "questions?");
     skill = "&type=" + value;
     getApiShowQues(urlApiPublic + "questions?" + skill + type + level + q);
 });
-$("#ip-search").on("keyup", function (e) {
+$("#ip-search").on("keyup", function(e) {
     if (e.key !== "Enter") return;
     var value = $(this).val();
     if (value == -1) return getApiShowQues(urlApiPublic + "questions?");
@@ -356,25 +405,25 @@ $("#ip-search").on("keyup", function (e) {
     getApiShowQues(urlApiPublic + "questions?" + skill + type + level + q);
 });
 /////
-$("#selectSkillQs").on("change", function () {
+$("#selectSkillQs").on("change", function() {
     var value = $(this).val();
     if (value == -1) return fecthQuestionByExams(exam_id);
     skill = "&skill=" + value;
     fecthQuestionByExams(exam_id, "?" + skill + type + level + q);
 });
-$("#select-levelQs").on("change", function () {
+$("#select-levelQs").on("change", function() {
     var value = $(this).val();
     if (value == -1) return fecthQuestionByExams(exam_id);
     skill = "&level=" + value;
     fecthQuestionByExams(exam_id, "?" + skill + type + level + q);
 });
-$("#select-typeQs").on("change", function () {
+$("#select-typeQs").on("change", function() {
     var value = $(this).val();
     if (value == -1) return fecthQuestionByExams(exam_id);
     skill = "&type=" + value;
     fecthQuestionByExams(exam_id, "?" + skill + type + level + q);
 });
-$("#ip-searchQs").on("keyup", function (e) {
+$("#ip-searchQs").on("keyup", function(e) {
     if (e.key !== "Enter") return;
     var value = $(this).val();
     if (value == -1) return fecthQuestionByExams(exam_id);
