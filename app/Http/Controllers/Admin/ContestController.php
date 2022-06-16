@@ -315,7 +315,8 @@ class ContestController extends Controller
         $this->checkTypeContest();
         $major = Major::orderBy('id', 'desc')->get();
         $contest_type_text = request('type') == 1 ? 'test năng lực' : 'cuộc thi';
-        $contest = $this->getContest($id)->first();
+        $contest = $this->getContest($id, request('type') ?? 0)->first();
+        if(!$contest) abort(404);
         if ($contest->type != request('type')) abort(404);
         $rewardRankPoint = json_decode($contest->reward_rank_point);
         if ($contest) {
@@ -401,10 +402,10 @@ class ContestController extends Controller
         }
     }
 
-    private function getContest($id)
+    private function getContest($id,$type = 0)
     {
         try {
-            $contest = $this->contest::where('id', $id);
+            $contest = $this->contest::where('id', $id)->where('type' ,$type);
             return $contest;
         } catch (\Throwable $th) {
             return false;
@@ -436,7 +437,7 @@ class ContestController extends Controller
     {
         try {
             //
-            if (!($contest = $this->getContest($id))) return $this->responseApi(
+            if (!($contest = $this->getContest($id,config('util.TYPE_CONTEST')))) return $this->responseApi(
                 [
                     'status' => false,
                     'payload' => 'Không tìm thấy cuộc thi !',
@@ -470,7 +471,7 @@ class ContestController extends Controller
 
     public function show(Request $request, $id)
     {
-        $contest =  Contest::find($id)->load(['judges', 'rounds' => function ($q) use ($id) {
+        $contest =  Contest::whereId($id)->where('type',config('util.TYPE_CONTEST'))->load(['judges', 'rounds' => function ($q) use ($id) {
             return $q->when(
                 auth()->check() && auth()->user()->hasRole('judge'),
                 function ($q) use ($id) {
