@@ -64,7 +64,7 @@
                     <a target="_blank"
                         href="{{ route('admin.round.create') . '?contest_id=' . $test_capacity->id . '&type=1' }}"
                         style="float:right">Thêm bài làm </a>
-                    <div class="table-responsive table-responsive-md">
+                    <div style="width: 100%" class="table-responsive table-responsive-md ">
                         <table class="table table-row-bordered table-row-gray-300 gy-7  table-hover ">
                             <thead>
                                 <tr>
@@ -195,13 +195,15 @@
                             <div id="show-add-questions" class="mt-2 mb-2"></div>
                             <div id="data-save" class="mt-1">
                                 <div id="show-data-save" class="mb-5"></div>
-                                <button class="btn btn-primary" id="save-qs">Lưu </button>
-                                <button class="btn-reload btn btn-success">
-                                    <i class="bi bi-arrow-counterclockwise"></i>
-                                </button>
-                                <button class="btn-back btn btn-warning">
-                                    <i class="bi bi-backspace"></i>
-                                </button>
+                                <div style="position: fixed; bottom: 20px; transform: translateX(-50%);  left: 50%; z-index: 999999999;">
+                                    <button class="btn btn-primary" id="save-qs">Lưu </button>
+                                    <button class="btn-reload btn btn-success">
+                                        <i class="bi bi-arrow-counterclockwise"></i>
+                                    </button>
+                                    <button class="btn-back btn btn-warning">
+                                        <i class="bi bi-backspace"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
@@ -269,10 +271,12 @@
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody id="show-ques-anw">
+                                <tbody  id="show-ques-anw">
 
                                 </tbody>
                             </table>
+                            <ul style="position: fixed; bottom: 20px; transform: translateX(-50%);  left: 50%; z-index: 999999999;" id="show-paginate" class="pagination">
+                            </ul>
                         </div>
 
                     </div>

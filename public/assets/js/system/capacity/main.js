@@ -1,3 +1,4 @@
+var flagDataSaveHide = false;
 function loadTast(
     text = "Đang chạy ...",
     type = "info"
@@ -34,7 +35,7 @@ function backClass(navs, tabs) {
 }
 
 function fetchRoundGet(id) {
-    $("#show-exams").html(`<h2>Đang load ...</h2>`);
+    $("#show-exams").html(`<h2>Đang tải dữ liệu , vui lòng chờ ...</h2>`);
     $.ajax({
         type: "GET",
         url: `${urlApiPublic}exam/get-by-round/${id}`,
@@ -48,11 +49,11 @@ function fetchRoundGet(id) {
                     return `
                             <tr>
                                 <td>${data.name}</td>
-                                <td>${data.max_ponit}</td>
+                                <td style="text-align: center;">${data.max_ponit}</td>
                                 <td>${data.time ?? "Chưa có thời gian "}</td>
-                                <td>${data.status}</td>
-                                <td>
-                                     <button type="button" data-exam_name="${
+                                <td style="text-align: center;">${data.status == 1 ? 'Mở' : data.status == 0 ? 'Đóng' : ''}</td>
+                                <td style="text-align: center;">
+                                     <button style="background: #ccc;padding: 1vh 1vh 1vh 2vh;border-radius: 20px;" type="button" data-exam_name="${
                                          data.name
                                      }" data-exam_id="${data.id}" class="btn-click-show-exams btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_2">
                                         <i class="bi bi-ui-checks-grid"></i>
@@ -71,18 +72,18 @@ function fetchRoundGet(id) {
     });
 }
 
-function fecthQuestionByExams(id, param = "?") {
-    $("#show-ques-anw").html(`<h2>Đang load ... </h2>`);
+function fecthQuestionByExams(id, param = "?",url = null) {
+    $("#show-ques-anw").html(`<h2>Đang tải dữ liệu , vui lòng chờ ... </h2>`);
     $.ajax({
         type: "GET",
-        url: `${urlApiPublic}exam/get-question-by-exam/${id}${param}`,
+        url: url ?? `${urlApiPublic}exam/get-question-by-exam/${id}${param}`,
         success: function(res) {
             if (res.payload.length == 0)
                 $("#show-ques-anw").html(
                     `<h2>Không có câu hỏi câu trả lời nào </h2>`
                 );
             questions = res.question;
-            let html = res.payload
+            let html = res.payload.data
                 .map(function(data, index) {
                     var skillChill = data.skills
                         .map(function(val_skill) {
@@ -158,13 +159,24 @@ function fecthQuestionByExams(id, param = "?") {
                         `;
                 })
                 .join(" ");
+            let paginate = res.payload.links
+                .map(function (link,key) {
+                    var datapage = `${link.label}`;
+                    if(key == 0) datapage = `<i class="bi bi-chevron-left"></i>`;
+                    if(key == res.payload.links.length - 1 ) datapage = `<i class="bi bi-chevron-right"></i>`;
+                    return `
+                        <li class="page-item ${link.active == true ? 'active' : ''}" ><a role="button" data-link="${link.url}" class="click-paginate-link page-link" >${datapage}</a></li>
+                    `;
+                })
+                .join(" ");
+            $('#show-paginate').html(paginate);
             $("#show-ques-anw").html(html);
         },
     });
 }
 
 function getApiShowQues(url) {
-    $("#show-add-questions").html(`<h2>Đang load ...</h2>`);
+    $("#show-add-questions").html(`<h2>Đang tải dữ liệu , vui lòng chờ ...</h2>`);
     $.ajax({
         type: "GET",
         url: url,
@@ -195,15 +207,15 @@ function fetchShowQues(dataQ) {
         return `
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 <div>
-                    <a 
+                    <a
                     data-bs-toggle="collapse"
                     href="#multiCollapseExample${index}"
                     role="button"
                     aria-expanded="false"
                     aria-controls="multiCollapseExample${index}">
                     ${data.content}
-                    
-                    
+
+
                     </a>
                     <p>
                     - Mức độ : ${data.rank == 0 ? "Dễ" : data.rank == 1 ? "Trung bình " : data.rank == 2 ? "Khó" : "No "}
@@ -225,17 +237,17 @@ function fetchShowQues(dataQ) {
                     ${skillChill}
                 </div>
                 <div>
-                    <button 
+                    <button
                         class="btn-click-save btn btn-outline btn-outline-dashed btn-outline-dark btn-active-light-dark btn-sm p-1"
                         data-bs-toggle="tooltip" data-bs-html="true" title="Thêm vào danh sách câu hỏi"
-                        data-name="${data.content}" 
+                        data-name="${data.content}"
                         data-id="${data.id}"
                     >
                         <i class="bi bi-plus-square-fill"></i>
                     </button>
                 </div>
-                
-                
+
+
             </li>
             <div class="collapse multi-collapse" id="multiCollapseExample${index}">
                 <div class="card card-body">
@@ -252,8 +264,9 @@ function showListSave() {
     let html = listSave
         .map(function(data, index) {
             var titleTable = ``;
-            if (index == 0) titleTable = `<h2> Danh sách câu hỏi chờ </h2>`;
-            return `
+            if (flagDataSaveHide == false && index == 0) titleTable = `<h2> Danh sách câu hỏi chờ (${listSave.length}) <i role="button" class="click-hide-data-save bi bi-eye-fill fs-2x"></i></h2>`;
+            if (flagDataSaveHide == true && index == 0) titleTable = `<h2> Danh sách câu hỏi chờ (${listSave.length}) <i role="button" class="click-hide-data-save bi bi-eye-slash-fill fs-2x"></i></h2>`;
+            if(flagDataSaveHide == false) return `
                 ${titleTable}
                 <div class="p-1 m-1" style="background: #d7d7d7 ;border-radius: 10px ; position: relative   ;  padding-top: 15px !important;
                 ">
@@ -261,6 +274,7 @@ function showListSave() {
                     <i style=" cursor: pointer;   right: 1vh; position: absolute; top: 50%; transform: translateY(-50%);" data-key="${index}" class="click-rm-list bi bi-x fs-2x"></i>
                 </div>
             `;
+            if(flagDataSaveHide == true) return `${titleTable}`;
         })
         .join(" ");
     $("#show-data-save").html(html);
@@ -271,7 +285,7 @@ const mainPage = {
         $(".add-exam").on("click", function() {
             backClass([".nav-list", ".nav-ql"], [".tab-list", ".tab-ql"]);
             $("#show-exam-round").html(
-                `Danh sách các đề bài của bài làm ${$(this).data("round_name")}`
+                `Danh sách các đề bài của bài làm <strong style="color:blue">${$(this).data("round_name")}</strong>  `
             );
             fetchRoundGet($(this).data("round_id"));
         });
@@ -333,7 +347,7 @@ const mainPage = {
     },
     saveQuestionApi: function() {
         $("#save-qs").on("click", function() {
-            $(this).html(`<h2>Đang load ...</h2>`);
+            $(this).html(`<h2>Đang tải dữ liệu , vui lòng chờ ...</h2>`);
             var that = this;
             $.ajax({
                 type: "POST",
@@ -368,6 +382,18 @@ const mainPage = {
             });
         });
     },
+    hideDataSave: function () {
+        $(document).on('click','.click-hide-data-save',function () {
+            flagDataSaveHide = !flagDataSaveHide;
+            showListSave();
+        });
+    },
+    paginateClick: function (){
+      $(document).on('click','.click-paginate-link',function (e) {
+          e.preventDefault();
+          fecthQuestionByExams(exam_id,'',$(this).data('link'));
+      })  ;
+    },
 };
 mainPage.addExam();
 mainPage.showExam();
@@ -378,6 +404,8 @@ mainPage.reload();
 mainPage.back();
 mainPage.saveQuestionApi();
 mainPage.detachQuestion();
+mainPage.hideDataSave();
+mainPage.paginateClick();
 
 $("#selectSkill").on("change", function() {
     var value = $(this).val();

@@ -251,7 +251,7 @@ class ExamController extends Controller
                             ->when(request()->has('type'), function ($q) {
                                 $q->where('type', request('type'));
                             })
-                            ->get();
+                            ->paginate(request('limit') ?? 5);
             $questionsAll = Questions::with([
                 'answers','skills'
             ])->take(10)->get();
