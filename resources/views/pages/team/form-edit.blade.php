@@ -129,9 +129,10 @@
     <script>
         preview.showFile('#file-input', '#image-preview');
         var userArray = @json($userArray ?? []);
-        var _token = "{{ csrf_token() }}"
-        var max_user = "{{ $contest->max_user }}"
-        var urlSearch = "{{ route('admin.user.TeamUserSearch') }}"
+        var _token = "{{ csrf_token() }}";
+        var max_user = "{{ $contest->max_user }}";
+        var id_contest = "{{ $team->contest_id }}";
+        var urlSearch = "{{ route('admin.user.TeamUserSearch') }}";
         var urlShowContest = "{{ route('admin.teams.add.contest.show') }}";
     </script>
     <script src="{{ asset('assets/js/system/validate/validate.js') }}"></script>

@@ -46,8 +46,8 @@
                         <div class="fs-4 text-white mt-5">
                             <div class="opacity-75">
                                 <img style="width:100%"
-                                    src="{{ Storage::disk('s3')->has($team['image']) ? Storage::disk('s3')->temporaryUrl($team['image'], now()->addMinutes(5)) : 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
-                                    alt="">
+                                    src="{{ $team->image ? $team->image : 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
+                                    {{-- src="{{ Storage::disk('s3')->has($team['image']) ? Storage::disk('s3')->temporaryUrl($team['image'], now()->addMinutes(5)) : 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}" --}} alt="">
                             </div>
                         </div>
                         <div class="fs-4 text-white mt-5">

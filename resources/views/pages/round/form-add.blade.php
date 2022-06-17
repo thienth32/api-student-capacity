@@ -1,6 +1,6 @@
 @extends('layouts.main')
-@section('title', 'Thêm vòng thi')
-@section('page-title', 'Thêm vòng thi')
+@section('title', 'Thêm ' . $nameTypeContest)
+@section('page-title', 'Thêm ' . $nameTypeContest)
 @section('content')
     <div class="row">
         <div class="col-lg-12">
@@ -11,8 +11,9 @@
                     @csrf
 
                     <div class="form-group mb-10">
-                        <label class="form-label" for="">Tên vòng thi</label>
+                        <label class="form-label" for="">Tên {{ $nameTypeContest }}</label>
                         <input type="text" name="name" value="{{ old('name') }}" class=" form-control" placeholder="">
+
                         @error('name')
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
@@ -44,12 +45,13 @@
                                 </div>
                                 <div class="form-group mb-10">
 
-                                    <label for="" class="form-label">Thuộc cuộc thi</label>
+                                    <label for="" class="form-label">Thuộc cuộc thi (CT) & test năng lực (TLL)</label>
                                     <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
                                         data-hide-search="false" tabindex="-1" aria-hidden="true" name="contest_id"
                                         value="{{ old('contest_id') }}">
                                         @foreach ($contests as $contest)
                                             <option @selected(request()->has('contest_id') && request('contest_id') == $contest->id) value="{{ $contest->id }}">
+                                                {{ $contest->type == 0 ? 'CT-' : 'TLL-' }}
                                                 {{ $contest->name }} -
                                                 {{ $contest->date_start }}
                                                 ->
@@ -80,7 +82,7 @@
                             </div>
                             <div class="col-4">
                                 <div class="form-group ">
-                                    <label for="" class="form-label">Ảnh vòng thi</label>
+                                    <label for="" class="form-label">Ảnh đại diện {{ $nameTypeContest }}</label>
                                     <input name="image" type='file' id="file-input" accept=".png, .jpg, .jpeg"
                                         class="form-control" />
                                     <img class="w-100 mt-4 border rounded-3" id="image-preview"
@@ -94,9 +96,8 @@
                     </div>
 
                     <div class="form-group mb-10">
-                        <label class="form-label" for="">Mô tả vòng thi</label>
-                        <textarea class="form-control" name="description" id="kt_docs_ckeditor_classic"
-                            rows="3">{{ old('description') }}</textarea>
+                        <label class="form-label" for="">Mô tả {{ $nameTypeContest }}</label>
+                        <textarea class="form-control" name="description" id="kt_docs_ckeditor_classic" rows="3">{{ old('description') }}</textarea>
                         @error('description')
                             <p class="text-danger">{{ $message }}</p>
                         @enderror

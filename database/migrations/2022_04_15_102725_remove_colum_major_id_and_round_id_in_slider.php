@@ -18,7 +18,6 @@ return new class extends Migration
             $table->dropForeign('sliders_major_id_foreign');
             $table->dropColumn('round_id');
             $table->dropColumn('major_id');
-
         });
     }
 
@@ -34,10 +33,10 @@ return new class extends Migration
             $table->foreign('major_id')->references('id')->on('majors')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-                $table->unsignedInteger('round_id')->nullable();
-                $table->foreign('round_id')->references('id')->on('rounds')
-                    ->onUpdate('cascade')
-                    ->onDelete('cascade');
+            $table->unsignedInteger('round_id')->nullable();
+            $table->foreign('round_id')->references('id')->on('rounds')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 };

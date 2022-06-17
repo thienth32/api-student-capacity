@@ -67,12 +67,6 @@ class TeamController extends Controller
         try {
             $Contest = Contest::orderBy('id', 'DESC')->get();
             $dataTeam = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
-            // foreach ($dataTeam as $key) {
-
-            //     echo '<pre/>';
-            //     var_dump($key->contest->name);
-            // }
-            // die();
 
             DB::commit();
             return view('pages.team.listTeam', compact('dataTeam', 'Contest'));

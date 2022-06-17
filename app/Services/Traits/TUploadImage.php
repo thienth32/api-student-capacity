@@ -23,6 +23,7 @@ trait TUploadImage
             $nameFile = uniqid() . '-' . time() . '.' . $file->getClientOriginalExtension();
 
             Storage::disk('s3')->putFileAs('', $file, $nameFile);
+
             return $nameFile;
         } catch (\Throwable $th) {
             return false;

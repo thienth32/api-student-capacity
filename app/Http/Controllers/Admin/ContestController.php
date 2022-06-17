@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Judge;
 use App\Models\Major;
 use App\Models\Contest;
+use App\Models\Skills;
 use App\Models\Enterprise;
 use Illuminate\Http\Request;
 use App\Services\Traits\TResponse;
@@ -40,9 +41,36 @@ class ContestController extends Controller
     /**
      *  Get list contest
      */
-    private function getList()
+    private function getList($flagCapacity = false)
     {
         try {
+            $with = [];
+            if (!$flagCapacity) $with = [
+                'major',
+                'teams',
+                'rounds' => function ($q) {
+                    return $q->with([
+                        'teams' => function ($q) {
+                            return $q->with('members');
+                        }
+                    ]);
+                },
+                'enterprise',
+                'judges'
+            ];
+            if ($flagCapacity) $with = [
+                'rounds' => function ($q) {
+                    return $q->with([
+                        'exams' => function ($q) {
+                            return $q->with([
+                                'questions' => function ($q) {
+                                    return $q->with('answers');
+                                }
+                            ]);
+                        }
+                    ]);
+                }
+            ];
             $now = Carbon::now('Asia/Ho_Chi_Minh');
             $data = $this->contest::when(request()->has('contest_soft_delete'), function ($q) {
                 return $q->onlyTrashed();
@@ -50,7 +78,7 @@ class ContestController extends Controller
                 ->when(auth()->check() && auth()->user()->hasRole('judge'), function ($q) {
                     return $q->whereIn('id', array_unique(Judge::where('user_id', auth()->user()->id)->pluck('contest_id')->toArray()));
                 })
-                ->search(request('q') ?? null, ['name', 'description'])
+                ->search(request('q') ?? null, ['name'])
                 ->missingDate('register_deadline', request('miss_date') ?? null, $now->toDateTimeString())
                 ->passDate('register_deadline', request('pass_date') ?? null, $now->toDateTimeString())
                 ->registration_date('end_register_time', request('registration_date') ?? null, $now->toDateTimeString())
@@ -59,36 +87,26 @@ class ContestController extends Controller
                 ->hasDateTimeBetween('date_start', request('start_time') ?? null, request('end_time') ?? null)
                 // ->hasDateTimeBetween('end_register_time',request('registration_date'))
                 ->hasRequest(['major_id' => request('major_id') ?? null])
-                ->with([
-                    'major',
-                    'teams',
-                    'rounds' => function ($q) {
-                        return $q->with([
-                            'teams' => function ($q) {
-                                return $q->with('members');
-                            }
-                        ]);
-                    },
-                    'enterprise',
-                    'judges'
-                ])
+                ->with($with)
                 ->withCount('teams');
-            // ->paginate(request('limit') ?? 10);
-            // if(request()->ajax()){}
             return $data;
         } catch (\Throwable $th) {
             return false;
         }
     }
-
+    private function checkTypeContest()
+    {
+        if (request('type') != config('util.TYPE_CONTEST') && request('type') != config('util.TYPE_TEST')) abort(404);
+    }
     //  View contest
     public function index()
     {
-        if (!($data = $this->getList()->paginate(request('limit') ?? 10))) return abort(404);
-
+        $this->checkTypeContest();
+        if (!($data = $this->getList()->where('type', request('type') ?? 0)->paginate(request('limit') ?? 10))) return abort(404);
         return view('pages.contest.index', [
             'contests' => $data,
             'majors' => Major::where('parent_id', 0)->get(),
+            'contest_type_text' =>  request('type') == 1 ? 'test năng lực' : 'cuộc thi'
         ]);
     }
 
@@ -106,7 +124,7 @@ class ContestController extends Controller
         return $this->responseApi(
             [
                 "status" => true,
-                "payload" => $data->paginate(request('limit') ?? 9),
+                "payload" => $data->where('type', config('util.TYPE_CONTEST'))->paginate(request('limit') ?? 9),
             ]
         );
     }
@@ -114,31 +132,54 @@ class ContestController extends Controller
      *  End contest
      */
 
+    public function apiIndexCapacity()
+    {
+
+        if (!($data = $this->getList(true))) return $this->responseApi(
+            [
+                "status" => false,
+                "payload" => "Not found",
+            ],
+            404
+        );
+        return $this->responseApi(
+            [
+                "status" => true,
+                "payload" => $data->where('type', config('util.TYPE_TEST'))->paginate(request('limit') ?? 9),
+            ]
+        );
+    }
+
 
     public function create()
     {
+        $this->checkTypeContest();
         $majors = Major::all();
-        return view('pages.contest.form-add', compact('majors'));
+        $contest_type_text = request('type') == 1 ? 'test năng lực' : 'cuộc thi';
+        return view('pages.contest.form-add', compact('majors', 'contest_type_text'));
     }
     public function store(Request $request)
     {
-
+        $this->checkTypeContest();
+        $rule =   [
+            'name' => 'required|max:255|unique:contests,name',
+            'top1' => 'required|numeric',
+            'top2' => 'required|numeric',
+            'top3' => 'required|numeric',
+            'leave' => 'required|numeric',
+            'img' => 'required|mimes:jpeg,png,jpg|max:10000',
+            'date_start' => 'required|date',
+            'register_deadline' => 'required|date',
+            'description' => 'required',
+        ];
+        if (request('type') == config('util.TYPE_CONTEST')) $rule = array_merge($rule, [
+            'max_user' => 'required|numeric',
+            'start_register_time' => 'required|date',
+            'end_register_time' => 'required|date',
+        ]);
         $validator = Validator::make(
             $request->all(),
-            [
-                'name' => 'required|max:255|unique:contests,name',
-                'max_user' => 'required|numeric',
-                'top1' => 'required|numeric',
-                'top2' => 'required|numeric',
-                'top3' => 'required|numeric',
-                'leave' => 'required|numeric',
-                'img' => 'required|mimes:jpeg,png,jpg|max:10000',
-                'date_start' => 'required|date',
-                'register_deadline' => 'required|date',
-                'description' => 'required',
-                'start_register_time' => 'required|date',
-                'end_register_time' => 'required|date',
-            ],
+            $rule,
             [
                 'top1.required' => 'Chưa nhập trường này !',
                 'top1.numeric' =>  'Sai định dạng !',
@@ -182,13 +223,15 @@ class ContestController extends Controller
                 $contest->img = $filename;
             }
             $contest->name = $request->name;
-            $contest->max_user = $request->max_user;
+            $contest->max_user = $request->max_user ?? 9999;
             $contest->date_start = $request->date_start;
-            $contest->start_register_time = $request->start_register_time;
-            $contest->end_register_time = $request->end_register_time;
+            $contest->start_register_time = $request->start_register_time ?? null;
+            $contest->end_register_time = $request->end_register_time ?? null;
             $contest->register_deadline = $request->register_deadline;
             $contest->description = $request->description;
+            $contest->post_new = $request->post_new;
             $contest->major_id = $request->major_id;
+            $contest->type = request('type') ?? 0;
             $contest->status = config('util.ACTIVE_STATUS');
             $rewardRankPoint = json_encode(array(
                 'top1' => $request->top1,
@@ -268,12 +311,16 @@ class ContestController extends Controller
     }
     public function edit($id)
     {
-        $major = Major::orderBy('id', 'desc')->get();
 
-        $contest = $this->getContest($id)->first();
+        $this->checkTypeContest();
+        $major = Major::orderBy('id', 'desc')->get();
+        $contest_type_text = request('type') == 1 ? 'test năng lực' : 'cuộc thi';
+        $contest = $this->getContest($id, request('type') ?? 0)->first();
+        if (!$contest) abort(404);
+        if ($contest->type != request('type')) abort(404);
         $rewardRankPoint = json_decode($contest->reward_rank_point);
         if ($contest) {
-            return view('pages.contest.edit', compact('contest', 'major', 'rewardRankPoint'));
+            return view('pages.contest.edit', compact('contest', 'major', 'rewardRankPoint', 'contest_type_text'));
         } else {
             return view('error');
         }
@@ -281,19 +328,24 @@ class ContestController extends Controller
 
     public function update(Request $request, $id)
     {
+        $this->checkTypeContest();
+        $rule = [
+            'name' => 'required|unique:contests,name,' . $id . '',
+            'img' => 'mimes:jpeg,png,jpg|max:10000',
+            'date_start' => "required",
+            'register_deadline' => "required|after:date_start",
+            'description' => "required",
+            'major_id' => "required",
+
+        ];
+        if (request('type') == config('util.TYPE_CONTEST')) $rule = array_merge($rule, [
+            'max_user' => 'required|numeric',
+            'start_register_time' => 'required|date|before:end_register_time',
+            'end_register_time' => 'required|date|after:start_register_time',
+        ]);
         $validator = Validator::make(
             $request->all(),
-            [
-                'max_user' => 'required|numeric',
-                'name' => 'required|unique:contests,name,' . $id . '',
-                'img' => 'mimes:jpeg,png,jpg|max:10000',
-                'date_start' => "required",
-                'register_deadline' => "required|after:date_start",
-                'description' => "required",
-                'major_id' => "required",
-                'start_register_time' => 'required|date|before:end_register_time',
-                'end_register_time' => 'required|date|after:start_register_time',
-            ],
+            $rule,
             [
                 'max_user.required' => 'Chưa nhập trường này !',
                 'max_user.numeric' =>  'Sai định dạng !',
@@ -345,14 +397,15 @@ class ContestController extends Controller
             $contest->update($request->all());
 
             Db::commit();
-            return Redirect::route('admin.contest.list');
+            // return Redirect::route('admin.contest.list');
+            return redirect(route('admin.contest.list') . '?type=' . request('type') ?? 0);
         }
     }
 
-    private function getContest($id)
+    private function getContest($id, $type = 0)
     {
         try {
-            $contest = $this->contest::where('id', $id);
+            $contest = $this->contest::where('id', $id)->where('type', $type);
             return $contest;
         } catch (\Throwable $th) {
             return false;
@@ -384,13 +437,13 @@ class ContestController extends Controller
     {
         try {
             //
-            if (!($contest = $this->getContest($id))) return $this->responseApi(
+            if (!($contest = $this->getContest($id, config('util.TYPE_CONTEST')))) return $this->responseApi(
                 [
                     'status' => false,
                     'payload' => 'Không tìm thấy cuộc thi !',
                 ]
             );
-            if (!($contest2 = $this->addCollectionApiContest($contest))) return $this->responseApi(
+            if (!($contest2 = $this->addCollectionApiContest($contest)->first())) return $this->responseApi(
                 [
                     'status' => false,
                     'payload' => 'Không thể lấy thông tin cuộc thi  !',
@@ -400,7 +453,7 @@ class ContestController extends Controller
             return $this->responseApi(
                 [
                     "status" => true,
-                    "payload" => $contest2->first(),
+                    "payload" => $contest2,
                 ]
             );
         } catch (\Throwable $th) {
@@ -415,10 +468,35 @@ class ContestController extends Controller
         }
     }
 
+    public function apiShowCapacity($id)
+    {
+        try {
+            if (!($contest = $this->getContest($id, config('util.TYPE_TEST'))->first())) return $this->responseApi(
+                [
+                    'status' => false,
+                    'payload' => 'Không tìm thấy bài test năng lực !',
+                ]
+            );
+            return $this->responseApi(
+                [
+                    "status" => true,
+                    "payload" => $contest,
+                ]
+            );
+        } catch (\Throwable $th) {
+            return $this->responseApi(
+                [
+                    "status" => false,
+                    "payload" => 'Not found ',
+                ],
+                404
+            );
+        }
+    }
 
     public function show(Request $request, $id)
     {
-        $contest =  Contest::find($id)->load(['judges', 'rounds' => function ($q) use ($id) {
+        $contest =  Contest::whereId($id)->where('type', config('util.TYPE_CONTEST'))->load(['judges', 'rounds' => function ($q) use ($id) {
             return $q->when(
                 auth()->check() && auth()->user()->hasRole('judge'),
                 function ($q) use ($id) {
@@ -434,6 +512,23 @@ class ContestController extends Controller
         return view('pages.contest.detail.detail', compact('contest'));
     }
 
+    public function show_test_capacity(Request $request, Contest $contest, $id)
+    {
+        if (!$contest::where('type', 1)->whereId($id)->exists()) abort(404);
+        $test_capacity = $contest::where('type', 1)
+            ->whereId($id)
+            ->with([
+                'rounds' => function ($q) {
+                    return $q->with(['exams'])->withCount('exams');
+                }
+            ])
+            ->first();
+        $skills = Skills::all();
+        return view('pages.contest.detail-capacity.detail', [
+            'test_capacity' => $test_capacity,
+            'skills' => $skills
+        ]);
+    }
 
     public function contestDetailTeam($id)
     {

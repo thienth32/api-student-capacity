@@ -1,11 +1,8 @@
 @extends('layouts.main')
-@section('title', 'Thêm cuộc thi')
-@section('page-title', 'Thêm mới cuộc thi')
+@section('title', 'Thêm ' . $contest_type_text)
+@section('page-title', 'Thêm mới ' . $contest_type_text)
 @section('content')
     <div class="row">
-
-
-
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
                 @if (session()->has('success'))
@@ -57,11 +54,11 @@
                         Session::forget('error');
                     @endphp
                 @endif
-                <form id="formContest" action="{{ route('admin.contest.store') }}" method="post"
-                    enctype="multipart/form-data">
+                <form id="formContest" action="{{ route('admin.contest.store') . '?type=' . request('type') ?? 0 }}"
+                    method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group mb-10">
-                        <label for="" class="form-label">Tên cuộc thi</label>
+                        <label for="" class="form-label">Tên {{ $contest_type_text }}</label>
                         <input type="text" name="name" value="{{ old('name') }}" class=" form-control" placeholder="">
                         @error('name')
                             <p class="text-danger">{{ $message }}</p>
@@ -85,22 +82,24 @@
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
                             </div>
-                            <div class="form-group mb-10">
-                                <label for="" class="form-label">Thời gian bắt đầu đăng ký</label>
-                                <input value="{{ old('start_register_time') }}" type="datetime-local"
-                                    name="start_register_time" id="start_time" class="form-control" placeholder="">
-                                @error('start_register_time')
-                                    <p class="text-danger">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <div class="form-group mb-10">
-                                <label for="" class="form-label">Thời gian kết thúc đăng ký</label>
-                                <input value="{{ old('end_register_time') }}" type="datetime-local"
-                                    name="end_register_time" id="end_time" class="form-control" placeholder="">
-                                @error('end_register_time')
-                                    <p class="text-danger">{{ $message }}</p>
-                                @enderror
-                            </div>
+                            @if (request('type') != config('util.TYPE_TEST'))
+                                <div class="form-group mb-10">
+                                    <label for="" class="form-label">Thời gian bắt đầu đăng ký</label>
+                                    <input value="{{ old('start_register_time') }}" type="datetime-local"
+                                        name="start_register_time" id="start_time" class="form-control" placeholder="">
+                                    @error('start_register_time')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div class="form-group mb-10">
+                                    <label for="" class="form-label">Thời gian kết thúc đăng ký</label>
+                                    <input value="{{ old('end_register_time') }}" type="datetime-local"
+                                        name="end_register_time" id="end_time" class="form-control" placeholder="">
+                                    @error('end_register_time')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            @endif
                             <div class="form-group mb-10">
                                 <label for="" class="form-label">Thuộc chuyên ngành</label>
                                 <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
@@ -116,13 +115,14 @@
                             </div>
                         </div>
                         <div class="col-4">
-                            <div class="form-group mb-10">
-                                <label for="" class="form-label">Giới hạn thành viên trong đội</label>
-                                <input name="max_user" type='number' class="form-control" />
-
-                            </div>
+                            @if (request('type') != config('util.TYPE_TEST'))
+                                <div class="form-group mb-10">
+                                    <label for="" class="form-label">Giới hạn thành viên trong đội</label>
+                                    <input name="max_user" type='number' class="form-control" />
+                                </div>
+                            @endif
                             <div class="form-group ">
-                                <label for="" class="form-label">Ảnh cuộc thi</label>
+                                <label for="" class="form-label">Ảnh {{ $contest_type_text }}</label>
                                 <input name="img" type='file' id="file-input" accept=".png, .jpg, .jpeg"
                                     class="form-control" />
                                 <img class="w-100 mt-4 border rounded-3" id="image-preview"
@@ -162,11 +162,20 @@
 
                     </div>
                     <div class="form-group mb-10">
-                        <label for="" class="form-label">Mô tả cuộc thi</label>
-                        <textarea class="form-control" name="description" id="kt_docs_ckeditor_classic" rows="3">
+                        <label for="" class="form-label">Mô tả {{ $contest_type_text }}</label>
+                        <textarea class="form-control " name="description" id="kt_docs_ckeditor_classic" rows="3">
                             {{ old('description') }}
                         </textarea>
                         @error('description')
+                            <p class="text-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div class="form-group mb-10">
+                        <label for="" class="form-label">Tin tức</label>
+                        <textarea class="form-control " name="post_new" id="kt_docs_ckeditor_classic2" rows="3">
+                            {{ old('post_new') }}
+                        </textarea>
+                        @error('post_new')
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
                     </div>
@@ -189,6 +198,8 @@
     <script src="assets/js/system/date-after/date-after.js"></script>
     <script src="assets/js/system/contest/form.js"></script>
     <script>
+        pageCkeditor.classicCk2();
+
         rules.img = {
             required: true,
         };

@@ -285,7 +285,7 @@
                                     <!-- Modal -->
                                     <div style="margin:auto" class="modal fade " id="deltai_team_{{ $key->id }}"
                                         tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
+                                        <div class="modal-dialog modal-lg">
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <h5 class="modal-title" id="exampleModalLabel">Chi tiết đội thi
@@ -296,7 +296,7 @@
                                                 <div class="modal-body  ">
                                                     <div class="row">
                                                         <div class="col md-6">
-                                                            <img style="width:200px;height:200px"
+                                                            <img class="w-100"
                                                                 src="{{ $key->image ? $key->image : 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
                                                                 alt="">
                                                             <h4 class="mt-3">Ngày tạo : {{ $key->created_at }}
@@ -313,7 +313,9 @@
                                                             <ul>
                                                                 @if (count($key->members) > 0)
                                                                     @foreach ($key->members as $user)
-                                                                        <li class="pt-3">{{ $user->name }}</li>
+                                                                        <li class="pt-3">{{ $user->name }}
+                                                                            - {{ $user->email }}
+                                                                        </li>
                                                                     @endforeach
                                                                 @else
                                                                     <li class="pt-3">Chưa có thành viên </li>

@@ -10,25 +10,35 @@
                         <li class="breadcrumb-item pe-3">
                             <a href="{{ route('admin.contest.list') }}" class="pe-3">Cuộc thi </a>
                         </li>
-                        <li class="breadcrumb-item px-3 ">
-                            <a href="{{ route('admin.contest.show', ['id' => $round->contest->id]) }}"
-                                class="pe-3">
-                                {{ $round->contest->name }}
-                            </a>
-                        </li>
-                        <li class="breadcrumb-item pe-3">
-                            <a href="{{ route('admin.round.list') }}" class="pe-3">Vòng thi </a>
-                        </li>
-                        <li class="breadcrumb-item px-3 text-muted">
-                            <a href="{{ route('admin.round.detail', ['id' => $round->id]) }}">
-                                {{ $round->name }}
-                            </a>
-                        </li>
-                        <li class="breadcrumb-item pe-3">
-                            <a href="{{ route('admin.exam.index', ['id' => $round->id]) }}">
-                                Danh sách đề
-                            </a>
-                        </li>
+                        @if ($round->contest->type !== 1)
+                            <li class="breadcrumb-item px-3 ">
+                                <a href="{{ route('admin.contest.show', ['id' => $round->contest->id]) }}"
+                                    class="pe-3">
+                                    {{ $round->contest->name }}
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item pe-3">
+                                <a href="{{ route('admin.round.list') }}" class="pe-3">Vòng thi </a>
+                            </li>
+                            <li class="breadcrumb-item px-3 text-muted">
+                                <a href="{{ route('admin.round.detail', ['id' => $round->id]) }}">
+                                    {{ $round->name }}
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item pe-3">
+                                <a href="{{ route('admin.exam.index', ['id' => $round->id]) }}">
+                                    Danh sách đề
+                                </a>
+                            </li>
+                        @else
+                            <li class="breadcrumb-item px-3 ">
+                                <a href="{{ route('admin.contest.show.capatity', ['id' => $round->contest->id]) }}"
+                                    class="pe-3">
+                                    Capacity {{ $round->contest->name }}
+                                </a>
+                            </li>
+                        @endif
+
                         <li class="breadcrumb-item px-3 text-muted">Thêm mới đề thi</li>
                     </ol>
                 </div>

@@ -40,9 +40,15 @@
                         <select multiple class="form-select mb-2 select2-hidden-accessible" data-control="select2"
                             data-hide-search="false" tabindex="-1" aria-hidden="true" name="team_id[]"
                             value="{{ old('team_id') }}">
+                            {{-- @if (count($round->add_Teams) > 0 || count($round->teams) > 0)
+                                @foreach ($round->add_Teams as $teamSelect)
+                                    <option value="{{ $teamSelect->id }}"> {{ $teamSelect->name }}</option>
+                                @endforeach
+                            @else --}}
                             @foreach ($teams as $teamSelect)
                                 <option value="{{ $teamSelect->id }}"> {{ $teamSelect->name }}</option>
                             @endforeach
+
                         </select>
                         <button type="submit" class="btn btn-primary"> Thêm </button>
 
@@ -78,8 +84,8 @@
                                     <td>{{ $key++ }}</td>
 
                                     <td><img class='w-100px'
-                                            src="{{ Storage::disk('s3')->has($team->image) ? Storage::disk('s3')->temporaryUrl($team->image, now()->addMinutes(5)) : 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
-                                            alt=""></td>
+                                            src="{{ $team->image ? $team->image : 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
+                                            {{-- src="{{ Storage::disk('s3')->has($team->image) ? Storage::disk('s3')->temporaryUrl($team->image, now()->addMinutes(5)) : 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}" --}} alt=""></td>
                                     <td> <a
                                             href="{{ route('admin.round.detail.team.detail', ['id' => $round->id, 'teamId' => $team->id]) }}">
                                             {{ $team->name }}</a>
