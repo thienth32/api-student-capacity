@@ -341,7 +341,7 @@ class RoundController extends Controller
                 return redirect()->back()->withErrors($data['errors'])->withInput();
             }
 
-            return redirect(route('admin.round.list'));
+            return  redirect(route('admin.round.list'));
         }
         return redirect('error');
     }

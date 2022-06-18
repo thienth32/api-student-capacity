@@ -9,9 +9,9 @@
                     enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
-                    <div  class="form-group mb-10">
+                    <div class="form-group mb-10">
                         <label for="">Tên kỹ năng</label>
-                        <input  type="text" name="name" value="{{ $data->name }}" class=" form-control" placeholder="">
+                        <input type="text" name="name" value="{{ $data->name }}" class=" form-control" placeholder="">
                         @error('name')
                             <p id="checkname" class="text-danger">{{ $message }}</p>
                         @enderror
@@ -41,15 +41,15 @@
                                             @endphp
                                             <option
                                                 @foreach ($data->majorSkill as $item) @if ($item->id == $itemMajor->id)
-                                        {{ 'selected="selected"' }}
-                                        @endif @endforeach
+                                        {{ 'selected="selected"' }} @endif
+                                                @endforeach
                                                 value="{{ $itemMajor->id }}">
                                                 Ngành: {{ $itemMajor->name }}
                                             </option>
-                                            @include(
-                                                'pages.skill.include.listSelecterChisl',
-                                                ['majorPrent' => $itemMajor, 'major' => $data]
-                                            )
+                                            @include('pages.skill.include.listSelecterChisl', [
+                                                'majorPrent' => $itemMajor,
+                                                'major' => $data,
+                                            ])
                                         @endforeach
                                     </select>
                                     @if (count($data->majorSkill) > 0)

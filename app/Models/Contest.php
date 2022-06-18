@@ -48,6 +48,10 @@ class Contest extends Model
         'max_user',
         'reward_rank_point'
     ];
+    public function recruitment()
+    {
+        return $this->BelongsToMany(Recruitments::class, 'contest_recruitments', 'contest_id', 'recruitment_id')->withTimestamps();
+    }
     public function teams()
     {
         return $this->hasMany(Team::class, 'contest_id')->with('members');
