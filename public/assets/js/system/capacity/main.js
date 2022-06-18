@@ -1,6 +1,6 @@
 var flagDataSaveHide = false;
 var dataQues = null;
-var loading = `<div class="ct-ld"><div class="loading"></div> <h2 class="m-2">Hệ thống đang chạy , vui lòng chờ ...</h2></div>`;
+var loading = `<div class="ct-ld m-1"><div class="loading"></div> <h2 class="m-2">Hệ thống đang chạy , vui lòng chờ ...</h2></div>`;
 function loadTast(text = "Đang chạy ...", type = "info") {
     toastr.options = {
         closeButton: true,
