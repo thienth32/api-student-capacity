@@ -15,14 +15,7 @@ use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\SendMailController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EnterpriseController;
-use App\Http\Controllers\Admin\ExamController;
-use App\Http\Controllers\Admin\JudgesController;
-use App\Http\Controllers\Admin\MajorController;
 use App\Http\Controllers\Admin\RecruitmentController;
-use App\Http\Controllers\Admin\ResultController;
-use App\Http\Controllers\Admin\SendMailController;
-use App\Http\Controllers\Admin\SliderController;
-use App\Http\Controllers\Admin\SkillController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('dashboard/api-cuoc-thi', [DashboardController::class, 'chartCompetity'])->name('dashboard.chart-competity');
