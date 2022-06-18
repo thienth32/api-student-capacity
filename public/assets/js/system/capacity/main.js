@@ -1,4 +1,5 @@
 var flagDataSaveHide = false;
+var dataQues = null;
 function loadTast(
     text = "Đang chạy ...",
     type = "info"
@@ -74,6 +75,7 @@ function fetchRoundGet(id) {
 
 function fecthQuestionByExams(id, param = "?",url = null) {
     $("#show-ques-anw").html(`<h2>Đang tải dữ liệu , vui lòng chờ ... </h2>`);
+    $(".btn-add-question-answ").hide();
     $.ajax({
         type: "GET",
         url: url ?? `${urlApiPublic}exam/get-question-by-exam/${id}${param}`,
@@ -171,6 +173,7 @@ function fecthQuestionByExams(id, param = "?",url = null) {
                 .join(" ");
             $('#show-paginate').html(paginate);
             $("#show-ques-anw").html(html);
+            $(".btn-add-question-answ").show();
         },
     });
 }
@@ -182,6 +185,7 @@ function getApiShowQues(url) {
         url: url,
         success: function(res) {
             if (!res.status) return;
+            dataQues = res.payload;
             fetchShowQues(res.payload);
         },
     });
@@ -189,6 +193,7 @@ function getApiShowQues(url) {
 
 function fetchShowQues(dataQ) {
     var html = dataQ.map(function(data, index) {
+        let flagActive = checkQuesSionHas(data);
         var htmlChild = data.answers
             .map(function(val) {
                 return `
@@ -213,7 +218,9 @@ function fetchShowQues(dataQ) {
                     role="button"
                     aria-expanded="false"
                     aria-controls="multiCollapseExample${index}">
-                    ${data.content}
+                    ${data.content} ${flagActive == true
+                        ? '<i class="bi bi-check2-square"></i> ' + '<b style="color:lawngreen">Đã chọn</b> | <i role="button" data-id="'+data.id+'" class="click-remove-save bi bi-slash-circle" title="Hủy chọn"></i>'
+                        : ''}
 
 
                     </a>
@@ -238,7 +245,7 @@ function fetchShowQues(dataQ) {
                 </div>
                 <div>
                     <button
-                        class="btn-click-save btn btn-outline btn-outline-dashed btn-outline-dark btn-active-light-dark btn-sm p-1"
+                        class=" btn btn-outline btn-outline-dashed ${flagActive == true ? 'disable' : 'btn-click-save'} btn-outline-dark btn-active-light-dark btn-sm p-1"
                         data-bs-toggle="tooltip" data-bs-html="true" title="Thêm vào danh sách câu hỏi"
                         data-name="${data.content}"
                         data-id="${data.id}"
@@ -246,8 +253,6 @@ function fetchShowQues(dataQ) {
                         <i class="bi bi-plus-square-fill"></i>
                     </button>
                 </div>
-
-
             </li>
             <div class="collapse multi-collapse" id="multiCollapseExample${index}">
                 <div class="card card-body">
@@ -259,8 +264,17 @@ function fetchShowQues(dataQ) {
     $("#show-add-questions").html(html);
 }
 
-function showListSave() {
+function checkQuesSionHas(data){
 
+    let result = listSave.filter(function (data_list_save) {
+        return data_list_save.id == data.id;
+    })
+    if(result.length > 0) return true;
+    return false;
+}
+
+function showListSave() {
+    if(dataQues) fetchShowQues(dataQues);
     let html = listSave
         .map(function(data, index) {
             var titleTable = ``;
@@ -292,6 +306,8 @@ const mainPage = {
     },
     showExam: function() {
         $(document).on("click", ".btn-click-show-exams", function() {
+            $("#show-tast-qs").hide();
+            $("#show-list-qs").show();
             exam_id = $(this).data("exam_id");
             const name = $(this).data("exam_name");
             listSave = [];
@@ -333,6 +349,19 @@ const mainPage = {
             listSave.splice($(this).data("key"), 1);
             showListSave();
         });
+    },
+    removeByListQuestionById: function () {
+      $(document).on("click",".click-remove-save",function () {
+          let id = $(this).data("id");
+          let key = null;
+          listSave.map(function (item,keyData) {
+              if(id == item.id){
+                  key = keyData;
+              }
+          });
+          if(key !== null) listSave.splice(key, 1);
+          showListSave();
+      }) ;
     },
     reload: function() {
         $(".btn-reload").on("click", function() {
@@ -395,6 +424,7 @@ const mainPage = {
       })  ;
     },
 };
+
 mainPage.addExam();
 mainPage.showExam();
 mainPage.addQuestionSave();
@@ -406,6 +436,7 @@ mainPage.saveQuestionApi();
 mainPage.detachQuestion();
 mainPage.hideDataSave();
 mainPage.paginateClick();
+mainPage.removeByListQuestionById();
 
 $("#selectSkill").on("change", function() {
     var value = $(this).val();
