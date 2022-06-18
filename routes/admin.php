@@ -15,6 +15,14 @@ use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\SendMailController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EnterpriseController;
+use App\Http\Controllers\Admin\ExamController;
+use App\Http\Controllers\Admin\JudgesController;
+use App\Http\Controllers\Admin\MajorController;
+use App\Http\Controllers\Admin\RecruitmentController;
+use App\Http\Controllers\Admin\ResultController;
+use App\Http\Controllers\Admin\SendMailController;
+use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Admin\SkillController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('dashboard/api-cuoc-thi', [DashboardController::class, 'chartCompetity'])->name('dashboard.chart-competity');
@@ -293,6 +301,24 @@ Route::group([
 
     Route::prefix('capacity')->group(function () {
         Route::get('{id}', [ContestController::class, 'show_test_capacity'])->name('admin.contest.show.capatity');
+    });
+    Route::prefix('recruitment')->group(function () {
+        Route::get('{id}/edit', [RecruitmentController::class, 'edit'])->name('admin.recruitment.edit');
+        Route::put('{id}', [RecruitmentController::class, 'update'])->name('admin.recruitment.update');
+        Route::get('', [RecruitmentController::class, 'index'])->name('admin.recruitment.list');
+        Route::get('create', [RecruitmentController::class, 'create'])->name('admin.recruitment.create');
+        Route::post('store', [RecruitmentController::class, 'store'])->name('admin.recruitment.store');
+        Route::delete('{id}', [RecruitmentController::class, 'destroy'])->name('admin.recruitment.destroy');
+        // Route::prefix('{slug}/skill')->group(function () {
+        //     Route::get('', [MajorController::class, 'Skill'])->name('admin.major.skill');
+        //     Route::post('attach', [MajorController::class, 'attachSkill'])->name('admin.major.skill.attach');
+        //     Route::get('detach/{skill_id}', [MajorController::class, 'detachSkill'])->name('admin.major.skill.detach');
+        // });
+        Route::prefix('list-soft-deletes')->group(function () {
+            Route::get('', [RecruitmentController::class, 'listRecordSoftDeletes'])->name('admin.recruitment.list.soft.deletes');
+            Route::get('{id}/delete', [RecruitmentController::class, 'backUpRecruitment'])->name('admin.recruitment.soft.deletes');
+            Route::get('{id}/restore', [RecruitmentController::class, 'delete'])->name('admin.recruitment.soft.restore');
+        });
     });
 });
 

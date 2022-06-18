@@ -7,11 +7,13 @@ use App\Http\Controllers\Admin\ExamController;
 use App\Http\Controllers\Admin\MajorController as AdminMajorController;
 use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\RankUserController;
+use App\Http\Controllers\Admin\RecruitmentController;
 use App\Http\Controllers\Admin\ResultController;
 use App\Http\Controllers\Admin\RoundController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\SponsorController as AdminSponsorController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Models\Recruitments;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -74,6 +76,12 @@ Route::prefix('questions')->group(function () {
 Route::prefix('contest/round/{id_round}/result')->group(function () {
     Route::get('', [ResultController::class, 'indexApi']);
 });
+
+Route::prefix('recruitments')->group(function () {
+    Route::get('', [RecruitmentController::class, 'apiShow']);
+    Route::get('{id}', [RecruitmentController::class, 'apiDetail']);
+});
+
 
 Route::get('rating-major/{slug}', [RankUserController::class, 'getRatingUser']);
 

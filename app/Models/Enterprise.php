@@ -23,5 +23,9 @@ class Enterprise extends Model
     {
         return $this->belongsToMany(Contest::class, 'donors');
     }
+    public function recruitment()
+    {
+        return $this->BelongsToMany(Recruitments::class, 'enterprise_recruitments', 'enterprise_id', 'recruitment_id')->withTimestamps();
+    }
     use HasFactory;
 }

@@ -9,4 +9,5 @@ class EnterpriseRecruitment extends Model
 {
     use HasFactory;
     protected $table = 'enterprise_recruitments';
+    protected $fillable = ['enterprise_id', 'recruitment_id'];
 }
