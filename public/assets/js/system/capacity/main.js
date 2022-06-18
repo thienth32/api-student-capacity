@@ -1,5 +1,6 @@
 var flagDataSaveHide = false;
 var dataQues = null;
+var loading = `<div class="ct-ld"><div class="loading"></div> <h2 class="m-2">Hệ thống đang chạy , vui lòng chờ ...</h2></div>`;
 function loadTast(text = "Đang chạy ...", type = "info") {
     toastr.options = {
         closeButton: true,
@@ -33,7 +34,7 @@ function backClass(navs, tabs) {
 }
 
 function fetchRoundGet(id) {
-    $("#show-exams").html(`<h2>Đang tải dữ liệu , vui lòng chờ ...</h2>`);
+    $("#show-exams").html(loading);
     $.ajax({
         type: "GET",
         url: `${urlApiPublic}exam/get-by-round/${id}`,
@@ -79,7 +80,7 @@ function fetchRoundGet(id) {
 }
 
 function fecthQuestionByExams(id, param = "?", url = null) {
-    $("#show-ques-anw").html(`<h2>Đang tải dữ liệu , vui lòng chờ ... </h2>`);
+    $("#show-ques-anw").html(loading);
     $(".btn-add-question-answ").hide();
     $.ajax({
         type: "GET",
@@ -189,7 +190,7 @@ function fecthQuestionByExams(id, param = "?", url = null) {
 
 function getApiShowQues(url) {
     $("#show-add-questions").html(
-        `<h2>Đang tải dữ liệu , vui lòng chờ ...</h2>`
+        loading
     );
     $.ajax({
         type: "GET",
@@ -403,7 +404,7 @@ const mainPage = {
     },
     saveQuestionApi: function () {
         $("#save-qs").on("click", function () {
-            $(this).html(`<h2>Đang tải dữ liệu , vui lòng chờ ...</h2>`);
+            $(this).html(`Đang lưu ...`);
             var that = this;
             $.ajax({
                 type: "POST",
@@ -478,7 +479,7 @@ mainPage.detachQuestion();
 mainPage.hideDataSave();
 mainPage.paginateClick();
 mainPage.removeByListQuestionById();
-mainPage.blockF12();
+// mainPage.blockF12();
 
 $("#selectSkill").on("change", function () {
     var value = $(this).val();

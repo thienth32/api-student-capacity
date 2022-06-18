@@ -2,6 +2,52 @@
 @section('title', 'Chi tiết test năng lực')
 @section('page-title', 'Chi tiết test năng lực')
 @section('content')
+    <style>
+        .loading {
+            width: 6vmax;
+            height: 6vmax;
+            border-right: 4px solid black;
+            border-radius: 100%;
+            animation: spinRight 800ms linear infinite;
+        }
+        .loading:before, .loading:after {
+            content: '';
+            width: 4vmax;
+            height: 4vmax;
+            display: block;
+            position: absolute;
+            top: calc(50% - 2vmax);
+            left: calc(50% - 2vmax);
+            border-left: 3px solid black;
+            border-radius: 100%;
+            animation: spinLeft 800ms linear infinite;
+        }
+        .loading:after {
+            width: 2vmax;
+            height: 2vmax;
+            top: calc(50% - 1vmax);
+            left: calc(50% - 1vmax);
+            border: 0;
+            border-right: 2px solid black;
+            animation: none;
+        }
+        @keyframes spinLeft {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(720deg);
+            }
+        }
+        @keyframes spinRight {
+            from {
+                transform: rotate(360deg);
+            }
+            to {
+                transform: rotate(0deg);
+            }
+        }
+    </style>
     <div class=" mb-4">
         <div class="row">
             <div class="col-lg-12">
@@ -271,7 +317,7 @@
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody  id="show-ques-anw">
+                                <tbody  id="show-ques-anw" class="position-relative">
 
                                 </tbody>
                             </table>
