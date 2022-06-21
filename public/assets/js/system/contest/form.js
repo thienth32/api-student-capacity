@@ -7,25 +7,24 @@ const rules = {
     },
     date_start: {
         required: true,
-        beginLessEnd: true
+        beginLessEnd: true,
     },
     register_deadline: {
         required: true,
-        checkBeginNull: true
-
+        checkBeginNull: true,
     },
     description: {
         required: true,
     },
     max_user: {
         required: true,
-        number: true
+        number: true,
     },
     start_register_time: {
         required: true,
         startTimeCheckBegin: true,
         startTimeCheckEnd: true,
-        startTimeCheckLessEnd: true
+        startTimeCheckLessEnd: true,
     },
     end_register_time: {
         required: true,
@@ -33,41 +32,41 @@ const rules = {
 
     top1: {
         required: true,
-        number: true
+        number: true,
     },
     top2: {
         required: true,
-        number: true
+        number: true,
     },
     top3: {
         required: true,
-        number: true
+        number: true,
     },
     leave: {
         required: true,
-        number: true
+        number: true,
     },
 };
 const messages = {
     top1: {
         required: "Chưa nhập trường này !",
-        number: 'Sai định dạng !!'
+        number: "Sai định dạng !!",
     },
     top2: {
         required: "Chưa nhập trường này !",
-        number: 'Sai định dạng !!'
+        number: "Sai định dạng !!",
     },
     top3: {
         required: "Chưa nhập trường này !",
-        number: 'Sai định dạng !!'
+        number: "Sai định dạng !!",
     },
     leave: {
         required: "Chưa nhập trường này !",
-        number: 'Sai định dạng !!'
+        number: "Sai định dạng !!",
     },
     max_user: {
         required: "Chưa nhập trường này !",
-        number: 'Sai định dạng !!'
+        number: "Sai định dạng !!",
     },
     name: {
         required: "Chưa nhập trường này !",

@@ -49,6 +49,10 @@ class Contest extends Model
         'reward_rank_point',
         'post_new'
     ];
+    public function recruitment()
+    {
+        return $this->BelongsToMany(Recruitments::class, 'contest_recruitments', 'contest_id', 'recruitment_id')->withTimestamps();
+    }
     public function teams()
     {
         return $this->hasMany(Team::class, 'contest_id')->with('members');

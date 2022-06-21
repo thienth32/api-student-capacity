@@ -4,14 +4,14 @@ const rules = {
     name: {
         required: true,
         maxlength: 255,
-        hasSpecial:true
+        hasSpecial: true,
     },
     description: {
         required: true,
     },
     short_name: {
         required: true,
-        hasUppercase:true,
+        hasUppercase: true,
         maxlength: 20,
     },
 };
@@ -34,7 +34,7 @@ $.validator.addMethod(
         if (this.optional(element)) {
             return true;
         }
-        return  /^[A-Z0-9]*$/.test(value);
+        return /^[A-Z0-9]*$/.test(value);
     },
     "Trường yêu cầu viết hoa không dấu!!!"
 );
@@ -44,11 +44,11 @@ $.validator.addMethod(
         if (this.optional(element)) {
             return true;
         }
-        if(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(value)){
+        if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(value)) {
             return false;
-          } else {
+        } else {
             return true;
-          }
+        }
     },
     "Trường yêu cầu không có kí tự đặc biệt!!!"
 );

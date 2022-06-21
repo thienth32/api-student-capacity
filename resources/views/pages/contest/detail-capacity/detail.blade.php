@@ -2,6 +2,52 @@
 @section('title', 'Chi tiết test năng lực')
 @section('page-title', 'Chi tiết test năng lực')
 @section('content')
+    <style>
+        .loading {
+            width: 6vmax;
+            height: 6vmax;
+            border-right: 4px solid black;
+            border-radius: 100%;
+            animation: spinRight 800ms linear infinite;
+        }
+        .loading:before, .loading:after {
+            content: '';
+            width: 4vmax;
+            height: 4vmax;
+            display: block;
+            position: absolute;
+            top: calc(50% - 2vmax);
+            left: calc(50% - 2vmax);
+            border-left: 3px solid black;
+            border-radius: 100%;
+            animation: spinLeft 800ms linear infinite;
+        }
+        .loading:after {
+            width: 2vmax;
+            height: 2vmax;
+            top: calc(50% - 1vmax);
+            left: calc(50% - 1vmax);
+            border: 0;
+            border-right: 2px solid black;
+            animation: none;
+        }
+        @keyframes spinLeft {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(720deg);
+            }
+        }
+        @keyframes spinRight {
+            from {
+                transform: rotate(360deg);
+            }
+            to {
+                transform: rotate(0deg);
+            }
+        }
+    </style>
     <div class=" mb-4">
         <div class="row">
             <div class="col-lg-12">
@@ -64,7 +110,7 @@
                     <a target="_blank"
                         href="{{ route('admin.round.create') . '?contest_id=' . $test_capacity->id . '&type=1' }}"
                         style="float:right">Thêm bài làm </a>
-                    <div class="table-responsive table-responsive-md">
+                    <div style="width: 100%" class="table-responsive table-responsive-md ">
                         <table class="table table-row-bordered table-row-gray-300 gy-7  table-hover ">
                             <thead>
                                 <tr>
@@ -195,13 +241,15 @@
                             <div id="show-add-questions" class="mt-2 mb-2"></div>
                             <div id="data-save" class="mt-1">
                                 <div id="show-data-save" class="mb-5"></div>
-                                <button class="btn btn-primary" id="save-qs">Lưu </button>
-                                <button class="btn-reload btn btn-success">
-                                    <i class="bi bi-arrow-counterclockwise"></i>
-                                </button>
-                                <button class="btn-back btn btn-warning">
-                                    <i class="bi bi-backspace"></i>
-                                </button>
+                                <div style="position: fixed; bottom: 20px; transform: translateX(-50%);  left: 50%; z-index: 999999999;">
+                                    <button class="btn btn-primary" id="save-qs">Lưu </button>
+                                    <button class="btn-reload btn btn-success">
+                                        <i class="bi bi-arrow-counterclockwise"></i>
+                                    </button>
+                                    <button class="btn-back btn btn-warning">
+                                        <i class="bi bi-backspace"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
@@ -269,10 +317,12 @@
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody id="show-ques-anw">
+                                <tbody  id="show-ques-anw" class="position-relative">
 
                                 </tbody>
                             </table>
+                            <ul style="position: fixed; bottom: 20px; transform: translateX(-50%);  left: 50%; z-index: 999999999;" id="show-paginate" class="pagination">
+                            </ul>
                         </div>
 
                     </div>
