@@ -496,7 +496,7 @@ class ContestController extends Controller
 
     public function show(Request $request, $id)
     {
-        $contest =  Contest::whereId($id)->where('type', config('util.TYPE_CONTEST'))->load(['judges', 'rounds' => function ($q) use ($id) {
+        $contest =  Contest::whereId($id)->where('type', config('util.TYPE_CONTEST'))->first()->load(['judges', 'rounds' => function ($q) use ($id) {
             return $q->when(
                 auth()->check() && auth()->user()->hasRole('judge'),
                 function ($q) use ($id) {
