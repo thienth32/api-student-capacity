@@ -134,6 +134,8 @@
         var URL = window.location.href;
         var userArray = [];
         var max_user = 100;
+        var id_contest = "{{ $contest->id }}"
+        var judges = 0;
         var _token = "{{ csrf_token() }}"
         var urlSearch = "{{ route('admin.user.TeamUserSearch') }}"
         var URL_ATTACH = "{{ route('admin.judges.attach', ['contest_id' => $contest->id]) }}"

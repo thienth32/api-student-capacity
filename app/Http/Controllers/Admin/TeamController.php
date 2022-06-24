@@ -238,10 +238,8 @@ class TeamController extends Controller
                     $filename = $this->uploadFile($fileImage, $team->image);
                     $team->image = $filename;
                 }
-
                 $team->name = $request->name;
                 $team->save();
-
                 DB::commit();
                 return response()->json([
                     'status' => true,
