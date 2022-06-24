@@ -78,7 +78,7 @@ class ContestController extends Controller
                 ->when(auth()->check() && auth()->user()->hasRole('judge'), function ($q) {
                     return $q->whereIn('id', array_unique(Judge::where('user_id', auth()->user()->id)->pluck('contest_id')->toArray()));
                 })
-                ->search(request('q') ?? null, ['name'])
+                ->search(request('q') ?? null, ['name'], true)
                 ->missingDate('register_deadline', request('miss_date') ?? null, $now->toDateTimeString())
                 ->passDate('register_deadline', request('pass_date') ?? null, $now->toDateTimeString())
                 ->registration_date('end_register_time', request('registration_date') ?? null, $now->toDateTimeString())
@@ -496,7 +496,7 @@ class ContestController extends Controller
 
     public function show(Request $request, $id)
     {
-        $contest =  Contest::whereId($id)->where('type', config('util.TYPE_CONTEST'))->load(['judges', 'rounds' => function ($q) use ($id) {
+        $contest =  Contest::whereId($id)->where('type', config('util.TYPE_CONTEST'))->first()->load(['judges', 'rounds' => function ($q) use ($id) {
             return $q->when(
                 auth()->check() && auth()->user()->hasRole('judge'),
                 function ($q) use ($id) {
