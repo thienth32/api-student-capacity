@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Casts\FormatDate;
+use App\Casts\FormatImageGet;
 use App\Services\Builder\Builder;
 use App\Services\Traits\TGetAttributeColumn;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -28,6 +30,11 @@ class Round extends Model
         'description',
         'contest_id',
         'type_exam_id',
+    ];
+    protected $casts = [
+        'created_at' => FormatDate::class,
+        'updated_at' =>  FormatDate::class,
+        'image' => FormatImageGet::class,
     ];
 
     public static function boot()

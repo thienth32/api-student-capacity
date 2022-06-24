@@ -13,7 +13,8 @@
                     @method('put')
                     <div class="form-group mb-10">
                         <label class="form-label" for="">Tên {{ $nameContestType }}</label>
-                        <input type="text" name="name" value="{{ $round['name'] }}" class=" form-control" placeholder="">
+                        <input type="text" name="name" value="{{ $round['name'] }}" class=" form-control"
+                            placeholder="">
                         @error('name')
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
@@ -26,8 +27,8 @@
                                 <div class="form-group mb-10">
                                     <label class="form-label" for="">Thời gian bắt đầu</label>
                                     <input value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime($round['start_time'])) }}"
-                                        type="datetime-local" id="begin" max="" name="start_time" class="form-control"
-                                        placeholder="">
+                                        type="datetime-local" id="begin" max="" name="start_time"
+                                        class="form-control" placeholder="">
                                     @error('start_time')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
@@ -35,8 +36,8 @@
                                 <div class="form-group mb-10">
                                     <label class="form-label" for="">Thời gian kết thúc</label>
                                     <input value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime($round['end_time'])) }}"
-                                        id="end" min="" type="datetime-local" name="end_time" class="form-control"
-                                        placeholder="">
+                                        id="end" min="" type="datetime-local" name="end_time"
+                                        class="form-control" placeholder="">
                                     @error('end_time')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
@@ -106,7 +107,8 @@
                         @enderror
                     </div>
                     <div class="form-group mb-10 ">
-                        <button type="submit" name="" id="" class="btn btn-success btn-lg btn-block">Lưu </button>
+                        <button type="submit" name="" id="" class="btn btn-success btn-lg btn-block">Lưu
+                        </button>
                     </div>
                 </form>
             </div>
