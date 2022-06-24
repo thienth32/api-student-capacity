@@ -78,7 +78,7 @@ class ContestController extends Controller
                 ->when(auth()->check() && auth()->user()->hasRole('judge'), function ($q) {
                     return $q->whereIn('id', array_unique(Judge::where('user_id', auth()->user()->id)->pluck('contest_id')->toArray()));
                 })
-                ->search(request('q') ?? null, ['name'])
+                ->search(request('q') ?? null, ['name'], true)
                 ->missingDate('register_deadline', request('miss_date') ?? null, $now->toDateTimeString())
                 ->passDate('register_deadline', request('pass_date') ?? null, $now->toDateTimeString())
                 ->registration_date('end_register_time', request('registration_date') ?? null, $now->toDateTimeString())
