@@ -23,8 +23,7 @@
                         </span>
                     </a>
 
-                    <a class="mx-3"
-                        href="{{ route('admin.enterprise.soft.delete', 'enterprise_soft_delete=1') }}">
+                    <a class="mx-3" href="{{ route('admin.enterprise.soft.delete', 'enterprise_soft_delete=1') }}">
 
                         <span class=" svg-icon svg-icon-primary svg-icon-2x">
                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Files/Deleted-folder.svg--><svg
@@ -99,7 +98,8 @@
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="  form-group p-2">
                     <label class="form-label">Tìm kiếm </label>
-                    <input id="searchTeam" type="text" placeholder="'*Enter' tìm kiếm ..." class=" ip-search form-control">
+                    <input id="searchTeam" type="text" placeholder="'*Enter' tìm kiếm ..."
+                        class=" ip-search form-control">
                 </div>
             </div>
         </div>
@@ -107,8 +107,8 @@
             <hr>
             <span class="btn-hide svg-icon svg-icon-primary svg-icon-2x">
                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Stockholm-icons/Navigation/Angle-up.svg--><svg
-                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                    viewBox="0 0 24 24" version="1.1">
+                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                    height="24px" viewBox="0 0 24 24" version="1.1">
                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                         <polygon points="0 0 24 0 24 24 0 24" />
                         <path
@@ -120,8 +120,8 @@
 
             <span style="display: none" class="btn-show svg-icon svg-icon-primary svg-icon-2x">
                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Angle-down.svg--><svg
-                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                    viewBox="0 0 24 24" version="1.1">
+                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                    height="24px" viewBox="0 0 24 24" version="1.1">
                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                         <polygon points="0 0 24 0 24 24 0 24" />
                         <path
@@ -157,13 +157,15 @@
                                                     <polygon points="0 0 24 0 24 24 0 24" />
                                                     <rect fill="#000000" opacity="0.3"
                                                         transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
-                                                        x="5" y="5" width="2" height="12" rx="1" />
+                                                        x="5" y="5" width="2" height="12"
+                                                        rx="1" />
                                                     <path
                                                         d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
                                                         fill="#000000" fill-rule="nonzero" />
                                                     <rect fill="#000000" opacity="0.3"
                                                         transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
-                                                        x="17" y="7" width="2" height="12" rx="1" />
+                                                        x="17" y="7" width="2" height="12"
+                                                        rx="1" />
                                                     <path
                                                         d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
                                                         fill="#000000" fill-rule="nonzero"
@@ -192,13 +194,15 @@
                                                     <polygon points="0 0 24 0 24 24 0 24" />
                                                     <rect fill="#000000" opacity="0.3"
                                                         transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
-                                                        x="5" y="5" width="2" height="12" rx="1" />
+                                                        x="5" y="5" width="2" height="12"
+                                                        rx="1" />
                                                     <path
                                                         d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
                                                         fill="#000000" fill-rule="nonzero" />
                                                     <rect fill="#000000" opacity="0.3"
                                                         transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
-                                                        x="17" y="7" width="2" height="12" rx="1" />
+                                                        x="17" y="7" width="2" height="12"
+                                                        rx="1" />
                                                     <path
                                                         d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
                                                         fill="#000000" fill-rule="nonzero"
@@ -289,7 +293,7 @@
                                             <!-- Modal -->
                                             <div class="modal fade" id="donor_{{ $key->id }}" tabindex="-1"
                                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog">
+                                                <div class="modal-dialog modal-lg">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title" id="exampleModalLabel"> Tài trợ các
@@ -328,8 +332,10 @@
                                                         xmlns="http://www.w3.org/2000/svg"
                                                         xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                                                         height="24px" viewBox="0 0 24 24" version="1.1">
-                                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                            <rect x="0" y="0" width="24" height="24" />
+                                                        <g stroke="none" stroke-width="1" fill="none"
+                                                            fill-rule="evenodd">
+                                                            <rect x="0" y="0" width="24"
+                                                                height="24" />
                                                             <path
                                                                 d="M5,8.6862915 L5,5 L8.6862915,5 L11.5857864,2.10050506 L14.4852814,5 L19,5 L19,9.51471863 L21.4852814,12 L19,14.4852814 L19,19 L14.4852814,19 L11.5857864,21.8994949 L8.6862915,19 L5,19 L5,15.3137085 L1.6862915,12 L5,8.6862915 Z M12,15 C13.6568542,15 15,13.6568542 15,12 C15,10.3431458 13.6568542,9 12,9 C10.3431458,9 9,10.3431458 9,12 C9,13.6568542 10.3431458,15 12,15 Z"
                                                                 fill="#000000" />
@@ -341,20 +347,23 @@
                                             <ul class="dropdown-menu  px-4 ">
                                                 <li class="my-3">
                                                     <a href="{{ route('admin.enterprise.edit', $key->id) }}">
-                                                        <span role="button" class="svg-icon svg-icon-success svg-icon-2x">
+                                                        <span role="button"
+                                                            class="svg-icon svg-icon-success svg-icon-2x">
                                                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Design/Edit.svg--><svg
                                                                 xmlns="http://www.w3.org/2000/svg"
                                                                 xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                                                                 height="24px" viewBox="0 0 24 24" version="1.1">
                                                                 <g stroke="none" stroke-width="1" fill="none"
                                                                     fill-rule="evenodd">
-                                                                    <rect x="0" y="0" width="24" height="24" />
+                                                                    <rect x="0" y="0" width="24"
+                                                                        height="24" />
                                                                     <path
                                                                         d="M8,17.9148182 L8,5.96685884 C8,5.56391781 8.16211443,5.17792052 8.44982609,4.89581508 L10.965708,2.42895648 C11.5426798,1.86322723 12.4640974,1.85620921 13.0496196,2.41308426 L15.5337377,4.77566479 C15.8314604,5.0588212 16,5.45170806 16,5.86258077 L16,17.9148182 C16,18.7432453 15.3284271,19.4148182 14.5,19.4148182 L9.5,19.4148182 C8.67157288,19.4148182 8,18.7432453 8,17.9148182 Z"
                                                                         fill="#000000" fill-rule="nonzero"
                                                                         transform="translate(12.000000, 10.707409) rotate(-135.000000) translate(-12.000000, -10.707409) " />
-                                                                    <rect fill="#000000" opacity="0.3" x="5" y="20"
-                                                                        width="15" height="2" rx="1" />
+                                                                    <rect fill="#000000" opacity="0.3" x="5"
+                                                                        y="20" width="15" height="2"
+                                                                        rx="1" />
                                                                 </g>
                                                             </svg>
                                                         </span>
@@ -375,11 +384,13 @@
                                                                     class="svg-icon svg-icon-danger svg-icon-2x">
                                                                     <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Trash.svg--><svg
                                                                         xmlns="http://www.w3.org/2000/svg"
-                                                                        xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                                                                        height="24px" viewBox="0 0 24 24" version="1.1">
+                                                                        xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                        width="24px" height="24px" viewBox="0 0 24 24"
+                                                                        version="1.1">
                                                                         <g stroke="none" stroke-width="1" fill="none"
                                                                             fill-rule="evenodd">
-                                                                            <rect x="0" y="0" width="24" height="24" />
+                                                                            <rect x="0" y="0"
+                                                                                width="24" height="24" />
                                                                             <path
                                                                                 d="M6,8 L18,8 L17.106535,19.6150447 C17.04642,20.3965405 16.3947578,21 15.6109533,21 L8.38904671,21 C7.60524225,21 6.95358004,20.3965405 6.89346498,19.6150447 L6,8 Z M8,10 L8.45438229,14.0894406 L15.5517885,14.0339036 L16,10 L8,10 Z"
                                                                                 fill="#000000" fill-rule="nonzero" />
@@ -403,9 +414,10 @@
                                                                     height="24px" viewBox="0 0 24 24" version="1.1">
                                                                     <g stroke="none" stroke-width="1" fill="none"
                                                                         fill-rule="evenodd">
-                                                                        <rect x="0" y="0" width="24" height="24" />
-                                                                        <circle fill="#000000" opacity="0.3" cx="12" cy="12"
-                                                                            r="10" />
+                                                                        <rect x="0" y="0" width="24"
+                                                                            height="24" />
+                                                                        <circle fill="#000000" opacity="0.3" cx="12"
+                                                                            cy="12" r="10" />
                                                                         <path
                                                                             d="M14.5,11 C15.0522847,11 15.5,11.4477153 15.5,12 L15.5,15 C15.5,15.5522847 15.0522847,16 14.5,16 L9.5,16 C8.94771525,16 8.5,15.5522847 8.5,15 L8.5,12 C8.5,11.4477153 8.94771525,11 9.5,11 L9.5,10.5 C9.5,9.11928813 10.6192881,8 12,8 C13.3807119,8 14.5,9.11928813 14.5,10.5 L14.5,11 Z M12,9 C11.1715729,9 10.5,9.67157288 10.5,10.5 L10.5,11 L13.5,11 L13.5,10.5 C13.5,9.67157288 12.8284271,9 12,9 Z"
                                                                             fill="#000000" />
