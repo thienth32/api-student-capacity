@@ -11,7 +11,7 @@ class Recruitments extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = 'recruitments';
-    protected $fillable = ['name', 'description', 'start_time', 'end_time'];
+    protected $fillable = ['name', 'description', 'start_time', 'end_time', 'image'];
     public function enterprise()
     {
         return $this->BelongsToMany(Enterprise::class, 'enterprise_recruitments', 'recruitment_id', 'enterprise_id')->withTimestamps();

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Services\Traits\TUploadImage;
 use App\Http\Controllers\Controller;
 use App\Models\Contest;
 use App\Models\Enterprise;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Validator;
 
 class RecruitmentController extends Controller
 {
+    use TUploadImage;
     use TResponse;
     private function getList(Request $request)
     {
@@ -109,7 +111,7 @@ class RecruitmentController extends Controller
                 'description' => 'required',
                 'start_time' => 'required|after_or_equal:today',
                 'end_time' => 'required|after:start_time',
-
+                'image' => 'required|required|mimes:jpeg,png,jpg|max:10000',
 
             ],
             [
@@ -121,6 +123,9 @@ class RecruitmentController extends Controller
                 'end_time.required' => 'Chưa nhập trường này !',
                 'end_time.after' => 'Thời gian kết thúc không được nhỏ hơn thời gian bắt đầu !',
                 'description.required' => 'Chưa nhập trường này !',
+                'image.mimes' => 'Sai định dạng !',
+                'image.required' => 'Chưa nhập trường này !',
+                'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
             ]
         );
 
@@ -135,6 +140,11 @@ class RecruitmentController extends Controller
                 'start_time' => $request->start_time,
                 'end_time' => $request->end_time,
             ];
+            if ($request->has('image')) {
+                $fileImage =  $request->file('image');
+                $image = $this->uploadFile($fileImage);
+                $data['image'] = $image;
+            }
 
             // dd($request->contest_id);
             $newRecruitment =  Recruitments::create($data);
@@ -218,6 +228,11 @@ class RecruitmentController extends Controller
             $recruitment->end_time = $request->end_time;
             $recruitment->description = $request->description;
 
+            if ($request->has('image')) {
+                $fileImage =  $request->file('image');
+                $image = $this->uploadFile($fileImage);
+                $recruitment->image = $image;
+            }
             $recruitment->save();
             if ($request->enterprise_id != null) {
                 $index = -1;
@@ -288,6 +303,11 @@ class RecruitmentController extends Controller
         }
     }
 
+    public function detail($id)
+    {
+        $data = Recruitments::find($id);
+        return view('pages.recruitment.detailRecruitment', compact('data'));
+    }
     public function apiShow(Request $request)
     {
         $data = $this->getList($request)->get();
