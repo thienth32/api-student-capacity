@@ -10,7 +10,9 @@
             border-radius: 100%;
             animation: spinRight 800ms linear infinite;
         }
-        .loading:before, .loading:after {
+
+        .loading:before,
+        .loading:after {
             content: '';
             width: 4vmax;
             height: 4vmax;
@@ -22,6 +24,7 @@
             border-radius: 100%;
             animation: spinLeft 800ms linear infinite;
         }
+
         .loading:after {
             width: 2vmax;
             height: 2vmax;
@@ -31,18 +34,22 @@
             border-right: 2px solid black;
             animation: none;
         }
+
         @keyframes spinLeft {
             from {
                 transform: rotate(0deg);
             }
+
             to {
                 transform: rotate(720deg);
             }
         }
+
         @keyframes spinRight {
             from {
                 transform: rotate(360deg);
             }
+
             to {
                 transform: rotate(0deg);
             }
@@ -73,7 +80,8 @@
                         data-bs-toggle="tab" href="#kt_vtab_pane_4">
                         <!--begin::Svg Icon | path: icons/duotune/general/gen001.svg-->
                         <span class="svg-icon svg-icon-2 svg-icon-primary me-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none">
                                 <path
                                     d="M11 2.375L2 9.575V20.575C2 21.175 2.4 21.575 3 21.575H9C9.6 21.575 10 21.175 10 20.575V14.575C10 13.975 10.4 13.575 11 13.575H13C13.6 13.575 14 13.975 14 14.575V20.575C14 21.175 14.4 21.575 15 21.575H21C21.6 21.575 22 21.175 22 20.575V9.575L13 2.375C12.4 1.875 11.6 1.875 11 2.375Z"
                                     fill="black"></path>
@@ -89,7 +97,8 @@
                     <a style="width: 100%" class="nav-link nav-ql btn btn-flex btn-active-light-info">
                         <!--begin::Svg Icon | path: icons/duotune/general/gen003.svg-->
                         <span class="svg-icon svg-icon-2 svg-icon-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none">
                                 <path
                                     d="M13.0079 2.6L15.7079 7.2L21.0079 8.4C21.9079 8.6 22.3079 9.7 21.7079 10.4L18.1079 14.4L18.6079 19.8C18.7079 20.7 17.7079 21.4 16.9079 21L12.0079 18.8L7.10785 21C6.20785 21.4 5.30786 20.7 5.40786 19.8L5.90786 14.4L2.30785 10.4C1.70785 9.7 2.00786 8.6 3.00786 8.4L8.30785 7.2L11.0079 2.6C11.3079 1.8 12.5079 1.8 13.0079 2.6Z"
                                     fill="black"></path>
@@ -162,6 +171,7 @@
                                 <th>Thời gian </th>
                                 <th>Tình trạng </th>
                                 <th>Quản lý câu hỏi </th>
+                                <th>Chỉnh sửa </th>
                             </tr>
                         </thead>
                         <tbody id="show-exams">
@@ -195,7 +205,8 @@
                                     <div class="   form-group ">
                                         <label class="form-label">Skill</label>
                                         <select id="selectSkill" class="form-select mb-2 select2-hidden-accessible"
-                                            data-control="select2" data-hide-search="true" tabindex="-1" aria-hidden="true">
+                                            data-control="select2" data-hide-search="true" tabindex="-1"
+                                            aria-hidden="true">
                                             <option value="-1">Chọn skill</option>
                                             @foreach ($skills as $skill)
                                                 <option @selected(request('skill') == $skill->id) value="{{ $skill->id }}">
@@ -209,7 +220,8 @@
                                     <div class="form-group">
                                         <label class="form-label">Level</label>
                                         <select id="select-level" class="form-select mb-2 select2-hidden-accessible"
-                                            data-control="select2" data-hide-search="true" tabindex="-1" aria-hidden="true">
+                                            data-control="select2" data-hide-search="true" tabindex="-1"
+                                            aria-hidden="true">
                                             <option value="-1" @selected(!request()->has('level'))>Chọn level</option>
                                             <option @selected(request()->has('level') && request('level') == 0) value="0">Dễ</option>
                                             <option @selected(request()->has('level') && request('level') == 1) value="1">Trung bình</option>
@@ -221,7 +233,8 @@
                                     <div class="form-group">
                                         <label class="form-label">Loại</label>
                                         <select id="select-type" class="form-select mb-2 select2-hidden-accessible"
-                                            data-control="select2" data-hide-search="true" tabindex="-1" aria-hidden="true">
+                                            data-control="select2" data-hide-search="true" tabindex="-1"
+                                            aria-hidden="true">
                                             <option value="-1" @selected(!request()->has('type'))>Chọn loại</option>
                                             <option @selected(request()->has('type') && request('type') == 0) value="0">Một đáp án</option>
                                             <option @selected(request()->has('type') && request('type') == 1) value="1">Nhiều đáp án</option>
@@ -241,7 +254,8 @@
                             <div id="show-add-questions" class="mt-2 mb-2"></div>
                             <div id="data-save" class="mt-1">
                                 <div id="show-data-save" class="mb-5"></div>
-                                <div style="position: fixed; bottom: 20px; transform: translateX(-50%);  left: 50%; z-index: 999999999;">
+                                <div
+                                    style="position: fixed; bottom: 20px; transform: translateX(-50%);  left: 50%; z-index: 999999999;">
                                     <button class="btn btn-primary" id="save-qs">Lưu </button>
                                     <button class="btn-reload btn btn-success">
                                         <i class="bi bi-arrow-counterclockwise"></i>
@@ -261,7 +275,8 @@
                                     <div class="   form-group ">
                                         <label class="form-label">Skill</label>
                                         <select id="selectSkillQs" class="form-select mb-2 select2-hidden-accessible"
-                                            data-control="select2" data-hide-search="true" tabindex="-1" aria-hidden="true">
+                                            data-control="select2" data-hide-search="true" tabindex="-1"
+                                            aria-hidden="true">
                                             <option value="-1">Chọn skill</option>
                                             @foreach ($skills as $skill)
                                                 <option @selected(request('skill') == $skill->id) value="{{ $skill->id }}">
@@ -275,7 +290,8 @@
                                     <div class="form-group">
                                         <label class="form-label">Level</label>
                                         <select id="select-levelQs" class="form-select mb-2 select2-hidden-accessible"
-                                            data-control="select2" data-hide-search="true" tabindex="-1" aria-hidden="true">
+                                            data-control="select2" data-hide-search="true" tabindex="-1"
+                                            aria-hidden="true">
                                             <option value="-1" @selected(!request()->has('level'))>Chọn level</option>
                                             <option @selected(request()->has('level') && request('level') == 0) value="0">Dễ</option>
                                             <option @selected(request()->has('level') && request('level') == 1) value="1">Trung bình</option>
@@ -287,7 +303,8 @@
                                     <div class="form-group">
                                         <label class="form-label">Loại</label>
                                         <select id="select-typeQs" class="form-select mb-2 select2-hidden-accessible"
-                                            data-control="select2" data-hide-search="true" tabindex="-1" aria-hidden="true">
+                                            data-control="select2" data-hide-search="true" tabindex="-1"
+                                            aria-hidden="true">
                                             <option value="-1" @selected(!request()->has('type'))>Chọn loại</option>
                                             <option @selected(request()->has('type') && request('type') == 0) value="0">Một đáp án</option>
                                             <option @selected(request()->has('type') && request('type') == 1) value="1">Nhiều đáp án</option>
@@ -317,11 +334,12 @@
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody  id="show-ques-anw" class="position-relative">
+                                <tbody id="show-ques-anw" class="position-relative">
 
                                 </tbody>
                             </table>
-                            <ul style="position: fixed; bottom: 20px; transform: translateX(-50%);  left: 50%; z-index: 999999999;" id="show-paginate" class="pagination">
+                            <ul style="position: fixed; bottom: 20px; transform: translateX(-50%);  left: 50%; z-index: 999999999;"
+                                id="show-paginate" class="pagination">
                             </ul>
                         </div>
 

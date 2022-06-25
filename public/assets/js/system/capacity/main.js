@@ -66,6 +66,9 @@ function fetchRoundGet(id) {
                                         <i class="bi bi-ui-checks-grid"></i>
                                     </button>
                                 </td>
+                                <td>
+                                     <a target="_blank" href="/admin/rounds/${id}/detail/exam/${data.id}/edit?type=1">Chỉnh sửa</a>
+                                </td>
                             </tr>
                         `;
                 })
@@ -189,9 +192,7 @@ function fecthQuestionByExams(id, param = "?", url = null) {
 }
 
 function getApiShowQues(url) {
-    $("#show-add-questions").html(
-        loading
-    );
+    $("#show-add-questions").html(loading);
     $.ajax({
         type: "GET",
         url: url,

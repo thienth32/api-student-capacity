@@ -7,13 +7,12 @@
             <div class="row">
                 <div class="col-lg-12">
                     <ol class="breadcrumb text-muted fs-6 fw-bold">
-                        <li class="breadcrumb-item pe-3">
-                            <a href="{{ route('admin.contest.list') }}" class="pe-3">Cuộc thi </a>
-                        </li>
                         @if ($round->contest->type !== 1)
+                            <li class="breadcrumb-item pe-3">
+                                <a href="{{ route('admin.contest.list') }}" class="pe-3">Cuộc thi </a>
+                            </li>
                             <li class="breadcrumb-item px-3 ">
-                                <a href="{{ route('admin.contest.show', ['id' => $round->contest->id]) }}"
-                                    class="pe-3">
+                                <a href="{{ route('admin.contest.show', ['id' => $round->contest->id]) }}" class="pe-3">
                                     {{ $round->contest->name }}
                                 </a>
                             </li>
@@ -31,6 +30,9 @@
                                 </a>
                             </li>
                         @else
+                            <li class="breadcrumb-item pe-3">
+                                <a href="{{ route('admin.contest.list') . '?type=1' }}" class="pe-3">Test năng lực </a>
+                            </li>
                             <li class="breadcrumb-item px-3 ">
                                 <a href="{{ route('admin.contest.show.capatity', ['id' => $round->contest->id]) }}"
                                     class="pe-3">
@@ -89,14 +91,43 @@
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
                             </div>
-                            <div class="form-group mb-4">
-                                <label class="form-label" for="">File đề thi</label>
-                                <input type="file" name="external_url" id="" class="form-control" placeholder="">
-                                @error('external_url')
-                                    <p class="text-danger">{{ $message }}</p>
-                                @enderror
-                            </div>
+                            @if ($round->contest->type == config('util.TYPE_CONTEST'))
+                                <div class="form-group mb-4">
+                                    <label class="form-label" for="">File đề thi</label>
+                                    <input type="file" name="external_url" id="" class="form-control"
+                                        placeholder="">
+                                    @error('external_url')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            @endif
+
                         </div>
+                        @if ($round->contest->type == config('util.TYPE_TEST'))
+                            <div class="col-lg-12 row form-group mb-4">
+                                <div class="col-lg-6 form-group mb-4">
+                                    <label class="form-label" for="">Kiểu thi </label>
+                                    <select id="select-contest" name="time_type"
+                                        class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                                        data-hide-search="false" tabindex="-1" aria-hidden="true">
+                                        @forelse (config('util.TYPE_TIMES') as $time)
+                                            <option value="{{ $time['TYPE'] }}">
+                                                {{ $time['VALUE'] }}
+                                            </option>
+                                        @empty
+                                            <option disabled>Không có cuộc thi</option>
+                                        @endforelse
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 form-group mb-4">
+                                    <label class="form-label" for="">Thời gian </label>
+                                    <input type="number" name="time" class="form-control" placeholder="">
+                                    @error('time')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        @endif
                     </div>
                     <button type="submit" class="btn btn-primary">Lưu</button>
                 </form>
