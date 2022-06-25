@@ -10,7 +10,7 @@ class Exams extends Model
 {
     use SoftDeletes;
     protected $table = 'exams';
-    protected $fillable = ['name', 'description', 'max_ponit', 'ponit', 'external_url', 'round_id', 'time', 'time_type',"type"];
+    protected $fillable = ['name', 'description', 'max_ponit', 'ponit', 'external_url', 'round_id', 'time', 'time_type', "type"];
     use HasFactory;
 
 
@@ -22,6 +22,6 @@ class Exams extends Model
 
     public function questions()
     {
-        return $this -> belongsToMany(Questions::class,'exam_questions', 'exam_id','question_id');
+        return $this->belongsToMany(Questions::class, 'exam_questions', 'exam_id', 'question_id');
     }
 }
