@@ -30,7 +30,6 @@ class ContestController extends Controller
     private $contest;
     private $major;
     private $team;
-
     public function __construct(Contest $contest, Major $major, Team $team)
     {
         $this->contest = $contest;
@@ -103,6 +102,7 @@ class ContestController extends Controller
     {
         $this->checkTypeContest();
         if (!($data = $this->getList()->where('type', request('type') ?? 0)->paginate(request('limit') ?? 10))) return abort(404);
+
         return view('pages.contest.index', [
             'contests' => $data,
             'majors' => Major::where('parent_id', 0)->get(),

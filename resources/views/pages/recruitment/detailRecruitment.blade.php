@@ -26,7 +26,7 @@
                         <div class="fs-4 text-white mt-5">
                             <div class="opacity-75">
                                 <img style="width:100%"
-                                    src="{{ Storage::disk('s3')->has($data->image) ? Storage::disk('s3')->temporaryUrl($data->image, now()->addMinutes(5)) : 'https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg' }}" />
+                                    src="{{ $data->image ? $data->image : 'https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg' }}" />
 
                             </div>
                         </div>

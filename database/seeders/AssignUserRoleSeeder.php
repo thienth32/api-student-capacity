@@ -16,18 +16,20 @@ class AssignUserRoleSeeder extends Seeder
     public function run()
     {
         $users = User::all();
-        // foreach($users as $u){
-        //     if($u->id == 1){
+        // foreach ($users as $u) {
+        //     if ($u->id == 33) {
         //         $u->assignRole('super admin');
-        //     }else if($u->id <= 5){
+        //     } else if ($u->id == 36) {
         //         $u->assignRole('admin');
-        //     }else{
+        //     } else if ($u->id == 37) {
+        //         $u->assignRole('judge');
+        //     } else if ($u->id == 38) {
         //         $u->assignRole('student');
         //     }
         // }
         foreach ($users as $u) {
-            if ($u->id == 27) {
-                $u->assignRole('super admin');
+            if ($u->id == 35) {
+                $u->assignRole('teacher');
             }
         }
     }

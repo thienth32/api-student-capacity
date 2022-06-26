@@ -74,7 +74,10 @@ class Contest extends Model
     {
         return $this->belongsToMany(Enterprise::class, 'donors', 'contest_id', 'enterprise_id')->withTimestamps();
     }
-
+    public function skills()
+    {
+        return $this->belongsToMany(Skills::class, 'contest_skills', 'contest_id', 'skill_id')->withTimestamps();
+    }
     public function contest_users()
     {
         return $this->hasMany(ContestUser::class, 'contest_id');

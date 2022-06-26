@@ -28,7 +28,7 @@ class AuthController extends Controller
         $ggUser = Socialite::driver('google')->user();
         $user = User::where('email', $ggUser->email)->first();
         // dd($user->hasRole(config('util.ADMIN_ROLE')));
-        if ($user && $user->hasRole([config('util.SUPER_ADMIN_ROLE'), config('util.ADMIN_ROLE'), config('util.JUDGE_ROLE')])) {
+        if ($user && $user->hasRole([config('util.SUPER_ADMIN_ROLE'), config('util.ADMIN_ROLE'), config('util.JUDGE_ROLE'), config('util.TEACHER_ROLE')])) {
             Auth::login($user);
             return redirect(route('dashboard'));
         }
@@ -50,13 +50,13 @@ class AuthController extends Controller
             ]);
         }
         if (!Str::contains($googleUser->email, config('util.END_EMAIL_FPT'))) return response()->json([
-                'status' => false,
-                'payload' => "Tài khoản không tồn tại hoặc xác thực thất bại",
-            ]);
+            'status' => false,
+            'payload' => "Tài khoản không tồn tại hoặc xác thực thất bại",
+        ]);
 
         $user = User::with('roles')->where('email', $googleUser->email)->first();
         if ($user) {
-//            $user->avatar = $googleUser->avatar;
+            //            $user->avatar = $googleUser->avatar;
             $user->save();
             $token = $user->createToken('auth_token')->plainTextToken;
             return response()->json([
@@ -70,28 +70,28 @@ class AuthController extends Controller
         }
         $flagRoleAdmin = false;
         $MSSV = null;
-        if(strlen($googleUser->email) < 8 ) $flagRoleAdmin = true ;
-        if(!$flagRoleAdmin) foreach(config('util.MS_SV') as $ks) {
-                $MSSV = \Str::lower($ks) . \Str::afterLast(
-                    \Str::of($googleUser->email)
-                        ->before(config('util.END_EMAIL_FPT'))
-                        ->toString(),
-                    \Str::lower($ks)
-                );
+        if (strlen($googleUser->email) < 8) $flagRoleAdmin = true;
+        if (!$flagRoleAdmin) foreach (config('util.MS_SV') as $ks) {
+            $MSSV = \Str::lower($ks) . \Str::afterLast(
+                \Str::of($googleUser->email)
+                    ->before(config('util.END_EMAIL_FPT'))
+                    ->toString(),
+                \Str::lower($ks)
+            );
         };
         try {
             $user = null;
-            DB::transaction(function () use ($MSSV , $googleUser ,&$user){
+            DB::transaction(function () use ($MSSV, $googleUser, &$user) {
                 $user = User::create([
                     'mssv' => $MSSV,
-                    'name' => $googleUser -> name ?? 'no name',
-                    'email' => $googleUser -> email,
+                    'name' => $googleUser->name ?? 'no name',
+                    'email' => $googleUser->email,
                     'status' => 1,
                     'avatar' => null
                 ]);
             });
-            if($flagRoleAdmin && $user) $user->assignRole('admin');
-            if(!$flagRoleAdmin && $user) $user->assignRole('student');
+            if ($flagRoleAdmin && $user) $user->assignRole('admin');
+            if (!$flagRoleAdmin && $user) $user->assignRole('student');
             $token = $user->createToken('auth_token')->plainTextToken;
             return response()->json([
                 'status' => true,
@@ -101,7 +101,7 @@ class AuthController extends Controller
                     'user' => $user->toArray(),
                 ],
             ]);
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
                 'payload' => "Xác thực thất bại",

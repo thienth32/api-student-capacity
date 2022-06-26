@@ -95,7 +95,7 @@
                                     <input name="logo" type='file' id="file-input" accept=".png, .jpg, .jpeg"
                                         class="form-control" />
                                     <img class="w-100 mt-4 border rounded-3" id="image-preview"
-                                        src="{{ Storage::disk('s3')->has($enterprise->logo) ? Storage::disk('s3')->temporaryUrl($enterprise->logo, now()->addMinutes(5)) : 'https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg' }}" />
+                                        src="{{ $enterprise->logo ? $enterprise->logo : 'https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg' }}" />
                                 </div>
                             </div>
 

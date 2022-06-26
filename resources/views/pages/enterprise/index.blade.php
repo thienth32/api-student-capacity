@@ -249,7 +249,7 @@
 
                                     <td>
                                         <img style="width:150px;height:120px"
-                                            src="{{ Storage::disk('s3')->has($key->logo) ? Storage::disk('s3')->temporaryUrl($key->logo, now()->addMinutes(5)) : 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
+                                            src="{{ $key->logo ? $key->logo : 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
                                             alt="">
                                     </td>
                                     <td>
