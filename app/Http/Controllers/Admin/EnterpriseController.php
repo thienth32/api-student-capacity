@@ -203,8 +203,8 @@ class EnterpriseController extends Controller
     public function apiDetail($id)
     {
         $data = Enterprise::find($id);
-        // $data->load('contest');
-        // $data->load('enterprise');
+        $data->load('recruitment');
+
         return $this->responseApi(
             [
                 "status" => true,
