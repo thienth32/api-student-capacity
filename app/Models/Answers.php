@@ -16,6 +16,7 @@ class Answers extends Model
         'question_id',
         'is_correct',
     ];
+    // protected $hidden = ['is_correct'];
     // public function questions()
     // {
     //     return $this->belongsTo(Question::class, 'question_id')->with('answers');

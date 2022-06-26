@@ -1,31 +1,31 @@
 const teamPage = {
-    searchUserDB: function() {
-        // tìm kiếm người dùng trong db và in ra màn  hình để  thêm vô mảng
-        $('#searchUser', ).on('click', function(e) {
-            e.preventDefault();
-            let key = $('input#searchUserValue').val().trim();
-            $('input#searchUserValue').val(key)
-            if (key != '' && key.indexOf(' ') != 0) {
-                $('#resultUserSearch').text('Đang tìm kiếm .....');
-                $.ajax({
-                    type: "post",
-                    url: urlSearch,
-                    data: {
-                        key: key,
-                        id_contest: Number(id_contest),
-                        _token: _token,
-                    },
-                    success: function(response) {
-                        if (response.payload.length == 0) {
-                            $('#resultUserSearch').empty();
-                            toastr.warning('Người dùng này đã gia nhập cuộc thi hoặc không tìm thấy !!');
-                            $('input#searchUserValue').val('')
-                            return;
-                        }
-                        if (response.status === true) {
-                            var _html = ``;
-                            $.map(response.payload, function(val, key) {
-                                _html += /*html*/ `
+        searchUserDB: function() {
+            // tìm kiếm người dùng trong db và in ra màn  hình để  thêm vô mảng
+            $('#searchUser', ).on('click', function(e) {
+                e.preventDefault();
+                let key = $('input#searchUserValue').val().trim();
+                $('input#searchUserValue').val(key)
+                if (key != '' && key.indexOf(' ') != 0) {
+                    $('#resultUserSearch').text('Đang tìm kiếm .....');
+                    $.ajax({
+                        type: "post",
+                        url: urlSearch,
+                        data: {
+                            key: key,
+                            id_contest: Number(id_contest),
+                            _token: _token,
+                        },
+                        success: function(response) {
+                            if (response.payload.length == 0) {
+                                $('#resultUserSearch').empty();
+                                toastr.warning('Người dùng này đã gia nhập cuộc thi hoặc không tìm thấy !!');
+                                $('input#searchUserValue').val('')
+                                return;
+                            }
+                            if (response.status === true) {
+                                var _html = ``;
+                                $.map(response.payload, function(val, key) {
+                                    _html += /*html*/ `
                                     <li style='cursor: pointer;' data-key='${key}' data-id_user='${val.id}'data-name_user='${val.name}' data-email_user='${val.email}' class='addUserArray p-3 mb-2 '>
                                         <div  class=" d-flex justify-content-between align-items-center">
                                             <div>
@@ -37,50 +37,52 @@ const teamPage = {
                                         </div>
                                     </li>
                                 `;
-                            });
-                            // $('input#searchUserValue').val();
-                            $('#resultUserSearch').empty();
-                            $('#resultUserSearch').html(_html);
-                        } else {
-                            $('#resultUserSearch').empty();
-                            toastr.info(response.payload)
+                                });
+                                // $('input#searchUserValue').val();
+                                $('#resultUserSearch').empty();
+                                $('#resultUserSearch').html(_html);
+                            } else {
+                                $('#resultUserSearch').empty();
+                                toastr.info(response.payload)
+                            }
                         }
-                    }
-                });
-                return;
-            } else {
-                toastr.warning('Bạn chưa nhập thông tin cần tìm kiếm !', 'Cảnh báo')
-                return;
-            }
-        });
-    },
-    userArray: function(userArray) {
-        loadUserTeam(userArray);
-        //     // function load mảng  user  và in ra màn  hình 
-        function checkUserArray(userArray) {
-            if (userArray.length == 0) {
-                //rỗng
-                // $('#mesArrayUser').text('Danh sách còn trống, tìm kiếm để thêm vô !!')
-                $('#mesArrayUser').text('Giới hạn chỉ được ' + max_user + ' thành viên !!')
-                $('#buttonTeam').prop("disabled", true);
-            } else {
-                //có
-                // userArray.reverse();
-                $('#mesArrayUser').text('')
-                $('#buttonTeam').prop("disabled", false);
-            }
-        }
+                    });
+                    return;
+                } else {
+                    toastr.warning('Bạn chưa nhập thông tin cần tìm kiếm !', 'Cảnh báo')
+                    return;
+                }
+            });
+        },
+        userArray: function(userArray) {
 
-        function loadUserTeam(data) {
-            data.reverse();
-            checkUserArray(data);
-            var _html = ``;
-            _html += /*html*/ `
+
+                loadUserTeam(userArray);
+                //     // function load mảng  user  và in ra màn  hình 
+                function checkUserArray(userArray) {
+                    if (userArray.length == 0) {
+                        //rỗng
+                        // $('#mesArrayUser').text('Danh sách còn trống, tìm kiếm để thêm vô !!')
+                        $('#mesArrayUser').text('Giới hạn chỉ được ' + max_user + ' thành viên !!')
+                        $('#buttonTeam').prop("disabled", true);
+                    } else {
+                        //có
+                        // userArray.reverse();
+                        $('#mesArrayUser').text('')
+                        $('#buttonTeam').prop("disabled", false);
+                    }
+                }
+
+                function loadUserTeam(data) {
+                    data.reverse();
+                    checkUserArray(data);
+                    var _html = ``;
+                    _html += /*html*/ `
                 <table class="table table-row-bordered table-row-gray-300 table-hover ">
                 <tbody>
-            `;
-            $.map(data, function(val, key) {
-                _html += /*html*/ `
+                    `;
+                    $.map(data, function(val, key) {
+                                _html += /*html*/ `
                     <tr>
                         <td>${key +1}</td>
                         <td>${val.email_user}</td>
@@ -88,13 +90,16 @@ const teamPage = {
                             ${val.name_user}
                             <input hidden type="text" value="${val.id_user}" class="user_id"  name="user_id[]" >
                         </td>
-                        <td>
-                            <label class="form-label" for="${val.id_user}">
-                                <input checked type="radio" id="${val.id_user}" value="${val.id_user}"  name="bot_user" >
-                                    Trưởng nhóm
-                            </label>
-                        </td>
-
+                        
+                        ${
+                            (!(typeof judges !== "undefined"))?`
+                            <td>
+                                <label class="form-label" for="${val.id_user}">
+                                    <input checked type="radio" id="${val.id_user}" value="${val.id_user}"  name="bot_user" >
+                                        Trưởng nhóm
+                                </label>
+                            </td>`:``
+                        }
                         <td>
                             <button data-idUser='${key}' class="deleteUserArray btn btn-danger" type="button" >
                                 <span class="svg-icon svg-icon-2x svg-icon-primary "><!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Trash.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">

@@ -470,13 +470,15 @@ class ContestController extends Controller
 
     public function apiShowCapacity($id)
     {
+        $contest = $this->getContest($id, config('util.TYPE_TEST'))->first()->load('rounds');
         try {
-            if (!($contest = $this->getContest($id, config('util.TYPE_TEST'))->first())) return $this->responseApi(
-                [
-                    'status' => false,
-                    'payload' => 'Không tìm thấy bài test năng lực !',
-                ]
-            );
+            if (is_null($contest))
+                return $this->responseApi(
+                    [
+                        'status' => false,
+                        'payload' => 'Không tìm thấy bài test năng lực !',
+                    ]
+                );
             return $this->responseApi(
                 [
                     "status" => true,

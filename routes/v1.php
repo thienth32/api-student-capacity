@@ -50,6 +50,8 @@ Route::prefix('teams')->group(function () {
 Route::prefix('take-exam')->group(function () {
     Route::post('student', [AdminTakeExamController::class, 'takeExamStudent']);
     Route::post('student-submit', [AdminTakeExamController::class, 'takeExamStudentSubmit']);
+
+    Route::post('student-capacity', [AdminTakeExamController::class, 'takeExamStudentCapacity']);
 });
 
 
