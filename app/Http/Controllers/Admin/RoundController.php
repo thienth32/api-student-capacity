@@ -136,7 +136,7 @@ class RoundController extends Controller
     {
         $contests = Contest::all();
         $typeexams = TypeExam::all();
-        $nameTypeContest = request('type') == 1 ? ' bài làm  ' : ' cuộc thi ';
+        $nameTypeContest = request('type') == 1 ? ' bài làm  ' : ' vòng thi';
         return view('pages.round.form-add', compact('contests', 'typeexams','nameTypeContest'));
     }
     public function store(Request $request)
