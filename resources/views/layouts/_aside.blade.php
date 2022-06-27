@@ -204,11 +204,11 @@
                     </div>
                 </div>
 
-                <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                {{-- <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                     <span class="menu-link">
                         <span class="menu-icon">
                             <span class="svg-icon svg-icon-primary svg-icon-2x">
-                                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Design/Bezier-curve.svg--><svg
+                                 <svg
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                                     width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -221,14 +221,11 @@
                                             fill="#000000" />
                                     </g>
                                 </svg>
-                                <!--end::Svg Icon-->
                             </span>
                         </span>
 
                         <span class="menu-title">Quản lý vòng thi</span>
-                        <!--end::Svg Icon-->
 
-                        {{-- <span class="menu-title">Quản lí vòng thi</span> --}}
                         <span class="menu-arrow"></span>
                     </span>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
@@ -250,7 +247,7 @@
                             </a>
                         </div>
                     </div>
-                </div>
+                </div> --}}
 
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                     <span class="menu-link">

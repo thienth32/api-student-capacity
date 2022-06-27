@@ -168,7 +168,9 @@
                             <tr>
                                 <th>Tên đề bài </th>
                                 <th>Điểm số tối đa </th>
+                                <th>Điểm số qua vòng </th>
                                 <th>Thời gian </th>
+                                <th>Kiểu thời gian </th>
                                 <th>Tình trạng </th>
                                 <th>Quản lý câu hỏi </th>
                                 <th>Chỉnh sửa </th>
