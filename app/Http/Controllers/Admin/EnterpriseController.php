@@ -85,11 +85,13 @@ class EnterpriseController extends Controller
                 'name' => 'required|unique:enterprises,name',
                 'description' => "required",
                 'logo' => 'required|required|mimes:jpeg,png,jpg|max:10000',
+                'link_web' => "required",
             ],
             [
                 'name.required' => 'Chưa nhập trường này !',
                 'name.unique' => 'Đã tồn tại trường này',
                 'description.required' => 'Chưa nhập trường này !',
+                'link_web.required' => 'Chưa nhập trường này !',
                 'logo.mimes' => 'Sai định dạng !',
                 'logo.required' => 'Chưa nhập trường này !',
                 'logo.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
@@ -105,6 +107,8 @@ class EnterpriseController extends Controller
             $data = [
                 'name' => $request->name,
                 'description' => $request->description,
+                'link_web' => $request->link_web,
+
             ];
             if ($request->has('logo')) {
                 $fileImage =  $request->file('logo');
@@ -138,11 +142,13 @@ class EnterpriseController extends Controller
             [
                 'name' => 'required|unique:enterprises,name,' . $id,
                 'description' => "required",
+                'link_web' => "required",
             ],
             [
                 'name.required' => 'Chưa nhập trường này !',
                 'name.unique' => 'Đã tồn tại trường này',
                 'description.required' => 'Chưa nhập trường này !',
+                'link_web.required' => 'Chưa nhập trường này !',
             ]
         );
 
@@ -158,6 +164,7 @@ class EnterpriseController extends Controller
             }
             $enterprise->name = $request->name;
             $enterprise->description = $request->description;
+            $enterprise->link_web = $request->link_web;
             if ($request->has('logo')) {
                 $fileImage =  $request->file('logo');
                 $logo = $this->uploadFile($fileImage);
