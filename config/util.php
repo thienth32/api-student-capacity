@@ -14,6 +14,7 @@ return [
     'ADMIN_ROLE' => 2,
     'STUDENT_ROLE' => 3,
     'JUDGE_ROLE' => 4,
+    'TEACHER_ROLE' => 5,
     "CONTEST_STATUS_REGISTERING" => 1,
     "CONTEST_STATUS_GOING_ON" => 2,
     "CONTEST_STATUS_DONE" => 3,
@@ -30,4 +31,21 @@ return [
     "RANK_QUESTION_EASY" => 0,
     "RANK_QUESTION_MEDIUM" => 1,
     "RANK_QUESTION_DIFFICULT" => 2,
+    "TYPE_TIMES" => [
+        [
+            "TYPE" => 0,
+            "VALUE" => "Phút"
+        ],
+        [
+            "TYPE" => 1,
+            "VALUE" => "Giờ"
+        ],
+        [
+            "TYPE" => 2,
+            "VALUE" => "Ngày "
+        ],
+    ],
+    "TYPE_TIME_P" => 0,
+    "TYPE_TIME_H" => 1,
+    "TYPE_TIME_D" => 2,
 ];

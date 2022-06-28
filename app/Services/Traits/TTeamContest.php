@@ -77,9 +77,7 @@ trait TTeamContest
             $team = new Team();
             if ($request->has('image')) {
                 $fileImage =  $request->file('image');
-                // dd($this->uploadFile($fileImage));
                 $image = $this->uploadFile($fileImage);
-
                 $team->image = $image;
             }
             $team->name = $request->name;

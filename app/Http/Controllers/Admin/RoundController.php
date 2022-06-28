@@ -136,7 +136,7 @@ class RoundController extends Controller
     {
         $contests = Contest::all();
         $typeexams = TypeExam::all();
-        $nameTypeContest = request('type') == 1 ? ' bài làm  ' : ' cuộc thi ';
+        $nameTypeContest = request('type') == 1 ? ' bài làm  ' : ' vòng thi';
         return view('pages.round.form-add', compact('contests', 'typeexams','nameTypeContest'));
     }
     public function store(Request $request)
@@ -225,7 +225,7 @@ class RoundController extends Controller
     public function edit($id)
     {
         try {
-            $round = $this->round::where('id', $id)->with('contest')->get()->map->format()[0];
+            $round = $this->round::where('id', $id)->with('contest')->first()->toArray();
             if($round['contest']['type'] != request('type')) abort(404);
             return view('pages.round.edit', [
                 'round' => $round,

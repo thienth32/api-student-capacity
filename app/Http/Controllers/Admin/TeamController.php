@@ -233,14 +233,13 @@ class TeamController extends Controller
                     ]);
                 }
                 $team =  $this->team::find($team_id);
-                if ($request->hasFile('image')) {
+                if ($request->has('image')) {
                     $fileImage = $request->file('image');
-                    $filename = $this->uploadFile($fileImage);
+                    $filename = $this->uploadFile($fileImage, $team->image);
                     $team->image = $filename;
                 }
                 $team->name = $request->name;
                 $team->save();
-
                 DB::commit();
                 return response()->json([
                     'status' => true,
@@ -417,7 +416,7 @@ class TeamController extends Controller
         }
     }
 
-    public function userTeamSearch($id_contest)
+    public function userTeamSearch($id_contest, Request $request)
     {
         try {
             $usersNotTeam = User::where('status', config('util.ACTIVE_STATUS'))->pluck('id');

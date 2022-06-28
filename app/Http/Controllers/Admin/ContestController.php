@@ -30,7 +30,6 @@ class ContestController extends Controller
     private $contest;
     private $major;
     private $team;
-
     public function __construct(Contest $contest, Major $major, Team $team)
     {
         $this->contest = $contest;
@@ -78,7 +77,7 @@ class ContestController extends Controller
                 ->when(auth()->check() && auth()->user()->hasRole('judge'), function ($q) {
                     return $q->whereIn('id', array_unique(Judge::where('user_id', auth()->user()->id)->pluck('contest_id')->toArray()));
                 })
-                ->search(request('q') ?? null, ['name'])
+                ->search(request('q') ?? null, ['name'], true)
                 ->missingDate('register_deadline', request('miss_date') ?? null, $now->toDateTimeString())
                 ->passDate('register_deadline', request('pass_date') ?? null, $now->toDateTimeString())
                 ->registration_date('end_register_time', request('registration_date') ?? null, $now->toDateTimeString())
@@ -103,6 +102,7 @@ class ContestController extends Controller
     {
         $this->checkTypeContest();
         if (!($data = $this->getList()->where('type', request('type') ?? 0)->paginate(request('limit') ?? 10))) return abort(404);
+
         return view('pages.contest.index', [
             'contests' => $data,
             'majors' => Major::where('parent_id', 0)->get(),
@@ -470,13 +470,15 @@ class ContestController extends Controller
 
     public function apiShowCapacity($id)
     {
+        $contest = $this->getContest($id, config('util.TYPE_TEST'))->first()->load('rounds');
         try {
-            if (!($contest = $this->getContest($id, config('util.TYPE_TEST'))->first())) return $this->responseApi(
-                [
-                    'status' => false,
-                    'payload' => 'Không tìm thấy bài test năng lực !',
-                ]
-            );
+            if (is_null($contest))
+                return $this->responseApi(
+                    [
+                        'status' => false,
+                        'payload' => 'Không tìm thấy bài test năng lực !',
+                    ]
+                );
             return $this->responseApi(
                 [
                     "status" => true,

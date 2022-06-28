@@ -42,7 +42,7 @@ class ExamController extends Controller
     public function create($id_round)
     {
         $round = Round::find($id_round)->load('contest');
-        if($round -> contest -> type != request('type')) abort(404);
+        if($round -> contest -> type != request('type') ?? 0) abort(404);
         if (is_null($round)) return abort(404);
         return view(
             'pages.round.detail.exam.form-add',
@@ -62,7 +62,6 @@ class ExamController extends Controller
                     'description' => 'required|min:4',
                     'max_ponit' => 'required|numeric|min:0|max:1000',
                     'ponit' => 'required|numeric|min:0|max:1000',
-                    'external_url' => 'required|mimes:zip,docx,word|file|max:10000',
                 ],
                 [
                     'name.required' => 'Không bỏ trống trường tên !',
@@ -80,11 +79,6 @@ class ExamController extends Controller
                     'ponit.max' => 'Trường điểm không quá 1000 !',
                     'ponit.min' => 'Trường điểm phải là số dương !',
                     'ponit.required' => 'Không bỏ trống trường điểm !',
-
-                    'external_url.mimes' => 'Trường đề thi không đúng định dạng !',
-                    'external_url.required' => 'Không bỏ trống trường đề bài !',
-                    'external_url.file' => 'Trường đề bài phải là một file  !',
-                    'external_url.max' => 'Trường đề bài dung lượng quá lớn !',
                 ]
             );
 
@@ -93,18 +87,65 @@ class ExamController extends Controller
             }
             $round = Round::find($id_round)->load('contest');
             if (is_null($round)) return abort(404);
+
             if($round -> contest->type == 1) $type = 1;
-            $filename = $this->uploadFile($request->external_url);
+            if($type == 0){
+                $validatorContest = Validator::make(
+                    $request->all(),
+                    [
+                        'external_url' => 'required|mimes:zip,docx,word|file|max:10000',
+                    ],
+                    [
+                        'external_url.mimes' => 'Trường đề thi không đúng định dạng !',
+                        'external_url.required' => 'Không bỏ trống trường đề bài !',
+                        'external_url.file' => 'Trường đề bài phải là một file  !',
+                        'external_url.max' => 'Trường đề bài dung lượng quá lớn !',
+                    ]
+                );
+
+                if ($validatorContest->fails()) {
+                    return redirect()->back()->withErrors($validatorContest)->withInput();
+                }
+            }else{
+                 $validatorCapacity = Validator::make(
+                    $request->all(),
+                    [
+                        'time' => 'required',
+                        'time_type' => 'required'
+                    ],
+                    [
+                        'time.required' => 'Thời gian không được bỏ trống ',
+                        'time_type.required' => 'Kiểu thời gian không được bỏ trống ',
+                    ]
+                );
+
+                if ($validatorCapacity->fails()) {
+                    return redirect()->back()->withErrors($validatorCapacity)->withInput();
+                }
+            }
+            $dataMer = [];
+            if($type == 0) $dataMer = [
+                'round_id' => $id_round,
+                'external_url' => $this->uploadFile($request->external_url),
+                'type' => $type,
+                'status' => 1
+            ];
+            if($type == 1)  $dataMer = [
+                'round_id' => $id_round,
+                'type' => $type,
+                'status' => 1,
+                'external_url' => 'null',
+                'time' => $request -> time,
+                'time_type' => $request -> time_type,
+            ];
+
+            // $filename = $this->uploadFile($request->external_url);
             $dataCreate = array_merge($request->only([
                 'name',
                 'description',
                 'max_ponit',
                 'ponit',
-            ]), [
-                'round_id' => $id_round,
-                'external_url' => $filename,
-                'type' => $type
-            ]);
+            ]), $dataMer);
 
             $this->exam::create($dataCreate);
             if($round -> contest->type == 1) return Redirect::route('admin.contest.show.capatity', ['id' =>$round->contest->id]);
@@ -132,7 +173,7 @@ class ExamController extends Controller
 
         $round = Round::find($id_round);
         if (is_null($round)) return abort(404);
-        $exam = $this->exam::find($id);
+        $exam = $this->exam::whereId($id)->where('round_id',$id_round)->first();
         if (is_null($exam)) return abort(404);
         return view(
             'pages.round.detail.exam.form-edit',
@@ -144,18 +185,18 @@ class ExamController extends Controller
     }
     public function update(Request $request, $id_round, $id)
     {
+        $type = 0;
         $examModel = Exams::find($id);
         if (is_null($examModel)) return abort(404);
-        $round = Round::find($id_round);
+        $round = Round::find($id_round)->load('contest');
         if (is_null($round)) return abort(404);
         $validator = validator::make(
             $request->all(),
             [
-                'name' => 'required|unique:exams,name|min:4|max:255',
+                'name' => "required|unique:exams,name,$id|min:4|max:255",
                 'description' => 'required|min:4',
                 'max_ponit' => 'required|numeric|min:0|max:1000',
                 'ponit' => 'required|numeric|min:0|max:1000',
-                'external_url' => 'mimes:zip,docx,word|file|max:10000',
             ],
             [
                 'name.required' => 'Không bỏ trống trường tên !',
@@ -174,14 +215,51 @@ class ExamController extends Controller
                 'ponit.min' => 'Trường điểm phải là số dương !',
                 'ponit.required' => 'Không bỏ trống trường điểm !',
 
-                'external_url.mimes' => 'Trường đề thi không đúng định dạng !',
-                'external_url.file' => 'Trường đề bài phải là một file  !',
-                'external_url.max' => 'Trường đề bài dung lượng quá lớn !',
             ]
         );
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
+
+        if($round -> contest->type == 1) $type = 1;
+        if($type == 0){
+            if($request -> has('external_url')){
+                $validatorContest = Validator::make(
+                    $request->all(),
+                    [
+                        'external_url' => 'required|mimes:zip,docx,word|file|max:10000',
+                    ],
+                    [
+                        'external_url.mimes' => 'Trường đề thi không đúng định dạng !',
+                        'external_url.required' => 'Không bỏ trống trường đề bài !',
+                        'external_url.file' => 'Trường đề bài phải là một file  !',
+                        'external_url.max' => 'Trường đề bài dung lượng quá lớn !',
+                    ]
+                );
+
+                if ($validatorContest->fails()) {
+                    return redirect()->back()->withErrors($validatorContest)->withInput();
+                }
+            }
+
+        }else{
+                $validatorCapacity = Validator::make(
+                $request->all(),
+                [
+                    'time' => 'required',
+                    'time_type' => 'required'
+                ],
+                [
+                    'time.required' => 'Thời gian không được bỏ trống ',
+                    'time_type.required' => 'Kiểu thời gian không được bỏ trống ',
+                ]
+            );
+
+            if ($validatorCapacity->fails()) {
+                return redirect()->back()->withErrors($validatorCapacity)->withInput();
+            }
+        }
+
 
         DB::beginTransaction();
         try {
@@ -194,10 +272,13 @@ class ExamController extends Controller
             $examModel->name = $request->name;
             $examModel->description = $request->description;
             $examModel->max_ponit = $request->max_ponit;
+            if($request->has('time')) $examModel->time = $request->time;
+            if($request->has('time_type')) $examModel->time_type = $request->time_type;
             $examModel->ponit = $request->ponit;
             $examModel->round_id = $id_round;
             $examModel->save();
             DB::commit();
+            if($round -> contest->type == 1) return Redirect::route('admin.contest.show.capatity', ['id' =>$round->contest->id]);
             return Redirect::route('admin.exam.index', ['id' => $id_round]);
         } catch (\Throwable $th) {
             DB::rollBack();

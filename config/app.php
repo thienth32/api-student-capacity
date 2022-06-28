@@ -183,6 +183,8 @@ return [
         App\Providers\GoogleServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         // L5Swagger\L5SwaggerServiceProvider::class,
+
+        Maatwebsite\Excel\ExcelServiceProvider::class,
     ],
 
     /*
@@ -199,6 +201,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // ...
         'Image' => Intervention\Image\Facades\Image::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ])->toArray(),
 
 ];

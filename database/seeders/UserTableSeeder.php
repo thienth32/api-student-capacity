@@ -16,13 +16,22 @@ class UserTableSeeder extends Seeder
     public function run()
     {
         $users = [
+
             [
-                'name' => "Nguyễn Thị Linh",
-                'email' => 'linhntph17474@fpt.edu.vn'
+                'name' => "Quan hệ doanh nghiệp",
+                'email' => 'Qhdn.poly@fpt.edu.vn'
             ],
             [
-                'name' => "Hà Thị Diệp",
-                'email' => 'diephtbph13471@fpt.edu.vn'
+                'name' => "Linhntt136",
+                'email' => 'Linhntt136@fpt.edu.vn'
+            ],
+            [
+                'name' => "Huongdtt43",
+                'email' => 'Huongdtt43@fpt.edu.vn'
+            ],
+            [
+                'name' => "Quynk4",
+                'email' => 'Quynk4@fpt.edu.vn'
             ],
 
         ];

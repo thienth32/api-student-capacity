@@ -51,7 +51,17 @@ function fetchRoundGet(id) {
                                 <td style="text-align: center;">${
                                     data.max_ponit
                                 }</td>
+                                <td>${data.ponit}</td>
                                 <td>${data.time ?? "Chưa có thời gian "}</td>
+                                <td>${
+                                    data.time_type == 0
+                                        ? "Phút"
+                                        : data.time_type == 1
+                                        ? "Giờ"
+                                        : data.time_type == 2
+                                        ? "Ngày"
+                                        : "Trường hợp chưa có trong hệ thống !"
+                                }</td>
                                 <td style="text-align: center;">${
                                     data.status == 1
                                         ? "Mở"
@@ -65,6 +75,9 @@ function fetchRoundGet(id) {
                                      }" data-exam_id="${data.id}" class="btn-click-show-exams btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_2">
                                         <i class="bi bi-ui-checks-grid"></i>
                                     </button>
+                                </td>
+                                <td>
+                                     <a target="_blank" href="/admin/rounds/${id}/detail/exam/${data.id}/edit?type=1">Chỉnh sửa</a>
                                 </td>
                             </tr>
                         `;
@@ -189,9 +202,7 @@ function fecthQuestionByExams(id, param = "?", url = null) {
 }
 
 function getApiShowQues(url) {
-    $("#show-add-questions").html(
-        loading
-    );
+    $("#show-add-questions").html(loading);
     $.ajax({
         type: "GET",
         url: url,

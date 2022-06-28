@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\Contest;
 use App\Services\Traits\TUploadImage;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -17,7 +18,17 @@ use Illuminate\Support\Facades\Validator;
 class TakeExamController extends Controller
 {
     use TUploadImage;
+    private $contest;
+    private $examModel;
+    private $roundModel;
 
+
+    public function __construct(Contest $contest, Round $round, Exams $exams)
+    {
+        $this->roundModel = $round;
+        $this->contest = $contest;
+        $this->examModel = $exams;
+    }
     public function takeExamStudent(Request $request)
     {
         $checkUserTeam = false;
@@ -173,5 +184,53 @@ class TakeExamController extends Controller
                 'payload' => 'Lỗi hệ thống !!',
             ]);
         }
+    }
+    private function getContest($id, $type = 0)
+    {
+        try {
+            $contest = $this->contest::where('id', $id)->where('type', $type);
+            return $contest;
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
+
+    public function takeExamStudentCapacity(Request $request)
+    {
+        $validate = Validator::make(
+            $request->all(),
+            [
+                'round_id' => 'required',
+            ],
+            [
+                'round_id.required' => 'Chưa nhập trường này !',
+            ]
+        );
+        if ($validate->fails()) return response()->json([
+            'status' => false,
+            'payload' => $validate->errors()
+        ]);
+        $round = $this->roundModel::find($request->round_id);
+        if (is_null($round)) return response()->json([
+            'status' => false,
+            'payload' => 'Lỗi truy cập !!'
+        ]);
+        $exam = $this->examModel::where('round_id', $request->round_id)->inRandomOrder()->first();
+        if (is_null($exam)) return response()->json([
+            'status' => false,
+            'payload' => 'Lỗi truy cập !!'
+        ]);
+
+        $exam->load(['questions' => function ($q) {
+            return $q->with([
+                'answers' => function ($q) {
+                    return $q->select(['id', 'content', 'question_id']);
+                }
+            ]);
+        }]);
+        return response()->json([
+            'status' => true,
+            'payload' => $exam
+        ]);
     }
 }
