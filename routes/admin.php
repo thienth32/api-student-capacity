@@ -300,6 +300,8 @@ Route::group([
         Route::put('{id}', [RecruitmentController::class, 'update'])->name('admin.recruitment.update');
         Route::get('', [RecruitmentController::class, 'index'])->name('admin.recruitment.list');
         Route::get('create', [RecruitmentController::class, 'create'])->name('admin.recruitment.create');
+        Route::get('{id}', [RecruitmentController::class, 'detail'])->name('admin.recruitment.detail');
+
         Route::post('store', [RecruitmentController::class, 'store'])->name('admin.recruitment.store');
         Route::delete('{id}', [RecruitmentController::class, 'destroy'])->name('admin.recruitment.destroy');
         // Route::prefix('{slug}/skill')->group(function () {

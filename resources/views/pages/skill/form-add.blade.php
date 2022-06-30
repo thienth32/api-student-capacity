@@ -5,13 +5,13 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
-                <form id="formSkill" action="{{ route('admin.skill.store') }}" method="post"
-                    enctype="multipart/form-data">
+                <form id="formSkill" action="{{ route('admin.skill.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
 
                     <div class="form-group mb-10">
                         <label for="">Tên kỹ năng</label>
-                        <input type="text" name="name" value="{{ old('name') }}" class=" form-control" placeholder="">
+                        <input type="text" name="name" value="{{ old('name') }}" class=" form-control"
+                            placeholder="">
                         @error('name')
                             <p id="checkname" class="text-danger">{{ $message }}</p>
                         @enderror
@@ -42,10 +42,9 @@
                                             <option @selected(request('major_id') == $itemMajor->id) value="{{ $itemMajor->id }}">
                                                 Ngành: {{ $itemMajor->name }}
                                             </option>
-                                            @include(
-                                                'pages.major.include.listSelecterChislAdd',
-                                                ['majorPrent' => $itemMajor]
-                                            )
+                                            @include('pages.major.include.listSelecterChislAdd', [
+                                                'majorPrent' => $itemMajor,
+                                            ])
                                         @endforeach
                                     </select>
 
@@ -75,14 +74,15 @@
 
                     <div class="form-group mb-10">
                         <label for="">Mô tả kỹ năng</label>
-                        <textarea class="form-control" name="description" id="" rows="3">{{ old('description') }}</textarea>
+                        <textarea class="form-control" name="description" id="kt_docs_ckeditor_classic" rows="3">{{ old('description') }}</textarea>
                         @error('description')
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div class="form-group mb-10 ">
-                        <button type="submit" name="" id="" class="btn btn-success btn-lg btn-block">Lưu </button>
+                        <button type="submit" name="" id="" class="btn btn-success btn-lg btn-block">Lưu
+                        </button>
                     </div>
                 </form>
             </div>
@@ -92,6 +92,11 @@
 
 @endsection
 @section('page-script')
+    <script src="assets/plugins/custom/tinymce/tinymce.bundle.js"></script>
+    <script src="assets/plugins/custom/ckeditor/ckeditor-classic.bundle.js"></script>
+    <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
+    <script src="assets/js/system/ckeditor/ckeditor.js"></script>
+    <script src="assets/js/system/preview-file/previewImg.js"></script>
     <script src="assets/js/system/preview-file/previewImg.js"></script>
     <script src="assets/js/system/skill/form.js"></script>
     <script>

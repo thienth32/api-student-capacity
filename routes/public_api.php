@@ -60,6 +60,7 @@ Route::prefix('sliders')->group(function () {
 
 Route::prefix('enterprise')->group(function () {
     Route::get('', [EnterpriseController::class, 'apiIndex'])->name('enterprise.api.index');
+    Route::get('{id}', [EnterpriseController::class, 'apiDetail']);
 });
 Route::prefix('exam')->group(function () {
     Route::post('store', [ExamController::class, 'store'])->name('exam.api.store');

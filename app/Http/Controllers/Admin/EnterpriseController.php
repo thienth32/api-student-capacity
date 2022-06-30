@@ -10,10 +10,12 @@ use App\Services\Traits\TUploadImage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use App\Services\Traits\TResponse;
 
 class EnterpriseController extends Controller
 {
     use TUploadImage;
+    use TResponse;
     private function getList(Request $request)
     {
         $keyword = $request->has('keyword') ? $request->keyword : "";
@@ -197,5 +199,17 @@ class EnterpriseController extends Controller
         } catch (\Throwable $th) {
             return abort(404);
         }
+    }
+    public function apiDetail($id)
+    {
+        $data = Enterprise::find($id);
+        $data->load('recruitment');
+
+        return $this->responseApi(
+            [
+                "status" => true,
+                "payload" => $data,
+            ]
+        );
     }
 }
