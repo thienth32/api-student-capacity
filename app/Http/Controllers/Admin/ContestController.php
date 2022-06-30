@@ -765,7 +765,7 @@ class ContestController extends Controller
 
     public function apiCapacityRelated($id_capacity)
     {
-
+        $capacityArrId= [];
         $capacity = $this->contest::find($id_capacity);
         if(is_null($capacity)) return $this->responseApi(
             [
@@ -774,11 +774,22 @@ class ContestController extends Controller
             ]
         );
         $capacity->load(['recruitment'=>function($q){
-            return $q->with('contest');
+            return $q->with(['contest'=>function($q){
+                //  return $q->get(['id']);
+            }]);
         }]);
+        foreach ($capacity->recruitment as  $recruitment) {
+            if ($recruitment->contest) foreach ($recruitment->contest as $contest) {
+                array_push($capacityArrId, $contest->id);
+           }
+        }
+        $capacityArrId= array_unique($capacityArrId);
+        unset($capacityArrId[array_search($id_capacity,$capacityArrId)]);
+       $capacitys= $this->contest::whereIn('id', $capacityArrId)->limit(request('limit') ?? 4)->get();
+        $capacitys->load(['rounds']);
         return response()->json([
             'status' => true,
-            'payload' => $capacity,
+            'payload' => $capacitys,
         ]);
     }
 }
