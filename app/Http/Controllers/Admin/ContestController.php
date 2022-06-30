@@ -762,6 +762,19 @@ class ContestController extends Controller
             $contestUser->save();
         };
     }
+
+    public function apiCapacityRelated($id_capacity)
+    {
+
+        $capacity = $this->contest::find($id_capacity)
+        ->load(['recruitment'=>function($q){
+            return $q->with('contest');
+        }]);
+        return response()->json([
+            'status' => true,
+            'payload' => $capacity,
+        ]);
+    }
 }
 
 
