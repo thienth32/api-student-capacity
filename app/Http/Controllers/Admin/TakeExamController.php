@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\Contest;
+use App\Models\Team;
 use App\Services\Traits\TUploadImage;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -21,13 +22,15 @@ class TakeExamController extends Controller
     private $contest;
     private $examModel;
     private $roundModel;
+    private $teamModel;
 
 
-    public function __construct(Contest $contest, Round $round, Exams $exams)
+    public function __construct(Contest $contest, Round $round, Exams $exams, Team $team)
     {
         $this->roundModel = $round;
         $this->contest = $contest;
         $this->examModel = $exams;
+        $this->teamModel = $team;
     }
     public function takeExamStudent(Request $request)
     {
@@ -197,6 +200,7 @@ class TakeExamController extends Controller
 
     public function takeExamStudentCapacity(Request $request)
     {
+        $user = auth('sanctum')->user();
         $validate = Validator::make(
             $request->all(),
             [
@@ -210,6 +214,16 @@ class TakeExamController extends Controller
             'status' => false,
             'payload' => $validate->errors()
         ]);
+
+        $teamCheck =  $this->teamModel::where(
+            'contest_id',
+            $request->contest_id
+        )->where('name', trim($request->name))->get();
+        if (count($teamCheck) > 0) return response()->json([
+            'status' => false,
+            'payload' => 'Tên đã tồn tại trong cuộc thi !!'
+        ]);
+
         $round = $this->roundModel::find($request->round_id);
         if (is_null($round)) return response()->json([
             'status' => false,

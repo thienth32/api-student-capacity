@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\QuestionsExport;
 use App\Http\Controllers\Controller;
+use App\Imports\QuestionsImport;
 use App\Models\Answers;
 use App\Models\Exams;
 use App\Models\Questions;
@@ -12,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class QuestionController extends Controller
 {
@@ -390,5 +393,24 @@ class QuestionController extends Controller
                 'payload' => 'Không thể xóa câu hỏi  !',
             ]);
         }
+    }
+    public function exImpost(Request $request)
+    {
+        Excel::import(new QuestionsImport, $request->ex_file);
+    }
+
+    public function exportQe()
+    {
+        $point = [
+            [1, 2, 3],
+            [2, 5, 9]
+        ];
+        $data = (object) array(
+            'points' => $point,
+        );
+        $export = new QuestionsExport([$data]);
+        return Excel::download($export, 'abc.xlsx');
+        // return Excel::download(new QuestionsExport, 'question.xlsx');
+        // return Excel::download(new QuestionsExport, 'invoices.xlsx', true, ['X-Vapor-Base64-Encode' => 'True']);
     }
 }
