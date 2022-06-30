@@ -766,8 +766,14 @@ class ContestController extends Controller
     public function apiCapacityRelated($id_capacity)
     {
 
-        $capacity = $this->contest::find($id_capacity)
-        ->load(['recruitment'=>function($q){
+        $capacity = $this->contest::find($id_capacity);
+        if(is_null($capacity)) return $this->responseApi(
+            [
+                'status' => false,
+                'payload' => 'Không tìm thấy bài test năng lực !',
+            ]
+        );
+        $capacity->load(['recruitment'=>function($q){
             return $q->with('contest');
         }]);
         return response()->json([
