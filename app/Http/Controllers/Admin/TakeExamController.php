@@ -215,14 +215,14 @@ class TakeExamController extends Controller
             'payload' => $validate->errors()
         ]);
 
-        $teamCheck =  $this->teamModel::where(
-            'contest_id',
-            $request->contest_id
-        )->where('name', trim($request->name))->get();
-        if (count($teamCheck) > 0) return response()->json([
-            'status' => false,
-            'payload' => 'Tên đã tồn tại trong cuộc thi !!'
-        ]);
+//        $teamCheck =  $this->teamModel::where(
+//            'contest_id',
+//            $request->contest_id
+//        )->where('name', trim($request->name))->get();
+//        if (count($teamCheck) > 0) return response()->json([
+//            'status' => false,
+//            'payload' => 'Tên đã tồn tại trong cuộc thi !!'
+//        ]);
 
         $round = $this->roundModel::find($request->round_id);
         if (is_null($round)) return response()->json([
