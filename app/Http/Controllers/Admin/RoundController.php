@@ -132,10 +132,10 @@ class RoundController extends Controller
      *  Store round
      */
 
-    public function create()
+    public function create(TypeExam $typeExam)
     {
-        $contests = Contest::all();
-        $typeexams = TypeExam::all();
+        $contests = $this->contest::all();
+        $typeexams = $typeExam::all();
         $nameTypeContest = request('type') == 1 ? ' bài làm  ' : ' vòng thi';
         return view('pages.round.form-add', compact('contests', 'typeexams','nameTypeContest'));
     }
