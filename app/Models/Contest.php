@@ -47,7 +47,8 @@ class Contest extends Model
         'end_register_time',
         'max_user',
         'reward_rank_point',
-        'post_new'
+        'post_new',
+        'img'
     ];
     public function recruitment()
     {

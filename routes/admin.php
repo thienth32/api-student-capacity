@@ -344,4 +344,7 @@ Route::prefix('questions')->group(function () {
     Route::get('soft-delete', [QuestionController::class, 'softDeleteList'])->name('admin.question.soft.delete');
     Route::delete('delete/{id}', [QuestionController::class, 'delete'])->name('admin.question.delete');
     Route::get('restore-delete/{id}', [QuestionController::class, 'restoreDelete'])->name('admin.question.restore');
+
+    Route::post('impost', [QuestionController::class, 'exImpost'])->name('admin.question.excel.impost');
+    Route::get('export', [QuestionController::class, 'exportQe'])->name('admin.question.excel.export');
 });
