@@ -82,7 +82,10 @@ class Contest extends Model
     {
         return $this->hasMany(ContestUser::class, 'contest_id');
     }
-
+    public function posts()
+    {
+        return $this->morphMany(Post::class, 'postable');
+    }
 
     public function take_exams()
     {

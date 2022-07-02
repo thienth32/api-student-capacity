@@ -35,8 +35,8 @@
                             <div class="form-group mb-10">
                                 <label class="form-label">Thời gian bắt đầu</label>
                                 <input id="begin"
-                                    value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime($slider->start_time)) }}" max=""
-                                    type="datetime-local" value="{{ old('start_time') }}" name="start_time"
+                                    value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime($slider->start_time)) }}"
+                                    max="" type="datetime-local" value="{{ old('start_time') }}" name="start_time"
                                     class="form-control " placeholder="">
                                 @error('start_time')
                                     <p class="text-danger">{{ $message }}</p>
@@ -45,7 +45,8 @@
                             <div class="form-group mb-10">
 
                                 <label class="form-label">Thời gian kết thúc</label>
-                                <input id="end" value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime($slider->end_time)) }}"
+                                <input id="end"
+                                    value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime($slider->end_time)) }}"
                                     min="" type="datetime-local" name="end_time" value="{{ old('end_time') }}"
                                     class="form-control  " placeholder="Pick date rage" />
                                 @error('end_time')
@@ -139,7 +140,8 @@
                     </div>
 
                     <div class="form-group mb-10 ">
-                        <button type="submit" name="" id="" class="btn btn-success btn-lg btn-block">Cập nhật </button>
+                        <button type="submit" name="" id=""
+                            class="btn btn-success btn-lg btn-block">Cập nhật </button>
                     </div>
 
                 </form>

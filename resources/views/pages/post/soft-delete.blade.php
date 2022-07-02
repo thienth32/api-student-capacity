@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title', 'Danh sách các doanh nghiệp đã xóa ')
+@section('title', 'Danh sách các bài viết đã xóa ')
 {{-- @section('page-title', 'Danh sách các vòng thi đã xóa ') --}}
 @section('content')
 
@@ -7,9 +7,9 @@
 
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('admin.enterprise.list') }}">Doanh Nghiệp</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('admin.post.list') }}">Bài viết</a></li>
                 <li class="breadcrumb-item disable" aria-current="page">Backup
-                    <a href="{{ route('admin.enterprise.soft.delete', 'enterprise_soft_delete=1') }}">
+                    <a href="{{ route('admin.post.list.soft.deletes', 'post_soft_delete=1') }}">
 
                         <span role="button" class="refresh-btn svg-icon svg-icon-primary svg-icon-2x">
                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Update.svg--><svg
@@ -45,8 +45,10 @@
                 <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Doanh Nghiệp</th>
-                        <th scope="col">Giới thiệu </th>
+                        <th scope="col">Tiêu Đề</th>
+                        <th scope="col">Ngày xuất bản</th>
+                        <th scope="col">Thuộc thành phần</th>
+                        <th scope="col">Nội dung</th>
                         <th></th>
                         <th scope="col">Xóa ngày</th>
                         <th colspan="2"></th>
@@ -60,29 +62,61 @@
                                     {{ (request()->has('page') && request('page') !== 1 ? $listSofts->perPage() * (request('page') - 1) : 0) + $key + 1 }}
                                 </td>
                                 <td>
-                                    {{ $listSoft->name }}
+                                    {{ $listSoft->title }}
+                                </td>
+                                <td>
+                                    {{ date('d-m-Y H:i', strtotime($listSoft->published_at)) }}
+                                    <br>
+                                    {{ \Carbon\Carbon::parse($listSoft->published_at)->diffforHumans() }}
+                                </td>
+                                <td>
+                                    @if (get_class($listSoft->postable) == \App\Models\Round::class)
+                                        Vòng thi : <b><a
+                                                href="{{ route('admin.round.detail', ['id' => $listSoft->postable->id]) }}">{{ $listSoft->postable->name }}</a></b>
+                                    @elseif (get_class($listSoft->postable) == \App\Models\Recruitments::class)
+                                        Tuyển dụng :
+                                        <b><a
+                                                href="{{ route('admin.recruitment.detail', ['id' => $listSoft->postable->id]) }}">{{ $listSoft->postable->name }}</a></b>
+                                    @else
+                                        Cuộc thi : <b><a
+                                                href="{{ route('admin.contest.show', ['id' => $listSoft->postable->id]) }}">{{ $listSoft->postable->name }}</a></b>
+                                    @endif
                                 </td>
                                 <td>
                                     <button class="btn  btn-primary btn-sm" type="button" data-bs-toggle="modal"
                                         data-bs-target="#introduce_{{ $listSoft->id }}">
-                                        Xem thông tin...
+                                        Xem
                                     </button>
 
                                     <!-- Modal -->
                                     <div class="modal fade" id="introduce_{{ $listSoft->id }}" tabindex="-1"
                                         aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
+                                        <div class="modal-dialog modal-lg">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel"> Giới Thiệu Về
-                                                        Doanh
-                                                        Nghiệp
+                                                    <h5 class="modal-title" id="exampleModalLabel"> Thông tin tuyển dụng
                                                     </h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body  ">
-                                                    {!! $listSoft->description !!}
+                                                    @if (is_null($listSoft->content))
+                                                        <div class="col-md-3 mx-auto">
+                                                            <a href="{{ $listSoft->link_to }}">
+                                                                <div
+                                                                    class="badge badge-primary badge-pill bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
+                                                                    <div class="m-0  ">
+                                                                        <span class="text-white-700 fw-bold fs-6">Xem tại
+                                                                            đây</span>
+                                                                    </div>
+
+                                                                </div>
+                                                            </a>
+                                                        </div>
+                                                    @else
+                                                        {!! $listSoft->content !!}
+                                                    @endif
+
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
@@ -120,7 +154,7 @@
 
                                             <li class="my-3">
                                                 <a
-                                                    href="{{ route('admin.enterprise.soft.backup', ['id' => $listSoft->id]) }}">
+                                                    href="{{ route('admin.post.soft.deletes', ['id' => $listSoft->id]) }}">
                                                     <span class="svg-icon svg-icon-primary svg-icon-2x">
                                                         <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Files/Cloud-upload.svg--><svg
                                                             xmlns="http://www.w3.org/2000/svg"
@@ -148,7 +182,7 @@
                                             <li class="my-3">
                                                 @hasrole('super admin')
                                                     <a
-                                                        href="{{ route('admin.enterprise.soft.destroy', ['id' => $listSoft->id]) }}">
+                                                        href="{{ route('admin.post.soft.restore', ['id' => $listSoft->id]) }}">
                                                         <span role="button" class="svg-icon svg-icon-danger svg-icon-2x">
                                                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Trash.svg--><svg
                                                                 xmlns="http://www.w3.org/2000/svg"
@@ -214,7 +248,7 @@
 @endsection
 @section('page-script')
     <script>
-        let url = '/admin/enterprise/enterprise-soft-delete?enterprise_soft_delete=1&keyword=';
+        let url = '/admin/posts/list-soft-deletes?post_soft_delete=1&keyword=';
         $('#searchTeam').keypress(function(event) {
             var keycode = (event.keyCode ? event.keyCode : event.which);
             if (keycode == '13') {

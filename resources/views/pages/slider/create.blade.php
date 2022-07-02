@@ -40,8 +40,8 @@
                             <div class="form-group mb-10">
 
                                 <label class="form-label">Thời gian kết thúc</label>
-                                <input id="end" min="" type="datetime-local" name="end_time" value="{{ old('end_time') }}"
-                                    class="form-control  " placeholder="Pick date rage" />
+                                <input id="end" min="" type="datetime-local" name="end_time"
+                                    value="{{ old('end_time') }}" class="form-control  " placeholder="Pick date rage" />
                                 @error('end_time')
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
@@ -110,7 +110,8 @@
                         </div>
                     </div>
                     <div class="form-group mb-10 ">
-                        <button type="submit" name="" id="" class="btn btn-success btn-lg btn-block">Lưu </button>
+                        <button type="submit" name="" id="" class="btn btn-success btn-lg btn-block">Lưu
+                        </button>
                     </div>
 
                 </form>

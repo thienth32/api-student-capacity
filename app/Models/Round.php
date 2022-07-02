@@ -105,6 +105,10 @@ class Round extends Model
     {
         return $this->morphMany(Slider::class, 'sliderable');
     }
+    public function posts()
+    {
+        return $this->morphMany(Post::class, 'postable');
+    }
 
     public function exams()
     {

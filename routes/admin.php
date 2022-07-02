@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\SendMailController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EnterpriseController;
 use App\Http\Controllers\Admin\RecruitmentController;
+use App\Http\Controllers\Admin\PostsController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('dashboard/api-cuoc-thi', [DashboardController::class, 'chartCompetity'])->name('dashboard.chart-competity');
@@ -300,20 +301,34 @@ Route::group([
         Route::put('{id}', [RecruitmentController::class, 'update'])->name('admin.recruitment.update');
         Route::get('', [RecruitmentController::class, 'index'])->name('admin.recruitment.list');
         Route::get('create', [RecruitmentController::class, 'create'])->name('admin.recruitment.create');
-        Route::get('{id}', [RecruitmentController::class, 'detail'])->name('admin.recruitment.detail');
+
 
         Route::post('store', [RecruitmentController::class, 'store'])->name('admin.recruitment.store');
         Route::delete('{id}', [RecruitmentController::class, 'destroy'])->name('admin.recruitment.destroy');
-        // Route::prefix('{slug}/skill')->group(function () {
-        //     Route::get('', [MajorController::class, 'Skill'])->name('admin.major.skill');
-        //     Route::post('attach', [MajorController::class, 'attachSkill'])->name('admin.major.skill.attach');
-        //     Route::get('detach/{skill_id}', [MajorController::class, 'detachSkill'])->name('admin.major.skill.detach');
-        // });
         Route::prefix('list-soft-deletes')->group(function () {
             Route::get('', [RecruitmentController::class, 'listRecordSoftDeletes'])->name('admin.recruitment.list.soft.deletes');
             Route::get('{id}/delete', [RecruitmentController::class, 'backUpRecruitment'])->name('admin.recruitment.soft.deletes');
             Route::get('{id}/restore', [RecruitmentController::class, 'delete'])->name('admin.recruitment.soft.restore');
         });
+        Route::get('{id}', [RecruitmentController::class, 'detail'])->name('admin.recruitment.detail');
+    });
+    Route::prefix('posts')->group(function () {
+        Route::get('{slug}/edit', [PostsController::class, 'edit'])->name('admin.post.edit');
+        Route::put('{id}', [PostsController::class, 'update'])->name('admin.post.update');
+        Route::get('', [PostsController::class, 'index'])->name('admin.post.list');
+        Route::get('create', [PostsController::class, 'create'])->name('admin.post.create');
+        Route::get('insert', [PostsController::class, 'insert'])->name('admin.post.insert');
+
+        Route::post('un-status/{id}', [PostsController::class, 'un_status'])->name('admin.post.un.status');
+        Route::post('re-status/{id}', [PostsController::class, 're_status'])->name('admin.post.re.status');
+        Route::post('store', [PostsController::class, 'store'])->name('admin.post.store');
+        Route::delete('{slug}', [PostsController::class, 'destroy'])->name('admin.post.destroy');
+        Route::prefix('list-soft-deletes')->group(function () {
+            Route::get('', [PostsController::class, 'listRecordSoftDeletes'])->name('admin.post.list.soft.deletes');
+            Route::get('{id}/delete', [PostsController::class, 'backUpPost'])->name('admin.post.soft.deletes');
+            Route::get('{id}/restore', [PostsController::class, 'delete'])->name('admin.post.soft.restore');
+        });
+        Route::get('{slug}', [PostsController::class, 'detail'])->name('admin.post.detail');
     });
 });
 

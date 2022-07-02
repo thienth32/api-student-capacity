@@ -272,7 +272,7 @@
                                                             aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body  ">
-                                                        {{ $key->description }}
+                                                        {!! $key->description !!}
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary"

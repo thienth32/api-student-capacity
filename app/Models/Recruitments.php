@@ -27,4 +27,8 @@ class Recruitments extends Model
     {
         return $this->BelongsToMany(Contest::class, 'contest_recruitments', 'recruitment_id', 'contest_id')->with('skills')->withTimestamps();
     }
+    public function posts()
+    {
+        return $this->morphMany(Post::class, 'postable');
+    }
 }

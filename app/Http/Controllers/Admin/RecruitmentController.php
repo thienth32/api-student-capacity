@@ -191,6 +191,7 @@ class RecruitmentController extends Controller
     }
     public function update(Request $request, $id)
     {
+
         $validator = Validator::make(
             $request->all(),
             [
@@ -307,6 +308,7 @@ class RecruitmentController extends Controller
     public function detail($id)
     {
         $data = Recruitments::find($id);
+
         return view('pages.recruitment.detailRecruitment', compact('data'));
     }
     public function apiShow(Request $request)
