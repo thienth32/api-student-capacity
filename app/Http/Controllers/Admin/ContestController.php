@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\Contest\RequestContest;
 use Exception;
 use Carbon\Carbon;
 use App\Models\Team;
@@ -33,12 +34,13 @@ class ContestController extends Controller
     private $contest;
     private $major;
     private $team;
-
-    public function __construct(Contest $contest, Major $major, Team $team)
+    private $db;
+    public function __construct(Contest $contest, Major $major, Team $team , DB $db)
     {
         $this->contest = $contest;
         $this->major = $major;
         $this->team = $team;
+        $this->db = $db;
     }
 
     /**
@@ -153,85 +155,27 @@ class ContestController extends Controller
         return view('pages.contest.form-add', compact('majors', 'contest_type_text'));
     }
 
-    public function store(Request $request)
+    public function store(RequestContest $request, Redirect $redirect, Storage $storage)
     {
+
         $this->checkTypeContest();
-        $rule =   [
-            'name' => 'required|max:255|unique:contests,name',
-            'top1' => 'required|numeric',
-            'top2' => 'required|numeric',
-            'top3' => 'required|numeric',
-            'leave' => 'required|numeric',
-            'img' => 'required|mimes:jpeg,png,jpg|max:10000',
-            'date_start' => 'required|date',
-            'register_deadline' => 'required|date',
-            'description' => 'required',
-        ];
-        if (request('type') == config('util.TYPE_CONTEST')) $rule = array_merge($rule, [
-            'max_user' => 'required|numeric',
-            'start_register_time' => 'required|date',
-            'end_register_time' => 'required|date',
-        ]);
-
-        $validator = Validator::make(
-            $request->all(),
-            $rule,
-            [
-                'top1.required' => 'Chưa nhập trường này !',
-                'top1.numeric' =>  'Sai định dạng !',
-                'top2.required' => 'Chưa nhập trường này !',
-                'top2.numeric' =>  'Sai định dạng !',
-                'top3.required' => 'Chưa nhập trường này !',
-                'top3.numeric' =>  'Sai định dạng !',
-                'leave.required' => 'Chưa nhập trường này !',
-                'leave.numeric' =>  'Sai định dạng !',
-
-                'name.required' => 'Chưa nhập trường này !',
-                'max_user.required' => 'Chưa nhập trường này !',
-                'max_user.numeric' =>  'Sai định dạng !',
-                'name.unique' => 'Tên cuộc thi đã tồn tại !',
-                'name.max' => 'Độ dài kí tự không phù hợp !',
-                'img.mimes' => 'Sai định dạng !',
-                'img.required' => 'Chưa nhập trường này !',
-                'img.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
-                'date_start.required' => 'Chưa nhập trường này !',
-                'date_start.date' => 'Sai định dạng !',
-                'start_register_time.required' => 'Chưa nhập trường này !',
-                'start_register_time.date' => 'Sai định dạng !',
-
-                'end_register_time.required' => 'Chưa nhập trường này !',
-                'end_register_time.date' => 'Sai định dạng !',
-                'register_deadline.required' => 'Chưa nhập trường này !',
-                'register_deadline.date' => 'Sai định dạng !',
-                'description.required' => 'Chưa nhập trường này !',
-            ]
-        );
-
-        if ($validator->fails())  return redirect()->back()->withErrors($validator)->withInput();
-
-
         if ($request->hasFile('img')) {
             $fileImage = $request->file('img');
             $filename = $this->uploadFile($fileImage);
         }
-
-        DB::beginTransaction();
+        $this->db::beginTransaction();
         try {
-            $contest = $this->store($filename,$request);
-            DB::commit();
-            return Redirect::route('admin.contest.show', ['id' => $contest->id])->with('success', 'Thêm mới thành công !');
+            $contest = $this->contest->store($filename,$request);
+            $this->db::commit();
+            return $redirect::route('admin.contest.show', ['id' => $contest->id])->with('success', 'Thêm mới thành công !');
         } catch (Exception $ex) {
             if ($request->hasFile('img')) {
                 $fileImage = $request->file('img');
-                if (Storage::disk('s3')->has($filename)) Storage::disk('s3')->delete($filename);
+                if ($storage::disk('s3')->has($filename)) $storage::disk('s3')->delete($filename);
             }
-            DB::rollBack();
-            return Redirect::back()->with('error', 'Thêm mới thất bại !');
+            $this->db::rollBack();
+            return $redirect::back()->with('error', 'Thêm mới thất bại !');
         }
-
-
-
-        // dd($request->all());
     }
     public function un_status($id)
     {
@@ -303,88 +247,46 @@ class ContestController extends Controller
         }
     }
 
-    public function update(Request $request, $id, Validator $validatorFacades)
+    public function update(RequestContest $request, $id, Validator $validatorFacades)
     {
         $this->checkTypeContest();
-        $rule = [
-            'name' => 'required|unique:contests,name,' . $id . '',
-            'img' => 'mimes:jpeg,png,jpg|max:10000',
-            'date_start' => "required",
-            'register_deadline' => "required|after:date_start",
-            'description' => "required",
-            'major_id' => "required",
-
-        ];
-        if (request('type') == config('util.TYPE_CONTEST')) $rule = array_merge($rule, [
-            'max_user' => 'required|numeric',
-            'start_register_time' => 'required|date|before:end_register_time',
-            'end_register_time' => 'required|date|after:start_register_time',
-        ]);
-        $validator = $validatorFacades::make(
-            $request->all(),
-            $rule,
-            [
-                'max_user.required' => 'Chưa nhập trường này !',
-                'max_user.numeric' =>  'Sai định dạng !',
-
-                'img.mimes' => 'Sai định dạng !',
-                'img.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
-                "name.required" => "Tường name không bỏ trống !",
-                "name.unique" => "Tên cuộc thi đã tồn tại !",
-                "date_start.required" => "Tường thời gian bắt đầu  không bỏ trống !",
-                "register_deadline.required" => "Tường thời gian kết thúc không bỏ trống !",
-                "register_deadline.after" => "Tường thời gian kết thúc không nhỏ hơn trường bắt đầu  !",
-                "description.required" => "Tường mô tả không bỏ trống !",
-                "major_id.required" => "Tường cuộc thi tồn tại !",
-
-                'end_register_time.required' => 'Chưa nhập trường này !',
-                'end_register_time.date' => 'Sai định dạng !',
-                'end_register_time.after' => 'Thời gian kết thúc đăng kí không được bằng hoặc nhỏ hơn thời gian bắt đầu đăng kí!',
-                'end_register_time.before' => 'Thời gian kết thúc đăng kí không được bằng hoặc lớn hơn thời gian bắt đầu cuộc thi!',
-                'register_deadline.required' => 'Chưa nhập trường này !',
-                'register_deadline.date' => 'Sai định dạng !',
-                'register_deadline.after' => 'Thời gian kết thúc không được bằng thời gian bắt đầu !',
-                'description.required' => 'Chưa nhập trường này !',
-            ]
-        );
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-        DB::beginTransaction();
-
+        $this->db::beginTransaction();
         $contest = $this->contest->find($id);
+        try {
+            if (is_null($contest)) {
+                return redirect(route('admin.contest.list') . '?type=' . request('type') ?? 0);
+            } else {
+                $rewardRankPoint = json_encode(array(
+                    'top1' => $request->top1,
+                    'top2' => $request->top2,
+                    'top3' => $request->top3,
+                    'leave' => $request->leave,
+                ));
 
-        if (is_null($contest)) {
-            return response()->json([
-                "payload" => 'Không tồn tại trong cơ sở dữ liệu !'
-            ], 500);
-        } else {
-            $rewardRankPoint = json_encode(array(
-                'top1' => $request->top1,
-                'top2' => $request->top2,
-                'top3' => $request->top3,
-                'leave' => $request->leave,
-            ));
+                if ($request->has('img')) {
+                    $fileImage =  $request->file('img');
+                    $img = $this->uploadFile($fileImage, $contest->img);
+                    $dataSave = array_merge($request->except(['_method','_token','img']) , [
+                        'reward_rank_point' => $rewardRankPoint,
+                        'img' => $img
+                    ]);
+                }else{
+                    $dataSave = array_merge($request->except(['_method','_token']) , [
+                        'reward_rank_point' => $rewardRankPoint,
+                    ]);
+                }
 
-            if ($request->has('img')) {
-                $fileImage =  $request->file('img');
-                $img = $this->uploadFile($fileImage, $contest->img);
-                $dataSave = array_merge($request->except(['_method','_token','img']) , [
-                    'reward_rank_point' => $rewardRankPoint,
-                    'img' => $img
-                ]);
-            }else{
-                $dataSave = array_merge($request->except(['_method','_token']) , [
-                    'reward_rank_point' => $rewardRankPoint,
-                ]);
+                $this->contest->update($contest , $dataSave);
+
+                $this->db::commit();
+                // return Redirect::route('admin.contest.list');
+                return redirect(route('admin.contest.list') . '?type=' . request('type') ?? 0);
             }
-
-            $this->contest->update($contest , $dataSave);
-
-            Db::commit();
-            // return Redirect::route('admin.contest.list');
-            return redirect(route('admin.contest.list') . '?type=' . request('type') ?? 0);
+        }catch (\Exception $e) {
+            $this->db::rollBack();
+            return redirect()->back()->with('error', 'Cập nhật thất bại !');;
         }
+
     }
 
     private function getContest($id, $type = 0)
@@ -524,17 +426,17 @@ class ContestController extends Controller
         return view('pages.contest.detail.team.contest-team', compact('contest', 'teams'));
     }
 
-    public function contestDetailTeamAddSelect(Request  $request, $id)
+    public function contestDetailTeamAddSelect(Request  $request,Redirect $redirect, $id)
     {
         // dd($request->all());
         $contest = $this->contest->find($id);
         $team = $this->team::find($request->team_id);
         if (is_null($contest) && is_null($team)) {
-            return Redirect::back();
+            return $redirect::back();
         } else {
             $team->contest_id = $id;
             $team->save();
-            return Redirect::back();
+            return $redirect::back();
         }
     }
 

@@ -4,10 +4,12 @@ namespace App\Services\Modules\MContest;
 use App\Models\Major;
 use App\Models\Contest as ModelContest;
 use App\Models\Team;
+use App\Services\Traits\TUploadImage;
 use Carbon\Carbon;
 
 class Contest
 {
+    use TUploadImage;
     private $contest;
     private $major;
     private $team;
@@ -70,7 +72,7 @@ class Contest
         ));
         $contest->reward_rank_point =  $rewardRankPoint;
         $contest->save();
-
+        return $contest;
     }
 
     public function find($id)
