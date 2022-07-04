@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Round\RequestRound;
 use App\Models\Contest;
 use App\Models\Donor;
 use App\Models\DonorRound;
@@ -32,71 +33,32 @@ class RoundController extends Controller
     private $round;
     private $contest;
     private $type_exam;
+    private $modelDulesRound;
+    private $db;
 
-    public function __construct(Round $round, Contest $contest, TypeExam $type_exam)
+    public function __construct(
+        Round $round,
+        \App\Services\Modules\MRound\Round $modelDulesRound,
+        Contest $contest,
+        TypeExam $type_exam,
+        DB $db
+    )
     {
         $this->round = $round;
         $this->contest = $contest;
         $this->type_exam = $type_exam;
-    }
-
-    /**
-     *  Get list round
-     */
-    private function getList()
-    {
-        try {
-            $key = null;
-            $valueDate = null;
-            if (request()->has('day')) {
-                $valueDate = request('day');
-                $key = 'day';
-            }
-            if (request()->has('month')) {
-                $valueDate = request('month');
-                $key = 'month';
-            };
-            if (request()->has('year')) {
-                $valueDate = request('year');
-                $key = 'year';
-            };
-
-            $data = $this->round::when(request()->has('round_soft_delete'), function ($q) {
-                return $q->onlyTrashed();
-            })->search(request('q') ?? null, ['name', 'description'])
-                ->sort((request('sort') == 'asc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'rounds')
-                ->hasDateTimeBetween('start_time', request('start_time') ?? null, request('end_time') ?? null)
-                ->hasSubTime(
-                    $key,
-                    $valueDate,
-                    (request('op_time') == 'sub' ? 'sub' : 'add'),
-                    'start_time'
-                )
-                ->hasRequest([
-                    'contest_id' => request('contest_id') ?? null,
-                    'type_exam_id' => request('type_exam_id') ?? null,
-                ])
-                ->with([
-                    'contest',
-                    'type_exam',
-                ]);
-
-            return $data;
-        } catch (\Throwable $th) {
-            return false;
-        }
+        $this->modelDulesRound = $modelDulesRound;
+        $this->db = $db;
     }
 
     //  View round
     public function index()
     {
-        if (!($rounds = $this->getList())) {
+        if (!($rounds = $this->modelDulesRound->index())) {
             return view('not_found');
         }
-
-        $rounds = $this->getList();
         return view('pages.round.index', [
-            'rounds' => $rounds->paginate(request('limit') ?? 5),
+            'rounds' => $rounds,
             'contests' => $this->contest::withCount(['teams', 'rounds'])->get(),
             'type_exams' => $this->type_exam::all(),
         ]);
@@ -106,7 +68,7 @@ class RoundController extends Controller
     public function apiIndex()
     {
 
-        if (!($data = $this->getList())) {
+        if (!($data = $this->modelDulesRound->apiIndex())) {
             return $this->responseApi(
                 [
                     "status" => false,
@@ -119,18 +81,11 @@ class RoundController extends Controller
         return $this->responseApi(
             [
                 "status" => true,
-                "payload" => $data->get(),
+                "payload" => $data,
             ]
         );
+
     }
-
-    /**
-     *  End list round
-     */
-
-    /**
-     *  Store round
-     */
 
     public function create(TypeExam $typeExam)
     {
@@ -139,44 +94,9 @@ class RoundController extends Controller
         $nameTypeContest = request('type') == 1 ? ' bài làm  ' : ' vòng thi';
         return view('pages.round.form-add', compact('contests', 'typeexams','nameTypeContest'));
     }
-    public function store(Request $request)
+
+    public function store(RequestRound $request)
     {
-        // dd($request->all());
-
-        $validator = Validator::make(
-            request()->all(),
-            [
-                'name' => 'required|max:255|unique:rounds,name',
-                // 'name' => 'required|unique:rounds|max:255|regex:/^[0-9a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễếệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\ ]+$/u',
-                'image' => 'required|required|mimes:jpeg,png,jpg|max:10000',
-                'start_time' => 'required',
-                'end_time' => 'required|after:start_time',
-                'description' => 'required',
-                'contest_id' => 'required|numeric',
-                'type_exam_id' => 'required|numeric',
-            ],
-            [
-                'name.required' => 'Chưa nhập trường này !',
-                'name.max' => 'Độ dài kí tự không phù hợp !',
-                'name.unique' => 'Đã tồn tại trong cơ sở dữ liệu !',
-                'name.regex' => 'Trường name không chứ kí tự đặc biệt !',
-                'image.mimes' => 'Sai định dạng !',
-                'image.required' => 'Chưa nhập trường này !',
-                'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
-                'start_time.required' => 'Chưa nhập trường này !',
-                'end_time.required' => 'Chưa nhập trường này !',
-                'end_time.after' => 'Thời gian kết thúc không được nhỏ hơn  thời gian bắt đầu !',
-                'description.required' => 'Chưa nhập trường này !',
-                'contest_id.required' => 'Chưa nhập trường này !',
-                'contest_id.numeric' => 'Sai định dạng !',
-                'type_exam_id.required' => 'Chưa nhập trường này !',
-                'type_exam_id.numeric' => 'Sai định dạng !',
-            ]
-        );
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
 
         $contest = $this->contest::find($request->contest_id ?? 0);
         if (Carbon::parse($request->start_time)->toDateTimeString() < Carbon::parse($contest->date_start)->toDateTimeString()) {
@@ -186,22 +106,10 @@ class RoundController extends Controller
             return redirect()->back()->withErrors(['end_time' => 'Thời gian kết thúc không được lớn hơn thời gian kết thúc của cuộc thi !'])->withInput();
         };
 
-        DB::beginTransaction();
+        $this->db::beginTransaction();
         try {
-            if ($request->hasFile('image')) {
-                $fileImage = $request->file('image');
-                $filename = $this->uploadFile($fileImage);
-            }
-            $round = new Round();
-            $round->name = $request->name;
-            $round->image = $filename;
-            $round->start_time = $request->start_time;
-            $round->end_time = $request->end_time;
-            $round->description = $request->description;
-            $round->contest_id = $request->contest_id;
-            $round->type_exam_id = $request->type_exam_id;
-            $round->save();
-            Db::commit();
+            $this->modelDulesRound->store($request);
+            $this->db::commit();
             return Redirect::route('admin.round.list');
         } catch (Exception $ex) {
             if ($request->hasFile('image')) {
@@ -210,7 +118,7 @@ class RoundController extends Controller
                     Storage::disk('s3')->delete($filename);
                 }
             }
-            Db::rollBack();
+            $this->db::rollBack();
             return Redirect::back()->with(['error' => 'Thêm mới thất bại !']);
         }
     }
@@ -246,7 +154,7 @@ class RoundController extends Controller
      *  Update round
      */
 
-    private function updateRound($id)
+    private function updateRound(RequestRound $request,$id)
     {
         try {
             // dd(request()->all());
@@ -254,76 +162,24 @@ class RoundController extends Controller
                 return false;
             }
 
-            $validator = Validator::make(
-                request()->all(),
-                [
-                    'name' => "required|max:255|regex:/^[0-9a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễếệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\ ]+$/u|unique:rounds,name," . $round->id,
-                    'start_time' => "required|before:end_time",
-                    'end_time' => "required|after:start_time",
-                    'description' => "required",
-                    'contest_id' => "required",
-                    'type_exam_id' => "required",
-                ],
-                [
-                    "name.required" => "Trường name không bỏ trống !",
-                    'name.max' => 'Độ dài kí tự không phù hợp !',
-                    'name.unique' => 'Đã tồn tại trong cơ sở dữ liệu !',
-                    'name.regex' => 'Trường name không chứ kí tự đặc biệt !',
-                    // "start_time.date_format" => "Trường thời gian bắt đầu không đúng định dạng !",
-                    // "end_time.date_format" => "Trường thời gian kết thúc không đúng định dạng !",
-                    "start_time.required" => "Trường thời gian bắt đầu  không bỏ trống !",
-                    "end_time.required" => "Trường thời gian kết thúc không bỏ trống !",
-                    "start_time.before" => "Trường thời gian bắt đầu  không nhỏ hơn trường kết thúc  !",
-                    "end_time.after" => "Trường thời gian kết thúc không nhỏ hơn trường bắt đầu  !",
-                    "description.required" => "Trường mô tả không bỏ trống !",
-                    "contest_id.required" => "Trường cuộc thi tồn tại !",
-                    "type_exam_id.required" => "Trường loại thi không tồn tại !",
-                ]
-            );
 
-            if ($validator->fails()) {
-                return [
-                    'status' => false,
-                    'errors' => $validator,
-                ];
-            }
-
-            $contest = $this->contest::find(request()->contest_id ?? 0);
-            if (Carbon::parse(request()->start_time)->toDateTimeString() < Carbon::parse($contest->date_start)->toDateTimeString()) {
+            $contest = $this->contest::find($request->contest_id ?? 0);
+            if (Carbon::parse($request->start_time)->toDateTimeString() < Carbon::parse($contest->date_start)->toDateTimeString()) {
                 return [
                     'status' => false,
                     'errors' => ['start_time' => 'Thời gian bắt đầu không được bé hơn thời gian bắt đầu của cuộc thi !'],
                 ];
             };
-            if (Carbon::parse(request()->end_time)->toDateTimeString() > Carbon::parse($contest->register_deadline)->toDateTimeString()) {
+            if (Carbon::parse($request->end_time)->toDateTimeString() > Carbon::parse($contest->register_deadline)->toDateTimeString()) {
                 return [
                     'status' => false,
                     'errors' => ['end_time' => 'Thời gian kết thúc không được lớn hơn thời gian kết thúc của cuộc thi !'],
                 ];
             };
             $data = null;
-            if (request()->has('image')) {
-
-                $validator = Validator::make(
-                    request()->all(),
-                    [
-                        'image' => 'file|mimes:jpeg,jpg,png|max:10000',
-                    ],
-                    [
-                        'image.max' => 'Ảnh không quá 10000 kb  !',
-                        'image.mimes' => 'Ảnh không đúng định dạng: jpeg,jpg,png !',
-                    ]
-                );
-
-                if ($validator->fails()) {
-                    return [
-                        'status' => false,
-                        'errors' => $validator,
-                    ];
-                }
-
+            if ($request->has('image')) {
                 $nameFile = $this->uploadFile(request()->image, $round->image);
-                $data = array_merge(request()->except('image'), [
+                $data = array_merge($request->except('image'), [
                     'image' => $nameFile,
                 ]);
             } else {
@@ -334,6 +190,7 @@ class RoundController extends Controller
         } catch (\Throwable $th) {
             return false;
         }
+
     }
 
     // View round
@@ -349,28 +206,7 @@ class RoundController extends Controller
         }
         return redirect('error');
     }
-    // Response round
-    // public function apiUpdate($id)
-    // {
-    //     if ($data = $this->updateRound($id)) {
-    //         if (isset($data['status']) && $data['status'] == false) return response()->json([
-    //             "status" => false,
-    //             "payload" => $data['errors']->errors(),
-    //         ]);
-    //         return response()->json([
-    //             "status" => true,
-    //             "payload" => $data,
-    //         ]);
-    //     }
 
-    //     return response()->json([
-    //         "status" => false,
-    //         "payload" => "Server not found",
-    //     ], 404);
-    // }
-    /**
-     * End update round
-     */
 
     /**
      * Destroy round
@@ -382,7 +218,7 @@ class RoundController extends Controller
                 return false;
             }
 
-            DB::transaction(function () use ($id) {
+            $this->db::transaction(function () use ($id) {
                 if (!($data = $this->round::find($id))) {
                     return false;
                 }
@@ -412,24 +248,10 @@ class RoundController extends Controller
 
         return redirect('error');
     }
-    // Response
-    // public function apiDestroy($id)
-    // {
-    //     if ($this->destroyRound($id))  return response()->json([
-    //         "status" => true,
-    //         "payload" => "Success"
-    //     ]);
-    //     return response()->json([
-    //         "status" => false,
-    //         "payload" => "Server not found"
-    //     ], 404);
-    // }
-    /**
-     *  End destroy round
-     */
-    public function show(Round $round, $id)
+
+    public function show(  $id)
     {
-        $round = Round::whereId($id);
+        $round = $this->round::whereId($id);
         if (is_null($round)) {
             return response()->json(['status' => false, 'payload' => 'Không tồn tại trong hệ thống !'], 404);
         } {
@@ -465,12 +287,12 @@ class RoundController extends Controller
     }
     public function contestDetailRound($id)
     {
-        if (!($rounds = $this->getList())) {
+        if (!($rounds = $this->modelDulesRound->getList())) {
             return view('not_found');
         }
 
         $contest = $this->contest->find($id);
-        $rounds = $this->getList();
+        $rounds = $this->modelDulesRound->getList();
         return view('pages.contest.detail.contest-round', [
             'rounds' => $rounds->where('contest_id', $id)
                 ->when(
@@ -525,17 +347,13 @@ class RoundController extends Controller
             return abort(404);
         }
 
-        //         foreach($round as $item){
-        // var_dump($item->Enterprise->name);
-        // }
-        // die();
         $enterprise = Enterprise::all();
         return view('pages.round.detail.enterprise', ['round' => $round, 'roundDeltai' => $this->round->find($id), 'enterprise' => $enterprise]);
     }
 
     public function softDelete()
     {
-        $listRoundSofts = $this->getList()->paginate(request('limit') ?? 5);
+        $listRoundSofts = $this->modelDulesRound->getList()->paginate(request('limit') ?? 5);
         return view('pages.round.round-soft-delete', [
             'listRoundSofts' => $listRoundSofts,
         ]);
@@ -561,8 +379,8 @@ class RoundController extends Controller
     }
     public function roundDetailTeam($id)
     {
-        $round = Round::find($id);
-        $teams = Round::find($id)->load('contest')->contest->teams;
+        $round = $this->round::find($id);
+        $teams = $this->round::find($id)->load('contest')->contest->teams;
         return view('pages.round.detail.round-team', compact('round', 'teams'));
     }
     public function attachEnterprise(Request $request, $id)
@@ -609,7 +427,7 @@ class RoundController extends Controller
     public function attachTeam(Request $request, $id)
     {
         try {
-            Round::find($id)->teams()->syncWithoutDetaching($request->team_id);
+            $this->round::find($id)->teams()->syncWithoutDetaching($request->team_id);
             return Redirect::back();
         } catch (\Throwable $th) {
             return Redirect::back();
@@ -618,7 +436,7 @@ class RoundController extends Controller
     public function detachTeam($id, $team_id)
     {
         try {
-            Round::find($id)->teams()->detach([$team_id]);
+            $this->round::find($id)->teams()->detach([$team_id]);
             return Redirect::back();
         } catch (\Throwable $th) {
             return Redirect::back();
@@ -632,7 +450,7 @@ class RoundController extends Controller
     {
 
         try {
-            $round = Round::find($id);
+            $round = $this->round::find($id);
             $team = Team::where('id', $teamId)->first();
             return view(
                 'pages.round.detail.team.index',
@@ -653,7 +471,7 @@ class RoundController extends Controller
     public function roundDetailTeamTakeExam($id, $teamId)
     {
         try {
-            $round = Round::find($id);
+            $round = $this->round::find($id);
             $team = Team::where('id', $teamId)->first();
             $takeExam = RoundTeam::where('round_id', $id)->where('team_id', $teamId)->with('takeExam')->first();
             return view(
@@ -673,7 +491,7 @@ class RoundController extends Controller
     {
         try {
 
-            $round = Round::find($id);
+            $round = $this->round::find($id);
 
             $team = Team::where('id', $teamId)->first();
             $takeExam = RoundTeam::where('round_id', $id)->where('team_id', $teamId)->with('takeExam', function ($q) use ($round) {
@@ -699,7 +517,7 @@ class RoundController extends Controller
     }
     public function roundDetailFinalTeamMakeExam(Request $request, $id, $teamId)
     {
-        $round = Round::find($id);
+        $round = $this->round::find($id);
         $team = Team::where('id', $teamId)->first();
         $roundTeam = RoundTeam::where('round_id', $id)
             ->where('team_id', $teamId)
@@ -747,7 +565,7 @@ class RoundController extends Controller
 
     public function roundDetailUpdateTeamMakeExam(Request $request, $id, $teamId)
     {
-        $round = Round::find($id);
+        $round = $this->round::find($id);
         $roundTeam = RoundTeam::where('round_id', $id)
             ->where('team_id', $teamId)
             ->with('takeExam', function ($q) use ($round) {
@@ -803,8 +621,7 @@ class RoundController extends Controller
     public function roundDetailTeamTakeExamUpdate(Request $request, $id, $teamId, $takeExamId)
     {
         try {
-            // $round = Round::find($id);
-            // $team = Team::where('id', $teamId)->first();
+
             $dataCreate = [
                 'point' => $request->final_point,
                 'reason' => $request->has('reason') ? $request->reason : null,
@@ -843,7 +660,7 @@ class RoundController extends Controller
     public function roundDetailTeamExam($id, $teamId)
     {
         try {
-            $round = Round::find($id);
+            $round = $this->round::find($id);
             $team = Team::where('id', $teamId)->first();
             $takeExam = RoundTeam::where('round_id', $id)->where('team_id', $teamId)->first();
             // dd($takeExam->takeExam->exam);
@@ -865,7 +682,7 @@ class RoundController extends Controller
     public function roundDetailTeamJudge($id, $teamId)
     {
         try {
-            $round = Round::find($id);
+            $round = $this->round::find($id);
             $team = Team::where('id', $teamId)->first();
             $takeExam = RoundTeam::where('round_id', $id)->where('team_id', $teamId)->first()->takeExam;
             if ($takeExam != null) {
@@ -893,7 +710,7 @@ class RoundController extends Controller
     }
     public function sendMail($id)
     {
-        $round = Round::findOrFail($id)->load([
+        $round = $this->round::findOrFail($id)->load([
             'judges',
             'teams' => function ($q) {
                 return $q->with(['members']);

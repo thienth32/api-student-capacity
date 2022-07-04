@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Slider\RequestSlider;
 use App\Models\Contest;
 use App\Models\Major;
 use App\Models\Round;
@@ -159,25 +160,9 @@ class SliderController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(RequestSlider $request)
     {
-        $request->validate(
-            [
-                'link_to' => 'required',
-                'start_time' => 'required',
-                'end_time' => 'required|after:start_time',
-                'image_url' => 'image|mimes:jpeg,png,jpg|max:10000',
-            ],
-            [
-                'link_to.required' => 'Không để trống trường này !',
-                'start_time.required' => 'Không để trống trường này !',
-                'end_time.required' => 'Không để trống trường này !',
-                'end_time.after' => 'Trường này thời gian nhỏ hơn trường thời gian bắt đầu  !',
-                'image_url.image' => 'Không để trống trường này !',
-                'image_url.mimes' => 'Trường này không đúng định dạng  !',
-                'image_url.max' => 'Trường này kích cỡ quá lớn  !',
-            ]
-        );
+
         // try {
         if ($request->hasFile('image_url')) {
             $fileImage = $request->file('image_url');
@@ -224,35 +209,12 @@ class SliderController extends Controller
         return abort(404);
     }
 
-    public function update(Request $request, $id)
+    public function update(RequestSlider $request, $id)
     {
         if (!($slider = $this->slider::find($id))) return abort(404);
-        $request->validate(
-            [
-                'link_to' => 'required',
-                'start_time' => 'required',
-                'end_time' => 'required|after:start_time',
-            ],
-            [
-                'link_to.required' => 'Không để trống trường này !',
-                'start_time.required' => 'Không để trống trường này !',
-                'end_time.required' => 'Không để trống trường này !',
-                'end_time.after' => 'Trường này thời gian nhỏ hơn trường thời gian bắt đầu  !',
-            ]
-        );
+
         $data = null;
         if (request()->has('image_url')) {
-
-            $request->validate(
-                [
-                    'image_url' => 'image|mimes:jpeg,png,jpg|max:10000',
-                ],
-                [
-                    'image_url.image' => 'Không để trống trường này !',
-                    'image_url.mimes' => 'Trường này không đúng định dạng  !',
-                    'image_url.max' => 'Trường này kích cỡ quá lớn  !',
-                ]
-            );
             $nameFile = $this->uploadFile(request()->image_url, $slider->image_url);
             $data = array_merge(request()->except('image_url', 'major_id', 'round_id'), [
                 'image_url' => $nameFile
