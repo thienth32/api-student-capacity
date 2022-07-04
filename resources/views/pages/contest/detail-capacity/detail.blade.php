@@ -114,7 +114,7 @@
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade active show tab-list" id="kt_vtab_pane_4" role="tabpanel">
                     <h2>
-                        Danh sách bài làm thuộc <strong style="color: blue">{{ $test_capacity->name }}</strong>
+                        Danh sách đề bài thuộc <strong style="color: blue">{{ $test_capacity->name }}</strong>
                     </h2>
                     <a target="_blank"
                         href="{{ route('admin.round.create') . '?contest_id=' . $test_capacity->id . '&type=1' }}"
@@ -123,9 +123,9 @@
                         <table class="table table-row-bordered table-row-gray-300 gy-7  table-hover ">
                             <thead>
                                 <tr>
-                                    <th>Tên bài làm </th>
-                                    <th>Tổng số đề bài</th>
-                                    <th>Đề bài</th>
+                                    <th>Tên đề bài  </th>
+                                    <th>Bài làm</th>
+                                    <th>Tổng số bài làm</th>
                                     <th style="text-align: center">Thao tác </th>
                                 </tr>
                             </thead>
@@ -139,7 +139,7 @@
                                             <td>
                                                 <a target="_blank"
                                                     href="{{ route('admin.exam.create', ['id' => $round->id]) . '?type=1' }}">Thêm
-                                                    đề bài</a>
+                                                    bài làm</a>
                                             </td>
                                             <td>
                                                 {{ $round->exams_count }}
@@ -357,7 +357,7 @@
 @endsection
 @section('page-script')
     <script>
-        const urlApiPublic = "http://127.0.0.1:8000/api/public/";
+        const urlApiPublic = "/api/public/";
         let questions = null;
         let listSave = [];
         let exam_id = null;
