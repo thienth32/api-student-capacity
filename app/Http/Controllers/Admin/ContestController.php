@@ -771,7 +771,7 @@ class ContestController extends Controller
         }
         $capacityArrId= array_unique($capacityArrId);
         unset($capacityArrId[array_search($id_capacity,$capacityArrId)]);
-       $capacitys= $this->contest->getContest()::whereIn('id', $capacityArrId)->limit(request('limit') ?? 4)->get();
+        $capacitys= $this->contest->getContest()::whereIn('id', $capacityArrId)->limit(request('limit') ?? 4)->get();
         $capacitys->load(['rounds']);
         return response()->json([
             'status' => true,
