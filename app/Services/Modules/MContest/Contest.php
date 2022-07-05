@@ -30,7 +30,7 @@ class Contest
         $this->carbon = $carbon;
     }
 
-    public function getList($flagCapacity , $request)
+    private function getList($flagCapacity , $request)
     {
         $with = [];
 
@@ -47,6 +47,7 @@ class Contest
             'enterprise',
             'judges'
         ];
+
         if ($flagCapacity) $with = [
             'rounds' => function ($q) {
                 return $q->with([
@@ -80,6 +81,21 @@ class Contest
                 ->with($with)
                 ->withCount('teams');
     }
+
+    public function index()
+    {
+        return $this->getList(false, request())
+            ->where('type', request('type') ?? 0)
+            ->paginate(request('limit') ?? 10);
+    }
+
+    public function apiIndex($flagCapacity = false)
+    {
+        return $this->getList($flagCapacity,request())
+            ->where('type', config('util.TYPE_CONTEST'))
+            ->paginate(request('limit') ?? 9);
+    }
+
 
     public function store($filename , $request)
     {

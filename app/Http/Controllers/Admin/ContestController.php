@@ -40,17 +40,6 @@ class ContestController extends Controller
         $this->db = $db;
     }
 
-    /**
-     *  Get list contest
-     */
-    private function getList($flagCapacity = false)
-    {
-        try {
-            return $this->contest->getList($flagCapacity,request());
-        } catch (\Throwable $th) {
-            return false;
-        }
-    }
 
     private function checkTypeContest()
     {
@@ -61,11 +50,10 @@ class ContestController extends Controller
     public function index()
     {
         $this->checkTypeContest();
-        if (!($data = $this->getList())) return abort(404);
+        if (!($data = $this->contest->index())) return abort(404);
 
         return view('pages.contest.index', [
-            'contests' => $data ->where('type', request('type') ?? 0)
-                                ->paginate(request('limit') ?? 10),
+            'contests' => $data ,
             'majors' => Major::where('parent_id', 0)->get(),
             'contest_type_text' =>  request('type') == 1 ? 'test năng lực' : 'cuộc thi'
         ]);
@@ -74,8 +62,7 @@ class ContestController extends Controller
     //  Response contest
     public function apiIndex()
     {
-//        $data = $this->getList();
-        if (!($data = $this->getList())) return $this->responseApi(
+        if (!($data = $this->contest->apiIndex())) return $this->responseApi(
             [
                 "status" => false,
                 "payload" => "Not found",
@@ -85,7 +72,7 @@ class ContestController extends Controller
         return $this->responseApi(
             [
                 "status" => true,
-                "payload" => $data->where('type', config('util.TYPE_CONTEST'))->paginate(request('limit') ?? 9),
+                "payload" => $data,
             ]
         );
     }
@@ -96,7 +83,7 @@ class ContestController extends Controller
     public function apiIndexCapacity()
     {
 
-        if (!($data = $this->getList(true))) return $this->responseApi(
+        if (!($data = $this->contest->apiIndex(true))) return $this->responseApi(
             [
                 "status" => false,
                 "payload" => "Not found",
@@ -106,7 +93,7 @@ class ContestController extends Controller
         return $this->responseApi(
             [
                 "status" => true,
-                "payload" => $data->where('type', config('util.TYPE_TEST'))->paginate(request('limit') ?? 9),
+                "payload" => $data ,
             ]
         );
     }
@@ -124,10 +111,10 @@ class ContestController extends Controller
     {
 
         $this->checkTypeContest();
-        if ($request->hasFile('img')) {
-            $fileImage = $request->file('img');
-            $filename = $this->uploadFile($fileImage);
-        }
+//        if ($request->hasFile('img')) {
+//            $fileImage = $request->file('img');
+//            $filename = $this->uploadFile($fileImage);
+//        }
         $this->db::beginTransaction();
         try {
             $contest = $this->contest->store($filename,$request);
@@ -142,6 +129,7 @@ class ContestController extends Controller
             return $redirect::back()->with('error', 'Thêm mới thất bại !');
         }
     }
+
     public function un_status($id)
     {
         try {
@@ -195,6 +183,7 @@ class ContestController extends Controller
             return abort(404);
         }
     }
+
     public function edit($id)
     {
 
@@ -407,7 +396,7 @@ class ContestController extends Controller
 
     public function softDelete()
     {
-        $listContestSofts = $this->getList()->paginate(request('limit') ?? 5);
+        $listContestSofts = $this->contest->index();
         return view('pages.contest.contest-soft-delete', [
             'listContestSofts' => $listContestSofts
         ]);
