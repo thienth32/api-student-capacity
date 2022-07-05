@@ -19,6 +19,11 @@ use Spatie\Permission\Models\Role;
 class UserController extends Controller
 {
     use TUploadImage, TCheckUserDrugTeam;
+
+
+    public function __construct(private User $user , private Role $role)
+    {}
+
     public function TeamUserSearch(Request $request)
     {
 
@@ -86,7 +91,7 @@ class UserController extends Controller
     {
         try {
             $limit = 10;
-            $users = User::status(request('status') ?? null)
+            $users = $this->user::status(request('status') ?? null)
                 ->sort(request('sort') == 'asc' ? 'asc' : 'desc', request('sort_by') ?? null, 'users')
                 ->search(request('q') ?? null, ['name', 'email'])
                 ->has_role(request('role') ?? null)
@@ -132,7 +137,7 @@ class UserController extends Controller
     public function listAdmin()
     {
         if (!$users = $this->getUser()) return abort(404);
-        $roles =  Role::all();
+        $roles =  $this->role::all();
         return view('pages.auth.index', ['users' => $users, 'roles' => $roles]);
     }
 
@@ -149,7 +154,7 @@ class UserController extends Controller
             'payload' => 'Không thể câp nhật trạng thái !',
         ]);
         try {
-            $user = User::find($id);
+            $user = $this->user::find($id);
             $user->update([
                 'status' => 0,
             ]);
@@ -173,7 +178,7 @@ class UserController extends Controller
             'payload' => 'Không thể câp nhật trạng thái !',
         ]);
         try {
-            $user = User::find($id);
+            $user = $this->user::find($id);
             $user->update([
                 'status' => 1,
             ]);
@@ -195,11 +200,11 @@ class UserController extends Controller
 
         $data = explode("&&&&", $request->role);
 
-        if (!$role = Role::whereName($data[0])->first()) return response()->json([
+        if (!$role = $this->role::whereName($data[0])->first()) return response()->json([
             'status' => false,
             'payload' => 'Không có quyền  !',
         ]);
-        if (!$user = User::find($data[1])) return response()->json([
+        if (!$user = $this->user::find($data[1])) return response()->json([
             'status' => false,
             'payload' => 'Không tìm thấy tài khoản  !',
         ]);
@@ -233,54 +238,54 @@ class UserController extends Controller
             'payload' => $request->user()->toArray()
         ]);
     }
-    public function add_user(Request $request)
-    {
-        // validator
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'name' => 'required|max:255',
-                'email' => 'required|email|max:255|unique:users',
-            ],
-            [
-                'name.required' => 'Chưa nhập trường này !',
-                'name.max' => 'Độ dài tên không phù hợp!',
-
-                'email.required' => 'Chưa nhập trường này !',
-                'email.email' => 'Không đúng định dạng email !',
-                'email.max' => 'Độ dài email không phù hợp!',
-                'email.unique' => 'Email đã tồn tại!',
-            ]
-        );
-        // dd($validator->errors()->toArray());
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'payload' => $validator->errors()
-            ]);
-        }
-        DB::beginTransaction();
-        try {
-            $model = new User();
-            $model->fill($request->all());
-            $model->save();
-            $role = Role::find($request->role_id);
-            $model->assignRole($role->name);
-            DB::commit();
-        } catch (Exception $ex) {
-            Log::error("Lỗi tạo tài khoản:");
-            Log::info("post data: " . json_encode($request->all()));
-            DB::rollBack();
-            return response()->json([
-                'status' => false,
-                'payload' => $ex->getMessage()
-            ]);
-        }
-        return response()->json([
-            'status' => true,
-            'payload' => $model->toArray()
-        ]);
-    }
+//    public function add_user(Request $request)
+//    {
+//        // validator
+//        $validator = Validator::make(
+//            $request->all(),
+//            [
+//                'name' => 'required|max:255',
+//                'email' => 'required|email|max:255|unique:users',
+//            ],
+//            [
+//                'name.required' => 'Chưa nhập trường này !',
+//                'name.max' => 'Độ dài tên không phù hợp!',
+//
+//                'email.required' => 'Chưa nhập trường này !',
+//                'email.email' => 'Không đúng định dạng email !',
+//                'email.max' => 'Độ dài email không phù hợp!',
+//                'email.unique' => 'Email đã tồn tại!',
+//            ]
+//        );
+//        // dd($validator->errors()->toArray());
+//        if ($validator->fails()) {
+//            return response()->json([
+//                'status' => false,
+//                'payload' => $validator->errors()
+//            ]);
+//        }
+//        DB::beginTransaction();
+//        try {
+//            $model = new User();
+//            $model->fill($request->all());
+//            $model->save();
+//            $role = Role::find($request->role_id);
+//            $model->assignRole($role->name);
+//            DB::commit();
+//        } catch (Exception $ex) {
+//            Log::error("Lỗi tạo tài khoản:");
+//            Log::info("post data: " . json_encode($request->all()));
+//            DB::rollBack();
+//            return response()->json([
+//                'status' => false,
+//                'payload' => $ex->getMessage()
+//            ]);
+//        }
+//        return response()->json([
+//            'status' => true,
+//            'payload' => $model->toArray()
+//        ]);
+//    }
 
     public function block_user(Request $request, $id)
     {
@@ -307,7 +312,7 @@ class UserController extends Controller
 
     public function updateRoleUser(Request $request, $id)
     {
-        $user = User::find($id);
+        $user = $this->user::find($id);
         if (is_null($user)) {
             return response()->json([
                 'status' => false,
