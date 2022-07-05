@@ -7,7 +7,7 @@ use App\Models\Contest;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Http\Request;
-
+use Menu;
 class DashboardController extends Controller
 {
     public function index(Request $request)

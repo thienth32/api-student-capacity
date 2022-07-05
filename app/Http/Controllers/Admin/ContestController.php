@@ -46,38 +46,7 @@ class ContestController extends Controller
     private function getList($flagCapacity = false)
     {
         try {
-            $with = [];
-
-            if (!$flagCapacity) $with = [
-                'major',
-                'teams',
-                'rounds' => function ($q) {
-                    return $q->with([
-                        'teams' => function ($q) {
-                            return $q->with('members');
-                        }
-                    ]);
-                },
-                'enterprise',
-                'judges'
-            ];
-            if ($flagCapacity) $with = [
-                'rounds' => function ($q) {
-                    return $q->with([
-                        'exams' => function ($q) {
-                            return $q->with([
-                                'questions' => function ($q) {
-                                    return $q->with('answers');
-                                }
-                            ]);
-                        }
-                    ]);
-                }
-            ];
-
-            $data =  $this->contest->getList($with,request());
-
-            return $data;
+            return $this->contest->getList($flagCapacity,request());
         } catch (\Throwable $th) {
             return false;
         }
@@ -92,12 +61,11 @@ class ContestController extends Controller
     public function index()
     {
         $this->checkTypeContest();
-        if (!($data = $this->getList()
-                            ->where('type', request('type') ?? 0)
-                            ->paginate(request('limit') ?? 10))) return abort(404);
+        if (!($data = $this->getList())) return abort(404);
 
         return view('pages.contest.index', [
-            'contests' => $data,
+            'contests' => $data ->where('type', request('type') ?? 0)
+                                ->paginate(request('limit') ?? 10),
             'majors' => Major::where('parent_id', 0)->get(),
             'contest_type_text' =>  request('type') == 1 ? 'test năng lực' : 'cuộc thi'
         ]);
