@@ -1,6 +1,7 @@
 <?php
 const ROLE_ADMINS = 'admin|super admin';
 const ROLE_JUDGE = 'admin|super admin|judge';
+const TYPE_CAPACITY = 1;
 return [
     [
         "icon" => '
@@ -63,14 +64,14 @@ return [
         "subs-menu" => [
             [
                 "name" => "Danh sách test năng lực ",
-                "param" => '?type=' . config('util.TYPE_TEST'),
+                "param" => '?type=' . TYPE_CAPACITY,
                 "link" => "admin.contest.list",
                 "role" => ROLE_ADMINS
             ],
             [
                 "name" => "Thêm mới test năng lực",
                 "link" => "admin.contest.create",
-                "param" => '?type=' . config('util.TYPE_TEST'),
+                "param" => '?type=' . TYPE_CAPACITY,
                 "role" => ROLE_ADMINS,
             ]
         ]
