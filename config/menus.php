@@ -37,7 +37,7 @@ return [
                 "role" => ROLE_ADMINS,
             ]
         ]
-    ],
+    ],// Cuoc thi
     [
         "icon" => '
             <!--begin::Svg Icon | path: icons/duotune/communication/com013.svg-->
@@ -74,7 +74,7 @@ return [
                 "role" => ROLE_ADMINS,
             ]
         ]
-    ],
+    ],// Test nang luc
     [
         "icon" => '
            <!--begin::Svg Icon | path: icons/duotune/communication/com013.svg-->
@@ -100,7 +100,7 @@ return [
                 "role" => ROLE_ADMINS
             ]
         ]
-    ],
+    ],// Tai khoan
     [
         "icon" => '
             <span class="svg-icon svg-icon-primary svg-icon-2x">
@@ -133,7 +133,7 @@ return [
                 "role" => ROLE_ADMINS
             ]
         ]
-    ],
+    ],// Doi thi
     [
         "icon" => '
            <span class="svg-icon svg-icon-primary svg-icon-2x">
@@ -169,7 +169,7 @@ return [
                 "role" => ROLE_ADMINS
             ]
         ]
-    ],
+    ],// Doanh nghiep
     [
         "icon" => '
             <!--begin::Svg Icon | path: icons/duotune/communication/com013.svg-->
@@ -205,7 +205,7 @@ return [
                 "role" => ROLE_ADMINS
             ]
         ]
-    ],
+    ],// Chuyen nganh
     [
         "icon" => '
             <!--begin::Svg Icon | path: icons/duotune/communication/com013.svg-->
@@ -239,7 +239,7 @@ return [
                 "role" => ROLE_ADMINS
             ]
         ]
-    ],
+    ],// Ki nang
     [
         "icon" => '
            <!--begin::Svg Icon | path: icons/duotune/communication/com013.svg-->
@@ -274,7 +274,7 @@ return [
                 "role" => ROLE_ADMINS
             ]
         ]
-    ],
+    ],// Slider
     [
         "icon" => '
          <!--begin::Svg Icon | path: icons/duotune/communication/com013.svg-->
@@ -311,7 +311,7 @@ return [
                 "role" => ROLE_ADMINS
             ]
         ]
-    ],
+    ],// Cau hoi
     [
         "icon" => '
       <!--begin::Svg Icon | path: icons/duotune/communication/com013.svg-->
@@ -346,7 +346,7 @@ return [
                 "role" => ROLE_ADMINS
             ]
         ]
-    ],
+    ],// Tuyen dung
     [
         "icon" => '
    <!--begin::Svg Icon | path: icons/duotune/communication/com013.svg-->
@@ -387,5 +387,5 @@ return [
                 "role" => ROLE_ADMINS
             ]
         ]
-    ],
+    ],// Bai viet
 ];
