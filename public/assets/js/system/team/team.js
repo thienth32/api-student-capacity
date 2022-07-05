@@ -74,7 +74,7 @@ const teamPage = {
                 }
 
                 function loadUserTeam(data) {
-                    data.reverse();
+                    // data.reverse();
                     checkUserArray(data);
                     var _html = ``;
                     _html += /*html*/ `
@@ -84,21 +84,24 @@ const teamPage = {
                     $.map(data, function(val, key) {
                                 _html += /*html*/ `
                     <tr>
-                        <td>${key +1}</td>
+                        <td>${key + 1}</td>
                         <td>${val.email_user}</td>
                         <td>
                             ${val.name_user}
                             <input hidden type="text" value="${val.id_user}" class="user_id"  name="user_id[]" >
                         </td>
                         
-                        ${
-                            (!(typeof judges !== "undefined"))?`
+                        ${(!(typeof judges !== "undefined")) ? `
                             <td>
                                 <label class="form-label" for="${val.id_user}">
-                                    <input checked type="radio" id="${val.id_user}" value="${val.id_user}"  name="bot_user" >
-                                        Trưởng nhóm
+                                ${(typeof team !== "undefined") ? `
+                                        <input  checked  type="radio" id="${val.id_user}" value="${val.id_user}"  name="bot_user" >
+                                    `: `
+                                        <input ${ (val.bot === 1) ?'checked':'' }   type="radio" id="${val.id_user}" value="${val.id_user}"  name="bot_user" >
+                                    `}
+                                    Trưởng nhóm
                                 </label>
-                            </td>`:``
+                            </td>`:`` 
                         }
                         <td>
                             <button data-idUser='${key}' class="deleteUserArray btn btn-danger" type="button" >
@@ -149,9 +152,9 @@ const teamPage = {
                 }
             }
 
+            $(this).remove();
             loadUserTeam(userArray);
             checkUserArray(userArray)
-            $(this).remove();
         });
 
         // xóa user ra khỏi mảng

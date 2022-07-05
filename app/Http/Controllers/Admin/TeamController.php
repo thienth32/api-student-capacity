@@ -98,32 +98,45 @@ class TeamController extends Controller
 
     public function create()
     {
-        $contests = Contest::all();
+        $contests = Contest::where('type', 0)->get();
         return view('pages.team.form-add', compact('contests'));
     }
 
     public function store(Request $request)
     {
+
         return $this->addTeamContest($request, null, Redirect::route('admin.teams'), Redirect::back());
     }
 
     public function edit($id)
     {
         $userArray = [];
-        $users = User::all();
-        $contests = Contest::all();
+        // $users = User::all();
+        $contests = Contest::where('type', 0)->get();
         $team = Team::find($id);
-        foreach ($users as $user) {
-            foreach ($team->members as $me) {
-                if ($user->id == $me->id) {
-                    array_push($userArray, [
-                        'id_user' => $user->id,
-                        'email_user' => $user->email,
-                        'name_user' => $user->name
-                    ]);
-                }
-            }
+        // foreach ($users as $user) {
+        //     foreach ($team->members as $me) {
+        //         if ($user->id == $me->id) {
+        //             array_push($userArray, [
+        //                 'id_user' => $user->id,
+        //                 'email_user' => $user->email,
+        //                 'name_user' => $user->name
+        //             ]);
+        //         }
+        //     }
+        // }
+
+        foreach ($team->members as $me) {
+            array_push($userArray, [
+                'id_user' => $me->id,
+                'email_user' => $me->email,
+                'name_user' => $me->name,
+                'bot' => $me->pivot->bot,
+            ]);
         }
+        // dump($team->members->toArray());
+        // dump($userArray);
+        // die;
         return view('pages.team.form-edit', compact('contests', 'team', 'userArray'));
     }
     public function update(Request $request, $id_team)

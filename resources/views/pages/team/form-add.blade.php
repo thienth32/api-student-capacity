@@ -119,6 +119,7 @@
         }
         preview.showFile('#file-input', '#image-preview');
         var userArray = @json($userArray ?? []);
+        var team = 0;
         var _token = "{{ csrf_token() }}";
         var id_contest = 0;
         var urlSearch = "{{ route('admin.user.TeamUserSearch') }}";

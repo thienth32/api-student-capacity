@@ -97,8 +97,8 @@
                         <div class="col-lg-4">
                             <div class="form-group ">
                                 <label for="" class="form-label">Ảnh đội thi</label>
-                                <input value="{{ old('image', $team->image) }}" name="image" type='file' id="file-input"
-                                    accept=".png, .jpg, .jpeg" class="form-control" />
+                                <input value="{{ old('image', $team->image) }}" name="image" type='file'
+                                    id="file-input" accept=".png, .jpg, .jpeg" class="form-control" />
                                 @error('image')
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
@@ -129,6 +129,7 @@
     <script>
         preview.showFile('#file-input', '#image-preview');
         var userArray = @json($userArray ?? []);
+        console.log(userArray);
         var _token = "{{ csrf_token() }}";
         var max_user = "{{ $contest->max_user }}";
         var id_contest = "{{ $team->contest_id }}";
