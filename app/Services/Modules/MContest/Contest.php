@@ -4,6 +4,7 @@ namespace App\Services\Modules\MContest;
 use App\Models\Major;
 use App\Models\Contest as ModelContest;
 use App\Models\Team;
+use App\Models\Judge;
 use App\Services\Traits\TUploadImage;
 use Carbon\Carbon;
 
@@ -13,22 +14,59 @@ class Contest
     private $contest;
     private $major;
     private $team;
+    private $judge;
+    private $carbon;
 
-    public function __construct(ModelContest $contest, Major $major, Team $team)
+    public function __construct(
+        ModelContest $contest,
+        Major $major, Team $team ,
+        Judge $judge ,
+        Carbon $carbon)
     {
         $this->contest = $contest;
         $this->major = $major;
         $this->team = $team;
+        $this->judge = $judge;
+        $this->carbon = $carbon;
     }
 
-    public function getList($with , $request)
+    public function getList($flagCapacity , $request)
     {
-        $now = Carbon::now('Asia/Ho_Chi_Minh');
+        $with = [];
+
+        if (!$flagCapacity) $with = [
+            'major',
+            'teams',
+            'rounds' => function ($q) {
+                return $q->with([
+                    'teams' => function ($q) {
+                        return $q->with('members');
+                    }
+                ]);
+            },
+            'enterprise',
+            'judges'
+        ];
+        if ($flagCapacity) $with = [
+            'rounds' => function ($q) {
+                return $q->with([
+                    'exams' => function ($q) {
+                        return $q->with([
+                            'questions' => function ($q) {
+                                return $q->with('answers');
+                            }
+                        ]);
+                    }
+                ]);
+            }
+        ];
+
+        $now = $this->carbon::now('Asia/Ho_Chi_Minh');
         return  $this->contest::when($request->has('contest_soft_delete'), function ($q) {
                     return $q->onlyTrashed();
                 })
                 ->when(auth()->check() && auth()->user()->hasRole('judge'), function ($q) {
-                    return $q->whereIn('id', array_unique(Judge::where('user_id', auth()->user()->id)->pluck('contest_id')->toArray()));
+                    return $q->whereIn('id', array_unique($this->judge::where('user_id', auth()->user()->id)->pluck('contest_id')->toArray()));
                 })
                 ->search($request->q ?? null, ['name'], true)
                 ->missingDate('register_deadline', $request->miss_date ?? null, $now->toDateTimeString())
