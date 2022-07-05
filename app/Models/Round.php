@@ -112,6 +112,6 @@ class Round extends Model
 
     public function exams()
     {
-        return $this->hasMany(Exams::class, 'round_id');
+        return $this->hasMany(Exam::class, 'round_id');
     }
 }

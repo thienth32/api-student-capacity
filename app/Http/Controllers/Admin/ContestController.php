@@ -9,7 +9,7 @@ use App\Models\User;
 use App\Models\Judge;
 use App\Models\Major;
 use App\Services\Modules\MContest\Contest;
-use App\Models\Skills;
+use App\Models\Skill;
 use App\Models\Enterprise;
 use Illuminate\Http\Request;
 use App\Services\Traits\TResponse;
@@ -366,7 +366,7 @@ class ContestController extends Controller
         return view('pages.contest.detail.detail', compact('contest'));
     }
 
-    public function show_test_capacity(Request $request, $id ,Skills $skillModel)
+    public function show_test_capacity(Request $request, $id , Skill $skillModel)
     {
         if (! $this->contest->getContest()::where('type', 1)->whereId($id)->exists()) abort(404);
         $test_capacity =  $this->contest->getContest()::where('type', 1)

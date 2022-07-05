@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Exports\QuestionsExport;
 use App\Http\Controllers\Controller;
 use App\Imports\QuestionsImport;
-use App\Models\Answers;
-use App\Models\Exams;
+use App\Models\Answer;
+use App\Models\Exam;
 use App\Models\Questions;
-use App\Models\Skills;
+use App\Models\Skill;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -21,7 +21,7 @@ class QuestionController extends Controller
     protected $skillModel;
     protected $questionModel;
     protected $answerModel;
-    public function __construct(Skills $skills, Questions $questions, Answers $answers)
+    public function __construct(Skill $skills, Questions $questions, Answer $answers)
     {
         $this->skillModel = $skills;
         $this->questionModel = $questions;
@@ -361,7 +361,7 @@ class QuestionController extends Controller
     {
         try {
             $ids = [];
-            $exams = Exams::whereId($request->exam_id)->first();
+            $exams = Exam::whereId($request->exam_id)->first();
             foreach ($request->question_ids ?? [] as $question_id) {
                 array_push($ids, (int)$question_id['id']);
             }
@@ -381,7 +381,7 @@ class QuestionController extends Controller
     public function remove_question_by_exams(Request $request)
     {
         try {
-            $exams = Exams::whereId($request->exam_id)->first();
+            $exams = Exam::whereId($request->exam_id)->first();
             $exams->questions()->detach($request->questions_id);
             return response()->json([
                 'status' => true,

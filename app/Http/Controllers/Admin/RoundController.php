@@ -9,11 +9,11 @@ use App\Models\Donor;
 use App\Models\DonorRound;
 use App\Models\Enterprise;
 use App\Models\Evaluation;
-use App\Models\HistoryPoints;
+use App\Models\HistoryPoint;
 use App\Models\Judge;
 use App\Models\Round;
 use App\Models\RoundTeam;
-use App\Models\TakeExams;
+use App\Models\TakeExam;
 use App\Models\Team;
 use App\Models\TypeExam;
 use App\Services\Traits\TResponse;
@@ -628,7 +628,7 @@ class RoundController extends Controller
                 'user_id' => auth()->user()->id,
 
             ];
-            $takeExam = TakeExams::find($takeExamId);
+            $takeExam = TakeExam::find($takeExamId);
             if ($takeExam) {
 
                 $takeExam->history_point()->create($dataCreate);
@@ -689,9 +689,9 @@ class RoundController extends Controller
                 foreach ($takeExam->evaluation as $key => $item) {
                     $data[$key] = $item->id;
                 }
-                $historyPoint2 = HistoryPoints::whereIn('historiable_id', $data)->orderByDesc('id')->get();
+                $historyPoint2 = HistoryPoint::whereIn('historiable_id', $data)->orderByDesc('id')->get();
                 // dd($historyPoint2);
-                $historyPoint = HistoryPoints::where('historiable_id', $takeExam->id)->orderByDesc('id')->get();
+                $historyPoint = HistoryPoint::where('historiable_id', $takeExam->id)->orderByDesc('id')->get();
             }
 
             return view(

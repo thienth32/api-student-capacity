@@ -77,7 +77,7 @@ class Contest extends Model
     }
     public function skills()
     {
-        return $this->belongsToMany(Skills::class, 'contest_skills', 'contest_id', 'skill_id')->withTimestamps();
+        return $this->belongsToMany(Skill::class, 'contest_skills', 'contest_id', 'skill_id')->withTimestamps();
     }
     public function contest_users()
     {
@@ -91,8 +91,8 @@ class Contest extends Model
     public function take_exams()
     {
         return $this->hasManyDeep(
-            TakeExams::class,
-            [Round::class, Exams::class],
+            TakeExam::class,
+            [Round::class, Exam::class],
             [
                 'contest_id',
                 'round_id',

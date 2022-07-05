@@ -15,10 +15,10 @@ class Evaluation extends Model
 
     public function judge_round()
     {
-        return $this->belongsTo(Judges_round::class, 'judge_round_id')->with('judge');
+        return $this->belongsTo(Judge_round::class, 'judge_round_id')->with('judge');
     }
     public function history_point()
     {
-        return $this->morphOne(HistoryPoints::class, 'historiable');
+        return $this->morphOne(HistoryPoint::class, 'historiable');
     }
 }

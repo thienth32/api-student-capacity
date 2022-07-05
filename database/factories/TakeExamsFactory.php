@@ -2,13 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\Exams;
+use App\Models\Exam;
 use App\Models\RoundTeam;
 use Faker\Provider\ar_EG\Text;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TakeExams>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TakeExam>
  */
 class TakeExamsFactory extends Factory
 {
@@ -20,7 +20,7 @@ class TakeExamsFactory extends Factory
     public function definition()
     {
         return [
-            'exam_id' => Exams::all()->random()->id,
+            'exam_id' => Exam::all()->random()->id,
             'round_team_id' => RoundTeam::all()->random()->id,
             'final_point' => 10,
             'result_url' => $this->faker->url(),

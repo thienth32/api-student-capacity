@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Major;
 use App\Models\MajorSkill;
-use App\Models\Skills;
+use App\Models\Skill;
 use Carbon\Carbon;
 use App\Services\Traits\TUploadImage;
 use Illuminate\Http\Request;
@@ -26,10 +26,10 @@ class SkillController extends Controller
         $softDelete = $request->has('skill_soft_delete') ? $request->skill_soft_delete : null;
 
         if ($softDelete != null) {
-            $query = Skills::onlyTrashed()->where('name', 'like', "%$keyword%")->orderByDesc('deleted_at');
+            $query = Skill::onlyTrashed()->where('name', 'like', "%$keyword%")->orderByDesc('deleted_at');
             return $query;
         }
-        $query = Skills::where('name', 'like', "%$keyword%");
+        $query = Skill::where('name', 'like', "%$keyword%");
         if ($major != null) {
             $query = Major::find($major);
         }
@@ -69,7 +69,7 @@ class SkillController extends Controller
     {
         DB::beginTransaction();
         try {
-            $data = Skills::find($id);
+            $data = Skill::find($id);
 
             DB::commit();
             return view('pages.skill.detailSkill', compact('data'));
@@ -137,7 +137,7 @@ class SkillController extends Controller
                 $data['image_url'] = $logo;
             }
 
-            $newSkill = Skills::create($data);
+            $newSkill = Skill::create($data);
 
             if ($newSkill) {
 
@@ -163,7 +163,7 @@ class SkillController extends Controller
     public function edit(Request $request, $id)
     {
 
-        $data =  Skills::find($id);
+        $data =  Skill::find($id);
         $dataMajor = Major::where('parent_id', 0)->get();
 
         return view('pages.skill.form-edit', compact('data', 'dataMajor'));
@@ -198,7 +198,7 @@ class SkillController extends Controller
 
         DB::beginTransaction();
         try {
-            $skill = Skills::find($id);
+            $skill = Skill::find($id);
             if (!$skill) {
                 return redirect('error');
             }
@@ -234,7 +234,7 @@ class SkillController extends Controller
         try {
             if (!(auth()->user()->hasRole('super admin'))) return false;
             DB::transaction(function () use ($id) {
-                if (!($data = Skills::find($id))) return false;
+                if (!($data = Skill::find($id))) return false;
                 if (Storage::disk('s3')->has($data->image_url)) Storage::disk('s3')->delete($data->image_url);
                 $data->delete();
             });
@@ -253,7 +253,7 @@ class SkillController extends Controller
     public function backUpSkill($id)
     {
         try {
-            Skills::withTrashed()->where('id', $id)->restore();
+            Skill::withTrashed()->where('id', $id)->restore();
             return redirect()->back();
         } catch (\Throwable $th) {
             return abort(404);
@@ -266,7 +266,7 @@ class SkillController extends Controller
         try {
             if (!(auth()->user()->hasRole('super admin'))) return false;
 
-            Skills::withTrashed()->where('id', $id)->forceDelete();
+            Skill::withTrashed()->where('id', $id)->forceDelete();
             return redirect()->back();
         } catch (\Throwable $th) {
             return abort(404);

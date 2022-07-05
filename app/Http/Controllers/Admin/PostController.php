@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Validator;
 
 use function GuzzleHttp\Promise\all;
 
-class PostsController extends Controller
+class PostController extends Controller
 {
     use TUploadImage;
     use TResponse;

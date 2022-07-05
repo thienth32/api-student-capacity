@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class TakeExams extends Model
+class TakeExam extends Model
 {
     use SoftDeletes;
     use \Znck\Eloquent\Traits\BelongsToThrough;
@@ -23,7 +23,7 @@ class TakeExams extends Model
     use HasFactory;
     public function exam()
     {
-        return $this->belongsTo(Exams::class, 'exam_id', 'id');
+        return $this->belongsTo(Exam::class, 'exam_id', 'id');
     }
     public function evaluations()
     {
@@ -35,7 +35,7 @@ class TakeExams extends Model
     }
     public function history_point()
     {
-        return $this->morphOne(HistoryPoints::class, 'historiable');
+        return $this->morphOne(HistoryPoint::class, 'historiable');
     }
     public function teams()
     {
