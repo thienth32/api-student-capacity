@@ -110,11 +110,11 @@ class EnterpriseController extends Controller
                 'link_web' => $request->link_web,
 
             ];
-            if ($request->has('logo')) {
-                $fileImage =  $request->file('logo');
-                $logo = $this->uploadFile($fileImage);
-                $data['logo'] = $logo;
-            }
+        
+            $logo = $this->uploadFile($request->file('logo'));
+            if(!$logo)  return redirect()->back()->with('error', 'Thêm mới thất bại !'); 
+            $data['logo'] = $logo;
+          
 
             Enterprise::create($data);
             Db::commit();

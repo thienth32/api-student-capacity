@@ -218,8 +218,8 @@ class ContestController extends Controller
                 ));
 
                 if ($request->has('img')) {
-                    $fileImage =  $request->file('img');
-                    $img = $this->uploadFile($fileImage, $contest->img);
+                    $img = $this->uploadFile($request->file('img'), $contest->img);
+                    if(!$img)  return redirect()->back()->with('error', 'Cập nhật thất bại !');
                     $dataSave = array_merge($request->except(['_method','_token','img']) , [
                         'reward_rank_point' => $rewardRankPoint,
                         'img' => $img
@@ -238,7 +238,7 @@ class ContestController extends Controller
             }
         }catch (\Exception $e) {
             $this->db::rollBack();
-            return redirect()->back()->with('error', 'Cập nhật thất bại !');;
+            return redirect()->back()->with('error', 'Cập nhật thất bại !');
         }
 
     }
