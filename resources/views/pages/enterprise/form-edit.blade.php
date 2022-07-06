@@ -1,7 +1,21 @@
 @extends('layouts.main')
-@section('title', 'Chỉnh sửa doanh nghiệp')
-@section('page-title', 'Chỉnh sửa doanh nghiệp')
+@section('title', 'Cập nhập doanh nghiệp')
+@section('page-title', 'Cập nhập doanh nghiệp')
 @section('content')
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <ol class="breadcrumb text-muted fs-6 fw-bold">
+                <li class="breadcrumb-item pe-3">
+
+                    <a href="{{ route('admin.enterprise.list') }}" class="pe-3">
+                        Danh sách doanh nghiệp
+                    </a>
+
+                </li>
+                <li class="breadcrumb-item px-3 text-muted">Cập nhập doanh nghiệp : {{ $enterprise->name }}</li>
+            </ol>
+        </div>
+    </div>
     <div class="card card-flush p-4">
         <div class="row">
 

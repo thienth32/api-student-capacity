@@ -1,7 +1,19 @@
 @extends('layouts.main')
-@section('title', 'Thêm câu hỏi')
+@section('title', 'Thêm mới câu hỏi')
 @section('page-title', 'Thêm mới câu hỏi')
 @section('content')
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <ol class="breadcrumb text-muted fs-6 fw-bold">
+                <li class="breadcrumb-item pe-3">
+                    <a href="{{ route('admin.question.index') }}" class="pe-3">
+                        Danh sách câu hỏi
+                    </a>
+                </li>
+                <li class="breadcrumb-item px-3 text-muted">Thêm mới câu hỏi </li>
+            </ol>
+        </div>
+    </div>
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
@@ -91,7 +103,8 @@
                                     data-hide-search="true" data-placeholder="Chọn trạng thái" tabindex="-1"
                                     aria-hidden="true" name="status" value="{{ old('status') }}">
                                     <option data-select2-id="select2-data-130-vofb"></option>
-                                    <option {{ old('status') == 0 ? 'selected' : '' }} value="0">Không kích hoạt</option>
+                                    <option {{ old('status') == 0 ? 'selected' : '' }} value="0">Không kích hoạt
+                                    </option>
                                     <option selected {{ old('status') == 1 ? 'selected' : '' }} value="1">Kích hoạt
                                     </option>
                                 </select>
@@ -117,13 +130,13 @@
                         <!--begin::Form group-->
                         <div class="form-group">
                             <div data-repeater-list="answers">
-                                @for ($i = 0; $i < 4; $i++)
+                                @for ($i = 0; $i < 3; $i++)
                                     <div data-repeater-item>
                                         <div class="form-group row pb-5">
                                             <div class="col-md-6">
                                                 <label class="form-label">Nội dung đáp án</label>
-                                                <input value="{{ old("answers.$i.content") }}" name="content" type="text"
-                                                    class="form-control mb-2 mb-md-0" />
+                                                <input value="{{ old("answers.$i.content") }}" name="content"
+                                                    type="text" class="form-control mb-2 mb-md-0" />
                                                 @if ($errors->has("answers.$i.content"))
                                                     <p class="text-danger">
                                                         {{ $errors->first("answers.$i.content") }}
@@ -134,10 +147,16 @@
                                                 <div class="form-check form-check-custom form-check-solid mt-2 mt-md-11">
                                                     <label class="form-check-label">
                                                         <input name="is_correct" class="form-check-input is_correct"
-                                                            {{ $i == 2 ? 'checked' : '' }} type="radio" value="1" />
+                                                            {{ $i == 2 ? 'checked' : '' }} type="radio"
+                                                            value="1" />
                                                         Đúng
                                                     </label>
                                                 </div>
+                                                {{-- @if ($errors->has("answers.$i.is_correct"))
+                                                    <p class="text-danger">
+                                                        {{ $errors->first("answers.$i.is_correct") }}
+                                                    </p>
+                                                @endif --}}
                                             </div>
 
                                             <div class="col-md-4">

@@ -6,7 +6,7 @@
 
 
     <div class="card card-flush p-4">
-        <div class="row">
+        <div class="row mb-4">
             <div class=" col-lg-6">
 
                 <h1>Quản lý câu hỏi

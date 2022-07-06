@@ -2,24 +2,24 @@
 @section('title', 'Danh sách kỹ năng theo chuyên ngành')
 @section('page-title', 'Danh sách kỹ năng theo chuyên ngành')
 @section('content')
-    <div class=" card card-flush p-5">
-        <div class="row pb-5">
-            <div class="col-lg-12">
-                <ol class="breadcrumb text-muted fs-6 fw-bold">
-                    <li class="breadcrumb-item pe-3">
-                        <a href="{{ route('admin.major.list') }}" class="pe-3">Chuyên ngành</a>
-                    </li>
-                    <li class="breadcrumb-item px-3 ">
-                        <a href="{{ route('admin.major.skill', ['slug' => $major->slug]) }}" class="pe-3">
-                            {{ $major->name }}
-                        </a>
-                    </li>
-                    <li class="breadcrumb-item px-3 text-muted">
-                        Danh sách kỹ năng
-                    </li>
-                </ol>
-            </div>
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <ol class="breadcrumb text-muted fs-6 fw-bold">
+                <li class="breadcrumb-item pe-3">
+                    <a href="{{ route('admin.major.list') }}" class="pe-3">Danh sách chuyên ngành</a>
+                </li>
+                <li class="breadcrumb-item px-3 ">
+                    <a href="{{ route('admin.major.skill', ['slug' => $major->slug]) }}" class="pe-3">
+                        Chuyên ngành : {{ $major->name }}
+                    </a>
+                </li>
+                <li class="breadcrumb-item px-3 text-muted">
+                    Danh sách kỹ năng
+                </li>
+            </ol>
         </div>
+    </div>
+    <div class=" card card-flush p-5">
         <div class="row">
             <div class="col-lg-12">
                 <form id="formTeam" action="{{ route('admin.major.skill.attach', ['slug' => $major->slug]) }}"
@@ -99,8 +99,8 @@
                                                             <h5 class="modal-title" id="exampleModalLabel"> Giới Thiệu Về
                                                                 kỹ năng
                                                             </h5>
-                                                            <button type="button" class="btn-close"
-                                                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body  ">
                                                             {{ $item->description }}
