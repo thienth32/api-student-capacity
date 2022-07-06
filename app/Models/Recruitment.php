@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Casts\FormatDate;
 use App\Casts\FormatImageGet;
 
-class Recruitments extends Model
+class Recruitment extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = 'recruitments';

@@ -73,7 +73,7 @@
                                     @if (get_class($listSoft->postable) == \App\Models\Round::class)
                                         Vòng thi : <b><a
                                                 href="{{ route('admin.round.detail', ['id' => $listSoft->postable->id]) }}">{{ $listSoft->postable->name }}</a></b>
-                                    @elseif (get_class($listSoft->postable) == \App\Models\Recruitments::class)
+                                    @elseif (get_class($listSoft->postable) == \App\Models\Recruitment::class)
                                         Tuyển dụng :
                                         <b><a
                                                 href="{{ route('admin.recruitment.detail', ['id' => $listSoft->postable->id]) }}">{{ $listSoft->postable->name }}</a></b>

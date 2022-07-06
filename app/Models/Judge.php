@@ -22,12 +22,12 @@ class Judge extends Model
 
     public function judge_rounds()
     {
-        return $this->hasMany(Judge_round::class, 'judge_id');
+        return $this->hasMany(JudgeRound::class, 'judge_id');
     }
 
     public function evaluation()
     {
-        return $this->hasManyThrough(Evaluation::class, Judge_round::class, 'judge_id', 'judge_round_id', 'id');
+        return $this->hasManyThrough(Evaluation::class, JudgeRound::class, 'judge_id', 'judge_round_id', 'id');
     }
     public function user()
     {

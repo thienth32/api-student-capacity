@@ -15,7 +15,7 @@ class Evaluation extends Model
 
     public function judge_round()
     {
-        return $this->belongsTo(Judge_round::class, 'judge_round_id')->with('judge');
+        return $this->belongsTo(JudgeRound::class, 'judge_round_id')->with('judge');
     }
     public function history_point()
     {

@@ -399,7 +399,7 @@
                                     @if (get_class($key->postable) == \App\Models\Round::class)
                                         Vòng thi : <b><a
                                                 href="{{ route('admin.round.detail', ['id' => $key->postable->id]) }}">{{ $key->postable->name }}</a></b>
-                                    @elseif (get_class($key->postable) == \App\Models\Recruitments::class)
+                                    @elseif (get_class($key->postable) == \App\Models\Recruitment::class)
                                         Tuyển dụng :
                                         <b><a
                                                 href="{{ route('admin.recruitment.detail', ['id' => $key->postable->id]) }}">{{ $key->postable->name }}</a></b>

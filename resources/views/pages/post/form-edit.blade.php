@@ -53,7 +53,7 @@
                                         class="mygroup btn {{ $post->postable !== null && get_class($post->postable) == \App\Models\Round::class ? 'btn-primary' : 'btn-light' }} col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 click-round">
                                         Vòng thi</button>
                                     <button type="button"
-                                        class="click-recruitment   btn {{ $post->postable !== null && get_class($post->postable) == \App\Models\Recruitments::class ? 'btn-primary' : 'btn-light' }} col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 ">
+                                        class="click-recruitment   btn {{ $post->postable !== null && get_class($post->postable) == \App\Models\Recruitment::class ? 'btn-primary' : 'btn-light' }} col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 ">
                                         Tuyển dụng</button>
                                 </div>
                                 <br>
@@ -110,7 +110,7 @@
                                         </div>
 
                                     </div>
-                                    <div style="{{ $post->postable !== null && get_class($post->postable) == \App\Models\Recruitments::class ? '' : 'display:none' }}"
+                                    <div style="{{ $post->postable !== null && get_class($post->postable) == \App\Models\Recruitment::class ? '' : 'display:none' }}"
                                         id="recruitment">
                                         <div class="form-group mb-10">
                                             <label for="" class="form-label">Tuyển dụng</label>
@@ -118,7 +118,7 @@
                                                 data-control="select2" data-placeholder="Chọn cuộc thi ">
                                                 <option value="0">Chọn tuyển dụng</option>
                                                 @foreach ($recruitments as $item)
-                                                    <option @selected(($post->postable != null ? $post->postable->id : 0) === $item->id && get_class($post->postable) == \App\Models\Recruitments::class) value="{{ $item->id }}">
+                                                    <option @selected(($post->postable != null ? $post->postable->id : 0) === $item->id && get_class($post->postable) == \App\Models\Recruitment::class) value="{{ $item->id }}">
                                                         {{ $item->name }}
                                                     </option>
                                                 @endforeach

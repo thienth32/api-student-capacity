@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Judge;
-use App\Models\Judge_round;
+use App\Models\JudgeRound;
 use App\Models\TakeExam;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -22,7 +22,7 @@ class EvaluationFactory extends Factory
         return [
             'ponit' => mt_rand(1, 10),
             'exams_team_id' => TakeExam::all()->random()->id,
-            'judge_round_id' => Judge_round::all()->random()->id,
+            'judge_round_id' => JudgeRound::all()->random()->id,
         ];
     }
 }

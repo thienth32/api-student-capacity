@@ -47,7 +47,7 @@ class PostController extends Controller
             return $query;
         }
         if ($recruitment != 0) {
-            $query = Recruitments::find($recruitment);
+            $query = Recruitment::find($recruitment);
             return $query;
         }
         $query = Post::where('title', 'like', "%$keyword%");
@@ -80,7 +80,7 @@ class PostController extends Controller
             $round = null;
             if (request()->has('round_id')) $round = Round::find(request('round_id'))->load('contest');
             $contest = Contest::where('type', 0)->get();
-            $recruitments = Recruitments::all();
+            $recruitments = Recruitment::all();
             $rounds = Round::all();
             $posts = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
 
@@ -150,7 +150,7 @@ class PostController extends Controller
         DB::beginTransaction();
         try {
             $contest = Contest::where('type', 0)->get();
-            $recruitments = Recruitments::all();
+            $recruitments = Recruitment::all();
             $rounds = Round::all();
 
             DB::commit();
@@ -167,7 +167,7 @@ class PostController extends Controller
         DB::beginTransaction();
         try {
             $contest = Contest::where('type', 0)->get();
-            $recruitments = Recruitments::all();
+            $recruitments = Recruitment::all();
             $rounds = Round::all();
 
             DB::commit();
@@ -236,7 +236,7 @@ class PostController extends Controller
                 $dataRound = Round::find($request->round_id);
                 $dataRound->posts()->create($data);
             } elseif ($request->recruitment_id != 0) {
-                $dataRound = Recruitments::find($request->recruitment_id);
+                $dataRound = Recruitment::find($request->recruitment_id);
                 $dataRound->posts()->create($data);
             }
 
@@ -269,7 +269,7 @@ class PostController extends Controller
         try {
             $round = null;
             $contest = Contest::where('type', 0)->get();
-            $recruitments = Recruitments::all();
+            $recruitments = Recruitment::all();
             $post = $this->getList($request)->where('slug', $slug)->first();
             $post->load('postable');
             if ($post->postable && (get_class($post->postable) == Round::class)) {
@@ -348,7 +348,7 @@ class PostController extends Controller
                 $post->postable_type = Round::class;
             } elseif ($request->recruitment_id != 0) {
                 $post->postable_id = $request->recruitment_id;
-                $post->postable_type = Recruitments::class;
+                $post->postable_type = Recruitment::class;
             }
             $post->save();
 
