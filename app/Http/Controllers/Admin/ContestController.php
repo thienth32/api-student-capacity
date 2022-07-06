@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\Contest\RequestContest;
+use App\Services\Traits\TStatus;
 use Exception;
 use App\Models\Team;
 use App\Models\User;
@@ -26,12 +27,13 @@ use Illuminate\Support\Facades\Validator;
 
 class ContestController extends Controller
 {
-    use TUploadImage, TResponse, TTeamContest;
+    use TUploadImage, TResponse, TTeamContest , TStatus;
 
     private $contest;
     private $major;
     private $team;
     private $db;
+
     public function __construct(Contest $contest, Major $major, Team $team , DB $db)
     {
         $this->contest = $contest;
@@ -40,10 +42,14 @@ class ContestController extends Controller
         $this->db = $db;
     }
 
-
     private function checkTypeContest()
     {
         if (request('type') != config('util.TYPE_CONTEST') && request('type') != config('util.TYPE_TEST')) abort(404);
+    }
+
+    public function getModelDataStatus($id)
+    {
+        return $this->contest->find($id);
     }
 
     //  View contest
@@ -62,19 +68,8 @@ class ContestController extends Controller
     //  Response contest
     public function apiIndex()
     {
-        if (!($data = $this->contest->apiIndex())) return $this->responseApi(
-            [
-                "status" => false,
-                "payload" => "Not found",
-            ],
-            404
-        );
-        return $this->responseApi(
-            [
-                "status" => true,
-                "payload" => $data,
-            ]
-        );
+        if (!($data = $this->contest->apiIndex())) return $this->responseApi(false);
+        return $this->responseApi(true , $data);
     }
     /**
      *  End contest
@@ -82,20 +77,8 @@ class ContestController extends Controller
 
     public function apiIndexCapacity()
     {
-
-        if (!($data = $this->contest->apiIndex(true))) return $this->responseApi(
-            [
-                "status" => false,
-                "payload" => "Not found",
-            ],
-            404
-        );
-        return $this->responseApi(
-            [
-                "status" => true,
-                "payload" => $data ,
-            ]
-        );
+        if (!($data = $this->contest->apiIndex(true))) return $this->responseApi(false);
+        return $this->responseApi(true, $data);
     }
 
 
@@ -111,12 +94,9 @@ class ContestController extends Controller
     {
 
         $this->checkTypeContest();
-//        if ($request->hasFile('img')) {
-//            $fileImage = $request->file('img');
-//            $filename = $this->uploadFile($fileImage);
-//        }
         $this->db::beginTransaction();
         try {
+            $filename = $this->uploadFile($request->img);
             $contest = $this->contest->store($filename,$request);
             $this->db::commit();
             return $redirect::route('admin.contest.show', ['id' => $contest->id])->with('success', 'Thêm mới thành công !');
@@ -127,45 +107,6 @@ class ContestController extends Controller
             }
             $this->db::rollBack();
             return $redirect::back()->with('error', 'Thêm mới thất bại !');
-        }
-    }
-
-    public function un_status($id)
-    {
-        try {
-            $contest = $this->contest->find($id);
-            $contest->update([
-                'status' => 0,
-            ]);
-
-            return response()->json([
-                'status' => true,
-                'payload' => 'Success'
-            ]);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'payload' => 'Không thể câp nhật trạng thái !',
-            ]);
-        }
-    }
-
-    public function re_status($id)
-    {
-        try {
-            $contest = $this->contest->find($id);
-            $contest->update([
-                'status' => 1,
-            ]);
-            return response()->json([
-                'status' => true,
-                'payload' => 'Success'
-            ]);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'payload' => 'Không thể câp nhật trạng thái !',
-            ]);
         }
     }
 
@@ -278,34 +219,13 @@ class ContestController extends Controller
     {
         try {
             //
-            if (!($contest = $this->getContest($id, config('util.TYPE_CONTEST')))) return $this->responseApi(
-                [
-                    'status' => false,
-                    'payload' => 'Không tìm thấy cuộc thi !',
-                ]
-            );
-            if (!($contest2 = $this->addCollectionApiContest($contest)->first())) return $this->responseApi(
-                [
-                    'status' => false,
-                    'payload' => 'Không thể lấy thông tin cuộc thi  !',
-                ]
-            );
+            if (!($contest = $this->getContest($id, config('util.TYPE_CONTEST')))) return $this->responseApi(false,'Không tìm thấy cuộc thi !');
+            if (!($contest2 = $this->addCollectionApiContest($contest)->first())) return $this->responseApi(false,'Không thể lấy thông tin cuộc thi  !');
 
-            return $this->responseApi(
-                [
-                    "status" => true,
-                    "payload" => $contest2,
-                ]
-            );
+            return $this->responseApi(true,$contest2);
         } catch (\Throwable $th) {
 
-            return $this->responseApi(
-                [
-                    "status" => false,
-                    "payload" => 'Not found ',
-                ],
-                404
-            );
+            return $this->responseApi(false );
         }
     }
 
@@ -314,26 +234,10 @@ class ContestController extends Controller
         $contest = $this->getContest($id, config('util.TYPE_TEST'))->first()->load('rounds');
         try {
             if (is_null($contest))
-                return $this->responseApi(
-                    [
-                        'status' => false,
-                        'payload' => 'Không tìm thấy bài test năng lực !',
-                    ]
-                );
-            return $this->responseApi(
-                [
-                    "status" => true,
-                    "payload" => $contest,
-                ]
-            );
+                return $this->responseApi(false,'Không tìm thấy bài test năng lực !');
+            return $this->responseApi(true,$contest);
         } catch (\Throwable $th) {
-            return $this->responseApi(
-                [
-                    "status" => false,
-                    "payload" => 'Not found ',
-                ],
-                404
-            );
+            return $this->responseApi(false );
         }
     }
 
@@ -536,7 +440,6 @@ class ContestController extends Controller
             Log::info('..--..');
             Log::info($th->getMessage());
             Log::info('..--..');
-            dd($th);
         }
     }
 
@@ -609,12 +512,7 @@ class ContestController extends Controller
     {
         $capacityArrId= [];
         $capacity = $this->contest->find($id_capacity);
-        if(is_null($capacity)) return $this->responseApi(
-            [
-                'status' => false,
-                'payload' => 'Không tìm thấy bài test năng lực !',
-            ]
-        );
+        if(is_null($capacity)) return $this->responseApi(false, 'Không tìm thấy bài test năng lực !');
         $capacity->load(['recruitment'=>function($q){
             return $q->with(['contest'=>function($q){
                 //  return $q->get(['id']);
@@ -629,10 +527,7 @@ class ContestController extends Controller
         unset($capacityArrId[array_search($id_capacity,$capacityArrId)]);
         $capacitys= $this->contest->getContest()::whereIn('id', $capacityArrId)->limit(request('limit') ?? 4)->get();
         $capacitys->load(['rounds']);
-        return response()->json([
-            'status' => true,
-            'payload' => $capacitys,
-        ]);
+        return $this->responseApi(true,$capacitys);
     }
 }
 

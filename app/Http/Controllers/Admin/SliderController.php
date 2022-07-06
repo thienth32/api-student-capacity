@@ -8,12 +8,13 @@ use App\Models\Contest;
 use App\Models\Major;
 use App\Models\Round;
 use App\Models\Slider;
+use App\Services\Traits\TStatus;
 use App\Services\Traits\TUploadImage;
 use Illuminate\Http\Request;
 
 class SliderController extends Controller
 {
-    use TUploadImage;
+    use TUploadImage,TStatus;
 
     private $slider;
     private $major;
@@ -68,43 +69,9 @@ class SliderController extends Controller
         }
     }
 
-    public function un_status($id)
+    public function getModelDataStatus($id)
     {
-        try {
-            $slider = $this->slider::find($id);
-            $slider->update([
-                'status' => 0,
-            ]);
-
-            return response()->json([
-                'status' => true,
-                'payload' => 'Success'
-            ]);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'payload' => 'Không thể câp nhật trạng thái !',
-            ]);
-        }
-    }
-
-    public function re_status($id)
-    {
-        try {
-            $slider = $this->slider::find($id);
-            $slider->update([
-                'status' => 1,
-            ]);
-            return response()->json([
-                'status' => true,
-                'payload' => 'Success'
-            ]);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'payload' => 'Không thể câp nhật trạng thái !',
-            ]);
-        }
+        return $this->slider::find($id);
     }
 
     public function create()

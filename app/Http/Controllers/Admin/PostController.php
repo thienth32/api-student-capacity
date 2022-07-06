@@ -10,8 +10,9 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\Contest;
 use App\Models\Enterprise;
-use App\Models\Recruitments;
+use App\Models\Recruitment;
 use App\Models\Round;
+use App\Services\Traits\TStatus;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 
@@ -20,7 +21,7 @@ use function GuzzleHttp\Promise\all;
 class PostController extends Controller
 {
     use TUploadImage;
-    use TResponse;
+    use TResponse,TStatus;
     private function getList(Request $request)
     {
         $keyword = $request->has('keyword') ? $request->keyword : "";
@@ -107,44 +108,13 @@ class PostController extends Controller
             return redirect('error');
         };
     }
-    public function un_status($id)
-    {
-        try {
-            $post = Post::find($id);
-            $post->update([
-                'status' => 0,
-            ]);
 
-            return response()->json([
-                'status' => true,
-                'payload' => $post
-            ]);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'payload' => 'Không thể câp nhật trạng thái !',
-            ]);
-        }
+    public function getModelDataStatus($id)
+    {
+        return Post::find($id);
     }
 
-    public function re_status($id)
-    {
-        try {
-            $post = Post::find($id);
-            $post->update([
-                'status' => 1,
-            ]);
-            return response()->json([
-                'status' => true,
-                'payload' => $post
-            ]);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'payload' => 'Không thể câp nhật trạng thái !',
-            ]);
-        }
-    }
+
     public function create(Request $request)
     {
         DB::beginTransaction();

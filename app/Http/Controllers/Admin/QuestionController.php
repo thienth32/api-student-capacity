@@ -9,6 +9,7 @@ use App\Models\Answer;
 use App\Models\Exam;
 use App\Models\Questions;
 use App\Models\Skill;
+use App\Services\Traits\TStatus;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,6 +19,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class QuestionController extends Controller
 {
+    use TStatus;
     protected $skillModel;
     protected $questionModel;
     protected $answerModel;
@@ -289,44 +291,9 @@ class QuestionController extends Controller
         return Redirect::route('admin.question.index');
     }
 
-
-    public function un_status(Request $request)
+    public function getModelDataStatus($id)
     {
-        try {
-            $question = $this->questionModel::find($request->id);
-            $question->update([
-                'status' => 0,
-            ]);
-
-            return response()->json([
-                'status' => true,
-                'payload' => 'Success'
-            ]);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'payload' => 'Không thể câp nhật trạng thái !',
-            ]);
-        }
-    }
-
-    public function re_status(Request $request)
-    {
-        try {
-            $question = $this->questionModel::find($request->id);
-            $question->update([
-                'status' => 1,
-            ]);
-            return response()->json([
-                'status' => true,
-                'payload' => 'Success'
-            ]);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'payload' => 'Không thể câp nhật trạng thái !',
-            ]);
-        }
+        return $this->questionModel::find($id);
     }
 
     public function softDeleteList()
