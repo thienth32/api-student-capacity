@@ -15,7 +15,6 @@ use App\Models\Enterprise;
 use Illuminate\Http\Request;
 use App\Services\Traits\TResponse;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\ContestUser;
 use App\Models\Round;
@@ -238,7 +237,6 @@ class ContestController extends Controller
 
     public function contestDetailTeamAddSelect(Request  $request,Redirect $redirect, $id)
     {
-        // dd($request->all());
         $contest = $this->contest->find($id);
         $team = $this->team::find($request->team_id);
         if (is_null($contest) && is_null($team)) {
