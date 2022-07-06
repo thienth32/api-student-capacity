@@ -16,7 +16,7 @@ use App\Services\Traits\TStatus;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 
-use function GuzzleHttp\Promise\all;
+//use function GuzzleHttp\Promise\all;
 
 class PostController extends Controller
 {
@@ -82,6 +82,7 @@ class PostController extends Controller
             if (request()->has('round_id')) $round = Round::find(request('round_id'))->load('contest');
             $contest = Contest::where('type', 0)->get();
             $recruitments = Recruitment::all();
+
             $rounds = Round::all();
             $posts = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
 
