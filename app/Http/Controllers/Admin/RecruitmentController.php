@@ -6,7 +6,7 @@ use App\Services\Traits\TUploadImage;
 use App\Http\Controllers\Controller;
 use App\Models\Contest;
 use App\Models\Enterprise;
-use App\Models\Recruitments;
+use App\Models\Recruitment;
 use Carbon\Carbon;
 use App\Services\Traits\TResponse;
 use Illuminate\Http\Request;

@@ -16,7 +16,7 @@ use App\Services\Traits\TStatus;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 
-use function GuzzleHttp\Promise\all;
+//use function GuzzleHttp\Promise\all;
 
 class PostController extends Controller
 {
