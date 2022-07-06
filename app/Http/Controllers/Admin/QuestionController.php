@@ -21,11 +21,13 @@ class QuestionController extends Controller
     protected $skillModel;
     protected $questionModel;
     protected $answerModel;
-    public function __construct(Skill $skills, Questions $questions, Answer $answers)
+    protected $examModel;
+    public function __construct(Skill $skill, Questions $question, Answer $answer, Exam $exam)
     {
-        $this->skillModel = $skills;
-        $this->questionModel = $questions;
-        $this->answerModel = $answers;
+        $this->skillModel = $skill;
+        $this->questionModel = $question;
+        $this->answerModel = $answer;
+        $this->examModel = $exam;
     }
 
     /**
@@ -134,19 +136,18 @@ class QuestionController extends Controller
                 'status.numeric' => 'Sai định dạng !',
                 'rank.required' => 'Chưa nhập trường này !',
                 'rank.numeric' => 'Sai định dạng !',
-
                 'skill.required' =>  'Chưa nhập trường này !',
                 'skill.*.required' =>  'Chưa nhập trường này !',
             ]
         );
-        // dd($validator->messages());
-        if ($validator->fails() || count($request->answers) <= 2) {
-            if (count($request->answers) <= 2) {
+        if ($validator->fails() || !isset($request->answers)) {
+            if (!isset($request->answers)) {
                 return redirect()->back()->withErrors($validator)->with('errorAnswerConten', 'Phải ít nhất 3 đáp án !!')->withInput($request->input());
+            } else {
+                if (count($request->answers) <= 2) return redirect()->back()->withErrors($validator)->with('errorAnswerConten', 'Phải ít nhất 3 đáp án !!')->withInput($request->input());
             }
             return redirect()->back()->withErrors($validator)->withInput();
         }
-
         DB::beginTransaction();
         try {
             $question = $this->questionModel::create([
@@ -361,7 +362,7 @@ class QuestionController extends Controller
     {
         try {
             $ids = [];
-            $exams = Exam::whereId($request->exam_id)->first();
+            $exams = $this->examModel::whereId($request->exam_id)->first();
             foreach ($request->question_ids ?? [] as $question_id) {
                 array_push($ids, (int)$question_id['id']);
             }
@@ -381,7 +382,7 @@ class QuestionController extends Controller
     public function remove_question_by_exams(Request $request)
     {
         try {
-            $exams = Exam::whereId($request->exam_id)->first();
+            $exams = $this->examModel::whereId($request->exam_id)->first();
             $exams->questions()->detach($request->questions_id);
             return response()->json([
                 'status' => true,

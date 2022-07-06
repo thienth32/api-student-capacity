@@ -1,7 +1,19 @@
 @extends('layouts.main')
-@section('title', 'Chỉnh sửa câu hỏi')
-@section('page-title', 'Chỉnh sửa câu hỏi')
+@section('title', 'Cập nhập câu hỏi')
+@section('page-title', 'Cập nhập câu hỏi')
 @section('content')
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <ol class="breadcrumb text-muted fs-6 fw-bold">
+                <li class="breadcrumb-item pe-3">
+                    <a href="{{ route('admin.question.index') }}" class="pe-3">
+                        Danh sách câu hỏi
+                    </a>
+                </li>
+                <li class="breadcrumb-item px-3 text-muted">Cập nhập câu hỏi </li>
+            </ol>
+        </div>
+    </div>
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
@@ -80,7 +92,8 @@
                                     <option {{ old('type', $question->type) == 0 ? 'selected' : '' }} value="0">
                                         Một đáp án
                                     </option>
-                                    <option {{ old('type', $question->type) == 1 ? 'selected' : '' }} value="1">Nhiều đáp
+                                    <option {{ old('type', $question->type) == 1 ? 'selected' : '' }} value="1">
+                                        Nhiều đáp
                                         án
                                     </option>
                                 </select>
@@ -96,7 +109,8 @@
                                     data-hide-search="true" data-placeholder="Chọn trạng thái" tabindex="-1"
                                     aria-hidden="true" name="status" value="{{ old('status') }}">
                                     <option data-select2-id="select2-data-130-vofb"></option>
-                                    <option {{ old('status') == 0 ? 'selected' : '' }} value="0">Không kích hoạt</option>
+                                    <option {{ old('status') == 0 ? 'selected' : '' }} value="0">Không kích hoạt
+                                    </option>
                                     <option selected {{ old('status') == 1 ? 'selected' : '' }} value="1">Kích hoạt
                                     </option>
                                 </select>
@@ -169,7 +183,7 @@
                                         </div>
                                     @endforeach
                                 @else
-                                    @for ($i = 0; $i < 4; $i++)
+                                    @for ($i = 0; $i < 3; $i++)
                                         <div data-repeater-item>
                                             <div class="form-group row pb-5">
                                                 <div class="col-md-6">
@@ -187,7 +201,8 @@
                                                         class="form-check form-check-custom form-check-solid mt-2 mt-md-11">
                                                         <label class="form-check-label">
                                                             <input name="is_correct" class="form-check-input is_correct"
-                                                                {{ $i == 2 ? 'checked' : '' }} type="radio" value="1" />
+                                                                {{ $i == 2 ? 'checked' : '' }} type="radio"
+                                                                value="1" />
                                                             Đúng
                                                         </label>
                                                     </div>

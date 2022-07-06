@@ -2,6 +2,20 @@
 @section('title', 'Thêm mới slider ')
 @section('page-title', 'Thêm mới slider ')
 @section('content')
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <ol class="breadcrumb text-muted fs-6 fw-bold">
+                <li class="breadcrumb-item pe-3">
+
+                    <a href="{{ route('admin.sliders.list') }}" class="pe-3">
+                        Danh sách slider
+                    </a>
+
+                </li>
+                <li class="breadcrumb-item px-3 text-muted">Thêm mới slider </li>
+            </ol>
+        </div>
+    </div>
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
@@ -13,14 +27,15 @@
                         <img class="pb-4" style=" width: 100%" id="previewImg">
 
                     </div>
-                    <div>
+
+                    <div class="form-group mb-10">
                         <label for="" class="form-label">Ảnh</label>
                         <input name="image_url" type="file" class="file-change form-control">
                         @error('image_url')
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
                     </div>
-                    <div>
+                    <div class="form-group mb-10">
                         <label for="" class="form-label">Hình thức lọc ảnh </label>
                         <select class="form-select" data-control="select2" data-placeholder="Select an option">
                             <option value="1">Dạng cột </option>
@@ -110,7 +125,8 @@
                         </div>
                     </div>
                     <div class="form-group mb-10 ">
-                        <button type="submit" name="" id="" class="btn btn-success btn-lg btn-block">Lưu
+                        <button type="submit" name="" id=""
+                            class="btn btn-success btn-lg btn-block">Lưu
                         </button>
                     </div>
 

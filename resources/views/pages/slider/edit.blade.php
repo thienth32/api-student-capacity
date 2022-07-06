@@ -2,12 +2,26 @@
 @section('title', 'Cập nhật slider ')
 @section('page-title', 'Cập nhật slider ')
 @section('content')
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <ol class="breadcrumb text-muted fs-6 fw-bold">
+                <li class="breadcrumb-item pe-3">
+
+                    <a href="{{ route('admin.sliders.list') }}" class="pe-3">
+                        Danh sách slider
+                    </a>
+
+                </li>
+                <li class="breadcrumb-item px-3 text-muted">Cập nhập slider </li>
+            </ol>
+        </div>
+    </div>
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
 
-                <form id="formAddSlider" action="{{ route('admin.sliders.update', ['id' => $slider->id]) }}" method="post"
-                    enctype="multipart/form-data">
+                <form id="formAddSlider" action="{{ route('admin.sliders.update', ['id' => $slider->id]) }}"
+                    method="post" enctype="multipart/form-data">
                     @csrf
                     @method('put')
                     <div style="width: 80%" class="text-center m-auto">
@@ -16,14 +30,14 @@
                             style=" width: 100%" id="previewImg">
 
                     </div>
-                    <div>
+                    <div class="form-group mb-10">
                         <label for="" class="form-label">Ảnh</label>
                         <input name="image_url" type="file" class="file-change form-control">
                         @error('image_url')
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
                     </div>
-                    <div>
+                    <div class="form-group mb-10">
                         <label for="" class="form-label">Hình thức lọc ảnh </label>
                         <select class="form-select" data-control="select2" data-placeholder="Select an option">
                             <option value="1">Dạng cột </option>
@@ -69,7 +83,7 @@
 
                         </div>
                     </div>
-                    <div class="col-12 pb-2">
+                    <div class="col-12 pb-2 form-group mb-10">
                         <label for="" class="form-label">Thuộc thành phần </label>
                         <div class="row pb-2">
                             <div class="col-4">
@@ -88,7 +102,8 @@
                                     chủ </button>
                             </div>
                         </div>
-                        <div style="{{ $slider->sliderable !== null && get_class($slider->sliderable) == \App\Models\Major::class ? '' : 'display: none' }}"
+                        <div class="form-group mb-10"
+                            style="{{ $slider->sliderable !== null && get_class($slider->sliderable) == \App\Models\Major::class ? '' : 'display: none' }}"
                             id="major">
                             <label class="form-label">Chuyên ngành</label>
                             <select name="major_id" class="form-select form-major" data-control="select2"
@@ -102,20 +117,23 @@
                         </div>
                         <div style="{{ $slider->sliderable !== null && get_class($slider->sliderable) == \App\Models\Round::class ? '' : 'display: none' }}"
                             id="round">
+                            <div class="form-group mb-10">
 
-                            {{--  --}}
-                            <label class="form-label">Cuộc thi </label>
-                            <select id="select-contest-p" class="form-select form-contest " data-control="select2"
-                                data-placeholder="Chọn vòng thi ">
-                                <option value="0">Chọn cuộc thi</option>
-                                @foreach ($contests as $contest)
-                                    <option @selected(($round ? $round->contest->id : 0) == $contest->id) value="{{ $contest->id }}">
-                                        {{ $contest->name }} -
-                                        {{ $contest->rounds_count . ' vòng thi ' }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            <div>
+                                {{--  --}}
+                                <label class="form-label">Cuộc thi </label>
+                                <select id="select-contest-p" class="form-select form-contest " data-control="select2"
+                                    data-placeholder="Chọn vòng thi ">
+                                    <option value="0">Chọn cuộc thi</option>
+                                    @foreach ($contests as $contest)
+                                        <option @selected(($round ? $round->contest->id : 0) == $contest->id) value="{{ $contest->id }}">
+                                            {{ $contest->name }} -
+                                            {{ $contest->rounds_count . ' vòng thi ' }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                {{--  --}}
+                            </div>
+                            <div class="form-group mb-10">
                                 <label class="form-label">Vòng thi </label>
                                 <select id="select-round" name="round_id" class="form-select form-round "
                                     data-control="select2" data-placeholder="Chọn vòng thi ">
@@ -131,11 +149,11 @@
                                             @endif
                                         @endforeach
                                     @else
-                                        <option disabled value="0">Không có vòng thi nào ! Hãy chọn cuộc thi </option>
+                                        <option disabled value="0">Không có vòng thi nào ! Hãy chọn cuộc thi
+                                        </option>
                                     @endif
                                 </select>
                             </div>
-                            {{--  --}}
                         </div>
                     </div>
 
