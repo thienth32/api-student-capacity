@@ -253,7 +253,7 @@ class RoundController extends Controller
     {
         $round = $this->round::whereId($id);
         if (is_null($round)) {
-            return response()->json(['status' => false, 'payload' => 'Không tồn tại trong hệ thống !'], 404);
+            return $this->responseApi(false,'Không tồn tại trong hệ thống !');
         } {
             $round->with('contest');
             $round->with('type_exam');
@@ -263,25 +263,21 @@ class RoundController extends Controller
                 return $q->with('members');
             }]);
 
-            return response()->json(
-                [
-                    'status' => true,
-                    'payload' => $round
-                        ->get()
-                        ->map(function ($col, $key) {
-                            if ($key > 0) return;
-                            $col = $col->toArray();
-                            $user = [];
-                            foreach ($col['judges'] as $judge) {
-                                array_push($user, $judge['user']);
-                            }
-                            $arrResult = array_merge($col, [
-                                'judges' => $user
-                            ]);
-                            return $arrResult;
-                        })[0]
-                ],
-                200
+            return $this->responseApi(true,
+                $round
+                    ->get()
+                    ->map(function ($col, $key) {
+                        if ($key > 0) return;
+                        $col = $col->toArray();
+                        $user = [];
+                        foreach ($col['judges'] as $judge) {
+                            array_push($user, $judge['user']);
+                        }
+                        $arrResult = array_merge($col, [
+                            'judges' => $user
+                        ]);
+                        return $arrResult;
+                    })[0]
             );
         }
     }

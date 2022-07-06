@@ -47,7 +47,6 @@ class ContestController extends Controller
         return $this->contest->find($id);
     }
 
-    //  View contest
     public function index()
     {
         $this->checkTypeContest();
@@ -60,15 +59,11 @@ class ContestController extends Controller
         ]);
     }
 
-    //  Response contest
     public function apiIndex()
     {
         if (!($data = $this->contest->apiIndex())) return $this->responseApi(false);
         return $this->responseApi(true , $data);
     }
-    /**
-     *  End contest
-     */
 
     public function apiIndexCapacity()
     {
