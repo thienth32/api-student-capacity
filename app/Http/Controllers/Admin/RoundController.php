@@ -26,30 +26,20 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Image;
+use App\Services\Modules\MRound\Round as ModelDulesRound;
 
 class RoundController extends Controller
 {
     use TResponse, TUploadImage;
-    private $round;
-    private $contest;
-    private $type_exam;
-    private $modelDulesRound;
-    private $db;
 
     public function __construct(
-        Round $round,
-        \App\Services\Modules\MRound\Round $modelDulesRound,
-        Contest $contest,
-        TypeExam $type_exam,
-        DB $db
+        private Round $round,
+        private ModelDulesRound $modelDulesRound,
+        private Contest $contest,
+        private TypeExam $type_exam,
+        private DB $db
     )
-    {
-        $this->round = $round;
-        $this->contest = $contest;
-        $this->type_exam = $type_exam;
-        $this->modelDulesRound = $modelDulesRound;
-        $this->db = $db;
-    }
+    {}
 
     //  View round
     public function index()
@@ -69,21 +59,10 @@ class RoundController extends Controller
     {
 
         if (!($data = $this->modelDulesRound->apiIndex())) {
-            return $this->responseApi(
-                [
-                    "status" => false,
-                    "payload" => "Server not found",
-                ],
-                404
-            );
+            return $this->responseApi(false);
         }
 
-        return $this->responseApi(
-            [
-                "status" => true,
-                "payload" => $data,
-            ]
-        );
+        return $this->responseApi(true,$data);
 
     }
 
