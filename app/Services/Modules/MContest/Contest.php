@@ -101,11 +101,7 @@ class Contest
     {
 
         $contest = new $this->contest();
-        if ($request->hasFile('img')) {
-            $fileImage = $request->file('img');
-            $filename = $this->uploadFile($fileImage);
-            $contest->img = $filename;
-        }
+        $contest->img = $filename;
         $contest->name = $request->name;
         $contest->img = $filename;
         $contest->max_user = $request->max_user ?? 9999;
