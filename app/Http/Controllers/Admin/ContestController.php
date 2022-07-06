@@ -29,18 +29,14 @@ class ContestController extends Controller
 {
     use TUploadImage, TResponse, TTeamContest , TStatus;
 
-    private $contest;
-    private $major;
-    private $team;
-    private $db;
-
-    public function __construct(Contest $contest, Major $major, Team $team , DB $db)
-    {
-        $this->contest = $contest;
-        $this->major = $major;
-        $this->team = $team;
-        $this->db = $db;
-    }
+    public function __construct(
+        private Contest $contest,
+        private Major $major,
+        private Team $team ,
+        private DB $db,
+        private Storage $storage
+    )
+    { }
 
     private function checkTypeContest()
     {
@@ -90,7 +86,7 @@ class ContestController extends Controller
         return view('pages.contest.form-add', compact('majors', 'contest_type_text'));
     }
 
-    public function store(RequestContest $request, Redirect $redirect, Storage $storage)
+    public function store(RequestContest $request, Redirect $redirect)
     {
 
         $this->checkTypeContest();
@@ -102,8 +98,7 @@ class ContestController extends Controller
             return $redirect::route('admin.contest.show', ['id' => $contest->id])->with('success', 'Thêm mới thành công !');
         } catch (Exception $ex) {
             if ($request->hasFile('img')) {
-                $fileImage = $request->file('img');
-                if ($storage::disk('s3')->has($filename)) $storage::disk('s3')->delete($filename);
+                if ($this->storage::disk('s3')->has($filename)) $this->storage::disk('s3')->delete($filename);
             }
             $this->db::rollBack();
             return $redirect::back()->with('error', 'Thêm mới thất bại !');
@@ -114,9 +109,9 @@ class ContestController extends Controller
     {
         try {
             if (!(auth()->user()->hasRole(config('util.ROLE_DELETE')))) return abort(404);
-            DB::transaction(function () use ($id) {
+            $this->db::transaction(function () use ($id) {
                 $contest = $this->contest->find($id);
-                if (Storage::disk('s3')->has($contest->image)) Storage::disk('s3')->delete($contest->image);
+                if ($this->storage::disk('s3')->has($contest->image)) $this->storage::disk('s3')->delete($contest->image);
                 $contest->delete();
             });
             return redirect()->back();
@@ -170,9 +165,7 @@ class ContestController extends Controller
                         'reward_rank_point' => $rewardRankPoint,
                     ]);
                 }
-
                 $this->contest->update($contest , $dataSave);
-
                 $this->db::commit();
                 // return Redirect::route('admin.contest.list');
                 return redirect(route('admin.contest.list') . '?type=' . request('type') ?? 0);
@@ -194,48 +187,25 @@ class ContestController extends Controller
         }
     }
 
-    private function addCollectionApiContest($contest)
-    {
-        try {
-
-            return $contest->with(['enterprise', 'teams' => function ($q) {
-                return $q->withCount('members');
-            }, 'rounds' => function ($q) {
-                return $q->with([
-                    'teams' => function ($q) {
-                        return $q->with('members');
-                    },
-                    'judges' => function ($q) {
-                        return $q->with('user');
-                    }
-                ]);
-            }, 'judges'])->withCount('rounds');
-        } catch (\Throwable $th) {
-            return false;
-        }
-    }
-
     public function apiShow($id)
     {
         try {
-            //
-            if (!($contest = $this->getContest($id, config('util.TYPE_CONTEST')))) return $this->responseApi(false,'Không tìm thấy cuộc thi !');
-            if (!($contest2 = $this->addCollectionApiContest($contest)->first())) return $this->responseApi(false,'Không thể lấy thông tin cuộc thi  !');
-
-            return $this->responseApi(true,$contest2);
+            if (!($contest = $this->contest->apiShow($id,config('util.TYPE_CONTEST')) ))
+                return $this->responseApi(false,'Không thể lấy thông tin cuộc thi  !');
+            return $this->responseApi(true,$contest);
         } catch (\Throwable $th) {
-
-            return $this->responseApi(false );
+            return $this->responseApi(false);
         }
     }
 
     public function apiShowCapacity($id)
     {
-        $contest = $this->getContest($id, config('util.TYPE_TEST'))->first()->load('rounds');
+
         try {
-            if (is_null($contest))
+            $capacity = $this->contest->apiShow($id,config('util.TYPE_TEST'));
+            if (is_null($capacity))
                 return $this->responseApi(false,'Không tìm thấy bài test năng lực !');
-            return $this->responseApi(true,$contest);
+            return $this->responseApi(true,$capacity);
         } catch (\Throwable $th) {
             return $this->responseApi(false );
         }
@@ -243,43 +213,25 @@ class ContestController extends Controller
 
     public function show(Request $request, $id)
     {
-        $contest =  $this->contest->getContest()::whereId($id)->where('type', config('util.TYPE_CONTEST'))->first()->load(['judges', 'rounds' => function ($q) use ($id) {
-            return $q->when(
-                auth()->check() && auth()->user()->hasRole('judge'),
-                function ($q) use ($id) {
-                    $judge = Judge::where('contest_id', $id)->where('user_id', auth()->user()->id)->with('judge_round')->first('id');
-                    $arrId = [];
-                    foreach ($judge->judge_round as $judge_round) {
-                        array_push($arrId, $judge_round->id);
-                    }
-                    return $q->whereIn('id', $arrId);
-                }
-            );
-        }]);
+        $contest = $this->contest->show($id,config('util.TYPE_CONTEST'));
+        if(!$contest) abort(404);
         return view('pages.contest.detail.detail', compact('contest'));
     }
 
-    public function show_test_capacity(Request $request, $id , Skill $skillModel)
+    public function show_test_capacity(Request $request,Skill $skillModel, $id )
     {
-        if (! $this->contest->getContest()::where('type', 1)->whereId($id)->exists()) abort(404);
-        $test_capacity =  $this->contest->getContest()::where('type', 1)
-            ->whereId($id)
-            ->with([
-                'rounds' => function ($q) {
-                    return $q->with(['exams'])->withCount('exams');
-                }
-            ])
-            ->first();
+        $capacity = $this->contest->show($id,config('util.TYPE_TEST'));
+        if (!$capacity) abort(404);
         $skills = $skillModel::all();
         return view('pages.contest.detail-capacity.detail', [
-            'test_capacity' => $test_capacity,
+            'test_capacity' => $capacity,
             'skills' => $skills
         ]);
     }
 
     public function contestDetailTeam($id)
     {
-        $contest =   $this->contest->find($id);
+        $contest = $this->contest->find($id);
         $teams = $this->team::get()->load('contest');
         return view('pages.contest.detail.team.contest-team', compact('contest', 'teams'));
     }
@@ -309,7 +261,7 @@ class ContestController extends Controller
     public function backUpContest($id)
     {
         try {
-            $this->contest->getContest()::withTrashed()->where('id', $id)->restore();
+            $this->contest->backUpContest($id);
             return redirect()->back();
         } catch (\Throwable $th) {
             return abort(404);
@@ -319,36 +271,36 @@ class ContestController extends Controller
     public function deleteContest($id)
     {
         try {
-            $this->contest->getContest()::withTrashed()->where('id', $id)->forceDelete();
+            $this->contest->deleteContest($id);
             return redirect()->back();
         } catch (\Throwable $th) {
             return abort(404);
         }
     }
+
     public function contestDetailEnterprise($id , Enterprise $enterpriseModel)
     {
-        if (!($contestEnterprise = $this->contest->find($id)->load('enterprise')->enterprise()->paginate(5))) return abort(404);
         $contest =  $this->contest->find($id);
+        if (!($contestEnterprise = $contest->load('enterprise')->enterprise()->paginate(5))) return abort(404);
         $enterprise = $enterpriseModel::all();
         return view('pages.contest.detail.enterprise', ['contest' => $contest, 'contestEnterprise' => $contestEnterprise, 'enterprise' => $enterprise]);
     }
     public function attachEnterprise(Request $request, $id)
     {
         try {
-
             $this->contest->find($id)->enterprise()->syncWithoutDetaching($request->enterprise_id);
-            return Redirect::back();
+            return redirect()->back();
         } catch (\Throwable $th) {
-            return Redirect::back();
+            return redirect()->back();
         }
     }
     public function detachEnterprise($id, $enterprise_id)
     {
         try {
             $this->contest->find($id)->enterprise()->detach([$enterprise_id]);
-            return Redirect::back();
+            return redirect()->back();
         } catch (\Throwable $th) {
-            return Redirect::back();
+            return redirect()->back();
         }
     }
 
@@ -399,7 +351,7 @@ class ContestController extends Controller
                 ]
             );
         } else {
-            return Redirect::back();
+            return redirect()->back();
         }
     }
 
@@ -409,9 +361,10 @@ class ContestController extends Controller
         if (!is_null($contest)) {
             return $this->editTeamContest($request, $id_team, $id_contest, Redirect::route('admin.contest.detail.team', ['id' => $id_contest]), Redirect::back());
         } else {
-            return Redirect::back();
+            return redirect()->back();
         }
     }
+
     public function userTeamRound($roundId, Round $round)
     {
         $team_id = 0;
@@ -437,20 +390,13 @@ class ContestController extends Controller
                 'payload' => $team,
             ]);
         } catch (\Throwable $th) {
-            Log::info('..--..');
-            Log::info($th->getMessage());
-            Log::info('..--..');
+
         }
     }
 
     public function sendMail($id)
     {
-        $contest = $this->contest->getContest()::findOrFail($id)->load([
-            'judges',
-            'teams' => function ($q) {
-                return $q->with(['members']);
-            }
-        ]);
+        $contest = $this->contest->sendMail($id);
         $judges = $contest->judges;
         $users = [];
         if (count($contest->teams) > 0) {
@@ -466,12 +412,17 @@ class ContestController extends Controller
     public function register_deadline($id)
     {
         if (!$contest = $this->contest->find($id)) abort(404);
-        $take_exams = $contest->take_exams()->with(['teams' => function ($q) use ($contest) {
-            return $q->where('contest_id', $contest->id)->with('users');
-        }])->orderByDesc('final_point')->orderByDesc('updated_at')->get();
+        $take_exams = $contest->take_exams()
+            ->with([
+                'teams' => function ($q) use ($contest) {
+                    return $q->where('contest_id', $contest->id)->with('users');
+                }
+            ])
+            ->orderByDesc('final_point')
+            ->orderByDesc('updated_at')->get();
         $pointAdd = json_decode($contest->reward_rank_point);
         try {
-            DB::transaction(function () use ($contest, $pointAdd, $take_exams) {
+            $this->db::transaction(function () use ($contest, $pointAdd, $take_exams) {
                 foreach ($take_exams as $key => $take_exam) {
                     if ($key == 0) {
                         if ($take_exam->teams) $this->updateUserAddPoint($take_exam->teams->users, $contest->id, $pointAdd->top1 ?? 0);

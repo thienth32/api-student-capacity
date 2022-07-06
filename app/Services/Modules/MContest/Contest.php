@@ -11,24 +11,16 @@ use Carbon\Carbon;
 class Contest
 {
     use TUploadImage;
-    private $contest;
-    private $major;
-    private $team;
-    private $judge;
-    private $carbon;
+
 
     public function __construct(
-        ModelContest $contest,
-        Major $major, Team $team ,
-        Judge $judge ,
-        Carbon $carbon)
-    {
-        $this->contest = $contest;
-        $this->major = $major;
-        $this->team = $team;
-        $this->judge = $judge;
-        $this->carbon = $carbon;
-    }
+        private ModelContest $contest,
+        private Major $major,
+        private Team $team ,
+        private Judge $judge ,
+        private Carbon $carbon,
+    )
+    {}
 
     private function getList($flagCapacity , $request)
     {
@@ -97,7 +89,7 @@ class Contest
     }
 
 
-    public function store($filename , $request)
+    public function store($filename, $request)
     {
 
         $contest = new $this->contest();
@@ -123,6 +115,100 @@ class Contest
         $contest->reward_rank_point =  $rewardRankPoint;
         $contest->save();
         return $contest;
+    }
+
+    private function whereId($id,$type)
+    {
+        return $this->contest::whereId($id)
+            ->where('type', $type);
+    }
+
+    public function sendMail($id)
+    {
+        return $this->whereId($id,config('util.TYPE_CONTEST'))
+            ->with([
+                'judges',
+                'teams' => function ($q) {
+                    return $q->with(['members']);
+                }
+            ])
+            ->first();
+    }
+
+    public function backUpContest($id)
+    {
+        return $this->contest::withTrashed()->where('id', $id)->restore();
+    }
+
+    public function deleteContest($id)
+    {
+        return $this->contest::withTrashed()->where('id', $id)->forceDelete();
+    }
+
+    public function apiShow($id ,$type )
+    {
+        $with = [
+            'enterprise',
+            'teams' => function ($q) {
+                return $q->withCount('members');
+            },
+            'rounds' => function ($q) {
+                return $q->with([
+                    'teams' => function ($q) {
+                        return $q->with('members');
+                    },
+                    'judges' => function ($q) {
+                        return $q->with('user');
+                    }
+                ]);
+            },
+            'judges'
+        ];
+        if($type == config('util.TYPE_TEST')) $with = ['rounds'];
+        $contest = $this->whereId($id ,$type )
+            ->with(
+                $with
+            )
+            ->withCount('rounds')
+            ->first();
+        return $contest;
+    }
+
+    public function show($id,$type)
+    {
+        $with = [
+            'judges',
+            'rounds' => function ($q) use ($id) {
+                return $q->when(//
+                    auth()->check() && auth()->user()->hasRole('judge'),
+                    function ($q) use ($id) {
+                        $judge = $this->judge::where('contest_id', $id)
+                            ->where('user_id', auth()->user()->id)
+                            ->with('judge_round')
+                            ->first('id');
+                        $arrId = [];
+                        foreach ($judge->judge_round as $judge_round) {
+                            array_push($arrId, $judge_round->id);
+                        }
+                        return $q->whereIn('id', $arrId);
+                    }
+                );//
+            }
+        ];
+        if($type == config('util.TYPE_TEST')) $with = [
+            'rounds' => function ($q) {
+                return $q->with(['exams'])->withCount('exams');
+            }
+        ];
+        try {
+            $contest = $this->whereId($id,$type)
+                ->with($with)
+                ->first();
+            return $contest;
+        }catch (\Exception $e){
+            return false;
+        }
+
     }
 
     public function find($id)
