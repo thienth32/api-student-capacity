@@ -13,7 +13,6 @@ use App\Http\Controllers\Admin\RoundController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\SponsorController as AdminSponsorController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
-use App\Models\Recruitments;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -39,6 +38,7 @@ Route::prefix('contests')->group(function () {
 Route::prefix('capacity')->group(function () {
     Route::get('', [AdminContestController::class, 'apiIndexCapacity'])->name('capacity.api.index');
     Route::get('{id}', [AdminContestController::class, 'apiShowCapacity'])->name('capacity.api.show');
+    Route::get('{id}/related', [AdminContestController::class, 'apiCapacityRelated'])->name('capacity.api.related');
 });
 
 Route::prefix('rounds')->group(function () {

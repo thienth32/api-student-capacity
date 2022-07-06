@@ -2,9 +2,22 @@
 @section('title', 'Thêm mới doanh nghiệp')
 @section('page-title', 'Thêm mới doanh nghiệp')
 @section('content')
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <ol class="breadcrumb text-muted fs-6 fw-bold">
+                <li class="breadcrumb-item pe-3">
+
+                    <a href="{{ route('admin.enterprise.list') }}" class="pe-3">
+                        Danh sách doanh nghiệp
+                    </a>
+
+                </li>
+                <li class="breadcrumb-item px-3 text-muted">Thêm mới doanh nghiệp </li>
+            </ol>
+        </div>
+    </div>
     <div class="card card-flush p-4">
         <div class="row">
-
             <div class="col-lg-12">
                 <div class="card card-flush h-lg-100 p-10">
                     @if (session()->has('success'))
@@ -68,6 +81,14 @@
                                     <input type="text" name="name" value="{{ old('name') }}" class=" form-control"
                                         placeholder="">
                                     @error('name')
+                                        <p id="checkname" class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div class="form-group mb-10">
+                                    <label class="form-label" for="">Địa chỉ Website</label>
+                                    <input type="text" name="link_web" value="{{ old('link_web') }}"
+                                        class=" form-control" placeholder="">
+                                    @error('link_web')
                                         <p id="checkname" class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>

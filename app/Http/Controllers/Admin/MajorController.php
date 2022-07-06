@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Major;
-use App\Models\Skills;
+use App\Models\Skill;
 use App\Services\Traits\TResponse;
 
 use Illuminate\Http\Request;
@@ -200,7 +200,7 @@ class MajorController extends Controller
     }
     public function skill($slug)
     {
-        $listSkill = Skills::all();
+        $listSkill = Skill::all();
         $major = $this->getList()->where('slug', $slug)->first();
         $skills = $this->getList()->where('slug', $slug)->first()->skill()->paginate(6);
        $parentSkill=$this->getList()->where('slug', $slug)->first()->skill()->get();

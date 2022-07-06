@@ -3,6 +3,7 @@
 namespace App\Services\Traits;
 
 use App\Models\Contest;
+use App\Models\Member;
 use App\Models\Team;
 use App\Models\User;
 use Exception;
@@ -67,13 +68,24 @@ trait TTeamContest
         if (count($teamCheck) > 0) return
             redirect()
             ->back()
-            ->with('errorName', 'Tên này đã tồn tại trong cuộc thi !!')
+            ->with('errorName', 'Tên đội đã tồn tại trong cuộc thi !!')
             ->with('userArray', $userArr)
             ->withInput($request->input());
         // dd('Dừng');
         DB::beginTransaction();
         try {
+            $member = [];
             $result = $this->checkUserDrugTeam(($contest_id == null ? $request->contest_id : $contest_id), $request->user_id);
+
+            // foreach ($result['user-pass'] as $key => $userPass) {
+            //     array_push($member, [
+            //         $userPass,
+            //         44,
+            //         // 'bot' => $result['user-pass'][array_rand($result['user-pass'])],
+            //     ]);
+            // }
+            // dump($member);
+            // die;
             $team = new Team();
             if ($request->has('image')) {
                 $fileImage =  $request->file('image');
@@ -83,7 +95,14 @@ trait TTeamContest
             $team->name = $request->name;
             $team->contest_id = ($contest_id == null ? $request->contest_id : $contest_id);
             $team->save();
-            $team->members()->syncWithoutDetaching($result['user-pass']);
+            foreach ($result['user-pass'] as $key => $userPass) {
+                array_push($member, [
+                    'user_id' => $userPass,
+                    'team_id' => $team->id,
+                    'bot' => (($userPass == $request->bot_user) ? 1 : null),
+                ]);
+            }
+            Member::insert($member);
             DB::commit();
             return $backViewSuccess;
         } catch (Exception $ex) {
@@ -98,6 +117,8 @@ trait TTeamContest
 
     function editTeamContest($request, $id_team, $contest_id = null, $backViewSuccess, $backViewFailure)
     {
+        $member = [];
+        // dd($request->all());
         $validator = Validator::make(
             $request->all(),
             [
@@ -134,6 +155,7 @@ trait TTeamContest
                 ->with('userArray', $userArr)
                 ->withInput($request->input());
         }
+
         DB::beginTransaction();
         try {
             $result = $this->checkUserDrugTeam(($contest_id == null ? $request->contest_id : $contest_id), $request->user_id, $id_team ?? null);
@@ -148,11 +170,21 @@ trait TTeamContest
                     $image = $this->uploadFile($fileImage, $team->image);
                     $team->image = $image;
                 }
-                $user_id = $result['user-pass'];
-                $team->users()->sync($user_id);
+                // $user_id = $result['user-pass'];
+                // $team->users()->sync($user_id);
+
                 $team->name = $request->name;
                 $team->contest_id = ($contest_id == null ? $request->contest_id : $contest_id);
                 $team->save();
+                $team->users()->detach();
+                foreach ($result['user-pass'] as $key => $userPass) {
+                    array_push($member, [
+                        'user_id' => $userPass,
+                        'team_id' => $team->id,
+                        'bot' => (($userPass == $request->bot_user) ? 1 : null),
+                    ]);
+                }
+                Member::insert($member);
                 Db::commit();
 
                 return $backViewSuccess;
@@ -163,6 +195,7 @@ trait TTeamContest
                 if (Storage::disk('s3')->has($fileImage)) Storage::disk('s3')->delete($fileImage);
             }
             Db::rollBack();
+            dd($ex);
             return $backViewFailure;
         }
     }

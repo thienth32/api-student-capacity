@@ -2,6 +2,25 @@
 @section('title', 'Thêm ' . $contest_type_text)
 @section('page-title', 'Thêm mới ' . $contest_type_text)
 @section('content')
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <ol class="breadcrumb text-muted fs-6 fw-bold">
+
+                <li class="breadcrumb-item pe-3">
+                    @if (request('type') == 0)
+                        <a href="{{ route('admin.contest.list') }}" class="pe-3">
+                            Danh sách cuộc thi
+                        </a>
+                    @else
+                        <a href="{{ route('admin.contest.list', ['type' => 1]) }}" class="pe-3">
+                            Danh sách test năng lực
+                        </a>
+                    @endif
+                </li>
+                <li class="breadcrumb-item px-3 text-muted">Thêm mới {{ $contest_type_text }}</li>
+            </ol>
+        </div>
+    </div>
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
@@ -40,8 +59,10 @@
                                     <path
                                         d="M11.1669899,4.49941818 L2.82535718,19.5143571 C2.557144,19.9971408 2.7310878,20.6059441 3.21387153,20.8741573 C3.36242953,20.9566895 3.52957021,21 3.69951446,21 L21.2169432,21 C21.7692279,21 22.2169432,20.5522847 22.2169432,20 C22.2169432,19.8159952 22.1661743,19.6355579 22.070225,19.47855 L12.894429,4.4636111 C12.6064401,3.99235656 11.9909517,3.84379039 11.5196972,4.13177928 C11.3723594,4.22181902 11.2508468,4.34847583 11.1669899,4.49941818 Z"
                                         fill="#000000" opacity="0.3" />
-                                    <rect fill="#000000" x="11" y="9" width="2" height="7" rx="1" />
-                                    <rect fill="#000000" x="11" y="17" width="2" height="2" rx="1" />
+                                    <rect fill="#000000" x="11" y="9" width="2" height="7"
+                                        rx="1" />
+                                    <rect fill="#000000" x="11" y="17" width="2" height="2"
+                                        rx="1" />
                                 </g>
                             </svg>
                             <!--end::Svg Icon-->
@@ -59,7 +80,8 @@
                     @csrf
                     <div class="form-group mb-10">
                         <label for="" class="form-label">Tên {{ $contest_type_text }}</label>
-                        <input type="text" name="name" value="{{ old('name') }}" class=" form-control" placeholder="">
+                        <input type="text" name="name" value="{{ old('name') }}" class=" form-control"
+                            placeholder="">
                         @error('name')
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
@@ -68,8 +90,8 @@
                         <div class="col-8">
                             <div class="form-group mb-10">
                                 <label for="" class="form-label">Thời gian bắt đầu </label>
-                                <input id="begin" value="{{ old('date_start') }}" type="datetime-local" name="date_start"
-                                    class="form-control" placeholder="">
+                                <input id="begin" value="{{ old('date_start') }}" type="datetime-local"
+                                    name="date_start" class="form-control" placeholder="">
                                 @error('date_start')
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
@@ -180,7 +202,8 @@
                         @enderror
                     </div>
                     <div class="form-group mb-10 ">
-                        <button type="submit" name="" id="" class="btn btn-success btn-lg btn-block">Lưu </button>
+                        <button type="submit" name="" id=""
+                            class="btn btn-success btn-lg btn-block">Lưu </button>
                     </div>
                 </form>
             </div>

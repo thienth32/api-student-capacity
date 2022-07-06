@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 
-class JudgesController extends Controller
+class JudgeController extends Controller
 {
 
     private $contest;

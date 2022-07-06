@@ -47,11 +47,12 @@ class Contest extends Model
         'end_register_time',
         'max_user',
         'reward_rank_point',
-        'post_new'
+        'post_new',
+        'img'
     ];
     public function recruitment()
     {
-        return $this->BelongsToMany(Recruitments::class, 'contest_recruitments', 'contest_id', 'recruitment_id')->withTimestamps();
+        return $this->BelongsToMany(Recruitment::class, 'contest_recruitments', 'contest_id', 'recruitment_id')->withTimestamps();
     }
     public function teams()
     {
@@ -76,19 +77,22 @@ class Contest extends Model
     }
     public function skills()
     {
-        return $this->belongsToMany(Skills::class, 'contest_skills', 'contest_id', 'skill_id')->withTimestamps();
+        return $this->belongsToMany(Skill::class, 'contest_skills', 'contest_id', 'skill_id')->withTimestamps();
     }
     public function contest_users()
     {
         return $this->hasMany(ContestUser::class, 'contest_id');
     }
-
+    public function posts()
+    {
+        return $this->morphMany(Post::class, 'postable');
+    }
 
     public function take_exams()
     {
         return $this->hasManyDeep(
-            TakeExams::class,
-            [Round::class, Exams::class],
+            TakeExam::class,
+            [Round::class, Exam::class],
             [
                 'contest_id',
                 'round_id',

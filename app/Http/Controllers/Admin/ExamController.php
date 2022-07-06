@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Exams;
+use App\Models\Exam;
 use App\Models\Questions;
 use App\Services\Traits\TUploadImage;
 use Illuminate\Http\Request;
@@ -21,7 +21,7 @@ class ExamController extends Controller
     use TUploadImage;
     private $exam;
 
-    public function __construct(Exams $exam)
+    public function __construct(Exam $exam)
     {
         $this->exam = $exam;
     }
@@ -186,7 +186,7 @@ class ExamController extends Controller
     public function update(Request $request, $id_round, $id)
     {
         $type = 0;
-        $examModel = Exams::find($id);
+        $examModel = Exam::find($id);
         if (is_null($examModel)) return abort(404);
         $round = Round::find($id_round)->load('contest');
         if (is_null($round)) return abort(404);
@@ -292,7 +292,7 @@ class ExamController extends Controller
     public function get_by_round($id)
     {
         try {
-            $exams = Exams::where('round_id',$id)->where('type',1)->with(['questions' => function ($q) {
+            $exams = Exam::where('round_id',$id)->where('type',1)->with(['questions' => function ($q) {
                 return $q -> with('answers');
             }])->get();
             $questions = Questions::with([
@@ -315,7 +315,7 @@ class ExamController extends Controller
     public function showQuestionAnswerExams($id)
     {
          try {
-            $questions = Exams::whereId($id)
+            $questions = Exam::whereId($id)
                             ->where('type',1)
                             ->first()
                             ->questions()

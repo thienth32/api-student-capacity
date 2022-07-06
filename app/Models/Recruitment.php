@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Casts\FormatDate;
 use App\Casts\FormatImageGet;
 
-class Recruitments extends Model
+class Recruitment extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = 'recruitments';
@@ -26,5 +26,9 @@ class Recruitments extends Model
     public function contest()
     {
         return $this->BelongsToMany(Contest::class, 'contest_recruitments', 'recruitment_id', 'contest_id')->with('skills')->withTimestamps();
+    }
+    public function posts()
+    {
+        return $this->morphMany(Post::class, 'postable');
     }
 }

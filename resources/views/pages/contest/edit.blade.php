@@ -2,6 +2,25 @@
 @section('title', 'Cập nhật ' . $contest_type_text)
 @section('page-title', 'Cập nhật ' . $contest_type_text)
 @section('content')
+
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <ol class="breadcrumb text-muted fs-6 fw-bold">
+                <li class="breadcrumb-item pe-3">
+                    @if (request('type') == 0)
+                        <a href="{{ route('admin.contest.list') }}" class="pe-3">
+                            Danh sách cuộc thi
+                        </a>
+                    @else
+                        <a href="{{ route('admin.contest.list', ['type' => 1]) }}" class="pe-3">
+                            Danh sách test năng lực
+                        </a>
+                    @endif
+                </li>
+                <li class="breadcrumb-item px-3 text-muted">Cập nhập {{ $contest_type_text . ' ' . $contest->name }} </li>
+            </ol>
+        </div>
+    </div>
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
@@ -12,8 +31,8 @@
                     @method('put')
                     <div class="form-group mb-10">
                         <label class="form-label" for="">Tên {{ $contest_type_text }}</label>
-                        <input type="text" name="name" value="{{ old('name', $contest->name) }}" class=" form-control"
-                            placeholder="">
+                        <input type="text" name="name" value="{{ old('name', $contest->name) }}"
+                            class=" form-control" placeholder="">
                         @error('name')
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
@@ -26,8 +45,8 @@
                                 <div class="form-group mb-10">
                                     <label class="form-label" for="">Thời gian bắt đầu</label>
                                     <input value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime($contest->date_start)) }}"
-                                        type="datetime-local" id="begin" max="" name="date_start" class="form-control"
-                                        placeholder="">
+                                        type="datetime-local" id="begin" max="" name="date_start"
+                                        class="form-control" placeholder="">
 
                                     @error('date_start')
                                         <p class="text-danger">{{ $message }}</p>
@@ -162,7 +181,8 @@
                         <p class="text-danger">{{ $message }}</p>
                     @enderror --}}
                     <div class="form-group mb-10 ">
-                        <button type="submit" name="" id="" class="btn btn-success btn-lg btn-block">Lưu </button>
+                        <button type="submit" name="" id=""
+                            class="btn btn-success btn-lg btn-block">Lưu </button>
                     </div>
                 </form>
             </div>

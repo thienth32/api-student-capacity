@@ -336,7 +336,7 @@ const mainPage = {
         $(".add-exam").on("click", function () {
             backClass([".nav-list", ".nav-ql"], [".tab-list", ".tab-ql"]);
             $("#show-exam-round").html(
-                `Danh sách các đề bài của bài làm <strong style="color:blue">${$(
+                `Danh sách các bài làm của đề <strong style="color:blue">${$(
                     this
                 ).data("round_name")}</strong>  `
             );

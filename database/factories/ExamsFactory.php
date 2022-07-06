@@ -6,7 +6,7 @@ use App\Models\Round;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Exams>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Exam>
  */
 class ExamsFactory extends Factory
 {

@@ -14,6 +14,6 @@ class RoundTeam extends Model
     use HasFactory;
     public function takeExam()
     {
-        return $this->hasOne(TakeExams::class, 'round_team_id')->with(['exam', 'evaluation']);
+        return $this->hasOne(TakeExam::class, 'round_team_id')->with(['exam', 'evaluation']);
     }
 }

@@ -6,7 +6,7 @@
 
 
     <div class="card card-flush p-4">
-        <div class="row">
+        <div class="row mb-4">
             <div class=" col-lg-6">
 
                 <h1>Quản lý câu hỏi
@@ -43,10 +43,19 @@
                 </h1>
             </div>
             <div class=" col-lg-6">
-                <div class=" d-flex flex-row-reverse bd-highlight">
-
-                    <a href="{{ route('admin.question.create') }}" class=" btn btn-primary">Tạo mới câu hỏi
-                    </a>
+                <div class=" d-flex justify-content-end bd-highlight">
+                    <div>
+                        <a href="{{ route('admin.question.create') }}" class=" btn btn-primary">Tạo mới câu hỏi
+                        </a>
+                    </div>
+                    <div class="ms-4">
+                        <form action="{{ route('admin.question.excel.impost') }}" method="post"
+                            enctype="multipart/form-data">
+                            @csrf
+                            <input type="file" name="ex_file" id="">
+                            <button type="submit" class="btn btn-primary">Lưu</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -164,19 +173,21 @@
                                     class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                     <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
                                         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                        style="width: 14px !important ; height: 14px !important" width="24px" height="24px"
-                                        viewBox="0 0 24 24" version="1.1">
+                                        style="width: 14px !important ; height: 14px !important" width="24px"
+                                        height="24px" viewBox="0 0 24 24" version="1.1">
                                         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                             <polygon points="0 0 24 0 24 24 0 24" />
                                             <rect fill="#000000" opacity="0.3"
                                                 transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
-                                                x="5" y="5" width="2" height="12" rx="1" />
+                                                x="5" y="5" width="2" height="12"
+                                                rx="1" />
                                             <path
                                                 d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
                                                 fill="#000000" fill-rule="nonzero" />
                                             <rect fill="#000000" opacity="0.3"
                                                 transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
-                                                x="17" y="7" width="2" height="12" rx="1" />
+                                                x="17" y="7" width="2" height="12"
+                                                rx="1" />
                                             <path
                                                 d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
                                                 fill="#000000" fill-rule="nonzero"
@@ -202,13 +213,15 @@
                                                 <polygon points="0 0 24 0 24 24 0 24" />
                                                 <rect fill="#000000" opacity="0.3"
                                                     transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
-                                                    x="5" y="5" width="2" height="12" rx="1" />
+                                                    x="5" y="5" width="2" height="12"
+                                                    rx="1" />
                                                 <path
                                                     d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
                                                     fill="#000000" fill-rule="nonzero" />
                                                 <rect fill="#000000" opacity="0.3"
                                                     transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
-                                                    x="17" y="7" width="2" height="12" rx="1" />
+                                                    x="17" y="7" width="2" height="12"
+                                                    rx="1" />
                                                 <path
                                                     d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
                                                     fill="#000000" fill-rule="nonzero"
@@ -240,13 +253,15 @@
                                                 <polygon points="0 0 24 0 24 24 0 24" />
                                                 <rect fill="#000000" opacity="0.3"
                                                     transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
-                                                    x="5" y="5" width="2" height="12" rx="1" />
+                                                    x="5" y="5" width="2" height="12"
+                                                    rx="1" />
                                                 <path
                                                     d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
                                                     fill="#000000" fill-rule="nonzero" />
                                                 <rect fill="#000000" opacity="0.3"
                                                     transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
-                                                    x="17" y="7" width="2" height="12" rx="1" />
+                                                    x="17" y="7" width="2" height="12"
+                                                    rx="1" />
                                                 <path
                                                     d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
                                                     fill="#000000" fill-rule="nonzero"
@@ -361,15 +376,17 @@
                                     @hasanyrole(config('util.ROLE_ADMINS'))
 
                                         <div class="btn-group dropstart">
-                                            <button type="button" class="btn   btn-sm dropdown-toggle" data-bs-toggle="dropdown"
-                                                aria-expanded="false">
+                                            <button type="button" class="btn   btn-sm dropdown-toggle"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
                                                 <span class="svg-icon svg-icon-success svg-icon-2x">
                                                     <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Settings-2.svg--><svg
                                                         xmlns="http://www.w3.org/2000/svg"
-                                                        xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                                                        viewBox="0 0 24 24" version="1.1">
-                                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                            <rect x="0" y="0" width="24" height="24" />
+                                                        xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                                        height="24px" viewBox="0 0 24 24" version="1.1">
+                                                        <g stroke="none" stroke-width="1" fill="none"
+                                                            fill-rule="evenodd">
+                                                            <rect x="0" y="0" width="24"
+                                                                height="24" />
                                                             <path
                                                                 d="M5,8.6862915 L5,5 L8.6862915,5 L11.5857864,2.10050506 L14.4852814,5 L19,5 L19,9.51471863 L21.4852814,12 L19,14.4852814 L19,19 L14.4852814,19 L11.5857864,21.8994949 L8.6862915,19 L5,19 L5,15.3137085 L1.6862915,12 L5,8.6862915 Z M12,15 C13.6568542,15 15,13.6568542 15,12 C15,10.3431458 13.6568542,9 12,9 C10.3431458,9 9,10.3431458 9,12 C9,13.6568542 10.3431458,15 12,15 Z"
                                                                 fill="#000000" />
@@ -388,13 +405,15 @@
                                                                 height="24px" viewBox="0 0 24 24" version="1.1">
                                                                 <g stroke="none" stroke-width="1" fill="none"
                                                                     fill-rule="evenodd">
-                                                                    <rect x="0" y="0" width="24" height="24" />
+                                                                    <rect x="0" y="0" width="24"
+                                                                        height="24" />
                                                                     <path
                                                                         d="M8,17.9148182 L8,5.96685884 C8,5.56391781 8.16211443,5.17792052 8.44982609,4.89581508 L10.965708,2.42895648 C11.5426798,1.86322723 12.4640974,1.85620921 13.0496196,2.41308426 L15.5337377,4.77566479 C15.8314604,5.0588212 16,5.45170806 16,5.86258077 L16,17.9148182 C16,18.7432453 15.3284271,19.4148182 14.5,19.4148182 L9.5,19.4148182 C8.67157288,19.4148182 8,18.7432453 8,17.9148182 Z"
                                                                         fill="#000000" fill-rule="nonzero"
                                                                         transform="translate(12.000000, 10.707409) rotate(-135.000000) translate(-12.000000, -10.707409) " />
-                                                                    <rect fill="#000000" opacity="0.3" x="5" y="20" width="15"
-                                                                        height="2" rx="1" />
+                                                                    <rect fill="#000000" opacity="0.3" x="5"
+                                                                        y="20" width="15" height="2"
+                                                                        rx="1" />
                                                                 </g>
                                                             </svg>
                                                         </span>
@@ -403,8 +422,8 @@
                                                 </li>
                                                 <li class="my-3">
                                                     <a class="" data-bs-toggle="collapse"
-                                                        href="#collapse{{ $token }}" role="button" aria-expanded="false"
-                                                        aria-controls="collapse{{ $token }}">
+                                                        href="#collapse{{ $token }}" role="button"
+                                                        aria-expanded="false" aria-controls="collapse{{ $token }}">
                                                         <span class="svg-icon svg-icon-primary svg-icon-2x">
                                                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Text/Bullet-list.svg--><svg
                                                                 xmlns="http://www.w3.org/2000/svg"
@@ -412,7 +431,8 @@
                                                                 height="24px" viewBox="0 0 24 24" version="1.1">
                                                                 <g stroke="none" stroke-width="1" fill="none"
                                                                     fill-rule="evenodd">
-                                                                    <rect x="0" y="0" width="24" height="24" />
+                                                                    <rect x="0" y="0" width="24"
+                                                                        height="24" />
                                                                     <path
                                                                         d="M10.5,5 L19.5,5 C20.3284271,5 21,5.67157288 21,6.5 C21,7.32842712 20.3284271,8 19.5,8 L10.5,8 C9.67157288,8 9,7.32842712 9,6.5 C9,5.67157288 9.67157288,5 10.5,5 Z M10.5,10 L19.5,10 C20.3284271,10 21,10.6715729 21,11.5 C21,12.3284271 20.3284271,13 19.5,13 L10.5,13 C9.67157288,13 9,12.3284271 9,11.5 C9,10.6715729 9.67157288,10 10.5,10 Z M10.5,15 L19.5,15 C20.3284271,15 21,15.6715729 21,16.5 C21,17.3284271 20.3284271,18 19.5,18 L10.5,18 C9.67157288,18 9,17.3284271 9,16.5 C9,15.6715729 9.67157288,15 10.5,15 Z"
                                                                         fill="#000000" />
@@ -443,7 +463,8 @@
                                                                     height="24px" viewBox="0 0 24 24" version="1.1">
                                                                     <g stroke="none" stroke-width="1" fill="none"
                                                                         fill-rule="evenodd">
-                                                                        <rect x="0" y="0" width="24" height="24" />
+                                                                        <rect x="0" y="0" width="24"
+                                                                            height="24" />
                                                                         <path
                                                                             d="M6,8 L18,8 L17.106535,19.6150447 C17.04642,20.3965405 16.3947578,21 15.6109533,21 L8.38904671,21 C7.60524225,21 6.95358004,20.3965405 6.89346498,19.6150447 L6,8 Z M8,10 L8.45438229,14.0894406 L15.5517885,14.0339036 L16,10 L8,10 Z"
                                                                             fill="#000000" fill-rule="nonzero" />

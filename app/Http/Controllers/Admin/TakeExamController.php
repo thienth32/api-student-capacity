@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Exams;
+use App\Models\Exam;
 use App\Models\Round;
 use App\Models\RoundTeam;
-use App\Models\TakeExams;
+use App\Models\TakeExam;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\Contest;
+use App\Models\Team;
 use App\Services\Traits\TUploadImage;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -21,13 +22,15 @@ class TakeExamController extends Controller
     private $contest;
     private $examModel;
     private $roundModel;
+    private $teamModel;
 
 
-    public function __construct(Contest $contest, Round $round, Exams $exams)
+    public function __construct(Contest $contest, Round $round, Exam $exams, Team $team)
     {
         $this->roundModel = $round;
         $this->contest = $contest;
         $this->examModel = $exams;
+        $this->teamModel = $team;
     }
     public function takeExamStudent(Request $request)
     {
@@ -72,25 +75,25 @@ class TakeExamController extends Controller
                 'status' => false,
                 'payload' => 'Đội thi của bạn đang chờ phê duyệt !!'
             ]);
-            $takeExamCheck = TakeExams::where('round_team_id', $teamRound->id)->first();
+            $takeExamCheck = TakeExam::where('round_team_id', $teamRound->id)->first();
 
             if (is_null($takeExamCheck)) {
-                if (count(Exams::all()) == 0) return response()->json([
+                if (count(Exam::all()) == 0) return response()->json([
                     'status' => false,
                     'payload' => "Đề thi chưa cập nhập !!"
                 ]);
-                $exams = Exams::all()->random()->id;
+                $exams = Exam::all()->random()->id;
                 if (is_null($exams)) return response()->json([
                     'status' => false,
                     'payload' => "Đề thi chưa cập nhập !!"
                 ]);
-                $takeExamModel = new TakeExams();
+                $takeExamModel = new TakeExam();
                 $takeExamModel->exam_id = $exams;
                 $takeExamModel->round_team_id = $teamRound->id;
                 $takeExamModel->status = config('util.TAKE_EXAM_STATUS_UNFINISHED');
                 $takeExamModel->save();
                 DB::commit();
-                $takeExam = TakeExams::find($takeExamModel->id);
+                $takeExam = TakeExam::find($takeExamModel->id);
                 if (Storage::disk('s3')->has($takeExam->exam->external_url)) {
                     $urlExam = Storage::disk('s3')->temporaryUrl($takeExam->exam->external_url, now()->addMinutes(5));
                 } else {
@@ -147,7 +150,7 @@ class TakeExamController extends Controller
         ]);
 
         try {
-            $takeExam = TakeExams::find($request->id);
+            $takeExam = TakeExam::find($request->id);
             if (is_null($takeExam)) return response()->json([
                 'status' => false,
                 'payload' => 'Không tồn tại trên hệ thống !!',
@@ -197,6 +200,7 @@ class TakeExamController extends Controller
 
     public function takeExamStudentCapacity(Request $request)
     {
+        $user = auth('sanctum')->user();
         $validate = Validator::make(
             $request->all(),
             [
@@ -210,6 +214,16 @@ class TakeExamController extends Controller
             'status' => false,
             'payload' => $validate->errors()
         ]);
+
+//        $teamCheck =  $this->teamModel::where(
+//            'contest_id',
+//            $request->contest_id
+//        )->where('name', trim($request->name))->get();
+//        if (count($teamCheck) > 0) return response()->json([
+//            'status' => false,
+//            'payload' => 'Tên đã tồn tại trong cuộc thi !!'
+//        ]);
+
         $round = $this->roundModel::find($request->round_id);
         if (is_null($round)) return response()->json([
             'status' => false,

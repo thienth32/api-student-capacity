@@ -12,18 +12,10 @@ trait TUploadImage
     {
         try {
 
+            if(!$file) return false;
             if ($nameOld) if (Storage::disk('s3')->has($nameOld)) Storage::disk('s3')->delete($nameOld);
-
-            // $img = Image::make($file);
-            // $img->resize(100, 100, function ($constraint) {
-            //     $constraint->aspectRatio();
-            // });
-            // return  $img;
-            // $file =  Image::make($file->getRealPath())->resize(50, 50)->stream();
             $nameFile = uniqid() . '-' . time() . '.' . $file->getClientOriginalExtension();
-
             Storage::disk('s3')->putFileAs('', $file, $nameFile);
-
             return $nameFile;
         } catch (\Throwable $th) {
             return false;

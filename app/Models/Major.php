@@ -35,7 +35,7 @@ class Major extends Model
 
     public function Skill()
     {
-        return $this->belongsToMany(Skills::class, 'major_skills', 'major_id', 'skill_id')->withTimestamps();
+        return $this->belongsToMany(Skill::class, 'major_skills', 'major_id', 'skill_id')->withTimestamps();
     }
 
     public function sliders()

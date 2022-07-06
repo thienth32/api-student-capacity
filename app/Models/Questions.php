@@ -39,11 +39,11 @@ class Questions extends Model
     }
     public function skills()
     {
-        return $this->belongsToMany(Skills::class, 'question_skills', 'question_id', 'skill_id');
+        return $this->belongsToMany(Skill::class, 'question_skills', 'question_id', 'skill_id');
     }
 
     public function answers()
     {
-        return $this->hasMany(Answers::class, 'question_id');
+        return $this->hasMany(Answer::class, 'question_id');
     }
 }

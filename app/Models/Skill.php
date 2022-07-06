@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Skills extends Model
+class Skill extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = 'skills';

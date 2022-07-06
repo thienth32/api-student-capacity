@@ -24,8 +24,7 @@ const pageCkeditor = {
                         "tableRow",
                         "mergeTableCells",
                     ],
-                },
-
+                }
             )
             .then((editor) => {})
             .catch((error) => {});
@@ -55,11 +54,11 @@ const pageCkeditor = {
                         "tableRow",
                         "mergeTableCells",
                     ],
-                },
-
+                }
             )
             .then((editor) => {})
             .catch((error) => {});
     },
 };
 pageCkeditor.classicCk();
+// pageCkeditor.classicCk2();

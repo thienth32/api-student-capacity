@@ -2,6 +2,21 @@
 @section('title', 'Cập nhật kỹ năng')
 @section('page-title', 'Cập nhật kỹ năng')
 @section('content')
+
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <ol class="breadcrumb text-muted fs-6 fw-bold">
+                <li class="breadcrumb-item pe-3">
+
+                    <a href="{{ route('admin.skill.index') }}" class="pe-3">
+                        Danh sách kĩ năng
+                    </a>
+
+                </li>
+                <li class="breadcrumb-item px-3 text-muted">Cập nhập kĩ năng : {{ $data->name }} </li>
+            </ol>
+        </div>
+    </div>
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">

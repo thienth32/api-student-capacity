@@ -17,7 +17,7 @@ class Enterprise extends Model
         'updated_at' =>  FormatDate::class,
         'logo' => FormatImageGet::class,
     ];
-    protected $fillable = ['name', 'logo', 'description'];
+    protected $fillable = ['name', 'logo', 'description', 'link_web'];
 
     public static function boot()
     {
@@ -32,7 +32,7 @@ class Enterprise extends Model
     }
     public function recruitment()
     {
-        return $this->BelongsToMany(Recruitments::class, 'enterprise_recruitments', 'enterprise_id', 'recruitment_id')->with('contest')->withTimestamps();
+        return $this->BelongsToMany(Recruitment::class, 'enterprise_recruitments', 'enterprise_id', 'recruitment_id')->with('contest')->withTimestamps();
     }
     use HasFactory;
 }

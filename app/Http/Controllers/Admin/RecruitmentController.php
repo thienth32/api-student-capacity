@@ -6,7 +6,7 @@ use App\Services\Traits\TUploadImage;
 use App\Http\Controllers\Controller;
 use App\Models\Contest;
 use App\Models\Enterprise;
-use App\Models\Recruitments;
+use App\Models\Recruitment;
 use Carbon\Carbon;
 use App\Services\Traits\TResponse;
 use Illuminate\Http\Request;
@@ -30,10 +30,10 @@ class RecruitmentController extends Controller
         $sortBy = $request->has('sortBy') ? $request->sortBy : "desc";
         $softDelete = $request->has('recruitment_soft_delete') ? $request->recruitment_soft_delete : null;
         if ($softDelete != null) {
-            $query = Recruitments::onlyTrashed()->where('name', 'like', "%$keyword%")->orderByDesc('deleted_at');
+            $query = Recruitment::onlyTrashed()->where('name', 'like', "%$keyword%")->orderByDesc('deleted_at');
             return $query;
         }
-        $query = Recruitments::where('name', 'like', "%$keyword%");
+        $query = Recruitment::where('name', 'like', "%$keyword%");
         if ($enterprise != null) {
             $query = Enterprise::find($enterprise);
         }
@@ -148,13 +148,13 @@ class RecruitmentController extends Controller
             }
 
             // dd($request->contest_id);
-            $newRecruitment =  Recruitments::create($data);
+            $newRecruitment =  Recruitment::create($data);
             if ($newRecruitment) {
                 if ($request->enterprise_id != null) {
-                    Recruitments::find($newRecruitment->id)->enterprise()->syncWithoutDetaching($request->enterprise_id);
+                    Recruitment::find($newRecruitment->id)->enterprise()->syncWithoutDetaching($request->enterprise_id);
                 }
                 if ($request->contest_id != null) {
-                    Recruitments::find($newRecruitment->id)->contest()->syncWithoutDetaching($request->contest_id);
+                    Recruitment::find($newRecruitment->id)->contest()->syncWithoutDetaching($request->contest_id);
                 }
             }
             Db::commit();
@@ -170,7 +170,7 @@ class RecruitmentController extends Controller
         try {
             if (!(auth()->user()->hasRole('super admin'))) return false;
             DB::transaction(function () use ($id) {
-                if (!($data = Recruitments::find($id))) return false;
+                if (!($data = Recruitment::find($id))) return false;
                 $data->delete();
             });
             return redirect()->back();
@@ -181,7 +181,7 @@ class RecruitmentController extends Controller
     public function edit(Request $request, $id)
     {
 
-        $data =  Recruitments::find($id);
+        $data =  Recruitment::find($id);
         $enterprises = Enterprise::all();
         $contests = Contest::where('type', 1)->get();
         // dd($data);
@@ -191,6 +191,7 @@ class RecruitmentController extends Controller
     }
     public function update(Request $request, $id)
     {
+
         $validator = Validator::make(
             $request->all(),
             [
@@ -219,7 +220,7 @@ class RecruitmentController extends Controller
         // dd($id);
         DB::beginTransaction();
         try {
-            $recruitment = Recruitments::find($id);
+            $recruitment = Recruitment::find($id);
             // dd($recruitment);
             if (!$recruitment) {
                 return redirect('error');
@@ -237,35 +238,35 @@ class RecruitmentController extends Controller
             $recruitment->save();
             if ($request->enterprise_id != null) {
                 $index = -1;
-                Recruitments::find($id)->enterprise()->syncWithoutDetaching($request->enterprise_id);
-                foreach (Recruitments::find($id)->enterprise()->get() as $item) {
+                Recruitment::find($id)->enterprise()->syncWithoutDetaching($request->enterprise_id);
+                foreach (Recruitment::find($id)->enterprise()->get() as $item) {
                     foreach ($request->enterprise_id as $value) {
                         if ($item->id == $value) {
                             $index = $value;
                         }
                     }
                     if ($item->id != $index) {
-                        Recruitments::find($id)->enterprise()->detach($item->id);
+                        Recruitment::find($id)->enterprise()->detach($item->id);
                     }
                 }
             } else {
-                Recruitments::find($id)->enterprise()->detach();
+                Recruitment::find($id)->enterprise()->detach();
             }
             if ($request->contest_id != null) {
                 $count = -1;
-                Recruitments::find($id)->contest()->syncWithoutDetaching($request->contest_id);
-                foreach (Recruitments::find($id)->contest()->get() as $item) {
+                Recruitment::find($id)->contest()->syncWithoutDetaching($request->contest_id);
+                foreach (Recruitment::find($id)->contest()->get() as $item) {
                     foreach ($request->contest_id as $value) {
                         if ($item->id == $value) {
                             $count = $value;
                         }
                     }
                     if ($item->id != $count) {
-                        Recruitments::find($id)->contest()->detach($item->id);
+                        Recruitment::find($id)->contest()->detach($item->id);
                     }
                 }
             } else {
-                Recruitments::find($id)->contest()->detach();
+                Recruitment::find($id)->contest()->detach();
             }
 
             Db::commit();
@@ -284,7 +285,7 @@ class RecruitmentController extends Controller
     public function backUpRecruitment($id)
     {
         try {
-            Recruitments::withTrashed()->where('id', $id)->restore();
+            Recruitment::withTrashed()->where('id', $id)->restore();
             return redirect()->back();
         } catch (\Throwable $th) {
             return abort(404);
@@ -297,7 +298,7 @@ class RecruitmentController extends Controller
         try {
             if (!(auth()->user()->hasRole('super admin'))) return false;
 
-            Recruitments::withTrashed()->where('id', $id)->forceDelete();
+            Recruitment::withTrashed()->where('id', $id)->forceDelete();
             return redirect()->back();
         } catch (\Throwable $th) {
             return abort(404);
@@ -306,7 +307,8 @@ class RecruitmentController extends Controller
 
     public function detail($id)
     {
-        $data = Recruitments::find($id);
+        $data = Recruitment::find($id);
+
         return view('pages.recruitment.detailRecruitment', compact('data'));
     }
     public function apiShow(Request $request)
@@ -323,7 +325,7 @@ class RecruitmentController extends Controller
     }
     public function apiDetail($id)
     {
-        $data = Recruitments::find($id);
+        $data = Recruitment::find($id);
         $data->load('contest');
         $data->load('enterprise');
         return $this->responseApi(

@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Major;
-use App\Models\Skills;
+use App\Models\Skill;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,7 +20,7 @@ class MajorSkillFactory extends Factory
     {
         return [
             'major_id' => Major::all()->random()->id,
-            'skill_id' => Skills::all()->random()->id,
+            'skill_id' => Skill::all()->random()->id,
         ];
     }
 }

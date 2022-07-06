@@ -2,27 +2,34 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\QuestionsExport;
 use App\Http\Controllers\Controller;
-use App\Models\Answers;
-use App\Models\Exams;
+use App\Imports\QuestionsImport;
+use App\Models\Answer;
+use App\Models\Exam;
 use App\Models\Questions;
-use App\Models\Skills;
+use App\Models\Skill;
+use App\Services\Traits\TStatus;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class QuestionController extends Controller
 {
+    use TStatus;
     protected $skillModel;
     protected $questionModel;
     protected $answerModel;
-    public function __construct(Skills $skills, Questions $questions, Answers $answers)
+    protected $examModel;
+    public function __construct(Skill $skill, Questions $question, Answer $answer, Exam $exam)
     {
-        $this->skillModel = $skills;
-        $this->questionModel = $questions;
-        $this->answerModel = $answers;
+        $this->skillModel = $skill;
+        $this->questionModel = $question;
+        $this->answerModel = $answer;
+        $this->examModel = $exam;
     }
 
     /**
@@ -131,19 +138,18 @@ class QuestionController extends Controller
                 'status.numeric' => 'Sai định dạng !',
                 'rank.required' => 'Chưa nhập trường này !',
                 'rank.numeric' => 'Sai định dạng !',
-
                 'skill.required' =>  'Chưa nhập trường này !',
                 'skill.*.required' =>  'Chưa nhập trường này !',
             ]
         );
-        // dd($validator->messages());
-        if ($validator->fails() || count($request->answers) <= 2) {
-            if (count($request->answers) <= 2) {
+        if ($validator->fails() || !isset($request->answers)) {
+            if (!isset($request->answers)) {
                 return redirect()->back()->withErrors($validator)->with('errorAnswerConten', 'Phải ít nhất 3 đáp án !!')->withInput($request->input());
+            } else {
+                if (count($request->answers) <= 2) return redirect()->back()->withErrors($validator)->with('errorAnswerConten', 'Phải ít nhất 3 đáp án !!')->withInput($request->input());
             }
             return redirect()->back()->withErrors($validator)->withInput();
         }
-
         DB::beginTransaction();
         try {
             $question = $this->questionModel::create([
@@ -286,44 +292,9 @@ class QuestionController extends Controller
         return Redirect::route('admin.question.index');
     }
 
-
-    public function un_status(Request $request)
+    public function getModelDataStatus($id)
     {
-        try {
-            $question = $this->questionModel::find($request->id);
-            $question->update([
-                'status' => 0,
-            ]);
-
-            return response()->json([
-                'status' => true,
-                'payload' => 'Success'
-            ]);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'payload' => 'Không thể câp nhật trạng thái !',
-            ]);
-        }
-    }
-
-    public function re_status(Request $request)
-    {
-        try {
-            $question = $this->questionModel::find($request->id);
-            $question->update([
-                'status' => 1,
-            ]);
-            return response()->json([
-                'status' => true,
-                'payload' => 'Success'
-            ]);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'payload' => 'Không thể câp nhật trạng thái !',
-            ]);
-        }
+        return $this->questionModel::find($id);
     }
 
     public function softDeleteList()
@@ -358,7 +329,7 @@ class QuestionController extends Controller
     {
         try {
             $ids = [];
-            $exams = Exams::whereId($request->exam_id)->first();
+            $exams = $this->examModel::whereId($request->exam_id)->first();
             foreach ($request->question_ids ?? [] as $question_id) {
                 array_push($ids, (int)$question_id['id']);
             }
@@ -378,7 +349,7 @@ class QuestionController extends Controller
     public function remove_question_by_exams(Request $request)
     {
         try {
-            $exams = Exams::whereId($request->exam_id)->first();
+            $exams = $this->examModel::whereId($request->exam_id)->first();
             $exams->questions()->detach($request->questions_id);
             return response()->json([
                 'status' => true,
@@ -390,5 +361,24 @@ class QuestionController extends Controller
                 'payload' => 'Không thể xóa câu hỏi  !',
             ]);
         }
+    }
+    public function exImpost(Request $request)
+    {
+        Excel::import(new QuestionsImport, $request->ex_file);
+    }
+
+    public function exportQe()
+    {
+        $point = [
+            [1, 2, 3],
+            [2, 5, 9]
+        ];
+        $data = (object) array(
+            'points' => $point,
+        );
+        $export = new QuestionsExport([$data]);
+        return Excel::download($export, 'abc.xlsx');
+        // return Excel::download(new QuestionsExport, 'question.xlsx');
+        // return Excel::download(new QuestionsExport, 'invoices.xlsx', true, ['X-Vapor-Base64-Encode' => 'True']);
     }
 }

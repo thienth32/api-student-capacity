@@ -16,3 +16,4 @@ class TypeExam extends Model
         'name','description'
     ];
 }
+ 

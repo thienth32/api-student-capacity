@@ -3,78 +3,39 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Slider\RequestSlider;
 use App\Models\Contest;
 use App\Models\Major;
 use App\Models\Round;
 use App\Models\Slider;
+use App\Services\Traits\TStatus;
 use App\Services\Traits\TUploadImage;
 use Illuminate\Http\Request;
 
 class SliderController extends Controller
 {
-    use TUploadImage;
+    use TUploadImage,TStatus;
+
     private $slider;
     private $major;
     private $contest;
     private $round;
-    public function __construct(Slider $slider, Major $major, Round $round, Contest $contest)
+    private $modulesSlider;
+
+    public function __construct(Slider $slider, \App\Services\Modules\MSlider\Slider  $modulesSlider, Major $major, Round $round, Contest $contest)
     {
         $this->slider = $slider;
         $this->major = $major;
         $this->round = $round;
         $this->contest = $contest;
+        $this->modulesSlider=$modulesSlider;
     }
 
-    private function getList()
-    {
-        try {
-            $key = null;
-            $valueDate = null;
-            if (request()->has('day')) {
-                $valueDate = request('day');
-                $key = 'day';
-            }
-            if (request()->has('month')) {
-                $valueDate = request('month');
-                $key = 'month';
-            };
-            if (request()->has('year')) {
-                $valueDate = request('year');
-                $key = 'year';
-            };
-
-            $sliders = $this->slider::when(request()->has('slider_soft_delete'), function ($q) {
-                return $q->onlyTrashed();
-            })->search(request('q') ?? null, ['link_to', 'image_url'])
-                ->sort((request('sort') == 'desc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'sliders')
-                ->when(request()->has('major'), function ($q) {
-                    return $q->where('sliderable_id', request('major_id'))->where('sliderable_type', $this->major::class);
-                })
-                ->when(request()->has('round'), function ($q) {
-                    return $q->where('sliderable_id', request('round_id'))->where('sliderable_type', $this->round::class);
-                })
-                ->when(request()->has('home'), function ($q) {
-                    return $q->whereNull('sliderable_id')->whereNull('sliderable_type');
-                })
-                ->hasDateTimeBetween('start_time', request('start_time') ?? null, request('end_time') ?? null)
-                ->hasSubTime(
-                    $key,
-                    $valueDate,
-                    (request('op_time') == 'sub' ? 'sub' : 'add'),
-                    'start_time'
-                )
-                ->with(['sliderable']);
-
-            return $sliders;
-        } catch (\Throwable $th) {
-            return false;
-        }
-    }
     public function index()
     {
         $round = null;
         if (request()->has('round_id')) $round = $this->round::find(request('round_id'))->load('contest');
-        $sliders = $this->getList()->status(request('status') ?? null)->paginate(request('limit') ?? 5);
+        $sliders = $this->modulesSlider->index();
         $majors = $this->major::withCount('sliders')->get();
         $rounds = $this->round::withCount('sliders')->get();
         $contests = $this->contest::withCount('rounds')->get();
@@ -91,11 +52,11 @@ class SliderController extends Controller
     public function apiIndex()
     {
         try {
-            $data = $this->getList();
+            $data = $this->modulesSlider->apiIndex();
             return response()->json(
                 [
                     "status" => true,
-                    "payload" => $data->where('status', 1)->get(),
+                    "payload" => $data,
                 ]
             );
         } catch (\Throwable $th) {
@@ -108,43 +69,9 @@ class SliderController extends Controller
         }
     }
 
-    public function un_status($id)
+    public function getModelDataStatus($id)
     {
-        try {
-            $slider = $this->slider::find($id);
-            $slider->update([
-                'status' => 0,
-            ]);
-
-            return response()->json([
-                'status' => true,
-                'payload' => 'Success'
-            ]);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'payload' => 'Không thể câp nhật trạng thái !',
-            ]);
-        }
-    }
-
-    public function re_status($id)
-    {
-        try {
-            $slider = $this->slider::find($id);
-            $slider->update([
-                'status' => 1,
-            ]);
-            return response()->json([
-                'status' => true,
-                'payload' => 'Success'
-            ]);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'payload' => 'Không thể câp nhật trạng thái !',
-            ]);
-        }
+        return $this->slider::find($id);
     }
 
     public function create()
@@ -159,51 +86,25 @@ class SliderController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(RequestSlider $request)
     {
-        $request->validate(
-            [
-                'link_to' => 'required',
-                'start_time' => 'required',
-                'end_time' => 'required|after:start_time',
-                'image_url' => 'image|mimes:jpeg,png,jpg|max:10000',
-            ],
-            [
-                'link_to.required' => 'Không để trống trường này !',
-                'start_time.required' => 'Không để trống trường này !',
-                'end_time.required' => 'Không để trống trường này !',
-                'end_time.after' => 'Trường này thời gian nhỏ hơn trường thời gian bắt đầu  !',
-                'image_url.image' => 'Không để trống trường này !',
-                'image_url.mimes' => 'Trường này không đúng định dạng  !',
-                'image_url.max' => 'Trường này kích cỡ quá lớn  !',
-            ]
-        );
-        // try {
-        if ($request->hasFile('image_url')) {
-            $fileImage = $request->file('image_url');
-            $filename = $this->uploadFile($fileImage);
-        }
-        $dataCreate = [
-            'link_to' => $request->link_to,
-            'start_time' => $request->start_time,
-            'end_time' => $request->end_time,
-            'image_url' => $filename,
-            'status' => 1,
-        ];
-        if ($request->major_id != 0) {
-            $major = $this->major::find($request->major_id);
-            $major->sliders()->create($dataCreate);
-        } elseif ($request->round_id != 0) {
-            $round = $this->round::find($request->round_id);
-            $round->sliders()->create($dataCreate);
-        } else {
-            $dataCreate = array_merge($dataCreate, ['sliderable_id' => null, 'sliderable_type' => null]);
-            $this->slider::create($dataCreate);
-        }
+
+         try {
+            if ($request->hasFile('image_url')) {
+                $fileImage = $request->file('image_url');
+                $filename = $this->uploadFile($fileImage);
+            }
+            $this->modulesSlider->store([
+                'link_to' => $request->link_to,
+                'start_time' => $request->start_time,
+                'end_time' => $request->end_time,
+                'image_url' => $filename,
+                'status' => 1,
+            ],$request);
         return redirect()->route('admin.sliders.list');;
-        // } catch (\Throwable $th) {
-        //     return abort(404);
-        // }
+         } catch (\Throwable $th) {
+             return abort(404);
+         }
     }
 
     public function edit(Request $request, $id)
@@ -224,53 +125,35 @@ class SliderController extends Controller
         return abort(404);
     }
 
-    public function update(Request $request, $id)
+    public function update(RequestSlider $request, $id)
     {
         if (!($slider = $this->slider::find($id))) return abort(404);
-        $request->validate(
-            [
-                'link_to' => 'required',
-                'start_time' => 'required',
-                'end_time' => 'required|after:start_time',
-            ],
-            [
-                'link_to.required' => 'Không để trống trường này !',
-                'start_time.required' => 'Không để trống trường này !',
-                'end_time.required' => 'Không để trống trường này !',
-                'end_time.after' => 'Trường này thời gian nhỏ hơn trường thời gian bắt đầu  !',
-            ]
-        );
-        $data = null;
-        if (request()->has('image_url')) {
 
-            $request->validate(
-                [
-                    'image_url' => 'image|mimes:jpeg,png,jpg|max:10000',
-                ],
-                [
-                    'image_url.image' => 'Không để trống trường này !',
-                    'image_url.mimes' => 'Trường này không đúng định dạng  !',
-                    'image_url.max' => 'Trường này kích cỡ quá lớn  !',
-                ]
-            );
-            $nameFile = $this->uploadFile(request()->image_url, $slider->image_url);
-            $data = array_merge(request()->except('image_url', 'major_id', 'round_id'), [
-                'image_url' => $nameFile
-            ]);
-        } else {
-            $data = request()->only([
-                'start_time', 'end_time', 'link_to'
-            ]);
+        try {
+
+            $data = null;
+            if (request()->has('image_url')) {
+                $nameFile = $this->uploadFile(request()->image_url, $slider->image_url);
+                $data = array_merge(request()->except('image_url', 'major_id', 'round_id'), [
+                    'image_url' => $nameFile
+                ]);
+            } else {
+                $data = request()->only([
+                    'start_time', 'end_time', 'link_to'
+                ]);
+            }
+            if ($request->major_id != 0) {
+                $data = array_merge($data, ['sliderable_id' => $request->major_id, 'sliderable_type' => $this->major::class]);
+            } elseif ($request->round_id != 0) {
+                $data = array_merge($data, ['sliderable_id' => $request->round_id, 'sliderable_type' => $this->round::class]);
+            } else {
+                $data = array_merge($data, ['sliderable_id' => null, 'sliderable_type' => null]);
+            }
+            $this->modulesSlider->update($slider,$data);
+            return redirect()->route('admin.sliders.list');
+        }catch (\Exception $e) {
+            abort(404);
         }
-        if ($request->major_id != 0) {
-            $data = array_merge($data, ['sliderable_id' => $request->major_id, 'sliderable_type' => $this->major::class]);
-        } elseif ($request->round_id != 0) {
-            $data = array_merge($data, ['sliderable_id' => $request->round_id, 'sliderable_type' => $this->round::class]);
-        } else {
-            $data = array_merge($data, ['sliderable_id' => null, 'sliderable_type' => null]);
-        }
-        $slider->update($data);
-        return redirect()->route('admin.sliders.list');
     }
 
     public function destroy($id)
@@ -283,7 +166,7 @@ class SliderController extends Controller
 
     public function softDelete()
     {
-        $listSliderSoft = $this->getList()->paginate(request('limit') ?? 5);
+        $listSliderSoft = $this->modulesSlider->getList()->paginate(request('limit') ?? 5);
         return view('pages.slider.slider-soft-delete', [
             'listSliderSoft' => $listSliderSoft
         ]);

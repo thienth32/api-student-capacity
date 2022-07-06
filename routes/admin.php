@@ -7,7 +7,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\MajorController;
 use App\Http\Controllers\Admin\RoundController;
 use App\Http\Controllers\Admin\SkillController;
-use App\Http\Controllers\Admin\JudgesController;
+use App\Http\Controllers\Admin\JudgeController;
 use App\Http\Controllers\Admin\ResultController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\ContestController;
@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\SendMailController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EnterpriseController;
 use App\Http\Controllers\Admin\RecruitmentController;
+use App\Http\Controllers\Admin\PostController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('dashboard/api-cuoc-thi', [DashboardController::class, 'chartCompetity'])->name('dashboard.chart-competity');
@@ -248,14 +249,14 @@ Route::group([
     });
 
     Route::prefix('judges')->group(function () {
-        Route::get('{contest_id}/contest', [JudgesController::class, 'getJudgesContest'])->name('admin.judges.contest');
-        Route::get('{round_id}/round', [JudgesController::class, 'getJudgesRound'])->name('admin.judges.round');
-        Route::post('{round_id}/attach-round', [JudgesController::class, 'attachRound'])->name('admin.judges.attach.round');
-        Route::post('{round_id}/detach-round', [JudgesController::class, 'dettachRound'])->name('admin.judges.detach.round');
+        Route::get('{contest_id}/contest', [JudgeController::class, 'getJudgesContest'])->name('admin.judges.contest');
+        Route::get('{round_id}/round', [JudgeController::class, 'getJudgesRound'])->name('admin.judges.round');
+        Route::post('{round_id}/attach-round', [JudgeController::class, 'attachRound'])->name('admin.judges.attach.round');
+        Route::post('{round_id}/detach-round', [JudgeController::class, 'dettachRound'])->name('admin.judges.detach.round');
 
-        Route::post('{contest_id}/attach', [JudgesController::class, 'attachJudges'])->name('admin.judges.attach');
-        Route::post('{contest_id}/sync', [JudgesController::class, 'syncJudges'])->name('admin.judges.sync');
-        Route::delete('{contest_id}/detach', [JudgesController::class, 'detachJudges'])->name('admin.judges.detach');
+        Route::post('{contest_id}/attach', [JudgeController::class, 'attachJudges'])->name('admin.judges.attach');
+        Route::post('{contest_id}/sync', [JudgeController::class, 'syncJudges'])->name('admin.judges.sync');
+        Route::delete('{contest_id}/detach', [JudgeController::class, 'detachJudges'])->name('admin.judges.detach');
     });
 
     Route::prefix('sliders')->group(function () {
@@ -300,20 +301,34 @@ Route::group([
         Route::put('{id}', [RecruitmentController::class, 'update'])->name('admin.recruitment.update');
         Route::get('', [RecruitmentController::class, 'index'])->name('admin.recruitment.list');
         Route::get('create', [RecruitmentController::class, 'create'])->name('admin.recruitment.create');
-        Route::get('{id}', [RecruitmentController::class, 'detail'])->name('admin.recruitment.detail');
+
 
         Route::post('store', [RecruitmentController::class, 'store'])->name('admin.recruitment.store');
         Route::delete('{id}', [RecruitmentController::class, 'destroy'])->name('admin.recruitment.destroy');
-        // Route::prefix('{slug}/skill')->group(function () {
-        //     Route::get('', [MajorController::class, 'Skill'])->name('admin.major.skill');
-        //     Route::post('attach', [MajorController::class, 'attachSkill'])->name('admin.major.skill.attach');
-        //     Route::get('detach/{skill_id}', [MajorController::class, 'detachSkill'])->name('admin.major.skill.detach');
-        // });
         Route::prefix('list-soft-deletes')->group(function () {
             Route::get('', [RecruitmentController::class, 'listRecordSoftDeletes'])->name('admin.recruitment.list.soft.deletes');
             Route::get('{id}/delete', [RecruitmentController::class, 'backUpRecruitment'])->name('admin.recruitment.soft.deletes');
             Route::get('{id}/restore', [RecruitmentController::class, 'delete'])->name('admin.recruitment.soft.restore');
         });
+        Route::get('{id}', [RecruitmentController::class, 'detail'])->name('admin.recruitment.detail');
+    });
+    Route::prefix('posts')->group(function () {
+        Route::get('{slug}/edit', [PostController::class, 'edit'])->name('admin.post.edit');
+        Route::put('{id}', [PostController::class, 'update'])->name('admin.post.update');
+        Route::get('', [PostController::class, 'index'])->name('admin.post.list');
+        Route::get('create', [PostController::class, 'create'])->name('admin.post.create');
+        Route::get('insert', [PostController::class, 'insert'])->name('admin.post.insert');
+
+        Route::post('un-status/{id}', [PostController::class, 'un_status'])->name('admin.post.un.status');
+        Route::post('re-status/{id}', [PostController::class, 're_status'])->name('admin.post.re.status');
+        Route::post('store', [PostController::class, 'store'])->name('admin.post.store');
+        Route::delete('{slug}', [PostController::class, 'destroy'])->name('admin.post.destroy');
+        Route::prefix('list-soft-deletes')->group(function () {
+            Route::get('', [PostController::class, 'listRecordSoftDeletes'])->name('admin.post.list.soft.deletes');
+            Route::get('{id}/delete', [PostController::class, 'backUpPost'])->name('admin.post.soft.deletes');
+            Route::get('{id}/restore', [PostController::class, 'delete'])->name('admin.post.soft.restore');
+        });
+        Route::get('{slug}', [PostController::class, 'detail'])->name('admin.post.detail');
     });
 });
 
@@ -329,4 +344,7 @@ Route::prefix('questions')->group(function () {
     Route::get('soft-delete', [QuestionController::class, 'softDeleteList'])->name('admin.question.soft.delete');
     Route::delete('delete/{id}', [QuestionController::class, 'delete'])->name('admin.question.delete');
     Route::get('restore-delete/{id}', [QuestionController::class, 'restoreDelete'])->name('admin.question.restore');
+
+    Route::post('impost', [QuestionController::class, 'exImpost'])->name('admin.question.excel.impost');
+    Route::get('export', [QuestionController::class, 'exportQe'])->name('admin.question.excel.export');
 });
