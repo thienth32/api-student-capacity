@@ -82,6 +82,7 @@ class PostController extends Controller
             if (request()->has('round_id')) $round = Round::find(request('round_id'))->load('contest');
             $contest = Contest::where('type', 0)->get();
             $recruitments = Recruitment::all();
+
             $rounds = Round::all();
             $posts = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
 

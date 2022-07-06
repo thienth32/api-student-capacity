@@ -13,7 +13,6 @@ use App\Http\Controllers\Admin\RoundController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\SponsorController as AdminSponsorController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
-use App\Models\Recruitments;
 use Illuminate\Support\Facades\Route;
 
 /*

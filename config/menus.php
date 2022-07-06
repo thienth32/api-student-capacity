@@ -1,7 +1,7 @@
 <?php
-const ROLE_ADMINS = 'admin|super admin';
-const ROLE_JUDGE = 'admin|super admin|judge';
-const TYPE_CAPACITY = 1;
+$ROLE_HAS_ADMINS = 'admin|super admin';
+$ROLE_JUDGE = 'admin|super admin|judge';
+$TYPE_CAPACITY = 1;
 return [
     [
         "icon" => '
@@ -23,19 +23,19 @@ return [
                     </span>
                     <!--end::Svg Icon-->',
         "name" => "Quản lý cuộc thi",
-        "role" => ROLE_JUDGE,
+        "role" => $ROLE_JUDGE,
         "subs-menu" => [
             [
                 "name" => "Danh sách cuộc thi ",
                 "link" => "admin.contest.list",
                 "param" => "",
-                "role" => ROLE_JUDGE
+                "role" => $ROLE_JUDGE
             ],
             [
                 "name" => "Thêm mới cuộc thi",
                 "link" => "admin.contest.create",
                 "param" => "",
-                "role" => ROLE_ADMINS,
+                "role" => $ROLE_HAS_ADMINS,
             ]
         ]
     ],// Cuoc thi
@@ -60,19 +60,19 @@ return [
                 <!--end::Svg Icon-->
         ',
         "name" => "Quản lý test năng lực",
-        "role" => ROLE_ADMINS,
+        "role" => $ROLE_HAS_ADMINS,
         "subs-menu" => [
             [
                 "name" => "Danh sách test năng lực ",
-                "param" => '?type=' . TYPE_CAPACITY,
+                "param" => '?type=' . $TYPE_CAPACITY,
                 "link" => "admin.contest.list",
-                "role" => ROLE_ADMINS
+                "role" => $ROLE_HAS_ADMINS
             ],
             [
                 "name" => "Thêm mới test năng lực",
                 "link" => "admin.contest.create",
-                "param" => '?type=' . TYPE_CAPACITY,
-                "role" => ROLE_ADMINS,
+                "param" => '?type=' . $TYPE_CAPACITY,
+                "role" => $ROLE_HAS_ADMINS,
             ]
         ]
     ],// Test nang luc
@@ -92,13 +92,13 @@ return [
                             <!--end::Svg Icon-->
         ',
         "name" => "Quản lý tài khoản",
-        "role" => ROLE_ADMINS,
+        "role" => $ROLE_HAS_ADMINS,
         "subs-menu" => [
             [
                 "name" => "Tổng quan",
                 "param" => '',
                 "link" => "admin.acount.list",
-                "role" => ROLE_ADMINS
+                "role" => $ROLE_HAS_ADMINS
             ]
         ]
     ],// Tai khoan
@@ -119,19 +119,19 @@ return [
                             </span>
         ',
         "name" => "Quản lí đội thi",
-        "role" => ROLE_ADMINS,
+        "role" => $ROLE_HAS_ADMINS,
         "subs-menu" => [
             [
                 "name" => "Danh sách đội thi",
                 "param" => '',
                 "link" => "admin.teams",
-                "role" => ROLE_ADMINS
+                "role" => $ROLE_HAS_ADMINS
             ],
             [
                 "name" => "Thêm mới đội thi",
                 "link" => "admin.teams.create",
                 "param" => '',
-                "role" => ROLE_ADMINS
+                "role" => $ROLE_HAS_ADMINS
             ]
         ]
     ],// Doi thi
@@ -155,19 +155,19 @@ return [
                             </span>
         ',
         "name" => "Quản lý doanh nghiệp",
-        "role" => ROLE_ADMINS,
+        "role" => $ROLE_HAS_ADMINS,
         "subs-menu" => [
             [
                 "name" => "Danh sách doanh nghiệp",
                 "param" => '',
                 "link" => "admin.enterprise.list",
-                "role" => ROLE_ADMINS
+                "role" => $ROLE_HAS_ADMINS
             ],
             [
                 "name" => "Thêm mới doanh nghiệp",
                 "link" => "admin.enterprise.create",
                 "param" => '',
-                "role" => ROLE_ADMINS
+                "role" => $ROLE_HAS_ADMINS
             ]
         ]
     ],// Doanh nghiep
@@ -191,19 +191,19 @@ return [
                             <!--end::Svg Icon-->
         ',
         "name" => "Quản lý chuyên ngành",
-        "role" => ROLE_ADMINS,
+        "role" => $ROLE_HAS_ADMINS,
         "subs-menu" => [
             [
                 "name" => "Danh sách chuyên ngành ",
                 "param" => '',
                 "link" => "admin.major.list",
-                "role" => ROLE_ADMINS
+                "role" => $ROLE_HAS_ADMINS
             ],
             [
                 "name" => "Thêm mới chuyên ngành ",
                 "link" => "admin.major.create",
                 "param" => '',
-                "role" => ROLE_ADMINS
+                "role" => $ROLE_HAS_ADMINS
             ]
         ]
     ],// Chuyen nganh
@@ -225,19 +225,19 @@ return [
                             <!--end::Svg Icon-->
         ',
         "name" => "Quản lý kỹ năng",
-        "role" => ROLE_ADMINS,
+        "role" => $ROLE_HAS_ADMINS,
         "subs-menu" => [
             [
                 "name" => "Danh sách kỹ năng ",
                 "param" => '',
                 "link" => "admin.skill.index",
-                "role" => ROLE_ADMINS
+                "role" => $ROLE_HAS_ADMINS
             ],
             [
                 "name" => "Thêm mới kỹ năng ",
                 "link" => "admin.skill.create",
                 "param" => '',
-                "role" => ROLE_ADMINS
+                "role" => $ROLE_HAS_ADMINS
             ]
         ]
     ],// Ki nang
@@ -260,19 +260,19 @@ return [
                             <!--end::Svg Icon-->
         ',
         "name" => "Quản lý slider",
-        "role" => ROLE_ADMINS,
+        "role" => $ROLE_HAS_ADMINS,
         "subs-menu" => [
             [
                 "name" => "Danh sách slider ",
                 "param" => '',
                 "link" => "admin.sliders.list",
-                "role" => ROLE_ADMINS
+                "role" => $ROLE_HAS_ADMINS
             ],
             [
                 "name" => "Thêm mới slider",
                 "link" => "admin.sliders.create",
                 "param" => '',
-                "role" => ROLE_ADMINS
+                "role" => $ROLE_HAS_ADMINS
             ]
         ]
     ],// Slider
@@ -297,19 +297,19 @@ return [
                             <!--end::Svg Icon-->
         ',
         "name" => "Quản lý bộ câu hỏi",
-        "role" => ROLE_ADMINS,
+        "role" => $ROLE_HAS_ADMINS,
         "subs-menu" => [
             [
                 "name" => "Danh sách bộ câu hỏi ",
                 "param" => '',
                 "link" => "admin.question.index",
-                "role" => ROLE_ADMINS
+                "role" => $ROLE_HAS_ADMINS
             ],
             [
                 "name" => "Thêm mới bộ câu hỏi",
                 "link" => "admin.question.create",
                 "param" => '',
-                "role" => ROLE_ADMINS
+                "role" => $ROLE_HAS_ADMINS
             ]
         ]
     ],// Cau hoi
@@ -332,19 +332,19 @@ return [
                             <!--end::Svg Icon-->
         ',
         "name" => "Quản lý tuyển dụng",
-        "role" => ROLE_ADMINS,
+        "role" => $ROLE_HAS_ADMINS,
         "subs-menu" => [
             [
                 "name" => "Danh sách tuyển dụng ",
                 "param" => '',
                 "link" => "admin.recruitment.list",
-                "role" => ROLE_ADMINS
+                "role" => $ROLE_HAS_ADMINS
             ],
             [
                 "name" => "Thêm mới tuyển dụng",
                 "link" => "admin.recruitment.create",
                 "param" => '',
-                "role" => ROLE_ADMINS
+                "role" => $ROLE_HAS_ADMINS
             ]
         ]
     ],// Tuyen dung
@@ -367,25 +367,25 @@ return [
                             <!--end::Svg Icon-->
         ',
         "name" => "Quản lý bài viết",
-        "role" => ROLE_ADMINS,
+        "role" => $ROLE_HAS_ADMINS,
         "subs-menu" => [
             [
                 "name" => "Danh sách bài viết ",
                 "param" => '',
                 "link" => "admin.post.list",
-                "role" => ROLE_ADMINS
+                "role" => $ROLE_HAS_ADMINS
             ],
             [
                 "name" => "Thêm mới bài viết",
                 "link" => "admin.post.create",
                 "param" => '',
-                "role" => ROLE_ADMINS
+                "role" => $ROLE_HAS_ADMINS
             ],
             [
                 "name" => "Thêm mới bài viết bên ngoài trang",
                 "link" => "admin.post.insert",
                 "param" => '',
-                "role" => ROLE_ADMINS
+                "role" => $ROLE_HAS_ADMINS
             ]
         ]
     ],// Bai viet
