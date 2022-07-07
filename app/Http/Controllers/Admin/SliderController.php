@@ -8,13 +8,14 @@ use App\Models\Contest;
 use App\Models\Major;
 use App\Models\Round;
 use App\Models\Slider;
+use App\Services\Traits\TResponse;
 use App\Services\Traits\TStatus;
 use App\Services\Traits\TUploadImage;
 use Illuminate\Http\Request;
 
 class SliderController extends Controller
 {
-    use TUploadImage,TStatus;
+    use TUploadImage,TStatus,TResponse;
 
     private $slider;
     private $major;
@@ -53,19 +54,9 @@ class SliderController extends Controller
     {
         try {
             $data = $this->modulesSlider->apiIndex();
-            return response()->json(
-                [
-                    "status" => true,
-                    "payload" => $data,
-                ]
-            );
+            return $this->responseApi(true,$data);
         } catch (\Throwable $th) {
-            return response()->json(
-                [
-                    "status" => false,
-                    "payload" => "Serve not found",
-                ]
-            );
+            return $this->responseApi(false);
         }
     }
 

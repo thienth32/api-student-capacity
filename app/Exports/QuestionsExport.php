@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\Questions;
+use App\Models\Question;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -35,6 +35,6 @@ class QuestionsExport implements FromCollection, WithHeadings, WithMapping
     }
     public function collection()
     {
-        return Questions::all();
+        return Question::all();
     }
 }

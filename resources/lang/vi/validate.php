@@ -13,5 +13,6 @@ return [
     'numeric' =>  'Trường nhập định dạng !',
     'regex' => 'Trường nhập không đúng định dạng !',
     'end_time:date_after' => 'Thời gian kết thúc không được nhỏ hơn  thời gian bắt đầu !',
-
+    'file' => 'Trường nhập không đúng định dạng file !',
+    'maxFile' => 'Trường nhập file dung lượng quá lớn  !',
 ];
