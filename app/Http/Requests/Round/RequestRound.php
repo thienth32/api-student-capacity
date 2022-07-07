@@ -40,27 +40,27 @@ class RequestRound extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'Chưa nhập trường này !',
-            'name.max' => 'Độ dài kí tự không phù hợp !',
-            'name.unique' => 'Đã tồn tại trong cơ sở dữ liệu !',
-            'name.regex' => 'Trường name không chứ kí tự đặc biệt !',
+            'name.required' => trans('validate.required'),
+            'name.max' =>   trans('validate.max'),
+            'name.unique' => trans('validate.unique'),
+            'name.regex' => trans('validate.regex'),
 
-            'image.mimes' => 'Sai định dạng !',
-            'image.required' => 'Chưa nhập trường này !',
-            'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
+            'image.mimes' => trans('validate.mimes'),
+            'image.required' => trans('validate.required'),
+            'image.max' => trans('validate.maxImage'),
 
-            'start_time.required' => 'Chưa nhập trường này !',
+            'start_time.required' => trans('validate.required'),
 
-            'end_time.required' => 'Chưa nhập trường này !',
-            'end_time.after' => 'Thời gian kết thúc không được nhỏ hơn  thời gian bắt đầu !',
+            'end_time.required' => trans('validate.required'),
+            'end_time.after' => trans('validate.end_time:date_after'),
 
-            'description.required' => 'Chưa nhập trường này !',
+            'description.required' => trans('validate.required'),
 
-            'contest_id.required' => 'Chưa nhập trường này !',
-            'contest_id.numeric' => 'Sai định dạng !',
+            'contest_id.required' => trans('validate.required'),
+            'contest_id.numeric' => trans('validate.numeric'),
 
-            'type_exam_id.required' => 'Chưa nhập trường này !',
-            'type_exam_id.numeric' => 'Sai định dạng !',
+            'type_exam_id.required' => trans('validate.required'),
+            'type_exam_id.numeric' => trans('validate.numeric'),
         ];
     }
 }

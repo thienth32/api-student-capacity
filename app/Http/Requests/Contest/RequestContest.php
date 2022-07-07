@@ -89,10 +89,4 @@ class RequestContest extends FormRequest
         ];
     }
 
-
-//    protected function failedValidation(Validator $validator)
-//    {
-//        return back()->withErrors($validator)->withInput();
-//    }
-
 }

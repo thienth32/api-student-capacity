@@ -30,13 +30,13 @@ class RequestSlider extends FormRequest
     public function messages()
     {
         return [
-            'link_to.required' => 'Không để trống trường này !',
-            'start_time.required' => 'Không để trống trường này !',
-            'end_time.required' => 'Không để trống trường này !',
-            'end_time.after' => 'Trường này thời gian nhỏ hơn trường thời gian bắt đầu  !',
-            'image_url.image' => 'Không để trống trường này !',
-            'image_url.mimes' => 'Trường này không đúng định dạng  !',
-            'image_url.max' => 'Trường này kích cỡ quá lớn  !',
+            'link_to.required' => trans('validate.required'),
+            'start_time.required' => trans('validate.required'),
+            'end_time.required' => trans('validate.required'),
+            'end_time.after' => trans('validate.end_time:date_after'),
+            'image_url.image' => trans('validate.image'),
+            'image_url.mimes' => trans('validate.mimes'),
+            'image_url.max' => trans('validate.maxImage'),
         ];
     }
 }
