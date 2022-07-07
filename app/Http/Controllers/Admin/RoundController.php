@@ -69,7 +69,8 @@ class RoundController extends Controller
 
     public function store(RequestRound $request)
     {
-        $contest = $this->contest::find($request->contest_id ?? 0);
+        $contest = $this->contest::find($request->contest_id);
+        if(!$contest) return abort(404);
         if (Carbon::parse($request->start_time)->toDateTimeString() < Carbon::parse($contest->date_start)->toDateTimeString()) {
             return redirect()->back()->withErrors(['start_time' => 'Thời gian bắt đầu không được bé hơn thời gian bắt đầu của cuộc thi !'])->withInput();
         };
@@ -80,7 +81,7 @@ class RoundController extends Controller
         try {
             $this->modelDulesRound->store($request);
             $this->db::commit();
-            return Redirect::route('admin.round.list');
+            return redirect()->route('admin.contest.detail.round',['id' => $contest -> id]);
         } catch (Exception $ex) {
             if ($request->hasFile('image')) {
                 $fileImage = $request->file('image');
@@ -109,12 +110,13 @@ class RoundController extends Controller
         }
     }
 
-    private function updateRound(RequestRound $request,$id)
+    private function updateRound($request,$id)
     {
         try {
             // dd(request()->all());
             if (!($round = $this->round::find($id))) return false;
-            $contest = $this->contest::find($request->contest_id ?? 0);
+            $contest = $this->contest::find($request->contest_id);
+            if(!$contest) return false;
             if (Carbon::parse($request->start_time)->toDateTimeString() < Carbon::parse($contest->date_start)->toDateTimeString()) {
                 return [
                     'status' => false,
@@ -145,15 +147,14 @@ class RoundController extends Controller
     }
 
     // View round
-    public function update($id)
+    public function update(RequestRound $request , $id)
     {
-        if ($data = $this->updateRound($id)) {
-            // dd($data);
+        if ($data = $this->updateRound($request,$id)) {
             if (isset($data['status']) && $data['status'] == false)
                 return redirect()->back()->withErrors($data['errors'])->withInput();
-            return  redirect(route('admin.round.list'));
+            return redirect()->route('admin.contest.detail.round',['id' => request()->contest_id]);
         }
-        return redirect('error');
+        return abort(404);
     }
 
     private function destroyRound($id)
