@@ -16,6 +16,13 @@ use Illuminate\Support\Facades\Validator;
 class SkillController extends Controller
 {
     use TUploadImage;
+
+    public function __construct(
+        private Skill $skill,
+        private Major $major,
+        private MajorSkill $majorSkill
+    ) {
+    }
     private function getList(Request $request)
     {
         $keyword = $request->has('keyword') ? $request->keyword : "";
@@ -26,12 +33,12 @@ class SkillController extends Controller
         $softDelete = $request->has('skill_soft_delete') ? $request->skill_soft_delete : null;
 
         if ($softDelete != null) {
-            $query = Skill::onlyTrashed()->where('name', 'like', "%$keyword%")->orderByDesc('deleted_at');
+            $query = $this->skill::onlyTrashed()->where('name', 'like', "%$keyword%")->orderByDesc('deleted_at');
             return $query;
         }
-        $query = Skill::where('name', 'like', "%$keyword%");
+        $query = $this->skill::where('name', 'like', "%$keyword%");
         if ($major != null) {
-            $query = Major::find($major);
+            $query = $this->major::find($major);
         }
         if ($timeDay != null) {
             $current = Carbon::now();
@@ -48,17 +55,14 @@ class SkillController extends Controller
     // Danh sách teams phía view
     public function index(Request $request)
     {
-        DB::beginTransaction();
         try {
-            $dataMajor = Major::where('parent_id', 0)->get();
+            $dataMajor = $this->major::where('parent_id', 0)->get();
             $dataSkill = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
             if ($request->major_id) {
                 $dataSkill = $this->getList($request)->Skill()->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
             }
-            DB::commit();
             return view('pages.skill.index', compact('dataSkill', 'dataMajor'));
         } catch (\Throwable $th) {
-            DB::rollBack();
             return response()->json([
                 'status' => 'lỗi'
             ]);
@@ -67,26 +71,20 @@ class SkillController extends Controller
     // chi tiết skill
     public function detail(Request $request, $id)
     {
-        DB::beginTransaction();
         try {
-            $data = Skill::find($id);
+            $data = $this->skill::find($id);
 
-            DB::commit();
             return view('pages.skill.detailSkill', compact('data'));
         } catch (\Throwable $th) {
-            DB::rollBack();
-            return redirect('error');;
+            return redirect(abort(404));
         };
     }
     public function create(Request $request)
     {
-        DB::beginTransaction();
         try {
-            $dataMajor = Major::where('parent_id', 0)->get();
-            DB::commit();
+            $dataMajor = $this->major::where('parent_id', 0)->get();
             return view('pages.skill.form-add', compact('dataMajor'));
         } catch (\Throwable $th) {
-            DB::rollBack();
             return response()->json([
                 'status' => '404 not phao'
             ]);
@@ -136,16 +134,11 @@ class SkillController extends Controller
                 $logo = $this->uploadFile($fileImage);
                 $data['image_url'] = $logo;
             }
-
-            $newSkill = Skill::create($data);
-
+            $newSkill = $this->skill::create($data);
             if ($newSkill) {
-
                 if ($request->major_id != null) {
-
                     foreach ($request->major_id as $item) {
-
-                        MajorSkill::create([
+                        $this->majorSkill::create([
                             'major_id' => $item,
                             'skill_id' => $newSkill->id,
                         ]);
@@ -153,7 +146,6 @@ class SkillController extends Controller
                 }
             }
             Db::commit();
-
             return redirect()->route('admin.skill.index');
         } catch (\Throwable $th) {
             Db::rollBack();
@@ -163,8 +155,8 @@ class SkillController extends Controller
     public function edit(Request $request, $id)
     {
 
-        $data =  Skill::find($id);
-        $dataMajor = Major::where('parent_id', 0)->get();
+        $data =  $this->skill::find($id);
+        $dataMajor = $this->major::where('parent_id', 0)->get();
 
         return view('pages.skill.form-edit', compact('data', 'dataMajor'));
     }
@@ -198,7 +190,7 @@ class SkillController extends Controller
 
         DB::beginTransaction();
         try {
-            $skill = Skill::find($id);
+            $skill = $this->skill::find($id);
             if (!$skill) {
                 return redirect('error');
             }
@@ -214,13 +206,13 @@ class SkillController extends Controller
 
                 MajorSkill::where('skill_id', $id)->delete();
                 foreach ($request->major_id as $item) {
-                    MajorSkill::create([
+                    $this->majorSkill::create([
                         'major_id' => $item,
                         'skill_id' => $id,
                     ]);
                 }
             } else {
-                MajorSkill::where('skill_id', $id)->delete();
+                $this->majorSkill::where('skill_id', $id)->delete();
             }
             Db::commit();
             return redirect()->route('admin.skill.index');
@@ -234,7 +226,7 @@ class SkillController extends Controller
         try {
             if (!(auth()->user()->hasRole('super admin'))) return false;
             DB::transaction(function () use ($id) {
-                if (!($data = Skill::find($id))) return false;
+                if (!($data = $this->skill::find($id))) return false;
                 if (Storage::disk('s3')->has($data->image_url)) Storage::disk('s3')->delete($data->image_url);
                 $data->delete();
             });
@@ -253,7 +245,7 @@ class SkillController extends Controller
     public function backUpSkill($id)
     {
         try {
-            Skill::withTrashed()->where('id', $id)->restore();
+            $this->skill::withTrashed()->where('id', $id)->restore();
             return redirect()->back();
         } catch (\Throwable $th) {
             return abort(404);
@@ -266,7 +258,7 @@ class SkillController extends Controller
         try {
             if (!(auth()->user()->hasRole('super admin'))) return false;
 
-            Skill::withTrashed()->where('id', $id)->forceDelete();
+            $this->skill::withTrashed()->where('id', $id)->forceDelete();
             return redirect()->back();
         } catch (\Throwable $th) {
             return abort(404);
