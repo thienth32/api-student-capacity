@@ -76,7 +76,7 @@ class ContestController extends Controller
                 }
             ];
 
-            $data =  $this->contest->getList($with,request());
+            $data =  $this->contest->getList($with, request());
 
             return $data;
         } catch (\Throwable $th) {
@@ -94,8 +94,8 @@ class ContestController extends Controller
     {
         $this->checkTypeContest();
         if (!($data = $this->getList()
-                            ->where('type', request('type') ?? 0)
-                            ->paginate(request('limit') ?? 10))) return abort(404);
+            ->where('type', request('type') ?? 0)
+            ->paginate(request('limit') ?? 10))) return abort(404);
 
         return view('pages.contest.index', [
             'contests' => $data,
@@ -107,7 +107,9 @@ class ContestController extends Controller
     //  Response contest
     public function apiIndex()
     {
-//        $data = $this->getList();
+
+        $data = $this->getList();
+
         if (!($data = $this->getList())) return $this->responseApi(
             [
                 "status" => false,
@@ -217,7 +219,7 @@ class ContestController extends Controller
 
         DB::beginTransaction();
         try {
-            $contest = $this->store($filename,$request);
+            $contest = $this->store($filename, $request);
             DB::commit();
             return Redirect::route('admin.contest.show', ['id' => $contest->id])->with('success', 'Thêm mới thành công !');
         } catch (Exception $ex) {
@@ -369,17 +371,17 @@ class ContestController extends Controller
             if ($request->has('img')) {
                 $fileImage =  $request->file('img');
                 $img = $this->uploadFile($fileImage, $contest->img);
-                $dataSave = array_merge($request->except(['_method','_token','img']) , [
+                $dataSave = array_merge($request->except(['_method', '_token', 'img']), [
                     'reward_rank_point' => $rewardRankPoint,
                     'img' => $img
                 ]);
-            }else{
-                $dataSave = array_merge($request->except(['_method','_token']) , [
+            } else {
+                $dataSave = array_merge($request->except(['_method', '_token']), [
                     'reward_rank_point' => $rewardRankPoint,
                 ]);
             }
 
-            $this->contest->update($contest , $dataSave);
+            $this->contest->update($contest, $dataSave);
 
             Db::commit();
             // return Redirect::route('admin.contest.list');
@@ -499,9 +501,9 @@ class ContestController extends Controller
         return view('pages.contest.detail.detail', compact('contest'));
     }
 
-    public function show_test_capacity(Request $request, $id ,Skills $skillModel)
+    public function show_test_capacity(Request $request, $id, Skills $skillModel)
     {
-        if (! $this->contest->getContest()::where('type', 1)->whereId($id)->exists()) abort(404);
+        if (!$this->contest->getContest()::where('type', 1)->whereId($id)->exists()) abort(404);
         $test_capacity =  $this->contest->getContest()::where('type', 1)
             ->whereId($id)
             ->with([
@@ -565,7 +567,7 @@ class ContestController extends Controller
             return abort(404);
         }
     }
-    public function contestDetailEnterprise($id , Enterprise $enterpriseModel)
+    public function contestDetailEnterprise($id, Enterprise $enterpriseModel)
     {
         if (!($contestEnterprise = $this->contest->find($id)->load('enterprise')->enterprise()->paginate(5))) return abort(404);
         $contest =  $this->contest->find($id);
@@ -751,27 +753,27 @@ class ContestController extends Controller
 
     public function apiCapacityRelated($id_capacity)
     {
-        $capacityArrId= [];
+        $capacityArrId = [];
         $capacity = $this->contest->find($id_capacity);
-        if(is_null($capacity)) return $this->responseApi(
+        if (is_null($capacity)) return $this->responseApi(
             [
                 'status' => false,
                 'payload' => 'Không tìm thấy bài test năng lực !',
             ]
         );
-        $capacity->load(['recruitment'=>function($q){
-            return $q->with(['contest'=>function($q){
+        $capacity->load(['recruitment' => function ($q) {
+            return $q->with(['contest' => function ($q) {
                 //  return $q->get(['id']);
             }]);
         }]);
         foreach ($capacity->recruitment as  $recruitment) {
             if ($recruitment->contest) foreach ($recruitment->contest as $contest) {
                 array_push($capacityArrId, $contest->id);
-           }
+            }
         }
-        $capacityArrId= array_unique($capacityArrId);
-        unset($capacityArrId[array_search($id_capacity,$capacityArrId)]);
-       $capacitys= $this->contest->getContest()::whereIn('id', $capacityArrId)->limit(request('limit') ?? 4)->get();
+        $capacityArrId = array_unique($capacityArrId);
+        unset($capacityArrId[array_search($id_capacity, $capacityArrId)]);
+        $capacitys = $this->contest->getContest()::whereIn('id', $capacityArrId)->limit(request('limit') ?? 4)->get();
         $capacitys->load(['rounds']);
         return response()->json([
             'status' => true,
