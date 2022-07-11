@@ -12,25 +12,36 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\Contest;
 use App\Models\Team;
+use App\Services\Traits\TResponse;
 use App\Services\Traits\TUploadImage;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class TakeExamController extends Controller
 {
-    use TUploadImage;
+    use TUploadImage, TResponse;
     private $contest;
     private $examModel;
     private $roundModel;
     private $teamModel;
+    private $roundTeamModel;
+    private $takeExamModel;
 
 
-    public function __construct(Contest $contest, Round $round, Exam $exams, Team $team)
-    {
+    public function __construct(
+        Contest $contest,
+        Round $round,
+        Exam $exams,
+        Team $team,
+        RoundTeam $roundTeam,
+        TakeExam $takeExam
+    ) {
         $this->roundModel = $round;
         $this->contest = $contest;
         $this->examModel = $exams;
         $this->teamModel = $team;
+        $this->roundTeamModel = $roundTeam;
+        $this->takeExamModel = $takeExam;
     }
     public function takeExamStudent(Request $request)
     {
@@ -46,11 +57,9 @@ class TakeExamController extends Controller
                 'round_id.required' => 'Chưa nhập trường này !',
             ]
         );
-        if ($validate->fails()) return response()->json([
-            'status' => false,
-            'payload' => $validate->errors()
-        ]);
-        $round = Round::find($request->round_id)->load('teams');
+        if ($validate->fails()) return $this->responseApi(true,  $validate->errors());
+
+        $round = $this->roundModel::find($request->round_id)->load('teams');
         DB::beginTransaction();
         try {
             foreach ($round->teams as $team) {
@@ -64,44 +73,37 @@ class TakeExamController extends Controller
                 }
             }
             if ($checkUserTeam == false)
-                return response()->json([
-                    'status' => false,
-                    'payload' => 'Bạn không thuộc đội thi nào trong cuộc thi !!'
-                ]);
-            $teamRound = RoundTeam::where('team_id', $team_id)
+                return $this->responseApi(false, 'Bạn không thuộc đội thi nào trong cuộc thi !!');
+
+            $teamRound = $this->roundTeamModel::where('team_id', $team_id)
                 ->where('round_id', $request->round_id)
                 ->first();
-            if (is_null($teamRound)) return response()->json([
-                'status' => false,
-                'payload' => 'Đội thi của bạn đang chờ phê duyệt !!'
-            ]);
-            $takeExamCheck = TakeExam::where('round_team_id', $teamRound->id)->first();
+            if (is_null($teamRound)) return $this->responseApi(false, 'Đội thi của bạn đang chờ phê duyệt !!');
+
+            $takeExamCheck = $this->takeExamModel::where('round_team_id', $teamRound->id)->first();
 
             if (is_null($takeExamCheck)) {
-                if (count(Exam::all()) == 0) return response()->json([
-                    'status' => false,
-                    'payload' => "Đề thi chưa cập nhập !!"
+                if (count($this->examModel::where('type', 0)->get()) == 0)
+                    return $this->responseApi(false, "Đề thi chưa cập nhập !!");
+
+                $exams = $this->examModel::where('type', 0)->get()->random()->id;
+                if (is_null($exams))
+                    return $this->responseApi(false, "Đề thi chưa cập nhập !!");
+
+
+                $takeExamModel = $this->takeExamModel::create([
+                    'exam_id' => $exams,
+                    'round_team_id' => $teamRound->id,
+                    'status' => config('util.TAKE_EXAM_STATUS_UNFINISHED'),
                 ]);
-                $exams = Exam::all()->random()->id;
-                if (is_null($exams)) return response()->json([
-                    'status' => false,
-                    'payload' => "Đề thi chưa cập nhập !!"
-                ]);
-                $takeExamModel = new TakeExam();
-                $takeExamModel->exam_id = $exams;
-                $takeExamModel->round_team_id = $teamRound->id;
-                $takeExamModel->status = config('util.TAKE_EXAM_STATUS_UNFINISHED');
-                $takeExamModel->save();
                 DB::commit();
-                $takeExam = TakeExam::find($takeExamModel->id);
+                $takeExam = $this->takeExamModel::find($takeExamModel->id);
                 if (Storage::disk('s3')->has($takeExam->exam->external_url)) {
                     $urlExam = Storage::disk('s3')->temporaryUrl($takeExam->exam->external_url, now()->addMinutes(5));
                 } else {
                     $urlExam = $takeExam->exam->external_url;
                 }
-                return response()->json([
-                    'status' => true,
-                    'payload' => $takeExam,
+                return $this->responseApi(true, $takeExam, [
                     'exam' => $urlExam,
                     'status_take_exam' => $takeExam->status
                 ]);
@@ -111,20 +113,13 @@ class TakeExamController extends Controller
             } else {
                 $urlExam = $takeExamCheck->exam->external_url;
             }
-            return response()->json([
-                'status' => true,
-                'payload' => $takeExamCheck,
-                'exam' => $urlExam
-            ]);
+            return $this->responseApi(true, $takeExamCheck, ['exam' => $urlExam]);
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::info('..--..');
             Log::info($th->getMessage());
             Log::info('..--..');
-            return response()->json([
-                'status' => false,
-                'payload' => "Đang lỗi !!"
-            ]);
+            return $this->responseApi(false, 'Lỗi hệ thống !!');
         }
     }
     public function takeExamStudentSubmit(Request $request)
@@ -144,17 +139,15 @@ class TakeExamController extends Controller
                 'id.required' => 'Thiếu id !',
             ]
         );
-        if ($validate->fails()) return response()->json([
-            'status' => false,
-            'payload' => $validate->errors()
-        ]);
+        if ($validate->fails())
+            return $this->responseApi(true, $validate->errors());
+
 
         try {
-            $takeExam = TakeExam::find($request->id);
-            if (is_null($takeExam)) return response()->json([
-                'status' => false,
-                'payload' => 'Không tồn tại trên hệ thống !!',
-            ]);
+            $takeExam = $this->takeExamModel::find($request->id);
+            if (is_null($takeExam))
+                return $this->responseApi(false, 'Không tồn tại trên hệ thống !!');
+
             if ($request->has('file_url')) {
                 $fileUrl = $request->file('file_url');
                 $filename = $this->uploadFile($fileUrl);
@@ -173,19 +166,13 @@ class TakeExamController extends Controller
             }
             $takeExam->status = config('util.TAKE_EXAM_STATUS_COMPLETE');
             $takeExam->save();
-            return response()->json([
-                'status' => true,
-                'payload' => 'Nộp bài thành công !!',
-            ]);
+            return $this->responseApi(false, 'Nộp bài thành công !!');
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::info('..--..');
             Log::info($th->getMessage());
             Log::info('..--..');
-            return response()->json([
-                'status' => false,
-                'payload' => 'Lỗi hệ thống !!',
-            ]);
+            return $this->responseApi(false, 'Lỗi hệ thống !!');
         }
     }
     private function getContest($id, $type = 0)
@@ -210,30 +197,23 @@ class TakeExamController extends Controller
                 'round_id.required' => 'Chưa nhập trường này !',
             ]
         );
-        if ($validate->fails()) return response()->json([
-            'status' => false,
-            'payload' => $validate->errors()
-        ]);
+        if ($validate->fails())
+            return $this->responseApi(true, $validate->errors());
 
-//        $teamCheck =  $this->teamModel::where(
-//            'contest_id',
-//            $request->contest_id
-//        )->where('name', trim($request->name))->get();
-//        if (count($teamCheck) > 0) return response()->json([
-//            'status' => false,
-//            'payload' => 'Tên đã tồn tại trong cuộc thi !!'
-//        ]);
+
+        //        $teamCheck =  $this->teamModel::where(
+        //            'contest_id',
+        //            $request->contest_id
+        //        )->where('name', trim($request->name))->get();
+        //        if (count($teamCheck) > 0) return response()->json([
+        //            'status' => false,
+        //            'payload' => 'Tên đã tồn tại trong cuộc thi !!'
+        //        ]);
 
         $round = $this->roundModel::find($request->round_id);
-        if (is_null($round)) return response()->json([
-            'status' => false,
-            'payload' => 'Lỗi truy cập !!'
-        ]);
+        if (is_null($round)) return $this->responseApi(false, 'Lỗi truy cập hệ thống !!');
         $exam = $this->examModel::where('round_id', $request->round_id)->inRandomOrder()->first();
-        if (is_null($exam)) return response()->json([
-            'status' => false,
-            'payload' => 'Lỗi truy cập !!'
-        ]);
+        if (is_null($exam)) return $this->responseApi(false, 'Lỗi truy cập hệ thống !!');
 
         $exam->load(['questions' => function ($q) {
             return $q->with([
@@ -242,9 +222,6 @@ class TakeExamController extends Controller
                 }
             ]);
         }]);
-        return response()->json([
-            'status' => true,
-            'payload' => $exam
-        ]);
+        return $this->responseApi(true, $exam);
     }
 }

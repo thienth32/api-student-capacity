@@ -126,7 +126,7 @@ class TeamController extends Controller
         if (!is_null($team)) {
             return $this->editTeamContest($request, $id_team, null, Redirect::route('admin.teams'), Redirect::back());
         } else {
-            return Redirect::back();
+            return redirect()->back();
         }
     }
 
@@ -202,9 +202,6 @@ class TeamController extends Controller
                 }
                 if ($user->status != config('util.ACTIVE_STATUS'))
                     return  $this->responseApi(false, 'Tài khoản đã bị khóa !');
-
-
-
                 $teamChecks = $this->team::where(
                     'contest_id',
                     $request->contest_id
@@ -292,7 +289,7 @@ class TeamController extends Controller
             DB::rollBack();
             if ($request->hasFile('image')) {
                 $fileImage = $request->file('image');
-                if (Storage::disk('google')->has($fileImage)) Storage::disk('google')->delete($filename);
+                if (Storage::disk('google')->has($fileImage)) Storage::disk('google')->delete($fileImage);
             }
 
             return $this->responseApi(true, $th);
