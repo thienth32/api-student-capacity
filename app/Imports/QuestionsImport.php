@@ -2,7 +2,7 @@
 
 namespace App\Imports;
 
-use App\Models\Questions;
+use App\Models\Question;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
@@ -17,7 +17,7 @@ class QuestionsImport implements ToCollection
     public function collection(Collection  $rows)
     {
         foreach ($rows as $row) {
-            Questions::create([
+            Question::create([
                 'content' => $row[0],
                 'status' => $row[1],
                 'type' => $row[2],

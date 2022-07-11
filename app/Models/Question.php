@@ -9,7 +9,7 @@ use App\Casts\FormatDate;
 use App\Casts\FormatImageGet;
 use App\Services\Builder\Builder;
 
-class Questions extends Model
+class Question extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = 'questions';

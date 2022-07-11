@@ -35,6 +35,7 @@ class RequestContest extends FormRequest
             'date_start' => 'required|date',
             'register_deadline' => 'required|date',
             'description' => 'required',
+            'post_new' => 'required'
         ];
 
         if(!$this->route()->id || $this->has('img'))  $rule = array_merge($rule, [
@@ -57,40 +58,35 @@ class RequestContest extends FormRequest
     public function messages()
     {
         return [
-            'top1.required' => 'Chưa nhập trường này !',
-            'top1.numeric' =>  'Sai định dạng !',
-            'top2.required' => 'Chưa nhập trường này !',
-            'top2.numeric' =>  'Sai định dạng !',
-            'top3.required' => 'Chưa nhập trường này !',
-            'top3.numeric' =>  'Sai định dạng !',
-            'leave.required' => 'Chưa nhập trường này !',
-            'leave.numeric' =>  'Sai định dạng !',
+            'top1.required' => trans('validate.required'),
+            'top1.numeric' =>  trans('validate.numeric'),
+            'top2.required' => trans('validate.required'),
+            'top2.numeric' =>  trans('validate.numeric'),
+            'top3.required' => trans('validate.required'),
+            'top3.numeric' =>  trans('validate.numeric'),
+            'leave.required' => trans('validate.required'),
+            'leave.numeric' =>  trans('validate.numeric'),
 
-            'name.required' => 'Chưa nhập trường này !',
-            'max_user.required' => 'Chưa nhập trường này !',
-            'max_user.numeric' =>  'Sai định dạng !',
-            'name.unique' => 'Tên cuộc thi đã tồn tại !',
-            'name.max' => 'Độ dài kí tự không phù hợp !',
-            'img.mimes' => 'Sai định dạng !',
-            'img.required' => 'Chưa nhập trường này !',
-            'img.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
-            'date_start.required' => 'Chưa nhập trường này !',
-            'date_start.date' => 'Sai định dạng !',
-            'start_register_time.required' => 'Chưa nhập trường này !',
-            'start_register_time.date' => 'Sai định dạng !',
+            'name.required' => trans('validate.required'),
+            'post_new.required' => trans('validate.required'),
+            'max_user.required' => trans('validate.required'),
+            'max_user.numeric' =>  trans('validate.numeric'),
+            'name.unique' => trans('validate.unique'),
+            'name.max' => trans('validate.max'),
+            'img.mimes' => trans('validate.mimes'),
+            'img.required' => trans('validate.required'),
+            'img.max' => trans('validate.maxImage'),
+            'date_start.required' => trans('validate.required'),
+            'date_start.date' => trans('validate.date'),
+            'start_register_time.required' => trans('validate.required'),
+            'start_register_time.date' => trans('validate.date'),
 
-            'end_register_time.required' => 'Chưa nhập trường này !',
-            'end_register_time.date' => 'Sai định dạng !',
-            'register_deadline.required' => 'Chưa nhập trường này !',
-            'register_deadline.date' => 'Sai định dạng !',
-            'description.required' => 'Chưa nhập trường này !',
+            'end_register_time.required' => trans('validate.required'),
+            'end_register_time.date' => trans('validate.date'),
+            'register_deadline.required' => trans('validate.required'),
+            'register_deadline.date' => trans('validate.date'),
+            'description.required' =>trans('validate.required'),
         ];
     }
-
-
-//    protected function failedValidation(Validator $validator)
-//    {
-//        return back()->withErrors($validator)->withInput();
-//    }
 
 }
