@@ -66,13 +66,13 @@ class SkillController extends Controller
     public function store(RequestsSkill $request)
     {
 
-        DB::beginTransaction();
+        $this->db::beginTransaction();
         try {
             $this->modulesSkill->store($request);
-            Db::commit();
+            $this->db::commit();
             return redirect()->route('admin.skill.index');
         } catch (\Throwable $th) {
-            Db::rollBack();
+            $this->db::rollBack();
             return redirect('error');
         }
     }
@@ -89,10 +89,10 @@ class SkillController extends Controller
         DB::beginTransaction();
         try {
             $this->modulesSkill->update($request, $id);
-            Db::commit();
+            $this->db::commit();
             return redirect()->route('admin.skill.index');
         } catch (\Throwable $th) {
-            Db::rollBack();
+            $this->db::rollBack();
             return redirect('error');
         }
     }
@@ -101,7 +101,7 @@ class SkillController extends Controller
 
         try {
             if (!(auth()->user()->hasRole('super admin'))) return false;
-            DB::transaction(function () use ($id) {
+            $this->db::transaction(function () use ($id) {
                 if (!($data = $this->skill::find($id))) return false;
                 $data->delete();
             });
