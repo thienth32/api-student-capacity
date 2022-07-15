@@ -46,25 +46,25 @@
                                 <div class="row col-12 m-auto">
 
                                     <button id="clickContset" type="button"
-                                        class="mygroup btn col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light click-contest">
+                                        class="mygroup btn  {{ old('contest_id') ? 'btn-primary' : '' }} col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light click-contest">
                                         Cuộc thi</button>
                                     <button type="button"
-                                        class="mygroup btn col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light click-round">
+                                        class="mygroup btn  {{ old('round_id') ? 'btn-primary' : '' }} col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light click-round">
                                         Vòng thi</button>
                                     <button type="button"
-                                        class="click-recruitment  btn col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light">
+                                        class="click-recruitment  btn {{ old('recruitment_id') ? 'btn-primary' : '' }} col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light">
                                         Tuyển dụng</button>
                                 </div>
                                 <br>
                                 <div class="col-12 pb-2">
-                                    <div style="display:none" id="contest">
+                                    <div style="{{ old('contest_id') ? '' : 'display:none' }}" id="contest">
                                         <div class="form-group mb-10">
                                             <label for="" class="form-label">Cuộc thi</label>
                                             <select name="contest_id" class="form-select form-major" data-control="select2"
                                                 data-placeholder="Chọn cuộc thi ">
                                                 <option value="0">Chọn cuộc thi</option>
                                                 @foreach ($contest as $item)
-                                                    <option @selected(request('contest_id') == $item->id) value="{{ $item->id }}">
+                                                    <option @selected(old('contest_id') == $item->id) value="{{ $item->id }}">
                                                         {{ $item->name }}
                                                     </option>
                                                 @endforeach
@@ -73,13 +73,13 @@
                                         </div>
 
                                     </div>
-                                    <div style="display:none" id="round">
+                                    <div style="{{ old('round_id') ? '' : 'display:none' }}" id="round">
                                         <label class="form-label">Cuộc thi </label>
-                                        <select id="select-contest-p" class="form-select form-contest "
+                                        <select id="select-contest-p" name="contestRound" class="form-select form-contest "
                                             data-control="select2" data-placeholder="Chọn cuộc thi ">
                                             <option value="">Chọn cuộc thi</option>
                                             @foreach ($contest as $item)
-                                                <option value="{{ $item->id }}">
+                                                <option @selected(old('contestRound') == $item->id) value="{{ $item->id }}">
                                                     {{ $item->name }} - {{ count($item->rounds) }} vòng thi
                                                 </option>
                                             @endforeach
@@ -94,14 +94,14 @@
                                         </div>
 
                                     </div>
-                                    <div style="display:none" id="recruitment">
+                                    <div style="{{ old('recruitment_id') ? '' : 'display:none' }}" id="recruitment">
                                         <div class="form-group mb-10">
                                             <label for="" class="form-label">Tuyển dụng</label>
                                             <select name="recruitment_id" class="form-select form-major"
                                                 data-control="select2" data-placeholder="Chọn cuộc thi ">
                                                 <option value="0">Chọn tuyển dụng</option>
                                                 @foreach ($recruitments as $item)
-                                                    <option @selected(request('recruitment_id') == $item->id) value="{{ $item->id }}">
+                                                    <option @selected(old('recruitment_id') == $item->id) value="{{ $item->id }}">
                                                         {{ $item->name }}
                                                     </option>
                                                 @endforeach
@@ -167,9 +167,15 @@
     <script src="assets/js/system/post/post.js"></script>
     <script src="assets/js/system/post/date-after.js"></script>
     <script>
+        const oldRound = @json(old('round_id'));
+        const oldRecruitment = @json(old('recruitment_id'));
         $(document).ready(function() {
-
-            $(".click-contest").click();
+            if (oldRound == null || oldRecruitment == null) {
+                $(".click-contest").click();
+            }
+            if (oldRound != null) {
+                $("#select-contest-p").change();
+            }
 
         });
         rules.thumbnail_url = {

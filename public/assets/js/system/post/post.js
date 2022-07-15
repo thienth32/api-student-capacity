@@ -66,6 +66,7 @@ $(document).ready(function () {
         $("#recruitment").toggle(300);
     });
 });
+
 const pageSliderForm = {
     selectRoundChildContest: function () {
         $("#select-contest-p").on("change", function () {
@@ -75,7 +76,9 @@ const pageSliderForm = {
                 html +
                 rounds.map(function (data) {
                     if (id == data.contest_id) {
-                        return ` <option value="${data.id}">${data.name} </option>`;
+                        return ` <option ${
+                            oldRound == data.id ? "selected" : ""
+                        } value="${data.id}">${data.name} </option>`;
                     }
                     return "";
                 });

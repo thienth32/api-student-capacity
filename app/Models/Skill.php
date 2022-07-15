@@ -14,7 +14,7 @@ class Skill extends Model
     protected $fillable = ['name', 'short_name', 'image_url', 'description'];
     public function majorSkill()
     {
-        return $this->belongsToMany(Major::class, 'major_skills', 'skill_id', 'major_id');
+        return $this->belongsToMany(Major::class, 'major_skills', 'skill_id', 'major_id')->withTimestamps();
     }
 
     public function questions()

@@ -195,7 +195,7 @@
     <script>
         preview.showFile('#file-input', '#image-preview');
         dateAfter('input[type=datetime-local]#begin', 'input[type=datetime-local]#end')
-
+        const oldRound = @json(old('round_id'));
         const rounds = @json($rounds);
     </script>
     <script src="assets/js/system/validate/validate.js"></script>

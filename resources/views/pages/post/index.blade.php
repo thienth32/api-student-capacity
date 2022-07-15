@@ -421,7 +421,8 @@
 
                                 </td>
                                 <td>
-                                    @if (\Carbon\Carbon::parse($key->published_at)->toDateTimeString() > \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
+                                    @if (\Carbon\Carbon::parse($key->published_at)->toDateTimeString() >
+                                        \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
                                         <span class="badge bg-danger">Chưa xuất bản </span>
                                     @else
                                         <span class="badge  bg-success">Đã xuất bản </span>

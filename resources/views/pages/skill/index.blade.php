@@ -97,8 +97,8 @@
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="  form-group p-2">
                     <label class="form-label">Tìm kiếm </label>
-                    <input id="searchTeam" type="text" placeholder="'*Enter' tìm kiếm ..."
-                        class=" ip-search form-control">
+                    <input value="{{ request('keyword') ?? '' }}" id="searchTeam" type="text"
+                        placeholder="'*Enter' tìm kiếm ..." class=" ip-search form-control">
                 </div>
             </div>
 
@@ -325,7 +325,7 @@
                                                         aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body  ">
-                                                    {{ $key->description }}
+                                                    {!! $key->description !!}
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
