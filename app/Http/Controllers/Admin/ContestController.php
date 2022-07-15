@@ -372,16 +372,11 @@ class ContestController extends Controller
                     }
                 }
             }
-            if ($team_id == 0)  return response()->json([
-                'status' => true,
-                'payload' => [],
-            ]);
+            if ($team_id == 0)  return $this->responseApi(true, []);
             $team = $this->team::find($team_id)->load('members');
-            return response()->json([
-                'status' => true,
-                'payload' => $team,
-            ]);
+            return $this->responseApi(true, $team);
         } catch (\Throwable $th) {
+            return $this->responseApi(false);
         }
     }
 

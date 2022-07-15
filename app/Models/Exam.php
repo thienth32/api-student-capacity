@@ -22,6 +22,6 @@ class Exam extends Model
 
     public function questions()
     {
-        return $this->belongsToMany(Questions::class, 'exam_questions', 'exam_id', 'question_id');
+        return $this->belongsToMany(Question::class, 'exam_questions', 'exam_id', 'question_id');
     }
 }

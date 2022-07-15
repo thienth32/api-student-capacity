@@ -45,29 +45,22 @@ class SkillController extends Controller
     // chi tiết skill
     public function detail($id)
     {
-        DB::beginTransaction();
         try {
             $data = $this->modulesSkill->find($id);
 
-            DB::commit();
             return view('pages.skill.detailSkill', compact('data'));
         } catch (\Throwable $th) {
-            DB::rollBack();
-            return redirect('error');;
+            return redirect(abort(404));
         };
     }
     public function create(Request $request)
     {
-        DB::beginTransaction();
         try {
             $dataMajor = $this->major::where('parent_id', 0)->get();
-            DB::commit();
+
             return view('pages.skill.form-add', compact('dataMajor'));
         } catch (\Throwable $th) {
-            DB::rollBack();
-            return response()->json([
-                'status' => '404 not phao'
-            ]);
+            return redirect('error');
         };
     }
     public function store(RequestsSkill $request)
@@ -77,7 +70,6 @@ class SkillController extends Controller
         try {
             $this->modulesSkill->store($request);
             Db::commit();
-
             return redirect()->route('admin.skill.index');
         } catch (\Throwable $th) {
             Db::rollBack();

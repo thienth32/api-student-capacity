@@ -141,7 +141,11 @@
                                 <div class="form-group mb-10">
                                     <label for="" class="form-label">Giới hạn thành viên trong đội</label>
                                     <input name="max_user" type='number' class="form-control" />
+                                    @error('max_user')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
                                 </div>
+
                             @endif
                             <div class="form-group ">
                                 <label for="" class="form-label">Ảnh {{ $contest_type_text }}</label>
@@ -151,7 +155,9 @@
                                     src="https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg" />
                             </div>
 
-
+                            @error('img')
+                                <p class="text-danger">{{ $message }}</p>
+                            @enderror
 
                         </div>
                     </div>
@@ -161,24 +167,36 @@
                             <div class="form-group mt-4 ">
                                 <label for="" class="form-label">Top 1</label>
                                 <input name="top1" type='number' class="form-control" />
+                                @error('top1')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
                             </div>
                         </div>
                         <div class="col-3">
                             <div class="form-group mt-4 ">
                                 <label for="" class="form-label">Top 2</label>
                                 <input name="top2" type='number' class="form-control" />
+                                @error('top2')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
                             </div>
                         </div>
                         <div class="col-3">
                             <div class="form-group mt-4 ">
                                 <label for="" class="form-label">Top 3</label>
                                 <input name="top3" type='number' class="form-control" />
+                                @error('top3')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
                             </div>
                         </div>
                         <div class="col-3">
                             <div class="form-group mt-4 ">
                                 <label for="" class="form-label">Còn lại</label>
                                 <input name="leave" type='number' class="form-control" />
+                                @error('leave')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
                             </div>
                         </div>
 
@@ -234,5 +252,5 @@
             'input[type=datetime-local]#start_time', 'input[type=datetime-local]#end_time')
         preview.showFile('#file-input', '#image-preview');
     </script>
-    <script src="assets/js/system/validate/validate.js"></script>
+{{--    <script src="assets/js/system/validate/validate.js"></script>--}}
 @endsection
