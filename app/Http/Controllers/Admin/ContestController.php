@@ -28,7 +28,7 @@ class ContestController extends Controller
 {
     use TUploadImage, TResponse, TTeamContest , TStatus;
 
-    public function __construct(
+     public function __construct(
         private Contest $contest,
         private Major $major,
         private Team $team ,
@@ -36,6 +36,49 @@ class ContestController extends Controller
         private Storage $storage
     )
     { }
+
+    /**
+     *  Get list contest
+     */
+    private function getList($flagCapacity = false)
+    {
+        try {
+            $with = [];
+
+            if (!$flagCapacity) $with = [
+                'major',
+                'teams',
+                'rounds' => function ($q) {
+                    return $q->with([
+                        'teams' => function ($q) {
+                            return $q->with('members');
+                        }
+                    ]);
+                },
+                'enterprise',
+                'judges'
+            ];
+            if ($flagCapacity) $with = [
+                'rounds' => function ($q) {
+                    return $q->with([
+                        'exams' => function ($q) {
+                            return $q->with([
+                                'questions' => function ($q) {
+                                    return $q->with('answers');
+                                }
+                            ]);
+                        }
+                    ]);
+                }
+            ];
+
+            $data =  $this->contest->getList($with, request());
+
+            return $data;
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
 
     private function checkTypeContest()
     {
@@ -448,18 +491,16 @@ class ContestController extends Controller
 
     public function apiCapacityRelated($id_capacity)
     {
-        $capacityArrId= [];
+        $capacityArrId = [];
         $capacity = $this->contest->find($id_capacity);
         if(is_null($capacity)) return $this->responseApi(false, 'Không tìm thấy bài test năng lực !');
         $capacity->load(['recruitment'=>function($q){
-            return $q->with(['contest'=>function($q){
-                //  return $q->get(['id']);
-            }]);
+            return $q->with(['contest']);
         }]);
         foreach ($capacity->recruitment as  $recruitment) {
             if ($recruitment->contest) foreach ($recruitment->contest as $contest) {
                 array_push($capacityArrId, $contest->id);
-           }
+            }
         }
         $capacityArrId= array_unique($capacityArrId);
         unset($capacityArrId[array_search($id_capacity,$capacityArrId)]);

@@ -313,6 +313,7 @@ class RecruitmentController extends Controller
     }
     public function apiShow(Request $request)
     {
+
         $data = $this->getList($request)->get();
         $data->load('contest');
         $data->load('enterprise');
