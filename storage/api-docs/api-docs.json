@@ -1,0 +1,104 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "OpenApi Capacity Fpoly",
+        "contact": {
+            "email": ""
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/public/contests": {
+            "get": {
+                "description": "Description api contests",
+                "operationId": "21335560b55dc3b39b979268e1450fa3",
+                "parameters": [
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "description": "Tìm kiếm ",
+                        "required": false
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Lọc theo trạng thái ",
+                        "required": false
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Lọc theo chiều asc hoặc desc ",
+                        "required": false
+                    },
+                    {
+                        "name": "sort_by",
+                        "in": "query",
+                        "description": "Các cột cần lọc  ",
+                        "required": false
+                    },
+                    {
+                        "name": "major_id",
+                        "in": "query",
+                        "description": "Lọc theo chuyên ngành   ",
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                }
+            }
+        },
+        "/api/public/capacity": {
+            "get": {
+                "description": "Description api capacity",
+                "operationId": "35885eef783a04e08d43104f04f5887d",
+                "parameters": [
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "description": "Tìm kiếm ",
+                        "required": false
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Lọc theo trạng thái ",
+                        "required": false
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Lọc theo chiều asc hoặc desc ",
+                        "required": false
+                    },
+                    {
+                        "name": "sort_by",
+                        "in": "query",
+                        "description": "Các cột cần lọc  ",
+                        "required": false
+                    },
+                    {
+                        "name": "major_id",
+                        "in": "query",
+                        "description": "Lọc theo chuyên ngành   ",
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                }
+            }
+        }
+    }
+}
