@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Imports\QuestionsImport;
 use App\Models\Answer;
 use App\Models\Exam;
-use App\Models\Questions;
+use App\Models\Question;
 use App\Models\Skill;
 use App\Services\Traits\TStatus;
 use Carbon\Carbon;
@@ -24,7 +24,7 @@ class QuestionController extends Controller
     protected $questionModel;
     protected $answerModel;
     protected $examModel;
-    public function __construct(Skill $skill, Questions $question, Answer $answer, Exam $exam)
+    public function __construct(Skill $skill, Question $question, Answer $answer, Exam $exam)
     {
         $this->skillModel = $skill;
         $this->questionModel = $question;
@@ -179,10 +179,10 @@ class QuestionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Questions  $questions
+     * @param  \App\Models\Question  $questions
      * @return \Illuminate\Http\Response
      */
-    public function show(Questions $questions)
+    public function show(Question $questions)
     {
         //
     }
@@ -190,10 +190,10 @@ class QuestionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Questions  $questions
+     * @param  \App\Models\Question  $questions
      * @return \Illuminate\Http\Response
      */
-    public function edit(Questions $questions, $id)
+    public function edit(Question $questions, $id)
     {
         $skills = $this->skillModel::select('name', 'id')->get();
         $question = $this->questionModel::find($id)->load(['answers', 'skills']);
@@ -208,7 +208,7 @@ class QuestionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Questions  $questions
+     * @param  \App\Models\Question  $questions
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -283,10 +283,10 @@ class QuestionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Questions  $questions
+     * @param  \App\Models\Question  $questions
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Questions $questions, $id)
+    public function destroy(Question $questions, $id)
     {
         $this->questionModel::find($id)->delete();
         return Redirect::route('admin.question.index');

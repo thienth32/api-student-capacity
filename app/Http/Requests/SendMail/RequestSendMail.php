@@ -32,10 +32,10 @@ class RequestSendMail extends FormRequest
     public function messages()
     {
         return [
-            'content.required' => 'Trường nội dung không được bỏ trống !',
-            'content.min' => 'Trường nội dung không được nhỏ quá 2 ký tự !',
-            'subject.min' => 'Trường tiêu đề không được nhỏ quá 2 ký tự !',
-            'subject.required' => 'Trường tiêu đề không được bỏ trống !',
+            'content.required' => trans('validate.required'),
+            'content.min' => trans('validate.min'),
+            'subject.min' => trans('validate.min'),
+            'subject.required' => trans('validate.required'),
         ];
     }
 

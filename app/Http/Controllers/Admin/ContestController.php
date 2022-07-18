@@ -28,7 +28,7 @@ class ContestController extends Controller
 {
     use TUploadImage, TResponse, TTeamContest , TStatus;
 
-    public function __construct(
+     public function __construct(
         private Contest $contest,
         private Major $major,
         private Team $team ,
@@ -36,6 +36,49 @@ class ContestController extends Controller
         private Storage $storage
     )
     { }
+
+    /**
+     *  Get list contest
+     */
+    private function getList($flagCapacity = false)
+    {
+        try {
+            $with = [];
+
+            if (!$flagCapacity) $with = [
+                'major',
+                'teams',
+                'rounds' => function ($q) {
+                    return $q->with([
+                        'teams' => function ($q) {
+                            return $q->with('members');
+                        }
+                    ]);
+                },
+                'enterprise',
+                'judges'
+            ];
+            if ($flagCapacity) $with = [
+                'rounds' => function ($q) {
+                    return $q->with([
+                        'exams' => function ($q) {
+                            return $q->with([
+                                'questions' => function ($q) {
+                                    return $q->with('answers');
+                                }
+                            ]);
+                        }
+                    ]);
+                }
+            ];
+
+            $data =  $this->contest->getList($with, request());
+
+            return $data;
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
 
     private function checkTypeContest()
     {
@@ -59,12 +102,88 @@ class ContestController extends Controller
         ]);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/public/contests",
+     *     description="Description api contests",
+     *     @OA\Parameter(
+     *         name="q",
+     *         in="query",
+     *         description="Tìm kiếm ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="status",
+     *         in="query",
+     *         description="Lọc theo trạng thái ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort",
+     *         in="query",
+     *         description="Lọc theo chiều asc hoặc desc ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort_by",
+     *         in="query",
+     *         description="Các cột cần lọc  ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="major_id",
+     *         in="query",
+     *         description="Lọc theo chuyên ngành   ",
+     *         required=false,
+     *     ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
     public function apiIndex()
     {
         if (!($data = $this->contest->apiIndex())) return $this->responseApi(false);
         return $this->responseApi(true , $data);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/public/capacity",
+     *     description="Description api capacity",
+     *     @OA\Parameter(
+     *         name="q",
+     *         in="query",
+     *         description="Tìm kiếm ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="status",
+     *         in="query",
+     *         description="Lọc theo trạng thái ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort",
+     *         in="query",
+     *         description="Lọc theo chiều asc hoặc desc ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort_by",
+     *         in="query",
+     *         description="Các cột cần lọc  ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="major_id",
+     *         in="query",
+     *         description="Lọc theo chuyên ngành   ",
+     *         required=false,
+     *     ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
     public function apiIndexCapacity()
     {
         if (!($data = $this->contest->apiIndex(true))) return $this->responseApi(false);
@@ -373,17 +492,11 @@ class ContestController extends Controller
                     }
                 }
             }
-            if ($team_id == 0)  return response()->json([
-                'status' => true,
-                'payload' => [],
-            ]);
+            if ($team_id == 0)  return $this->responseApi(true,[]);
             $team = $this->team::find($team_id)->load('members');
-            return response()->json([
-                'status' => true,
-                'payload' => $team,
-            ]);
+            return $this->responseApi(true,$team);
         } catch (\Throwable $th) {
-
+            return $this->responseApi(false);
         }
     }
 
@@ -454,18 +567,16 @@ class ContestController extends Controller
 
     public function apiCapacityRelated($id_capacity)
     {
-        $capacityArrId= [];
+        $capacityArrId = [];
         $capacity = $this->contest->find($id_capacity);
         if(is_null($capacity)) return $this->responseApi(false, 'Không tìm thấy bài test năng lực !');
         $capacity->load(['recruitment'=>function($q){
-            return $q->with(['contest'=>function($q){
-                //  return $q->get(['id']);
-            }]);
+            return $q->with(['contest']);
         }]);
         foreach ($capacity->recruitment as  $recruitment) {
             if ($recruitment->contest) foreach ($recruitment->contest as $contest) {
                 array_push($capacityArrId, $contest->id);
-           }
+            }
         }
         $capacityArrId= array_unique($capacityArrId);
         unset($capacityArrId[array_search($id_capacity,$capacityArrId)]);

@@ -1,0 +1,43 @@
+    /**
+     * @OA\Get(
+     *     path="/api/api-get",
+     *     description="Description api",
+     *     @OA\Response(response="200", description="Mã code viết vào đây ")
+     * )
+     */
+
+     /**
+     * @OA\Post(
+     *     path="/api/api-post",
+     *     description="Description api",
+     *     @OA\Parameter(
+     *         name="Name",
+     *         in="query",
+     *         description="Your first name",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="Age",
+     *         in="query",
+     *         description="Your age",
+     *         required=false,
+     *     ),
+     *     @OA\RequestBody(
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                  @OA\Property(
+     *                      type="string",
+     *                      property="title",
+     *                  ),
+     *                  @OA\Property(
+     *                      type="number",
+     *                      property="age",
+     *                  ),
+     *              ),
+     *          ),
+     *      ),
+     *     @OA\Response(response="200", description="Thành công "),
+     *     @OA\Response(response="404", description="Không thành công  "),
+     * )
+     */
