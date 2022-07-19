@@ -149,15 +149,13 @@ class RecruitmentController extends Controller
     }
     public function apiShow(Request $request)
     {
-        $data = $this->modulesRecruitment->getList($request)->get();
+        $data = $this->modulesRecruitment->getList($request)->paginate(request('limit') ?? config('util.HOMEPAGE_ITEM_AMOUNT'));
         if (!$data) abort(404);
         $data->load('contest');
         $data->load('enterprise');
         return $this->responseApi(
-            [
-                "status" => true,
-                "payload" => $data,
-            ]
+            true,
+            $data,
         );
     }
     public function apiDetail($id)
@@ -167,10 +165,8 @@ class RecruitmentController extends Controller
         $data->load('contest');
         $data->load('enterprise');
         return $this->responseApi(
-            [
-                "status" => true,
-                "payload" => $data,
-            ]
+            true,
+            $data
         );
     }
 }
