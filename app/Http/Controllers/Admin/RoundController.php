@@ -53,6 +53,45 @@ class RoundController extends Controller
         ]);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/public/rounds",
+     *     description="Description api round",
+     *     tags={"Round"},
+     *     @OA\Parameter(
+     *         name="q",
+     *         in="query",
+     *         description="Tìm kiếm ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort",
+     *         in="query",
+     *         description="Lọc theo chiều asc hoặc desc ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort_by",
+     *         in="query",
+     *         description="Các cột cần lọc  ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="contest_id",
+     *         in="query",
+     *         description="Lọc theo cuộc thi   ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="type_exam_id",
+     *         in="query",
+     *         description="Lọc theo thể loại thi   ",
+     *         required=false,
+     *     ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
     //  Response round
     public function apiIndex()
     {
@@ -181,6 +220,21 @@ class RoundController extends Controller
         return redirect('error');
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/public/rounds/{id}",
+     *     description="Description api round by id",
+     *     tags={"Round"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID vòng thi",
+     *         required=true,
+     *     ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
     public function show($id)
     {
         $round = $this->round::whereId($id);

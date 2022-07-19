@@ -39,6 +39,21 @@ class MajorController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/public/majors/{slug}",
+     *     description="Description api major by slug",
+     *     tags={"Major"},
+     *     @OA\Parameter(
+     *         name="slug",
+     *         in="path",
+     *         description="Slug chuyên ngành  ",
+     *         required=true,
+     *     ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
     public function apiShow($slug)
     {
         if (!($major = $this->getMajor($slug))) return $this->responseApi(
@@ -82,6 +97,33 @@ class MajorController extends Controller
         return abort(404);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/public/majors",
+     *     description="Description api major",
+     *     tags={"Major"},
+     *     @OA\Parameter(
+     *         name="q",
+     *         in="query",
+     *         description="Tìm kiếm ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort",
+     *         in="query",
+     *         description="Lọc theo chiều asc hoặc desc ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort_by",
+     *         in="query",
+     *         description="Các cột cần lọc  ",
+     *         required=false,
+     *     ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
     public function apiIndex()
     {
         if ($data = $this->getList()) {
