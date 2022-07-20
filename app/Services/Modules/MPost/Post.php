@@ -29,6 +29,7 @@ class Post
         $keyword = $request->has('keyword') ? $request->keyword : "";
         $status = $request->has('status') ? $request->status : null;
         $contest = $request->has('contest_id') ? $request->contest_id : 0;
+        $capacity = $request->has('capacity_id') ? $request->capacity_id : 0;
         $rounds = $request->has('round_id') ? $request->round_id : 0;
         $recruitment = $request->has('recruitment_id') ? $request->recruitment_id : 0;
         $progress = $request->has('progress') ? $request->progress : null;
@@ -43,6 +44,10 @@ class Post
         }
         if ($contest != 0) {
             $query = $this->contest::find($contest);
+            return $query;
+        }
+        if ($capacity != 0) {
+            $query = $this->contest::find($capacity);
             return $query;
         }
         if ($rounds != 0) {
@@ -80,6 +85,9 @@ class Post
         if ($request->contest_id) {
             return $this->getList($request)->posts()->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
         }
+        if ($request->capacity_id) {
+            return $this->getList($request)->posts()->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
+        }
         if ($request->round_id) {
             return $this->getList($request)->posts()->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
         }
@@ -115,6 +123,9 @@ class Post
         if ($request->contest_id != 0) {
             $dataContest = $this->contest::find($request->contest_id);
             $dataContest->posts()->create($data);
+        } elseif ($request->capacity_id != 0) {
+            $dataCapacity = $this->contest::find($request->capacity_id);
+            $dataCapacity->posts()->create($data);
         } elseif ($request->round_id != 0) {
             $dataRound = $this->round::find($request->round_id);
             $dataRound->posts()->create($data);
@@ -145,6 +156,9 @@ class Post
         }
         if ($request->contest_id != 0) {
             $post->postable_id = $request->contest_id;
+            $post->postable_type = $this->contest::class;
+        } elseif ($request->capacity_id != 0) {
+            $post->postable_id = $request->capacity_id;
             $post->postable_type = $this->contest::class;
         } elseif ($request->round_id != 0) {
             $post->postable_id = $request->round_id;

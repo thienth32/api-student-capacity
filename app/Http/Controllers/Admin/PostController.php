@@ -37,66 +37,14 @@ class PostController extends Controller
         private Storage $storage
     ) {
     }
-    private function getList(Request $request)
-    {
-        $keyword = $request->has('keyword') ? $request->keyword : "";
-        $status = $request->has('status') ? $request->status : null;
-        $contest = $request->has('contest_id') ? $request->contest_id : 0;
-        $rounds = $request->has('round_id') ? $request->round_id : 0;
-        $recruitment = $request->has('recruitment_id') ? $request->recruitment_id : 0;
-        $progress = $request->has('progress') ? $request->progress : null;
-        $orderBy = $request->has('orderBy') ? $request->orderBy : 'id';
-        $startTime = $request->has('startTime') ? $request->startTime : null;
-        $endTime = $request->has('endTime') ? $request->endTime : null;
-        $sortBy = $request->has('sortBy') ? $request->sortBy : "desc";
-        $softDelete = $request->has('post_soft_delete') ? $request->post_soft_delete : null;
-        if ($softDelete != null) {
-            $query = $this->post::onlyTrashed()->where('title', 'like', "%$keyword%")->orderByDesc('deleted_at');
-            return $query;
-        }
-        if ($contest != 0) {
-            $query = $this->contest::find($contest);
-            return $query;
-        }
-        if ($rounds != 0) {
-            $query = $this->round::find($rounds);
-            return $query;
-        }
-        if ($recruitment != 0) {
-            $query = $this->recruitment::find($recruitment);
-            return $query;
-        }
-        $query = $this->post::where('title', 'like', "%$keyword%");
-        if ($status != null) {
-            $query->where('status', $status);
-        }
-        if ($progress != null) {
-            if ($progress == 'unpublished') {
-                $query->where('published_at', '>', \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString());
-            } elseif ($progress == 'published') {
-                $query->where('published_at', '<', \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString());
-            }
-        }
-        if ($endTime != null && $startTime != null) {
-            $query->where('published_at', '>=', \Carbon\Carbon::parse(request('startTime'))->toDateTimeString())->where('published_at', '<=', \Carbon\Carbon::parse(request('endTime'))->toDateTimeString());
-        }
-        if ($sortBy == "desc") {
-            $query->orderByDesc($orderBy);
-        } else {
-            $query->orderBy($orderBy);
-        }
-        // dd($query->get());
-        return $query;
-    }
     public function index(Request $request)
     {
-
-
         try {
             $round = null;
             if (request()->has('round_id')) $round = $this->round::find(request('round_id'))->load('contest');
 
             $contest = $this->contest::where('type', 0)->get();
+            $capacity = $this->contest::where('type', 1)->get();
             $recruitments = $this->recruitment::all();
             $rounds = $this->round::all();
             $posts = $this->modulesPost->index($request);
@@ -104,6 +52,7 @@ class PostController extends Controller
             return view('pages.post.index', [
                 'posts' => $posts,
                 'contest' => $contest,
+                'capacity' => $capacity,
                 'recruitments' => $recruitments,
                 'rounds' => $rounds,
                 'round' => $round
@@ -124,11 +73,20 @@ class PostController extends Controller
         $this->db::beginTransaction();
         try {
             $contest = $this->contest::where('type', 0)->get();
+            $capacity = $this->contest::where('type', 1)->get();
             $recruitments = $this->recruitment::all();
             $rounds = $this->round::all();
 
             $this->db::commit();
-            return view('pages.post.form-add', ['contest' => $contest, 'recruitments' => $recruitments, 'rounds' => $rounds]);
+            return view(
+                'pages.post.form-add',
+                [
+                    'capacity' => $capacity,
+                    'contest' => $contest,
+                    'recruitments' => $recruitments,
+                    'rounds' => $rounds
+                ]
+            );
         } catch (\Throwable $th) {
             $this->db::rollBack();
             return redirect('error');
@@ -138,12 +96,22 @@ class PostController extends Controller
     {
         $this->db::beginTransaction();
         try {
-            $contest = Contest::where('type', 0)->get();
-            $recruitments = Recruitment::all();
-            $rounds = Round::all();
+            $contest =  $this->contest::where('type', 0)->get();
+            $capacity = $this->contest::where('type', 1)->get();
+            $recruitments = $this->recruitment::all();
+            $rounds = $this->round::all();
 
             $this->db::commit();
-            return view('pages.post.form-add-outside', ['contest' => $contest, 'recruitments' => $recruitments, 'rounds' => $rounds]);
+            return view(
+                'pages.post.form-add-outside',
+                [
+                    'capacity' => $capacity,
+                    'contest' => $contest,
+                    'recruitments' => $recruitments,
+                    'rounds' => $rounds,
+                    'capacity' => $capacity,
+                ]
+            );
         } catch (\Throwable $th) {
             $this->db::rollBack();
             return redirect('error');
@@ -183,8 +151,9 @@ class PostController extends Controller
         try {
             $round = null;
             $contest = $this->contest::where('type', 0)->get();
+            $capacity = $this->contest::where('type', 1)->get();
             $recruitments = $this->recruitment::all();
-            $post = $this->getList($request)->where('slug', $slug)->first();
+            $post = $this->modulesPost->getList($request)->where('slug', $slug)->first();
             $post->load('postable');
             if ($post->postable && (get_class($post->postable) == $this->round::class)) {
                 $round = $this->round::find($post->postable->id)->load('contest');
@@ -195,6 +164,7 @@ class PostController extends Controller
                 'post' => $post,
                 'recruitments' => $recruitments,
                 'contest' => $contest,
+                'capacity' => $capacity,
                 'rounds' => $this->round::all(),
 
             ]);

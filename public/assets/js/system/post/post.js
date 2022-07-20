@@ -41,17 +41,30 @@ const Page = {
 Page.changeSlug();
 $(document).ready(function () {
     $(".click-contest").click(function () {
+        $(".click-capacity").removeClass("btn-primary");
         $(".click-round").removeClass("btn-primary");
         $(".click-recruitment").removeClass("btn-primary");
         $(this).addClass("btn-primary");
+        $("#capacity").hide(100);
         $("#round").hide(100);
         $("#recruitment").hide(100);
         $("#contest").show(300);
     });
-
+    $(".click-capacity").click(function () {
+        $(".click-contest").removeClass("btn-primary");
+        $(".click-round").removeClass("btn-primary");
+        $(".click-recruitment").removeClass("btn-primary");
+        $(this).addClass("btn-primary");
+        $("#contest").hide(100);
+        $("#round").hide(100);
+        $("#recruitment").hide(100);
+        $("#capacity").show(300);
+    });
     $(".click-round").click(function () {
         $(".click-contest").removeClass("btn-primary");
         $(".click-recruitment").removeClass("btn-primary");
+        $(".click-capacity").removeClass("btn-primary");
+        $("#capacity").hide(100);
         $("#contest").hide(100);
         $("#recruitment").hide(100);
         $(this).addClass("btn-primary");
@@ -60,6 +73,8 @@ $(document).ready(function () {
     $(".click-recruitment").click(function () {
         $(".click-contest").removeClass("btn-primary");
         $(".click-round").removeClass("btn-primary");
+        $(".click-capacity").removeClass("btn-primary");
+        $("#capacity").hide(100);
         $("#contest").hide(100);
         $("#round").hide(100);
         $(this).addClass("btn-primary");
