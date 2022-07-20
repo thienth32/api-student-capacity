@@ -20,21 +20,21 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('get-user-by-token', [UserController::class, 'get_user_by_token']);
 
-Route::group(['middleware' => ['role:super admin']], function () {
-    Route::group(['prefix' => 'account'], function () {
-        Route::post('/', [UserController::class, 'list']);
-        Route::post('add', [UserController::class, 'add_user']);
-        Route::delete('block/{id}', [UserController::class, 'block_user']);
-        Route::post('update-role-user/{id}', [UserController::class, 'updateRoleUser']);
-    });
-});
+//Route::group(['middleware' => ['role:super admin']], function () {
+//    Route::group(['prefix' => 'account'], function () {
+//        Route::post('/', [UserController::class, 'list']);
+//        Route::post('add', [UserController::class, 'add_user']);
+//        Route::delete('block/{id}', [UserController::class, 'block_user']);
+//        Route::post('update-role-user/{id}', [UserController::class, 'updateRoleUser']);
+//    });
+//});
 
-Route::group(['prefix' => 'majors'], function () {
-    Route::post('/', [\App\Http\Controllers\Admin\Majorcontroller::class, 'store']);
-    Route::delete('/{id}', [\App\Http\Controllers\Admin\Majorcontroller::class, 'destroy']);
-    Route::put('/{id}', [\App\Http\Controllers\Admin\Majorcontroller::class, 'update']);
-    Route::get('/{id}/edit', [\App\Http\Controllers\Admin\Majorcontroller::class, 'edit']);
-});
+//Route::group(['prefix' => 'majors'], function () {
+//    Route::post('/', [\App\Http\Controllers\Admin\Majorcontroller::class, 'store']);
+//    Route::delete('/{id}', [\App\Http\Controllers\Admin\Majorcontroller::class, 'destroy']);
+//    Route::put('/{id}', [\App\Http\Controllers\Admin\Majorcontroller::class, 'update']);
+//    Route::get('/{id}/edit', [\App\Http\Controllers\Admin\Majorcontroller::class, 'edit']);
+//});
 
 
 Route::prefix('teams')->group(function () {

@@ -15,15 +15,6 @@ use App\Http\Controllers\Admin\SponsorController as AdminSponsorController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
- */
 
 Route::get('sponsors', [AdminSponsorController::class, 'list']);
 
@@ -44,6 +35,7 @@ Route::prefix('rounds')->group(function () {
     Route::get('', [RoundController::class, 'apiIndex'])->name('round.api.index');
     Route::get('{id}', [RoundController::class, 'show'])->name('round.api.show');
 });
+
 Route::prefix('majors')->group(function () {
     Route::get('', [AdminMajorController::class, 'apiIndex'])->name('major.api.index');
     Route::get('{slug}', [AdminMajorController::class, 'apiShow'])->name('major.api.show');
@@ -85,6 +77,6 @@ Route::prefix('recruitments')->group(function () {
 
 Route::get('rating-major/{slug}', [RankUserController::class, 'getRatingUser']);
 
-Route::post('upload-file', function () {
-    return "https://htmlcolorcodes.com/assets/images/html-color-codes-color-palette-generators.jpg";
-});
+//Route::post('upload-file', function () {
+//    return "https://htmlcolorcodes.com/assets/images/html-color-codes-color-palette-generators.jpg";
+//});

@@ -106,6 +106,7 @@ class ContestController extends Controller
      * @OA\Get(
      *     path="/api/public/contests",
      *     description="Description api contests",
+     *     tags={"Contest"},
      *     @OA\Parameter(
      *         name="q",
      *         in="query",
@@ -150,6 +151,7 @@ class ContestController extends Controller
      * @OA\Get(
      *     path="/api/public/capacity",
      *     description="Description api capacity",
+     *     tags={"Capacity"},
      *     @OA\Parameter(
      *         name="q",
      *         in="query",
@@ -299,6 +301,21 @@ class ContestController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/public/contests/{id}",
+     *     description="Description api contests",
+     *     tags={"Contest"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Id cuộc thi ",
+     *         required=true,
+     *     ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
     public function apiShow($id)
     {
         try {
@@ -310,6 +327,21 @@ class ContestController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/public/capacity/{id}",
+     *     description="Description api capacity",
+     *     tags={"Capacity"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Id test năng lực  ",
+     *         required=true,
+     *     ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
     public function apiShowCapacity($id)
     {
 
@@ -476,6 +508,23 @@ class ContestController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/v1/round/{id_round}/team-me",
+     *     description="Description api user team round",
+     *     tags={"Round","Team","Contest","Api V1"},
+     *     summary="Authorization",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *         name="id_round",
+     *         in="path",
+     *         description="Id vòng thi  test năng lực  ",
+     *         required=true,
+     *     ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
     public function userTeamRound($roundId, Round $round)
     {
         $team_id = 0;
