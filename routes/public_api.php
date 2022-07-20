@@ -20,7 +20,7 @@ Route::get('sponsors', [AdminSponsorController::class, 'list']);
 
 Route::get('users', [AdminUserController::class, 'index']); // danh sách user
 
-Route::get('company', [AdminCompanyController::class, 'listCompany']); // Doanh nghiệp
+Route::get('companys', [AdminCompanyController::class, 'listCompany']); // Doanh nghiệp
 Route::prefix('contests')->group(function () {
     Route::get('', [AdminContestController::class, 'apiIndex'])->name('contest.api.index');
     Route::get('{id}', [AdminContestController::class, 'apiShow'])->name('contest.api.show');

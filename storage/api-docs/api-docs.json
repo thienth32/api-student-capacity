@@ -9,6 +9,23 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/api/public/companys": {
+            "get": {
+                "tags": [
+                    "Company"
+                ],
+                "description": "Description api company",
+                "operationId": "e61feaab3509040c777c15c3268bc04f",
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                }
+            }
+        },
         "/api/public/contests": {
             "get": {
                 "tags": [
@@ -384,6 +401,23 @@
                         "required": false
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                }
+            }
+        },
+        "/api/public/sponsors": {
+            "get": {
+                "tags": [
+                    "Sponsor"
+                ],
+                "description": "Description api sponsor",
+                "operationId": "54b653c79eccccc3f70db34dfe909b77",
                 "responses": {
                     "200": {
                         "description": "{ status: true , data : data }"
