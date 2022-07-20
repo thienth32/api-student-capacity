@@ -25,6 +25,114 @@
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
                     </div>
+                    <div class="form-group mb-5">
+                        <label class="form-label" for="">Thuộc các thành phần</label>
+                        <div class="row col-12 m-auto">
+
+                            <button id="clickContset" type="button"
+                                class="mygroup btn  {{ $post->postable !== null && get_class($post->postable) == \App\Models\Contest::class && $post->postable->type == 0 ? 'btn-primary' : 'btn-light' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3  click-contest">
+                                Cuộc thi</button>
+                            <button id="clickCapacity" type="button"
+                                class="mygroup btn  {{ $post->postable !== null && get_class($post->postable) == \App\Models\Contest::class && $post->postable->type == 1 ? 'btn-primary' : 'btn-light' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3  click-capacity">
+                                Bài test</button>
+                            <button type="button"
+                                class="mygroup btn {{ $post->postable !== null && get_class($post->postable) == \App\Models\Round::class ? 'btn-primary' : 'btn-light' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 click-round">
+                                Vòng thi</button>
+                            <button type="button"
+                                class="click-recruitment   btn {{ $post->postable !== null && get_class($post->postable) == \App\Models\Recruitment::class ? 'btn-primary' : 'btn-light' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 ">
+                                Tuyển dụng</button>
+                        </div>
+                        <br>
+                        <div class="col-12 pb-2">
+                            <div style=" {{ $post->postable !== null && get_class($post->postable) == \App\Models\Contest::class && $post->postable->type == 0 ? '' : 'display:none' }}"
+                                id="contest">
+                                <div class="form-group mb-10">
+                                    <label for="" class="form-label">Cuộc thi</label>
+                                    <select name="contest_id" class="form-select form-major" data-control="select2"
+                                        data-placeholder="Chọn cuộc thi ">
+                                        <option value="0">Chọn cuộc thi</option>
+                                        @foreach ($contest as $item)
+                                            <option @selected(($post->postable != null ? $post->postable->id : 0) === $item->id && get_class($post->postable) == \App\Models\Contest::class && $post->postable->type == 0) value="{{ $item->id }}">
+                                                {{ $item->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+
+                                </div>
+
+                            </div>
+                            <div style=" {{ $post->postable !== null && get_class($post->postable) == \App\Models\Contest::class && $post->postable->type == 1 ? '' : 'display:none' }}"
+                                id="capacity">
+                                <div class="form-group mb-10">
+                                    <label for="" class="form-label">Bài test</label>
+                                    <select name="capacity_id" class="form-select form-major" data-control="select2"
+                                        data-placeholder="Chọn bài test ">
+                                        <option value="0">Chọn bài test</option>
+                                        @foreach ($capacity as $item)
+                                            <option @selected(($post->postable != null ? $post->postable->id : 0) === $item->id && get_class($post->postable) == \App\Models\Contest::class && $post->postable->type == 1) value="{{ $item->id }}">
+                                                {{ $item->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+
+                                </div>
+
+                            </div>
+                            <div style=" {{ $post->postable !== null && get_class($post->postable) == \App\Models\Round::class ? '' : 'display:none' }}"
+                                id="round">
+                                <label class="form-label">Cuộc thi </label>
+                                <select id="select-contest-p" class="form-select form-contest " data-control="select2"
+                                    data-placeholder="Chọn cuộc thi ">
+                                    <option value="0">Chọn cuộc thi</option>
+                                    @foreach ($contest as $item)
+                                        <option @selected(($round ? $round->contest->id : 0) == $item->id && get_class($post->postable) == \App\Models\Round::class) value="{{ $item->id }}">
+                                            {{ $item->name }} - {{ count($item->rounds) }} vòng thi
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <div>
+                                    <label class="form-label">Vòng thi </label>
+                                    <select id="select-round" name="round_id" class="form-select form-round "
+                                        data-control="select2" data-placeholder="Chọn vòng thi ">
+                                        <option value="0">Chọn vòng thi</option>
+                                        @if ($post->postable !== null && get_class($post->postable) == \App\Models\Round::class)
+
+                                            @foreach ($rounds as $r)
+                                                @if ($round && ($round->contest ? $round->contest->id : 0) == $r->contest_id)
+                                                    <option @selected($post->postable->id == $r->id) value="{{ $r->id }}">
+                                                        {{ $r->name }}
+                                                    </option>
+                                                @endif
+                                            @endforeach
+                                        @else
+                                            <option disabled value="0">Không có vòng thi nào ! Hãy chọn cuộc
+                                                thi </option>
+                                        @endif
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div style="{{ $post->postable !== null && get_class($post->postable) == \App\Models\Recruitment::class ? '' : 'display:none' }}"
+                                id="recruitment">
+                                <div class="form-group mb-10">
+                                    <label for="" class="form-label">Tuyển dụng</label>
+                                    <select name="recruitment_id" class="form-select form-major" data-control="select2"
+                                        data-placeholder="Chọn cuộc thi ">
+                                        <option value="0">Chọn tuyển dụng</option>
+                                        @foreach ($recruitments as $item)
+                                            <option @selected(($post->postable != null ? $post->postable->id : 0) === $item->id && get_class($post->postable) == \App\Models\Recruitment::class) value="{{ $item->id }}">
+                                                {{ $item->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
                     <div class="row">
 
 
@@ -42,95 +150,7 @@
                                 @enderror
 
                             </div>
-                            <div class="col-12 row">
-                                <label class="form-label" for="">Thuộc các thành phần</label>
-                                <div class="row col-12 m-auto">
 
-                                    <button id="clickContset" type="button"
-                                        class="mygroup btn  {{ $post->postable !== null && get_class($post->postable) == \App\Models\Contest::class ? 'btn-primary' : 'btn-light' }} col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4  click-contest">
-                                        Cuộc thi</button>
-                                    <button type="button"
-                                        class="mygroup btn {{ $post->postable !== null && get_class($post->postable) == \App\Models\Round::class ? 'btn-primary' : 'btn-light' }} col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 click-round">
-                                        Vòng thi</button>
-                                    <button type="button"
-                                        class="click-recruitment   btn {{ $post->postable !== null && get_class($post->postable) == \App\Models\Recruitment::class ? 'btn-primary' : 'btn-light' }} col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 ">
-                                        Tuyển dụng</button>
-                                </div>
-                                <br>
-                                <div class="col-12 pb-2">
-                                    <div style=" {{ $post->postable !== null && get_class($post->postable) == \App\Models\Contest::class ? '' : 'display:none' }}"
-                                        id="contest">
-                                        <div class="form-group mb-10">
-                                            <label for="" class="form-label">Cuộc thi</label>
-                                            <select name="contest_id" class="form-select form-major" data-control="select2"
-                                                data-placeholder="Chọn cuộc thi ">
-                                                <option value="0">Chọn cuộc thi</option>
-                                                @foreach ($contest as $item)
-                                                    <option @selected(($post->postable != null ? $post->postable->id : 0) === $item->id && get_class($post->postable) == \App\Models\Contest::class) value="{{ $item->id }}">
-                                                        {{ $item->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-
-                                        </div>
-
-                                    </div>
-                                    <div style=" {{ $post->postable !== null && get_class($post->postable) == \App\Models\Round::class ? '' : 'display:none' }}"
-                                        id="round">
-                                        <label class="form-label">Cuộc thi </label>
-                                        <select id="select-contest-p" class="form-select form-contest "
-                                            data-control="select2" data-placeholder="Chọn cuộc thi ">
-                                            <option value="0">Chọn cuộc thi</option>
-                                            @foreach ($contest as $item)
-                                                <option @selected(($round ? $round->contest->id : 0) == $item->id && get_class($post->postable) == \App\Models\Round::class) value="{{ $item->id }}">
-                                                    {{ $item->name }} - {{ count($item->rounds) }} vòng thi
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        <div>
-                                            <label class="form-label">Vòng thi </label>
-                                            <select id="select-round" name="round_id" class="form-select form-round "
-                                                data-control="select2" data-placeholder="Chọn vòng thi ">
-                                                <option value="0">Chọn vòng thi</option>
-                                                @if ($post->postable !== null && get_class($post->postable) == \App\Models\Round::class)
-
-                                                    @foreach ($rounds as $r)
-                                                        @if ($round && ($round->contest ? $round->contest->id : 0) == $r->contest_id)
-                                                            <option @selected($post->postable->id == $r->id)
-                                                                value="{{ $r->id }}">
-                                                                {{ $r->name }}
-                                                            </option>
-                                                        @endif
-                                                    @endforeach
-                                                @else
-                                                    <option disabled value="0">Không có vòng thi nào ! Hãy chọn cuộc
-                                                        thi </option>
-                                                @endif
-                                            </select>
-                                        </div>
-
-                                    </div>
-                                    <div style="{{ $post->postable !== null && get_class($post->postable) == \App\Models\Recruitment::class ? '' : 'display:none' }}"
-                                        id="recruitment">
-                                        <div class="form-group mb-10">
-                                            <label for="" class="form-label">Tuyển dụng</label>
-                                            <select name="recruitment_id" class="form-select form-major"
-                                                data-control="select2" data-placeholder="Chọn cuộc thi ">
-                                                <option value="0">Chọn tuyển dụng</option>
-                                                @foreach ($recruitments as $item)
-                                                    <option @selected(($post->postable != null ? $post->postable->id : 0) === $item->id && get_class($post->postable) == \App\Models\Recruitment::class) value="{{ $item->id }}">
-                                                        {{ $item->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                            </div>
-                            <br>
                             <div class="form-group mb-10">
                                 <label class="form-label" for="">Mô tả ngắn bài viết</label>
                                 <textarea class="form-control" name="description" id="kt_docs_ckeditor_classic" rows="3">{{ $post->description }}</textarea>
@@ -195,7 +215,7 @@
     <script>
         preview.showFile('#file-input', '#image-preview');
         dateAfter('input[type=datetime-local]#begin', 'input[type=datetime-local]#end')
-
+        const oldRound = @json(old('round_id'));
         const rounds = @json($rounds);
     </script>
     <script src="assets/js/system/validate/validate.js"></script>

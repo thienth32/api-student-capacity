@@ -9,6 +9,23 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/api/public/companys": {
+            "get": {
+                "tags": [
+                    "Company"
+                ],
+                "description": "Description api company",
+                "operationId": "e61feaab3509040c777c15c3268bc04f",
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                }
+            }
+        },
         "/api/public/contests": {
             "get": {
                 "tags": [
@@ -16,8 +33,7 @@
                 ],
                 "description": "Description api contests",
                 "operationId": "21335560b55dc3b39b979268e1450fa3",
-                "parameters": [
-                    {
+                "parameters": [{
                         "name": "q",
                         "in": "query",
                         "description": "Tìm kiếm ",
@@ -65,8 +81,7 @@
                 ],
                 "description": "Description api capacity",
                 "operationId": "35885eef783a04e08d43104f04f5887d",
-                "parameters": [
-                    {
+                "parameters": [{
                         "name": "q",
                         "in": "query",
                         "description": "Tìm kiếm ",
@@ -114,14 +129,12 @@
                 ],
                 "description": "Description api contests",
                 "operationId": "1241e1c4c5b972314cf795f2e34d9803",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "Id cuộc thi ",
-                        "required": true
-                    }
-                ],
+                "parameters": [{
+                    "name": "id",
+                    "in": "path",
+                    "description": "Id cuộc thi ",
+                    "required": true
+                }],
                 "responses": {
                     "200": {
                         "description": "{ status: true , data : data }"
@@ -139,14 +152,12 @@
                 ],
                 "description": "Description api capacity",
                 "operationId": "90df66c6dccd12e824748cf907944a9e",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "Id test năng lực  ",
-                        "required": true
-                    }
-                ],
+                "parameters": [{
+                    "name": "id",
+                    "in": "path",
+                    "description": "Id test năng lực  ",
+                    "required": true
+                }],
                 "responses": {
                     "200": {
                         "description": "{ status: true , data : data }"
@@ -168,14 +179,12 @@
                 "summary": "Authorization",
                 "description": "Description api user team round",
                 "operationId": "3a1f2dd7c1341a660e9327dc18b4d867",
-                "parameters": [
-                    {
-                        "name": "id_round",
-                        "in": "path",
-                        "description": "Id vòng thi  test năng lực  ",
-                        "required": true
-                    }
-                ],
+                "parameters": [{
+                    "name": "id_round",
+                    "in": "path",
+                    "description": "Id vòng thi  test năng lực  ",
+                    "required": true
+                }],
                 "responses": {
                     "200": {
                         "description": "{ status: true , data : data }"
@@ -184,11 +193,9 @@
                         "description": "{ status: false , message : 'Not found' }"
                     }
                 },
-                "security": [
-                    {
-                        "bearer_token": []
-                    }
-                ]
+                "security": [{
+                    "bearer_token": []
+                }]
             }
         },
         "/api/public/majors/{slug}": {
@@ -198,14 +205,12 @@
                 ],
                 "description": "Description api major by slug",
                 "operationId": "a5fb343f61bb2d44539c4b11722d53c0",
-                "parameters": [
-                    {
-                        "name": "slug",
-                        "in": "path",
-                        "description": "Slug chuyên ngành  ",
-                        "required": true
-                    }
-                ],
+                "parameters": [{
+                    "name": "slug",
+                    "in": "path",
+                    "description": "Slug chuyên ngành  ",
+                    "required": true
+                }],
                 "responses": {
                     "200": {
                         "description": "{ status: true , data : data }"
@@ -223,8 +228,7 @@
                 ],
                 "description": "Description api major",
                 "operationId": "f9d3da5b0287ea4b69a670678b4376f7",
-                "parameters": [
-                    {
+                "parameters": [{
                         "name": "q",
                         "in": "query",
                         "description": "Tìm kiếm ",
@@ -260,8 +264,7 @@
                 ],
                 "description": "Description api round",
                 "operationId": "5ac6e97b1ff1a579549ab171c1002025",
-                "parameters": [
-                    {
+                "parameters": [{
                         "name": "q",
                         "in": "query",
                         "description": "Tìm kiếm ",
@@ -309,14 +312,12 @@
                 ],
                 "description": "Description api round by id",
                 "operationId": "1587120770bfcb9352882bee5228a36d",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID vòng thi",
-                        "required": true
-                    }
-                ],
+                "parameters": [{
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID vòng thi",
+                    "required": true
+                }],
                 "responses": {
                     "200": {
                         "description": "{ status: true , data : data }"
@@ -334,8 +335,7 @@
                 ],
                 "description": "Description api slider",
                 "operationId": "64698f167d137050ea39cbcdb0ece4f6",
-                "parameters": [
-                    {
+                "parameters": [{
                         "name": "q",
                         "in": "query",
                         "description": "Tìm kiếm ",
@@ -426,11 +426,9 @@
                         "description": "{ status: false , message : 'Not found' }"
                     }
                 },
-                "security": [
-                    {
-                        "bearer_token": []
-                    }
-                ]
+                "security": [{
+                    "bearer_token": []
+                }]
             }
         },
         "/api/v1/users/edit": {
@@ -467,11 +465,9 @@
                         "description": "{ status: false , message : 'Not found' }"
                     }
                 },
-                "security": [
-                    {
-                        "bearer_token": []
-                    }
-                ]
+                "security": [{
+                    "bearer_token": []
+                }]
             }
         }
     },
