@@ -26,6 +26,7 @@ Route::prefix('contests')->group(function () {
     Route::get('', [AdminContestController::class, 'apiIndex'])->name('contest.api.index');
     Route::get('{id}', [AdminContestController::class, 'apiShow'])->name('contest.api.show');
 });
+
 Route::prefix('capacity')->group(function () {
     Route::get('', [AdminContestController::class, 'apiIndexCapacity'])->name('capacity.api.index');
     Route::get('{id}', [AdminContestController::class, 'apiShowCapacity'])->name('capacity.api.show');
@@ -54,12 +55,14 @@ Route::prefix('enterprise')->group(function () {
     Route::get('', [EnterpriseController::class, 'apiIndex'])->name('enterprise.api.index');
     Route::get('{id}', [EnterpriseController::class, 'apiDetail']);
 });
+
 Route::prefix('exam')->group(function () {
     Route::post('store', [ExamController::class, 'store'])->name('exam.api.store');
     Route::get('download', [ExamController::class, 'download'])->name('exam.api.download');
     Route::get('get-by-round/{id}', [ExamController::class, 'get_by_round'])->name('exam.api.get.round');
     Route::get('get-question-by-exam/{id}', [ExamController::class, 'showQuestionAnswerExams'])->name('exam.api.get.questions.exam');
 });
+
 Route::prefix('questions')->group(function () {
     Route::get('', [QuestionController::class, 'indexApi'])->name('questions.api.list');
     Route::post('save-question', [QuestionController::class, 'save_questions'])->name('questions.api.save.question');
