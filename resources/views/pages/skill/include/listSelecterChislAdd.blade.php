@@ -3,16 +3,12 @@
         $dash .= '-- ';
     @endphp
     @foreach ($majorPrent->majorChils as $majorChirent)
-        <option
-            @foreach ($major->majorSkill as $item) @if ($item->id == $majorChirent->id)
-        {{ 'selected="selected"' }} @endif
-            @endforeach
+        <option {{ collect(old('major_id'))->contains($majorChirent->id) ? 'selected' : '' }}
             value="{{ $majorChirent->id }}">{{ $dash . $majorChirent->name }}
         </option>
         @if ($majorChirent->majorChils->count())
-            @include('pages.skill.include.listSelecterChisl', [
+            @include('pages.skill.include.listSelecterChislAdd', [
                 'majorPrent' => $majorChirent,
-                'major' => $major,
             ])
         @endif
     @endforeach

@@ -26,16 +26,16 @@ use Illuminate\Support\Facades\Validator;
 
 class ContestController extends Controller
 {
-    use TUploadImage, TResponse, TTeamContest , TStatus;
+    use TUploadImage, TResponse, TTeamContest, TStatus;
 
-     public function __construct(
+    public function __construct(
         private Contest $contest,
         private Major $major,
-        private Team $team ,
+        private Team $team,
         private DB $db,
         private Storage $storage
-    )
-    { }
+    ) {
+    }
 
     /**
      *  Get list contest
@@ -96,7 +96,7 @@ class ContestController extends Controller
         if (!($data = $this->contest->index())) return abort(404);
 
         return view('pages.contest.index', [
-            'contests' => $data ,
+            'contests' => $data,
             'majors' => Major::where('parent_id', 0)->get(),
             'contest_type_text' =>  request('type') == 1 ? 'test năng lực' : 'cuộc thi'
         ]);
@@ -144,7 +144,7 @@ class ContestController extends Controller
     public function apiIndex()
     {
         if (!($data = $this->contest->apiIndex())) return $this->responseApi(false);
-        return $this->responseApi(true , $data);
+        return $this->responseApi(true, $data);
     }
 
     /**
@@ -208,7 +208,7 @@ class ContestController extends Controller
         $this->db::beginTransaction();
         try {
             $filename = $this->uploadFile($request->img);
-            $contest = $this->contest->store($filename,$request);
+            $contest = $this->contest->store($filename, $request);
             $this->db::commit();
             return $redirect::route('admin.contest.show', ['id' => $contest->id])->with('success', 'Thêm mới thành công !');
         } catch (Exception $ex) {
@@ -270,26 +270,25 @@ class ContestController extends Controller
 
                 if ($request->has('img')) {
                     $img = $this->uploadFile($request->file('img'), $contest->img);
-                    if(!$img)  return redirect()->back()->with('error', 'Cập nhật thất bại !');
-                    $dataSave = array_merge($request->except(['_method','_token','img']) , [
+                    if (!$img)  return redirect()->back()->with('error', 'Cập nhật thất bại !');
+                    $dataSave = array_merge($request->except(['_method', '_token', 'img']), [
                         'reward_rank_point' => $rewardRankPoint,
                         'img' => $img
                     ]);
-                }else{
-                    $dataSave = array_merge($request->except(['_method','_token']) , [
+                } else {
+                    $dataSave = array_merge($request->except(['_method', '_token']), [
                         'reward_rank_point' => $rewardRankPoint,
                     ]);
                 }
-                $this->contest->update($contest , $dataSave);
+                $this->contest->update($contest, $dataSave);
                 $this->db::commit();
                 // return Redirect::route('admin.contest.list');
                 return redirect(route('admin.contest.list') . '?type=' . request('type') ?? 0);
             }
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             $this->db::rollBack();
             return redirect()->back()->with('error', 'Cập nhật thất bại !');
         }
-
     }
 
     private function getContest($id, $type = 0)
@@ -320,9 +319,9 @@ class ContestController extends Controller
     public function apiShow($id)
     {
         try {
-            if (!($contest = $this->contest->apiShow($id,config('util.TYPE_CONTEST')) ))
-                return $this->responseApi(false,'Không thể lấy thông tin cuộc thi  !');
-            return $this->responseApi(true,$contest);
+            if (!($contest = $this->contest->apiShow($id, config('util.TYPE_CONTEST'))))
+                return $this->responseApi(false, 'Không thể lấy thông tin cuộc thi  !');
+            return $this->responseApi(true, $contest);
         } catch (\Throwable $th) {
             return $this->responseApi(false);
         }
@@ -347,25 +346,25 @@ class ContestController extends Controller
     {
 
         try {
-            $capacity = $this->contest->apiShow($id,config('util.TYPE_TEST'));
+            $capacity = $this->contest->apiShow($id, config('util.TYPE_TEST'));
             if (is_null($capacity))
-                return $this->responseApi(false,'Không tìm thấy bài test năng lực !');
-            return $this->responseApi(true,$capacity);
+                return $this->responseApi(false, 'Không tìm thấy bài test năng lực !');
+            return $this->responseApi(true, $capacity);
         } catch (\Throwable $th) {
-            return $this->responseApi(false );
+            return $this->responseApi(false);
         }
     }
 
     public function show(Request $request, $id)
     {
-        $contest = $this->contest->show($id,config('util.TYPE_CONTEST'));
-        if(!$contest) abort(404);
+        $contest = $this->contest->show($id, config('util.TYPE_CONTEST'));
+        if (!$contest) abort(404);
         return view('pages.contest.detail.detail', compact('contest'));
     }
 
-    public function show_test_capacity(Request $request,Skill $skillModel, $id )
+    public function show_test_capacity(Request $request, Skill $skillModel, $id)
     {
-        $capacity = $this->contest->show($id,config('util.TYPE_TEST'));
+        $capacity = $this->contest->show($id, config('util.TYPE_TEST'));
         if (!$capacity) abort(404);
         $skills = $skillModel::all();
         return view('pages.contest.detail-capacity.detail', [
@@ -381,7 +380,7 @@ class ContestController extends Controller
         return view('pages.contest.detail.team.contest-team', compact('contest', 'teams'));
     }
 
-    public function contestDetailTeamAddSelect(Request  $request,Redirect $redirect, $id)
+    public function contestDetailTeamAddSelect(Request  $request, Redirect $redirect, $id)
     {
         $contest = $this->contest->find($id);
         $team = $this->team::find($request->team_id);
@@ -422,7 +421,7 @@ class ContestController extends Controller
         }
     }
 
-    public function contestDetailEnterprise($id , Enterprise $enterpriseModel)
+    public function contestDetailEnterprise($id, Enterprise $enterpriseModel)
     {
         $contest =  $this->contest->find($id);
         if (!($contestEnterprise = $contest->load('enterprise')->enterprise()->paginate(5))) return abort(404);
@@ -541,9 +540,9 @@ class ContestController extends Controller
                     }
                 }
             }
-            if ($team_id == 0)  return $this->responseApi(true,[]);
+            if ($team_id == 0)  return $this->responseApi(true, []);
             $team = $this->team::find($team_id)->load('members');
-            return $this->responseApi(true,$team);
+            return $this->responseApi(true, $team);
         } catch (\Throwable $th) {
             return $this->responseApi(false);
         }
@@ -618,8 +617,8 @@ class ContestController extends Controller
     {
         $capacityArrId = [];
         $capacity = $this->contest->find($id_capacity);
-        if(is_null($capacity)) return $this->responseApi(false, 'Không tìm thấy bài test năng lực !');
-        $capacity->load(['recruitment'=>function($q){
+        if (is_null($capacity)) return $this->responseApi(false, 'Không tìm thấy bài test năng lực !');
+        $capacity->load(['recruitment' => function ($q) {
             return $q->with(['contest']);
         }]);
         foreach ($capacity->recruitment as  $recruitment) {
@@ -627,11 +626,11 @@ class ContestController extends Controller
                 array_push($capacityArrId, $contest->id);
             }
         }
-        $capacityArrId= array_unique($capacityArrId);
-        unset($capacityArrId[array_search($id_capacity,$capacityArrId)]);
-        $capacitys= $this->contest->getContest()::whereIn('id', $capacityArrId)->limit(request('limit') ?? 4)->get();
+        $capacityArrId = array_unique($capacityArrId);
+        unset($capacityArrId[array_search($id_capacity, $capacityArrId)]);
+        $capacitys = $this->contest->getContest()::whereIn('id', $capacityArrId)->limit(request('limit') ?? 4)->get();
         $capacitys->load(['rounds']);
-        return $this->responseApi(true,$capacitys);
+        return $this->responseApi(true, $capacitys);
     }
 }
 

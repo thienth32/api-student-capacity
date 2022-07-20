@@ -50,7 +50,7 @@
                                     <label for="" class="form-label">Thuộc chuyên ngành</label>
                                     <select multiple class="form-select mb-2 select2-hidden-accessible"
                                         data-control="select2" data-hide-search="false" tabindex="-1" aria-hidden="true"
-                                        name="major_id[]" value="{{ old('major_id') }}">
+                                        name="major_id[]" value="{{ serialize(old('major_id')) }}">
                                         @foreach ($dataMajor as $itemMajor)
                                             @php
                                                 $dash = '';
@@ -68,12 +68,6 @@
                                             ])
                                         @endforeach
                                     </select>
-                                    @if (count($data->majorSkill) > 0)
-                                        <input type="hidden" value="{{ $data->majorSkill }}" name="oldMajor">
-                                    @endif
-                                    @error('major_id')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
                                 </div>
                             </div>
                             <div class="col-4">

@@ -115,13 +115,16 @@
                 <div class="row col-12 m-auto">
 
                     <button id="clickContset" type="button"
-                        class="mygroup btn  {{ request()->has('contest_id') ? 'btn-primary' : '' }} col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light click-contest">
+                        class="mygroup btn  {{ request()->has('contest_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light click-contest">
                         Bài viết thuộc cuộc thi</button>
+                    <button id="clickCapacity" type="button"
+                        class="mygroup btn  {{ request()->has('capacity_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light click-capacity">
+                        Bài viết thuộc bài test</button>
                     <button type="button"
-                        class="mygroup btn {{ request()->has('round_id') ? 'btn-primary' : '' }} col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light click-round">
+                        class="mygroup btn {{ request()->has('round_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light click-round">
                         Bài viết thuộc vòng thi</button>
                     <button type="button"
-                        class="click-recruitment  btn {{ request()->has('recruitment_id') ? 'btn-primary' : '' }} col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light">
+                        class="click-recruitment  btn {{ request()->has('recruitment_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light">
                         Bài viết thuộc tuyển dụng</button>
                 </div>
                 <br>
@@ -129,11 +132,27 @@
                     <div style="{{ request()->has('contest_id') ? '' : 'display: none' }}" id="contest">
                         <div class="form-group mb-10">
                             <label for="" class="form-label">Cuộc thi</label>
-                            <select name="contest_id" class="form-select-contest form-contest" data-control="select2"
-                                data-placeholder="Chọn cuộc thi ">
+                            <select id="select-contest" name="contest_id" class="form-select form-contest"
+                                data-control="select2" data-placeholder="Chọn cuộc thi ">
                                 <option value="0">Chọn cuộc thi</option>
                                 @foreach ($contest as $item)
                                     <option @selected(request('contest_id') == $item->id) value="{{ $item->id }}">
+                                        {{ $item->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+
+                        </div>
+
+                    </div>
+                    <div style="{{ request()->has('capacity_id') ? '' : 'display: none' }}" id="capacity">
+                        <div class="form-group mb-10">
+                            <label for="" class="form-label">Cuộc thi</label>
+                            <select id="select-capacity" name="capacity_id" class="form-select form-contest"
+                                data-control="select2" data-placeholder="Chọn bài test ">
+                                <option value="0">Chọn bài test</option>
+                                @foreach ($capacity as $item)
+                                    <option @selected(request('capacity_id') == $item->id) value="{{ $item->id }}">
                                         {{ $item->name }}
                                     </option>
                                 @endforeach
@@ -177,7 +196,7 @@
                     <div style="{{ request()->has('recruitment_id') ? '' : 'display: none' }}" id="recruitment">
                         <div class="form-group mb-10">
                             <label for="" class="form-label">Tuyển dụng</label>
-                            <select name="recruitment_id" class="form-select-recruitments form-major"
+                            <select id="select-recruitment" name="recruitment_id" class="form-select form-major"
                                 data-control="select2" data-placeholder="Chọn cuộc thi ">
                                 <option value="0">Chọn tuyển dụng</option>
                                 @foreach ($recruitments as $item)
@@ -403,9 +422,12 @@
                                         Tuyển dụng :
                                         <b><a
                                                 href="{{ route('admin.recruitment.detail', ['id' => $key->postable->id]) }}">{{ $key->postable->name }}</a></b>
-                                    @else
+                                    @elseif(get_class($key->postable) == \App\Models\Contest::class && $key->postable->type == 0)
                                         Cuộc thi : <b><a
                                                 href="{{ route('admin.contest.show', ['id' => $key->postable->id]) }}">{{ $key->postable->name }}</a></b>
+                                    @else
+                                        Bài test : <b><a
+                                                href="{{ route('admin.contest.show.capatity', ['id' => $key->postable->id]) }}">{{ $key->postable->name }}</a></b>
                                     @endif
                                 </td>
                                 <td>
@@ -421,7 +443,8 @@
 
                                 </td>
                                 <td>
-                                    @if (\Carbon\Carbon::parse($key->published_at)->toDateTimeString() > \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
+                                    @if (\Carbon\Carbon::parse($key->published_at)->toDateTimeString() >
+                                        \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
                                         <span class="badge bg-danger">Chưa xuất bản </span>
                                     @else
                                         <span class="badge  bg-success">Đã xuất bản </span>
