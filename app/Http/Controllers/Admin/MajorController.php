@@ -79,6 +79,7 @@ class MajorController extends Controller
         try {
             $limit = 10;
             $dataMajor = Major::sort(request('sort') == 'asc' ? 'asc' : 'desc', request('sort_by') ?? null, 'majors')
+                ->withCount(['sliders','contests','majorChils','teams','parent'])
                 ->search(request('q') ?? null, ['name', 'slug']);
             return $dataMajor;
         } catch (\Throwable $th) {

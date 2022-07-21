@@ -60,7 +60,7 @@ class Round
     public function index()
     {
         try {
-            return $this->getList()->paginate(request('limit') ?? 5);
+            return $this->getList() ->withCount(['results','exams','posts','sliders'])->paginate(request('limit') ?? 5);
         }catch (\Exception $e) {
             return false;
         }

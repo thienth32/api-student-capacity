@@ -89,7 +89,8 @@ return [
                                         rx="4" fill="black" />
                                 </svg>
                             </span>
-                            <!--end::Svg Icon-->
+                            <!--end::Sv
+                            g Icon-->
         ',
         "name" => "Quản lý tài khoản",
         "role" => $ROLE_HAS_ADMINS,

@@ -97,7 +97,7 @@ class ContestController extends Controller
 
         return view('pages.contest.index', [
             'contests' => $data,
-            'majors' => Major::where('parent_id', 0)->get(),
+            'majors' => $this->major::where('parent_id', 0)->get(),
             'contest_type_text' =>  request('type') == 1 ? 'test năng lực' : 'cuộc thi'
         ]);
     }
@@ -226,11 +226,12 @@ class ContestController extends Controller
             if (!(auth()->user()->hasRole(config('util.ROLE_DELETE')))) return abort(404);
             $this->db::transaction(function () use ($id) {
                 $contest = $this->contest->find($id);
-                if ($this->storage::disk('s3')->has($contest->image)) $this->storage::disk('s3')->delete($contest->image);
+                if ($this->storage::disk('s3')->has($contest->image ?? 'null')) $this->storage::disk('s3')->delete($contest->image);
                 $contest->delete();
             });
             return redirect()->back();
         } catch (\Throwable $th) {
+            dd($th->getMessage());
             return abort(404);
         }
     }
@@ -396,8 +397,10 @@ class ContestController extends Controller
     public function softDelete()
     {
         $listContestSofts = $this->contest->index();
+        $namePage = request('type') == 1 ? 'Test năng lực' : 'Cuộc thi ';
         return view('pages.contest.contest-soft-delete', [
-            'listContestSofts' => $listContestSofts
+            'listContestSofts' => $listContestSofts,
+            'namePage' => $namePage
         ]);
     }
 
