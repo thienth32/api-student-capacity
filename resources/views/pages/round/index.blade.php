@@ -344,7 +344,7 @@
                                         VT-{{ $round->name }}
                                     </a>
                                 @else
-                                    <a href="{{ route('admin.contest.show.capatity', ['id' => $round->id]) }}">
+                                    <a href="{{ route('admin.contest.show.capatity', ['id' => $round->contest_id]) }}">
                                         BL-{{ $round->name }}
                                     </a>
                                 @endif
@@ -425,6 +425,11 @@
                                         </li>
                                         <li class="my-3">
                                             @hasrole(config('util.ROLE_DELETE'))
+                                                @if($round->results_count == 0
+                                                                   && $round->exams_count == 0
+                                                                   && $round->posts_count == 0
+                                                                   && $round->sliders_count == 0
+                                                                   )
                                                 <form action="{{ route('admin.round.destroy', ['id' => $round->id]) }}"
                                                     method="post">
                                                     @csrf
@@ -453,6 +458,7 @@
                                                         Xóa bỏ
                                                     </button>
                                                 </form>
+                                                @endif
                                             @else
                                                 <span style="cursor: not-allowed; user-select: none"
                                                     class="svg-icon svg-icon-danger svg-icon-2x">

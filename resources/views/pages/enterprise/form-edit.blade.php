@@ -113,7 +113,7 @@
                             </div>
                             <div class="col-4">
                                 <div class="form-group ">
-                                    <label for="" class="form-label">Ảnh cuộc thi</label>
+                                    <label for="" class="form-label">Logo doanh nghiệp</label>
                                     <input name="logo" type='file' id="file-input" accept=".png, .jpg, .jpeg"
                                         class="form-control" />
                                     <img class="w-100 mt-4 border rounded-3" id="image-preview"

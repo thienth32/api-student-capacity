@@ -42,10 +42,11 @@ class Round extends Model
         parent::boot();
         static::deleting(function ($q) {
             // $q->results()->delete();
-            $q->teams()->detach();
-            $q->judges()->detach();
+//            $q->teams()->detach();
+//            $q->judges()->detach();
         });
     }
+
     public function format()
     {
         return [

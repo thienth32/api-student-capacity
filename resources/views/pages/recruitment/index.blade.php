@@ -160,7 +160,7 @@
         </div>
         <div class="table-responsive p-4 card card-flush ">
 
-            @if (count($Recruitments) > 0)
+            @if (count($recruitments) > 0)
                 <table class=" table table-hover table-responsive-md ">
                     <thead>
                         <tr>
@@ -328,21 +328,21 @@
                     </thead>
                     <tbody>
                         @php
-                            $total = $Recruitments->total();
+                            $total = $recruitments->total();
                         @endphp
-                        @foreach ($Recruitments as $index => $key)
+                        @foreach ($recruitments as $index => $key)
                             <tr>
                                 @if (request()->has('sortBy'))
                                     <th scope="row">
                                         @if (request('sortBy') == 'desc')
-                                            {{ (request()->has('page') && request('page') !== 1 ? $Recruitments->perPage() * (request('page') - 1) : 0) + $index + 1 }}
+                                            {{ (request()->has('page') && request('page') !== 1 ? $recruitments->perPage() * (request('page') - 1) : 0) + $index + 1 }}
                                         @else
-                                            {{ request()->has('page') && request('page') !== 1 ? $total - $Recruitments->perPage() * (request('page') - 1) - $index : ($total -= 1) }}
+                                            {{ request()->has('page') && request('page') !== 1 ? $total - $recruitments->perPage() * (request('page') - 1) - $index : ($total -= 1) }}
                                         @endif
                                     </th>
                                 @else
                                     <th scope="row">
-                                        {{ (request()->has('page') && request('page') !== 1 ? $Recruitments->perPage() * (request('page') - 1) : 0) + $index + 1 }}
+                                        {{ (request()->has('page') && request('page') !== 1 ? $recruitments->perPage() * (request('page') - 1) : 0) + $index + 1 }}
                                     </th>
                                 @endif
 
@@ -351,9 +351,11 @@
                                     {{ $key->name }}
                                 </td>
                                 <td>
-                                    @if (\Carbon\Carbon::parse($key->start_time)->toDateTimeString() > \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
+                                    @if (\Carbon\Carbon::parse($key->start_time)->toDateTimeString() >
+                                        \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
                                         <span class="badge bg-primary">Sắp diễn ra </span>
-                                    @elseif (\Carbon\Carbon::parse($key->end_time)->toDateTimeString() > \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
+                                    @elseif (\Carbon\Carbon::parse($key->end_time)->toDateTimeString() >
+                                        \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
                                         <span class="badge bg-success">Đang diễn ra </span>
                                     @else
                                         <span class="badge bg-danger">Đã kết thúc </span>
@@ -573,7 +575,7 @@
                         @endforeach
                     </tbody>
                 </table>
-                {{ $Recruitments->appends(request()->all())->links('pagination::bootstrap-4') }}
+                {{ $recruitments->appends(request()->all())->links('pagination::bootstrap-4') }}
             @else
                 <h2>Không tìm thấy thông tin tuyển dụng !!!</h2>
             @endif

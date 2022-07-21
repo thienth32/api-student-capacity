@@ -41,8 +41,8 @@ class Slider
 
         return $this->slider::when(request()
             ->has('slider_soft_delete'), function ($q) {
-                return $q->onlyTrashed();
-            })
+            return $q->onlyTrashed();
+        })
             ->search(request('q') ?? null, ['link_to', 'image_url'])
             ->sort((request('sort') == 'desc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'sliders')
             ->when(request()->has('major'), function ($q) {
@@ -68,7 +68,7 @@ class Slider
     {
         try {
             return $this->getList()->status(request('status') ?? null)->paginate(request('limit') ?? 5);
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
     }
@@ -77,12 +77,12 @@ class Slider
     {
         try {
             return $this->getList()->where('status', 1)->get();
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
     }
 
-    public function store($dataCreate,$request)
+    public function store($dataCreate, $request)
     {
         if ($request->major_id != 0) {
             $major = $this->major::find($request->major_id);

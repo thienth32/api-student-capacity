@@ -48,7 +48,7 @@
                                 <label for="" class="form-label">Doanh nghiệp tuyển dụng</label>
                                 <select placeholder="Chọn" multiple class="form-select mb-2 select2-hidden-accessible"
                                     data-control="select2" data-hide-search="false" tabindex="-1" aria-hidden="true"
-                                    name="enterprise_id[]" value="{{ old('enterprise_id') }}">
+                                    name="enterprise_id[]" value="{{ serialize(old('enterprise_id')) }}">
                                     @foreach ($enterprises as $item)
                                         <option
                                             @foreach ($data->enterprise as $value) @if ($value->id == $item->id)
@@ -65,7 +65,7 @@
                                 <label for="" class="form-label">Chọn phần test năng lực</label>
                                 <select placeholder="Chọn" multiple class="form-select mb-2 select2-hidden-accessible"
                                     data-control="select2" data-hide-search="false" tabindex="-1" aria-hidden="true"
-                                    name="contest_id[]" value="{{ old('contest_id') }}">
+                                    name="contest_id[]" value="{{ serialize(old('contest_id')) }}">
                                     @foreach ($contests as $item)
                                         <option
                                             @foreach ($data->contest as $value) @if ($value->id == $item->id)

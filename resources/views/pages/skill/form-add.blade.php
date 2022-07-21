@@ -49,15 +49,17 @@
                                     <label for="" class="form-label">Thuộc chuyên ngành</label>
                                     <select multiple class="form-select mb-2 select2-hidden-accessible"
                                         data-control="select2" data-hide-search="false" tabindex="-1" aria-hidden="true"
-                                        name="major_id[]" value="{{ old('major_id') }}">
+                                        name="major_id[]" value="{{ serialize(old('major_id')) }}">
                                         @foreach ($dataMajor as $itemMajor)
                                             @php
                                                 $dash = '';
                                             @endphp
-                                            <option @selected(request('major_id') == $itemMajor->id) value="{{ $itemMajor->id }}">
+                                            <option
+                                                {{ collect(old('major_id'))->contains($itemMajor->id) ? 'selected' : '' }}
+                                                value="{{ $itemMajor->id }}">
                                                 Ngành: {{ $itemMajor->name }}
                                             </option>
-                                            @include('pages.major.include.listSelecterChislAdd', [
+                                            @include('pages.skill.include.listSelecterChislAdd', [
                                                 'majorPrent' => $itemMajor,
                                             ])
                                         @endforeach

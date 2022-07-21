@@ -73,9 +73,12 @@
                                             Tuyển dụng :
                                             <b><a
                                                     href="{{ route('admin.recruitment.detail', ['id' => $data->postable->id]) }}">{{ $data->postable->name }}</a></b>
-                                        @else
+                                        @elseif(get_class($data->postable) == \App\Models\Contest::class && $data->postable->type == 0)
                                             Cuộc thi : <b><a
                                                     href="{{ route('admin.contest.show', ['id' => $data->postable->id]) }}">{{ $data->postable->name }}</a></b>
+                                        @else
+                                            Bài test : <b><a
+                                                    href="{{ route('admin.contest.show.capatity', ['id' => $data->postable->id]) }}">{{ $data->postable->name }}</a></b>
                                         @endif
                                     </div>
                                 </div>

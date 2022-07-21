@@ -18,6 +18,7 @@ const rules = {
 
     contest_id: "multipeFieldValidator",
     round_id: "multipeFieldValidator",
+    capacity_id: "multipeFieldValidator",
 };
 
 const messages = {
@@ -60,19 +61,29 @@ $.validator.addMethod(
         var returnVal = false;
         if (
             $("select[name=contest_id").val() != 0 &&
+            $("select[name=capacity_id").val() == 0 &&
             $("select[name=round_id").val() == 0 &&
             $("select[name=recruitment_id").val() == 0
         ) {
             returnVal = true;
         } else if (
             $("select[name=round_id").val() != 0 &&
+            $("select[name=capacity_id").val() == 0 &&
             $("select[name=contest_id").val() == 0 &&
             $("select[name=recruitment_id").val() == 0
         ) {
             returnVal = true;
         } else if (
             $("select[name=recruitment_id").val() != 0 &&
+            $("select[name=capacity_id").val() == 0 &&
             $("select[name=contest_id").val() == 0 &&
+            $("select[name=round_id").val() == 0
+        ) {
+            returnVal = true;
+        } else if (
+            $("select[name=capacity_id").val() != 0 &&
+            $("select[name=contest_id").val() == 0 &&
+            $("select[name=recruitment_id").val() == 0 &&
             $("select[name=round_id").val() == 0
         ) {
             returnVal = true;
@@ -87,18 +98,27 @@ $("select[name=contest_id").change(function () {
     $(this).valid();
     $("select[name=round_id").val() == 0;
     $("select[name=recruitment_id").val() == 0;
+    $("select[name=capacity_id").val() == 0;
 });
 
 $("select[name=round_id").change(function () {
     $(this).valid();
     $("select[name=contest_id").val() == 0;
     $("select[name=recruitment_id").val() == 0;
+    $("select[name=capacity_id").val() == 0;
 });
 
 $("select[name=recruitment_id").change(function () {
     $(this).valid();
     $("select[name=contest_id").val() == 0;
     $("select[name=round").val() == 0;
+    $("select[name=capacity_id").val() == 0;
+});
+$("select[name=capacity_id").change(function () {
+    $(this).valid();
+    $("select[name=contest_id").val() == 0;
+    $("select[name=round").val() == 0;
+    $("select[name=recruitment_id").val() == 0;
 });
 $.validator.addMethod(
     "hasSpecial",

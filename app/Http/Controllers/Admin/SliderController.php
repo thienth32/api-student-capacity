@@ -50,6 +50,63 @@ class SliderController extends Controller
         ]);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/public/sliders",
+     *     description="Description api slider",
+     *     tags={"Slider"},
+     *     @OA\Parameter(
+     *         name="q",
+     *         in="query",
+     *         description="Tìm kiếm ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort",
+     *         in="query",
+     *         description="Lọc theo chiều asc hoặc desc ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort_by",
+     *         in="query",
+     *         description="Các cột cần lọc  ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="major",
+     *         in="query",
+     *         description="Slider của chuyên ngành    ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="major_id",
+     *         in="query",
+     *         description="Slider lọc theo chuyên ngành    ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="round",
+     *         in="query",
+     *         description="Slider của vòng thi     ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="round_id",
+     *         in="query",
+     *         description="Slider lọc theo vòng thi    ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="home",
+     *         in="query",
+     *         description="Slider của trang chủ      ",
+     *         required=false,
+     *     ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
     public function apiIndex()
     {
         try {

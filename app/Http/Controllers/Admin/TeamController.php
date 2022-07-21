@@ -160,6 +160,23 @@ class TeamController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/v1/teams/{id}",
+     *     description="Description api user team",
+     *     tags={"Team"},
+     *     summary="Authorization",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Id đội",
+     *         required=true,
+     *     ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
     // chi tiết đội thi phía client
     public function apiShow($id)
     {

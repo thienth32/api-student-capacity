@@ -156,7 +156,7 @@
 
                                             </li>
                                             <li class="my-3">
-                                                @hasrole('super admin')
+                                                @hasrole('admin')
                                                     <a
                                                         href="{{ route('admin.recruitment.soft.restore', ['id' => $listSoft->id]) }}">
                                                         <span role="button" class="svg-icon svg-icon-danger svg-icon-2x">

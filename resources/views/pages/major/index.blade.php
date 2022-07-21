@@ -216,6 +216,7 @@
                             <td>{{ $major->slug }}
 
                             </td>
+
                             <td>
                                 <div class="btn-group dropstart">
                                     <button type="button" class="btn   btn-sm dropdown-toggle" data-bs-toggle="dropdown"
@@ -287,8 +288,14 @@
                                             </a>
                                         </li>
                                         <li class="py-3">
-
                                             @hasrole(config('util.ROLE_DELETE'))
+                                                @if(
+                                                        $major-> contests_count == 0
+                                                        && $major -> sliders_count == 0
+                                                        && $major -> majorChils == 0
+                                                        && $major -> teams == 0
+                                                        && $major -> parent == 0
+                                                    )
                                                 <form action="{{ route('admin.major.destroy', ['slug' => $major->slug]) }}"
                                                     method="post">
                                                     @csrf
@@ -315,6 +322,7 @@
                                                         </span>
                                                     </button>
                                                 </form>
+                                                @endif
                                             @else
                                                 <span style="cursor: not-allowed; user-select: none"
                                                     class="svg-icon svg-icon-danger svg-icon-2x">

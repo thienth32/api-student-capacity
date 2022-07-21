@@ -78,6 +78,14 @@ class Contest
     {
         return $this->getList(false, request())
             ->where('type', request('type') ?? 0)
+            ->withCount([
+                "rounds",
+                "teams",
+                "contest_users",
+                "posts",
+                "enterprise",
+                "judges"
+            ])
             ->paginate(request('limit') ?? 10);
     }
 

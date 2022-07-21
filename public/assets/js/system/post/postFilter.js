@@ -41,17 +41,30 @@ const Page = {
 Page.changeSlug();
 $(document).ready(function () {
     $(".click-contest").click(function () {
+        $(".click-capacity").removeClass("btn-primary");
         $(".click-round").removeClass("btn-primary");
         $(".click-recruitment").removeClass("btn-primary");
         $(this).addClass("btn-primary");
+        $("#capacity").hide(100);
         $("#round").hide(100);
         $("#recruitment").hide(100);
         $("#contest").show(300);
     });
-
+    $(".click-capacity").click(function () {
+        $(".click-contest").removeClass("btn-primary");
+        $(".click-round").removeClass("btn-primary");
+        $(".click-recruitment").removeClass("btn-primary");
+        $(this).addClass("btn-primary");
+        $("#contest").hide(100);
+        $("#round").hide(100);
+        $("#recruitment").hide(100);
+        $("#capacity").show(300);
+    });
     $(".click-round").click(function () {
         $(".click-contest").removeClass("btn-primary");
         $(".click-recruitment").removeClass("btn-primary");
+        $(".click-capacity").removeClass("btn-primary");
+        $("#capacity").hide(100);
         $("#contest").hide(100);
         $("#recruitment").hide(100);
         $(this).addClass("btn-primary");
@@ -60,6 +73,8 @@ $(document).ready(function () {
     $(".click-recruitment").click(function () {
         $(".click-contest").removeClass("btn-primary");
         $(".click-round").removeClass("btn-primary");
+        $(".click-capacity").removeClass("btn-primary");
+        $("#capacity").hide(100);
         $("#contest").hide(100);
         $("#round").hide(100);
         $(this).addClass("btn-primary");
@@ -133,15 +148,19 @@ $(document).ready(function () {
         let status = $(this).val();
         window.location = url + "?status=" + status;
     });
-    $(".form-select-contest").change(function () {
+    $("#select-contest").change(function () {
         let contest_id = $(this).val();
         window.location = url + "?contest_id=" + contest_id;
+    });
+    $("#select-capacity").change(function () {
+        let capacity_id = $(this).val();
+        window.location = url + "?capacity_id=" + capacity_id;
     });
     $("#select-round").change(function () {
         let round_id = $(this).val();
         window.location = url + "?round_id=" + round_id;
     });
-    $(".form-select-recruitments").change(function () {
+    $("#select-recruitment").change(function () {
         let recruitment_id = $(this).val();
         window.location = url + "?recruitment_id=" + recruitment_id;
     });
