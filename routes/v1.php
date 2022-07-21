@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ContestController;
+use App\Http\Controllers\Admin\RoundController;
 use App\Http\Controllers\Admin\TakeExamController as AdminTakeExamController;
 use App\Http\Controllers\Admin\TeamController as AdminTeamController;
 use App\Http\Controllers\Admin\UserController;
@@ -56,7 +57,7 @@ Route::prefix('take-exam')->group(function () {
 
 
 Route::prefix('round')->group(function () {
-    Route::get('{id_round}/team-me', [ContestController::class, 'userTeamRound']);
+    Route::get('{id_round}/team-me', [RoundController::class, 'userTeamRound']);
 });
 
 
