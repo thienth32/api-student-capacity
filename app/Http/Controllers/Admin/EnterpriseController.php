@@ -27,6 +27,7 @@ class EnterpriseController extends Controller
         private MEnterpriseEnterprise $modulesEnterprise,
     ) {
     }
+    
     public function apiIndex(Request $request)
     {
         $listEnterprise = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
