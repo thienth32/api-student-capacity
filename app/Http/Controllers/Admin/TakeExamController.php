@@ -166,6 +166,68 @@ class TakeExamController extends Controller
     /**
      * 
      * @OA\Post(
+     *     path="/api/v1/take-exam/check-student-capacity",
+     *     description="",
+     *     tags={"TakeExam","Capacity","Api V1"},
+     *     summary="Authorization",
+     *     security={{"bearer_token":{}}},
+     *     @OA\RequestBody(
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                  @OA\Property(
+     *                      type="number",
+     *                      property="round_id",
+     *                  ),
+     *              
+     *              ),
+     *          ),
+     *      ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
+    public function checkStudentCapacity(Request $request)
+    {
+        $user_id = auth('sanctum')->user()->id;
+        $validate = Validator::make(
+            $request->all(),
+            [
+                'round_id' => 'required|integer',
+            ],
+            [
+                'round_id.required' => 'Chưa nhập trường này !',
+                'round_id.integer' => 'Sai định dạng !',
+            ]
+        );
+        if ($validate->fails())
+            return $this->responseApi(true, $validate->errors());
+        try {
+            $round = $this->roundModel::find($request->round_id);
+            if (is_null($round)) return $this->responseApi(false, 'Lỗi truy cập hệ thống !!');
+            $exam = $this->examModel::where('round_id', $request->round_id)->pluck('id');
+            if (is_null($exam)) return $this->responseApi(false, 'Lỗi truy cập hệ thống !!');
+            $resultCapacity = $this->resultCapacity::where('user_id', $user_id)
+                ->whereIn('exam_id', $exam)->first();
+            if ($resultCapacity) {
+                // return $this->responseApi(true, $exam);
+                if ($resultCapacity->status == config('util.STATUS_RESULT_CAPACITY_DOING')) {
+                    return $this->responseApi(true, config('util.STATUS_RESULT_CAPACITY_DOING'), ['message' => "Đang làm !!"]);
+                } else {
+                    return $this->responseApi(true, config('util.STATUS_RESULT_CAPACITY_DONE'), ['message' => "Đã làm !!"]);
+                }
+            } else {
+                return $this->responseApi(false, "Chưa làm !!");
+            }
+        } catch (\Throwable $th) {
+            return $this->responseApi(false, 'Lỗi hệ thống !!');
+        }
+    }
+
+
+    /**
+     * 
+     * @OA\Post(
      *     path="/api/v1/take-exam/student-capacity",
      *     description="Trả về đề bài test năng lực , nếu lần đầu làm sẽ tạo bản ghi mới với trạng thái là đang làm  , nếu đang làm dở sẽ trả vè bài làm trước đó ",
      *     tags={"TakeExam","Capacity","Api V1"},
@@ -217,7 +279,7 @@ class TakeExamController extends Controller
                 $exam = $this->examModel::where('round_id', $request->round_id)->inRandomOrder()->first();
                 $this->resultCapacity::create([
                     'scores' => 0,
-                    'status' => config('util.INACTIVE_STATUS'),
+                    'status' => config('util.STATUS_RESULT_CAPACITY_DOING'),
                     'exam_id' => $exam->id,
                     'user_id' => $user_id,
                     'type' => $exam->type
