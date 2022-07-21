@@ -270,6 +270,33 @@
                 }
             }
         },
+        "/api/public/rating-major/{slug}": {
+            "get": {
+                "tags": [
+                    "Rank user",
+                    "User",
+                    "Major"
+                ],
+                "description": "Description api slider",
+                "operationId": "a543ea7b9a6c549431aca0fa06b2a645",
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "Slug chuyên ngành ",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                }
+            }
+        },
         "/api/public/rounds": {
             "get": {
                 "tags": [
