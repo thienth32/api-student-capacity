@@ -49,4 +49,7 @@ return [
     "TYPE_TIME_H" => 1,
     "TYPE_TIME_D" => 2,
 
+
+    "STATUS_RESULT_CAPACITY_DOING" => 0,
+    "STATUS_RESULT_CAPACITY_DONE" => 1,
 ];

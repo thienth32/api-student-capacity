@@ -2,7 +2,7 @@
     "openapi": "3.0.0",
     "info": {
         "title": "OpenApi Capacity Fpoly",
-        "description": "OpenApi Capacity Fpoly<br>\n *      ✅NOTE✅\n *      Note: Khi sử dụng api authentication v1 cần nhập token bearer phần Authorize\n *      Note: Tìm kiếm api theo các tag\n *      Note: Thiếu , gặp bug -> chụp ảnh gửi cho BE sửa 🔧\n *      ✅END NOTE✅",
+        "description": "OpenApi Capacity Fpoly<br>\r\n *      ✅NOTE✅\r\n *      Note: Khi sử dụng api authentication v1 cần nhập token bearer phần Authorize\r\n *      Note: Tìm kiếm api theo các tag\r\n *      Note: Thiếu , gặp bug -> chụp ảnh gửi cho BE sửa 🔧\r\n *      ✅END NOTE✅",
         "contact": {
             "email": ""
         },
@@ -174,40 +174,6 @@
                 }
             }
         },
-        "/api/v1/round/{id_round}/team-me": {
-            "get": {
-                "tags": [
-                    "Round",
-                    "Team",
-                    "Contest",
-                    "Api V1"
-                ],
-                "summary": "Authorization",
-                "description": "Description api user team round",
-                "operationId": "3a1f2dd7c1341a660e9327dc18b4d867",
-                "parameters": [
-                    {
-                        "name": "id_round",
-                        "in": "path",
-                        "description": "Id vòng thi  test năng lực  ",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{ status: true , data : data }"
-                    },
-                    "404": {
-                        "description": "{ status: false , message : 'Not found' }"
-                    }
-                },
-                "security": [
-                    {
-                        "bearer_token": []
-                    }
-                ]
-            }
-        },
         "/api/public/majors/{slug}": {
             "get": {
                 "tags": [
@@ -371,6 +337,40 @@
                 }
             }
         },
+        "/api/v1/round/{id_round}/team-me": {
+            "get": {
+                "tags": [
+                    "Round",
+                    "Team",
+                    "Contest",
+                    "Api V1"
+                ],
+                "summary": "Authorization",
+                "description": "Description api user team round",
+                "operationId": "bde2278baf532ce9582fc98930342292",
+                "parameters": [
+                    {
+                        "name": "id_round",
+                        "in": "path",
+                        "description": "Id vòng thi  test năng lực  ",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
         "/api/public/sliders": {
             "get": {
                 "tags": [
@@ -453,6 +453,45 @@
                         "description": "{ status: false , message : 'Not found' }"
                     }
                 }
+            }
+        },
+        "/api/v1/take-exam/check-student-capacity": {
+            "post": {
+                "tags": [
+                    "TakeExam",
+                    "Capacity",
+                    "Api V1"
+                ],
+                "summary": "Authorization",
+                "description": "",
+                "operationId": "f9207e403ccf646f08309718ec3e0588",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "round_id": {
+                                        "type": "number"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
             }
         },
         "/api/v1/take-exam/student-capacity": {
@@ -571,7 +610,7 @@
         "securitySchemes": {
             "bearer_token": {
                 "type": "apiKey",
-                "description": "Nhập vào ô input dạng \"Bearer token\" <br> <b>Ví dụ</b>: <strong>Bearer 48|i93gO5EA6cBqiguiLCAiIAOiLkLoMXwoIvEnZvTn</strong>\n                     <br><br><hr>",
+                "description": "Nhập vào ô input dạng \"Bearer token\" <br> <b>Ví dụ</b>: <strong>Bearer 48|i93gO5EA6cBqiguiLCAiIAOiLkLoMXwoIvEnZvTn</strong>\r\n                     <br><br><hr>",
                 "name": "Authorization",
                 "in": "header"
             }
