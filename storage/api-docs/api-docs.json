@@ -494,6 +494,37 @@
                 ]
             }
         },
+        "/api/v1/teams/{id}": {
+            "get": {
+                "tags": [
+                    "Team"
+                ],
+                "summary": "Authorization",
+                "description": "Description api user team",
+                "operationId": "87cd6ee8d4e402c7192763ec04ec309e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id đội",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
         "/api/v1/users/edit": {
             "post": {
                 "tags": [
