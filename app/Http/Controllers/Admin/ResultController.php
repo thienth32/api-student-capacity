@@ -26,6 +26,7 @@ class ResultController extends Controller
 
         return $query;
     }
+
     public function indexApi($id_round)
     {
         $data = $this->getList($id_round)->paginate(request('limit') ?? 10);
@@ -35,6 +36,7 @@ class ResultController extends Controller
             'payload' => $data
         ]);
     }
+
     public function index($id_round)
     {
         $round = Round::find($id_round);

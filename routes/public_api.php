@@ -45,11 +45,7 @@ Route::prefix('majors')->group(function () {
 Route::prefix('sliders')->group(function () {
     Route::get('', [SliderController::class, 'apiIndex'])->name('slider.api.index');
 });
-
-// Route::get('', [AdminMajorController::class, 'apiIndex'])->name('major.api.index');
-
-// Route::get('{slug}', [AdminMajorController::class, 'apiShow'])->name('major.api.show');
-
+//
 Route::prefix('enterprise')->group(function () {
     Route::get('', [EnterpriseController::class, 'apiIndex'])->name('enterprise.api.index');
     Route::get('{id}', [EnterpriseController::class, 'apiDetail']);
@@ -80,6 +76,4 @@ Route::prefix('recruitments')->group(function () {
 
 Route::get('rating-major/{slug}', [RankUserController::class, 'getRatingUser']);
 
-//Route::post('upload-file', function () {
-//    return "https://htmlcolorcodes.com/assets/images/html-color-codes-color-palette-generators.jpg";
-//});
+
