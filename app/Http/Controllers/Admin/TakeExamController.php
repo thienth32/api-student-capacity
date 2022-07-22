@@ -276,7 +276,7 @@ class TakeExamController extends Controller
                 $exam = $this->examModel::find($resultCapacity->exam_id);
             } else {
                 $exam = $this->examModel::where('round_id', $request->round_id)->inRandomOrder()->first();
-                $this->resultCapacity::create([
+                $resultCapacityNew =  $this->resultCapacity::create([
                     'scores' => 0,
                     'status' => config('util.STATUS_RESULT_CAPACITY_DOING'),
                     'exam_id' => $exam->id,
@@ -292,10 +292,14 @@ class TakeExamController extends Controller
                 ]);
             }]);
             $dB::commit();
+            if ($resultCapacity) {
+                return $this->responseApi(true, $exam, ['exam_at' => $resultCapacity->created_at]);
+            } else {
+                return $this->responseApi(true, $exam, ['exam_at' => $resultCapacityNew->created_at]);
+            }
         } catch (\Throwable $th) {
             $dB::rollBack();
             return $this->responseApi(false, 'Lỗi hệ thống !!');
         }
-        return $this->responseApi(true, $exam);
     }
 }
