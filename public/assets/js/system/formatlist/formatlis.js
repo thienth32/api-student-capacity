@@ -180,8 +180,8 @@ const formatPage = {
     },
     showPage() {
         $(".card-format").hide();
-        $(".btn-show").hide();
-        $(".btn-hide").show();
+        $(".btn-hide").hide();
+        $(".btn-show").show();
         $(".btn-hide").on("click", function () {
             $(".card-format").hide(1000);
             $(this).hide();
