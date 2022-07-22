@@ -210,7 +210,6 @@ class TakeExamController extends Controller
             $resultCapacity = $this->resultCapacity::where('user_id', $user_id)
                 ->whereIn('exam_id', $exam)->first();
             if ($resultCapacity) {
-                // return $this->responseApi(true, $exam);
                 if ($resultCapacity->status == config('util.STATUS_RESULT_CAPACITY_DOING')) {
                     return $this->responseApi(true, config('util.STATUS_RESULT_CAPACITY_DOING'), ['message' => "Đang làm !!"]);
                 } else {

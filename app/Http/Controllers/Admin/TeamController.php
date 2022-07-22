@@ -250,8 +250,7 @@ class TeamController extends Controller
 
     public function apiAddTeam(Request $request)
     {
-
-        $validate = validator::make(
+        $validate = Validator::make(
             $request->all(),
             [
                 'contest_id' => 'required',

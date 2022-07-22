@@ -39,7 +39,7 @@ Route::get('get-user-by-token', [UserController::class, 'get_user_by_token']);
 
 
 Route::prefix('teams')->group(function () {
-    Route::get('{id}', [AdminTeamController::class, 'apiShow']);
+    // Route::get('{id}', [AdminTeamController::class, 'apiShow']);
     Route::post('add-team', [AdminTeamController::class, "apiAddTeam"]);
     Route::put('edit-team/{team_id}', [AdminTeamController::class, "apiEditTeam"]);
     Route::get('{id}', [AdminTeamController::class, 'apiShow'])->name('team.api.show');
