@@ -215,16 +215,7 @@ class RecruitmentController extends Controller
         if (!$data) abort(404);
         $data->load('contest');
         $data->load('enterprise');
-        $arr = [];
-        foreach ($data as $item) {
-            foreach ($item->contest as $contest) {
-                foreach ($contest->skills as $skill) {
-                    $arr[] = $skill;
-                }
-            }
-            $item['skill'] = collect($arr)->unique('id')->values()->all();
-            $arr = [];
-        }
+        $this->modulesRecruitment->LoadSkillAndUserApiShow($data);
         return $this->responseApi(
             true,
             $data,
@@ -251,16 +242,7 @@ class RecruitmentController extends Controller
         if (!$data) abort(404);
         $data->load('contest');
         $data->load('enterprise');
-        $arr = [];
-        foreach ($data->contest as $contest) {
-            foreach ($contest->skills as $skill) {
-                $arr[] = $skill;
-            }
-        }
-        $data['skill'] = collect($arr)->unique('id')->values()->all();
-        $arr = [];
-
-
+        $this->modulesRecruitment->loadSkillAndUserApiDetail($data);
         return $this->responseApi(
             true,
             $data

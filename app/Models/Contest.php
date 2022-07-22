@@ -31,10 +31,10 @@ class Contest extends Model
     {
         parent::boot();
         static::deleting(function ($q) {
-//            $q->teams()->delete();
-//            $q->rounds()->delete();
-//            $q->enterprise()->detach();
-//            $q->judges()->detach();
+            //            $q->teams()->delete();
+            //            $q->rounds()->delete();
+            //            $q->enterprise()->detach();
+            //            $q->judges()->detach();
         });
     }
 
@@ -71,7 +71,7 @@ class Contest extends Model
     }
     public function rounds()
     {
-        return $this->hasMany(Round::class, 'contest_id');
+        return $this->hasMany(Round::class, 'contest_id')->with('result_capacity');
     }
 
     public function enterprise()
@@ -90,7 +90,6 @@ class Contest extends Model
     {
         return $this->morphMany(Post::class, 'postable');
     }
-
     public function take_exams()
     {
         return $this->hasManyDeep(

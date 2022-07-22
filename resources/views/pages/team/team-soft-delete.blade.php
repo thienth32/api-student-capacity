@@ -118,8 +118,8 @@
                                 </td>
                                 <td>
                                     <div class="btn-group dropstart">
-                                        <button type="button" class="btn   btn-sm dropdown-toggle" data-bs-toggle="dropdown"
-                                            aria-expanded="false">
+                                        <button type="button" class="btn   btn-sm dropdown-toggle"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
                                             <span class="svg-icon svg-icon-success svg-icon-2x">
                                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Settings-2.svg--><svg
                                                     xmlns="http://www.w3.org/2000/svg"
@@ -164,7 +164,7 @@
 
 
                                             </li>
-                                            <li class="my-3">
+                                            {{-- <li class="my-3">
                                                 @hasrole('super admin')
                                                     <a
                                                         href="{{ route('admin.team.soft.destroy', ['id' => $listTeamSoft->id]) }}">
@@ -208,7 +208,7 @@
                                                     Xóa vĩnh viễn
                                                 @endhasrole
 
-                                            </li>
+                                            </li> --}}
                                         </ul>
                                     </div>
                                 </td>

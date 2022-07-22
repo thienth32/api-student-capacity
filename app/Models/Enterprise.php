@@ -18,14 +18,25 @@ class Enterprise extends Model
         'logo' => FormatImageGet::class,
     ];
     protected $fillable = ['name', 'logo', 'description', 'link_web'];
-
-    public static function boot()
+    protected static function boot()
     {
         parent::boot();
-        static::deleting(function ($q) {
-            $q->donors()->detach();
+        static::deleting(function ($p) {
+            $relationMethods = ['donors', 'recruitment'];
+            foreach ($relationMethods as $relationMethod) {
+                if ($p->$relationMethod()->count() > 0) {
+                    return false;
+                }
+            }
         });
     }
+    // public static function boot()
+    // {
+    //     parent::boot();
+    //     static::deleting(function ($q) {
+    //         $q->donors()->detach();
+    //     });
+    // }
     public function donors()
     {
         return $this->belongsToMany(Contest::class, 'donors');

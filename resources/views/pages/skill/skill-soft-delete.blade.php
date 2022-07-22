@@ -146,8 +146,7 @@
                                         <ul class="dropdown-menu px-4 ">
 
                                             <li class="my-3">
-                                                <a
-                                                    href="{{ route('admin.skill.soft.backup', ['id' => $listSoft->id]) }}">
+                                                <a href="{{ route('admin.skill.soft.backup', ['id' => $listSoft->id]) }}">
                                                     <span class="svg-icon svg-icon-primary svg-icon-2x">
                                                         <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Files/Cloud-upload.svg--><svg
                                                             xmlns="http://www.w3.org/2000/svg"
@@ -172,7 +171,7 @@
 
 
                                             </li>
-                                            <li class="my-3">
+                                            {{-- <li class="my-3">
                                                 @hasrole('super admin')
                                                     <a
                                                         href="{{ route('admin.skill.soft.destroy', ['id' => $listSoft->id]) }}">
@@ -220,7 +219,7 @@
                                                     Xóa vĩnh viễn
                                                 @endhasrole
 
-                                            </li>
+                                            </li> --}}
                                         </ul>
                                     </div>
                                 </td>

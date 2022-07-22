@@ -159,4 +159,46 @@ class Recruitment
             $this->recruitment::find($id)->contest()->detach();
         }
     }
+    public function LoadSkillAndUserApiShow($data)
+    {
+        $arrSkill = [];
+        foreach ($data as $item) {
+            foreach ($item->contest as $contest) {
+                foreach ($contest->skills as $skill) {
+                    $arrSkill[] = $skill;
+                }
+            }
+            $item['skill'] = collect($arrSkill)->unique('id')->values()->all();
+            $arrSkill = [];
+        }
+        foreach ($data as $item) {
+            foreach ($item->contest as $contest) {
+                foreach ($contest->rounds as $round) {
+                    foreach ($round->result_capacity as $users)
+                        $arrUser[] = $users->user;
+                }
+            }
+            $item['user'] = collect($arrUser)->unique('id')->values()->all();;
+            $arrUser = [];
+        }
+    }
+    public function loadSkillAndUserApiDetail($data)
+    {
+        $arr = [];
+        foreach ($data->contest as $contest) {
+            foreach ($contest->skills as $skill) {
+                $arr[] = $skill;
+            }
+        }
+        $data['skill'] = collect($arr)->unique('id')->values()->all();
+        $arr = [];
+        foreach ($data->contest as $contest) {
+            foreach ($contest->rounds as $round) {
+                foreach ($round->result_capacity as $users)
+                    $arrUser[] = $users->user;
+            }
+        }
+        $data['user'] = collect($arrUser)->unique('id')->values()->all();;
+        $arrUser = [];
+    }
 }

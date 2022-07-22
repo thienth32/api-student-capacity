@@ -80,15 +80,14 @@ class EnterpriseController extends Controller
     public function destroy($id)
     {
         try {
-            if (!(auth()->user()->hasRole(config('util.ROLE_DELETE')))) return false;
+            if (!(auth()->user()->hasRole(config('util.ROLE_DELETE')))) return abort(404);
             $this->db::transaction(function () use ($id) {
-                if (!($data = $this->enterprise::find($id))) return false;
-                if ($this->storage::disk('s3')->has($data->logo)) $this->storage::disk('s3')->delete($data->logo);
+                if (!($data = $this->enterprise::find($id))) return abort(404);
                 $data->delete();
             });
             return redirect()->back();
         } catch (\Throwable $th) {
-            return false;
+            return abort(404);
         }
     }
     public function create(Request $request)

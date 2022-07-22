@@ -42,8 +42,8 @@ class Round extends Model
         parent::boot();
         static::deleting(function ($q) {
             // $q->results()->delete();
-//            $q->teams()->detach();
-//            $q->judges()->detach();
+            //            $q->teams()->detach();
+            //            $q->judges()->detach();
         });
     }
 
@@ -113,5 +113,9 @@ class Round extends Model
     public function exams()
     {
         return $this->hasMany(Exam::class, 'round_id');
+    }
+    public function result_capacity()
+    {
+        return $this->hasManyThrough(ResultCapacity::class, Exam::class, 'round_id', 'exam_id', 'id')->with('user');
     }
 }

@@ -100,14 +100,14 @@ class SkillController extends Controller
     {
 
         try {
-            if (!(auth()->user()->hasRole('super admin'))) return false;
+            if (!(auth()->user()->hasRole('super admin'))) return abort(404);
             $this->db::transaction(function () use ($id) {
-                if (!($data = $this->skill::find($id))) return false;
+                if (!($data = $this->skill::find($id))) return abort(404);
                 $data->delete();
             });
             return redirect()->back();
         } catch (\Throwable $th) {
-            return false;
+            return abort(404);
         }
     }
 
