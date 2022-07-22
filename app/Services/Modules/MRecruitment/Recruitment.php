@@ -3,7 +3,9 @@
 namespace App\Services\Modules\MRecruitment;
 
 use App\Models\Contest;
+use App\Models\ContestRecruitment;
 use App\Models\Enterprise;
+use App\Models\EnterpriseRecruitment;
 use App\Models\Recruitment as ModelsRecruitment;
 use App\Services\Traits\TUploadImage;
 use Carbon\Carbon;
@@ -16,7 +18,9 @@ class Recruitment
         private Contest $contest,
         private Enterprise $enterprise,
         private ModelsRecruitment $recruitment,
-        private Carbon $carbon
+        private Carbon $carbon,
+        private EnterpriseRecruitment $enterpriseRecruitment,
+        private ContestRecruitment $contestRecruitment,
     ) {
     }
     public function getList(Request $request)
@@ -24,6 +28,7 @@ class Recruitment
         $keyword = $request->has('keyword') ? $request->keyword : "";
         $enterprise = $request->has('enterprise_id') ? $request->enterprise_id : null;
         $contest = $request->has('contest_id') ? $request->contest_id : null;
+        $recruitmentHot =  $request->has('recruitmentHot') ? $request->recruitmentHot : null;
         $progress = $request->has('progress') ? $request->progress : null;
         $orderBy = $request->has('orderBy') ? $request->orderBy : 'id';
         $startTime = $request->has('startTime') ? $request->startTime : null;
@@ -34,12 +39,14 @@ class Recruitment
             $query =  $this->recruitment::onlyTrashed()->where('name', 'like', "%$keyword%")->orderByDesc('deleted_at');
             return $query;
         }
-        $query =   $this->recruitment::where('name', 'like', "%$keyword%");
-        if ($enterprise != null) {
-            $query = $this->enterprise::find($enterprise);
-        }
-        if ($contest != null) {
-            $query =  $this->contest::find($contest);
+        $query = $this->recruitment::where('name', 'like', "%$keyword%");
+
+        if ($recruitmentHot != null) {
+            if ($recruitmentHot == 'hot') {
+                $query->where('hot', 1);
+            } else {
+                $query->where('hot', 0);
+            }
         }
         if ($progress != null) {
             if ($progress == 'pass_date') {
@@ -52,7 +59,6 @@ class Recruitment
             }
         }
         if ($endTime != null && $startTime != null) {
-            // dd(\Carbon\Carbon::parse(request('startTime'))->format('m/d/Y h:i:s A'), \Carbon\Carbon::parse(request('endTime'))->format('m/d/Y h:i:s A'));
             $query->where('start_time', '>=', \Carbon\Carbon::parse(request('startTime'))->toDateTimeString())->where('start_time', '<=', \Carbon\Carbon::parse(request('endTime'))->toDateTimeString());
         }
         if ($sortBy == "desc") {
@@ -60,19 +66,19 @@ class Recruitment
         } else {
             $query->orderBy($orderBy);
         }
-        // dd($query->get());
+        if ($enterprise != null) {
+            $recruitmentsId =  $this->enterpriseRecruitment::where('enterprise_id', $enterprise)->pluck('recruitment_id')->toArray();
+            $query->whereIn('id', $recruitmentsId);
+        }
+        if ($contest != null) {
+            $recruitmentsIdInContest = $this->contestRecruitment::where('contest_id', $contest)->pluck('recruitment_id')->toArray();
+            $query->whereIn('id',  $recruitmentsIdInContest);
+        }
         return $query;
     }
     public function index(Request $request)
     {
-        if ($request->enterprise_id) {
-            return   $this->getList($request)->recruitment()->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
-        }
-        if ($request->contest_id) {
-            return $this->getList($request)->recruitment()->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
-        }
-
-        return $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
+        return $this->getList($request)->paginate(request('limit') ?? config('util.HOMEPAGE_ITEM_AMOUNT'));
     }
     public function find($id)
     {

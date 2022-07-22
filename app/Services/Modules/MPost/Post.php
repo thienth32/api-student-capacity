@@ -42,22 +42,6 @@ class Post
             $query = $this->post::onlyTrashed()->where('title', 'like', "%$keyword%")->orderByDesc('deleted_at');
             return $query;
         }
-        if ($contest != 0) {
-            $query = $this->contest::find($contest);
-            return $query;
-        }
-        if ($capacity != 0) {
-            $query = $this->contest::find($capacity);
-            return $query;
-        }
-        if ($rounds != 0) {
-            $query = $this->round::find($rounds);
-            return $query;
-        }
-        if ($recruitment != 0) {
-            $query = $this->recruitment::find($recruitment);
-            return $query;
-        }
         $query = $this->post::where('title', 'like', "%$keyword%");
         if ($status != null) {
             $query->where('status', $status);
@@ -77,29 +61,26 @@ class Post
         } else {
             $query->orderBy($orderBy);
         }
-        // dd($query->get());
+        if ($contest != 0) {
+            $query->where('postable_id', $contest)->where('postable_type', $this->contest::class);
+        }
+        if ($capacity != 0) {
+            $query->where('postable_id', $capacity)->where('postable_type', $this->contest::class);
+        }
+        if ($rounds != 0) {
+            $query->where('postable_id', $rounds)->where('postable_type', $this->round::class);
+        }
+        if ($recruitment != 0) {
+            $query->where('postable_id', $recruitment)->where('postable_type', $this->recruitment::class);
+        }
         return $query;
     }
     public function index(Request $request)
     {
-        if ($request->contest_id) {
-            return $this->getList($request)->posts()->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
-        }
-        if ($request->capacity_id) {
-            return $this->getList($request)->posts()->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
-        }
-        if ($request->round_id) {
-            return $this->getList($request)->posts()->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
-        }
-        if ($request->recruitment_id) {
-            return $this->getList($request)->posts()->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
-        }
-
-        return $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));;
+        return $this->getList($request)->paginate(request('limit') ?? config('util.HOMEPAGE_ITEM_AMOUNT'));;
     }
     public function find($id)
     {
-
         return $this->post::find($id);
     }
     public function store($request)

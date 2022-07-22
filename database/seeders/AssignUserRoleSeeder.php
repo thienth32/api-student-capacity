@@ -28,8 +28,8 @@ class AssignUserRoleSeeder extends Seeder
         //     }
         // }
         foreach ($users as $u) {
-            if ($u->id == 35) {
-                $u->assignRole('teacher');
+            if ($u->id == 39) {
+                $u->assignRole('super admin');
             }
         }
     }

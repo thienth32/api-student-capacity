@@ -2,7 +2,7 @@
     "openapi": "3.0.0",
     "info": {
         "title": "OpenApi Capacity Fpoly",
-        "description": "OpenApi Capacity Fpoly<br>\n *      ✅NOTE✅\n *      Note: Khi sử dụng api authentication v1 cần nhập token bearer phần Authorize\n *      Note: Tìm kiếm api theo các tag\n *      Note: Thiếu , gặp bug -> chụp ảnh gửi cho BE sửa 🔧\n *      ✅END NOTE✅",
+        "description": "OpenApi Capacity Fpoly<br>\r\n *      ✅NOTE✅\r\n *      Note: Khi sử dụng api authentication v1 cần nhập token bearer phần Authorize\r\n *      Note: Tìm kiếm api theo các tag\r\n *      Note: Thiếu , gặp bug -> chụp ảnh gửi cho BE sửa 🔧\r\n *      ✅END NOTE✅",
         "contact": {
             "email": ""
         },
@@ -191,6 +191,74 @@
                 ]
             }
         },
+        "/api/public/enterprise": {
+            "get": {
+                "tags": [
+                    "Enterprise"
+                ],
+                "description": "Description api enterprise",
+                "operationId": "32dc39ad57c2922ba36aef1f3965c12a",
+                "parameters": [
+                    {
+                        "name": "keyword",
+                        "in": "query",
+                        "description": "Tìm kiếm ",
+                        "required": false
+                    },
+                    {
+                        "name": "sortBy",
+                        "in": "query",
+                        "description": "Lọc theo chiều asc hoặc desc ",
+                        "required": false
+                    },
+                    {
+                        "name": "orderBy",
+                        "in": "query",
+                        "description": "Các cột cần lọc  ",
+                        "required": false
+                    },
+                    {
+                        "name": "contest_id",
+                        "in": "query",
+                        "description": "Tài trọ cho các cuộc thi",
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                }
+            }
+        },
+        "/api/public/enterprise/{id}": {
+            "get": {
+                "tags": [
+                    "Enterprise"
+                ],
+                "description": "Description api enterprise",
+                "operationId": "9864d9da8ccfcfd8a8ba7911cfdeda28",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id doanh nghiệp",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                }
+            }
+        },
         "/api/public/majors/{slug}": {
             "get": {
                 "tags": [
@@ -241,6 +309,178 @@
                         "in": "query",
                         "description": "Các cột cần lọc  ",
                         "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                }
+            }
+        },
+        "/api/public/posts": {
+            "get": {
+                "tags": [
+                    "Posts"
+                ],
+                "description": "Description api posts",
+                "operationId": "e88782f1cc96983e1b9cce3712d33bcf",
+                "parameters": [
+                    {
+                        "name": "keyword",
+                        "in": "query",
+                        "description": "Tìm kiếm ",
+                        "required": false
+                    },
+                    {
+                        "name": "sortBy",
+                        "in": "query",
+                        "description": "Lọc theo chiều asc hoặc desc ",
+                        "required": false
+                    },
+                    {
+                        "name": "orderBy",
+                        "in": "query",
+                        "description": "Các cột cần lọc  ",
+                        "required": false
+                    },
+                    {
+                        "name": "contest_id",
+                        "in": "query",
+                        "description": "Bài viết thuộc của thi",
+                        "required": false
+                    },
+                    {
+                        "name": "round_id",
+                        "in": "query",
+                        "description": "bài viết thuộc vòng thi",
+                        "required": false
+                    },
+                    {
+                        "name": "capacity_id",
+                        "in": "query",
+                        "description": "Bài viết thuộc của bài test",
+                        "required": false
+                    },
+                    {
+                        "name": "recruitment_id",
+                        "in": "query",
+                        "description": "Bài viết thuộc Tuyển dụng",
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                }
+            }
+        },
+        "/api/public/posts/{slug}": {
+            "get": {
+                "tags": [
+                    "Posts"
+                ],
+                "description": "Description api post",
+                "operationId": "52bf4501c34877af005111470d695826",
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "slug bài viết",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                }
+            }
+        },
+        "/api/public/recruitments": {
+            "get": {
+                "tags": [
+                    "Recruitment"
+                ],
+                "description": "Description api recruitments",
+                "operationId": "028bd5fd0d4398dbaf6942fe8ebdecda",
+                "parameters": [
+                    {
+                        "name": "keyword",
+                        "in": "query",
+                        "description": "Tìm kiếm ",
+                        "required": false
+                    },
+                    {
+                        "name": "sortBy",
+                        "in": "query",
+                        "description": "Lọc theo chiều asc hoặc desc ",
+                        "required": false
+                    },
+                    {
+                        "name": "orderBy",
+                        "in": "query",
+                        "description": "Các cột cần lọc  ",
+                        "required": false
+                    },
+                    {
+                        "name": "contest_id",
+                        "in": "query",
+                        "description": "Tuyển dụng thuộc bài test",
+                        "required": false
+                    },
+                    {
+                        "name": "recruitmentHot",
+                        "in": "query",
+                        "description": "Bài tuyển dụng Hot (recruitmentHot='hot' list tuyển dụng hot ,\n     * recruitmentHot='normal' list tuyển dụng bthuong\n     * )",
+                        "required": false
+                    },
+                    {
+                        "name": "enterprise_id",
+                        "in": "query",
+                        "description": "Tuyển dụng cho các doanh nghiệp  ",
+                        "required": false
+                    },
+                    {
+                        "name": "progress",
+                        "in": "query",
+                        "description": "Trạng thái của bài đăng\n     * 'pass_date'= sắp diễn ra,\n     * 'registration_date'= đang diễn ra\n     * 'miss_date'= đã diễn ra ",
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                }
+            }
+        },
+        "/api/public/recruitments/{id}": {
+            "get": {
+                "tags": [
+                    "Recruitment"
+                ],
+                "description": "Description api recruitment",
+                "operationId": "c5a807e68a6bacbfb8063d71cddacd1a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id Tuyển dụng  ",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -440,7 +680,7 @@
         "securitySchemes": {
             "bearer_token": {
                 "type": "apiKey",
-                "description": "Nhập vào ô input dạng \"Bearer token\" <br> <b>Ví dụ</b>: <strong>Bearer 48|i93gO5EA6cBqiguiLCAiIAOiLkLoMXwoIvEnZvTn</strong>\n                     <br><br><hr>",
+                "description": "Nhập vào ô input dạng \"Bearer token\" <br> <b>Ví dụ</b>: <strong>Bearer 48|i93gO5EA6cBqiguiLCAiIAOiLkLoMXwoIvEnZvTn</strong>\r\n                     <br><br><hr>",
                 "name": "Authorization",
                 "in": "header"
             }

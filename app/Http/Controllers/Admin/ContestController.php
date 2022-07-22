@@ -547,7 +547,6 @@ class ContestController extends Controller
             return $this->responseApi(false);
         }
     }
-
     public function sendMail($id)
     {
         $contest = $this->contest->sendMail($id);

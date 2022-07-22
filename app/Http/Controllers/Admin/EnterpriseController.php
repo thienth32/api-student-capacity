@@ -27,14 +27,47 @@ class EnterpriseController extends Controller
         private MEnterpriseEnterprise $modulesEnterprise,
     ) {
     }
+    /**
+     * @OA\Get(
+     *     path="/api/public/enterprise",
+     *     description="Description api enterprise",
+     *     tags={"Enterprise"},
+     *     @OA\Parameter(
+     *         name="keyword",
+     *         in="query",
+     *         description="Tìm kiếm ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="sortBy",
+     *         in="query",
+     *         description="Lọc theo chiều asc hoặc desc ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="orderBy",
+     *         in="query",
+     *         description="Các cột cần lọc  ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="contest_id",
+     *         in="query",
+     *         description="Tài trọ cho các cuộc thi",
+     *         required=false,
+     *     ),
+     *
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
     public function apiIndex(Request $request)
     {
-        $listEnterprise = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
+        $data = $this->modulesEnterprise->index($request);
+        $data->load('recruitment');
         return $this->responseApi(
-            [
-                "status" => true,
-                "payload" => $listEnterprise,
-            ]
+            true,
+            $data
         );
     }
     public function index(Request $request)
@@ -132,16 +165,26 @@ class EnterpriseController extends Controller
             return abort(404);
         }
     }
+    /**
+     * @OA\Get(
+     *     path="/api/public/enterprise/{id}",
+     *     description="Description api enterprise",
+     *     tags={"Enterprise"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Id doanh nghiệp",
+     *         required=true,
+     *     ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
     public function apiDetail($id)
     {
         $data = $this->enterprise::find($id);
         $data->load('recruitment');
 
-        return $this->responseApi(
-            [
-                "status" => true,
-                "payload" => $data,
-            ]
-        );
+        return $this->responseApi(true, $data);
     }
 }

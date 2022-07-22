@@ -39,27 +39,24 @@ class PostController extends Controller
     }
     public function index(Request $request)
     {
-        try {
-            $round = null;
-            if (request()->has('round_id')) $round = $this->round::find(request('round_id'))->load('contest');
 
-            $contest = $this->contest::where('type', 0)->get();
-            $capacity = $this->contest::where('type', 1)->get();
-            $recruitments = $this->recruitment::all();
-            $rounds = $this->round::all();
-            $posts = $this->modulesPost->index($request);
+        $round = null;
+        if (request()->has('round_id')) $round = $this->round::find(request('round_id'))->load('contest');
 
-            return view('pages.post.index', [
-                'posts' => $posts,
-                'contest' => $contest,
-                'capacity' => $capacity,
-                'recruitments' => $recruitments,
-                'rounds' => $rounds,
-                'round' => $round
-            ]);
-        } catch (\Throwable $th) {
-            return redirect('error');
-        };
+        $contest = $this->contest::where('type', 0)->get();
+        $capacity = $this->contest::where('type', 1)->get();
+        $recruitments = $this->recruitment::all();
+        $rounds = $this->round::all();
+        $posts = $this->modulesPost->index($request);
+
+        return view('pages.post.index', [
+            'posts' => $posts,
+            'contest' => $contest,
+            'capacity' => $capacity,
+            'recruitments' => $recruitments,
+            'rounds' => $rounds,
+            'round' => $round
+        ]);
     }
 
     public function getModelDataStatus($id)
@@ -143,7 +140,6 @@ class PostController extends Controller
             return abort(404);
         }
     }
-
     public function edit(Request $request, $slug)
     {
 
@@ -224,5 +220,93 @@ class PostController extends Controller
         } catch (\Throwable $th) {
             return abort(404);
         }
+    }
+    /**
+     * @OA\Get(
+     *     path="/api/public/posts",
+     *     description="Description api posts",
+     *     tags={"Posts"},
+     *     @OA\Parameter(
+     *         name="keyword",
+     *         in="query",
+     *         description="Tìm kiếm ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="sortBy",
+     *         in="query",
+     *         description="Lọc theo chiều asc hoặc desc ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="orderBy",
+     *         in="query",
+     *         description="Các cột cần lọc  ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="contest_id",
+     *         in="query",
+     *         description="Bài viết thuộc của thi",
+     *         required=false,
+     *     ),
+     *       @OA\Parameter(
+     *         name="round_id",
+     *         in="query",
+     *         description="bài viết thuộc vòng thi",
+     *         required=false,
+     *     ),
+     *   @OA\Parameter(
+     *         name="capacity_id",
+     *         in="query",
+     *         description="Bài viết thuộc của bài test",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="recruitment_id",
+     *         in="query",
+     *         description="Bài viết thuộc Tuyển dụng",
+     *         required=false,
+     *     ),
+     *
+     *
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
+    public function apiShow(Request $request)
+    {
+        $data = $this->modulesPost->index($request);
+        $data->load('user');
+        if (!$data) abort(404);
+        return $this->responseApi(
+            true,
+            $data,
+        );
+    }
+    /**
+     * @OA\Get(
+     *     path="/api/public/posts/{slug}",
+     *     description="Description api post",
+     *     tags={"Posts"},
+     *     @OA\Parameter(
+     *         name="slug",
+     *         in="path",
+     *         description="slug bài viết",
+     *         required=true,
+     *     ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
+    public function apiDetail($slug)
+    {
+        $data = $this->post::where('slug', $slug)->first();
+        $data->load('user');
+        if (!$data) abort(404);
+        return $this->responseApi(
+            true,
+            $data
+        );
     }
 }

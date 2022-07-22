@@ -3,6 +3,7 @@
 namespace App\Services\Modules\MEnterprise;
 
 use App\Models\Contest;
+use App\Models\Donor;
 use App\Models\Enterprise as ModelsEnterprise;
 use App\Services\Traits\TUploadImage;
 use Illuminate\Http\Request;
@@ -13,8 +14,7 @@ class Enterprise
     public function __construct(
         private Contest $contest,
         private ModelsEnterprise $enterprise,
-        // private DB $db,
-        // private Storage $storage
+        private Donor $donor,
     ) {
     }
     public function getList(Request $request)
@@ -23,7 +23,6 @@ class Enterprise
         $keyword = $request->has('keyword') ? $request->keyword : "";
         $contest = $request->has('contest') ? $request->contest : null;
         $orderBy = $request->has('orderBy') ? $request->orderBy : 'id';
-
         $sortBy = $request->has('sortBy') ? $request->sortBy : "desc";
         $softDelete = $request->has('enterprise_soft_delete') ? $request->enterprise_soft_delete : null;
 
@@ -32,22 +31,21 @@ class Enterprise
             return $query;
         }
         $query =  $this->enterprise::where('name', 'like', "%$keyword%");
-        if ($contest != null) {
-            $query = Contest::find($contest);
-        }
+
         if ($sortBy == "desc") {
             $query->orderByDesc($orderBy);
         } else {
             $query->orderBy($orderBy);
         }
+        if ($contest != null) {
+            $enterprisesId =  $this->donor::where('contest_id', $contest)->pluck('enterprise_id')->toArray();
+            $query->whereIn('id', $enterprisesId);
+        }
         return $query;
     }
     public function index(Request $request)
     {
-        if ($request->contest) {
-            return $this->getList($request)->enterprise()->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
-        }
-        return $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
+        return $this->getList($request)->paginate(request('limit') ?? config('util.HOMEPAGE_ITEM_AMOUNT'));
     }
     public function store($dataCreate, $request)
     {

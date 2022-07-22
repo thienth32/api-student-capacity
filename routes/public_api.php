@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\ContestController as AdminContestController;
 use App\Http\Controllers\Admin\EnterpriseController;
 use App\Http\Controllers\Admin\ExamController;
 use App\Http\Controllers\Admin\MajorController as AdminMajorController;
+use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\RankUserController;
 use App\Http\Controllers\Admin\RecruitmentController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\Admin\RoundController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\SponsorController as AdminSponsorController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+
 use Illuminate\Support\Facades\Route;
 
 
@@ -73,8 +75,10 @@ Route::prefix('recruitments')->group(function () {
     Route::get('', [RecruitmentController::class, 'apiShow']);
     Route::get('{id}', [RecruitmentController::class, 'apiDetail']);
 });
-
-
+Route::prefix('posts')->group(function () {
+    Route::get('', [PostController::class, 'apiShow']);
+    Route::get('{slug}', [PostController::class, 'apiDetail']);
+});
 Route::get('rating-major/{slug}', [RankUserController::class, 'getRatingUser']);
 
 //Route::post('upload-file', function () {

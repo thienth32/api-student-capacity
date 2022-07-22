@@ -11,16 +11,19 @@ use App\Models\Recruitment;
 use App\Services\Modules\MRecruitment\Recruitment as MRecruitmentRecruitment;
 use Carbon\Carbon;
 use App\Services\Traits\TResponse;
+use App\Services\Traits\TStatus;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Sheet;
 
 class RecruitmentController extends Controller
 {
     use TUploadImage;
-    use TResponse;
+    use TResponse, TStatus;
 
     public function __construct(
 
@@ -140,30 +143,124 @@ class RecruitmentController extends Controller
             return abort(404);
         }
     }
-
+    public function getModelDataHot($id)
+    {
+        return $this->modulesRecruitment->find($id);
+    }
     public function detail($id)
     {
         $data = $this->modulesRecruitment->find($id);
-
         return view('pages.recruitment.detailRecruitment', compact('data'));
     }
+    /**
+     * @OA\Get(
+     *     path="/api/public/recruitments",
+     *     description="Description api recruitments",
+     *     tags={"Recruitment"},
+     *     @OA\Parameter(
+     *         name="keyword",
+     *         in="query",
+     *         description="Tìm kiếm ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="sortBy",
+     *         in="query",
+     *         description="Lọc theo chiều asc hoặc desc ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="orderBy",
+     *         in="query",
+     *         description="Các cột cần lọc  ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="contest_id",
+     *         in="query",
+     *         description="Tuyển dụng thuộc bài test",
+     *         required=false,
+     *     ),
+     *    *     @OA\Parameter(
+     *         name="recruitmentHot",
+     *         in="query",
+     *         description="Bài tuyển dụng Hot (recruitmentHot='hot' list tuyển dụng hot ,
+     * recruitmentHot='normal' list tuyển dụng bthuong
+     * )",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="enterprise_id",
+     *         in="query",
+     *         description="Tuyển dụng cho các doanh nghiệp  ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="progress",
+     *         in="query",
+     *         description="Trạng thái của bài đăng
+     * 'pass_date'= sắp diễn ra,
+     * 'registration_date'= đang diễn ra
+     * 'miss_date'= đã diễn ra ",
+     *         required=false,
+     *     ),
+     *
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
     public function apiShow(Request $request)
     {
-        $data = $this->modulesRecruitment->getList($request)->paginate(request('limit') ?? config('util.HOMEPAGE_ITEM_AMOUNT'));
+        $data = $this->modulesRecruitment->index($request);
         if (!$data) abort(404);
         $data->load('contest');
         $data->load('enterprise');
+        $arr = [];
+        foreach ($data as $item) {
+            foreach ($item->contest as $contest) {
+                foreach ($contest->skills as $skill) {
+                    $arr[] = $skill;
+                }
+            }
+            $item['skill'] = collect($arr)->unique('id')->values()->all();
+            $arr = [];
+        }
         return $this->responseApi(
             true,
             $data,
         );
     }
+    /**
+     * @OA\Get(
+     *     path="/api/public/recruitments/{id}",
+     *     description="Description api recruitment",
+     *     tags={"Recruitment"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Id Tuyển dụng  ",
+     *         required=true,
+     *     ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
     public function apiDetail($id)
     {
         $data = $this->modulesRecruitment->find($id);
         if (!$data) abort(404);
         $data->load('contest');
         $data->load('enterprise');
+        $arr = [];
+        foreach ($data->contest as $contest) {
+            foreach ($contest->skills as $skill) {
+                $arr[] = $skill;
+            }
+        }
+        $data['skill'] = collect($arr)->unique('id')->values()->all();
+        $arr = [];
+
+
         return $this->responseApi(
             true,
             $data

@@ -97,6 +97,38 @@
                         placeholder="'*Enter' tìm kiếm ..." class=" ip-search form-control">
                 </div>
             </div>
+            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
+                <div class="  form-group p-2">
+                    <label class="form-label"> Loại tuyển dụng </label>
+                    <select class="select-type-recruitment form-select mb-2 select2-hidden-accessible"
+                        data-control="select2" data-hide-search="true" tabindex="-1" aria-hidden="true">
+                        <option class="form-control" value="">Chọn loại tuyển dụng</option>
+                        <option class="form-control" @selected(request('recruitmentHot') == 'hot') value="hot"> Tuyển dụng hot
+                        </option>
+                        <option class="form-control" @selected(request('recruitmentHot') == 'normal') value="normal"> Tuyển dụng
+                            thường
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
+                <div class="  form-group p-2">
+                    <label for="" class="form-label">Hoạt động tuyển dụng </label>
+                    <select class="select-date-time form-select mb-2 select2-hidden-accessible" data-control="select2"
+                        data-hide-search="true" tabindex="-1" aria-hidden="true">
+                        <option class="form-control" value="">Chọn hoạt động</option>
+                        <option class="form-control" @selected(request('progress') == 'pass_date') value="pass_date"> Sắp diễn ra
+                        </option>
+                        <option class="form-control" @selected(request('progress') == 'registration_date') value="registration_date"> Đang diễn
+                            ra
+                        </option>
+                        <option class="form-control" @selected(request('progress') == 'miss_date') value="miss_date">Đã diễn ra
+                        </option>
+
+                    </select>
+                </div>
+            </div>
+
             <div class="col-12 row ">
                 <div class="col-12 row">
                     <div class="mb-0">
@@ -108,21 +140,7 @@
                         </div>
 
                     </div>
-                    <div class="col-12 mt-4 ">
-                        <label for="" class="form-label">Hoạt động tuyển dụng </label>
-                        <select class="select-date-time form-select mb-2 select2-hidden-accessible" data-control="select2"
-                            data-hide-search="true" tabindex="-1" aria-hidden="true">
-                            <option class="form-control" value="">Chọn hoạt động</option>
-                            <option class="form-control" @selected(request('progress') == 'pass_date') value="pass_date"> Sắp diễn ra
-                            </option>
-                            <option class="form-control" @selected(request('progress') == 'registration_date') value="registration_date"> Đang diễn
-                                ra
-                            </option>
-                            <option class="form-control" @selected(request('progress') == 'miss_date') value="miss_date">Đã diễn ra
-                            </option>
 
-                        </select>
-                    </div>
                 </div>
             </div>
 
@@ -236,6 +254,8 @@
                                 </a>
 
                             </th>
+                            <th scope="col">Tuyển dụng hot
+                            </th>
                             <th scope="col">Quá trình
                             </th>
                             <th scope="col">Thời gian bắt đầu
@@ -311,10 +331,10 @@
                                 </a>
                             </th>
 
-                            <th scope="col">Doanh nghiệp tuyển dụng
+                            <th scope="col">Doanh nghiệp
 
                             </th>
-                            <th scope="col">Test năng lực
+                            <th scope="col">Bài test
 
                             </th>
                             <th scope="col"> Giới thiệu
@@ -345,10 +365,20 @@
                                         {{ (request()->has('page') && request('page') !== 1 ? $recruitments->perPage() * (request('page') - 1) : 0) + $index + 1 }}
                                     </th>
                                 @endif
-
-
                                 <td>
                                     {{ $key->name }}
+                                </td>
+                                <td>
+                                    @hasanyrole('admin|super admin')
+
+                                        <div class="form-check form-switch">
+                                            <input value="{{ $key->hot }}" data-id="{{ $key->id }}"
+                                                class="form-select-status-hot form-check-input" @checked($key->hot == 1)
+                                                type="checkbox" role="switch">
+
+                                        </div>
+                                    @endhasrole
+
                                 </td>
                                 <td>
                                     @if (\Carbon\Carbon::parse($key->start_time)->toDateTimeString() >
@@ -383,7 +413,8 @@
                                             @if (count($key->enterprise) > 0)
                                                 @foreach ($key->enterprise as $item)
                                                     <li style="padding:7px" class="dropdown-item ">
-                                                        {{ $item->name }}
+                                                        <a
+                                                            href="{{ route('admin.recruitment.detail', ['id' => $item->id]) }}">{{ $item->name }}</a>
                                                     </li>
                                                 @endforeach
                                             @else
@@ -404,7 +435,10 @@
                                             @if (count($key->contest) > 0)
                                                 @foreach ($key->contest as $item)
                                                     <li style="padding:7px" class="dropdown-item ">
-                                                        {{ $item->name }}
+                                                        <a
+                                                            href="{{ route('admin.contest.show.capatity', ['id' => $item->id]) }}">
+                                                            {{ $item->name }}</a>
+
                                                     </li>
                                                 @endforeach
                                             @else
@@ -590,5 +624,7 @@
     <script src="assets/js/system/recruitment/recruitment.js"></script>
 
     <script src="assets/js/system/formatlist/formatlis.js"></script>
-    <script></script>
+    <script>
+        const _token = "{{ csrf_token() }}";
+    </script>
 @endsection

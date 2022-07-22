@@ -76,7 +76,7 @@
                                     <input value="{{ old('image_url') }}" name="image_url" type='file' id="file-input"
                                         class="form-control" accept=".png, .jpg, .jpeg" />
                                     <img class="w-100 mt-4 border rounded-3" id="image-preview"
-                                        src="{{ Storage::disk('s3')->has($data->image_url) ? Storage::disk('s3')->temporaryUrl($data->image_url, now()->addMinutes(5)) : 'https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg' }}" />
+                                        src="{{ $data->image_url ? $data->image_url : 'https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg' }}" />
                                 </div>
                             </div>
 
