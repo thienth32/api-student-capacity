@@ -25,7 +25,7 @@
      *     ),
      *     @OA\RequestBody(
      *          @OA\MediaType(
-     *              mediaType="application/json",
+     *         mediaType="application/json",     
      *              @OA\Schema(
      *                  @OA\Property(
      *                      type="string",
