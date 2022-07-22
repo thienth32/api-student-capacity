@@ -97,7 +97,7 @@ class ContestController extends Controller
 
         return view('pages.contest.index', [
             'contests' => $data,
-            'majors' => $this->major::where('parent_id', 0)->get(),
+            'majors' => $this->major::where('parent_id', 0)->with(['majorChils'])->get(),
             'contest_type_text' =>  request('type') == 1 ? 'test năng lực' : 'cuộc thi'
         ]);
     }

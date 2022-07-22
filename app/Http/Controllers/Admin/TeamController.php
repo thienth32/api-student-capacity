@@ -160,6 +160,9 @@ class TeamController extends Controller
         }
     }
 
+
+
+    // chi tiết đội thi phía client
     /**
      * @OA\Get(
      *     path="/api/v1/teams/{id}",
@@ -177,7 +180,7 @@ class TeamController extends Controller
      *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
      * )
      */
-    // chi tiết đội thi phía client
+
     public function apiShow($id)
     {
         try {
@@ -190,6 +193,40 @@ class TeamController extends Controller
         }
     }
 
+    /**
+     * @OA\Put(
+     *     path="/api/v1/teams/edit-team/{team_id}",
+     *     description="Description api capacity",
+     *     tags={"Team","Api V1"},
+     *     summary="Authorization",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *         name="team_id",
+     *         in="path",
+     *         description="Id đội muốn chỉnh sửa",
+     *         required=true,
+     *      @OA\Schema(type="number")
+     *     ),
+     *     @OA\RequestBody(
+     *          @OA\MediaType(
+     *          mediaType="multipart/form-data" ,
+     *              @OA\Schema(
+
+     *                  @OA\Property(
+     *                      type="string",
+     *                      property="name",
+     *                  ),
+     *                  @OA\Property(
+     *                      type="file",
+     *                      property="image",
+     *                  ),
+     *              ),
+     *          ),
+     *      ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
     public function apiEditTeam(Request $request, $team_id)
     {
         DB::beginTransaction();
@@ -248,10 +285,40 @@ class TeamController extends Controller
         }
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/v1/teams/add-team",
+     *     description="Đăng kí đội thi đồng thời người đăng kí sẽ là nhóm trưởng",
+     *      tags={"Team","Api V1"},
+     *        summary="Authorization",
+     *     security={{"bearer_token":{}}},
+
+     *     @OA\RequestBody(
+     *          @OA\MediaType(
+     *          mediaType="multipart/form-data" ,
+     *              @OA\Schema(
+     *                  @OA\Property(
+     *                      type="number",
+     *                      property="contest_id",
+     *                  ),
+     *                  @OA\Property(
+     *                      type="string",
+     *                      property="name",
+     *                  ),
+     *                  @OA\Property(
+     *                      type="file",
+     *                      property="image",
+     *                  ),
+     *              ),
+     *          ),
+     *      ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
     public function apiAddTeam(Request $request)
     {
-
-        $validate = validator::make(
+        $validate = Validator::make(
             $request->all(),
             [
                 'contest_id' => 'required',
@@ -314,6 +381,23 @@ class TeamController extends Controller
     }
 
 
+    /**
+     * @OA\Get(
+     *     path="/api/v1/teams/check-user-team-contest/{id_contest}",
+     *     description="Description api user team",
+     *     tags={"Team","Contest"},
+     *     summary="Authorization",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *         name="id_contest",
+     *         in="path",
+     *         description="Id cuộc thi cần check",
+     *         required=true,
+     *     ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
     public function checkUserTeamContest($id_contest)
     {
         $user_id = auth('sanctum')->user()->id;
@@ -321,7 +405,42 @@ class TeamController extends Controller
         if (count($result['user-not-pass']) > 0) return $this->responseApi(false, 'Tài khoản này đã tham gia cuộc thi khác !');
     }
 
-
+    /**
+     * @OA\Post(
+     *     path="/api/v1/add-user-team-contest/{id_contest}/{id_team}",
+     *     description="Dẩy  user_id với dạng array :  {  'user_id': [ 0,3,4,5,6] }",
+     *     tags={"Team","Api V1"},
+     *     summary="Authorization",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *         name="id_contest",
+     *         in="path",
+     *         description="Id cuộc thi đó",
+     *         required=true,
+     *      @OA\Schema(type="number")
+     *     ),
+     *     @OA\Parameter(
+     *         name="id_team",
+     *         in="path",
+     *         description="Id đội muốn thêm thành viên",
+     *         required=true,
+     *      @OA\Schema(type="number")
+     *     ),
+     *     @OA\RequestBody(
+     *          @OA\MediaType(
+     *               mediaType="application/json",
+     *              @OA\Schema(
+     *                  @OA\Property(
+     *                      type="string",
+     *                      property="user_id",
+     *                  ),
+     *              ),
+     *          ),
+     *      ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
     public function addUserTeamContest(Request $request, $id_contest, $id_team)
     {
 
@@ -372,6 +491,32 @@ class TeamController extends Controller
         }
     }
 
+
+
+    /**
+     * @OA\Post(
+     *     path="/api/v1/user-team-search/{id_contest}",
+     *     description="Tìm kiếm user ko có trong cuộc thi này",
+     *     tags={"Team","Api V1" , "Contest"},
+     *     summary="Authorization",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *         name="id_contest",
+     *         in="path",
+     *         description="Id cuộc thi đó",
+     *         required=true,
+     *      @OA\Schema(type="number")
+     *     ),
+     *     @OA\Parameter(
+     *         name="key",
+     *         in="query",
+     *         description="Tìm kiếm theo tên hoặc email ",
+     *         required=false,
+     *     ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
     public function userTeamSearch($id_contest, Request $request)
     {
         try {
@@ -393,12 +538,38 @@ class TeamController extends Controller
         return $this->responseApi(true, $max_user);
     }
 
+
+    /**
+     * @OA\Post(
+     *     path="/api/v1/delete-user-team-contest",
+     *     description="Dẩy  user_id với dạng array :  {  'user_id': [ 0,3,4,5,6] }",
+     *     tags={"Team","Api V1" , "Contest"},
+     *     summary="Authorization",
+     *     security={{"bearer_token":{}}},
+     *     @OA\RequestBody(
+     *          @OA\MediaType(
+     *             mediaType="application/json",
+     *              @OA\Schema(
+     *                  @OA\Property(
+     *                      type="number",
+     *                      property="team_id",
+     *                  ),
+     *                  @OA\Property(
+     *                      type="string",
+     *                      property="user_id",
+     *                  ),
+
+     *              ),
+     *          ),
+     *      ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
     public function deleteUserTeamContest(Request $request)
     {
         $team = $this->team::find($request->team_id);
         if (is_null($team))  return $this->responseApi(false, "Thông tin đội bị lỗi !!");
-
-
         $userID = $this->user::whereIn('id', $request->user_id)->get()->pluck('id');
         $team->members()->detach($userID);
         return $this->responseApi(false, "Xóa thành viên thành công !!");

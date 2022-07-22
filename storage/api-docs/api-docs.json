@@ -2,7 +2,7 @@
     "openapi": "3.0.0",
     "info": {
         "title": "OpenApi Capacity Fpoly",
-        "description": "OpenApi Capacity Fpoly<br>\r\n *      ✅NOTE✅\r\n *      Note: Khi sử dụng api authentication v1 cần nhập token bearer phần Authorize\r\n *      Note: Tìm kiếm api theo các tag\r\n *      Note: Thiếu , gặp bug -> chụp ảnh gửi cho BE sửa 🔧\r\n *      ✅END NOTE✅",
+        "description": "OpenApi Capacity Fpoly<br>\n *      ✅NOTE✅\n *      Note: Khi sử dụng api authentication v1 cần nhập token bearer phần Authorize\n *      Note: Tìm kiếm api theo các tag\n *      Note: Thiếu , gặp bug -> chụp ảnh gửi cho BE sửa 🔧\n *      ✅END NOTE✅",
         "contact": {
             "email": ""
         },
@@ -811,6 +811,276 @@
                 ]
             }
         },
+        "/api/v1/teams/edit-team/{team_id}": {
+            "put": {
+                "tags": [
+                    "Team",
+                    "Api V1"
+                ],
+                "summary": "Authorization",
+                "description": "Description api capacity",
+                "operationId": "472f22d91efcabe0d11abf37c1cdc7a1",
+                "parameters": [
+                    {
+                        "name": "team_id",
+                        "in": "path",
+                        "description": "Id đội muốn chỉnh sửa",
+                        "required": true,
+                        "schema": {
+                            "type": "number"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "image": {
+                                        "type": "file"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/teams/add-team": {
+            "post": {
+                "tags": [
+                    "Team",
+                    "Api V1"
+                ],
+                "summary": "Authorization",
+                "description": "Đăng kí đội thi đồng thời người đăng kí sẽ là nhóm trưởng",
+                "operationId": "0d5088776f811688eca43888cacbba77",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "contest_id": {
+                                        "type": "number"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "image": {
+                                        "type": "file"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/teams/check-user-team-contest/{id_contest}": {
+            "get": {
+                "tags": [
+                    "Team",
+                    "Contest"
+                ],
+                "summary": "Authorization",
+                "description": "Description api user team",
+                "operationId": "7983552cc8f07ee77530ba3e8afcc9da",
+                "parameters": [
+                    {
+                        "name": "id_contest",
+                        "in": "path",
+                        "description": "Id cuộc thi cần check",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/add-user-team-contest/{id_contest}/{id_team}": {
+            "post": {
+                "tags": [
+                    "Team",
+                    "Api V1"
+                ],
+                "summary": "Authorization",
+                "description": "Dẩy  user_id với dạng array :  {  'user_id': [ 0,3,4,5,6] }",
+                "operationId": "c99cfe747f0838856010194a7c5f0573",
+                "parameters": [
+                    {
+                        "name": "id_contest",
+                        "in": "path",
+                        "description": "Id cuộc thi đó",
+                        "required": true,
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "id_team",
+                        "in": "path",
+                        "description": "Id đội muốn thêm thành viên",
+                        "required": true,
+                        "schema": {
+                            "type": "number"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "user_id": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/user-team-search/{id_contest}": {
+            "post": {
+                "tags": [
+                    "Team",
+                    "Api V1",
+                    "Contest"
+                ],
+                "summary": "Authorization",
+                "description": "Tìm kiếm user ko có trong cuộc thi này",
+                "operationId": "b19378818d94f81357f44cc710bc0c5f",
+                "parameters": [
+                    {
+                        "name": "id_contest",
+                        "in": "path",
+                        "description": "Id cuộc thi đó",
+                        "required": true,
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "description": "Tìm kiếm theo tên hoặc email ",
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/delete-user-team-contest": {
+            "post": {
+                "tags": [
+                    "Team",
+                    "Api V1",
+                    "Contest"
+                ],
+                "summary": "Authorization",
+                "description": "Dẩy  user_id với dạng array :  {  'user_id': [ 0,3,4,5,6] }",
+                "operationId": "bae4e50decbfeeccd079d572fe72672e",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "team_id": {
+                                        "type": "number"
+                                    },
+                                    "user_id": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
         "/api/v1/users/edit": {
             "post": {
                 "tags": [
@@ -857,7 +1127,7 @@
         "securitySchemes": {
             "bearer_token": {
                 "type": "apiKey",
-                "description": "Nhập vào ô input dạng \"Bearer token\" <br> <b>Ví dụ</b>: <strong>Bearer 48|i93gO5EA6cBqiguiLCAiIAOiLkLoMXwoIvEnZvTn</strong>\r\n                     <br><br><hr>",
+                "description": "Nhập vào ô input dạng \"Bearer token\" <br> <b>Ví dụ</b>: <strong>Bearer 48|i93gO5EA6cBqiguiLCAiIAOiLkLoMXwoIvEnZvTn</strong>\n                     <br><br><hr>",
                 "name": "Authorization",
                 "in": "header"
             }
