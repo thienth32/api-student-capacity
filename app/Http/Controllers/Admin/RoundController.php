@@ -277,20 +277,24 @@ class RoundController extends Controller
         }
 
         $contest = $this->contest->find($id);
-        $rounds = $this->modelDulesRound->getList();
         return view('pages.contest.detail.contest-round', [
             'rounds' => $rounds->where('contest_id', $id)
                 ->when(
                     auth()->check() && auth()->user()->hasRole('judge'),
                     function ($q) use ($id) {
-                        $judge = $this->judge::where('contest_id', $id)->where('user_id', auth()->user()->id)->with('judge_round')->first('id');
+                        $judge = $this->judge::where('contest_id', $id)
+                            ->where('user_id', auth()->user()->id)
+                            ->with('judge_round')
+                            ->first('id');
                         $arrId = [];
                         foreach ($judge->judge_round as $judge_round) {
                             array_push($arrId, $judge_round->id);
                         }
                         return $q->whereIn('id', $arrId);
                     }
-                )->paginate(request('limit') ?? 5),
+                )
+                ->withCount(['results','exams','posts','sliders'])
+                ->paginate(request('limit') ?? 5),
             'contests' => $this->contest::withCount(['teams', 'rounds'])->get(),
             'type_exams' => $this->type_exam::all(),
             'contest' => $contest

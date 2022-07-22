@@ -21,7 +21,7 @@
                         </svg>
                         <!--end::Svg Icon-->
                     </span>
-                    <a href="{{ route('admin.contest.soft.delete', 'contest_soft_delete=1') }}">
+                    <a href="{{ route('admin.contest.soft.delete', 'contest_soft_delete=1') . '&type=' . (request('type') ?? 0) }}">
 
                         <span class=" svg-icon svg-icon-primary svg-icon-2x">
                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Files/Deleted-folder.svg--><svg
@@ -338,7 +338,7 @@
 
                                 <td class="text-center">
 
-                                    {{ count($contest->judges) }}
+                                    {{ $contest->judges_count }}
 
                                 </td>
                             @endif
@@ -467,6 +467,13 @@
                                             @endif
                                             <li class="my-3">
                                                 @hasrole(config('util.ROLE_DELETE'))
+                                                @if($contest->rounds_count == 0
+                                                    && $contest->teams_count == 0
+                                                    && $contest->contest_users_count == 0
+                                                    && $contest->posts_count == 0
+                                                    && $contest->enterprise_count == 0
+                                                    && $contest->judges_count == 0
+                                                    )
                                                     <form
                                                         action="{{ route('admin.contest.destroy', ['id' => $contest->id]) . '?type=' . (request('type') ?? 0) }}"
                                                         method="post">
@@ -497,6 +504,7 @@
                                                             Xóa bỏ
                                                         </button>
                                                     </form>
+                                                @endif
                                                 @else
                                                     <div style="cursor: not-allowed; user-select: none">
 
