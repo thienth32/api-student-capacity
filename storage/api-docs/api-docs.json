@@ -9,6 +9,23 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/api/public/companys": {
+            "get": {
+                "tags": [
+                    "Company"
+                ],
+                "description": "Description api company",
+                "operationId": "e61feaab3509040c777c15c3268bc04f",
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                }
+            }
+        },
         "/api/public/contests": {
             "get": {
                 "tags": [
@@ -567,6 +584,40 @@
                 }
             }
         },
+        "/api/v1/round/{id_round}/team-me": {
+            "get": {
+                "tags": [
+                    "Round",
+                    "Team",
+                    "Contest",
+                    "Api V1"
+                ],
+                "summary": "Authorization",
+                "description": "Description api user team round",
+                "operationId": "bde2278baf532ce9582fc98930342292",
+                "parameters": [
+                    {
+                        "name": "id_round",
+                        "in": "path",
+                        "description": "Id vòng thi  test năng lực  ",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
         "/api/public/sliders": {
             "get": {
                 "tags": [
@@ -632,6 +683,132 @@
                         "description": "{ status: false , message : 'Not found' }"
                     }
                 }
+            }
+        },
+        "/api/public/sponsors": {
+            "get": {
+                "tags": [
+                    "Sponsor"
+                ],
+                "description": "Description api sponsor",
+                "operationId": "54b653c79eccccc3f70db34dfe909b77",
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                }
+            }
+        },
+        "/api/v1/take-exam/check-student-capacity": {
+            "post": {
+                "tags": [
+                    "TakeExam",
+                    "Capacity",
+                    "Api V1"
+                ],
+                "summary": "Authorization",
+                "description": "",
+                "operationId": "f9207e403ccf646f08309718ec3e0588",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "round_id": {
+                                        "type": "number"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/take-exam/student-capacity": {
+            "post": {
+                "tags": [
+                    "TakeExam",
+                    "Capacity",
+                    "Api V1"
+                ],
+                "summary": "Authorization",
+                "description": "Trả về đề bài test năng lực , nếu lần đầu làm sẽ tạo bản ghi mới với trạng thái là đang làm  , nếu đang làm dở sẽ trả vè bài làm trước đó ",
+                "operationId": "0c6bb8678a7cbee5dd56f74daa84d33e",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "round_id": {
+                                        "type": "number"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/teams/{id}": {
+            "get": {
+                "tags": [
+                    "Team"
+                ],
+                "summary": "Authorization",
+                "description": "Description api user team",
+                "operationId": "87cd6ee8d4e402c7192763ec04ec309e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id đội",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
             }
         },
         "/api/v1/users/edit": {

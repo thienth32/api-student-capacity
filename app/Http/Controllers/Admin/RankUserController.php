@@ -4,29 +4,41 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Major;
+use App\Services\Traits\TResponse;
 use Illuminate\Support\Facades\Log;
 
 class RankUserController extends Controller
 {
+    use TResponse;
+    /**
+     * @OA\Get(
+     *     path="/api/public/rating-major/{slug}",
+     *     description="Description api slider",
+     *     tags={"Rank user" , "User" , "Major"},
+     *     @OA\Parameter(
+     *         name="slug",
+     *         in="path",
+     *         description="Slug chuyên ngành ",
+     *         required=true,
+     *     ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
     // Xep hang sinh vien theo chuyen nganh
-    public function getRatingUser($slug)
+    public function getRatingUser(Major $majorModel , $slug)
     {
         try {
-            if (!$major = Major::whereSlug($slug)
+            if (!$major = $majorModel::whereSlug($slug)
                 ->first()) {
-                return response()->json(
-                    [
-                        'status' => false,
-                        'payload' => 'Không tìm thấy chuyên ngành ' . $slug . '!',
-                    ]
-                );
+                return $this->responseApi(false , 'Không tìm thấy chuyên ngành ' . $slug . '!');
             }
 
             $rank = 0;
             $maxPoin = 0;
-            return response()->json([
-                'status' => true,
-                'payload' => $major
+            return $this->responseApi(
+                true ,
+                    $major
                     ->contest_user()
                     ->orderByDesc('reward_point')
                     ->with('contest')
@@ -61,14 +73,10 @@ class RankUserController extends Controller
                             'user' => $q->user,
                         ];
                     }),
-            ]);
+            );
         } catch (\Throwable$th) {
-            Log::info($th->getMessage());
-            dd($th->getMessage());
-            return response()->json([
-                'status' => false,
-                'payload' => 'Đã xảy ra lỗi !',
-            ]);
+            return $this->responseApi(false , $th->getMessage());
+
         }
     }
 
