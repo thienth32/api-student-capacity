@@ -32,7 +32,8 @@ class RequestsRecruitment extends FormRequest
             'description' => 'required',
             'start_time' => 'required|after_or_equal:today',
             'end_time' => 'required|after:start_time',
-
+            'amount' => 'required|numeric|min:1',
+            'cost' => 'required|numeric|min:1',
         ];
         if (!$this->route()->id || $this->has('image_url'))  $rule = array_merge($rule, [
             'image' => 'required|required|mimes:jpeg,png,jpg|max:10000',
@@ -52,6 +53,13 @@ class RequestsRecruitment extends FormRequest
             'image.mimes' => 'Sai định dạng !',
             'image.required' => 'Chưa nhập trường này !',
             'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
+            'amount.min' => 'Trường tối thiểu là 1',
+            'amount.numeric' => 'Trường phải là số',
+            'amount.required' =>  'Chưa nhập trường này !',
+            'cost.min' => 'Trường tối thiểu là 1',
+            'cost.numeric' => 'Trường phải là số',
+            'cost.required' =>  'Chưa nhập trường này !',
+
         ];
     }
 }

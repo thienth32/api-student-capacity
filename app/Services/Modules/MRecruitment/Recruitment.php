@@ -92,6 +92,8 @@ class Recruitment
             'description' => $request->description,
             'start_time' => $request->start_time,
             'end_time' => $request->end_time,
+            'cost' => $request->cost,
+            'amount' => $request->amount,
         ];
         if ($request->has('image')) {
             $fileImage =  $request->file('image');
@@ -119,7 +121,8 @@ class Recruitment
         $recruitment->start_time = $request->start_time;
         $recruitment->end_time = $request->end_time;
         $recruitment->description = $request->description;
-
+        $recruitment->cost = $request->cost;
+        $recruitment->amount = $request->amount;
         if ($request->has('image')) {
             $fileImage =  $request->file('image');
             $image = $this->uploadFile($fileImage);
