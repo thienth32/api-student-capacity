@@ -171,6 +171,7 @@ class Recruitment
             $item['skill'] = collect($arrSkill)->unique('id')->values()->all();
             $arrSkill = [];
         }
+        $arrUser = [];
         foreach ($data as $item) {
             foreach ($item->contest as $contest) {
                 foreach ($contest->rounds as $round) {
@@ -192,6 +193,8 @@ class Recruitment
         }
         $data['skill'] = collect($arr)->unique('id')->values()->all();
         $arr = [];
+
+        $arrUser = [];
         foreach ($data->contest as $contest) {
             foreach ($contest->rounds as $round) {
                 foreach ($round->result_capacity as $users)
