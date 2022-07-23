@@ -114,11 +114,8 @@ function checkOutUrl() {
 }
 
 // Loas tast
-function loadTast(
-    text = "Đang chạy ...",
-    page = "toastr-bottom-left",
-    type = "info"
-) {
+function loadTast( text = "Đang chạy ...", page = "toastr-bottom-left", type = "info" )
+{
     toastr.options = {
         closeButton: true,
         debug: false,
@@ -179,9 +176,24 @@ const formatPage = {
         });
     },
     showPage() {
-        $(".card-format").hide();
-        $(".btn-hide").hide();
-        $(".btn-show").show();
+
+        let flag = false ;
+        aListQuery.map(function (data) {
+            if (searchParams.has(data)) {
+                flag = true;
+            }
+        });
+
+        if(!flag)
+        {
+            $(".card-format").hide();
+            $(".btn-hide").hide();
+            $(".btn-show").show();
+        }else{
+            $(".btn-hide").show();
+            $(".btn-show").hide();
+        }
+
         $(".btn-hide").on("click", function () {
             $(".card-format").hide(1000);
             $(this).hide();

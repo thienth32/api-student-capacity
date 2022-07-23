@@ -174,40 +174,6 @@
                 }
             }
         },
-        "/api/v1/round/{id_round}/team-me": {
-            "get": {
-                "tags": [
-                    "Round",
-                    "Team",
-                    "Contest",
-                    "Api V1"
-                ],
-                "summary": "Authorization",
-                "description": "Description api user team round",
-                "operationId": "3a1f2dd7c1341a660e9327dc18b4d867",
-                "parameters": [
-                    {
-                        "name": "id_round",
-                        "in": "path",
-                        "description": "Id vòng thi  test năng lực  ",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{ status: true , data : data }"
-                    },
-                    "404": {
-                        "description": "{ status: false , message : 'Not found' }"
-                    }
-                },
-                "security": [
-                    {
-                        "bearer_token": []
-                    }
-                ]
-            }
-        },
         "/api/public/enterprise": {
             "get": {
                 "tags": [
@@ -424,6 +390,33 @@
                 }
             }
         },
+        "/api/public/rating-major/{slug}": {
+            "get": {
+                "tags": [
+                    "Rank user",
+                    "User",
+                    "Major"
+                ],
+                "description": "Description api slider",
+                "operationId": "a543ea7b9a6c549431aca0fa06b2a645",
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "Slug chuyên ngành ",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                }
+            }
+        },
         "/api/public/recruitments": {
             "get": {
                 "tags": [
@@ -459,7 +452,7 @@
                     {
                         "name": "recruitmentHot",
                         "in": "query",
-                        "description": "Bài tuyển dụng Hot (recruitmentHot='hot' list tuyển dụng hot ,\n     * recruitmentHot='normal' list tuyển dụng bthuong\n     * )",
+                        "description": "Bài tuyển dụng Hot (recruitmentHot='hot' list tuyển dụng hot ,\r\n     * recruitmentHot='normal' list tuyển dụng bthuong\r\n     * )",
                         "required": false
                     },
                     {
@@ -471,7 +464,7 @@
                     {
                         "name": "progress",
                         "in": "query",
-                        "description": "Trạng thái của bài đăng\n     * 'pass_date'= sắp diễn ra,\n     * 'registration_date'= đang diễn ra\n     * 'miss_date'= đã diễn ra ",
+                        "description": "Trạng thái của bài đăng\r\n     * 'pass_date'= sắp diễn ra,\r\n     * 'registration_date'= đang diễn ra\r\n     * 'miss_date'= đã diễn ra ",
                         "required": false
                     }
                 ],

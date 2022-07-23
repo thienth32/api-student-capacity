@@ -78,7 +78,22 @@
                     <div class="mb-5">
                         <!--begin::Step 1-->
                         <div class="flex-column current" data-kt-stepper-element="content">
+                            <!--begin::Alert-->
+                            <div class="alert alert-primary">
 
+                                <!--begin::Wrapper-->
+                                <div class="d-flex flex-column">
+                                    <!--begin::Title-->
+                                    <h4 class="mb-1 text-dark">Note</h4>
+                                    <!--end::Title-->
+                                    <!--begin::Content-->
+                                    <p>$name = Tên người nhận</p>
+                                    <p>$email = Email người nhận</p>
+                                    <!--end::Content-->
+                                </div>
+                                <!--end::Wrapper-->
+                            </div>
+                            <!--end::Alert-->
                             <div class="form-group mb-10">
                                 <label for="" class="form-label">Tiêu đề gửi mail </label>
                                 <input value="{{ old('subject') }}" type="text" class="form-control" name="subject"
@@ -90,24 +105,6 @@
 
                             <div class="form-group mb-10">
                                 <label for="" class="form-label">Nội dung gửi mail </label>
-
-                                <!--begin::Alert-->
-                                <div class="alert alert-primary">
-
-                                    <!--begin::Wrapper-->
-                                    <div class="d-flex flex-column">
-                                        <!--begin::Title-->
-                                        <h4 class="mb-1 text-dark">Note</h4>
-                                        <!--end::Title-->
-                                        <!--begin::Content-->
-                                        <p>$name = Tên người nhận</p>
-                                        <p>$email = Email người nhận</p>
-                                        <!--end::Content-->
-                                    </div>
-                                    <!--end::Wrapper-->
-                                </div>
-                                <!--end::Alert-->
-
 
                                 <textarea name="content" id="kt_docs_tinymce_hidden"> {{ old('content') }}</textarea>
                                 @error('content')

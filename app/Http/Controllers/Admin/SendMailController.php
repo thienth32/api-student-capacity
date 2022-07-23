@@ -23,22 +23,34 @@ class SendMailController extends Controller
     }
     private function senMail($users = [], $data = [])
     {
-        // Mail::to('kopopi593@gmail.com')->cc($users)->send(new FinnalPass($data));
         foreach ($users as $user) {
-            $contentNew = '';
             $userFind = $this->user::where('email', $user)->first();
-            $contentNew = str_replace('$name', $userFind->name, $data['content']);
-            $contentNew = str_replace('$email', $userFind->email, $contentNew);
+            $content = $this->repLaceParams([
+                'name' => $userFind->name,
+                'email' => $userFind->email,
+            ],$data['content']);
+            $subject = $this->repLaceParams([
+                'name' => $userFind->name,
+                'email' => $userFind->email,
+            ],$data['subject']);
+
             $this->mail::to($userFind->email)->send(new FinnalPass([
-                'subject' => $data['subject'],
-                'content' => $contentNew,
+                'subject' => $subject,
+                'content' => $content,
             ]));
         }
     }
 
+    public function repLaceParams($dataKey , $content)
+    {
+        $data = str_replace('$name', $dataKey['name'], $content);
+        $data = str_replace('$email', $dataKey['email'], $data);
+        return $data;
+    }
+
     public function sendMailRoundUser(RequestSendMail $request, $id)
     {
-
+        dd($request->all());
         if (!$request->has('users')) return redirect()->back()->withErrors(['users' => 'Tài khoản nhận mail không thể bỏ trống !'])->withInput($request->input());
         $users = $request->users;
         $this->senMail(
