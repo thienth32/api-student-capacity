@@ -28,6 +28,7 @@ class ExamController extends Controller
         private DB $db
     )
     {}
+
     public function index($id_round)
     {
         $round = $this->round::find($id_round);
