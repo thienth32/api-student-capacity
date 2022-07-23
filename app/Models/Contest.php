@@ -103,6 +103,19 @@ class Contest extends Model
         );
     }
 
+    public function userCapacityDone()
+    {
+        // return $this->hasMany(Round::class, 'contest_id');
+        return $this->hasManyDeep(
+            ResultCapacity::class,
+            [Round::class, Exam::class],
+            [
+                'contest_id',
+                'round_id',
+                'user_id',
+            ]
+        );
+    }
     public function newEloquentBuilder($query)
     {
         return new Builder($query);
