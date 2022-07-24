@@ -239,6 +239,7 @@
     <script src="assets/js/system/date-after/date-after.js"></script>
     <script src="assets/js/system/contest/form.js"></script>
     <script>
+
         pageCkeditor.classicCk2();
 
         rules.img = {
