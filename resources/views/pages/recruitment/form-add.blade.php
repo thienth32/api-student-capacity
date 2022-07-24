@@ -54,13 +54,33 @@
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
                             </div>
+
+                            <div class="form-group mb-10">
+                                <label class="form-label" for="">Số lượng tuyển dụng</label>
+                                <input min="1" type="number" value="{{ old('amount') }}" name="amount"
+                                    class="form-control " placeholder="">
+                                @error('amount')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
+
+                            </div>
+                            <div class="form-group mb-10">
+                                <label class="form-label" for="">Lương tuyển dụng</label>
+                                <input min="1" type="number" value="{{ old('cost') }}" name="cost"
+                                    class="form-control " placeholder="">
+                                @error('cost')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
+
+                            </div>
                             <div class="form-group mb-10">
                                 <label for="" class="form-label">Doanh nghiệp tuyển dụng</label>
                                 <select placeholder="Chọn" multiple class="form-select mb-2 select2-hidden-accessible"
                                     data-control="select2" data-hide-search="false" tabindex="-1" aria-hidden="true"
-                                    name="enterprise_id[]" value="{{ old('enterprise_id') }}">
+                                    name="enterprise_id[]" value="{{ serialize(old('enterprise_id')) }}">
                                     @foreach ($enterprise as $item)
-                                        <option @selected(request('enterprise_id') == $item->id) value="{{ $item->id }}">
+                                        <option {{ collect(old('enterprise_id'))->contains($item->id) ? 'selected' : '' }}
+                                            value="{{ $item->id }}">
                                             {{ $item->name }}
                                         </option>
                                     @endforeach
@@ -73,9 +93,10 @@
                                 <label for="" class="form-label">Chọn phần test năng lực</label>
                                 <select placeholder="Chọn" multiple class="form-select mb-2 select2-hidden-accessible"
                                     data-control="select2" data-hide-search="false" tabindex="-1" aria-hidden="true"
-                                    name="contest_id[]" value="{{ old('contest_id') }}">
+                                    name="contest_id[]" value="{{ serialize(old('contest_id')) }}">
                                     @foreach ($contest as $item)
-                                        <option @selected(request('contest_id') == $item->id) value="{{ $item->id }}">
+                                        <option {{ collect(old('contest_id'))->contains($item->id) ? 'selected' : '' }}
+                                            value="{{ $item->id }}">
                                             {{ $item->name }}
                                         </option>
                                     @endforeach
@@ -115,7 +136,8 @@
                     </div>
 
                     <div class="form-group mb-10 ">
-                        <button type="submit" name="" id="" class="btn btn-success btn-lg btn-block">Lưu
+                        <button type="submit" name="" id=""
+                            class="btn btn-success btn-lg btn-block">Lưu
                         </button>
                     </div>
                 </form>

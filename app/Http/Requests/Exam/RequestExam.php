@@ -14,8 +14,10 @@ class RequestExam extends FormRequest
 
     public function rules()
     {
+        $ruleName = 'required|unique:exams,name|min:4|max:255';
+        if($this->route()->id) $ruleName = 'required|min:4|max:255|unique:exams,name,'. $this->route()->id . ',id';
         $rule = [
-            'name' => 'required|unique:exams,name|min:4|max:255',
+            'name' => $ruleName,
             'description' => 'required|min:4',
             'max_ponit' => 'required|numeric|min:0|max:1000',
             'ponit' => 'required|numeric|min:0|max:1000',

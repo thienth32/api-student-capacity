@@ -44,7 +44,9 @@
 //         });
 //     });
 // }
-
+$('input').on('change',function () {
+    $('.text-danger').hide();
+}); 
 function dateAfterEdit(begin, end, start_time = null, end_time = null) {
     let getTimeToday = new Date().toJSON().slice(0, 19);
     let that = this;

@@ -13,19 +13,23 @@ class Recruitment extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = 'recruitments';
-    protected $fillable = ['name', 'description', 'start_time', 'end_time', 'image'];
+    protected $fillable = ['amount', 'cost', 'hot', 'name', 'description', 'start_time', 'end_time', 'image'];
     protected $casts = [
         'created_at' => FormatDate::class,
         'updated_at' =>  FormatDate::class,
         'image' => FormatImageGet::class,
     ];
+    public function recruitmentEnterprise()
+    {
+        return $this->BelongsToMany(Recruitment::class, 'enterprise_recruitments', 'recruitment_id', 'enterprise_id')->withTimestamps();
+    }
     public function enterprise()
     {
         return $this->BelongsToMany(Enterprise::class, 'enterprise_recruitments', 'recruitment_id', 'enterprise_id')->withTimestamps();
     }
     public function contest()
     {
-        return $this->BelongsToMany(Contest::class, 'contest_recruitments', 'recruitment_id', 'contest_id')->with('skills')->withTimestamps();
+        return $this->BelongsToMany(Contest::class, 'contest_recruitments', 'recruitment_id', 'contest_id')->with(['skills', 'rounds'])->withTimestamps();
     }
     public function posts()
     {

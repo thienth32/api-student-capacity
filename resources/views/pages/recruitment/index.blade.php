@@ -97,6 +97,38 @@
                         placeholder="'*Enter' tìm kiếm ..." class=" ip-search form-control">
                 </div>
             </div>
+            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
+                <div class="  form-group p-2">
+                    <label class="form-label"> Loại tuyển dụng </label>
+                    <select class="select-type-recruitment form-select mb-2 select2-hidden-accessible"
+                        data-control="select2" data-hide-search="true" tabindex="-1" aria-hidden="true">
+                        <option class="form-control" value="">Chọn loại tuyển dụng</option>
+                        <option class="form-control" @selected(request('recruitmentHot') == 'hot') value="hot"> Tuyển dụng hot
+                        </option>
+                        <option class="form-control" @selected(request('recruitmentHot') == 'normal') value="normal"> Tuyển dụng
+                            thường
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
+                <div class="  form-group p-2">
+                    <label for="" class="form-label">Hoạt động tuyển dụng </label>
+                    <select class="select-date-time form-select mb-2 select2-hidden-accessible" data-control="select2"
+                        data-hide-search="true" tabindex="-1" aria-hidden="true">
+                        <option class="form-control" value="">Chọn hoạt động</option>
+                        <option class="form-control" @selected(request('progress') == 'pass_date') value="pass_date"> Sắp diễn ra
+                        </option>
+                        <option class="form-control" @selected(request('progress') == 'registration_date') value="registration_date"> Đang diễn
+                            ra
+                        </option>
+                        <option class="form-control" @selected(request('progress') == 'miss_date') value="miss_date">Đã diễn ra
+                        </option>
+
+                    </select>
+                </div>
+            </div>
+
             <div class="col-12 row ">
                 <div class="col-12 row">
                     <div class="mb-0">
@@ -108,21 +140,7 @@
                         </div>
 
                     </div>
-                    <div class="col-12 mt-4 ">
-                        <label for="" class="form-label">Hoạt động tuyển dụng </label>
-                        <select class="select-date-time form-select mb-2 select2-hidden-accessible" data-control="select2"
-                            data-hide-search="true" tabindex="-1" aria-hidden="true">
-                            <option class="form-control" value="">Chọn hoạt động</option>
-                            <option class="form-control" @selected(request('progress') == 'pass_date') value="pass_date"> Sắp diễn ra
-                            </option>
-                            <option class="form-control" @selected(request('progress') == 'registration_date') value="registration_date"> Đang diễn
-                                ra
-                            </option>
-                            <option class="form-control" @selected(request('progress') == 'miss_date') value="miss_date">Đã diễn ra
-                            </option>
 
-                        </select>
-                    </div>
                 </div>
             </div>
 
@@ -160,7 +178,7 @@
         </div>
         <div class="table-responsive p-4 card card-flush ">
 
-            @if (count($Recruitments) > 0)
+            @if (count($recruitments) > 0)
                 <table class=" table table-hover table-responsive-md ">
                     <thead>
                         <tr>
@@ -235,6 +253,8 @@
                                     </span>
                                 </a>
 
+                            </th>
+                            <th scope="col">Tuyển dụng hot
                             </th>
                             <th scope="col">Quá trình
                             </th>
@@ -311,10 +331,10 @@
                                 </a>
                             </th>
 
-                            <th scope="col">Doanh nghiệp tuyển dụng
+                            <th scope="col">Doanh nghiệp
 
                             </th>
-                            <th scope="col">Test năng lực
+                            <th scope="col">Bài test
 
                             </th>
                             <th scope="col"> Giới thiệu
@@ -328,32 +348,44 @@
                     </thead>
                     <tbody>
                         @php
-                            $total = $Recruitments->total();
+                            $total = $recruitments->total();
                         @endphp
-                        @foreach ($Recruitments as $index => $key)
+                        @foreach ($recruitments as $index => $key)
                             <tr>
                                 @if (request()->has('sortBy'))
                                     <th scope="row">
                                         @if (request('sortBy') == 'desc')
-                                            {{ (request()->has('page') && request('page') !== 1 ? $Recruitments->perPage() * (request('page') - 1) : 0) + $index + 1 }}
+                                            {{ (request()->has('page') && request('page') !== 1 ? $recruitments->perPage() * (request('page') - 1) : 0) + $index + 1 }}
                                         @else
-                                            {{ request()->has('page') && request('page') !== 1 ? $total - $Recruitments->perPage() * (request('page') - 1) - $index : ($total -= 1) }}
+                                            {{ request()->has('page') && request('page') !== 1 ? $total - $recruitments->perPage() * (request('page') - 1) - $index : ($total -= 1) }}
                                         @endif
                                     </th>
                                 @else
                                     <th scope="row">
-                                        {{ (request()->has('page') && request('page') !== 1 ? $Recruitments->perPage() * (request('page') - 1) : 0) + $index + 1 }}
+                                        {{ (request()->has('page') && request('page') !== 1 ? $recruitments->perPage() * (request('page') - 1) : 0) + $index + 1 }}
                                     </th>
                                 @endif
-
-
                                 <td>
                                     {{ $key->name }}
                                 </td>
                                 <td>
-                                    @if (\Carbon\Carbon::parse($key->start_time)->toDateTimeString() > \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
+                                    @hasanyrole('admin|super admin')
+
+                                        <div class="form-check form-switch">
+                                            <input value="{{ $key->hot }}" data-id="{{ $key->id }}"
+                                                class="form-select-status-hot form-check-input" @checked($key->hot == 1)
+                                                type="checkbox" role="switch">
+
+                                        </div>
+                                    @endhasrole
+
+                                </td>
+                                <td>
+                                    @if (\Carbon\Carbon::parse($key->start_time)->toDateTimeString() >
+                                        \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
                                         <span class="badge bg-primary">Sắp diễn ra </span>
-                                    @elseif (\Carbon\Carbon::parse($key->end_time)->toDateTimeString() > \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
+                                    @elseif (\Carbon\Carbon::parse($key->end_time)->toDateTimeString() >
+                                        \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
                                         <span class="badge bg-success">Đang diễn ra </span>
                                     @else
                                         <span class="badge bg-danger">Đã kết thúc </span>
@@ -381,7 +413,8 @@
                                             @if (count($key->enterprise) > 0)
                                                 @foreach ($key->enterprise as $item)
                                                     <li style="padding:7px" class="dropdown-item ">
-                                                        {{ $item->name }}
+                                                        <a
+                                                            href="{{ route('admin.recruitment.detail', ['id' => $item->id]) }}">{{ $item->name }}</a>
                                                     </li>
                                                 @endforeach
                                             @else
@@ -402,7 +435,10 @@
                                             @if (count($key->contest) > 0)
                                                 @foreach ($key->contest as $item)
                                                     <li style="padding:7px" class="dropdown-item ">
-                                                        {{ $item->name }}
+                                                        <a
+                                                            href="{{ route('admin.contest.show.capatity', ['id' => $item->id]) }}">
+                                                            {{ $item->name }}</a>
+
                                                     </li>
                                                 @endforeach
                                             @else
@@ -511,35 +547,42 @@
                                             </li>
                                             <li class="my-3">
                                                 @hasrole('super admin')
-                                                    <form action="{{ route('admin.recruitment.destroy', $key->id) }}"
-                                                        method="post">
-                                                        @csrf
-                                                        @method('delete')
-                                                        <button onclick="return confirm('Bạn có chắc muốn xóa không !')"
-                                                            style=" background: none ; border: none ; list-style : none"
-                                                            type="submit">
-                                                            <span role="button" class="svg-icon svg-icon-danger svg-icon-2x">
-                                                                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Trash.svg--><svg
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                    xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                                                                    height="24px" viewBox="0 0 24 24" version="1.1">
-                                                                    <g stroke="none" stroke-width="1" fill="none"
-                                                                        fill-rule="evenodd">
-                                                                        <rect x="0" y="0" width="24"
-                                                                            height="24" />
-                                                                        <path
-                                                                            d="M6,8 L18,8 L17.106535,19.6150447 C17.04642,20.3965405 16.3947578,21 15.6109533,21 L8.38904671,21 C7.60524225,21 6.95358004,20.3965405 6.89346498,19.6150447 L6,8 Z M8,10 L8.45438229,14.0894406 L15.5517885,14.0339036 L16,10 L8,10 Z"
-                                                                            fill="#000000" fill-rule="nonzero" />
-                                                                        <path
-                                                                            d="M14,4.5 L14,3.5 C14,3.22385763 13.7761424,3 13.5,3 L10.5,3 C10.2238576,3 10,3.22385763 10,3.5 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z"
-                                                                            fill="#000000" opacity="0.3" />
-                                                                    </g>
-                                                                </svg>
-                                                                <!--end::Svg Icon-->
-                                                            </span>
-                                                            Xóa bỏ
-                                                        </button>
-                                                    </form>
+                                                    @if ($key->recruitmentEnterprise->count() == 0 &&
+                                                        $key->contest->count() == 0 &&
+                                                        $key->enterprise->count() == 0 &&
+                                                        $key->posts->count() == 0)
+                                                        <form action="{{ route('admin.recruitment.destroy', $key->id) }}"
+                                                            method="post">
+                                                            @csrf
+                                                            @method('delete')
+                                                            <button onclick="return confirm('Bạn có chắc muốn xóa không !')"
+                                                                style=" background: none ; border: none ; list-style : none"
+                                                                type="submit">
+                                                                <span role="button"
+                                                                    class="svg-icon svg-icon-danger svg-icon-2x">
+                                                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Trash.svg--><svg
+                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                        xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                        width="24px" height="24px" viewBox="0 0 24 24"
+                                                                        version="1.1">
+                                                                        <g stroke="none" stroke-width="1" fill="none"
+                                                                            fill-rule="evenodd">
+                                                                            <rect x="0" y="0"
+                                                                                width="24" height="24" />
+                                                                            <path
+                                                                                d="M6,8 L18,8 L17.106535,19.6150447 C17.04642,20.3965405 16.3947578,21 15.6109533,21 L8.38904671,21 C7.60524225,21 6.95358004,20.3965405 6.89346498,19.6150447 L6,8 Z M8,10 L8.45438229,14.0894406 L15.5517885,14.0339036 L16,10 L8,10 Z"
+                                                                                fill="#000000" fill-rule="nonzero" />
+                                                                            <path
+                                                                                d="M14,4.5 L14,3.5 C14,3.22385763 13.7761424,3 13.5,3 L10.5,3 C10.2238576,3 10,3.22385763 10,3.5 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z"
+                                                                                fill="#000000" opacity="0.3" />
+                                                                        </g>
+                                                                    </svg>
+                                                                    <!--end::Svg Icon-->
+                                                                </span>
+                                                                Xóa bỏ
+                                                            </button>
+                                                        </form>
+                                                    @endif
                                                 @else
                                                     <div style="cursor: not-allowed; user-select: none">
 
@@ -573,7 +616,7 @@
                         @endforeach
                     </tbody>
                 </table>
-                {{ $Recruitments->appends(request()->all())->links('pagination::bootstrap-4') }}
+                {{ $recruitments->appends(request()->all())->links('pagination::bootstrap-4') }}
             @else
                 <h2>Không tìm thấy thông tin tuyển dụng !!!</h2>
             @endif
@@ -588,5 +631,7 @@
     <script src="assets/js/system/recruitment/recruitment.js"></script>
 
     <script src="assets/js/system/formatlist/formatlis.js"></script>
-    <script></script>
+    <script>
+        const _token = "{{ csrf_token() }}";
+    </script>
 @endsection

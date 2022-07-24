@@ -26,16 +26,18 @@ class Contest extends Model
         'slug_name',
         'status_user_has_join_contest',
     ];
+
     public static function boot()
     {
         parent::boot();
         static::deleting(function ($q) {
-            $q->teams()->delete();
-            $q->rounds()->delete();
-            $q->enterprise()->detach();
-            $q->judges()->detach();
+            //            $q->teams()->delete();
+            //            $q->rounds()->delete();
+            //            $q->enterprise()->detach();
+            //            $q->judges()->detach();
         });
     }
+
     public $fillable = [
         'name',
         'date_start',
@@ -50,6 +52,7 @@ class Contest extends Model
         'post_new',
         'img'
     ];
+
     public function recruitment()
     {
         return $this->BelongsToMany(Recruitment::class, 'contest_recruitments', 'contest_id', 'recruitment_id')->withTimestamps();
@@ -68,7 +71,7 @@ class Contest extends Model
     }
     public function rounds()
     {
-        return $this->hasMany(Round::class, 'contest_id');
+        return $this->hasMany(Round::class, 'contest_id')->with('result_capacity');
     }
 
     public function enterprise()
@@ -87,7 +90,6 @@ class Contest extends Model
     {
         return $this->morphMany(Post::class, 'postable');
     }
-
     public function take_exams()
     {
         return $this->hasManyDeep(
@@ -101,6 +103,19 @@ class Contest extends Model
         );
     }
 
+    public function userCapacityDone()
+    {
+        // return $this->hasMany(Round::class, 'contest_id');
+        return $this->hasManyDeep(
+            ResultCapacity::class,
+            [Round::class, Exam::class],
+            [
+                'contest_id',
+                'round_id',
+                'user_id',
+            ]
+        );
+    }
     public function newEloquentBuilder($query)
     {
         return new Builder($query);

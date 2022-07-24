@@ -115,13 +115,16 @@
                 <div class="row col-12 m-auto">
 
                     <button id="clickContset" type="button"
-                        class="mygroup btn  {{ request()->has('contest_id') ? 'btn-primary' : '' }} col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light click-contest">
+                        class="mygroup btn  {{ request()->has('contest_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light click-contest">
                         Bài viết thuộc cuộc thi</button>
+                    <button id="clickCapacity" type="button"
+                        class="mygroup btn  {{ request()->has('capacity_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light click-capacity">
+                        Bài viết thuộc bài test</button>
                     <button type="button"
-                        class="mygroup btn {{ request()->has('round_id') ? 'btn-primary' : '' }} col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light click-round">
+                        class="mygroup btn {{ request()->has('round_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light click-round">
                         Bài viết thuộc vòng thi</button>
                     <button type="button"
-                        class="click-recruitment  btn {{ request()->has('recruitment_id') ? 'btn-primary' : '' }} col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light">
+                        class="click-recruitment  btn {{ request()->has('recruitment_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light">
                         Bài viết thuộc tuyển dụng</button>
                 </div>
                 <br>
@@ -129,11 +132,27 @@
                     <div style="{{ request()->has('contest_id') ? '' : 'display: none' }}" id="contest">
                         <div class="form-group mb-10">
                             <label for="" class="form-label">Cuộc thi</label>
-                            <select name="contest_id" class="form-select-contest form-contest" data-control="select2"
-                                data-placeholder="Chọn cuộc thi ">
+                            <select id="select-contest" name="contest_id" class="form-select form-contest"
+                                data-control="select2" data-placeholder="Chọn cuộc thi ">
                                 <option value="0">Chọn cuộc thi</option>
                                 @foreach ($contest as $item)
                                     <option @selected(request('contest_id') == $item->id) value="{{ $item->id }}">
+                                        {{ $item->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+
+                        </div>
+
+                    </div>
+                    <div style="{{ request()->has('capacity_id') ? '' : 'display: none' }}" id="capacity">
+                        <div class="form-group mb-10">
+                            <label for="" class="form-label">Cuộc thi</label>
+                            <select id="select-capacity" name="capacity_id" class="form-select form-contest"
+                                data-control="select2" data-placeholder="Chọn bài test ">
+                                <option value="0">Chọn bài test</option>
+                                @foreach ($capacity as $item)
+                                    <option @selected(request('capacity_id') == $item->id) value="{{ $item->id }}">
                                         {{ $item->name }}
                                     </option>
                                 @endforeach
@@ -177,7 +196,7 @@
                     <div style="{{ request()->has('recruitment_id') ? '' : 'display: none' }}" id="recruitment">
                         <div class="form-group mb-10">
                             <label for="" class="form-label">Tuyển dụng</label>
-                            <select name="recruitment_id" class="form-select-recruitments form-major"
+                            <select id="select-recruitment" name="recruitment_id" class="form-select form-major"
                                 data-control="select2" data-placeholder="Chọn cuộc thi ">
                                 <option value="0">Chọn tuyển dụng</option>
                                 @foreach ($recruitments as $item)
@@ -403,9 +422,12 @@
                                         Tuyển dụng :
                                         <b><a
                                                 href="{{ route('admin.recruitment.detail', ['id' => $key->postable->id]) }}">{{ $key->postable->name }}</a></b>
-                                    @else
+                                    @elseif(get_class($key->postable) == \App\Models\Contest::class && $key->postable->type == 0)
                                         Cuộc thi : <b><a
                                                 href="{{ route('admin.contest.show', ['id' => $key->postable->id]) }}">{{ $key->postable->name }}</a></b>
+                                    @else
+                                        Bài test : <b><a
+                                                href="{{ route('admin.contest.show.capatity', ['id' => $key->postable->id]) }}">{{ $key->postable->name }}</a></b>
                                     @endif
                                 </td>
                                 <td>
@@ -421,7 +443,8 @@
 
                                 </td>
                                 <td>
-                                    @if (\Carbon\Carbon::parse($key->published_at)->toDateTimeString() > \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
+                                    @if (\Carbon\Carbon::parse($key->published_at)->toDateTimeString() >
+                                        \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
                                         <span class="badge bg-danger">Chưa xuất bản </span>
                                     @else
                                         <span class="badge  bg-success">Đã xuất bản </span>
@@ -553,35 +576,39 @@
                                             </li>
                                             <li class="my-3">
                                                 @hasrole('super admin')
-                                                    <form action="{{ route('admin.post.destroy', $key->slug) }}"
-                                                        method="post">
-                                                        @csrf
-                                                        @method('delete')
-                                                        <button onclick="return confirm('Bạn có chắc muốn xóa không !')"
-                                                            style=" background: none ; border: none ; list-style : none"
-                                                            type="submit">
-                                                            <span role="button" class="svg-icon svg-icon-danger svg-icon-2x">
-                                                                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Trash.svg--><svg
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                    xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                                                                    height="24px" viewBox="0 0 24 24" version="1.1">
-                                                                    <g stroke="none" stroke-width="1" fill="none"
-                                                                        fill-rule="evenodd">
-                                                                        <rect x="0" y="0" width="24"
-                                                                            height="24" />
-                                                                        <path
-                                                                            d="M6,8 L18,8 L17.106535,19.6150447 C17.04642,20.3965405 16.3947578,21 15.6109533,21 L8.38904671,21 C7.60524225,21 6.95358004,20.3965405 6.89346498,19.6150447 L6,8 Z M8,10 L8.45438229,14.0894406 L15.5517885,14.0339036 L16,10 L8,10 Z"
-                                                                            fill="#000000" fill-rule="nonzero" />
-                                                                        <path
-                                                                            d="M14,4.5 L14,3.5 C14,3.22385763 13.7761424,3 13.5,3 L10.5,3 C10.2238576,3 10,3.22385763 10,3.5 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z"
-                                                                            fill="#000000" opacity="0.3" />
-                                                                    </g>
-                                                                </svg>
-                                                                <!--end::Svg Icon-->
-                                                            </span>
-                                                            Xóa bỏ
-                                                        </button>
-                                                    </form>
+                                                    @if ($key->postable->count() == 0 && $key->user->count() == 0)
+                                                        <form action="{{ route('admin.post.destroy', $key->slug) }}"
+                                                            method="post">
+                                                            @csrf
+                                                            @method('delete')
+                                                            <button onclick="return confirm('Bạn có chắc muốn xóa không !')"
+                                                                style=" background: none ; border: none ; list-style : none"
+                                                                type="submit">
+                                                                <span role="button"
+                                                                    class="svg-icon svg-icon-danger svg-icon-2x">
+                                                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Trash.svg--><svg
+                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                        xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                        width="24px" height="24px" viewBox="0 0 24 24"
+                                                                        version="1.1">
+                                                                        <g stroke="none" stroke-width="1" fill="none"
+                                                                            fill-rule="evenodd">
+                                                                            <rect x="0" y="0"
+                                                                                width="24" height="24" />
+                                                                            <path
+                                                                                d="M6,8 L18,8 L17.106535,19.6150447 C17.04642,20.3965405 16.3947578,21 15.6109533,21 L8.38904671,21 C7.60524225,21 6.95358004,20.3965405 6.89346498,19.6150447 L6,8 Z M8,10 L8.45438229,14.0894406 L15.5517885,14.0339036 L16,10 L8,10 Z"
+                                                                                fill="#000000" fill-rule="nonzero" />
+                                                                            <path
+                                                                                d="M14,4.5 L14,3.5 C14,3.22385763 13.7761424,3 13.5,3 L10.5,3 C10.2238576,3 10,3.22385763 10,3.5 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z"
+                                                                                fill="#000000" opacity="0.3" />
+                                                                        </g>
+                                                                    </svg>
+                                                                    <!--end::Svg Icon-->
+                                                                </span>
+                                                                Xóa bỏ
+                                                            </button>
+                                                        </form>
+                                                    @endif
                                                 @else
                                                     <div style="cursor: not-allowed; user-select: none">
 

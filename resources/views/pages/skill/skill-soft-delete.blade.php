@@ -35,8 +35,8 @@
         <div>
             <div class="  form-group p-2">
                 <label>Tìm kiếm </label>
-                <input id="searchTeam" type="text" value="{{ request('q') ?? '' }}" placeholder="'*Enter' tìm kiếm ..."
-                    class=" ip-search form-control">
+                <input id="searchTeam" type="text" value="{{ request('keyword') ?? '' }}"
+                    placeholder="'*Enter' tìm kiếm ..." class=" ip-search form-control">
             </div>
         </div>
 
@@ -59,7 +59,7 @@
                         @foreach ($listSofts as $key => $listSoft)
                             <tr>
                                 <td>
-                                    {{ (request()->has('page') && request('page') !== 1 ? $listSofts->perPage() * (request('page') - 1) : 0) +$key +1 }}
+                                    {{ (request()->has('page') && request('page') !== 1 ? $listSofts->perPage() * (request('page') - 1) : 0) + $key + 1 }}
                                 </td>
                                 <td>
                                     {{ $listSoft->short_name }}
@@ -68,34 +68,48 @@
                                     {{ $listSoft->name }}
                                 </td>
                                 <td>
-                                    @if (count( $listSoft->majorSkill) > 0)
-                                    @foreach ( $listSoft->majorSkill as $item)
-                                        {{ $item->name }}
-                                    @endforeach
-                                @else
-                                    chưa có chuyên ngành
-                                @endif
+                                    <div class="dropdown">
+                                        <button class="btn  btn-primary btn-sm dropdown-toggle" type="button"
+                                            id="triggerId_{{ $listSoft->id }}" data-bs-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">
+                                            Xem
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="triggerId_{{ $listSoft->id }}">
+                                            @if (count($listSoft->majorSkill) > 0)
+                                                @foreach ($$listSoft->majorSkill as $item)
+                                                    <li style="padding:7px" class="dropdown-item "><a
+                                                            href="{{ route('admin.major.skill', ['slug' => $item->slug]) }}">Ngành:
+                                                            {{ $item->name }}</a>
+                                                    </li>
+                                                @endforeach
+                                            @else
+                                                <li class="dropdown-item"> chưa có chuyên ngành</li>
+                                            @endif
+                                        </div>
+                                    </div>
+
                                 </td>
+
                                 <td>
-                                    <button class="badge bg-primary" type="button" data-bs-toggle="modal"
+                                    <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal"
                                         data-bs-target="#introduce_{{ $listSoft->id }}">
-                                        Xem thông tin...
+                                        Xem
                                     </button>
 
                                     <!-- Modal -->
                                     <div class="modal fade" id="introduce_{{ $listSoft->id }}" tabindex="-1"
                                         aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
+                                        <div class="modal-dialog modal-lg">
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <h5 class="modal-title" id="exampleModalLabel"> Giới Thiệu Về
-                                                     kỹ năng
+                                                        kỹ năng
                                                     </h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body  ">
-                                                    {{ $listSoft->description }}
+                                                    {!! $listSoft->description !!}
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
@@ -106,14 +120,14 @@
                                         </div>
                                     </div>
                                 <td>
-                                <td >
+                                <td>
                                     {{ $listSoft->deleted_at }}
                                     <p>{{ \Carbon\Carbon::parse($listSoft->deleted_at)->diffForHumans() }}</p>
                                 </td>
                                 <td>
                                     <div class="btn-group dropstart">
-                                        <button type="button" class="btn   btn-sm dropdown-toggle" data-bs-toggle="dropdown"
-                                            aria-expanded="false">
+                                        <button type="button" class="btn   btn-sm dropdown-toggle"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
                                             <span class="svg-icon svg-icon-success svg-icon-2x">
                                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Settings-2.svg--><svg
                                                     xmlns="http://www.w3.org/2000/svg"
@@ -132,8 +146,7 @@
                                         <ul class="dropdown-menu px-4 ">
 
                                             <li class="my-3">
-                                                <a
-                                                    href="{{ route('admin.skill.soft.backup', ['id' => $listSoft->id]) }}">
+                                                <a href="{{ route('admin.skill.soft.backup', ['id' => $listSoft->id]) }}">
                                                     <span class="svg-icon svg-icon-primary svg-icon-2x">
                                                         <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Files/Cloud-upload.svg--><svg
                                                             xmlns="http://www.w3.org/2000/svg"
@@ -158,7 +171,7 @@
 
 
                                             </li>
-                                            <li class="my-3">
+                                            {{-- <li class="my-3">
                                                 @hasrole('super admin')
                                                     <a
                                                         href="{{ route('admin.skill.soft.destroy', ['id' => $listSoft->id]) }}">
@@ -169,7 +182,8 @@
                                                                 height="24px" viewBox="0 0 24 24" version="1.1">
                                                                 <g stroke="none" stroke-width="1" fill="none"
                                                                     fill-rule="evenodd">
-                                                                    <rect x="0" y="0" width="24" height="24" />
+                                                                    <rect x="0" y="0" width="24"
+                                                                        height="24" />
                                                                     <path
                                                                         d="M6,8 L18,8 L17.106535,19.6150447 C17.04642,20.3965405 16.3947578,21 15.6109533,21 L8.38904671,21 C7.60524225,21 6.95358004,20.3965405 6.89346498,19.6150447 L6,8 Z M8,10 L8.45438229,14.0894406 L15.5517885,14.0339036 L16,10 L8,10 Z"
                                                                         fill="#000000" fill-rule="nonzero" />
@@ -189,9 +203,12 @@
                                                             xmlns="http://www.w3.org/2000/svg"
                                                             xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                                                             height="24px" viewBox="0 0 24 24" version="1.1">
-                                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                                <rect x="0" y="0" width="24" height="24" />
-                                                                <circle fill="#000000" opacity="0.3" cx="12" cy="12" r="10" />
+                                                            <g stroke="none" stroke-width="1" fill="none"
+                                                                fill-rule="evenodd">
+                                                                <rect x="0" y="0" width="24"
+                                                                    height="24" />
+                                                                <circle fill="#000000" opacity="0.3" cx="12"
+                                                                    cy="12" r="10" />
                                                                 <path
                                                                     d="M14.5,11 C15.0522847,11 15.5,11.4477153 15.5,12 L15.5,15 C15.5,15.5522847 15.0522847,16 14.5,16 L9.5,16 C8.94771525,16 8.5,15.5522847 8.5,15 L8.5,12 C8.5,11.4477153 8.94771525,11 9.5,11 L9.5,10.5 C9.5,9.11928813 10.6192881,8 12,8 C13.3807119,8 14.5,9.11928813 14.5,10.5 L14.5,11 Z M12,9 C11.1715729,9 10.5,9.67157288 10.5,10.5 L10.5,11 L13.5,11 L13.5,10.5 C13.5,9.67157288 12.8284271,9 12,9 Z"
                                                                     fill="#000000" />
@@ -202,7 +219,7 @@
                                                     Xóa vĩnh viễn
                                                 @endhasrole
 
-                                            </li>
+                                            </li> --}}
                                         </ul>
                                     </div>
                                 </td>

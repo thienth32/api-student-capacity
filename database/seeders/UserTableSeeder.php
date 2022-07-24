@@ -8,6 +8,7 @@ use Illuminate\Database\Seeder;
 
 class UserTableSeeder extends Seeder
 {
+
     /**
      * Run the database seeds.
      *
@@ -18,21 +19,10 @@ class UserTableSeeder extends Seeder
         $users = [
 
             [
-                'name' => "Quan hệ doanh nghiệp",
-                'email' => 'Qhdn.poly@fpt.edu.vn'
+                'name' => "Nguyễn Ngọc Anh",
+                'email' => 'anhnnph17682@fpt.edu.vn'
             ],
-            [
-                'name' => "Linhntt136",
-                'email' => 'Linhntt136@fpt.edu.vn'
-            ],
-            [
-                'name' => "Huongdtt43",
-                'email' => 'Huongdtt43@fpt.edu.vn'
-            ],
-            [
-                'name' => "Quynk4",
-                'email' => 'Quynk4@fpt.edu.vn'
-            ],
+
 
         ];
         foreach ($users as $u) {

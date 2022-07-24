@@ -1,25 +1,30 @@
 $(document).ready(function () {
+    const url = "admin/recruitment";
     $("#selectEnterprise").change(function () {
         let enterpriseId = $(this).val();
-        window.location = "admin/recruitment?enterprise_id=" + enterpriseId;
+        window.location = url + "?enterprise_id=" + enterpriseId;
     });
     $("#selectContest").change(function () {
         let idContest = $(this).val();
-        window.location = "admin/recruitment?contest_id=" + idContest;
+        window.location = url + "?contest_id=" + idContest;
     });
 
     $("#searchTeam").keypress(function (event) {
         var keycode = event.keyCode ? event.keyCode : event.which;
         if (keycode == "13") {
             let key = $(this).val();
-            window.location = "admin/recruitment?keyword=" + key;
+            window.location = url + "?keyword=" + key;
         }
     });
     $(".select-date-time").change(function () {
         let dateTime = $(this).val();
-        window.location = "admin/recruitment?progress=" + dateTime;
+        window.location = url + "?progress=" + dateTime;
     });
 
+    $(".select-type-recruitment").change(function () {
+        let typeRecruitemnt = $(this).val();
+        window.location = url + "?recruitmentHot=" + typeRecruitemnt;
+    });
     $(function () {
         function getUrlParameter(name) {
             name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -43,43 +48,50 @@ $(document).ready(function () {
             );
             if (ranges == "Hôm nay") {
                 window.location =
-                    "admin/recruitment?startTime=" +
+                    url +
+                    "?startTime=" +
                     start.format("MMMM D, YYYY HH:mm:ss") +
                     "&endTime=" +
                     end.format("MMMM D, YYYY HH:mm:ss");
             } else if (ranges == "Hôm qua") {
                 window.location =
-                    "admin/recruitment?startTime=" +
+                    url +
+                    "?startTime=" +
                     start.format("MMMM D, YYYY HH:mm:ss") +
                     "&endTime=" +
                     end.format("MMMM D, YYYY HH:mm:ss");
             } else if (ranges == "7 ngày trước") {
                 window.location =
-                    "admin/recruitment?startTime=" +
+                    url +
+                    "?startTime=" +
                     start.format("MMMM D, YYYY HH:mm:ss") +
                     "&endTime=" +
                     end.format("MMMM D, YYYY HH:mm:ss");
             } else if (ranges == "30 ngày trước") {
                 window.location =
-                    "admin/recruitment?startTime=" +
+                    url +
+                    "?startTime=" +
                     start.format("MMMM D, YYYY HH:mm:ss") +
                     "&endTime=" +
                     end.format("MMMM D, YYYY HH:mm:ss");
             } else if (ranges == "Tháng này") {
                 window.location =
-                    "admin/recruitment?startTime=" +
+                    url +
+                    "?startTime=" +
                     start.format("MMMM D, YYYY HH:mm:ss") +
                     "&endTime=" +
                     end.format("MMMM D, YYYY HH:mm:ss");
             } else if (ranges == "Tháng trước") {
                 window.location =
-                    "admin/recruitment?startTime=" +
+                    url +
+                    "?startTime=" +
                     start.format("MMMM D, YYYY HH:mm:ss") +
                     "&endTime=" +
                     end.format("MMMM D, YYYY HH:mm:ss");
             } else if (ranges == "Custom Range") {
                 window.location =
-                    "admin/recruitment?startTime=" +
+                    url +
+                    "?startTime=" +
                     start.format("MMMM D, YYYY HH:mm:ss") +
                     "&endTime=" +
                     end.format("MMMM D, YYYY HH:mm:ss");
@@ -114,3 +126,47 @@ $(document).ready(function () {
         cb(start, end, (ranges = ""));
     });
 });
+const pageRecruitmentForm = {
+    selectChangeStatus: function () {
+        $(".form-select-status-hot").on("change", function () {
+            let id = $(this).data("id");
+            if ($(this).val() == 1) {
+                $.ajax({
+                    url: `admin/recruitment/un-hot/${id}`,
+                    method: "POST",
+                    data: {
+                        _token: _token,
+                    },
+                    success: function (data) {
+                        console.log(data.payload);
+                        if (!data.status) return alert(data.payload);
+                        loadTast(
+                            "Thành công !",
+                            "toastr-bottom-left",
+                            "success"
+                        );
+                    },
+                });
+            } else {
+                $.ajax({
+                    url: `admin/recruitment/re-hot/${id}`,
+                    method: "POST",
+                    data: {
+                        _token: _token,
+                    },
+                    success: function (data) {
+                        console.log(data.payload);
+                        if (!data.status) return alert(data.payload);
+                        loadTast(
+                            "Thành công !",
+                            "toastr-bottom-left",
+                            "success"
+                        );
+                    },
+                });
+            }
+        });
+    },
+};
+
+pageRecruitmentForm.selectChangeStatus();

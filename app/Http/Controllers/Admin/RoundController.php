@@ -38,6 +38,7 @@ class RoundController extends Controller
         private ModelDulesRound $modelDulesRound,
         private Contest $contest,
         private TypeExam $type_exam,
+        private Team $team,
         private DB $db
     ) {
     }
@@ -53,6 +54,45 @@ class RoundController extends Controller
         ]);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/public/rounds",
+     *     description="Description api round",
+     *     tags={"Round"},
+     *     @OA\Parameter(
+     *         name="q",
+     *         in="query",
+     *         description="Tìm kiếm ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort",
+     *         in="query",
+     *         description="Lọc theo chiều asc hoặc desc ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort_by",
+     *         in="query",
+     *         description="Các cột cần lọc  ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="contest_id",
+     *         in="query",
+     *         description="Lọc theo cuộc thi   ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="type_exam_id",
+     *         in="query",
+     *         description="Lọc theo thể loại thi   ",
+     *         required=false,
+     *     ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
     //  Response round
     public function apiIndex()
     {
@@ -181,6 +221,21 @@ class RoundController extends Controller
         return redirect('error');
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/public/rounds/{id}",
+     *     description="Description api round by id",
+     *     tags={"Round"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID vòng thi",
+     *         required=true,
+     *     ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
     public function show($id)
     {
         $round = $this->round::whereId($id);
@@ -222,20 +277,24 @@ class RoundController extends Controller
         }
 
         $contest = $this->contest->find($id);
-        $rounds = $this->modelDulesRound->getList();
         return view('pages.contest.detail.contest-round', [
             'rounds' => $rounds->where('contest_id', $id)
                 ->when(
                     auth()->check() && auth()->user()->hasRole('judge'),
                     function ($q) use ($id) {
-                        $judge = $this->judge::where('contest_id', $id)->where('user_id', auth()->user()->id)->with('judge_round')->first('id');
+                        $judge = $this->judge::where('contest_id', $id)
+                            ->where('user_id', auth()->user()->id)
+                            ->with('judge_round')
+                            ->first('id');
                         $arrId = [];
                         foreach ($judge->judge_round as $judge_round) {
                             array_push($arrId, $judge_round->id);
                         }
                         return $q->whereIn('id', $arrId);
                     }
-                )->paginate(request('limit') ?? 5),
+                )
+                ->withCount(['results','exams','posts','sliders'])
+                ->paginate(request('limit') ?? 5),
             'contests' => $this->contest::withCount(['teams', 'rounds'])->get(),
             'type_exams' => $this->type_exam::all(),
             'contest' => $contest
@@ -658,5 +717,46 @@ class RoundController extends Controller
             }
         }
         return view('pages.round.add-mail', ['round' => $round, 'judges' => $judges, 'users' => array_unique($users)]);
+    }
+
+
+    /**
+     * @OA\Get(
+     *     path="/api/v1/round/{id_round}/team-me",
+     *     description="Description api user team round",
+     *     tags={"Round","Team","Contest","Api V1"},
+     *     summary="Authorization",
+     *     security={{"bearer_token":{}}},
+     *     @OA\Parameter(
+     *         name="id_round",
+     *         in="path",
+     *         description="Id vòng thi  test năng lực  ",
+     *         required=true,
+     *     ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
+    public function userTeamRound($roundId, Round $round)
+    {
+        $team_id = 0;
+        $user_id = auth('sanctum')->user()->id;
+        $round = $round::find($roundId)->load('teams');
+        try {
+            if ($round->teams) {
+                foreach ($round->teams as $team) {
+                    foreach ($team->users as $user) {
+                        if ($user->id == $user_id) {
+                            $team_id = $team->id;
+                        }
+                    }
+                }
+            }
+            if ($team_id == 0)  return $this->responseApi(true, []);
+            $team = $this->team::find($team_id)->load('members');
+            return $this->responseApi(true, $team);
+        } catch (\Throwable $th) {
+            return $this->responseApi(false);
+        }
     }
 }

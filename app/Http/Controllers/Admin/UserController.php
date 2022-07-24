@@ -363,6 +363,32 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/v1/users/edit",
+     *     description="Description api edit user",
+     *     tags={"User","Api V1"},
+     *     summary="Authorization",
+     *     security={{"bearer_token":{}}},
+     *     @OA\RequestBody(
+     *          @OA\MediaType(
+     *              mediaType="multipart/form-data",
+     *              @OA\Schema(
+     *                  @OA\Property(
+     *                      type="string",
+     *                      property="name",
+     *                  ),
+     *                  @OA\Property(
+     *                      type="file",
+     *                      property="avatar",
+     *                  ),
+     *              ),
+     *          ),
+     *      ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
     public function updateDetailUser(Request $request)
     {
         $validator = Validator::make(

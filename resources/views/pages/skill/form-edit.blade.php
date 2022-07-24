@@ -50,7 +50,7 @@
                                     <label for="" class="form-label">Thuộc chuyên ngành</label>
                                     <select multiple class="form-select mb-2 select2-hidden-accessible"
                                         data-control="select2" data-hide-search="false" tabindex="-1" aria-hidden="true"
-                                        name="major_id[]" value="{{ old('major_id') }}">
+                                        name="major_id[]" value="{{ serialize(old('major_id')) }}">
                                         @foreach ($dataMajor as $itemMajor)
                                             @php
                                                 $dash = '';
@@ -68,12 +68,6 @@
                                             ])
                                         @endforeach
                                     </select>
-                                    @if (count($data->majorSkill) > 0)
-                                        <input type="hidden" value="{{ $data->majorSkill }}" name="oldMajor">
-                                    @endif
-                                    @error('major_id')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
                                 </div>
                             </div>
                             <div class="col-4">
@@ -82,7 +76,7 @@
                                     <input value="{{ old('image_url') }}" name="image_url" type='file' id="file-input"
                                         class="form-control" accept=".png, .jpg, .jpeg" />
                                     <img class="w-100 mt-4 border rounded-3" id="image-preview"
-                                        src="{{ Storage::disk('s3')->has($data->image_url) ? Storage::disk('s3')->temporaryUrl($data->image_url, now()->addMinutes(5)) : 'https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg' }}" />
+                                        src="{{ $data->image_url ? $data->image_url : 'https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg' }}" />
                                 </div>
                             </div>
 

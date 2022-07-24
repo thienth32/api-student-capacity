@@ -145,7 +145,7 @@
 
 
                                             </li>
-                                            <li class="my-3">
+                                            {{-- <li class="my-3">
                                                 @hasrole('super admin')
                                                     <a
                                                         href="{{ route('admin.enterprise.soft.destroy', ['id' => $listSoft->id]) }}">
@@ -193,7 +193,7 @@
                                                     Xóa vĩnh viễn
                                                 @endhasrole
 
-                                            </li>
+                                            </li> --}}
                                         </ul>
                                     </div>
                                 </td>

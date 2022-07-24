@@ -42,10 +42,11 @@ class Round extends Model
         parent::boot();
         static::deleting(function ($q) {
             // $q->results()->delete();
-            $q->teams()->detach();
-            $q->judges()->detach();
+            //            $q->teams()->detach();
+            //            $q->judges()->detach();
         });
     }
+
     public function format()
     {
         return [
@@ -92,7 +93,6 @@ class Round extends Model
     {
         return $this->belongsToMany(Judge::class, 'judges_rounds', 'round_id', 'judge_id')->with(['user', 'evaluation']);
     }
-
     public function teams()
     {
         return $this->belongsToMany(Team::class, 'round_teams', 'round_id', 'team_id')->wherePivot('status', 1); //đã công bố
@@ -113,5 +113,9 @@ class Round extends Model
     public function exams()
     {
         return $this->hasMany(Exam::class, 'round_id');
+    }
+    public function result_capacity()
+    {
+        return $this->hasManyThrough(ResultCapacity::class, Exam::class, 'round_id', 'exam_id', 'id')->with('user');
     }
 }

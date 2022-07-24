@@ -45,10 +45,28 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-10">
+                                <label class="form-label" for="">Số lượng tuyển dụng</label>
+                                <input min="1" type="number" value="{{ $data->amount }}" name="amount"
+                                    class="form-control " placeholder="">
+                                @error('amount')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
+
+                            </div>
+                            <div class="form-group mb-10">
+                                <label class="form-label" for="">Lương tuyển dụng</label>
+                                <input min="1" type="number" value="{{ $data->cost }}" name="cost"
+                                    class="form-control " placeholder="">
+                                @error('cost')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
+
+                            </div>
+                            <div class="form-group mb-10">
                                 <label for="" class="form-label">Doanh nghiệp tuyển dụng</label>
                                 <select placeholder="Chọn" multiple class="form-select mb-2 select2-hidden-accessible"
                                     data-control="select2" data-hide-search="false" tabindex="-1" aria-hidden="true"
-                                    name="enterprise_id[]" value="{{ old('enterprise_id') }}">
+                                    name="enterprise_id[]" value="{{ serialize(old('enterprise_id')) }}">
                                     @foreach ($enterprises as $item)
                                         <option
                                             @foreach ($data->enterprise as $value) @if ($value->id == $item->id)
@@ -65,7 +83,7 @@
                                 <label for="" class="form-label">Chọn phần test năng lực</label>
                                 <select placeholder="Chọn" multiple class="form-select mb-2 select2-hidden-accessible"
                                     data-control="select2" data-hide-search="false" tabindex="-1" aria-hidden="true"
-                                    name="contest_id[]" value="{{ old('contest_id') }}">
+                                    name="contest_id[]" value="{{ serialize(old('contest_id')) }}">
                                     @foreach ($contests as $item)
                                         <option
                                             @foreach ($data->contest as $value) @if ($value->id == $item->id)
@@ -106,7 +124,8 @@
                     </div>
 
                     <div class="form-group mb-10 ">
-                        <button type="submit" name="" id="" class="btn btn-success btn-lg btn-block">Lưu
+                        <button type="submit" name="" id=""
+                            class="btn btn-success btn-lg btn-block">Lưu
                         </button>
                     </div>
                 </form>

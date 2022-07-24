@@ -302,14 +302,16 @@ Route::group([
         Route::get('', [RecruitmentController::class, 'index'])->name('admin.recruitment.list');
         Route::get('create', [RecruitmentController::class, 'create'])->name('admin.recruitment.create');
 
-
         Route::post('store', [RecruitmentController::class, 'store'])->name('admin.recruitment.store');
         Route::delete('{id}', [RecruitmentController::class, 'destroy'])->name('admin.recruitment.destroy');
+
         Route::prefix('list-soft-deletes')->group(function () {
             Route::get('', [RecruitmentController::class, 'listRecordSoftDeletes'])->name('admin.recruitment.list.soft.deletes');
             Route::get('{id}/delete', [RecruitmentController::class, 'backUpRecruitment'])->name('admin.recruitment.soft.deletes');
             Route::get('{id}/restore', [RecruitmentController::class, 'delete'])->name('admin.recruitment.soft.restore');
         });
+        Route::post('un-hot/{id}', [RecruitmentController::class, 'un_hot'])->name('admin.recruitment.un.hot');
+        Route::post('re-hot/{id}', [RecruitmentController::class, 're_hot'])->name('admin.recruitment.re.hot');
         Route::get('{id}', [RecruitmentController::class, 'detail'])->name('admin.recruitment.detail');
     });
     Route::prefix('posts')->group(function () {
