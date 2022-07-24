@@ -252,5 +252,5 @@
             'input[type=datetime-local]#start_time', 'input[type=datetime-local]#end_time')
         preview.showFile('#file-input', '#image-preview');
     </script>
-{{--    <script src="assets/js/system/validate/validate.js"></script>--}}
+    <script src="assets/js/system/validate/validate.js"></script>
 @endsection
