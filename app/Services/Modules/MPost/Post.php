@@ -24,6 +24,7 @@ class Post
 
     ) {
     }
+
     public function getList(Request $request)
     {
         $keyword = $request->has('keyword') ? $request->keyword : "";
@@ -73,11 +74,27 @@ class Post
         if ($recruitment != 0) {
             $query->where('postable_id', $recruitment)->where('postable_type', $this->recruitment::class);
         }
+        if ($request->post != null) {
+            $this->loadAble($query, $request->post);
+        }
+
         return $query;
     }
     public function index(Request $request)
     {
         return $this->getList($request)->paginate(request('limit') ?? config('util.HOMEPAGE_ITEM_AMOUNT'));;
+    }
+    private function loadAble($query, $post = null)
+    {
+        if ($post == 'post-contest') {
+            $query->where('status_capacity', 0)->where('postable_type', $this->contest::class);
+        } elseif ($post == 'post-capacity') {
+            $query->where('status_capacity', 1)->where('postable_type', $this->contest::class);
+        } elseif ($post == 'post-round') {
+            $query->where('postable_type', $this->round::class);
+        } elseif ($post == 'post-recruitment') {
+            $query->where('postable_type', $this->recruitment::class);
+        }
     }
     public function find($id)
     {
@@ -105,6 +122,7 @@ class Post
             $dataContest = $this->contest::find($request->contest_id);
             $dataContest->posts()->create($data);
         } elseif ($request->capacity_id != 0) {
+            $data['status_capacity'] = 1; // 1 là bài viết thuộc capacity nhằm phân biệt với contest
             $dataCapacity = $this->contest::find($request->capacity_id);
             $dataCapacity->posts()->create($data);
         } elseif ($request->round_id != 0) {
@@ -138,15 +156,19 @@ class Post
         if ($request->contest_id != 0) {
             $post->postable_id = $request->contest_id;
             $post->postable_type = $this->contest::class;
+            $post->status_capacity = 0;
         } elseif ($request->capacity_id != 0) {
+            $post->status_capacity = 1;
             $post->postable_id = $request->capacity_id;
             $post->postable_type = $this->contest::class;
         } elseif ($request->round_id != 0) {
             $post->postable_id = $request->round_id;
             $post->postable_type = $this->round::class;
+            $post->status_capacity = 0;
         } elseif ($request->recruitment_id != 0) {
             $post->postable_id = $request->recruitment_id;
             $post->postable_type = $this->recruitment::class;
+            $post->status_capacity = 0;
         }
         $post->save();
     }

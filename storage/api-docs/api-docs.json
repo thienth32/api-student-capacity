@@ -2,7 +2,7 @@
     "openapi": "3.0.0",
     "info": {
         "title": "OpenApi Capacity Fpoly",
-        "description": "OpenApi Capacity Fpoly<br>\n *      ✅NOTE✅\n *      Note: Khi sử dụng api authentication v1 cần nhập token bearer phần Authorize\n *      Note: Tìm kiếm api theo các tag\n *      Note: Thiếu , gặp bug -> chụp ảnh gửi cho BE sửa 🔧\n *      ✅END NOTE✅",
+        "description": "OpenApi Capacity Fpoly<br>\r\n *      ✅NOTE✅\r\n *      Note: Khi sử dụng api authentication v1 cần nhập token bearer phần Authorize\r\n *      Note: Tìm kiếm api theo các tag\r\n *      Note: Thiếu , gặp bug -> chụp ảnh gửi cho BE sửa 🔧\r\n *      ✅END NOTE✅",
         "contact": {
             "email": ""
         },
@@ -331,27 +331,33 @@
                         "required": false
                     },
                     {
+                        "name": "post",
+                        "in": "query",
+                        "description": "  post='post-contest' -> bài viết thuộc cuộc thi\n     *         post='post-capacity' -> bài viết thuộc test nl .\n     *         post='post-round' -> bài viết thuộc vòng thi .\n     *          post='post-recruitment' -> bài viết thuộc tuyển dụng\n     * ",
+                        "required": false
+                    },
+                    {
                         "name": "contest_id",
                         "in": "query",
-                        "description": "Bài viết thuộc của thi",
+                        "description": "Bài viết dành riêng  thuộc cuộc thi",
                         "required": false
                     },
                     {
                         "name": "round_id",
                         "in": "query",
-                        "description": "bài viết thuộc vòng thi",
+                        "description": "bài viết dành riêng thuộc vòng thi",
                         "required": false
                     },
                     {
                         "name": "capacity_id",
                         "in": "query",
-                        "description": "Bài viết thuộc của bài test",
+                        "description": "Bài viết dành riêng thuộc của bài test",
                         "required": false
                     },
                     {
                         "name": "recruitment_id",
                         "in": "query",
-                        "description": "Bài viết thuộc Tuyển dụng",
+                        "description": "Bài viết dành riêng thuộc Tuyển dụng",
                         "required": false
                     }
                 ],
@@ -1120,7 +1126,7 @@
         "securitySchemes": {
             "bearer_token": {
                 "type": "apiKey",
-                "description": "Nhập vào ô input dạng \"Bearer token\" <br> <b>Ví dụ</b>: <strong>Bearer 48|i93gO5EA6cBqiguiLCAiIAOiLkLoMXwoIvEnZvTn</strong>\n                     <br><br><hr>",
+                "description": "Nhập vào ô input dạng \"Bearer token\" <br> <b>Ví dụ</b>: <strong>Bearer 48|i93gO5EA6cBqiguiLCAiIAOiLkLoMXwoIvEnZvTn</strong>\r\n                     <br><br><hr>",
                 "name": "Authorization",
                 "in": "header"
             }

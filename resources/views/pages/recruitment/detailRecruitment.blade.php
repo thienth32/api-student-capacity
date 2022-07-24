@@ -59,6 +59,30 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="fs-4 text-white mt-5">
+                            <div class="opacity-75">
+                                <div class="row">
+                                    <div class="col-4">
+                                        <h3>Số lượng </h3>
+                                    </div>
+                                    <div class="col-8">
+                                        {{ $data->amount }} người
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fs-4 text-white mt-5">
+                            <div class="opacity-75">
+                                <div class="row">
+                                    <div class="col-4">
+                                        <h3>Mức lương </h3>
+                                    </div>
+                                    <div class="col-8">
+                                        {{ number_format($data->cost) }} $
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="fs-4 text-white mt-5">
                             <div class="opacity-75">
@@ -67,9 +91,11 @@
                                         <h3>Quá trình</h3>
                                     </div>
                                     <div class="col-8">
-                                        @if (\Carbon\Carbon::parse($data->start_time)->toDateTimeString() > \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
+                                        @if (\Carbon\Carbon::parse($data->start_time)->toDateTimeString() >
+                                            \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
                                             <button type="button" class="btn btn-primary">Sắp diễn ra</button>
-                                        @elseif (\Carbon\Carbon::parse($data->end_time)->toDateTimeString() > \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
+                                        @elseif (\Carbon\Carbon::parse($data->end_time)->toDateTimeString() >
+                                            \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
                                             <button type="button" class="btn btn-success">Đang diễn ra</button>
                                         @else
                                             <button type="button" class="btn btn-danger">Đã kết thúc</button>

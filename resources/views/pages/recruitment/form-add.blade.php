@@ -54,6 +54,25 @@
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
                             </div>
+
+                            <div class="form-group mb-10">
+                                <label class="form-label" for="">Số lượng tuyển dụng</label>
+                                <input min="1" type="number" value="{{ old('amount') }}" name="amount"
+                                    class="form-control " placeholder="">
+                                @error('amount')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
+
+                            </div>
+                            <div class="form-group mb-10">
+                                <label class="form-label" for="">Lương tuyển dụng</label>
+                                <input min="1" type="number" value="{{ old('cost') }}" name="cost"
+                                    class="form-control " placeholder="">
+                                @error('cost')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
+
+                            </div>
                             <div class="form-group mb-10">
                                 <label for="" class="form-label">Doanh nghiệp tuyển dụng</label>
                                 <select placeholder="Chọn" multiple class="form-select mb-2 select2-hidden-accessible"
@@ -117,7 +136,8 @@
                     </div>
 
                     <div class="form-group mb-10 ">
-                        <button type="submit" name="" id="" class="btn btn-success btn-lg btn-block">Lưu
+                        <button type="submit" name="" id=""
+                            class="btn btn-success btn-lg btn-block">Lưu
                         </button>
                     </div>
                 </form>

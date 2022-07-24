@@ -546,7 +546,7 @@
                                                 </a>
                                             </li>
                                             <li class="my-3">
-                                                @hasrole('admin')
+                                                @hasrole('super admin')
                                                     @if ($key->recruitmentEnterprise->count() == 0 &&
                                                         $key->contest->count() == 0 &&
                                                         $key->enterprise->count() == 0 &&

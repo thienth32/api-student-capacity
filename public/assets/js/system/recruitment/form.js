@@ -15,6 +15,12 @@ const rules = {
     end_time: {
         required: true,
     },
+    amount: {
+        required: true,
+    },
+    cost: {
+        required: true,
+    },
 };
 const messages = {
     name: {
@@ -32,6 +38,14 @@ const messages = {
     end_time: {
         required: "Chưa nhập trường này !!",
         min: "Không được nhỏ hơn thời gian hiện tại !",
+    },
+    amount: {
+        required: "Chưa nhập trường này !!",
+        min: "Không được nhỏ hơn 1 !",
+    },
+    cost: {
+        required: "Chưa nhập trường này !!",
+        min: "Không được nhỏ hơn 1 !",
     },
 };
 // $.validator.addMethod(

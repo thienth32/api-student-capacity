@@ -244,28 +244,38 @@ class PostController extends Controller
      *         description="Các cột cần lọc  ",
      *         required=false,
      *     ),
+     *          @OA\Parameter(
+     *         name="post",
+     *         in="query",
+     *         description="  post='post-contest' -> bài viết thuộc cuộc thi
+     *         post='post-capacity' -> bài viết thuộc test nl .
+     *         post='post-round' -> bài viết thuộc vòng thi .
+     *          post='post-recruitment' -> bài viết thuộc tuyển dụng
+     * ",
+     *         required=false,
+     *     ),
      *     @OA\Parameter(
      *         name="contest_id",
      *         in="query",
-     *         description="Bài viết thuộc của thi",
+     *         description="Bài viết dành riêng  thuộc cuộc thi",
      *         required=false,
      *     ),
      *       @OA\Parameter(
      *         name="round_id",
      *         in="query",
-     *         description="bài viết thuộc vòng thi",
+     *         description="bài viết dành riêng thuộc vòng thi",
      *         required=false,
      *     ),
      *   @OA\Parameter(
      *         name="capacity_id",
      *         in="query",
-     *         description="Bài viết thuộc của bài test",
+     *         description="Bài viết dành riêng thuộc của bài test",
      *         required=false,
      *     ),
      *     @OA\Parameter(
      *         name="recruitment_id",
      *         in="query",
-     *         description="Bài viết thuộc Tuyển dụng",
+     *         description="Bài viết dành riêng thuộc Tuyển dụng",
      *         required=false,
      *     ),
      *
