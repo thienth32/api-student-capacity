@@ -345,7 +345,6 @@ class ContestController extends Controller
      */
     public function apiShowCapacity($id)
     {
-
         try {
             $capacity = $this->contest->apiShow($id, config('util.TYPE_TEST'));
             if (is_null($capacity))

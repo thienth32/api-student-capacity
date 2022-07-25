@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\Modules\MContest;
 
 use App\Models\Major;
@@ -16,13 +17,13 @@ class Contest
     public function __construct(
         private ModelContest $contest,
         private Major $major,
-        private Team $team ,
-        private Judge $judge ,
+        private Team $team,
+        private Judge $judge,
         private Carbon $carbon,
-    )
-    {}
+    ) {
+    }
 
-    private function getList($flagCapacity , $request)
+    private function getList($flagCapacity, $request)
     {
         $with = [];
 
@@ -56,22 +57,22 @@ class Contest
 
         $now = $this->carbon::now('Asia/Ho_Chi_Minh');
         return  $this->contest::when($request->has('contest_soft_delete'), function ($q) {
-                    return $q->onlyTrashed();
-                })
-                ->when(auth()->check() && auth()->user()->hasRole('judge'), function ($q) {
-                    return $q->whereIn('id', array_unique($this->judge::where('user_id', auth()->user()->id)->pluck('contest_id')->toArray()));
-                })
-                ->search($request->q ?? null, ['name'], true)
-                ->missingDate('register_deadline', $request->miss_date ?? null, $now->toDateTimeString())
-                ->passDate('register_deadline', $request->pass_date ?? null, $now->toDateTimeString())
-                ->registration_date('end_register_time', $request->registration_date ?? null, $now->toDateTimeString())
-                ->status($request->status)
-                ->sort(($request->sort == 'asc' ? 'asc' : 'desc'), $request->sort_by ?? null, 'contests')
-                ->hasDateTimeBetween('date_start', $request->start_time ?? null, $request->end_time ?? null)
-                // ->hasDateTimeBetween('end_register_time',request('registration_date'))
-                ->hasRequest(['major_id' => $request->major_id ?? null])
-                ->with($with)
-                ->withCount('teams');
+            return $q->onlyTrashed();
+        })
+            ->when(auth()->check() && auth()->user()->hasRole('judge'), function ($q) {
+                return $q->whereIn('id', array_unique($this->judge::where('user_id', auth()->user()->id)->pluck('contest_id')->toArray()));
+            })
+            ->search($request->q ?? null, ['name'], true)
+            ->missingDate('register_deadline', $request->miss_date ?? null, $now->toDateTimeString())
+            ->passDate('register_deadline', $request->pass_date ?? null, $now->toDateTimeString())
+            ->registration_date('end_register_time', $request->registration_date ?? null, $now->toDateTimeString())
+            ->status($request->status)
+            ->sort(($request->sort == 'asc' ? 'asc' : 'desc'), $request->sort_by ?? null, 'contests')
+            ->hasDateTimeBetween('date_start', $request->start_time ?? null, $request->end_time ?? null)
+            // ->hasDateTimeBetween('end_register_time',request('registration_date'))
+            ->hasRequest(['major_id' => $request->major_id ?? null])
+            ->with($with)
+            ->withCount('teams');
     }
 
     public function index()
@@ -91,7 +92,7 @@ class Contest
 
     public function apiIndex($flagCapacity = false)
     {
-        return $this->getList($flagCapacity,request())
+        return $this->getList($flagCapacity, request())
             ->where('type', config('util.TYPE_CONTEST'))
             ->paginate(request('limit') ?? 9);
     }
@@ -125,7 +126,7 @@ class Contest
         return $contest;
     }
 
-    private function whereId($id,$type)
+    private function whereId($id, $type)
     {
         return $this->contest::whereId($id)
             ->where('type', $type);
@@ -133,7 +134,7 @@ class Contest
 
     public function sendMail($id)
     {
-        return $this->whereId($id,config('util.TYPE_CONTEST'))
+        return $this->whereId($id, config('util.TYPE_CONTEST'))
             ->with([
                 'judges',
                 'teams' => function ($q) {
@@ -153,7 +154,7 @@ class Contest
         return $this->contest::withTrashed()->where('id', $id)->forceDelete();
     }
 
-    public function apiShow($id ,$type )
+    public function apiShow($id, $type)
     {
         $with = [
             'enterprise',
@@ -172,8 +173,8 @@ class Contest
             },
             'judges'
         ];
-        if($type == config('util.TYPE_TEST')) $with = ['rounds'];
-        $contest = $this->whereId($id ,$type )
+        if ($type == config('util.TYPE_TEST')) $with = ['rounds', 'enterprise', 'userCapacityDone'];
+        $contest = $this->whereId($id, $type)
             ->with(
                 $with
             )
@@ -182,12 +183,12 @@ class Contest
         return $contest;
     }
 
-    public function show($id,$type)
+    public function show($id, $type)
     {
         $with = [
             'judges',
             'rounds' => function ($q) use ($id) {
-                return $q->when(//
+                return $q->when( //
                     auth()->check() && auth()->user()->hasRole('judge'),
                     function ($q) use ($id) {
                         $judge = $this->judge::where('contest_id', $id)
@@ -200,23 +201,22 @@ class Contest
                         }
                         return $q->whereIn('id', $arrId);
                     }
-                );//
+                ); //
             }
         ];
-        if($type == config('util.TYPE_TEST')) $with = [
+        if ($type == config('util.TYPE_TEST')) $with = [
             'rounds' => function ($q) {
                 return $q->with(['exams'])->withCount('exams');
             }
         ];
         try {
-            $contest = $this->whereId($id,$type)
+            $contest = $this->whereId($id, $type)
                 ->with($with)
                 ->first();
             return $contest;
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             return false;
         }
-
     }
 
     public function find($id)
@@ -224,7 +224,7 @@ class Contest
         return $this->contest::find($id);
     }
 
-    public function update($contest,$data)
+    public function update($contest, $data)
     {
         $contest->update($data);
     }
