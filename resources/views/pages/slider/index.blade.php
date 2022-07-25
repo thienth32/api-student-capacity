@@ -315,7 +315,7 @@
                                     @if (request('sort') == 'desc')
                                         {{ (request()->has('page') && request('page') !== 1 ? $sliders->perPage() * (request('page') - 1) : 0) + $key + 1 }}
                                     @else
-                                        {{ request()->has('page') && request('page') !== 1 ? $total - $sliders->perPage() * (request('page') - 1) - $key - 1 : ($total -= 1) }}
+                                        {{ request()->has('page') && request('page') !== 1 ? $total - $sliders->perPage() * (request('page') - 1) - $key - 1 : ($total -= ($key == 0 ? 0 : 1)) }}
                                     @endif
                                 </th>
                             @else
