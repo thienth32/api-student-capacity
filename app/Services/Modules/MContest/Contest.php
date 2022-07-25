@@ -173,7 +173,13 @@ class Contest
             },
             'judges'
         ];
-        if ($type == config('util.TYPE_TEST')) $with = ['rounds', 'enterprise', 'userCapacityDone'];
+        if ($type == config('util.TYPE_TEST')) $with = [
+            'rounds',
+            'enterprise',
+            'userCapacityDone' => function ($q) {
+                return $q->with('user');
+            }
+        ];
         $contest = $this->whereId($id, $type)
             ->with(
                 $with
