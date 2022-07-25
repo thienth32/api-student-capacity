@@ -56,22 +56,12 @@ class MajorController extends Controller
      */
     public function apiShow($slug)
     {
-        if (!($major = $this->getMajor($slug))) return $this->responseApi(
-            [
-                'status' => false,
-                'payload' => 'Không tìm thấy major '
-            ]
-        );
-        if (!($major = $this->addCollectionMajor($major))) return $this->responseApi(
-            [
-                'status' => false,
-                'payload' => 'Không lấy được major '
-            ]
-        );
-        return $this->responseApi([
-            'status' => true,
-            'payload' => $major->first(),
-        ]);
+        if (!($major = $this->getMajor($slug))) return $this->responseApi(false,'Không tìm thấy major ');
+
+        if (!($major = $this->addCollectionMajor($major))) return $this->responseApi(false,'Không lấy được major ');
+
+        return $this->responseApi(true,$major->first());
+
     }
 
     private function getList()
@@ -128,20 +118,9 @@ class MajorController extends Controller
     public function apiIndex()
     {
         if ($data = $this->getList()) {
-            return $this->responseApi(
-                [
-                    'status' => true,
-                    'payload' => $data->get(),
-                ]
-            );
+            return $this->responseApi(true,$data->get());
         }
-        return $this->responseApi(
-            [
-                'status' => false,
-                'payload' => 'Not found '
-            ],
-            404
-        );
+        return $this->responseApi(false);
     }
 
     public function create()
