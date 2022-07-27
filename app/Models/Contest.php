@@ -55,7 +55,7 @@ class Contest extends Model
 
     public function recruitment()
     {
-        return $this->BelongsToMany(Recruitment::class, 'contest_recruitments', 'contest_id', 'recruitment_id')->withTimestamps();
+        return $this->belongsToMany(Recruitment::class, 'contest_recruitments', 'contest_id', 'recruitment_id')->withTimestamps();
     }
     public function teams()
     {

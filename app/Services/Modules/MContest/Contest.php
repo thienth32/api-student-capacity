@@ -175,7 +175,9 @@ class Contest
         ];
         if ($type == config('util.TYPE_TEST')) $with = [
             'rounds',
-            'recruitment',
+            'recruitment' => function ($q) {
+                return $q->with('enterprise');
+            },
             'userCapacityDone' => function ($q) {
                 return $q->with('user');
             }
