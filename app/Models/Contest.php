@@ -115,6 +115,17 @@ class Contest extends Model
             ]
         );
     }
+    public function recruitmentEnterprise()
+    {
+        return $this->hasManyDeep(
+            Enterprise::class,
+            [
+                'contest_recruitments',
+                Recruitment::class,
+                'enterprise_recruitments'
+            ]
+        );
+    }
     public function newEloquentBuilder($query)
     {
         return new Builder($query);
