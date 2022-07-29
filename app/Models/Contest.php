@@ -55,7 +55,7 @@ class Contest extends Model
 
     public function recruitment()
     {
-        return $this->BelongsToMany(Recruitment::class, 'contest_recruitments', 'contest_id', 'recruitment_id')->withTimestamps();
+        return $this->belongsToMany(Recruitment::class, 'contest_recruitments', 'contest_id', 'recruitment_id')->withTimestamps();
     }
     public function teams()
     {
@@ -105,7 +105,6 @@ class Contest extends Model
 
     public function userCapacityDone()
     {
-        // return $this->hasMany(Round::class, 'contest_id');
         return $this->hasManyDeep(
             ResultCapacity::class,
             [Round::class, Exam::class],
@@ -113,6 +112,17 @@ class Contest extends Model
                 'contest_id',
                 'round_id',
                 'user_id',
+            ]
+        );
+    }
+    public function recruitmentEnterprise()
+    {
+        return $this->hasManyDeep(
+            Enterprise::class,
+            [
+                'contest_recruitments',
+                Recruitment::class,
+                'enterprise_recruitments'
             ]
         );
     }

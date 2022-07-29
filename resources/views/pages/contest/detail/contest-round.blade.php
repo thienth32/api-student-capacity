@@ -351,11 +351,25 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @php
+
+                                $total = $rounds->total();
+                            @endphp
                             @forelse ($rounds as $key => $round)
                                 <tr>
-                                    <th scope="row">
-                                        {{ (request()->has('page') && request('page') !== 1 ? $rounds->perPage() * (request('page') - 1) : 0) + $key + 1 }}
-                                    </th>
+                                    @if (request()->has('sort'))
+                                        <th scope="row">
+                                            @if (request('sort') == 'desc')
+                                                {{ (request()->has('page') && request('page') !== 1 ? $rounds->perPage() * (request('page') - 1) : 0) + $key + 1 }}
+                                            @else
+                                                {{ request()->has('page') && request('page') !== 1 ? $total - $rounds->perPage() * (request('page') - 1) - $key : ($total -= ($key == 0 ? 0 : 1)) }}
+                                            @endif
+                                        </th>
+                                    @else
+                                        <th scope="row">
+                                            {{ (request()->has('page') && request('page') !== 1 ? $rounds->perPage() * (request('page') - 1) : 0) + $key + 1 }}
+                                        </th>
+                                    @endif
                                     <td>
                                         <a href="{{ route('admin.round.detail', ['id' => $round->id]) }}">
                                             {{ $round->name }}

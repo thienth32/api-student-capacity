@@ -309,7 +309,7 @@
                                     @if (request('sort') == 'desc')
                                         {{ (request()->has('page') && request('page') !== 1 ? $contests->perPage() * (request('page') - 1) : 0) + $key + 1 }}
                                     @else
-                                        {{ request()->has('page') && request('page') !== 1 ? $total - $contests->perPage() * (request('page') - 1) - $key : ($total -= 1) }}
+                                        {{ request()->has('page') && request('page') !== 1 ? $total - $contests->perPage() * (request('page') - 1) - $key : ($total -= ($key == 0 ? 0 : 1)) }}
                                     @endif
                                 </th>
                             @else

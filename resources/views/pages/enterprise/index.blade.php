@@ -234,7 +234,7 @@
                                             @if (request('sortBy') == 'desc')
                                                 {{ (request()->has('page') && request('page') !== 1 ? $listEnterprise->perPage() * (request('page') - 1) : 0) + $index + 1 }}
                                             @else
-                                                {{ request()->has('page') && request('page') !== 1 ? $total - $listEnterprise->perPage() * (request('page') - 1) - $index : ($total -= 1) }}
+                                                {{ request()->has('page') && request('page') !== 1 ? $total - $listEnterprise->perPage() * (request('page') - 1) - $index : ($total -= ($index == 0 ? 0 : 1)) }}
                                             @endif
                                         </th>
                                     @else
