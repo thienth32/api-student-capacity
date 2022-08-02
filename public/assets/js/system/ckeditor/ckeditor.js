@@ -4,15 +4,14 @@ const pageCkeditor = {
             document.querySelector("#kt_docs_ckeditor_classic"),
             {
                 toolbar: [
-                    "heading",
                     "undo",
                     "redo",
                     "bold",
                     "italic",
                     "blockQuote",
                     "ckfinder",
-                    "imageTextAlternative",
-                    // "imageUpload",
+                    // "imageTextAlternative",
+                    "imageUpload",
                     "heading",
                     "imageStyle:full",
                     "imageStyle:side",

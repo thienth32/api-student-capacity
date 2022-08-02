@@ -19,8 +19,7 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
-                <form id="formSkill" action="{{ route('admin.skill.store') }}" method="post"
-                    enctype="multipart/form-data">
+                <form id="formSkill" action="{{ route('admin.skill.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
 
                     <div class="form-group mb-10">
