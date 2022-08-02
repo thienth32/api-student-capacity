@@ -16,6 +16,7 @@ use App\Models\RoundTeam;
 use App\Models\TakeExam;
 use App\Models\Team;
 use App\Models\TypeExam;
+use App\Services\Modules\MRound\MRoundInterface;
 use App\Services\Traits\TResponse;
 use App\Services\Traits\TUploadImage;
 use Carbon\Carbon;
@@ -24,9 +25,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 use Image;
-use App\Services\Modules\MRound\Round as ModelDulesRound;
 
 class RoundController extends Controller
 {
@@ -35,7 +34,7 @@ class RoundController extends Controller
     public function __construct(
         private Judge $judge,
         private Round $round,
-        private ModelDulesRound $modelDulesRound,
+        private MRoundInterface $modelDulesRound,
         private Contest $contest,
         private TypeExam $type_exam,
         private Team $team,

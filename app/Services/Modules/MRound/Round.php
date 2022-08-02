@@ -4,7 +4,7 @@ namespace App\Services\Modules\MRound;
 
 use App\Services\Traits\TUploadImage;
 
-class Round
+class Round implements MRoundInterface
 {
     use TUploadImage;
     public $round;

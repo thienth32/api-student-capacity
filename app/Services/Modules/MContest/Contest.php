@@ -9,7 +9,7 @@ use App\Models\Judge;
 use App\Services\Traits\TUploadImage;
 use Carbon\Carbon;
 
-class Contest
+class Contest implements MContestInterface
 {
     use TUploadImage;
 
@@ -96,7 +96,6 @@ class Contest
             ->where('type', config('util.TYPE_CONTEST'))
             ->paginate(request('limit') ?? 9);
     }
-
 
     public function store($filename, $request)
     {

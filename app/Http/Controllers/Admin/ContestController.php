@@ -3,13 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\Contest\RequestContest;
+use App\Services\Modules\MContest\MContestInterface;
 use App\Services\Traits\TStatus;
 use Exception;
 use App\Models\Team;
 use App\Models\User;
-use App\Models\Judge;
 use App\Models\Major;
-use App\Services\Modules\MContest\Contest;
 use App\Models\Skill;
 use App\Models\Enterprise;
 use Illuminate\Http\Request;
@@ -17,7 +16,6 @@ use App\Services\Traits\TResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\ContestUser;
-use App\Models\Round;
 use App\Services\Traits\TTeamContest;
 use App\Services\Traits\TUploadImage;
 use Illuminate\Support\Facades\Storage;
@@ -29,56 +27,12 @@ class ContestController extends Controller
     use TUploadImage, TResponse, TTeamContest, TStatus;
 
     public function __construct(
-        private Contest $contest,
+        private MContestInterface $contest,
         private Major $major,
         private Team $team,
         private DB $db,
         private Storage $storage
-    ) {
-    }
-
-    /**
-     *  Get list contest
-     */
-    private function getList($flagCapacity = false)
-    {
-        try {
-            $with = [];
-
-            if (!$flagCapacity) $with = [
-                'major',
-                'teams',
-                'rounds' => function ($q) {
-                    return $q->with([
-                        'teams' => function ($q) {
-                            return $q->with('members');
-                        }
-                    ]);
-                },
-                'enterprise',
-                'judges'
-            ];
-            if ($flagCapacity) $with = [
-                'rounds' => function ($q) {
-                    return $q->with([
-                        'exams' => function ($q) {
-                            return $q->with([
-                                'questions' => function ($q) {
-                                    return $q->with('answers');
-                                }
-                            ]);
-                        }
-                    ]);
-                }
-            ];
-
-            $data =  $this->contest->getList($with, request());
-
-            return $data;
-        } catch (\Throwable $th) {
-            return false;
-        }
-    }
+    ) {}
 
     private function checkTypeContest()
     {

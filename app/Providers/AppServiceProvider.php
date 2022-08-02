@@ -3,12 +3,15 @@
 namespace App\Providers;
 
 use App\Services\Manager\FMenu\MenuManager;
+use App\Services\Traits\RepositorySetup;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Menu;
+
 class AppServiceProvider extends ServiceProvider
 {
+    use RepositorySetup;
     /**
      * Register any application services.
      *
@@ -16,9 +19,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this -> app -> singleton('menu' , function () {
-            return new MenuManager();
-        });
+        $this->callApp();
     }
 
     /**
