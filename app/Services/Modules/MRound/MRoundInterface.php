@@ -11,4 +11,6 @@ interface MRoundInterface
     public function apiIndex();
 
     public function store($request);
+
+    public function find($id);
 }

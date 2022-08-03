@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\Builder\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -16,6 +17,10 @@ class Answer extends Model
         'question_id',
         'is_correct',
     ];
+    public function newEloquentBuilder($query)
+    {
+        return new Builder($query);
+    }
     // protected $hidden = ['is_correct'];
     // public function questions()
     // {

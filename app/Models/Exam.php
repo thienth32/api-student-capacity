@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\Builder\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -13,7 +14,10 @@ class Exam extends Model
     protected $fillable = ['name', 'description', 'max_ponit', 'ponit', 'external_url', 'round_id', 'time', 'time_type', "type"];
     use HasFactory;
 
-
+    public function newEloquentBuilder($query)
+    {
+        return new Builder($query);
+    }
 
     public function round()
     {
