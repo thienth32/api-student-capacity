@@ -74,8 +74,10 @@ Route::prefix('recruitments')->group(function () {
     Route::get('', [RecruitmentController::class, 'apiShow']);
     Route::get('{id}', [RecruitmentController::class, 'apiDetail']);
 });
+
 Route::prefix('posts')->group(function () {
     Route::get('', [PostController::class, 'apiShow']);
     Route::get('{slug}', [PostController::class, 'apiDetail']);
 });
+
 Route::get('rating-major/{slug}', [RankUserController::class, 'getRatingUser']);
