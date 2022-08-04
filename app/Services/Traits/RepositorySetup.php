@@ -12,13 +12,13 @@ trait RepositorySetup
 {
     public function callApp()
     {
-       $this->configMenuAdmin();
-       $this->callRepositoryApp();
+        $this->configMenuAdmin();
+        $this->callRepositoryApp();
     }
 
     private function configMenuAdmin()
     {
-        $this -> app -> singleton('menu' , function () {
+        $this->app->singleton('menu', function () {
             return new MenuManager();
         });
     }

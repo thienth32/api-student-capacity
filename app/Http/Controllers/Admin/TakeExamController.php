@@ -103,7 +103,6 @@ class TakeExamController extends Controller
     }
     public function takeExamStudentSubmit(Request $request, DB $dB)
     {
-
         $validate = Validator::make(
             $request->all(),
             [
@@ -200,23 +199,22 @@ class TakeExamController extends Controller
         if ($validate->fails())
             return $this->responseApi(true, $validate->errors());
         try {
-            $round = $this->roundModel->find($request->round_id);
+            $round = $this->round->find($request->round_id);
             if (is_null($round)) return $this->responseApi(false, 'Lỗi truy cập hệ thống !!');
             $exam = $this->exam->whereGet(['round_id' => $request->round_id])->pluck('id');
             if (is_null($exam)) return $this->responseApi(false, 'Lỗi truy cập hệ thống !!');
             $resultCapacity = $this->resultCapacity->whereInExamUser($exam, $user_id);
-
-
             if ($resultCapacity) {
                 if ($resultCapacity->status == config('util.STATUS_RESULT_CAPACITY_DOING')) {
                     return $this->responseApi(true, config('util.STATUS_RESULT_CAPACITY_DOING'), ['message' => "Đang làm !!"]);
                 } else {
-                    return $this->responseApi(true, config('util.STATUS_RESULT_CAPACITY_DONE'), ['message' => "Đã làm !!"]);
+                    return $this->responseApi(true, config('util.STATUS_RESULT_CAPACITY_DONE'), ['result' => $resultCapacity, 'message' => "Đã làm !!"]);
                 }
             } else {
                 return $this->responseApi(false, "Chưa làm !!");
             }
         } catch (\Throwable $th) {
+            // dd($th);
             return $this->responseApi(false, 'Lỗi hệ thống !!');
         }
     }
@@ -264,7 +262,7 @@ class TakeExamController extends Controller
             return $this->responseApi(true, $validate->errors());
         $dB::beginTransaction();
         try {
-            $round = $this->roundModel->find($request->round_id);
+            $round = $this->round->find($request->round_id);
             if (is_null($round)) return $this->responseApi(false, 'Lỗi truy cập hệ thống !!');
             $exam = $this->exam->whereGet(['round_id' => $request->round_id])->pluck('id');
             if (is_null($exam)) return $this->responseApi(false, 'Lỗi truy cập hệ thống !!');
@@ -296,12 +294,39 @@ class TakeExamController extends Controller
             }
         } catch (\Throwable $th) {
             $dB::rollBack();
-            // return $this->responseApi(false, 'Lỗi hệ thống !!');
-            dd($th);
+            return $this->responseApi(false, 'Lỗi hệ thống !!');
+            // dd($th);
         }
     }
 
-
+    /**
+     * 
+     * @OA\Post(
+     *     path="/api/v1/take-exam/student-capacity-submit",
+     *     description="",
+     *     tags={"TakeExam","Capacity","Api V1"},
+     *     summary="Authorization",
+     *     security={{"bearer_token":{}}},
+     *     @OA\RequestBody(
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                  @OA\Property(
+     *                      type="string",
+     *                      property="exam_id",
+     *                  ),
+     *                   @OA\Property(
+     *                      type="string",
+     *                      property="data",
+     *                  ),
+     *              
+     *              ),
+     *          ),
+     *      ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
     public function takeExamStudentCapacitySubmit(Request $request)
     {
         $falseAnswer = 0;
@@ -309,11 +334,8 @@ class TakeExamController extends Controller
         $score = 0;
         $user_id = auth('sanctum')->user()->id;
         $exam = $this->exam->findById($request->exam_id, ['questions'], ['max_ponit', 'ponit'], false);
-        // dump($request->data);
-
         $score_one_question = $exam->max_ponit / $exam->questions_count;
         $donotAnswer = $exam->questions_count - count($request->data);
-
         foreach ($request->data as $key => $data) {
             if ($data['type'] == 0) {
                 $answer = $this->answer->findById(
@@ -347,7 +369,6 @@ class TakeExamController extends Controller
                 }
             }
         }
-
         $resultCapacity =  $this->resultCapacity->findByUserExam($user_id, $request->exam_id);
         $resultCapacity->update([
             'scores' => $score,
