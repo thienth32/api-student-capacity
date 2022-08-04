@@ -79,3 +79,9 @@ Route::prefix('posts')->group(function () {
     Route::get('{slug}', [PostController::class, 'apiDetail']);
 });
 Route::get('rating-major/{slug}', [RankUserController::class, 'getRatingUser']);
+
+Route::prefix('rating')->group(function () {
+
+    Route::get('capacity', function ($id) {
+    });
+});
