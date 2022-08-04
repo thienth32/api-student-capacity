@@ -338,18 +338,22 @@ class TakeExamController extends Controller
         $donotAnswer = $exam->questions_count - count($request->data);
         foreach ($request->data as $key => $data) {
             if ($data['type'] == 0) {
-                $answer = $this->answer->findById(
-                    $data['answerId'],
-                    [
-                        'question_id' => $data['questionId'],
-                        'is_correct' => config('util.ANSWER_TRUE'),
-                    ]
-                );
-                if ($answer && $data['answerId'] === $answer->id) {
-                    $score += $score_one_question;
-                    $trueAnswer += 1;
+                if ($data['answerId'] == null) {
+                    $donotAnswer += 1;
                 } else {
-                    $falseAnswer += 1;
+                    $answer = $this->answer->findById(
+                        $data['answerId'],
+                        [
+                            'question_id' => $data['questionId'],
+                            'is_correct' => config('util.ANSWER_TRUE'),
+                        ]
+                    );
+                    if ($answer && $data['answerId'] === $answer->id) {
+                        $score += $score_one_question;
+                        $trueAnswer += 1;
+                    } else {
+                        $falseAnswer += 1;
+                    }
                 }
             } else {
                 if (count($data['answerIds']) <= 1) {
