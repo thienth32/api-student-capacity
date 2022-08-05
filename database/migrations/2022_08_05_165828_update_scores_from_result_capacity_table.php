@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('take_exams', function (Blueprint $table) {
-            $table->dropColumn('final_point');
+        Schema::table('result_capacity', function (Blueprint $table) {
+            $table->dropColumn('scores');
         });
     }
 
@@ -25,8 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('take_exams', function (Blueprint $table) {
-            $table->integer('final_point');
+        Schema::table('result_capacity', function (Blueprint $table) {
+            $table->float('scores', 8, 2)->nullable();
         });
     }
 };
