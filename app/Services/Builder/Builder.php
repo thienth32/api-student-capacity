@@ -4,9 +4,11 @@ namespace App\Services\Builder;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 
 class Builder extends  EloquentBuilder
 {
+
     public function missingDate($column = null, $miss_date = null, $time = null)
     {
         if ($miss_date == null) return $this;
