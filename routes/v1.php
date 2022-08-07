@@ -55,6 +55,7 @@ Route::prefix('take-exam')->group(function () {
 
     Route::post('check-student-capacity', [AdminTakeExamController::class, 'checkStudentCapacity']);
     Route::post('student-capacity', [AdminTakeExamController::class, 'takeExamStudentCapacity']);
+    Route::post('student-capacity-submit', [AdminTakeExamController::class, 'takeExamStudentCapacitySubmit']);
 });
 
 
@@ -64,11 +65,7 @@ Route::prefix('round')->group(function () {
 
 
 Route::prefix('users')->group(function () {
-
-    // in ra tất cả cuộc thi đã tham gia hoặc chưa tham gia
     Route::get('contest-joined', [ContestController::class, 'apiIndex']);
-
-    // in ra tất cả cuộc thi đã tham gia
     Route::get('contest-joined-1', [UserController::class, 'contestJoined']);
     Route::post('edit', [UserController::class, 'updateDetailUser']);
 });

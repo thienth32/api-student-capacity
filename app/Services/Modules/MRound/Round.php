@@ -4,7 +4,7 @@ namespace App\Services\Modules\MRound;
 
 use App\Services\Traits\TUploadImage;
 
-class Round
+class Round implements MRoundInterface
 {
     use TUploadImage;
     public $round;
@@ -52,7 +52,7 @@ class Round
                     'contest',
                     'type_exam',
                 ]);
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
     }
@@ -60,8 +60,8 @@ class Round
     public function index()
     {
         try {
-            return $this->getList() ->withCount(['results','exams','posts','sliders'])->paginate(request('limit') ?? 5);
-        }catch (\Exception $e) {
+            return $this->getList()->withCount(['results', 'exams', 'posts', 'sliders'])->paginate(request('limit') ?? 5);
+        } catch (\Exception $e) {
             return false;
         }
     }
@@ -70,7 +70,7 @@ class Round
     {
         try {
             return $this->getList()->get();
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
     }
@@ -91,7 +91,9 @@ class Round
         $round->contest_id = $request->contest_id;
         $round->type_exam_id = $request->type_exam_id;
         $round->save();
-
     }
-
+    public function find($id, $with = [])
+    {
+        return $this->round::whereId($id)->with($with)->first();
+    }
 }

@@ -29,11 +29,11 @@
      *              @OA\Schema(
      *                  @OA\Property(
      *                      type="string",
-     *                      property="title",
+     *                      property="exam_id",
      *                  ),
      *                  @OA\Property(
-     *                      type="number",
-     *                      property="age",
+     *                      type="string",
+     *                      property="data",
      *                  ),
      *              ),
      *          ),
