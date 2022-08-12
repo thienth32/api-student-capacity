@@ -372,7 +372,7 @@
                                                 \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
                                             <span class="badge bg-primary">Sắp diễn ra </span>
                                         @elseif ((request('type') ?? 0) == config('util.TYPE_CONTEST') &&
-                                            \Carbon\Carbon::parse($contest->end_register_time)->toDateTimeString() >
+                                                \Carbon\Carbon::parse($contest->end_register_time)->toDateTimeString() >
                                                 \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
                                             <span class="badge bg-success">Đang mở đăng kí </span>
                                         @elseif (\Carbon\Carbon::parse($contest->date_start)->toDateTimeString() >
@@ -385,7 +385,7 @@
                                             <span class="badge bg-danger"> Đã diễn ra </span>
                                         @endif
                                     @else
-                                        <span class="badge bg-danger"> Đã diễn ra </span>
+                                        <span class="badge bg-danger"> Đã kết thúc  </span>
                                     @endif
 
                                 </td>

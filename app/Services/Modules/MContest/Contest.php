@@ -84,6 +84,7 @@ class Contest implements MContestInterface
                 "enterprise",
                 "judges"
             ])
+            ->orderBy('id','desc')
             ->paginate(request('limit') ?? 10);
     }
 

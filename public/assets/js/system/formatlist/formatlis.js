@@ -304,6 +304,7 @@ const formatPage = {
             }, time);
         }
         $(select).on("change", function () {
+
             var that = this;
             let id = $(this).data("id");
             $(this).prop("disabled", true);
