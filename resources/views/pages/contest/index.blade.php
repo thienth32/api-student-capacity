@@ -44,17 +44,14 @@
             </div>
             <div class=" col-lg-6">
                 <div class=" d-flex flex-row-reverse bd-highlight">
-
                     <a href="{{ route('admin.contest.create') . '?type=' . (request('type') ?? 0) }}"
                         class=" btn btn-primary">Tạo mới {{ $contest_type_text }}
                     </a>
                 </div>
             </div>
         </div>
-        {{--  --}}
 
         <div class="row card-format">
-
             <div class=" col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="   form-group ">
                     <label class="form-label">Chuyên ngành </label>
@@ -94,39 +91,34 @@
                         class=" ip-search form-control">
                 </div>
             </div>
-            <div class="col-12 row ">
-                <div class="col-12 row">
-                    <div class="mb-0">
-                        <label class="form-label">Thời gian </label>
-                        <input class="form-control " placeholder="Pick date rage" id="kt_daterangepicker_2" />
-                    </div>
 
-                    @if (request('type') != config('util.TYPE_TEST'))
-                        <div class="col-12 mt-4 ">
-                            <label for="" class="form-label">Hoạt động {{ $contest_type_text }} </label>
-                            <select class="select-date-time-contest form-select mb-2 select2-hidden-accessible"
-                                data-control="select2" data-hide-search="true" tabindex="-1" aria-hidden="true">
-                                <option class="form-control">Chọn hoạt động {{ $contest_type_text }}</option>
-                                {{-- <option class="form-control" @selected(request()->has('upcoming_date')) value="upcoming_date">Sắp diễn ra
-                                </option> --}}
-                                <option class="form-control" @selected(request()->has('pass_date')) value="pass_date"> Sắp và đang
-                                    diễn
-                                    ra
-                                </option>
-                                <option class="form-control" @selected(request()->has('registration_date')) value="registration_date"> Đang
-                                    mở
-                                    đăng kí
-                                </option>
-                                <option class="form-control" @selected(request()->has('miss_date')) value="miss_date">Đã diễn ra
-                                </option>
-
-                            </select>
-                        </div>
-                    @endif
-
-
-                </div>
+            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
+                <label class="form-label">Thời gian </label>
+                <input class="form-control " placeholder="Pick date rage" id="kt_daterangepicker_2" />
             </div>
+
+            @if (request('type') != config('util.TYPE_TEST'))
+                <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
+                    <label for="" class="form-label">Hoạt động {{ $contest_type_text }} </label>
+                    <select class="select-date-time-contest form-select mb-2 select2-hidden-accessible"
+                        data-control="select2" data-hide-search="true" tabindex="-1" aria-hidden="true">
+                        <option class="form-control">Chọn hoạt động {{ $contest_type_text }}</option>
+                        {{-- <option class="form-control" @selected(request()->has('upcoming_date')) value="upcoming_date">Sắp diễn ra
+                        </option> --}}
+                        <option class="form-control" @selected(request()->has('pass_date')) value="pass_date"> Sắp và đang
+                            diễn
+                            ra
+                        </option>
+                        <option class="form-control" @selected(request()->has('registration_date')) value="registration_date"> Đang
+                            mở
+                            đăng kí
+                        </option>
+                        <option class="form-control" @selected(request()->has('miss_date')) value="miss_date">Đã diễn ra
+                        </option>
+
+                    </select>
+                </div>
+            @endif
         </div>
 
         {{--  --}}

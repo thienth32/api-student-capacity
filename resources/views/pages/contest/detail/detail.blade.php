@@ -171,7 +171,7 @@
             <div class=" card card-flush ">
                 <div class="row p-5 d-flex justify-content-center align-items-center ">
                     @hasanyrole(config('util.ROLE_ADMINS') . '|judge')
-                        <div class="col-md-3">
+                        <div class="col-md-3 mb-5">
                             <a
                                 href="{{ route('admin.contest.detail.round', ['id' => $contest->id], 'contest_id=' . $contest->id) }}">
                                 <div class="bg-gray-100 bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">
