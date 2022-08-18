@@ -3,7 +3,7 @@
 @section('page-title', 'Quản lý bài viết')
 @section('content')
     <div class="card card-flush p-4">
-        <div class="row">
+        <div class="row d-flex justify-content-between">
             <div class="col-lg-6">
                 <div class="d-flex justify-content-start">
                     <h1>
@@ -48,15 +48,11 @@
                 </div>
 
             </div>
-            <div class=" col-lg-6">
-                <div class=" d-flex flex-row-reverse bd-highlight">
-
+            <div class="col">
+                <div class=" d-flex flex-row justify-content-end bd-highlight">
                     <a href="{{ route('admin.post.create') }}" class=" btn btn-primary">Tạo mới bài viết
                     </a>
-                </div>
-                <div class=" d-flex flex-row-reverse bd-highlight mt-3">
-
-                    <a href="{{ route('admin.post.insert') }}" class=" btn btn-primary">Tạo mới bài viết bên ngoài
+                    <a href="{{ route('admin.post.insert') }}" class=" btn btn-outline-primary">Tạo mới bài viết bên ngoài
                     </a>
                 </div>
             </div>
