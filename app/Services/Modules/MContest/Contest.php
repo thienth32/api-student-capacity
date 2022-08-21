@@ -2,6 +2,7 @@
 
 namespace App\Services\Modules\MContest;
 
+use App\Models\JudgeRound;
 use App\Models\Major;
 use App\Models\Contest as ModelContest;
 use App\Models\Team;
@@ -19,6 +20,7 @@ class Contest implements MContestInterface
         private Major $major,
         private Team $team,
         private Judge $judge,
+        private JudgeRound $judge_round,
         private Carbon $carbon,
     ) {
     }
@@ -26,16 +28,17 @@ class Contest implements MContestInterface
     private function getList($flagCapacity, $request)
     {
         $with = [];
-
+        $user = auth()->user();
         if (!$flagCapacity) $with = [
             'major',
             'teams',
-            'rounds' => function ($q) {
+            'rounds' => function ($q) use ($user) {
                 return $q->with([
-                    'teams' => function ($q) {
-                        return $q->with('members');
-                    }
-                ]);
+                        'teams' => function ($q) {
+                            return $q->with('members');
+                        },
+                        'judges'
+                    ]);
             },
             'enterprise',
             'judges'
@@ -58,15 +61,20 @@ class Contest implements MContestInterface
         $now = $this->carbon::now('Asia/Ho_Chi_Minh');
         $contest =  $this->contest::when($request->has('contest_soft_delete'), function ($q) {
             return $q->onlyTrashed();
+        })->when($user->hasRole('judge'), function ($q, $v) {
+            return $q->whereIn('id', array_unique($this->judge::where('user_id', auth()->user()->id)->pluck('contest_id')->toArray()));
         });
-        if($request->has('q')) $contest ->search($request->q ?? null, ['name'], true);
-        if($request->has('miss_date')) $contest ->missingDate('register_deadline', $request->miss_date ?? null, $now->toDateTimeString());
-        if($request->has('pass_date')) $contest ->passDate('register_deadline', $request->pass_date ?? null, $now->toDateTimeString());
-        if($request->has('registration_date')) $contest ->registration_date('end_register_time', $request->registration_date ?? null, $now->toDateTimeString());
-        if($request->has('status')) $contest ->status($request->status);
-        if($request->has('sort') && $request->has('sort_by')) $contest ->sort(($request->sort == 'asc' ? 'asc' : 'desc'), $request->sort_by ?? null, 'contests');
-        if($request->has('start_time') && $request->has('end_time')) $contest ->hasDateTimeBetween('date_start', $request->start_time ?? null, $request->end_time ?? null);
-        if($request->has('major_id')) $contest  ->hasRequest(['major_id' => $request->major_id ?? null]);
+
+        $contest->where(function ($contest) use ($request,$now) {
+            if($request->has('q')) $contest ->search($request->q ?? null, ['name'], true);
+            if($request->has('miss_date')) $contest ->missingDate('register_deadline', $request->miss_date ?? null, $now->toDateTimeString());
+            if($request->has('pass_date')) $contest ->passDate('register_deadline', $request->pass_date ?? null, $now->toDateTimeString());
+            if($request->has('registration_date')) $contest ->registration_date('end_register_time', $request->registration_date ?? null, $now->toDateTimeString());
+            if($request->has('status')) $contest ->status($request->status);
+            if($request->has('sort') && $request->has('sort_by')) $contest ->sort(($request->sort == 'asc' ? 'asc' : 'desc'), $request->sort_by ?? null, 'contests');
+            if($request->has('start_time') && $request->has('end_time')) $contest ->hasDateTimeBetween(['date_start','register_deadline','start_register_time','end_regidter_time'], $request->start_time ?? null, $request->end_time ?? null);
+            if($request->has('major_id')) $contest  ->hasRequest(['major_id' => $request->major_id ?? null]);
+        });
         return $contest
             ->with($with)
             ->withCount('teams');
@@ -85,7 +93,7 @@ class Contest implements MContestInterface
                 "judges"
             ])
             ->orderBy('id','desc')
-            ->paginate(request('limit') ?? 10);
+            ->paginate(request('limit') ?? 5);
     }
 
     public function apiIndex($flagCapacity = false)

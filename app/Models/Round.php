@@ -93,18 +93,22 @@ class Round extends Model
     {
         return $this->belongsToMany(Judge::class, 'judges_rounds', 'round_id', 'judge_id')->with(['user', 'evaluation']);
     }
+
     public function teams()
     {
         return $this->belongsToMany(Team::class, 'round_teams', 'round_id', 'team_id')->wherePivot('status', 1); //đã công bố
     }
+
     public function add_Teams()
     {
         return $this->belongsToMany(Team::class, 'round_teams', 'round_id', 'team_id')->wherePivot('status', 2); //chưa công bố
     }
+
     public function sliders()
     {
         return $this->morphMany(Slider::class, 'sliderable');
     }
+
     public function posts()
     {
         return $this->morphMany(Post::class, 'postable');

@@ -210,7 +210,7 @@
                                                 action="{{ route('admin.round.detail.team.takeExam.update', ['id' => $round->id, 'teamId' => $team->id, 'takeExamId' => $judgesResult->id]) }}"
                                                 method="post">
                                                 @csrf
-                                                @method('put')
+                                                @method('PUT')
                                                 <input type="hidden" name="ponit"
                                                     value=" {{ $judgesResult->exam->ponit }}">
                                                 <div class="mb-3">
@@ -254,15 +254,21 @@
                                                 </div>
                                                 <div class="form-group mb-10 ">
                                                     @if ($judgesResult->final_point != null)
-                                                        <button onclick="notification()" type="button" name="" id=""
-                                                            class="btn btn-success btn-lg btn-block">Cập nhật điểm
+                                                        <button type="submit" onsubmit="return confirm('Điểm đã xác nhận. bạn có muốn thay đổi không!')"   name="" id=""
+                                                            class=" btn btn-success btn-lg btn-block">Cập nhật điểm
                                                         </button>
                                                     @else
-                                                        <button
-                                                            onclick="waitingNotice({{ count($judgesResult->evaluation) }}, {{ count($round->judges) }})"
-                                                            type="button" name="" id="submitResult"
-                                                            class="btn btn-success btn-lg btn-block">Xác nhận điểm
-                                                        </button>
+                                                        @if(count($judgesResult->evaluation) ==  count($round->judges))
+                                                            <button
+                                                                type="submit" name="" id="submitResult"
+                                                                class=" btn btn-success btn-lg btn-block">Xác nhận điểm
+                                                            </button>
+                                                        @else
+                                                            <p
+                                                                type="button" name="" id="submitResult"
+                                                                class=" btn btn-success btn-lg btn-block">Ban giám khảo chưa hoàn thiện điểm ( {{count($judgesResult->evaluation)  . " / " . count($round->judges)}} )
+                                                            </p>
+                                                        @endif
                                                     @endif
 
                                                 </div>

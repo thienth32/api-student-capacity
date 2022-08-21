@@ -254,7 +254,7 @@
                                                 @hasanyrole(config('util.ROLE_ADMINS'))
                                                     <td>
                                                         <a href="{{ route('admin.round.detail.team.judge', ['id' => $round->id, 'teamId' => $team->id]) }}"
-                                                            class="badge bg-primary p-3"> Vào xác nhận.
+                                                            class="badge bg-primary p-3"> Xác nhận điểm thi.
                                                         </a>
                                                     </td>
                                                 @endhasanyrole

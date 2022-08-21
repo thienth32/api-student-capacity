@@ -45,8 +45,8 @@
                                     <option value="{{ $teamSelect->id }}"> {{ $teamSelect->name }}</option>
                                 @endforeach
                             @else --}}
-                            @foreach ($teams as $teamSelect)
-                                <option value="{{ $teamSelect->id }}"> {{ $teamSelect->name }}</option>
+                            @foreach ($roundTeams as $team)
+                                <option value="{{ $team->team->id }}"> {{ $team->team->name }}</option>
                             @endforeach
 
                         </select>
@@ -70,6 +70,12 @@
                                 <th>#</th>
                                 <th>Ảnh</th>
                                 <th>Tên đội</th>
+                                <th>Trạng thái làm bài </th>
+                                @if(auth()->user()->hasRole('judge'))
+                                    <th>Chấm bài </th>
+                                @else
+                                   <th> Xác nhận điểm thi</th>
+                                @endif
                                 @hasanyrole(config('util.ROLE_ADMINS'))
                                     <th>Thao tác</th>
                                 @endhasanyrole
@@ -79,21 +85,39 @@
                             @php
                                 $key = 1;
                             @endphp
-                            @foreach ($round->teams as $team)
+                            @foreach ($roundTeams as $team)
                                 <tr>
                                     <td>{{ $key++ }}</td>
 
                                     <td><img class='w-100px'
-                                            src="{{ $team->image ? $team->image : 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
+                                            src="{{ $team->team->image ? $team->team->image : 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
                                             {{-- src="{{ Storage::disk('s3')->has($team->image) ? Storage::disk('s3')->temporaryUrl($team->image, now()->addMinutes(5)) : 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}" --}} alt=""></td>
                                     <td> <a
-                                            href="{{ route('admin.round.detail.team.detail', ['id' => $round->id, 'teamId' => $team->id]) }}">
-                                            {{ $team->name }}</a>
+                                            href="{{ route('admin.round.detail.team.detail', ['id' => $round->id, 'teamId' => $team->team->id]) }}">
+                                            {{ $team->team->name }}</a>
+                                    </td>
+                                    <td>
 
+                                        @if(isset($team->takeExam) && $team->takeExam->status == 2)
+                                            Đã nộp bài
+                                        @else
+                                            Chưa nộp bài
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if(auth()->user()->hasRole('judge'))
+                                            <a class="badge bg-primary p-3"
+                                               href="{{ route('admin.round.detail.team.make.exam', ['id' => $round->id, 'teamId' => $team->team->id]) }}">Chấm
+                                                bài</a>
+                                        @else
+                                            <a href="{{ route('admin.round.detail.team.judge', ['id' => $round->id, 'teamId' => $team->team->id]) }}"
+                                               class="badge bg-primary p-3"> Xác nhận điểm thi.
+                                            </a>
+                                        @endif
                                     </td>
                                     @hasanyrole(config('util.ROLE_ADMINS'))
                                         <td>
-                                            <a href="{{ route('admin.round.detail.team.detach', ['id' => $round->id, 'team_id' => $team->id]) }}"
+                                            <a href="{{ route('admin.round.detail.team.detach', ['id' => $round->id, 'team_id' => $team->team->id]) }}"
                                                 class="btn btn-danger deleteTeams"><i class="fas fa-trash-alt"></i></a>
                                         </td>
                                     @endhasanyrole

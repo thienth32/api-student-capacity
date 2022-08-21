@@ -42,6 +42,7 @@
                     </a>
                 </h1>
             </div>
+            @hasanyrole(config('util.ROLE_ADMINS'))
             <div class=" col-lg-6">
                 <div class=" d-flex flex-row-reverse bd-highlight">
 
@@ -50,6 +51,7 @@
                     </a>
                 </div>
             </div>
+            @endhasrole
         </div>
         {{--  --}}
 
@@ -295,6 +297,64 @@
                                 <!--end::Svg Icon-->
                             </span>
                         </th>
+                        <th scope="col">Thời gian bắt đầu đăng ký
+                            <span role="button" data-key="start_register_time"
+                                  class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
+                                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
+                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    style="width: 14px !important ; height: 14px !important" width="24px"
+                                    height="24px" viewBox="0 0 24 24" version="1.1">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <polygon points="0 0 24 0 24 24 0 24" />
+                                        <rect fill="#000000" opacity="0.3"
+                                              transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
+                                              x="5" y="5" width="2" height="12"
+                                              rx="1" />
+                                        <path
+                                            d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
+                                            fill="#000000" fill-rule="nonzero" />
+                                        <rect fill="#000000" opacity="0.3"
+                                              transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
+                                              x="17" y="7" width="2" height="12"
+                                              rx="1" />
+                                        <path
+                                            d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
+                                            fill="#000000" fill-rule="nonzero"
+                                            transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
+                                    </g>
+                                </svg>
+                                <!--end::Svg Icon-->
+                            </span>
+                        </th>
+                        <th scope="col">Thời gian kết thúc đăng ký
+                            <span role="button" data-key="end_register_time"
+                                  class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
+                                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
+                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    style="width: 14px !important ; height: 14px !important" width="24px"
+                                    height="24px" viewBox="0 0 24 24" version="1.1">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <polygon points="0 0 24 0 24 24 0 24" />
+                                        <rect fill="#000000" opacity="0.3"
+                                              transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
+                                              x="5" y="5" width="2" height="12"
+                                              rx="1" />
+                                        <path
+                                            d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
+                                            fill="#000000" fill-rule="nonzero" />
+                                        <rect fill="#000000" opacity="0.3"
+                                              transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
+                                              x="17" y="7" width="2" height="12"
+                                              rx="1" />
+                                        <path
+                                            d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
+                                            fill="#000000" fill-rule="nonzero"
+                                            transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
+                                    </g>
+                                </svg>
+                                <!--end::Svg Icon-->
+                            </span>
+                        </th>
                         <th colspan="2"></th>
                     </tr>
                 </thead>
@@ -303,6 +363,7 @@
                         $total = $contests->total();
                     @endphp
                     @forelse ($contests as $key => $contest)
+
                         <tr>
                             @if (request()->has('sort'))
                                 <th scope="row">
@@ -390,9 +451,11 @@
 
                                 </td>
                             @endif
-                            <td>{{ $contest->date_start }}</td>
-                            <td>{{ $contest->register_deadline }}</td>
-                            @hasanyrole(config('util.ROLE_ADMINS'))
+                                <td>{{ $contest->date_start }}</td>
+                                <td>{{ $contest->register_deadline }}</td>
+                                <td>{{ $contest->start_register_time }}</td>
+                                <td>{{ $contest->end_register_time }}</td>
+                                @hasanyrole(config('util.ROLE_ADMINS'))
                                 <td>
                                     <div class="btn-group dropstart">
                                         <button type="button" class="btn   btn-sm dropdown-toggle" data-bs-toggle="dropdown"
@@ -536,6 +599,32 @@
                                 </td>
                             @endhasrole
                         </tr>
+                        @if($contest ->type == 0 && $contest->rounds_count > 0)
+                        <tr >
+                            <td colspan="12">
+                                <table class="table table-row-dashed table-row-gray-500 gy-5 gs-5 mb-0">
+                                    <thead>
+                                    <tr class="fw-bold fs-6 text-gray-800">
+                                        <th scope="col"> Vòng thi </th>
+                                        <th scope="col">Xem chi tiết </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach($contest -> rounds as $round)
+                                            @if(auth()->user()->hasRole(['admin','super admin']) || in_array(auth()->id(),$round->judges->pluck('user_id')->toArray()))
+                                                <tr>
+                                                    <th scope="row">{{ $round -> name }}</th>
+                                                    <td><a href="{{ route('admin.round.detail',[ 'id' => $round -> id ]) }}">Xem chi tiết</a> </td>
+                                                </tr>
+                                            @endif
+                                        @endforeach
+
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        @endif
                     @empty
                     @endforelse
                 </tbody>
@@ -544,9 +633,9 @@
         </div>
     </div>
 
-
 @endsection
 @section('page-script')
+
     <script>
         let url = "/admin/contests?{{ request()->has('type') ? 'type=' . request('type') : '' }}&";
         const _token = "{{ csrf_token() }}";

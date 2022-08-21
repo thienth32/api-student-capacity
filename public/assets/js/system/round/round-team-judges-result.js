@@ -37,13 +37,7 @@ $(document).ready(function () {
         $("#judges").toggle(300);
     });
 });
-function waitingNotice(a, b) {
-    if (a < b) {
-        alert("Vẫn còn ban giám khảo đang chấm , vui lòng đợi điểm .");
-        return false;
-    }
-    return $("form").submit();
-}
+
 
 function notification() {
     let choice = confirm("Điểm đã xác nhận. bạn có muốn thay đổi không!");

@@ -23,7 +23,7 @@ Route::get('dashboard/api-cuoc-thi', [DashboardController::class, 'chartCompetit
 
 Route::prefix('rounds')->group(function () {
 
-    Route::get('', [RoundController::class, 'index'])->name('admin.round.list');
+    Route::get('', [RoundController::class, 'index'])->name('admin.round.list')->middleware('role_admin');
 
 
     Route::group([
@@ -81,19 +81,26 @@ Route::prefix('rounds')->group(function () {
             //     // Route::get('detach/{team_id}', [RoundController::class, 'detachTeam'])->name('admin.round.detail.team.detach');
             // });
 
-            Route::group([
-                'middleware' => 'role_admin:judge'
-            ], function () {
+//            Route::group([
+//                'middleware' => 'role_admin:judge'
+//            ], function () {
                 // Chấm điểm thi
                 Route::prefix('take_exam')->group(function () {
-                    Route::put('{teamId}/update/{takeExamId}', [RoundController::class, 'roundDetailTeamTakeExamUpdate'])->name('admin.round.detail.team.takeExam.update');
-                    Route::get('{teamId}/make', [RoundController::class, 'roundDetailTeamMakeExam'])->name('admin.round.detail.team.make.exam');
-                    Route::post('{teamId}/make', [RoundController::class, 'roundDetailFinalTeamMakeExam'])->name('admin.round.detail.team.final.make.exam');
-                    Route::put('{teamId}/make', [RoundController::class, 'roundDetailUpdateTeamMakeExam'])->name('admin.round.detail.team.update.make.exam');
-                    // Ban giám khảo
-                    Route::get('{teamId}', [RoundController::class, 'roundDetailTeamTakeExam'])->name('admin.round.detail.team.takeExam');
+                    Route::put('{teamId}/update/{takeExamId}', [RoundController::class, 'roundDetailTeamTakeExamUpdate'])
+                        ->name('admin.round.detail.team.takeExam.update')
+                        ->middleware('role_admin');
+                    Route::group([
+                        'middleware' => 'role_admin:judge'
+                    ], function () {
+                        Route::get('{teamId}/make', [RoundController::class, 'roundDetailTeamMakeExam'])->name('admin.round.detail.team.make.exam');
+                        Route::post('{teamId}/make', [RoundController::class, 'roundDetailFinalTeamMakeExam'])->name('admin.round.detail.team.final.make.exam');
+                        Route::put('{teamId}/make', [RoundController::class, 'roundDetailUpdateTeamMakeExam'])->name('admin.round.detail.team.update.make.exam');
+                        // Ban giám khảo
+                        Route::get('{teamId}', [RoundController::class, 'roundDetailTeamTakeExam'])->name('admin.round.detail.team.takeExam');
+
+                    });
                 });
-            });
+//            });
             Route::group([
                 'middleware' => 'role_admin'
             ], function () {
@@ -122,7 +129,6 @@ Route::prefix('rounds')->group(function () {
         });
     });
 });
-
 
 
 Route::group([

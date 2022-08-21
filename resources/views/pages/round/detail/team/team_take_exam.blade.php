@@ -63,8 +63,9 @@
                                 <tr>
                                     <td></td>
                                     <td>
-                                              <a href="{{ route('dowload.file') }}?url={{  $takeExam->exam->external_url }}"
-                                                class="badge bg-primary p-3">Tải về</a>
+                                              <a
+                                                  href="{{ route('dowload.file') }}?url={{  $takeExam->exam->external_url }}"
+                                                  class="badge bg-primary p-3">Tải về</a>
                                     </td>
                                     <td>
                                         @if ($takeExam->status == config('util.TAKE_EXAM_STATUS_UNFINISHED'))
@@ -72,13 +73,13 @@
                                         @elseif($takeExam->status == config('util.TAKE_EXAM_STATUS_CANCEL'))
                                             <span class="badge bg-danger  p-3"> Bài thi bị hủy </span>
                                         @else
-                                            {{-- @if (\Storage::disk('s3')->has($takeExam->result_url)) --}}
-                                            <a href="{{ route('dowload.file') }}?url={{ $takeExam->result_url }}"
+                                             @if ($takeExam->file_url)
+                                            <a href="{{ route('dowload.file') }}?url={{ $takeExam->file_url }}"
                                                 class="badge bg-primary p-3">Tải về</a>
-                                            {{-- @endif --}}
-                                            @if ($takeExam->file_url != null)
-                                                <a href="{{ route('dowload.file') }}?url={{ $takeExam->file_url }}"
-                                                    class="badge bg-primary p-3">link dự phòng</a>
+                                             @endif
+                                            @if ($takeExam->result_url != null)
+                                                <a href="{{ $takeExam->result_url }}"
+                                                    class="badge bg-primary p-3">Link bài làm </a>
                                             @endif
                                         @endif
                                     </td>
