@@ -26,7 +26,7 @@
                                 <div class="symbol symbol-30px me-5 mb-8">
                                     <span class="symbol-label">
                                         <!--begin::Svg Icon | path: icons/duotune/medicine/med005.svg-->
-                                        <i class="las fs-2x text-primary la-award"></i>                                    
+                                        <i class="las fs-2x text-primary la-award"></i>
                                         <!--end::Svg Icon-->
                                     </span>
                                 </div>
@@ -107,6 +107,7 @@
             <!--end::Body-->
         </div>
     </div>
+
     <div class="col-xl-8 mb-5 mb-xl-10">
         <!--begin::Chart widget 18-->
         <div class="card card-flush h-xl-100">
@@ -137,14 +138,80 @@
         </div>
         <!--end::Chart widget 18-->
     </div>
+    <div class="col-xl-12 mb-5 mb-xl-10">
+        <!--begin::Chart widget 18-->
+        <div class="card card-flush h-xl-100">
+            <!--begin::Header-->
+            <div class="card-header pt-7">
+                <!--begin::Title-->
+                <h3 class="card-title align-items-start flex-column">
+                    <span class="card-label fw-bolder text-gray-800">Lịch trình cuộc thi  </span>
+                    <span class="text-gray-400 mt-1 fw-bold fs-6"></span>
+                </h3>
+                <!--end::Title-->
+                <!--begin::Toolbar-->
+                <div class="card-toolbar">
+                    <!--begin::Daterangepicker(defined in src/js/layout/app.js)-->
+                    <!--end::Daterangepicker-->
+                </div>
+                <!--end::Toolbar-->
+            </div>
+            <!--end::Header-->
+            <!--begin::Body-->
+            <div class="card-body d-flex flex-column justify-content-between pt-3 pb-5">
+                <div id="kt_docs_vistimeline_style"></div>
+            </div>
+            <!--end: Card Body-->
+        </div>
+        <!--end::Chart widget 18-->
+    </div>
 </div>
 <input type="hidden" id="url_chart_data" value="{{route('dashboard.chart-competity')}}">
 @endsection
 @section('page-script')
 <script src="{{asset('assets/js/system/dashboard/chart-cuoc-thi.js')}}"></script>
 <script src="{{asset('assets/js/system/dashboard/dashboard.js')}}"></script>
+<link href="assets/plugins/custom/vis-timeline/vis-timeline.bundle.css" rel="stylesheet" type="text/css" />
+<script src="assets/plugins/custom/vis-timeline/vis-timeline.bundle.js"></script>
 <script>
     dashboardPage.initPage();
+
+    var container = document.getElementById("kt_docs_vistimeline_style");
+
+    // Generate HTML content
+    const getContent = (title, img) => {
+        const item = document.createElement('div');
+        const name = document.createElement('div');
+        const nameClasses = ['fw-bolder', 'mb-2'];
+        name.classList.add(...nameClasses);
+        name.innerHTML = title;
+
+        const image = document.createElement('img');
+        image.setAttribute('src', img);
+
+        const symbol = document.createElement('div');
+        const symbolClasses = ['symbol', 'symbol-circle', 'symbol-30'];
+        symbol.classList.add(...symbolClasses);
+        symbol.appendChild(image);
+
+        item.appendChild(name);
+        item.appendChild(symbol);
+
+        return item;
+    }
+
+    // note that months are zero-based in the JavaScript Date object
+    var items = new vis.DataSet(@json($contests));
+
+    var options = {
+        editable: true,
+        margin: {
+            item: 20,
+            axis: 40,
+        },
+    };
+
+    var timeline = new vis.Timeline(container, items, options);
 </script>
-    
+
 @endsection

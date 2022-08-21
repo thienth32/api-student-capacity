@@ -717,7 +717,7 @@
                                     <div class="fw-bolder d-flex align-items-center fs-5">{{ auth()->user()->name }}
                                         <span class="badge badge-light-success fw-bolder fs-8 px-2 py-1 ms-2"></span>
                                     </div>
-                                    <a href="#"
+                                    <a
                                         class="fw-bold text-muted text-hover-primary fs-7">{{ auth()->user()->email }}</a>
                                 </div>
                                 <!--end::Username-->
@@ -725,21 +725,21 @@
                         </div>
                         <!--end::Menu item-->
                         <!--begin::Menu separator-->
-                        <div class="separator my-2"></div>
+{{--                        <div class="separator my-2"></div>--}}
                         <!--end::Menu separator-->
                         <!--begin::Menu item-->
-                        <div class="menu-item px-5">
-                            <a href="#" class="menu-link px-5">My Profile</a>
-                        </div>
-                        <!--end::Menu item-->
-                        <!--begin::Menu separator-->
-                        <div class="separator my-2"></div>
-                        <!--end::Menu separator-->
-                        <!--begin::Menu item-->
-                        <div class="menu-item px-5 my-1">
-                            <a href="#" class="menu-link px-5">Account
-                                Settings</a>
-                        </div>
+{{--                        <div class="menu-item px-5">--}}
+{{--                            <a href="#" class="menu-link px-5">My Profile</a>--}}
+{{--                        </div>--}}
+{{--                        <!--end::Menu item-->--}}
+{{--                        <!--begin::Menu separator-->--}}
+{{--                        <div class="separator my-2"></div>--}}
+{{--                        <!--end::Menu separator-->--}}
+{{--                        <!--begin::Menu item-->--}}
+{{--                        <div class="menu-item px-5 my-1">--}}
+{{--                            <a href="#" class="menu-link px-5">Account--}}
+{{--                                Settings</a>--}}
+{{--                        </div>--}}
                         <!--end::Menu item-->
                         <!--begin::Menu item-->
                         <div class="menu-item px-5">
