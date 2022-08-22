@@ -813,50 +813,13 @@
                         <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-bold w-200px py-3" data-kt-menu="true">
                             <!--begin::Heading-->
                             <div class="menu-item px-3">
-                                <div class="menu-content text-muted pb-2 px-3 fs-7 text-uppercase">Contacts</div>
+                                <div class="menu-content text-muted pb-2 px-3 fs-7 text-uppercase">Hỗ trợ </div>
                             </div>
                             <!--end::Heading-->
                             <!--begin::Menu item-->
-                            <div class="menu-item px-3">
-                                <a href="#" class="menu-link px-3" data-bs-toggle="modal" data-bs-target="#kt_modal_users_search">Add Contact</a>
-                            </div>
-                            <!--end::Menu item-->
-                            <!--begin::Menu item-->
-                            <div class="menu-item px-3">
-                                <a href="#" class="menu-link flex-stack px-3" data-bs-toggle="modal" data-bs-target="#kt_modal_invite_friends">Invite Contacts
-                                    <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Specify a contact email to send an invitation"></i></a>
-                            </div>
-                            <!--end::Menu item-->
-                            <!--begin::Menu item-->
-                            <div class="menu-item px-3" data-kt-menu-trigger="hover" data-kt-menu-placement="right-start">
-                                <a href="#" class="menu-link px-3">
-                                    <span class="menu-title">Groups</span>
-                                    <span class="menu-arrow"></span>
-                                </a>
-                                <!--begin::Menu sub-->
-                                <div class="menu-sub menu-sub-dropdown w-175px py-4">
-                                    <!--begin::Menu item-->
-                                    <div class="menu-item px-3">
-                                        <a href="#" class="menu-link px-3" data-bs-toggle="tooltip" title="Coming soon">Create Group</a>
-                                    </div>
-                                    <!--end::Menu item-->
-                                    <!--begin::Menu item-->
-                                    <div class="menu-item px-3">
-                                        <a href="#" class="menu-link px-3" data-bs-toggle="tooltip" title="Coming soon">Invite Members</a>
-                                    </div>
-                                    <!--end::Menu item-->
-                                    <!--begin::Menu item-->
-                                    <div class="menu-item px-3">
-                                        <a href="#" class="menu-link px-3" data-bs-toggle="tooltip" title="Coming soon">Settings</a>
-                                    </div>
-                                    <!--end::Menu item-->
-                                </div>
-                                <!--end::Menu sub-->
-                            </div>
-                            <!--end::Menu item-->
                             <!--begin::Menu item-->
                             <div class="menu-item px-3 my-1">
-                                <a href="#" class="menu-link px-3" data-bs-toggle="tooltip" title="Coming soon">Settings</a>
+                                <a href="#" class="menu-link px-3" data-bs-toggle="tooltip" title="Đang cập nhật chức năng ">Cài đặt </a>
                             </div>
                             <!--end::Menu item-->
                         </div>
@@ -882,7 +845,7 @@
             <!--begin::Card body-->
             <div class="card-body" id="kt_drawer_chat_messenger_body">
                 <!--begin::Messages-->
-                <div class="scroll-y me-n5 pe-5" data-kt-element="messages" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-height="auto" data-kt-scroll-dependencies="#kt_drawer_chat_messenger_header, #kt_drawer_chat_messenger_footer" data-kt-scroll-wrappers="#kt_drawer_chat_messenger_body" data-kt-scroll-offset="0px">
+                <div class="scroll-y me-n5 pe-5 " data-kt-element="messages" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-height="auto" data-kt-scroll-dependencies="#kt_drawer_chat_messenger_header, #kt_drawer_chat_messenger_footer" data-kt-scroll-wrappers="#kt_drawer_chat_messenger_body" data-kt-scroll-offset="0px">
                     <!--begin::Message(in)-->
                     <div class="d-flex justify-content-start mb-10">
                         <!--begin::Wrapper-->
@@ -904,6 +867,36 @@
                             <!--end::User-->
                             <!--begin::Text-->
                             <div class="p-5 rounded bg-light-info text-dark fw-bold mw-lg-400px text-start" data-kt-element="message-text">Xin chào {{ auth() -> user() -> name }}</div>
+                            <!--end::Text-->
+                        </div>
+                        <!--end::Wrapper-->
+                    </div>
+                    <div class="show-chat-d">
+
+                    </div>
+                    <div style="display: none !important;" class="chat-hide d-flex justify-content-start mb-10">
+                        <!--begin::Wrapper-->
+                        <div class="d-flex flex-column align-items-start">
+                            <!--begin::User-->
+                            <div class="d-flex align-items-center mb-2">
+                                <!--begin::Avatar-->
+                                <div class="symbol symbol-35px symbol-circle">
+                                    <img alt="Pic" src="assets/media/avatars/300-25.jpg" />
+                                </div>
+                                <!--end::Avatar-->
+                                <!--begin::Details-->
+                                <div class="ms-3">
+                                    <a href="#" class="fs-5 fw-bolder text-gray-900 text-hover-primary me-1">Admin</a>
+                                    <span class="text-muted fs-7 mb-1">Now</span>
+                                </div>
+                                <!--end::Details-->
+                            </div>
+                            <!--end::User-->
+                            <!--begin::Text-->
+                            <div class="p-5 rounded bg-light-info text-dark fw-bold mw-lg-400px text-start" d
+                                 ata-kt-element="message-text">
+                                ...
+                            </div>
                             <!--end::Text-->
                         </div>
                         <!--end::Wrapper-->
@@ -939,7 +932,6 @@
                             <!--end::Wrapper-->
                         </div>
                     @endforeach
-
                     <!--end::Message(out)-->
 
                 </div>
@@ -947,7 +939,19 @@
             </div>
             <!--end::Card body-->
             <!--begin::Card footer-->
-{{--            <div class="card-footer pt-4" id="kt_drawer_chat_messenger_footer">--}}
+            <div class="card-footer pt-4" id="kt_drawer_chat_messenger_footer">
+                <div class="row">
+                    @foreach (config('support.support-qs') as $supppport)
+                        <p
+                            data-key="{{ $supppport['key'] }}"
+                            role="button"
+                            data-mess="{{ $supppport['mess'] }}"
+                            class="click-send-data col-6   mt-1">
+                            {{ $supppport['mess'] }}
+                        </p>
+                    @endforeach
+                </div>
+
 {{--                <!--begin::Input-->--}}
 {{--                <textarea class="form-control form-control-flush mb-3" rows="1" data-kt-element="input" placeholder="Type a message"></textarea>--}}
 {{--                <!--end::Input-->--}}
@@ -964,10 +968,11 @@
 {{--                    <!--end::Send-->--}}
 {{--                </div>--}}
 {{--                <!--end::Toolbar-->--}}
-{{--            </div>--}}
+            </div>
             <!--end::Card footer-->
         </div>
         <!--end::Messenger-->
     </div>
 
 </div>
+

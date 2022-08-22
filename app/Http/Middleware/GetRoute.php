@@ -20,13 +20,13 @@ class GetRoute
             if ($request->session()->has('url-history')) {
                 $request->session()->push('url-history', [
                     "time" => date("Y-m-d H:i:s"),
-                    "url" => $request->url()
+                    "url" => $request->fullUrl()
                 ]);
             }else{
                 $request->session()->put('url-history', [
                     [
                         "time" => date("Y-m-d H:i:s"),
-                        "url" => $request->url()
+                        "url" => $request->fullUrl()
                     ]
                 ]);
             }

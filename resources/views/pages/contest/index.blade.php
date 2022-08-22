@@ -8,7 +8,7 @@
             <div class=" col-lg-6">
 
                 <h1>Quản lý {{ $contest_type_text }}
-                    <span role="button" class="refresh-btn svg-icon svg-icon-primary svg-icon-2x">
+                    <span role="button" data-bs-toggle="tooltip" title="Tải lại trang " class="refresh-btn svg-icon svg-icon-primary svg-icon-2x">
                         <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Update.svg--><svg
                             xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                             height="24px" viewBox="0 0 24 24" version="1.1">
@@ -23,7 +23,7 @@
                     </span>
                     <a href="{{ route('admin.contest.soft.delete', 'contest_soft_delete=1') . '&type=' . (request('type') ?? 0) }}">
 
-                        <span class=" svg-icon svg-icon-primary svg-icon-2x">
+                        <span data-bs-toggle="tooltip" title="Kho lưu trữ bản xóa " class=" svg-icon svg-icon-primary svg-icon-2x">
                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Files/Deleted-folder.svg--><svg
                                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                                 height="24px" viewBox="0 0 24 24" version="1.1">
@@ -135,7 +135,7 @@
         <div>
             <div class="back">
 
-                <span class="btn-hide svg-icon svg-icon-primary svg-icon-2x">
+                <span data-bs-toggle="tooltip" title="Đóng lọc" class="btn-hide svg-icon svg-icon-primary svg-icon-2x">
                     <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Stockholm-icons/Navigation/Angle-up.svg--><svg
                         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                         height="24px" viewBox="0 0 24 24" version="1.1">
@@ -148,7 +148,7 @@
                     </svg>
                 </span>
 
-                <span class="btn-show svg-icon svg-icon-primary svg-icon-2x">
+                <span data-bs-toggle="tooltip" title="Mở lọc" class="btn-show svg-icon svg-icon-primary svg-icon-2x">
                     <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Angle-down.svg--><svg
                         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                         height="24px" viewBox="0 0 24 24" version="1.1">
@@ -297,6 +297,7 @@
                                 <!--end::Svg Icon-->
                             </span>
                         </th>
+                        @if( request('type') != config('util.TYPE_TEST'))
                         <th scope="col">Thời gian bắt đầu đăng ký
                             <span role="button" data-key="start_register_time"
                                   class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
@@ -355,6 +356,7 @@
                                 <!--end::Svg Icon-->
                             </span>
                         </th>
+                        @endif
                         <th colspan="2"></th>
                     </tr>
                 </thead>
@@ -453,8 +455,10 @@
                             @endif
                                 <td>{{ $contest->date_start }}</td>
                                 <td>{{ $contest->register_deadline }}</td>
+                                @if( request('type') != config('util.TYPE_TEST'))
                                 <td>{{ $contest->start_register_time }}</td>
                                 <td>{{ $contest->end_register_time }}</td>
+                                @endif
                                 @hasanyrole(config('util.ROLE_ADMINS'))
                                 <td>
                                     <div class="btn-group dropstart">

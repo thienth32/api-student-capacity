@@ -86,3 +86,5 @@ Route::prefix('rating')->group(function () {
     Route::get('capacity', function ($id) {
     });
 });
+
+Route::get('support-capacity',[\App\Http\Controllers\Admin\SupportController::class,'support']);

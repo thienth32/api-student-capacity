@@ -71,10 +71,10 @@ class Contest implements MContestInterface
             if($request->has('pass_date')) $contest ->passDate('register_deadline', $request->pass_date ?? null, $now->toDateTimeString());
             if($request->has('registration_date')) $contest ->registration_date('end_register_time', $request->registration_date ?? null, $now->toDateTimeString());
             if($request->has('status')) $contest ->status($request->status);
-            if($request->has('sort') && $request->has('sort_by')) $contest ->sort(($request->sort == 'asc' ? 'asc' : 'desc'), $request->sort_by ?? null, 'contests');
             if($request->has('start_time') && $request->has('end_time')) $contest ->hasDateTimeBetween(['date_start','register_deadline','start_register_time','end_regidter_time'], $request->start_time ?? null, $request->end_time ?? null);
             if($request->has('major_id')) $contest  ->hasRequest(['major_id' => $request->major_id ?? null]);
         });
+        if($request->has('sort') && $request->has('sort_by')) $contest ->sort(($request->sort == 'asc' ? 'asc' : 'desc'), $request->sort_by ?? null, 'contests');
         return $contest
             ->with($with)
             ->withCount('teams');
@@ -243,5 +243,12 @@ class Contest implements MContestInterface
     public function getContest()
     {
         return $this->contest;
+    }
+
+    public function getContestRunning()
+    {
+        return $this->contest::where('date_start' , '<' , date('Y-m-d H:i:'))
+            ->where('register_deadline','>',date('Y-m-d H:i'))
+            ->get(['name','id']);
     }
 }
