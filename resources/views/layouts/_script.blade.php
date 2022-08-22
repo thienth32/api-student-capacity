@@ -19,6 +19,10 @@
 
 {{-- Chat js --}}
 <script>
+    $('.sp-show-1').show();
+    setTimeout(function () {
+        $('.sp-show-1').hide();
+    },2000);
     $('.click-send-data').on('click',function () {
         var youChat = `
                 <div class="d-flex justify-content-end mb-10">
@@ -51,7 +55,6 @@
         `;
         $('.chat-hide').show();
         $('.show-chat-d').append(youChat);
-
         if($(this).data('key') == 1)
         {
             $('.chat-hide').attr('style','display:none !important');
@@ -86,7 +89,8 @@
                         </div>
                 `
             );
-        }else{
+        }else
+        {
             $.ajax({
                 url: `api/public/support-capacity?support_id=`+$(this).data('key'),
                 method: "GET",
@@ -166,7 +170,5 @@
                 }
             });
         }
-
-
     });
 </script>

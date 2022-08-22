@@ -44,7 +44,7 @@
             <!--end::Navbar-->
             <!--begin::Toolbar wrapper-->
             <div class="d-flex align-items-stretch flex-shrink-0">
-                <div class="d-flex align-items-center ms-1 ms-lg-3">
+                <div style="position: relative;" class="d-flex align-items-center ms-1 ms-lg-3">
                     <!--begin::Menu wrapper-->
                     <div class="btn btn-icon btn-icon-muted btn-active-light btn-active-color-primary w-30px h-30px w-md-40px h-md-40px position-relative" id="kt_drawer_chat_toggle">
                         <!--begin::Svg Icon | path: icons/duotune/communication/com012.svg-->
@@ -59,6 +59,31 @@
                         <span class="bullet bullet-dot bg-danger h-15px w-15px position-absolute translate-middle top-0 start-50 animation-blink"></span>
                     </div>
                     <!--end::Menu wrapper-->
+                    <style>
+                        .sp-show-1{
+                            position: absolute;
+                            width: 160px;
+                            background: #f5f8fa;
+                            left: -160px;
+                            z-index: 50;
+                            top: 10px;
+                            padding: 5px;
+                            border: 2px solid #f5f8fa;
+                            display: none;
+                        }
+                        .sp-show-1:after {
+                            content: "";
+                            position: absolute;
+                            border: 10px solid transparent;
+                            border-left: 10px solid #f5f8fa;
+                            border-right: none;
+                            bottom: 0px;
+                            right: -10px;
+                        }
+                    </style>
+                    <div class="sp-show-1">
+                        Bạn cần giúp gì ?
+                    </div>
                 </div>
 
                 <!--begin::Notifications-->
