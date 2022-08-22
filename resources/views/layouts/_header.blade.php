@@ -56,7 +56,7 @@
 												</svg>
 											</span>
                         <!--end::Svg Icon-->
-                        <span class="bullet bullet-dot bg-success h-6px w-6px position-absolute translate-middle top-0 start-50 animation-blink"></span>
+                        <span class="bullet bullet-dot bg-danger h-15px w-15px position-absolute translate-middle top-0 start-50 animation-blink"></span>
                     </div>
                     <!--end::Menu wrapper-->
                 </div>
