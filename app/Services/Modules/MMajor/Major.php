@@ -54,13 +54,12 @@ class Major implements MMajorInterface
 
     public function getRankUserCapacity($slug)
     {
-        $major = $this->major::whereSlug($slug)->first();
-        $major->load(['contests' => function ($q) {
+        $major = $this->major::whereSlug($slug)->with(['contests' => function ($q) {
             return $q->where('type', config('util.TYPE_TEST'))
                 ->with(['resultCapacity' => function ($q) {
-                    return $q->orderByDesc('scores')->where('status', config('util.STATUS_RESULT_CAPACITY_DONE'));
+                    return $q->where('result_capacity.status', config('util.STATUS_RESULT_CAPACITY_DONE'))->orderByDesc('scores');
                 }]);
-        }]);
-        dd($major->toArray());
+        }])->first();
+        return $major->contests;
     }
 }

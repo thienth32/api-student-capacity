@@ -87,7 +87,6 @@ class RankUserController extends Controller
     {
         try {
             if (!$dataRating = $this->major->getRankUserCapacity($slug)) return $this->responseApi(false, 'Không tìm thấy chuyên ngành ' . $slug . '!');
-
             return $this->responseApi(
                 true,
                 $dataRating

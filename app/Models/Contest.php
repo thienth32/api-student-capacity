@@ -131,13 +131,18 @@ class Contest extends Model
     {
         return $this->hasManyDeep(
             ResultCapacity::class,
-            [Round::class, Exam::class],
+            [
+                Round::class,
+                Exam::class
+            ],
             [
                 'contest_id',
                 'round_id',
                 'exam_id',
             ]
-        );
+        )->with(['user' => function ($q) {
+            return $q->select(['id', 'name', 'email', 'status']);
+        }]);
     }
 
     public function newEloquentBuilder($query)
