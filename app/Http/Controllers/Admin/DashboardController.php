@@ -8,6 +8,8 @@ use App\Models\Team;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Menu;
+use Carbon\Carbon;
+
 class DashboardController extends Controller
 {
     public function index(Request $request)
@@ -25,12 +27,24 @@ class DashboardController extends Controller
                                 ->whereHas('roles', function($q){
                                     $q->where('id', config('util.STUDENT_ROLE'));
                                 })->count();
+        $dt = Carbon::now('Asia/Ho_Chi_Minh');
+
+        $contests = Contest::where('register_deadline','>',$dt->subDays(7)->toDateTimeString())->orderBy('id','desc')
+            ->get()
+            ->map(function ($q) {
+                return [
+                    "start" => $q->date_start,
+                    "end" => $q->register_deadline,
+                    "content" => $q->name
+                ];
+            });
         return view('dashboard.index', compact(
             'totalContestRegistering',
             'totalContestGoingOn',
             'totalContestDone',
             'totalTeamActive',
-            'totalStudentAccount'
+            'totalStudentAccount',
+            'contests'
         ));
     }
 

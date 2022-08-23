@@ -82,6 +82,9 @@ Route::prefix('posts')->group(function () {
 Route::get('rating-major/{slug}', [RankUserController::class, 'getRatingUser']);
 
 Route::prefix('rating')->group(function () {
-
     Route::get('major-capacity/{slug}', [RankUserController::class, 'getRankUserCapacity']);
 });
+
+
+
+Route::get('support-capacity', [\App\Http\Controllers\Admin\SupportController::class, 'support']);
