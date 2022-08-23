@@ -933,9 +933,6 @@
                         </div>
                         <!--end::Wrapper-->
                     </div>
-                    <div style="transform: rotate(180deg);" class="show-chat-d">
-
-                    </div>
                     <div style="transform: rotate(180deg);display: none !important;"
                         class="chat-hide d-flex justify-content-start mb-10">
                         <!--begin::Wrapper-->
@@ -964,6 +961,9 @@
                             <!--end::Text-->
                         </div>
                         <!--end::Wrapper-->
+                    </div>
+                    <div style="transform: rotate(180deg);" class="show-chat-d">
+
                     </div>
                     <!--end::Message(in)-->
                     <!--begin::Message(out)-->

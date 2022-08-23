@@ -20,10 +20,10 @@
 {{-- Chat js --}}
 <script>
     $('.sp-show-1').show();
-    setTimeout(function () {
+    setTimeout(function() {
         $('.sp-show-1').hide();
-    },2000);
-    $('.click-send-data').on('click',function () {
+    }, 2000);
+    $('.click-send-data').on('click', function() {
         var youChat = `
                 <div class="d-flex justify-content-end mb-10">
                             <!--begin::Wrapper-->
@@ -55,9 +55,8 @@
         `;
         $('.chat-hide').show();
         $('.show-chat-d').append(youChat);
-        if($(this).data('key') == 1)
-        {
-            $('.chat-hide').attr('style','display:none !important');
+        if ($(this).data('key') == 1) {
+            $('.chat-hide').attr('style', 'transform: rotate(180deg);display:none !important');
             $('.show-chat-d').append(
                 `
                         <div class="d-flex justify-content-start mb-10">
@@ -89,22 +88,21 @@
                         </div>
                 `
             );
-        }else
-        {
+        } else {
             $.ajax({
-                url: `api/public/support-capacity?support_id=`+$(this).data('key'),
+                url: `api/public/support-capacity?support_id=` + $(this).data('key'),
                 method: "GET",
-                success: function (data) {
-                    $('.chat-hide').attr('style','display:none !important');
-                    if(data.payload.arr)
-                    {
-                        var adminChat = data.payload.data.map(function (data) {
+                success: function(data) {
+                    $('.chat-hide').attr('style',
+                        'transform: rotate(180deg);display:none !important');
+                    if (data.payload.arr) {
+                        var adminChat = data.payload.data.map(function(data) {
                             return `
                                 <li>Cuộc thi ${data.name}</li>
 
                             `;
                         }).join(" ");
-                    }else{
+                    } else {
                         var adminChat = data.payload;
                     }
                     $('.show-chat-d').append(
@@ -136,8 +134,9 @@
                 `
                     );
                 },
-                error: function (jqXHR, exception) {
-                    $('.chat-hide').attr('style','display:none !important');
+                error: function(jqXHR, exception) {
+                    $('.chat-hide').attr('style',
+                        'transform: rotate(180deg);display:none !important');
 
                     $('.show-chat-d').append(
                         `
