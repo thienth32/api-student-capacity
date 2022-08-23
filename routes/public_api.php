@@ -83,6 +83,5 @@ Route::get('rating-major/{slug}', [RankUserController::class, 'getRatingUser']);
 
 Route::prefix('rating')->group(function () {
 
-    Route::get('capacity', function ($id) {
-    });
+    Route::get('major-capacity/{slug}', [RankUserController::class, 'getRankUserCapacity']);
 });

@@ -126,6 +126,20 @@ class Contest extends Model
             ]
         );
     }
+
+    public function resultCapacity()
+    {
+        return $this->hasManyDeep(
+            ResultCapacity::class,
+            [Round::class, Exam::class],
+            [
+                'contest_id',
+                'round_id',
+                'exam_id',
+            ]
+        );
+    }
+
     public function newEloquentBuilder($query)
     {
         return new Builder($query);

@@ -5,13 +5,13 @@ namespace App\Services\Modules\MMajor;
 class Major implements MMajorInterface
 {
     public function __construct(public \App\Models\Major $major)
-    { }
+    {
+    }
 
     public function getRatingUserByMajorSlug($slug)
     {
         if (!$major = $this->major::whereSlug($slug)
-             ->first()
-        ) return false;
+            ->first()) return false;
         $rank = 0;
         $maxPoin = 0;
         return $major
@@ -49,5 +49,18 @@ class Major implements MMajorInterface
                     'user' => $q->user,
                 ];
             });
+    }
+
+
+    public function getRankUserCapacity($slug)
+    {
+        $major = $this->major::whereSlug($slug)->first();
+        $major->load(['contests' => function ($q) {
+            return $q->where('type', config('util.TYPE_TEST'))
+                ->with(['resultCapacity' => function ($q) {
+                    return $q->orderByDesc('scores')->where('status', config('util.STATUS_RESULT_CAPACITY_DONE'));
+                }]);
+        }]);
+        dd($major->toArray());
     }
 }
