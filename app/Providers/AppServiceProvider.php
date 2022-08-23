@@ -33,6 +33,6 @@ class AppServiceProvider extends ServiceProvider
         Arr::macro('listColumnOfTable', function (string $table) {
             return Schema::getColumnListing($table);
         });
-        // Model::preventLazyLoading(! app()->isProduction());
+        // Model::preventLazyLoading(!app()->isProduction());
     }
 }
