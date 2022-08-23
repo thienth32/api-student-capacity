@@ -47,12 +47,9 @@
             </div>
             <div class=" col-lg-6">
                 <div class=" d-flex flex-row-reverse bd-highlight">
-
-
                     <a href="{{ route('admin.teams.create') }}" class=" btn btn-primary">Tạo
                         mới đội thi
                     </a>
-
                 </div>
             </div>
         </div>
