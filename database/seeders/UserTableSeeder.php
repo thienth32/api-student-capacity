@@ -19,16 +19,15 @@ class UserTableSeeder extends Seeder
         $users = [
 
             [
-                'name' => "Nguyễn Ngọc Anh",
-                'email' => 'anhnnph17682@fpt.edu.vn'
+                'name' => "vandtph22521",
+                'email' => 'vandtph22521@fpt.edu.vn'
             ],
-
-
         ];
         foreach ($users as $u) {
             $model = new User();
             $model->fill($u);
             $model->save();
+            $model->assignRole('super admin');
         }
     }
 }

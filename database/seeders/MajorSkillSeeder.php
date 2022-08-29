@@ -17,7 +17,6 @@ class MajorSkillSeeder extends Seeder
     public function run()
     {
         DB::table('major_skills')->insert([
-
             [
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s'), 'major_id' => 14, 'skill_id' => 78
