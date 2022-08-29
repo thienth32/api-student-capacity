@@ -16,7 +16,7 @@
 
 {{-- Set up plugin global --}}
 <script src="assets/js/system/configplugins/configplugins.js"></script>
-
+{{--<script src='//fw-cdn.com/1947335/2726151.js' chat='true'></script>--}}
 {{-- Chat js --}}
 <script>
     $('.sp-show-1').show();
