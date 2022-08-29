@@ -92,7 +92,7 @@ class Contest implements MContestInterface
                 "enterprise",
                 "judges"
             ])
-            ->orderBy('id', 'desc')
+            ->orderBy('date_start', 'desc')
             ->paginate(request('limit') ?? 5);
     }
 
