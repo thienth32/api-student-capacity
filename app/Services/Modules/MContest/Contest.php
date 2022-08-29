@@ -34,11 +34,11 @@ class Contest implements MContestInterface
             'teams',
             'rounds' => function ($q) use ($user) {
                 return $q->with([
-                        'teams' => function ($q) {
-                            return $q->with('members');
-                        },
-                        'judges'
-                    ]);
+                    'teams' => function ($q) {
+                        return $q->with('members');
+                    },
+                    'judges'
+                ]);
             },
             'enterprise',
             'judges'
@@ -61,20 +61,20 @@ class Contest implements MContestInterface
         $now = $this->carbon::now('Asia/Ho_Chi_Minh');
         $contest =  $this->contest::when($request->has('contest_soft_delete'), function ($q) {
             return $q->onlyTrashed();
-        })->when($user->hasRole('judge'), function ($q, $v) {
+        })->when(isset($user) && $user->hasRole('judge'), function ($q, $v) {
             return $q->whereIn('id', array_unique($this->judge::where('user_id', auth()->user()->id)->pluck('contest_id')->toArray()));
         });
 
-        $contest->where(function ($contest) use ($request,$now) {
-            if($request->has('q')) $contest ->search($request->q ?? null, ['name'], true);
-            if($request->has('miss_date')) $contest ->missingDate('register_deadline', $request->miss_date ?? null, $now->toDateTimeString());
-            if($request->has('pass_date')) $contest ->passDate('register_deadline', $request->pass_date ?? null, $now->toDateTimeString());
-            if($request->has('registration_date')) $contest ->registration_date('end_register_time', $request->registration_date ?? null, $now->toDateTimeString());
-            if($request->has('status')) $contest ->status($request->status);
-            if($request->has('start_time') && $request->has('end_time')) $contest ->hasDateTimeBetween(['date_start','register_deadline','start_register_time','end_regidter_time'], $request->start_time ?? null, $request->end_time ?? null);
-            if($request->has('major_id')) $contest  ->hasRequest(['major_id' => $request->major_id ?? null]);
+        $contest->where(function ($contest) use ($request, $now) {
+            if ($request->has('q')) $contest->search($request->q ?? null, ['name'], true);
+            if ($request->has('miss_date')) $contest->missingDate('register_deadline', $request->miss_date ?? null, $now->toDateTimeString());
+            if ($request->has('pass_date')) $contest->passDate('register_deadline', $request->pass_date ?? null, $now->toDateTimeString());
+            if ($request->has('registration_date')) $contest->registration_date('end_register_time', $request->registration_date ?? null, $now->toDateTimeString());
+            if ($request->has('status')) $contest->status($request->status);
+            if ($request->has('start_time') && $request->has('end_time')) $contest->hasDateTimeBetween(['date_start', 'register_deadline', 'start_register_time', 'end_regidter_time'], $request->start_time ?? null, $request->end_time ?? null);
+            if ($request->has('major_id')) $contest->hasRequest(['major_id' => $request->major_id ?? null]);
         });
-        if($request->has('sort') && $request->has('sort_by')) $contest ->sort(($request->sort == 'asc' ? 'asc' : 'desc'), $request->sort_by ?? null, 'contests');
+        if ($request->has('sort') && $request->has('sort_by')) $contest->sort(($request->sort == 'asc' ? 'asc' : 'desc'), $request->sort_by ?? null, 'contests');
         return $contest
             ->with($with)
             ->withCount('teams');
@@ -92,14 +92,14 @@ class Contest implements MContestInterface
                 "enterprise",
                 "judges"
             ])
-            ->orderBy('id','desc')
+            ->orderBy('id', 'desc')
             ->paginate(request('limit') ?? 5);
     }
 
     public function apiIndex($flagCapacity = false)
     {
         return $this->getList($flagCapacity, request())
-            ->where('type', config('util.TYPE_CONTEST'))
+            ->where('type', $flagCapacity ?  config('util.TYPE_TEST') : config('util.TYPE_CONTEST'))
             ->paginate(request('limit') ?? 9);
     }
 
@@ -247,8 +247,8 @@ class Contest implements MContestInterface
 
     public function getContestRunning()
     {
-        return $this->contest::where('date_start' , '<' , date('Y-m-d H:i:'))
-            ->where('register_deadline','>',date('Y-m-d H:i'))
-            ->get(['name','id']);
+        return $this->contest::where('date_start', '<', date('Y-m-d H:i:'))
+            ->where('register_deadline', '>', date('Y-m-d H:i'))
+            ->get(['name', 'id']);
     }
 }
