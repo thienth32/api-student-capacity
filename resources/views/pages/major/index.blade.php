@@ -104,7 +104,7 @@
             <table class="table table-row-bordered table-row-gray-300 gy-7  table-hover ">
                 <thead>
                     <tr>
-                        <th scope="col" width="2%">
+                        {{-- <th scope="col" width="2%">
                             <span role="button" data-key="id"
                                 class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
@@ -132,14 +132,14 @@
                                 </svg>
                                 <!--end::Svg Icon-->
                             </span>
-                        </th>
+                        </th> --}}
                         <th scope="col"> Chuyên ngành
                             <span role="button" data-key="name"
                                 class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                    style="width: 14px !important ; height: 14px !important" width="24px"
-                                    height="24px" viewBox="0 0 24 24" version="1.1">
+                                    style="width: 14px !important ; height: 14px !important" width="24px" height="24px"
+                                    viewBox="0 0 24 24" version="1.1">
                                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                         <polygon points="0 0 24 0 24 24 0 24" />
                                         <rect fill="#000000" opacity="0.3"
@@ -203,7 +203,7 @@
                             $dash = '';
                         @endphp
                         <tr>
-                            @if (request()->has('sort'))
+                            {{-- @if (request()->has('sort'))
                                 <th scope="row">
                                     @if (request('sort') == 'desc')
                                         {{ (request()->has('page') && request('page') !== 1 ? $majors->perPage() * (request('page') - 1) : 0) + $key + 1 }}
@@ -215,7 +215,7 @@
                                 <th scope="row">
                                     {{ (request()->has('page') && request('page') !== 1 ? $majors->perPage() * (request('page') - 1) : 0) + $key + 1 }}
                                 </th>
-                            @endif
+                            @endif --}}
                             <td>{{ $major->name }}
 
                             </td>
@@ -304,8 +304,7 @@
                                                     $major->sliders_count == 0 &&
                                                     $major->majorChils_count == 0 &&
                                                     $major->teams_count == 0)
-                                                    <form
-                                                        action="{{ route('admin.major.destroy', ['slug' => $major->slug]) }}"
+                                                    <form action="{{ route('admin.major.destroy', ['slug' => $major->slug]) }}"
                                                         method="post">
                                                         @csrf
                                                         @method('delete')

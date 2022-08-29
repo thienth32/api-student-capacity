@@ -168,7 +168,7 @@
                 <table class="table table-row-bordered table-row-gray-300 gy-7 table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">
+                            {{-- <th scope="col">
                                 <span role="button" data-key="id"
                                     class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                     <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
@@ -196,7 +196,7 @@
                                     </svg>
                                     <!--end::Svg Icon-->
                                 </span>
-                            </th>
+                            </th> --}}
                             <th scope="col">Nội dung câu hỏi
                                 <a
                                     href="{{ route('admin.teams', [
@@ -288,7 +288,7 @@
                                 $token = uniqid(15);
                             @endphp
                             <tr>
-                                @if (request()->has('sort'))
+                                {{-- @if (request()->has('sort'))
                                     <th scope="row">
                                         @if (request('sort') == 'desc')
                                             {{ (request()->has('page') && request('page') !== 1 ? $questions->perPage() * (request('page') - 1) : 0) + $key + 1 }}
@@ -301,7 +301,7 @@
                                         {{ (request()->has('page') && request('page') !== 1 ? $questions->perPage() * (request('page') - 1) : 0) + $key + 1 }}
                                     </th>
                                 @endif
-                                </th>
+                                </th> --}}
                                 <td style="width:30%">
                                     {!! $question->content !!}
                                     <br>

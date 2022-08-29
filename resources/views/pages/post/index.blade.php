@@ -261,7 +261,7 @@
                 <table class=" table table-hover table-responsive-md ">
                     <thead>
                         <tr>
-                            <th scope="col">
+                            {{-- <th scope="col">
                                 <a
                                     href="{{ route('admin.post.list', [
                                         'sortBy' => request()->has('sortBy') ? (request('sortBy') == 'desc' ? 'asc' : 'desc') : 'asc',
@@ -296,7 +296,7 @@
                                     </span>
                                 </a>
 
-                            </th>
+                            </th> --}}
                             <th scope="col">Tiêu đề
                                 <a
                                     href="{{ route('admin.post.list', [
@@ -392,7 +392,7 @@
                         @endphp
                         @foreach ($posts as $index => $key)
                             <tr>
-                                @if (request()->has('sortBy'))
+                                {{-- @if (request()->has('sortBy'))
                                     <th scope="row">
                                         @if (request('sortBy') == 'desc')
                                             {{ (request()->has('page') && request('page') !== 1 ? $posts->perPage() * (request('page') - 1) : 0) + $index + 1 }}
@@ -404,7 +404,7 @@
                                     <th scope="row">
                                         {{ (request()->has('page') && request('page') !== 1 ? $posts->perPage() * (request('page') - 1) : 0) + $index + 1 }}
                                     </th>
-                                @endif
+                                @endif --}}
 
 
                                 <td>
