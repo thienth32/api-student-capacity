@@ -1,16 +1,16 @@
 function dateAfterEdit(begin, end) {
-    let getTimeToday = new Date().toJSON().slice(0, 19);
+    // let getTimeToday;
     let that = this;
 
     $(this.begin).on("keyup change", function () {
         let val = $(this).val();
-        $(that.end).prop("min", function () {
+        $(that.end).attr("min", function () {
             return val;
         });
     });
     $(this.end).on("keyup change", function () {
         let val = $(this).val();
-        $(that.begin).prop("max", function () {
+        $(that.begin).attr("max", function () {
             return val;
         });
     });

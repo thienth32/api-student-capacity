@@ -30,13 +30,14 @@ class RequestsRecruitment extends FormRequest
         $rule = [
             'name' =>  $ruleName,
             'description' => 'required',
-            'start_time' => 'required|after_or_equal:today',
+            'start_time' => 'required',
             'end_time' => 'required|after:start_time',
             'amount' => 'required|numeric|min:1',
             'cost' => 'required|numeric|min:1',
         ];
         if (!$this->route()->id || $this->has('image_url'))  $rule = array_merge($rule, [
             'image' => 'required|required|mimes:jpeg,png,jpg|max:10000',
+            'start_time' => 'required|after_or_equal:today',
         ]);
         return $rule;
     }

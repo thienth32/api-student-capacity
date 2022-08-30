@@ -78,7 +78,7 @@ class Recruitment
     }
     public function index(Request $request)
     {
-        return $this->getList($request)->paginate(request('limit') ?? config('util.HOMEPAGE_ITEM_AMOUNT'));
+        return $this->getList($request)->paginate(request('limit') ?? 10);
     }
     public function find($id)
     {
