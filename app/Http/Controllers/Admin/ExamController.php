@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Round;
 use App\Models\User;
+use App\Services\Traits\TResponse;
+use App\Services\Traits\TStatus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
@@ -19,15 +21,44 @@ use Illuminate\Support\Facades\Validator;
 
 class ExamController extends Controller
 {
-    use TUploadImage;
+    use TUploadImage, TResponse;
 
     public function __construct(
         private Exam $exam,
         private Round $round,
         private Question $question,
         private DB $db
-    )
-    {}
+    ) {
+    }
+
+    public function un_status($id, $id_exam)
+    {
+        try {
+            $data = $this->updateStatus($id_exam, 0);
+            return $this->responseApi(true, $data);
+        } catch (\Throwable $th) {
+            return $this->responseApi(false, $th->getMessage());
+        }
+    }
+
+    public function re_status($id, $id_exam)
+    {
+        try {
+            $data = $this->updateStatus($id_exam, 1);
+            return $this->responseApi(true, $data);
+        } catch (\Throwable $th) {
+            return $this->responseApi(false, $th->getMessage());
+        }
+    }
+
+    private function updateStatus($id, $status)
+    {
+        if (!(auth()->user()->hasRole(config('util.ROLE_ADMINS')))) throw new \Exception("Bạn không đủ thẩm quyền ! ");
+        $exam = $this->exam::whereId($id)->withCount('resultCapacity')->first();
+        if ($exam->resultCapacity_count > 0) throw new \Exception("Không thể cập nhật trạng thái !");
+        $exam->update(['status' => $status]);
+        return $exam;
+    }
 
     public function index($id_round)
     {
@@ -45,7 +76,7 @@ class ExamController extends Controller
     public function create($id_round)
     {
         $round = $this->round::find($id_round)->load('contest');
-        if($round -> contest -> type != request('type') ?? 0) abort(404);
+        if ($round->contest->type != request('type') ?? 0) abort(404);
         if (is_null($round)) return abort(404);
         return view(
             'pages.round.detail.exam.form-add',
@@ -54,6 +85,7 @@ class ExamController extends Controller
             ]
         );
     }
+
     public function store(RequestExam $request, $id_round)
     {
         try {
@@ -62,8 +94,8 @@ class ExamController extends Controller
             $round = $this->round::find($id_round)->load('contest');
             if (is_null($round)) return abort(404);
 
-            if($round -> contest->type == 1) $type = 1;
-            if($type == 0){
+            if ($round->contest->type == 1) $type = 1;
+            if ($type == 0) {
                 $validatorContest = Validator::make(
                     $request->all(),
                     [
@@ -80,8 +112,8 @@ class ExamController extends Controller
                 if ($validatorContest->fails()) {
                     return redirect()->back()->withErrors($validatorContest)->withInput();
                 }
-            }else{
-                 $validatorCapacity = Validator::make(
+            } else {
+                $validatorCapacity = Validator::make(
                     $request->all(),
                     [
                         'time' => 'required',
@@ -98,19 +130,19 @@ class ExamController extends Controller
                 }
             }
             $dataMer = [];
-            if($type == 0) $dataMer = [
+            if ($type == 0) $dataMer = [
                 'round_id' => $id_round,
                 'external_url' => $this->uploadFile($request->external_url),
                 'type' => $type,
                 'status' => 1
             ];
-            if($type == 1)  $dataMer = [
+            if ($type == 1)  $dataMer = [
                 'round_id' => $id_round,
                 'type' => $type,
                 'status' => 1,
                 'external_url' => 'null',
-                'time' => $request -> time,
-                'time_type' => $request -> time_type,
+                'time' => $request->time,
+                'time_type' => $request->time_type,
             ];
 
             // $filename = $this->uploadFile($request->external_url);
@@ -122,7 +154,7 @@ class ExamController extends Controller
             ]), $dataMer);
 
             $this->exam::create($dataCreate);
-            if($round -> contest->type == 1) return Redirect::route('admin.contest.show.capatity', ['id' =>$round->contest->id]);
+            if ($round->contest->type == 1) return Redirect::route('admin.contest.show.capatity', ['id' => $round->contest->id]);
             return redirect()->route('admin.exam.index', ['id' => $id_round]);
         } catch (\Throwable $th) {
             Log::info($th->getMessage());
@@ -148,7 +180,7 @@ class ExamController extends Controller
 
         $round = $this->round::find($id_round);
         if (is_null($round)) return abort(404);
-        $exam = $this->exam::whereId($id)->where('round_id',$id_round)->first();
+        $exam = $this->exam::whereId($id)->where('round_id', $id_round)->first();
         if (is_null($exam)) return abort(404);
         return view(
             'pages.round.detail.exam.form-edit',
@@ -167,9 +199,9 @@ class ExamController extends Controller
         $round = $this->round::find($id_round)->load('contest');
         if (is_null($round)) return abort(404);
 
-        if($round -> contest->type == 1) $type = 1;
-        if($type == 0){
-            if($request -> has('external_url')){
+        if ($round->contest->type == 1) $type = 1;
+        if ($type == 0) {
+            if ($request->has('external_url')) {
                 $validatorContest = Validator::make(
                     $request->all(),
                     [
@@ -187,9 +219,8 @@ class ExamController extends Controller
                     return redirect()->back()->withErrors($validatorContest)->withInput();
                 }
             }
-
-        }else{
-                $validatorCapacity = Validator::make(
+        } else {
+            $validatorCapacity = Validator::make(
                 $request->all(),
                 [
                     'time' => 'required',
@@ -218,13 +249,13 @@ class ExamController extends Controller
             $examModel->name = $request->name;
             $examModel->description = $request->description;
             $examModel->max_ponit = $request->max_ponit;
-            if($request->has('time')) $examModel->time = $request->time;
-            if($request->has('time_type')) $examModel->time_type = $request->time_type;
+            if ($request->has('time')) $examModel->time = $request->time;
+            if ($request->has('time_type')) $examModel->time_type = $request->time_type;
             $examModel->ponit = $request->ponit;
             $examModel->round_id = $id_round;
             $examModel->save();
             $this->db::commit();
-            if($round -> contest->type == 1) return Redirect::route('admin.contest.show.capatity', ['id' =>$round->contest->id]);
+            if ($round->contest->type == 1) return Redirect::route('admin.contest.show.capatity', ['id' => $round->contest->id]);
             return Redirect::route('admin.exam.index', ['id' => $id_round]);
         } catch (\Throwable $th) {
             $this->db::rollBack();
@@ -238,60 +269,59 @@ class ExamController extends Controller
     public function get_by_round($id)
     {
         try {
-            $exams = $this->exam::where('round_id',$id)->where('type',1)->with(['questions' => function ($q) {
-                return $q -> with('answers');
+            $exams = $this->exam::where('round_id', $id)->where('type', 1)->with(['questions' => function ($q) {
+                return $q->with('answers');
             }])->get();
             $questions = $this->question::with([
                 'answers'
             ])->take(10)->get();
-            return response() -> json([
+            return response()->json([
                 'status' => true,
                 'payload' => $exams,
                 'question' => $questions
             ]);
         } catch (\Throwable $th) {
-             return response() -> json([
+            return response()->json([
                 'status' => false,
                 'payload' => 'Hệ thống đã xảy ra lỗi '
-            ],404);
+            ], 404);
         }
-
     }
 
     public function showQuestionAnswerExams($id)
     {
-         try {
+        try {
             $questions = $this->exam::whereId($id)
-                            ->where('type',1)
-                            ->first()
-                            ->questions()
-                            ->with([
-                                'answers','skills'
-                            ])
-                            ->status(request('status'))
-                            ->search(request('q') ?? null, ['content'])
-                            ->sort((request('sort') == 'asc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'questions')
-                            ->whenWhereHasRelationship(request('skill') ?? null, 'skills', 'skills.id')
-                            ->when(request()->has('level'), function ($q) {
-                                $q->where('rank', request('level'));
-                            })
-                            ->when(request()->has('type'), function ($q) {
-                                $q->where('type', request('type'));
-                            })
-                            ->paginate(request('limit') ?? 5);
+                ->where('type', 1)
+                ->first()
+                ->questions()
+                ->with([
+                    'answers', 'skills'
+                ])
+                ->status(request('status'))
+                ->search(request('q') ?? null, ['content'])
+                ->sort((request('sort') == 'asc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'questions')
+                ->whenWhereHasRelationship(request('skill') ?? null, 'skills', 'skills.id')
+                ->when(request()->has('level'), function ($q) {
+                    $q->where('rank', request('level'));
+                })
+                ->when(request()->has('type'), function ($q) {
+                    $q->where('type', request('type'));
+                })
+                ->paginate(request('limit') ?? 5);
             $questionsAll = $this->question::with([
-                'answers','skills'
+                'answers', 'skills'
             ])->take(10)->get();
-            return response() -> json([
+            return response()->json([
                 'status' => true,
                 'payload' => $questions,
                 'question' => $questionsAll
             ]);
         } catch (\Throwable $th) {
-             return response() -> json([
+            return response()->json([
                 'status' => false,
                 'payload' => 'Hệ thống đã xảy ra lỗi '
-            ],404);
+            ], 404);
         }
     }
 }
