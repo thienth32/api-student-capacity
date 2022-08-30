@@ -11,7 +11,7 @@ class Exam extends Model
 {
     use SoftDeletes;
     protected $table = 'exams';
-    protected $fillable = ['name', 'description', 'max_ponit', 'ponit', 'external_url', 'round_id', 'time', 'time_type', "type"];
+    protected $fillable = ['name', 'description', 'max_ponit', 'ponit', 'external_url', 'round_id', 'time', 'time_type', "type", "status"];
     use HasFactory;
 
     public function newEloquentBuilder($query)

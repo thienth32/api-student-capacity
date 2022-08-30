@@ -56,12 +56,11 @@ class MajorController extends Controller
      */
     public function apiShow($slug)
     {
-        if (!($major = $this->getMajor($slug))) return $this->responseApi(false,'Không tìm thấy major ');
+        if (!($major = $this->getMajor($slug))) return $this->responseApi(false, 'Không tìm thấy major ');
 
-        if (!($major = $this->addCollectionMajor($major))) return $this->responseApi(false,'Không lấy được major ');
+        if (!($major = $this->addCollectionMajor($major))) return $this->responseApi(false, 'Không lấy được major ');
 
-        return $this->responseApi(true,$major->first());
-
+        return $this->responseApi(true, $major->first());
     }
 
     private function getList()
@@ -69,7 +68,10 @@ class MajorController extends Controller
         try {
             $limit = 10;
             $dataMajor = Major::sort(request('sort') == 'asc' ? 'asc' : 'desc', request('sort_by') ?? null, 'majors')
-                ->withCount(['sliders','contests','majorChils','teams','parent'])
+                ->withCount(['sliders', 'contests', 'majorChils', 'teams', 'parent'])
+                ->with(['majorChils' => function ($q) {
+                    return $q->withCount(['sliders', 'contests', 'majorChils', 'teams', 'parent']);
+                }])
                 ->search(request('q') ?? null, ['name', 'slug']);
             return $dataMajor;
         } catch (\Throwable $th) {
@@ -118,7 +120,7 @@ class MajorController extends Controller
     public function apiIndex()
     {
         if ($data = $this->getList()) {
-            return $this->responseApi(true,$data->get());
+            return $this->responseApi(true, $data->get());
         }
         return $this->responseApi(false);
     }
@@ -225,8 +227,8 @@ class MajorController extends Controller
         $listSkill = Skill::all();
         $major = $this->getList()->where('slug', $slug)->first();
         $skills = $this->getList()->where('slug', $slug)->first()->skill()->paginate(6);
-       $parentSkill=$this->getList()->where('slug', $slug)->first()->skill()->get();
-        return view('pages.major.skill', compact('skills', 'major', 'listSkill','parentSkill'));
+        $parentSkill = $this->getList()->where('slug', $slug)->first()->skill()->get();
+        return view('pages.major.skill', compact('skills', 'major', 'listSkill', 'parentSkill'));
     }
     public function detachSkill($slug, $skill_id)
     {
@@ -238,7 +240,7 @@ class MajorController extends Controller
             return Redirect::back();
         }
     }
-    public function attachSkill(Request $request,$slug)
+    public function attachSkill(Request $request, $slug)
     {
         try {
             $major = Major::where('slug', $slug)->first();

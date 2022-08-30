@@ -137,7 +137,7 @@
                 <table class="table table-row-bordered table-row-gray-300 gy-7 table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">
+                            {{-- <th scope="col">
 
                                 <a
                                     href="{{ route('admin.teams', [
@@ -172,7 +172,7 @@
                                 </a>
 
 
-                            </th>
+                            </th> --}}
                             <th scope="col">Đội thi
                                 <a
                                     href="{{ route('admin.teams', [
@@ -258,7 +258,7 @@
                         @endphp
                         @forelse ($dataTeam as $index=> $key)
                             <tr>
-                                @if (request()->has('sortBy'))
+                                {{-- @if (request()->has('sortBy'))
                                     <th scope="row">
                                         @if (request('sortBy') == 'desc')
                                             {{ (request()->has('page') && request('page') !== 1 ? $dataTeam->perPage() * (request('page') - 1) : 0) + $index + 1 }}
@@ -270,8 +270,8 @@
                                     <th scope="row">
                                         {{ (request()->has('page') && request('page') !== 1 ? $dataTeam->perPage() * (request('page') - 1) : 0) + $index + 1 }}
                                     </th>
-                                @endif
-                                </th>
+                                @endif --}}
+                                {{-- </th> --}}
                                 <td>
                                     <button class="p-3" style="border:none;background:none; text-align: left;"
                                         type="button" data-bs-toggle="modal"

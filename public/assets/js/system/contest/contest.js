@@ -16,6 +16,7 @@ const contestPage = {
 
     selectChangeStatus: function () {
         $(".form-select-status").on("change", function () {
+            loadTast();
             let id = $(this).data("id");
             if ($(this).val() == 1) {
                 $.ajax({

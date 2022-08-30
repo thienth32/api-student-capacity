@@ -28,20 +28,22 @@ class SendMailController extends Controller
             $content = $this->repLaceParams([
                 'name' => $userFind->name,
                 'email' => $userFind->email,
-            ],$data['content']);
+            ], $data['content']);
             $subject = $this->repLaceParams([
                 'name' => $userFind->name,
                 'email' => $userFind->email,
-            ],$data['subject']);
+            ], $data['subject']);
 
-            $this->mail::to($userFind->email)->send(new FinnalPass([
-                'subject' => $subject,
-                'content' => $content,
-            ]));
+            $this->mail::to($userFind->email)
+                ->cc(isset($data['cc']) ? $data['cc'] : [])
+                ->send(new FinnalPass([
+                    'subject' => $subject,
+                    'content' => $content,
+                ]));
         }
     }
 
-    public function repLaceParams($dataKey , $content)
+    public function repLaceParams($dataKey, $content)
     {
         $data = str_replace('$name', $dataKey['name'], $content);
         $data = str_replace('$email', $dataKey['email'], $data);
@@ -50,7 +52,6 @@ class SendMailController extends Controller
 
     public function sendMailRoundUser(RequestSendMail $request, $id)
     {
-        dd($request->all());
         if (!$request->has('users')) return redirect()->back()->withErrors(['users' => 'Tài khoản nhận mail không thể bỏ trống !'])->withInput($request->input());
         $users = $request->users;
         $this->senMail(
@@ -58,6 +59,7 @@ class SendMailController extends Controller
             [
                 'content' => $request->content,
                 'subject' => $request->subject,
+                'cc' => isset($request->cc) ? explode(",", $request->cc) : []
             ]
         );
         return redirect()->back()->with('success', 'Gửi mail thành công ');
@@ -72,6 +74,7 @@ class SendMailController extends Controller
             [
                 'content' => $request->content,
                 'subject' => $request->subject,
+                'cc' => isset($request->cc) ? explode(",", $request->cc) : []
             ]
         );
         return redirect()->back()->with('success', 'Gửi mail thành công ');

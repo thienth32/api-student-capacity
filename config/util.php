@@ -54,4 +54,6 @@ return [
     "STATUS_RESULT_CAPACITY_DONE" => 1,
     "ANSWER_FALSE" => 0,
     "ANSWER_TRUE" => 1,
+
+    "NAME_DOCKER" => "capacity_"
 ];

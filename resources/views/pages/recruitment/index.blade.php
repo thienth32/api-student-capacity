@@ -182,7 +182,7 @@
                 <table class=" table table-hover table-responsive-md ">
                     <thead>
                         <tr>
-                            <th scope="col">
+                            {{-- <th scope="col">
                                 <a
                                     href="{{ route('admin.recruitment.list', [
                                         'sortBy' => request()->has('sortBy') ? (request('sortBy') == 'desc' ? 'asc' : 'desc') : 'asc',
@@ -217,7 +217,7 @@
                                     </span>
                                 </a>
 
-                            </th>
+                            </th> --}}
                             <th scope="col">Tiêu đề
                                 <a
                                     href="{{ route('admin.recruitment.list', [
@@ -352,7 +352,7 @@
                         @endphp
                         @foreach ($recruitments as $index => $key)
                             <tr>
-                                @if (request()->has('sortBy'))
+                                {{-- @if (request()->has('sortBy'))
                                     <th scope="row">
                                         @if (request('sortBy') == 'desc')
                                             {{ (request()->has('page') && request('page') !== 1 ? $recruitments->perPage() * (request('page') - 1) : 0) + $index + 1 }}
@@ -364,7 +364,7 @@
                                     <th scope="row">
                                         {{ (request()->has('page') && request('page') !== 1 ? $recruitments->perPage() * (request('page') - 1) : 0) + $index + 1 }}
                                     </th>
-                                @endif
+                                @endif --}}
                                 <td>
                                     {{ $key->name }}
                                 </td>

@@ -25,4 +25,6 @@ interface MContestInterface
     public function update($contest, $data);
 
     public function getContest();
+
+    public function getContestRunning();
 }
