@@ -42,6 +42,7 @@ class Major implements MMajorInterface
                 // **
                 return [
                     'user_name' => $q->user->name,
+                    'avatar' => $q->user->avatar,
                     'rank' => $rank,
                     'reward_point' => $q->reward_point,
                     'contest_name' => $q->contest->name,
