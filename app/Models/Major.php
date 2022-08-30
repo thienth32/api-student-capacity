@@ -58,7 +58,7 @@ class Major extends Model
 
     public function contest_user()
     {
-        return $this->hasManyThrough(ContestUser::class, Contest::class);
+        return $this->hasManyThrough(ContestUser::class, Contest::class)->with(['user']);
     }
 
     public function teams()
