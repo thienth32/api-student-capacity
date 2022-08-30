@@ -76,6 +76,26 @@ class Major extends Model
     {
         return new Builder($query);
     }
+
+    public function resultCapacity()
+    {
+        return $this->hasManyDeep(
+            ResultCapacity::class,
+            [
+                Contest::class,
+                Round::class,
+                Exam::class
+            ],
+            [
+                'major_id',
+                'contest_id',
+                'round_id',
+                'exam_id',
+            ]
+        )->with(['user' => function ($q) {
+            return $q->select(['id', 'name', 'email', 'avatar', 'status']);
+        }]);
+    }
 }
     // public static function tree() {
 
