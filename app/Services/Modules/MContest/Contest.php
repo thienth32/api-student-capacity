@@ -84,7 +84,7 @@ class Contest implements MContestInterface
         if ($request->has('sort') && $request->has('sort_by')) $contest->sort(($request->sort == 'asc' ? 'asc' : 'desc'), $request->sort_by ?? null, 'contests');
         return $contest
             ->with($with)
-            ->withCount('teams');
+            ->withCount(['teams', 'rounds']);
     }
 
     public function index()
