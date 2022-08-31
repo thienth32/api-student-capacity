@@ -30,18 +30,22 @@ class Contest implements MContestInterface
         $with = [];
         $user = auth()->user();
         if (!$flagCapacity) $with = [
-            'major',
-            'teams',
-            'rounds' => function ($q) use ($user) {
-                return $q->with([
-                    'teams' => function ($q) {
-                        return $q->with('members');
-                    },
-                    'judges'
-                ]);
-            },
-            'enterprise',
-            'judges'
+            // 'major',
+            // 'teams' => function ($q) {
+            //     return $q->with([
+            //         'members'
+            //     ]);
+            // },
+            // 'rounds' => function ($q) {
+            //     return $q->with([
+            //         'teams' => function ($q) {
+            //             return $q->with('members');
+            //         },
+            //         'judges'
+            //     ]);
+            // },
+            // 'enterprise',
+            // 'judges'
         ];
 
         if ($flagCapacity) $with = [
@@ -61,9 +65,12 @@ class Contest implements MContestInterface
         $now = $this->carbon::now('Asia/Ho_Chi_Minh');
         $contest =  $this->contest::when($request->has('contest_soft_delete'), function ($q) {
             return $q->onlyTrashed();
-        })->when(isset($user) && $user->hasRole('judge'), function ($q, $v) {
-            return $q->whereIn('id', array_unique($this->judge::where('user_id', auth()->user()->id)->pluck('contest_id')->toArray()));
-        });
+        })
+            ->when(isset($user) && $user->hasRole('judge'), function ($q, $v) use ($user) {
+                return $q->whereIn('id', array_unique($this->judge::where('user_id', $user->id)
+                    ->pluck('contest_id')
+                    ->toArray()));
+            });
 
         $contest->where(function ($contest) use ($request, $now) {
             if ($request->has('q')) $contest->search($request->q ?? null, ['name'], true);

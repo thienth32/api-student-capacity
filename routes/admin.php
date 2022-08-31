@@ -357,3 +357,8 @@ Route::prefix('questions')->group(function () {
     Route::post('impost', [QuestionController::class, 'exImpost'])->name('admin.question.excel.impost');
     Route::get('export', [QuestionController::class, 'exportQe'])->name('admin.question.excel.export');
 });
+
+Route::get('api-view-check', function (App\Services\Modules\MContest\Contest $contest) {
+    $data = $contest->apiIndex();
+    return view('welcome');
+});
