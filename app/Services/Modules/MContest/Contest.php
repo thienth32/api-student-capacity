@@ -81,7 +81,7 @@ class Contest implements MContestInterface
             if ($request->has('start_time') && $request->has('end_time')) $contest->hasDateTimeBetween(['date_start', 'register_deadline', 'start_register_time', 'end_regidter_time'], $request->start_time ?? null, $request->end_time ?? null);
             if ($request->has('major_id')) $contest->hasRequest(['major_id' => $request->major_id ?? null]);
         });
-        if ($request->has('sort') && $request->has('sort_by')) $contest->sort(($request->sort == 'asc' ? 'asc' : 'desc'), $request->sort_by ?? null, 'contests');
+        if ($request->has('sort')) $contest->sort(($request->sort == 'asc' ? 'asc' : 'desc'), $request->sort_by ?? null, 'contests');
         return $contest
             ->with($with)
             ->withCount(['teams', 'rounds']);
