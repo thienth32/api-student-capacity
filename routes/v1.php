@@ -65,7 +65,7 @@ Route::prefix('round')->group(function () {
 
 
 Route::prefix('users')->group(function () {
-    Route::get('contest-joined', [ContestController::class, 'apiIndex']);
-    Route::get('contest-joined-1', [UserController::class, 'contestJoined']);
+    Route::get('contest-joined-and-not-joined', [UserController::class, 'contestJoinedAndNotJoined']);
+    Route::get('contest-joined', [UserController::class, 'contestJoined']);
     Route::post('edit', [UserController::class, 'updateDetailUser']);
 });

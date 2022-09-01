@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Contest;
 use App\Models\User;
+use App\Services\Modules\MContest\MContestInterface;
+use App\Services\Modules\MUser\MUserInterface;
 use App\Services\Traits\TCheckUserDrugTeam;
+use App\Services\Traits\TResponse;
 use App\Services\Traits\TUploadImage;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -18,11 +21,16 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    use TUploadImage, TCheckUserDrugTeam;
+    use TUploadImage, TCheckUserDrugTeam, TResponse;
 
 
-    public function __construct(private User $user , private Role $role)
-    {}
+    public function __construct(
+        private MUserInterface $user,
+        private MContestInterface $contest,
+        private User $muser,
+        private Role $role
+    ) {
+    }
 
     public function TeamUserSearch(Request $request)
     {
@@ -91,7 +99,7 @@ class UserController extends Controller
     {
         try {
             $limit = 10;
-            $users = $this->user::status(request('status') ?? null)
+            $users = $this->muser::status(request('status') ?? null)
                 ->sort(request('sort') == 'asc' ? 'asc' : 'desc', request('sort_by') ?? null, 'users')
                 ->search(request('q') ?? null, ['name', 'email'])
                 ->has_role(request('role') ?? null)
@@ -154,7 +162,7 @@ class UserController extends Controller
             'payload' => 'Không thể câp nhật trạng thái !',
         ]);
         try {
-            $user = $this->user::find($id);
+            $user = $this->muser::find($id);
             $user->update([
                 'status' => 0,
             ]);
@@ -178,7 +186,7 @@ class UserController extends Controller
             'payload' => 'Không thể câp nhật trạng thái !',
         ]);
         try {
-            $user = $this->user::find($id);
+            $user = $this->muser::find($id);
             $user->update([
                 'status' => 1,
             ]);
@@ -204,7 +212,7 @@ class UserController extends Controller
             'status' => false,
             'payload' => 'Không có quyền  !',
         ]);
-        if (!$user = $this->user::find($data[1])) return response()->json([
+        if (!$user = $this->muser::find($data[1])) return response()->json([
             'status' => false,
             'payload' => 'Không tìm thấy tài khoản  !',
         ]);
@@ -238,54 +246,54 @@ class UserController extends Controller
             'payload' => $request->user()->toArray()
         ]);
     }
-//    public function add_user(Request $request)
-//    {
-//        // validator
-//        $validator = Validator::make(
-//            $request->all(),
-//            [
-//                'name' => 'required|max:255',
-//                'email' => 'required|email|max:255|unique:users',
-//            ],
-//            [
-//                'name.required' => 'Chưa nhập trường này !',
-//                'name.max' => 'Độ dài tên không phù hợp!',
-//
-//                'email.required' => 'Chưa nhập trường này !',
-//                'email.email' => 'Không đúng định dạng email !',
-//                'email.max' => 'Độ dài email không phù hợp!',
-//                'email.unique' => 'Email đã tồn tại!',
-//            ]
-//        );
-//        // dd($validator->errors()->toArray());
-//        if ($validator->fails()) {
-//            return response()->json([
-//                'status' => false,
-//                'payload' => $validator->errors()
-//            ]);
-//        }
-//        DB::beginTransaction();
-//        try {
-//            $model = new User();
-//            $model->fill($request->all());
-//            $model->save();
-//            $role = Role::find($request->role_id);
-//            $model->assignRole($role->name);
-//            DB::commit();
-//        } catch (Exception $ex) {
-//            Log::error("Lỗi tạo tài khoản:");
-//            Log::info("post data: " . json_encode($request->all()));
-//            DB::rollBack();
-//            return response()->json([
-//                'status' => false,
-//                'payload' => $ex->getMessage()
-//            ]);
-//        }
-//        return response()->json([
-//            'status' => true,
-//            'payload' => $model->toArray()
-//        ]);
-//    }
+    //    public function add_user(Request $request)
+    //    {
+    //        // validator
+    //        $validator = Validator::make(
+    //            $request->all(),
+    //            [
+    //                'name' => 'required|max:255',
+    //                'email' => 'required|email|max:255|unique:users',
+    //            ],
+    //            [
+    //                'name.required' => 'Chưa nhập trường này !',
+    //                'name.max' => 'Độ dài tên không phù hợp!',
+    //
+    //                'email.required' => 'Chưa nhập trường này !',
+    //                'email.email' => 'Không đúng định dạng email !',
+    //                'email.max' => 'Độ dài email không phù hợp!',
+    //                'email.unique' => 'Email đã tồn tại!',
+    //            ]
+    //        );
+    //        // dd($validator->errors()->toArray());
+    //        if ($validator->fails()) {
+    //            return response()->json([
+    //                'status' => false,
+    //                'payload' => $validator->errors()
+    //            ]);
+    //        }
+    //        DB::beginTransaction();
+    //        try {
+    //            $model = new User();
+    //            $model->fill($request->all());
+    //            $model->save();
+    //            $role = Role::find($request->role_id);
+    //            $model->assignRole($role->name);
+    //            DB::commit();
+    //        } catch (Exception $ex) {
+    //            Log::error("Lỗi tạo tài khoản:");
+    //            Log::info("post data: " . json_encode($request->all()));
+    //            DB::rollBack();
+    //            return response()->json([
+    //                'status' => false,
+    //                'payload' => $ex->getMessage()
+    //            ]);
+    //        }
+    //        return response()->json([
+    //            'status' => true,
+    //            'payload' => $model->toArray()
+    //        ]);
+    //    }
 
     public function block_user(Request $request, $id)
     {
@@ -312,7 +320,7 @@ class UserController extends Controller
 
     public function updateRoleUser(Request $request, $id)
     {
-        $user = $this->user::find($id);
+        $user = $this->muser::find($id);
         if (is_null($user)) {
             return response()->json([
                 'status' => false,
@@ -336,32 +344,79 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/v1/users/contest-joined-and-not-joined",
+     *     description="Description api contests",
+     *     tags={"User-Joined-Contest"},
+     *     @OA\Parameter(
+     *         name="q",
+     *         in="query",
+     *         description="Tìm kiếm ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="status",
+     *         in="query",
+     *         description="Lọc theo trạng thái ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort",
+     *         in="query",
+     *         description="Lọc theo chiều asc hoặc desc ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort_by",
+     *         in="query",
+     *         description="Các cột cần lọc  ",
+     *         required=false,
+     *     ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
+    public function contestJoinedAndNotJoined()
+    {
+        if (!($data = $this->contest->apiIndex())) return $this->responseApi(false);
+        return $this->responseApi(true, $data);
+    }
 
+
+    /**
+     * @OA\Get(
+     *     path="/api/v1/users/contest-joined",
+     *     description="Description api contests",
+     *     tags={"User-Joined-Contest"},
+     *     @OA\Parameter(
+     *         name="q",
+     *         in="query",
+     *         description="Tìm kiếm ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort",
+     *         in="query",
+     *         description="Lọc theo chiều asc hoặc desc ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort_by",
+     *         in="query",
+     *         description="Các cột cần lọc  ",
+     *         required=false,
+     *     ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
     public function contestJoined()
     {
-        // user đã đăng nhập vô
-        //tổng quan url  http://127.0.0.1:8000/api/v1/users/contest-joined?sort=asc&status=1&q=Nguyen Bich test
-        // sort : asc/desc
-        // q : tìm kiếm
-
-        $contestID = [];
-        $user_id = auth('sanctum')->user()->id;
-        $user = User::find($user_id)->load('teams');
-        foreach ($user->teams as $team) {
-            if ($team->contest) {
-                array_push($contestID, $team->contest->id);
-            }
-        }
-        $contest = Contest::whereIn('id', $contestID)
-            ->search(request('q') ?? null, ['name', 'description'])
-            ->status(request('status'))
-            ->sort((request('sort') == 'asc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'contests')
-            ->get();
-        return response()->json([
-            'status' => true,
-            'payload' => $contest
-        ]);
+        $contest = $this->contestJoined();
+        return $this->responseApi(true, $contest);
     }
+
 
     /**
      * @OA\Post(

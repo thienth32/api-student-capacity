@@ -402,7 +402,8 @@ class TeamController extends Controller
     {
         $user_id = auth('sanctum')->user()->id;
         $result = $this->checkUserDrugTeam($id_contest, [$user_id]);
-        if (count($result['user-not-pass']) > 0) return $this->responseApi(false, 'Tài khoản này đã tham gia cuộc thi khác !');
+        if (count($result['user-not-pass']) > 0)
+            return $this->responseApi(false, 'Tài khoản này đã tham gia cuộc thi khác !');
     }
 
     /**
@@ -460,8 +461,6 @@ class TeamController extends Controller
             $user_id = auth('sanctum')->user()->id;
             $team = $this->team::where('id', $id_team)->where('contest_id', $id_contest)->first();
             if (is_null($team)) return $this->responseApi(false, 'Đội không tồn tại trong cuộc thi !');
-
-
             $team->load('members');
             $result = $this->checkUserDrugTeam($id_contest, $request->user_id);
             foreach ($team->members as $userTeam) {
@@ -471,12 +470,7 @@ class TeamController extends Controller
 
                     $user_pass = $this->user::whereIn('id', $result['user-pass'])->get();
                     $use_not_pass = $this->user::whereIn('id', $result['user-not-pass'])->get();
-                    // return response()->json([
-                    //     'status' => true,
-                    //     'payload' => 'Thêm thành viên thành công !',
-                    // 'user_pass' => $user_pass ?? null,
-                    // 'user_not_pass' => $use_not_pass ?? null
-                    // ]);
+
                     return $this->responseApi(true, 'Thêm thành viên thành công !', [
                         'user_pass' => $user_pass ?? null,
                         'user_not_pass' => $use_not_pass ?? null
