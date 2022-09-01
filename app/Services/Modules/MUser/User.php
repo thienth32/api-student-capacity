@@ -5,11 +5,11 @@ namespace App\Services\Modules\MUser;
 use App\Models\Contest;
 use App\Models\User as ModelsUser;
 
-class User
+class User implements MUserInterface
 {
     public function __construct(
-        protected  ModelsUser $user,
-        protected Contest $contest
+        private  ModelsUser $user,
+        private Contest $contest
     ) {
     }
     public function contestJoined()

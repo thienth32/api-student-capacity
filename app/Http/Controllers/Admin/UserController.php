@@ -27,7 +27,7 @@ class UserController extends Controller
     public function __construct(
         private MUserInterface $user,
         private MContestInterface $contest,
-        private User $muser,
+        private User $modeluser,
         private Role $role
     ) {
     }
@@ -99,7 +99,7 @@ class UserController extends Controller
     {
         try {
             $limit = 10;
-            $users = $this->muser::status(request('status') ?? null)
+            $users = $this->modeluser::status(request('status') ?? null)
                 ->sort(request('sort') == 'asc' ? 'asc' : 'desc', request('sort_by') ?? null, 'users')
                 ->search(request('q') ?? null, ['name', 'email'])
                 ->has_role(request('role') ?? null)
@@ -162,7 +162,7 @@ class UserController extends Controller
             'payload' => 'Không thể câp nhật trạng thái !',
         ]);
         try {
-            $user = $this->muser::find($id);
+            $user = $this->modeluser::find($id);
             $user->update([
                 'status' => 0,
             ]);
@@ -186,7 +186,7 @@ class UserController extends Controller
             'payload' => 'Không thể câp nhật trạng thái !',
         ]);
         try {
-            $user = $this->muser::find($id);
+            $user = $this->modeluser::find($id);
             $user->update([
                 'status' => 1,
             ]);
@@ -212,7 +212,7 @@ class UserController extends Controller
             'status' => false,
             'payload' => 'Không có quyền  !',
         ]);
-        if (!$user = $this->muser::find($data[1])) return response()->json([
+        if (!$user = $this->modeluser::find($data[1])) return response()->json([
             'status' => false,
             'payload' => 'Không tìm thấy tài khoản  !',
         ]);
@@ -320,7 +320,7 @@ class UserController extends Controller
 
     public function updateRoleUser(Request $request, $id)
     {
-        $user = $this->muser::find($id);
+        $user = $this->modeluser::find($id);
         if (is_null($user)) {
             return response()->json([
                 'status' => false,
@@ -413,7 +413,7 @@ class UserController extends Controller
      */
     public function contestJoined()
     {
-        $contest = $this->contestJoined();
+        $contest = $this->user->contestJoined();
         return $this->responseApi(true, $contest);
     }
 
