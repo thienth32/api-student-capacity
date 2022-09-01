@@ -31,6 +31,7 @@ class TeamController extends Controller
         $this->team = $team;
         $this->user = $user;
     }
+
     private function getList(Request $request)
     {
         $keyword = $request->has('keyword') ? $request->keyword : "";
@@ -60,7 +61,7 @@ class TeamController extends Controller
         // dd($query->get());
         return $query;
     }
-    // Danh sách teams phía view
+
     public function ListTeam(Request $request)
     {
         try {
@@ -75,7 +76,6 @@ class TeamController extends Controller
         };
     }
 
-    //xóa Teams
     public function deleteTeam(Request $request, $id)
     {
         try {
@@ -91,8 +91,6 @@ class TeamController extends Controller
         }
     }
 
-
-
     public function create()
     {
         $contests = $this->contest::where('type', 0)->get();
@@ -101,7 +99,6 @@ class TeamController extends Controller
 
     public function store(Request $request)
     {
-
         return $this->addTeamContest($request, null, Redirect::route('admin.teams'), Redirect::back());
     }
 
@@ -120,6 +117,7 @@ class TeamController extends Controller
         }
         return view('pages.team.form-edit', compact('contests', 'team', 'userArray'));
     }
+
     public function update(Request $request, $id_team)
     {
         $team =  $this->team::find($id_team);
@@ -130,14 +128,13 @@ class TeamController extends Controller
         }
     }
 
-
-
     public function softDelete(Request $request)
     {
         $listTeamSofts = $this->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
 
         return view('pages.team.team-soft-delete', compact('listTeamSofts'));
     }
+
     public function backUpTeam($id)
     {
         try {
@@ -147,6 +144,7 @@ class TeamController extends Controller
             return abort(404);
         }
     }
+
     public function destroy($id)
     {
         // dd($id);
@@ -160,9 +158,6 @@ class TeamController extends Controller
         }
     }
 
-
-
-    // chi tiết đội thi phía client
     /**
      * @OA\Get(
      *     path="/api/v1/teams/{id}",
@@ -323,12 +318,11 @@ class TeamController extends Controller
             [
                 'contest_id' => 'required',
                 'name' => 'required',
-                'image' =>  'required|mimes:jpeg,png,jpg|max:10000',
+                'image' =>  'mimes:jpeg,png,jpg|max:10000',
             ],
             [
                 'contest_id.required' => 'Chưa nhập trường này !',
                 'name.required' => 'Chưa nhập trường này !',
-                'image.required' => 'Chưa nhập trường này !',
                 'image.mimes' => 'Sai định dạng !',
                 'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
             ]
@@ -379,7 +373,6 @@ class TeamController extends Controller
             return $this->responseApi(true, $th);
         }
     }
-
 
     /**
      * @OA\Get(
@@ -485,8 +478,6 @@ class TeamController extends Controller
         }
     }
 
-
-
     /**
      * @OA\Post(
      *     path="/api/v1/user-team-search/{id_contest}",
@@ -531,7 +522,6 @@ class TeamController extends Controller
         $max_user = $this->contest::find($request->id)->max_user;
         return $this->responseApi(true, $max_user);
     }
-
 
     /**
      * @OA\Post(

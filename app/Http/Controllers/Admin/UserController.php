@@ -413,7 +413,7 @@ class UserController extends Controller
      */
     public function contestJoined()
     {
-        $contest = $this->contestJoined();
+        $contest = $this->user->contestJoined();
         return $this->responseApi(true, $contest);
     }
 
