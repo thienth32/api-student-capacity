@@ -59,7 +59,7 @@ class Contest extends Model
     }
     public function teams()
     {
-        return $this->hasMany(Team::class, 'contest_id')->with('members');
+        return $this->hasMany(Team::class, 'contest_id');
     }
     public function major()
     {

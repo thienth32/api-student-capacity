@@ -9,6 +9,8 @@ use App\Services\Modules\MMajor\Major;
 use App\Services\Modules\MMajor\MMajorInterface;
 use App\Services\Modules\MRound\MRoundInterface;
 use App\Services\Modules\MRound\Round;
+use App\Services\Modules\MUser\MUserInterface;
+use App\Services\Modules\MUser\User;
 
 trait RepositorySetup
 {
@@ -38,6 +40,11 @@ trait RepositorySetup
         $this->app->bind(
             MMajorInterface::class,
             Major::class,
+        );
+
+        $this->app->bind(
+            MUserInterface::class,
+            User::class,
         );
     }
 }
