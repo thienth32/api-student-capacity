@@ -1,6 +1,6 @@
 var flagDataSaveHide = false;
 var dataQues = null;
-var loading = `<div class="ct-ld m-1"><div class="loading"></div> <h2 class="m-2">Hệ thống đang chạy , vui lòng chờ ...</h2></div>`;
+var loading = `</div> <h2 class="m-2">Hệ thống đang chạy , vui lòng chờ ...</h2></div>`;
 function loadTast(text = "Đang chạy ...", type = "info") {
     toastr.options = {
         closeButton: true,
@@ -282,9 +282,8 @@ function fetchShowQues(dataQ) {
                             flagActive == true ? "disable" : "btn-click-save"
                         } btn-outline-dark btn-active-light-dark btn-sm p-1"
                         data-bs-toggle="tooltip" data-bs-html="true" title="Thêm vào danh sách câu hỏi"
-                        data-name="${data.content}"
                         data-id="${data.id}"
-                    >
+                        data-name="${data.content.replace(/"/g, "'")}" >
                         <i class="bi bi-plus-square-fill"></i>
                     </button>
                 </div>
