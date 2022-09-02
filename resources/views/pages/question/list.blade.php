@@ -484,11 +484,6 @@
 
                                     @endhasrole
                                 </td>
-                                <br>
-
-
-
-
 
                             </tr>
 
