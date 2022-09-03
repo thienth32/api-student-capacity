@@ -11,7 +11,8 @@
                         Quản lý tuyển dụng
                     </h1>
                     <a class="mx-2" href="{{ route('admin.recruitment.list') }}">
-                        <span role="button" class="refresh-btn svg-icon svg-icon-primary svg-icon-2x">
+                        <span data-bs-toggle="tooltip" title="Tải lại trang " role="button"
+                            class="refresh-btn svg-icon svg-icon-primary svg-icon-2x">
                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Update.svg--><svg
                                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                                 height="24px" viewBox="0 0 24 24" version="1.1">
@@ -29,7 +30,8 @@
                     <a class="mx-2"
                         href="{{ route('admin.recruitment.list.soft.deletes', 'recruitment_soft_delete=1') }}">
 
-                        <span class=" svg-icon svg-icon-primary svg-icon-2x">
+                        <span data-bs-toggle="tooltip" title="Kho lưu trữ bản xóa "
+                            class=" svg-icon svg-icon-primary svg-icon-2x">
                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Files/Deleted-folder.svg--><svg
                                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                                 height="24px" viewBox="0 0 24 24" version="1.1">
@@ -147,7 +149,7 @@
         </div>
         <div class="back">
             <hr>
-            <span class="btn-hide svg-icon svg-icon-primary svg-icon-2x">
+            <span data-bs-toggle="tooltip" title="Đóng lọc" class="btn-hide svg-icon svg-icon-primary svg-icon-2x">
                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Stockholm-icons/Navigation/Angle-up.svg--><svg
                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                     height="24px" viewBox="0 0 24 24" version="1.1">
@@ -160,7 +162,8 @@
                 </svg>
             </span>
 
-            <span style="display: none" class="btn-show svg-icon svg-icon-primary svg-icon-2x">
+            <span data-bs-toggle="tooltip" title="Mở lọc" style="display: none"
+                class="btn-show svg-icon svg-icon-primary svg-icon-2x">
                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Angle-down.svg--><svg
                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                     height="24px" viewBox="0 0 24 24" version="1.1">
@@ -224,7 +227,8 @@
                                         'sortBy' => request()->has('sortBy') ? (request('sortBy') == 'desc' ? 'asc' : 'desc') : 'asc',
                                         'orderBy' => 'name',
                                     ]) }}">
-                                    <span role="button" data-key="name"
+                                    <span role="button" data-key="name" data-bs-toggle="tooltip"
+                                        title="Lọc theo tiêu đề tuyển dụng "
                                         class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                         <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
                                             xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -264,7 +268,8 @@
                                         'sortBy' => request()->has('sortBy') ? (request('sortBy') == 'desc' ? 'asc' : 'desc') : 'asc',
                                         'orderBy' => 'start_time',
                                     ]) }}">
-                                    <span role="button" data-key="name"
+                                    <span role="button" data-key="name" data-bs-toggle="tooltip"
+                                        title="Lọc theo thời gian bắt đầu "
                                         class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                         <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
                                             xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -301,7 +306,8 @@
                                         'sortBy' => request()->has('sortBy') ? (request('sortBy') == 'desc' ? 'asc' : 'desc') : 'asc',
                                         'orderBy' => 'end_time',
                                     ]) }}">
-                                    <span role="button" data-key="name"
+                                    <span role="button" data-key="name" data-bs-toggle="tooltip"
+                                        title="Lọc theo thời gian kết thúc"
                                         class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                         <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
                                             xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -371,7 +377,8 @@
                                 <td>
                                     @hasanyrole('admin|super admin')
 
-                                        <div class="form-check form-switch">
+                                        <div data-bs-toggle="tooltip" title="Cập nhật trạng thái "
+                                            class="form-check form-switch">
                                             <input value="{{ $key->hot }}" data-id="{{ $key->id }}"
                                                 class="form-select-status-hot form-check-input" @checked($key->hot == 1)
                                                 type="checkbox" role="switch">
@@ -478,7 +485,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="btn-group dropstart">
+                                    <div data-bs-toggle="tooltip" title="Thao tác " class="btn-group dropstart">
                                         <button type="button" class="btn   btn-sm dropdown-toggle"
                                             data-bs-toggle="dropdown" aria-expanded="false">
                                             <span class="svg-icon svg-icon-success svg-icon-2x">

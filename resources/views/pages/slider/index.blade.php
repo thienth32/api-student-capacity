@@ -11,7 +11,8 @@
 
                     <h1>Quản lý slider
                     </h1>
-                    <span role="button" class="mx-2 refresh-btn svg-icon svg-icon-primary svg-icon-2x">
+                    <span data-bs-toggle="tooltip" title="Tải lại trang " role="button"
+                        class="mx-2 refresh-btn svg-icon svg-icon-primary svg-icon-2x">
                         <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Update.svg--><svg
                             xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                             height="24px" viewBox="0 0 24 24" version="1.1">
@@ -26,7 +27,8 @@
                     </span>
                     <a class="mx-2" href="{{ route('admin.sliders.soft.delete', 'slider_soft_delete=1') }}">
 
-                        <span class=" svg-icon svg-icon-primary svg-icon-2x">
+                        <span data-bs-toggle="tooltip" title="Kho lưu trữ bản xóa "
+                            class=" svg-icon svg-icon-primary svg-icon-2x">
                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Files/Deleted-folder.svg--><svg
                                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                                 height="24px" viewBox="0 0 24 24" version="1.1">
@@ -134,8 +136,8 @@
 
                         <div>
                             <label class="form-label">Vòng thi </label>
-                            <select id="select-round" name="round_id" class="form-select form-round " data-control="select2"
-                                data-placeholder="Chọn vòng thi ">
+                            <select id="select-round" name="round_id" class="form-select form-round "
+                                data-control="select2" data-placeholder="Chọn vòng thi ">
                                 @if (request()->has('round') && request()->has('round_id'))
                                     <option value="0">Chọn vòng thi</option>
                                     @foreach ($rounds as $r)
@@ -230,7 +232,7 @@
         </div>
         <div class="back">
             <hr>
-            <span class="btn-hide svg-icon svg-icon-primary svg-icon-2x">
+            <span data-bs-toggle="tooltip" title="Đóng lọc" class="btn-hide svg-icon svg-icon-primary svg-icon-2x">
                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Stockholm-icons/Navigation/Angle-up.svg--><svg
                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                     height="24px" viewBox="0 0 24 24" version="1.1">
@@ -243,7 +245,8 @@
                 </svg>
             </span>
 
-            <span style="display: none" class="btn-show svg-icon svg-icon-primary svg-icon-2x">
+            <span data-bs-toggle="tooltip" title="Mở lọc" style="display: none"
+                class="btn-show svg-icon svg-icon-primary svg-icon-2x">
                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Angle-down.svg--><svg
                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                     height="24px" viewBox="0 0 24 24" version="1.1">
@@ -325,7 +328,8 @@
                             @endif --}}
                             <td width="20%">
                                 <p><span id="text_{{ $slider->id }}">{{ $slider->link_to }}
-                                        <span class="coppyText p-3" data-key="{{ $slider->id }}" role="button">
+                                        <span data-bs-toggle="tooltip" title="Sao chép " class="coppyText p-3"
+                                            data-key="{{ $slider->id }}" role="button">
                                             <span class="svg-icon svg-icon-dark svg-icon-2x">
                                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Design/Substract.svg--><svg
                                                     xmlns="http://www.w3.org/2000/svg"
@@ -368,7 +372,8 @@
 
                             <td>
 
-                                <div class="form-check form-switch">
+                                <div data-bs-toggle="tooltip" title="Cập nhật trạng thái "
+                                    class="form-check form-switch">
                                     <input value="{{ $slider->status }}" data-id="{{ $slider->id }}"
                                         class="form-select-status form-check-input" @checked($slider->status == 1)
                                         type="checkbox" role="switch">
@@ -380,7 +385,7 @@
                             <td> {{ $slider->end_time }} <br>
                                 {{ \Carbon\Carbon::parse($slider->end_time)->diffForHumans() }}</td>
                             <td>
-                                <div class="btn-group dropstart">
+                                <div data-bs-toggle="tooltip" title="Thao tác " class="btn-group dropstart">
                                     <button style="padding: 0" type="button" class="btn   btn-sm dropdown-toggle"
                                         data-bs-toggle="dropdown" aria-expanded="false">
                                         <span class="svg-icon svg-icon-success svg-icon-2x">

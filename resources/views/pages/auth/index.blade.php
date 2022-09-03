@@ -8,7 +8,8 @@
             <div class="alert alert-primary">
                 Xin chào {{ auth()->user()->name }} , bạn thuộc quyền
                 {{ \Str::ucfirst(auth()->user()->roles[0]->name) }}
-                <span role="button" class="refresh-btn svg-icon svg-icon-primary svg-icon-2x">
+                <span data-bs-toggle="tooltip" title="Tải lại trang " role="button"
+                    class="refresh-btn svg-icon svg-icon-primary svg-icon-2x">
                     <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Update.svg--><svg
                         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                         height="24px" viewBox="0 0 24 24" version="1.1">
@@ -65,7 +66,7 @@
         <div>
             <div class="back">
 
-                <span class="btn-hide svg-icon svg-icon-primary svg-icon-2x">
+                <span data-bs-toggle="tooltip" title="Đóng lọc" class="btn-hide svg-icon svg-icon-primary svg-icon-2x">
                     <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Stockholm-icons/Navigation/Angle-up.svg--><svg
                         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                         height="24px" viewBox="0 0 24 24" version="1.1">
@@ -78,7 +79,7 @@
                     </svg>
                 </span>
 
-                <span class="btn-show svg-icon svg-icon-primary svg-icon-2x">
+                <span data-bs-toggle="tooltip" title="Mở lọc" class="btn-show svg-icon svg-icon-primary svg-icon-2x">
                     <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Angle-down.svg--><svg
                         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                         height="24px" viewBox="0 0 24 24" version="1.1">
@@ -184,7 +185,8 @@
                                         </span>
                                         {{ $user->status == 1 ? 'Hoạt động ' : 'Đã gỡ ' }}
                                     @else
-                                        <div class="form-check form-switch">
+                                        <div data-bs-toggle="tooltip" title="Cập nhật trạng thái "
+                                            class="form-check form-switch">
                                             <input value="{{ $user->status }}" data-id="{{ $user->id }}"
                                                 class="form-select-status form-check-input" @checked($user->status == 1)
                                                 type="checkbox" role="switch">
@@ -211,7 +213,8 @@
                                             </span>
                                             {{ $user->status == 1 ? 'Hoạt động ' : 'Đã gỡ ' }}
                                         @else
-                                            <div class="form-check form-switch">
+                                            <div data-bs-toggle="tooltip" title="Cập nhât trạng thái "
+                                                class="form-check form-switch">
                                                 <input value="{{ $user->status }}" data-id="{{ $user->id }}"
                                                     class="form-select-status form-check-input"
                                                     @checked($user->status == 1) type="checkbox" role="switch">
@@ -241,7 +244,8 @@
 
                                         {{ $user->roles[0]->name }}
                                     @else
-                                        <select class="select-role form-select mb-2 select2-hidden-accessible"
+                                        <select data-bs-toggle="tooltip" title="Cập nhật quyền"
+                                            class="select-role form-select mb-2 select2-hidden-accessible"
                                             data-control="select2" data-hide-search="true" tabindex="-1"
                                             aria-hidden="true">
                                             <option value="">Không có quyền</option>
@@ -273,7 +277,8 @@
                                             </span>
                                             {{ $user->roles[0]->name }}
                                         @else
-                                            <select class="select-role form-select mb-2 select2-hidden-accessible"
+                                            <select data-bs-toggle="tooltip" title="Cập nhật quyền"
+                                                class="select-role form-select mb-2 select2-hidden-accessible"
                                                 data-control="select2" data-hide-search="true" tabindex="-1"
                                                 aria-hidden="true">
                                                 <option value="">Không có quyền</option>

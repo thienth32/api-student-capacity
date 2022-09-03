@@ -10,7 +10,8 @@
 
                     <h1 class="me-2">Quản lý chuyên ngành
                     </h1>
-                    <span role="button" class="refresh-btn svg-icon svg-icon-primary svg-icon-2x">
+                    <span data-bs-toggle="tooltip" title="Tải lại trang " role="button"
+                        class="refresh-btn svg-icon svg-icon-primary svg-icon-2x">
                         <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Update.svg--><svg
                             xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                             height="24px" viewBox="0 0 24 24" version="1.1">
@@ -25,7 +26,8 @@
                     </span>
                     <a class="ms-3" href="{{ route('admin.major.list.soft.deletes') }}">
 
-                        <span class=" svg-icon svg-icon-primary svg-icon-2x">
+                        <span data-bs-toggle="tooltip" title="Kho lưu trữ bản xóa "
+                            class=" svg-icon svg-icon-primary svg-icon-2x">
                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Files/Deleted-folder.svg--><svg
                                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                                 height="24px" viewBox="0 0 24 24" version="1.1">
@@ -71,7 +73,7 @@
 
         <div class="back">
 
-            <span class="btn-hide svg-icon svg-icon-primary svg-icon-2x">
+            <span data-bs-toggle="tooltip" title="Đóng lọc" class="btn-hide svg-icon svg-icon-primary svg-icon-2x">
                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Stockholm-icons/Navigation/Angle-up.svg--><svg
                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                     height="24px" viewBox="0 0 24 24" version="1.1">
@@ -84,7 +86,7 @@
                 </svg>
             </span>
 
-            <span class="btn-show svg-icon svg-icon-primary svg-icon-2x">
+            <span data-bs-toggle="tooltip" title="Mở lọc" class="btn-show svg-icon svg-icon-primary svg-icon-2x">
                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Angle-down.svg--><svg
                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                     height="24px" viewBox="0 0 24 24" version="1.1">
@@ -134,12 +136,13 @@
                             </span>
                         </th> --}}
                         <th scope="col"> Chuyên ngành
-                            <span role="button" data-key="name"
+                            <span role="button" data-key="name" data-bs-toggle="tooltip"
+                                title="Lọc theo tên chuyên ngành "
                                 class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                    style="width: 14px !important ; height: 14px !important" width="24px" height="24px"
-                                    viewBox="0 0 24 24" version="1.1">
+                                    style="width: 14px !important ; height: 14px !important" width="24px"
+                                    height="24px" viewBox="0 0 24 24" version="1.1">
                                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                         <polygon points="0 0 24 0 24 24 0 24" />
                                         <rect fill="#000000" opacity="0.3"
@@ -163,7 +166,8 @@
                             </span>
                         </th>
                         <th scope="col"> Slug chuyên ngành
-                            <span role="button" data-key="slug"
+                            <span role="button" data-key="slug" data-bs-toggle="tooltip"
+                                title="Lọc theo slug chuyên ngành "
                                 class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -198,6 +202,7 @@
                     @php
                         $total = $majors->total();
                     @endphp
+
                     @forelse ($majors as $key => $major)
                         @php
                             $dash = '';
@@ -220,11 +225,10 @@
 
                             </td>
                             <td>{{ $major->slug }}
-
                             </td>
 
                             <td>
-                                <div class="btn-group dropstart">
+                                <div data-bs-toggle="tooltip" title="Thao tác" class="btn-group dropstart">
                                     <button type="button" class="btn   btn-sm dropdown-toggle" data-bs-toggle="dropdown"
                                         aria-expanded="false">
                                         <span class="svg-icon svg-icon-success svg-icon-2x">

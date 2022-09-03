@@ -47,7 +47,8 @@
             <div class="d-flex align-items-stretch flex-shrink-0">
                 <div style="position: relative;" class="d-flex align-items-center ms-1 ms-lg-3">
                     <!--begin::Menu wrapper-->
-                    <div class="btn btn-icon btn-icon-muted btn-active-light btn-active-color-primary w-30px h-30px w-md-40px h-md-40px position-relative"
+                    <div data-bs-toggle="tooltip" title="Hỗ trợ "
+                        class="btn btn-icon btn-icon-muted btn-active-light btn-active-color-primary w-30px h-30px w-md-40px h-md-40px position-relative"
                         id="kt_drawer_chat_toggle">
                         <!--begin::Svg Icon | path: icons/duotune/communication/com012.svg-->
                         <span class="svg-icon svg-icon-1">
@@ -64,7 +65,7 @@
                         </span>
                         <!--end::Svg Icon-->
                         <span
-                            class="bullet bullet-dot bg-danger h-15px w-15px position-absolute translate-middle top-0 start-50 animation-blink"></span>
+                            class="bullet bullet-dot bg-danger h-12px w-12px position-absolute translate-middle top-0 start-50 animation-blink"></span>
                     </div>
                     <!--end::Menu wrapper-->
                     <style>

@@ -18,7 +18,7 @@
                     {{ (request()->has('page') && request('page') !== 1 ? $majorChirent->perPage() * (request('page') - 1) : 0) +$key +1 }}
                 </th>
             @endif --}}
-            <td></td>
+            {{-- <td></td> --}}
             <td>{{ $dash . $majorChirent->name }}
 
             </td>
@@ -26,7 +26,7 @@
 
             </td>
             <td>
-                <div class="btn-group dropstart">
+                <div data-bs-toggle="tooltip" title="Thao tác " class="btn-group dropstart">
                     <button type="button" class="btn   btn-sm dropdown-toggle" data-bs-toggle="dropdown"
                         aria-expanded="false">
                         <span class="svg-icon svg-icon-success svg-icon-2x">
