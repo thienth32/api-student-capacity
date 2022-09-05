@@ -8,7 +8,8 @@
                 <div class="d-flex justify-content-start">
                     <h1>Quản lý doanh nghiệp</h1>
                     <a class="mx-3" href="{{ route('admin.enterprise.list') }}">
-                        <span role="button" class="refresh-btn svg-icon svg-icon-primary svg-icon-2x">
+                        <span data-bs-toggle="tooltip" title="Tải lại trang " role="button"
+                            class="refresh-btn svg-icon svg-icon-primary svg-icon-2x">
                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Update.svg--><svg
                                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                                 height="24px" viewBox="0 0 24 24" version="1.1">
@@ -25,7 +26,8 @@
 
                     <a class="mx-3" href="{{ route('admin.enterprise.soft.delete', 'enterprise_soft_delete=1') }}">
 
-                        <span class=" svg-icon svg-icon-primary svg-icon-2x">
+                        <span data-bs-toggle="tooltip" title="Kho lưu trữ bản xóa "
+                            class=" svg-icon svg-icon-primary svg-icon-2x">
                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Files/Deleted-folder.svg--><svg
                                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                                 height="24px" viewBox="0 0 24 24" version="1.1">
@@ -105,7 +107,7 @@
         </div>
         <div class="back">
             <hr>
-            <span class="btn-hide svg-icon svg-icon-primary svg-icon-2x">
+            <span data-bs-toggle="tooltip" title="Đóng lọc" class="btn-hide svg-icon svg-icon-primary svg-icon-2x">
                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Stockholm-icons/Navigation/Angle-up.svg--><svg
                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                     height="24px" viewBox="0 0 24 24" version="1.1">
@@ -118,7 +120,8 @@
                 </svg>
             </span>
 
-            <span style="display: none" class="btn-show svg-icon svg-icon-primary svg-icon-2x">
+            <span data-bs-toggle="tooltip" title="Mở lọc" style="display: none"
+                class="btn-show svg-icon svg-icon-primary svg-icon-2x">
                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Angle-down.svg--><svg
                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                     height="24px" viewBox="0 0 24 24" version="1.1">
@@ -140,7 +143,7 @@
                     <table class="table table-row-bordered table-row-gray-300 gy-7  table-hover ">
                         <thead>
                             <tr>
-                                <th scope="col">
+                                {{-- <th scope="col">
                                     <a
                                         href="{{ route('admin.enterprise.list', [
                                             'sortBy' => request()->has('sortBy') ? (request('sortBy') == 'desc' ? 'asc' : 'desc') : 'asc',
@@ -176,14 +179,15 @@
                                         </span>
                                     </a>
 
-                                </th>
+                                </th> --}}
                                 <th scope="col">Doanh nghiệp
                                     <a
                                         href="{{ route('admin.enterprise.list', [
                                             'sortBy' => request()->has('sortBy') ? (request('sortBy') == 'desc' ? 'asc' : 'desc') : 'asc',
                                             'orderBy' => 'name',
                                         ]) }}">
-                                        <span role="button" data-key="name"
+                                        <span role="button" data-key="name" data-bs-toggle="tooltip"
+                                            title="Lọc theo tên doanh nghiệp "
                                             class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
                                                 xmlns="http://www.w3.org/2000/svg"
@@ -224,12 +228,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @php
+                            {{-- @php
                                 $total = $listEnterprise->total();
-                            @endphp
+                            @endphp --}}
                             @forelse ($listEnterprise as $index=> $key)
                                 <tr>
-                                    @if (request()->has('sortBy'))
+                                    {{-- @if (request()->has('sortBy'))
                                         <th scope="row">
                                             @if (request('sortBy') == 'desc')
                                                 {{ (request()->has('page') && request('page') !== 1 ? $listEnterprise->perPage() * (request('page') - 1) : 0) + $index + 1 }}
@@ -241,7 +245,7 @@
                                         <th scope="row">
                                             {{ (request()->has('page') && request('page') !== 1 ? $listEnterprise->perPage() * (request('page') - 1) : 0) + $index + 1 }}
                                         </th>
-                                    @endif
+                                    @endif --}}
 
                                     <td>
                                         {{ $key->name }}
@@ -324,7 +328,7 @@
                                             </div>
                                     </td>
                                     <td>
-                                        <div class="btn-group dropstart">
+                                        <div data-bs-toggle="tooltip" title="Thao tác " class="btn-group dropstart">
                                             <button type="button" class="btn   btn-sm dropdown-toggle"
                                                 data-bs-toggle="dropdown" aria-expanded="false">
                                                 <span class="svg-icon svg-icon-success svg-icon-2x">

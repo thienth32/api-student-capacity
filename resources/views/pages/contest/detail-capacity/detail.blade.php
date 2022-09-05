@@ -118,12 +118,12 @@
                     </h2>
                     <a target="_blank"
                         href="{{ route('admin.round.create') . '?contest_id=' . $test_capacity->id . '&type=1' }}"
-                        style="float:right">Thêm bài làm </a>
+                        style="float:right">Thêm đề bài </a>
                     <div style="width: 100%" class="table-responsive table-responsive-md ">
                         <table class="table table-row-bordered table-row-gray-300 gy-7  table-hover ">
                             <thead>
                                 <tr>
-                                    <th>Tên đề bài  </th>
+                                    <th>Tên đề bài </th>
                                     <th>Bài làm</th>
                                     <th>Tổng số bài làm</th>
                                     <th style="text-align: center">Thao tác </th>
@@ -145,7 +145,8 @@
                                                 {{ $round->exams_count }}
                                             </td>
                                             <td style="text-align: center">
-                                                <i role="button" data-round_id="{{ $round->id }}"
+                                                <i role="button" data-bs-toggle="tooltip" title="Quản lý bài làm "
+                                                    data-round_id="{{ $round->id }}"
                                                     data-round_name="{{ $round->name }}"
                                                     class="add-exam m-auto bi bi-plus-circle-fill fs-2x"></i>
                                             </td>
@@ -258,11 +259,13 @@
                                 <div id="show-data-save" class="mb-5"></div>
                                 <div
                                     style="position: fixed; bottom: 20px; transform: translateX(-50%);  left: 50%; z-index: 999999999;">
-                                    <button class="btn btn-primary" id="save-qs">Lưu </button>
-                                    <button class="btn-reload btn btn-success">
+                                    <button data-bs-toggle="tooltip" title="Lưu" class="btn btn-primary"
+                                        id="save-qs">Lưu </button>
+                                    <button data-bs-toggle="tooltip" title="Tải lại câu hỏi "
+                                        class="btn-reload btn btn-success">
                                         <i class="bi bi-arrow-counterclockwise"></i>
                                     </button>
-                                    <button class="btn-back btn btn-warning">
+                                    <button data-bs-toggle="tooltip" title="Trở về " class="btn-back btn btn-warning">
                                         <i class="bi bi-backspace"></i>
                                     </button>
                                 </div>
@@ -331,7 +334,7 @@
                                         <th>Độ khó </th>
                                         <th>Đáp án </th>
                                         <th>Tình trạng</th>
-                                        <th> <i role="button"
+                                        <th> <i role="button" data-bs-toggle="tooltip" title="Thêm câu hỏi câu trả lời "
                                                 class="btn-add-question-answ bi bi-plus-square-fill fs-2x"></i>
                                         </th>
                                     </tr>

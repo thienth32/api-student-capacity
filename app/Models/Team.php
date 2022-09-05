@@ -35,10 +35,12 @@ class Team extends Model
             $q->members()->detach();
         });
     }
+
     public function contest()
     {
         return $this->belongsTo(Contest::class, 'contest_id');
     }
+
     public function members()
     {
         return $this->belongsToMany(User::class, 'members', 'team_id', 'user_id')->withPivot('bot');
@@ -52,6 +54,11 @@ class Team extends Model
     public function result()
     {
         return $this->hasMany(Result::class);
+    }
+
+    public function roundTeam()
+    {
+        return $this->hasMany(RoundTeam::class);
     }
 
     public function newEloquentBuilder($query)

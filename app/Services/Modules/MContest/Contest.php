@@ -2,6 +2,7 @@
 
 namespace App\Services\Modules\MContest;
 
+use App\Models\JudgeRound;
 use App\Models\Major;
 use App\Models\Contest as ModelContest;
 use App\Models\Team;
@@ -19,6 +20,7 @@ class Contest implements MContestInterface
         private Major $major,
         private Team $team,
         private Judge $judge,
+        private JudgeRound $judge_round,
         private Carbon $carbon,
     ) {
     }
@@ -26,50 +28,52 @@ class Contest implements MContestInterface
     private function getList($flagCapacity, $request)
     {
         $with = [];
+        $user = auth()->user();
+        if (!$flagCapacity)
+            $with = [];
+        $whereDate = ['date_start', 'register_deadline', 'start_register_time', 'end_regidter_time'];
+        if (request()->has('type') && request('type') == 1) $whereDate = ['date_start', 'register_deadline'];
 
-        if (!$flagCapacity) $with = [
-            'major',
-            'teams',
-            'rounds' => function ($q) {
-                return $q->with([
-                    'teams' => function ($q) {
-                        return $q->with('members');
-                    }
-                ]);
-            },
-            'enterprise',
-            'judges'
-        ];
-
-        if ($flagCapacity) $with = [
-            'rounds' => function ($q) {
-                return $q->with([
-                    'exams' => function ($q) {
-                        return $q->with([
-                            'questions' => function ($q) {
-                                return $q->with('answers');
-                            }
-                        ]);
-                    }
-                ]);
-            }
-        ];
+        if ($flagCapacity)
+            $with = [
+                'rounds' => function ($q) {
+                    return $q->with([
+                        'exams' => function ($q) {
+                            return $q->with([
+                                'questions' => function ($q) {
+                                    return $q->with('answers');
+                                }
+                            ]);
+                        }
+                    ]);
+                }
+            ];
 
         $now = $this->carbon::now('Asia/Ho_Chi_Minh');
         $contest =  $this->contest::when($request->has('contest_soft_delete'), function ($q) {
             return $q->onlyTrashed();
+        })
+            ->when(isset($user) && $user->hasRole('judge'), function ($q, $v) use ($user) {
+                return $q->whereIn('id', array_unique($this->judge::where('user_id', $user->id)
+                    ->pluck('contest_id')
+                    ->toArray()));
+            });
+
+        $contest->where(function ($contest) use ($request, $now, $whereDate) {
+            if ($request->has('q')) $contest->search($request->q ?? null, ['name'], true);
+            if ($request->has('miss_date')) $contest->missingDate('register_deadline', $request->miss_date ?? null, $now->toDateTimeString())
+                ->orWhere('status', '>', 1);
+            if ($request->has('pass_date')) $contest->passDate('register_deadline', $request->pass_date ?? null, $now->toDateTimeString())
+                ->where('status', '<=', 1);
+            if ($request->has('registration_date')) $contest->registration_date('end_register_time', $request->registration_date ?? null, $now->toDateTimeString());
+            if ($request->has('status')) $contest->status($request->status);
+            if ($request->has('start_time') && $request->has('end_time')) $contest->hasDateTimeBetween($whereDate, $request->start_time ?? null, $request->end_time ?? null);
+            if ($request->has('major_id')) $contest->hasRequest(['major_id' => $request->major_id ?? null]);
         });
-        if($request->has('q')) $contest ->search($request->q ?? null, ['name'], true);
-        if($request->has('miss_date')) $contest ->missingDate('register_deadline', $request->miss_date ?? null, $now->toDateTimeString());
-        if($request->has('pass_date')) $contest ->passDate('register_deadline', $request->pass_date ?? null, $now->toDateTimeString());
-        if($request->has('registration_date')) $contest ->registration_date('end_register_time', $request->registration_date ?? null, $now->toDateTimeString());
-        if($request->has('status')) $contest ->status($request->status);
-        if($request->has('sort') && $request->has('sort_by')) $contest ->sort(($request->sort == 'asc' ? 'asc' : 'desc'), $request->sort_by ?? null, 'contests');
-        if($request->has('start_time') && $request->has('end_time')) $contest ->hasDateTimeBetween('date_start', $request->start_time ?? null, $request->end_time ?? null);
-        if($request->has('major_id')) $contest  ->hasRequest(['major_id' => $request->major_id ?? null]);
+        if ($request->has('sort')) $contest->sort(($request->sort == 'asc' ? 'asc' : 'desc'), $request->sort_by ?? null, 'contests');
         return $contest
             ->with($with)
-            ->withCount('teams');
+            ->withCount(['teams', 'rounds']);
     }
 
     public function index()
@@ -84,13 +88,14 @@ class Contest implements MContestInterface
                 "enterprise",
                 "judges"
             ])
-            ->paginate(request('limit') ?? 10);
+            ->orderBy('date_start', 'desc')
+            ->paginate(request('limit') ?? 5);
     }
 
     public function apiIndex($flagCapacity = false)
     {
         return $this->getList($flagCapacity, request())
-            ->where('type', config('util.TYPE_CONTEST'))
+            ->where('type', $flagCapacity ?  config('util.TYPE_TEST') : config('util.TYPE_CONTEST'))
             ->paginate(request('limit') ?? 9);
     }
 
@@ -234,5 +239,12 @@ class Contest implements MContestInterface
     public function getContest()
     {
         return $this->contest;
+    }
+
+    public function getContestRunning()
+    {
+        return $this->contest::where('date_start', '<', date('Y-m-d H:i:'))
+            ->where('register_deadline', '>', date('Y-m-d H:i'))
+            ->get(['name', 'id']);
     }
 }

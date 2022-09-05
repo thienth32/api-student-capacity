@@ -11,7 +11,8 @@
 
                     <h1>Quản lý slider
                     </h1>
-                    <span role="button" class="mx-2 refresh-btn svg-icon svg-icon-primary svg-icon-2x">
+                    <span data-bs-toggle="tooltip" title="Tải lại trang " role="button"
+                        class="mx-2 refresh-btn svg-icon svg-icon-primary svg-icon-2x">
                         <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Update.svg--><svg
                             xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                             height="24px" viewBox="0 0 24 24" version="1.1">
@@ -26,7 +27,8 @@
                     </span>
                     <a class="mx-2" href="{{ route('admin.sliders.soft.delete', 'slider_soft_delete=1') }}">
 
-                        <span class=" svg-icon svg-icon-primary svg-icon-2x">
+                        <span data-bs-toggle="tooltip" title="Kho lưu trữ bản xóa "
+                            class=" svg-icon svg-icon-primary svg-icon-2x">
                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Files/Deleted-folder.svg--><svg
                                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                                 height="24px" viewBox="0 0 24 24" version="1.1">
@@ -134,8 +136,8 @@
 
                         <div>
                             <label class="form-label">Vòng thi </label>
-                            <select id="select-round" name="round_id" class="form-select form-round " data-control="select2"
-                                data-placeholder="Chọn vòng thi ">
+                            <select id="select-round" name="round_id" class="form-select form-round "
+                                data-control="select2" data-placeholder="Chọn vòng thi ">
                                 @if (request()->has('round') && request()->has('round_id'))
                                     <option value="0">Chọn vòng thi</option>
                                     @foreach ($rounds as $r)
@@ -230,10 +232,10 @@
         </div>
         <div class="back">
             <hr>
-            <span class="btn-hide svg-icon svg-icon-primary svg-icon-2x">
+            <span data-bs-toggle="tooltip" title="Đóng lọc" class="btn-hide svg-icon svg-icon-primary svg-icon-2x">
                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Stockholm-icons/Navigation/Angle-up.svg--><svg
-                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                    viewBox="0 0 24 24" version="1.1">
+                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                    height="24px" viewBox="0 0 24 24" version="1.1">
                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                         <polygon points="0 0 24 0 24 24 0 24" />
                         <path
@@ -243,10 +245,11 @@
                 </svg>
             </span>
 
-            <span style="display: none" class="btn-show svg-icon svg-icon-primary svg-icon-2x">
+            <span data-bs-toggle="tooltip" title="Mở lọc" style="display: none"
+                class="btn-show svg-icon svg-icon-primary svg-icon-2x">
                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Angle-down.svg--><svg
-                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                    viewBox="0 0 24 24" version="1.1">
+                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                    height="24px" viewBox="0 0 24 24" version="1.1">
                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                         <polygon points="0 0 24 0 24 24 0 24" />
                         <path
@@ -264,7 +267,7 @@
             <table class=" table table-row-bordered table-row-gray-300 gy-7  table-hover  ">
                 <thead>
                     <tr>
-                        <th scope="col">
+                        {{-- <th scope="col">
                             <span role="button" data-key="id"
                                 class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
@@ -290,7 +293,7 @@
                                 </svg>
                                 <!--end::Svg Icon-->
                             </span>
-                        </th>
+                        </th> --}}
                         <th>Url chuyển hướng </th>
                         <th>Banner </th>
                         <th>Thuộc thành phần </th>
@@ -304,13 +307,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @php
+                    {{-- @php
 
                         $total = $sliders->total() + 1;
-                    @endphp
+                    @endphp --}}
                     @forelse ($sliders as $key => $slider)
                         <tr>
-                            @if (request()->has('sort'))
+                            {{-- @if (request()->has('sort'))
                                 <th scope="row">
                                     @if (request('sort') == 'desc')
                                         {{ (request()->has('page') && request('page') !== 1 ? $sliders->perPage() * (request('page') - 1) : 0) + $key + 1 }}
@@ -322,17 +325,20 @@
                                 <th scope="row">
                                     {{ (request()->has('page') && request('page') !== 1 ? $sliders->perPage() * (request('page') - 1) : 0) + $key + 1 }}
                                 </th>
-                            @endif
+                            @endif --}}
                             <td width="20%">
                                 <p><span id="text_{{ $slider->id }}">{{ $slider->link_to }}
-                                        <span class="coppyText p-3" data-key="{{ $slider->id }}" role="button">
+                                        <span data-bs-toggle="tooltip" title="Sao chép " class="coppyText p-3"
+                                            data-key="{{ $slider->id }}" role="button">
                                             <span class="svg-icon svg-icon-dark svg-icon-2x">
                                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Design/Substract.svg--><svg
                                                     xmlns="http://www.w3.org/2000/svg"
-                                                    xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                                                    viewBox="0 0 24 24" version="1.1">
-                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                        <rect x="0" y="0" width="24" height="24" />
+                                                    xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                                    height="24px" viewBox="0 0 24 24" version="1.1">
+                                                    <g stroke="none" stroke-width="1" fill="none"
+                                                        fill-rule="evenodd">
+                                                        <rect x="0" y="0" width="24"
+                                                            height="24" />
                                                         <path
                                                             d="M6,9 L6,15 C6,16.6568542 7.34314575,18 9,18 L15,18 L15,18.8181818 C15,20.2324881 14.2324881,21 12.8181818,21 L5.18181818,21 C3.76751186,21 3,20.2324881 3,18.8181818 L3,11.1818182 C3,9.76751186 3.76751186,9 5.18181818,9 L6,9 Z"
                                                             fill="#000000" fill-rule="nonzero" />
@@ -366,7 +372,8 @@
 
                             <td>
 
-                                <div class="form-check form-switch">
+                                <div data-bs-toggle="tooltip" title="Cập nhật trạng thái "
+                                    class="form-check form-switch">
                                     <input value="{{ $slider->status }}" data-id="{{ $slider->id }}"
                                         class="form-select-status form-check-input" @checked($slider->status == 1)
                                         type="checkbox" role="switch">
@@ -378,7 +385,7 @@
                             <td> {{ $slider->end_time }} <br>
                                 {{ \Carbon\Carbon::parse($slider->end_time)->diffForHumans() }}</td>
                             <td>
-                                <div class="btn-group dropstart">
+                                <div data-bs-toggle="tooltip" title="Thao tác " class="btn-group dropstart">
                                     <button style="padding: 0" type="button" class="btn   btn-sm dropdown-toggle"
                                         data-bs-toggle="dropdown" aria-expanded="false">
                                         <span class="svg-icon svg-icon-success svg-icon-2x">
@@ -404,14 +411,17 @@
                                                         xmlns="http://www.w3.org/2000/svg"
                                                         xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                                                         height="24px" viewBox="0 0 24 24" version="1.1">
-                                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                            <rect x="0" y="0" width="24" height="24" />
+                                                        <g stroke="none" stroke-width="1" fill="none"
+                                                            fill-rule="evenodd">
+                                                            <rect x="0" y="0" width="24"
+                                                                height="24" />
                                                             <path
                                                                 d="M8,17.9148182 L8,5.96685884 C8,5.56391781 8.16211443,5.17792052 8.44982609,4.89581508 L10.965708,2.42895648 C11.5426798,1.86322723 12.4640974,1.85620921 13.0496196,2.41308426 L15.5337377,4.77566479 C15.8314604,5.0588212 16,5.45170806 16,5.86258077 L16,17.9148182 C16,18.7432453 15.3284271,19.4148182 14.5,19.4148182 L9.5,19.4148182 C8.67157288,19.4148182 8,18.7432453 8,17.9148182 Z"
                                                                 fill="#000000" fill-rule="nonzero"
                                                                 transform="translate(12.000000, 10.707409) rotate(-135.000000) translate(-12.000000, -10.707409) " />
-                                                            <rect fill="#000000" opacity="0.3" x="5" y="20" width="15"
-                                                                height="2" rx="1" />
+                                                            <rect fill="#000000" opacity="0.3" x="5"
+                                                                y="20" width="15" height="2"
+                                                                rx="1" />
                                                         </g>
                                                     </svg>
                                                 </span>
@@ -434,7 +444,8 @@
                                                                 height="24px" viewBox="0 0 24 24" version="1.1">
                                                                 <g stroke="none" stroke-width="1" fill="none"
                                                                     fill-rule="evenodd">
-                                                                    <rect x="0" y="0" width="24" height="24" />
+                                                                    <rect x="0" y="0" width="24"
+                                                                        height="24" />
                                                                     <path
                                                                         d="M6,8 L18,8 L17.106535,19.6150447 C17.04642,20.3965405 16.3947578,21 15.6109533,21 L8.38904671,21 C7.60524225,21 6.95358004,20.3965405 6.89346498,19.6150447 L6,8 Z M8,10 L8.45438229,14.0894406 L15.5517885,14.0339036 L16,10 L8,10 Z"
                                                                         fill="#000000" fill-rule="nonzero" />
@@ -453,11 +464,14 @@
                                                     class="svg-icon svg-icon-danger svg-icon-2x">
                                                     <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Code/Lock-circle.svg--><svg
                                                         xmlns="http://www.w3.org/2000/svg"
-                                                        xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                                                        viewBox="0 0 24 24" version="1.1">
-                                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                            <rect x="0" y="0" width="24" height="24" />
-                                                            <circle fill="#000000" opacity="0.3" cx="12" cy="12" r="10" />
+                                                        xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                                        height="24px" viewBox="0 0 24 24" version="1.1">
+                                                        <g stroke="none" stroke-width="1" fill="none"
+                                                            fill-rule="evenodd">
+                                                            <rect x="0" y="0" width="24"
+                                                                height="24" />
+                                                            <circle fill="#000000" opacity="0.3" cx="12"
+                                                                cy="12" r="10" />
                                                             <path
                                                                 d="M14.5,11 C15.0522847,11 15.5,11.4477153 15.5,12 L15.5,15 C15.5,15.5522847 15.0522847,16 14.5,16 L9.5,16 C8.94771525,16 8.5,15.5522847 8.5,15 L8.5,12 C8.5,11.4477153 8.94771525,11 9.5,11 L9.5,10.5 C9.5,9.11928813 10.6192881,8 12,8 C13.3807119,8 14.5,9.11928813 14.5,10.5 L14.5,11 Z M12,9 C11.1715729,9 10.5,9.67157288 10.5,10.5 L10.5,11 L13.5,11 L13.5,10.5 C13.5,9.67157288 12.8284271,9 12,9 Z"
                                                                 fill="#000000" />

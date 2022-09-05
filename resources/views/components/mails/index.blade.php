@@ -112,7 +112,23 @@
                                 @enderror
                             </div>
 
+                            <div class="form-group mb-10">
+                                <label class="form-label">CC</label>
+                                <input class="form-control form-control-solid" name="cc" value=""
+                                    id="kt_tagify_2" placeholder="Có thể để trống !" />
+                                {{-- <label for="" class="form-label">CC</label> --}}
+                                {{-- <select class="form-select form-select-solid" data-control="select2"
+                                    data-placeholder="Select an option" data-allow-clear="true" name="users_cc[]"
+                                    multiple="multiple">
+                                    <option></option>
+                                    @foreach ($judges as $judge)
+                                        <option selected value="{{ $judge->email }}">{{ $judge->name }}
+                                            -- {{ $judge->email }} (Ban giám khảo )</option>
+                                    @endforeach
+                                </select> --}}
+                            </div>
                         </div>
+
                         <!--begin::Step 1-->
 
                         <!--begin::Step 1-->
@@ -186,11 +202,18 @@
 
 @endsection
 @section('page-script')
+    <script src="assets/plugins/global/plugins.bundle.js"></script>
     <script src="assets/plugins/custom/tinymce/tinymce.bundle.js"></script>
     <script src="assets/plugins/custom/ckeditor/ckeditor-classic.bundle.js"></script>
     <script src="assets/js/system/config-mail/mail.js"></script>
     @if (\Session::has('success'))
         <script>
+            // The DOM elements you wish to replace with Tagify
+            var input2 = document.querySelector("#kt_tagify_2");
+
+            // Initialize Tagify components on the above inputs
+            new Tagify(input2);
+
             toastr.options = {
                 "closeButton": false,
                 "debug": false,

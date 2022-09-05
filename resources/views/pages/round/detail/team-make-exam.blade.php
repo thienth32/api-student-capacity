@@ -30,7 +30,8 @@
                             <a href="{{ route('admin.round.detail.team', ['id' => $round->id]) }}"> Đội thi</a>
                         </li>
                         <li class="breadcrumb-item px-3 text-muted">
-                            {{ $team->name }}
+                            <a href="{{ route('admin.round.detail.team.detail', ['id' => $round->id, 'teamId' => $team->id]) }}"> {{ $team->name }}</a>
+
                         </li>
                         <li class="breadcrumb-item px-3 text-muted">
                             Chấm bài
@@ -47,13 +48,13 @@
                 <div class="col-6">
 
                     <h2>Đề bài {{ $takeExam->exam->name }}
-                        @if (Storage::disk('s3')->has($takeExam->exam->external_url))
+                        @if (Storage::disk('s3')->has($takeExam->exam->external_url ?? "ABC"))
                             <a href="{{ route('dowload.file') }}?url={{ $takeExam->exam->external_url }}"
                                 target="_blank" class="  btn btn-outline-primary">Tải về </a>
                         @endif
                     </h2>
                     <div>
-                        @if (!\Storage::disk('s3')->has($takeExam->exam->external_url))
+                        @if (!\Storage::disk('s3')->has($takeExam->exam->external_url ?? "ABC"))
                             <b>Đề bài: </b>
                             {{ $takeExam->exam->external_url }}
                         @endif
@@ -79,26 +80,29 @@
                 <div class="col-6">
                     <h2>Bài làm đội thi : {{ $team->name }}
                         @if ($takeExam->result_url == null)
-                            @if (\Storage::disk('s3')->has($takeExam->file_url ?? ''))
+                            @if (\Storage::disk('s3')->has($takeExam->file_url ?? 'ABC'))
                                 <a target="_blank" href="{{ route('dowload.file') }}?url={{ $takeExam->file_url }}"
                                     class="  btn btn-outline-primary">Tải về </a>
                             @endif
                         @endif
                     </h2>
-                    @if ($takeExam->result_url)
-                        <div>
-                            {{ $takeExam->result_url }}
-                        </div>
-                    @else
-                        @if (!\Storage::disk('s3')->has($takeExam->file_url ?? ''))
-                            {{ $takeExam->result_url }}
+                    @if ($takeExam->status == 2)
+                        @if ($takeExam->result_url)
+                            <div>
+                                {{ $takeExam->result_url }}
+                            </div>
                         @else
-                            <a target="_blank"
-                                href="{{ route('dowload.file') }}?url={{ $takeExam->file_url }}">{{ $takeExam->file_url }}
-                            </a>
+                            @if (!\Storage::disk('s3')->has($takeExam->file_url ?? 'ABC'))
+                                {{ $takeExam->result_url }}
+                            @else
+                                <a target="_blank"
+                                    href="{{ route('dowload.file') }}?url={{ $takeExam->file_url }}">{{ $takeExam->file_url }}
+                                </a>
+                            @endif
                         @endif
+                    @else
+                        Đội thi chưa nộp bài
                     @endif
-
                 </div>
                 <div class="col-6">
                     @if (count($takeExam->evaluations) > 0)

@@ -1,6 +1,6 @@
 var flagDataSaveHide = false;
 var dataQues = null;
-var loading = `<div class="ct-ld m-1"><div class="loading"></div> <h2 class="m-2">Hệ thống đang chạy , vui lòng chờ ...</h2></div>`;
+var loading = `</div> <h2 class="m-2">Hệ thống đang chạy , vui lòng chờ ...</h2></div>`;
 function loadTast(text = "Đang chạy ...", type = "info") {
     toastr.options = {
         closeButton: true,
@@ -69,7 +69,7 @@ function fetchRoundGet(id) {
                                         ? "Đóng"
                                         : ""
                                 }</td>
-                                <td style="text-align: center;">
+                                <td data-bs-toggle="tooltip" title="Quản lý câu hỏi câu trả lời " style="text-align: center;">
                                      <button style="background: #ccc;padding: 1vh 1vh 1vh 2vh;border-radius: 20px;" type="button" data-exam_name="${
                                          data.name
                                      }" data-exam_id="${data.id}" class="btn-click-show-exams btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_2">
@@ -172,7 +172,7 @@ function fecthQuestionByExams(id, param = "?", url = null) {
                                         : "No"
                                 }</td>
                                 <td>
-                                    <i role="button" data-id="${
+                                    <i data-bs-toggle="tooltip" title="Xóa câu hỏi " role="button" data-id="${
                                         data.id
                                     }" class="btn-dettach bi bi-backspace-reverse-fill fs-2x"></i>
                                 </td>
@@ -245,7 +245,7 @@ function fetchShowQues(dataQ) {
                     aria-controls="multiCollapseExample${index}">
                     ${
                         data.content
-                    } ${flagActive == true ? '<i class="bi bi-check2-square"></i> ' + '<b style="color:lawngreen">Đã chọn</b> | <i role="button" data-id="' + data.id + '" class="click-remove-save bi bi-slash-circle" title="Hủy chọn"></i>' : ""}
+                    } ${flagActive == true ? '<i class="bi bi-check2-square"></i> ' + '<b style="color:lawngreen">Đã chọn</b> | <i data-bs-toggle="tooltip" title="Xóa" role="button" data-id="' + data.id + '" class="click-remove-save bi bi-slash-circle" title="Hủy chọn"></i>' : ""}
 
 
                     </a>
@@ -282,9 +282,8 @@ function fetchShowQues(dataQ) {
                             flagActive == true ? "disable" : "btn-click-save"
                         } btn-outline-dark btn-active-light-dark btn-sm p-1"
                         data-bs-toggle="tooltip" data-bs-html="true" title="Thêm vào danh sách câu hỏi"
-                        data-name="${data.content}"
                         data-id="${data.id}"
-                    >
+                        data-name="${data.content.replace(/"/g, "'")}" >
                         <i class="bi bi-plus-square-fill"></i>
                     </button>
                 </div>
@@ -313,16 +312,16 @@ function showListSave() {
         .map(function (data, index) {
             var titleTable = ``;
             if (flagDataSaveHide == false && index == 0)
-                titleTable = `<h2> Danh sách câu hỏi chờ (${listSave.length}) <i role="button" class="click-hide-data-save bi bi-eye-fill fs-2x"></i></h2>`;
+                titleTable = `<h2> Danh sách câu hỏi chờ (${listSave.length}) <i role="button" data-bs-toggle="tooltip" title="Ẩn danh sách  " class="click-hide-data-save bi bi-eye-fill fs-2x"></i></h2>`;
             if (flagDataSaveHide == true && index == 0)
-                titleTable = `<h2> Danh sách câu hỏi chờ (${listSave.length}) <i role="button" class="click-hide-data-save bi bi-eye-slash-fill fs-2x"></i></h2>`;
+                titleTable = `<h2> Danh sách câu hỏi chờ (${listSave.length}) <i role="button" data-bs-toggle="tooltip" title="Xem danh sách" class="click-hide-data-save bi bi-eye-slash-fill fs-2x"></i></h2>`;
             if (flagDataSaveHide == false)
                 return `
                 ${titleTable}
                 <div class="p-1 m-1" style="background: #d7d7d7 ;border-radius: 10px ; position: relative   ;  padding-top: 15px !important;
                 ">
                 ${data.name}
-                    <i style=" cursor: pointer;   right: 1vh; position: absolute; top: 50%; transform: translateY(-50%);" data-key="${index}" class="click-rm-list bi bi-x fs-2x"></i>
+                    <i style=" cursor: pointer;   right: 1vh; position: absolute; top: 50%; transform: translateY(-50%);" data-bs-toggle="tooltip" title="Xóa khỏi danh sách " data-key="${index}" class="click-rm-list bi bi-x fs-2x"></i>
                 </div>
             `;
             if (flagDataSaveHide == true) return `${titleTable}`;

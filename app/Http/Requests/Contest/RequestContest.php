@@ -24,8 +24,8 @@ class RequestContest extends FormRequest
      */
     public function rules()
     {
-        $ruleName = 'required|max:255|unique:contests,name';
-        if($this->route()->id) $ruleName = 'required|max:255|unique:contests,name,' . $this->route()->id . ',id';
+        $ruleName = 'required|max:255';
+        // if($this->route()->id) $ruleName = 'required|max:255|unique:contests,name,' . $this->route()->id . ',id';
         $rule =   [
             'name' => $ruleName,
             'top1' => 'required|numeric',
@@ -38,7 +38,7 @@ class RequestContest extends FormRequest
             'post_new' => 'required'
         ];
 
-        if(!$this->route()->id || $this->has('img'))  $rule = array_merge($rule, [
+        if (!$this->route()->id || $this->has('img'))  $rule = array_merge($rule, [
             'img' => 'required|mimes:jpeg,png,jpg|max:10000',
         ]);
 
@@ -85,8 +85,7 @@ class RequestContest extends FormRequest
             'end_register_time.date' => trans('validate.date'),
             'register_deadline.required' => trans('validate.required'),
             'register_deadline.date' => trans('validate.date'),
-            'description.required' =>trans('validate.required'),
+            'description.required' => trans('validate.required'),
         ];
     }
-
 }

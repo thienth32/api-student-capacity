@@ -17,7 +17,6 @@ class RoleHasAdmins
     public function handle(Request $request, Closure $next, $role = null)
     {
         if (!$role)  $role = config('util.ROLE_ADMINS');
-
         if (auth()->user()->hasAnyRole($role)) {
             return $next($request);
         } else {

@@ -11,13 +11,13 @@
                             <a href="{{ route('admin.contest.list') }}" class="pe-3">Cuộc thi </a>
                         </li>
                         <li class="breadcrumb-item px-3 ">
-                            <a href="{{ route('admin.contest.show', ['id' => $round->contest->id]) }}"
-                                class="pe-3">
+                            <a href="{{ route('admin.contest.show', ['id' => $round->contest->id]) }}" class="pe-3">
                                 {{ $round->contest->name }}
                             </a>
                         </li>
                         <li class="breadcrumb-item pe-3">
-                            <a href="{{ route('admin.round.list') }}" class="pe-3">Vòng thi </a>
+                            <a href="{{ route('admin.contest.detail.round', ['id' => $round->contest->id], 'contest_id=' . $round->contest->id) }}"
+                                class="pe-3">Vòng thi </a>
                         </li>
                         <li class="breadcrumb-item px-3 text-muted">
                             <a href="{{ route('admin.round.detail', ['id' => $round->id]) }}">
@@ -52,6 +52,7 @@
                                 <th>Điểm qua vòng</th>
                                 <th>Điểm tối đa</th>
                                 <th>Đề bài</th>
+                                <th>Trạng thái </th>
                                 <th>Thao tác</th>
                             </tr>
                         </thead>
@@ -104,7 +105,22 @@
                                             data-external_url="{{ route('dowload.file') . '?url=' . $exam->external_url }}"
                                             type="button" class="download_file btn btn-success">Tải xuống</button>
                                     </td>
+                                    <td>
+                                        @hasanyrole('admin|super admin')
+                                            <div class="form-check form-switch">
+                                                <input value="{{ $exam->status }}" data-id="{{ $exam->id }}"
+                                                    class="form-select-status form-check-input" @checked($exam->status == 1)
+                                                    type="checkbox" role="switch">
+                                            </div>
+                                        @else
+                                            {{-- <div class="form-check form-switch">
+                                                <input value="{{ $exam->status }}" data-id="{{ $exam->id }}"
+                                                    class="form-check-input" @checked($exam->status == 1) type="checkbox"
+                                                    disabled role="switch">
+                                            </div> --}}
+                                        @endhasrole
 
+                                    </td>
                                     <td>
 
                                         <button
@@ -127,6 +143,11 @@
 @endsection
 @section('page-script')
 
+    <script>
+        const url = " {{ request()->url() }}";
+        const _token = "{{ csrf_token() }}";
+    </script>
+    <script src="assets/js/system/formatlist/formatlis.js"></script>
     <script src="assets/js/system/exam/exam.js"></script>
 
 @endsection

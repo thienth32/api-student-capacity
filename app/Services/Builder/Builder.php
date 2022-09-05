@@ -12,18 +12,22 @@ class Builder extends  EloquentBuilder
     public function missingDate($column = null, $miss_date = null, $time = null)
     {
         if ($miss_date == null) return $this;
-        return $this->whereDate($column, "<", $time);
+        return $this->where($column, "<", $time);
+        // return $this->whereDate($column, "<", $time);
     }
+
     public function passDate($column = null, $pass_date = null, $time = null)
     {
         if ($pass_date == null) return $this;
         return $this->whereDate($column, ">", $time);
     }
+
     public function registration_date($column = null, $registration_date = null, $time = null)
     {
         if ($registration_date == null) return $this;
         return $this->whereDate($column, ">", $time)->whereDate('start_register_time', "<", $time);
     }
+
     // public function upComingDate($column = null, $pass_date = null, $time = null)
     // {
     //     if ($pass_date == null) return $this;
@@ -35,6 +39,19 @@ class Builder extends  EloquentBuilder
      */
     public function hasDateTimeBetween($column = null, $start_time = null, $end_time = null)
     {
+        if (is_array($column) && $start_time && $end_time) {
+            $this->where(function ($q) use ($column, $start_time, $end_time) {
+                foreach ($column as $key => $col) {
+                    if ($key == 0) {
+                        $q->whereBetween($col, [$start_time, $end_time]);
+                        continue;
+                    } else {
+                        $q->orWhereBetween($col, [$start_time, $end_time]);
+                    }
+                }
+            });
+            return $this;
+        }
         if ($column && $start_time && $end_time) return $this->whereBetween($column, [$start_time, $end_time]);
         return $this;
     }

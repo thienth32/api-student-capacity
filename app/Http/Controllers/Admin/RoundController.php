@@ -34,6 +34,7 @@ class RoundController extends Controller
     public function __construct(
         private Judge $judge,
         private Round $round,
+        private RoundTeam $roundTeam,
         private MRoundInterface $modelDulesRound,
         private Contest $contest,
         private TypeExam $type_exam,
@@ -299,13 +300,16 @@ class RoundController extends Controller
             'contest' => $contest
         ]);
     }
+
     public function adminShow($id)
     {
         if (!($round = $this->round::with(['contest', 'type_exam', 'judges', 'teams', 'Donor'])->where('id', $id)->first())) {
             return abort(404);
         }
 
-        $roundTeam = RoundTeam::where('round_id', $id)->where('status', config('util.ROUND_TEAM_STATUS_NOT_ANNOUNCED'))->get();
+        $roundTeam = RoundTeam::where('round_id', $id)
+            ->where('status', config('util.ROUND_TEAM_STATUS_NOT_ANNOUNCED'))
+            ->get();
         return view('pages.round.detail.detail', ['round' => $round, 'roundTeam' => $roundTeam]);
     }
     /**
@@ -328,6 +332,7 @@ class RoundController extends Controller
             return redirect()->back();
         }
     }
+
     // chi tiết doanh nghiệp
     public function roundDetailEnterprise($id)
     {
@@ -346,6 +351,7 @@ class RoundController extends Controller
             'listRoundSofts' => $listRoundSofts,
         ]);
     }
+
     public function backUpRound($id)
     {
         try {
@@ -365,12 +371,19 @@ class RoundController extends Controller
             return abort(404);
         }
     }
+
     public function roundDetailTeam($id)
     {
-        $round = $this->round::find($id);
-        $teams = $this->round::find($id)->load('contest')->contest->teams;
-        return view('pages.round.detail.round-team', compact('round', 'teams'));
+        $round = $this->round::whereId($id)->first();
+        $roundTeams = $this->roundTeam::where('round_id', $id)
+            ->with([
+                'team',
+                'takeExam'
+            ])
+            ->get();
+        return view('pages.round.detail.round-team', compact('round', 'roundTeams'));
     }
+
     public function attachEnterprise(Request $request, Donor $donor, DonorRound $donorRound, $id)
     {
         try {
@@ -400,6 +413,7 @@ class RoundController extends Controller
             return redirect()->back();
         }
     }
+
     public function detachEnterprise($id, $donor_id)
     {
         try {
@@ -410,6 +424,7 @@ class RoundController extends Controller
             return redirect()->back();
         }
     }
+
     public function attachTeam(Request $request, $id)
     {
         try {
@@ -419,6 +434,7 @@ class RoundController extends Controller
             return redirect()->back();
         }
     }
+
     public function detachTeam($id, $team_id)
     {
         try {
@@ -475,17 +491,22 @@ class RoundController extends Controller
 
     public function roundDetailTeamMakeExam($id, $teamId)
     {
+
         try {
             $round = $this->round::find($id);
+
             $team = Team::where('id', $teamId)->first();
-            $takeExam = RoundTeam::where('round_id', $id)->where('team_id', $teamId)->with('takeExam', function ($q) use ($round) {
-                return $q->with(['exam', 'evaluations' => function ($q) use ($round) {
-                    $judge = $this->judge::where('contest_id', $round->contest_id)->where('user_id', auth()->user()->id)->with('judge_rounds', function ($q) use ($round) {
-                        return $q->where('round_id', $round->id);
-                    })->first('id');
-                    return $q->where('judge_round_id', $judge->judge_rounds[0]->id);
-                }]);
-            })->first();
+            $takeExam = RoundTeam::where('round_id', $id)
+                ->where('team_id', $teamId)
+                ->with('takeExam', function ($q) use ($round) {
+                    return $q->with(['exam', 'evaluations' => function ($q) use ($round) {
+                        $judge = $this->judge::where('contest_id', $round->contest_id)->where('user_id', auth()->user()->id)->with('judge_rounds', function ($q) use ($round) {
+                            return $q->where('round_id', $round->id);
+                        })->first('id');
+                        return $q->where('judge_round_id', $judge->judge_rounds[0]->id);
+                    }]);
+                })
+                ->first();
             return view(
                 'pages.round.detail.team-make-exam',
                 [
@@ -605,16 +626,14 @@ class RoundController extends Controller
     public function roundDetailTeamTakeExamUpdate(Request $request, $id, $teamId, $takeExamId)
     {
         try {
-
             $dataCreate = [
                 'point' => $request->final_point,
                 'reason' => $request->has('reason') ? $request->reason : null,
                 'user_id' => auth()->user()->id,
-
             ];
+
             $takeExam = TakeExam::find($takeExamId);
             if ($takeExam) {
-
                 $takeExam->history_point()->create($dataCreate);
                 $takeExam->final_point = $request->final_point;
                 $takeExam->mark_comment = $request->has('mark_comment') ? $request->mark_comment : null;
@@ -629,10 +648,9 @@ class RoundController extends Controller
                     'status' => config('util.ROUND_TEAM_STATUS_NOT_ANNOUNCED'), // Chưa công bố
                 ]);
             } elseif ($check && $request->final_point < $request->ponit) {
-                //   dd($check);
                 $check->delete();
             }
-
+            echo "<lescript>art('Thành công ')<script/>";
             return redirect()->back();
         } catch (\Throwable $th) {
             return redirect()->back();
@@ -660,9 +678,8 @@ class RoundController extends Controller
             return redirect()->back();
         }
     }
-    /**
-     * Danh sách BGk kèm điểm và đánh giá bài thi
-     */
+
+
     public function roundDetailTeamJudge($id, $teamId)
     {
         try {
@@ -673,9 +690,13 @@ class RoundController extends Controller
                 foreach ($takeExam->evaluation as $key => $item) {
                     $data[$key] = $item->id;
                 }
-                $historyPoint2 = HistoryPoint::whereIn('historiable_id', $data)->orderByDesc('id')->get();
-                // dd($historyPoint2);
-                $historyPoint = HistoryPoint::where('historiable_id', $takeExam->id)->orderByDesc('id')->get();
+                $historyPoint2 = HistoryPoint::whereIn('historiable_id', $data)
+                    ->with(['user'])
+                    ->orderByDesc('id')->get();
+                $historyPoint = HistoryPoint::where('historiable_id', $takeExam->id)
+                    ->with(['user'])
+                    ->orderByDesc('id')
+                    ->get();
             }
 
             return view(

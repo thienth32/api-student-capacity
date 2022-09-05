@@ -58,7 +58,7 @@ class Major extends Model
 
     public function contest_user()
     {
-        return $this->hasManyThrough(ContestUser::class, Contest::class);
+        return $this->hasManyThrough(ContestUser::class, Contest::class)->with(['user']);
     }
 
     public function teams()
@@ -75,6 +75,26 @@ class Major extends Model
     public function newEloquentBuilder($query)
     {
         return new Builder($query);
+    }
+
+    public function resultCapacity()
+    {
+        return $this->hasManyDeep(
+            ResultCapacity::class,
+            [
+                Contest::class,
+                Round::class,
+                Exam::class
+            ],
+            [
+                'major_id',
+                'contest_id',
+                'round_id',
+                'exam_id',
+            ]
+        )->with(['user' => function ($q) {
+            return $q->select(['id', 'name', 'email', 'avatar', 'status']);
+        }]);
     }
 }
     // public static function tree() {

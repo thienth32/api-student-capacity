@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Log;
 
 class RankUserController extends Controller
 {
+    public function __construct(private MMajorInterface $major)
+    {
+    }
     use TResponse;
     /**
      * @OA\Get(
@@ -26,17 +29,17 @@ class RankUserController extends Controller
      * )
      */
     // Xep hang sinh vien theo chuyen nganh
-    public function getRatingUser(MMajorInterface $majorModel , $slug)
+    public function getRatingUser(MMajorInterface $majorModel, $slug)
     {
         try {
-            if (!$dataRating = $majorModel->getRatingUserByMajorSlug($slug)) return $this->responseApi(false , 'Không tìm thấy chuyên ngành ' . $slug . '!');
+            if (!$dataRating = $majorModel->getRatingUserByMajorSlug($slug)) return $this->responseApi(false, 'Không tìm thấy chuyên ngành ' . $slug . '!');
 
             return $this->responseApi(
-                true ,
+                true,
                 $dataRating
             );
-        } catch (\Throwable$th) {
-            return $this->responseApi(false , $th->getMessage());
+        } catch (\Throwable $th) {
+            return $this->responseApi(false, $th->getMessage());
         }
     }
 
@@ -78,4 +81,18 @@ class RankUserController extends Controller
     //     }
     //     return $arrResult;
     // }
+
+
+    public function getRankUserCapacity($slug)
+    {
+        try {
+            if (!$dataRating = $this->major->getRankUserCapacity($slug)) return $this->responseApi(false, 'Không tìm thấy chuyên ngành ' . $slug . '!');
+            return $this->responseApi(
+                true,
+                $dataRating
+            );
+        } catch (\Throwable $th) {
+            return $this->responseApi(false, $th->getMessage());
+        }
+    }
 }

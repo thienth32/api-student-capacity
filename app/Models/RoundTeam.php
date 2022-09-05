@@ -13,12 +13,20 @@ class RoundTeam extends Model
     protected $table = 'round_teams';
     protected $fillable = ['team_id', 'round_id', 'status'];
     use HasFactory;
+
     public function newEloquentBuilder($query)
     {
         return new Builder($query);
     }
+
     public function takeExam()
     {
         return $this->hasOne(TakeExam::class, 'round_team_id')->with(['exam', 'evaluation']);
     }
+
+    public function team()
+    {
+        return $this->belongsTo(Team::class);
+    }
+
 }

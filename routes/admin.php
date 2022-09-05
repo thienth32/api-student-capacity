@@ -23,7 +23,7 @@ Route::get('dashboard/api-cuoc-thi', [DashboardController::class, 'chartCompetit
 
 Route::prefix('rounds')->group(function () {
 
-    Route::get('', [RoundController::class, 'index'])->name('admin.round.list');
+    Route::get('', [RoundController::class, 'index'])->name('admin.round.list')->middleware('role_admin');
 
 
     Route::group([
@@ -81,12 +81,17 @@ Route::prefix('rounds')->group(function () {
             //     // Route::get('detach/{team_id}', [RoundController::class, 'detachTeam'])->name('admin.round.detail.team.detach');
             // });
 
-            Route::group([
-                'middleware' => 'role_admin:judge'
-            ], function () {
-                // Chấm điểm thi
-                Route::prefix('take_exam')->group(function () {
-                    Route::put('{teamId}/update/{takeExamId}', [RoundController::class, 'roundDetailTeamTakeExamUpdate'])->name('admin.round.detail.team.takeExam.update');
+            //            Route::group([
+            //                'middleware' => 'role_admin:judge'
+            //            ], function () {
+            // Chấm điểm thi
+            Route::prefix('take_exam')->group(function () {
+                Route::put('{teamId}/update/{takeExamId}', [RoundController::class, 'roundDetailTeamTakeExamUpdate'])
+                    ->name('admin.round.detail.team.takeExam.update')
+                    ->middleware('role_admin');
+                Route::group([
+                    'middleware' => 'role_admin:judge'
+                ], function () {
                     Route::get('{teamId}/make', [RoundController::class, 'roundDetailTeamMakeExam'])->name('admin.round.detail.team.make.exam');
                     Route::post('{teamId}/make', [RoundController::class, 'roundDetailFinalTeamMakeExam'])->name('admin.round.detail.team.final.make.exam');
                     Route::put('{teamId}/make', [RoundController::class, 'roundDetailUpdateTeamMakeExam'])->name('admin.round.detail.team.update.make.exam');
@@ -94,6 +99,7 @@ Route::prefix('rounds')->group(function () {
                     Route::get('{teamId}', [RoundController::class, 'roundDetailTeamTakeExam'])->name('admin.round.detail.team.takeExam');
                 });
             });
+            //            });
             Route::group([
                 'middleware' => 'role_admin'
             ], function () {
@@ -115,6 +121,8 @@ Route::prefix('rounds')->group(function () {
             Route::get('create', [ExamController::class, 'create'])->name('admin.exam.create');
             Route::post('store', [ExamController::class, 'store'])->name('admin.exam.store');
             Route::get('{id_exam}/edit', [ExamController::class, 'edit'])->name('admin.exam.edit');
+            Route::post('{id_exam}/un-status', [ExamController::class, 'un_status'])->name('admin.exam.un_status');
+            Route::post('{id_exam}/re-status', [ExamController::class, 're_status'])->name('admin.exam.re_status');
             Route::put('{id_exam}', [ExamController::class, 'update'])->name('admin.exam.update');
         });
         Route::prefix('result')->group(function () {
@@ -122,7 +130,6 @@ Route::prefix('rounds')->group(function () {
         });
     });
 });
-
 
 
 Route::group([
@@ -349,4 +356,9 @@ Route::prefix('questions')->group(function () {
 
     Route::post('impost', [QuestionController::class, 'exImpost'])->name('admin.question.excel.impost');
     Route::get('export', [QuestionController::class, 'exportQe'])->name('admin.question.excel.export');
+});
+
+Route::get('api-view-check', function (App\Services\Modules\MContest\Contest $contest) {
+    $data = $contest->apiIndex();
+    return view('welcome');
 });

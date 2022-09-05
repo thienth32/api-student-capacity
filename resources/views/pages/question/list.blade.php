@@ -10,7 +10,8 @@
             <div class=" col-lg-6">
 
                 <h1>Quản lý câu hỏi
-                    <span role="button" class="refresh-btn svg-icon svg-icon-primary svg-icon-2x">
+                    <span data-bs-toggle="tooltip" title="Tải lại trang " role="button"
+                        class="refresh-btn svg-icon svg-icon-primary svg-icon-2x">
                         <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Update.svg--><svg
                             xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                             height="24px" viewBox="0 0 24 24" version="1.1">
@@ -24,7 +25,8 @@
                         <!--end::Svg Icon-->
                     </span>
                     <a href="{{ route('admin.question.soft.delete', 'question_soft_delete=1') }}">
-                        <span role="button" class="svg-icon svg-icon-primary svg-icon-2x">
+                        <span data-bs-toggle="tooltip" title="Kho lưu trữ bản xóa " role="button"
+                            class="svg-icon svg-icon-primary svg-icon-2x">
                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Trash.svg--><svg
                                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                                 height="24px" viewBox="0 0 24 24" version="1.1">
@@ -132,7 +134,7 @@
         <div>
             <div class="back">
 
-                <span class="btn-hide svg-icon svg-icon-primary svg-icon-2x">
+                <span data-bs-toggle="tooltip" title="Đóng lọc" class="btn-hide svg-icon svg-icon-primary svg-icon-2x">
                     <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Stockholm-icons/Navigation/Angle-up.svg--><svg
                         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                         height="24px" viewBox="0 0 24 24" version="1.1">
@@ -145,7 +147,7 @@
                     </svg>
                 </span>
 
-                <span class="btn-show svg-icon svg-icon-primary svg-icon-2x">
+                <span data-bs-toggle="tooltip" title="Mở lọc" class="btn-show svg-icon svg-icon-primary svg-icon-2x">
                     <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Angle-down.svg--><svg
                         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                         height="24px" viewBox="0 0 24 24" version="1.1">
@@ -168,7 +170,7 @@
                 <table class="table table-row-bordered table-row-gray-300 gy-7 table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">
+                            {{-- <th scope="col">
                                 <span role="button" data-key="id"
                                     class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                     <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
@@ -196,14 +198,15 @@
                                     </svg>
                                     <!--end::Svg Icon-->
                                 </span>
-                            </th>
+                            </th> --}}
                             <th scope="col">Nội dung câu hỏi
                                 <a
                                     href="{{ route('admin.teams', [
                                         'sortBy' => request()->has('sortBy') ? (request('sortBy') == 'desc' ? 'asc' : 'desc') : 'asc',
                                         'orderBy' => 'name',
                                     ]) }}">
-                                    <span role="button" data-key="name"
+                                    <span role="button" data-key="name" data-bs-toggle="tooltip"
+                                        title="Lọc theo nội dung câu hỏi "
                                         class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                         <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
                                             xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -243,7 +246,8 @@
                                         'sortBy' => request()->has('sortBy') ? (request('sortBy') == 'desc' ? 'asc' : 'desc') : 'asc',
                                         'orderBy' => 'created_at',
                                     ]) }}">
-                                    <span role="button" data-key="end_time"
+                                    <span role="button" data-key="end_time" data-bs-toggle="tooltip"
+                                        title="Lọc theo ngày tạo "
                                         class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                         <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
                                             xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -288,7 +292,7 @@
                                 $token = uniqid(15);
                             @endphp
                             <tr>
-                                @if (request()->has('sort'))
+                                {{-- @if (request()->has('sort'))
                                     <th scope="row">
                                         @if (request('sort') == 'desc')
                                             {{ (request()->has('page') && request('page') !== 1 ? $questions->perPage() * (request('page') - 1) : 0) + $key + 1 }}
@@ -301,7 +305,7 @@
                                         {{ (request()->has('page') && request('page') !== 1 ? $questions->perPage() * (request('page') - 1) : 0) + $key + 1 }}
                                     </th>
                                 @endif
-                                </th>
+                                </th> --}}
                                 <td style="width:30%">
                                     {!! $question->content !!}
                                     <br>
@@ -363,7 +367,8 @@
                                         Kích hoạt
                                     @endif --}}
 
-                                    <div class="form-check form-switch">
+                                    <div data-bs-toggle="tooltip" title="Cập nhật trạng thái "
+                                        class="form-check form-switch">
                                         <input value="{{ $question->status }}" data-id="{{ $question->id }}"
                                             class="form-select-status form-check-input " @checked($question->status == 1)
                                             type="checkbox" role="switch">
@@ -375,7 +380,7 @@
                                 <td>
                                     @hasanyrole(config('util.ROLE_ADMINS'))
 
-                                        <div class="btn-group dropstart">
+                                        <div data-bs-toggle="tooltip" title="Thao tác " class="btn-group dropstart">
                                             <button type="button" class="btn   btn-sm dropdown-toggle"
                                                 data-bs-toggle="dropdown" aria-expanded="false">
                                                 <span class="svg-icon svg-icon-success svg-icon-2x">
@@ -484,11 +489,6 @@
 
                                     @endhasrole
                                 </td>
-                                <br>
-
-
-
-
 
                             </tr>
 

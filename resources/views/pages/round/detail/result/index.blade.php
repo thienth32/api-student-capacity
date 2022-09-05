@@ -94,21 +94,28 @@
                                                 {{ (request()->has('page') && request('page') !== 1 ? $results->perPage() * (request('page') - 1) : 0) + $key + 1 }}
                                             </th>
                                         @endif
-                                        <td>
-                                            {{ $team->name }}
-                                        </td>
-                                        <td>
-                                            @foreach ($team->result as $result)
-                                                {{ date('d-m-Y H:i:s', strtotime($result->created_at)) }}
-                                                <br>
-                                                {{ \Carbon\Carbon::parse($result->created_at)->diffforHumans() }}
-                                            @endforeach
-                                        </td>
-                                        <td>
-                                            @foreach ($team->result as $result)
-                                                {{ $result->point }}
-                                            @endforeach
-                                        </td>
+                                            <td>
+                                                {{ $team->name }}
+                                            </td>
+                                        @if(count($team->result) > 0))
+                                            <td>
+                                                @foreach ($team->result as $result)
+                                                    {{ date('d-m-Y H:i:s', strtotime($result->created_at)) }}
+                                                    <br>
+                                                    {{ \Carbon\Carbon::parse($result->created_at)->diffforHumans() }}
+                                                @endforeach
+
+                                            </td>
+                                            <td>
+                                                @foreach ($team->result as $result)
+                                                    {{ $result->point }}
+                                                @endforeach
+                                            </td>
+
+                                        @else
+                                            <td>Chưa có điểm thi</td>
+                                            <td>Chưa có điểm thi</td>
+                                        @endif
                                         {{-- <td>
                                             {{ date('d-m-Y H:i:s', strtotime($result->created_at)) }}
                                             <br>

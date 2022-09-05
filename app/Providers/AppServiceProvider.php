@@ -8,6 +8,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Menu;
+use Illuminate\Database\Eloquent\Model;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,5 +33,6 @@ class AppServiceProvider extends ServiceProvider
         Arr::macro('listColumnOfTable', function (string $table) {
             return Schema::getColumnListing($table);
         });
+        // Model::preventLazyLoading(!app()->isProduction());
     }
 }

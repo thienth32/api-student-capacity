@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CodeManagerController;
 use App\Http\Controllers\Admin\CompanyController as AdminCompanyController;
 use App\Http\Controllers\Admin\ContestController as AdminContestController;
 use App\Http\Controllers\Admin\EnterpriseController;
@@ -82,7 +83,9 @@ Route::prefix('posts')->group(function () {
 Route::get('rating-major/{slug}', [RankUserController::class, 'getRatingUser']);
 
 Route::prefix('rating')->group(function () {
-
-    Route::get('capacity', function ($id) {
-    });
+    Route::get('major-capacity/{slug}', [RankUserController::class, 'getRankUserCapacity']);
 });
+
+Route::get('support-capacity', [\App\Http\Controllers\Admin\SupportController::class, 'support']);
+
+Route::post('run-code', [CodeManagerController::class, 'run']);

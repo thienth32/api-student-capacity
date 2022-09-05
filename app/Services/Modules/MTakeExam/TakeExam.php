@@ -3,10 +3,12 @@
 namespace App\Services\Modules\MTakeExam;
 
 use App\Models\TakeExam as ModelsTakeExam;
+use App\Services\Traits\TResponse;
+use Illuminate\Support\Facades\DB;
 
 class TakeExam
 {
-
+    use TResponse;
     public function __construct(
         private ModelsTakeExam $model
     ) {
