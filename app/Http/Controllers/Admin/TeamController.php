@@ -238,7 +238,7 @@ class TeamController extends Controller
                     'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
                 ]
             );
-            if ($validate->fails()) return $this->responseApi(true, $validate->errors());
+            if ($validate->fails()) return $this->responseApi(false, $validate->errors());
             $user_id = auth('sanctum')->user()->id;
             $user = $this->user::find($user_id);
             $teamCheck = $this->team::find($team_id)->load('members');
@@ -327,7 +327,7 @@ class TeamController extends Controller
                 'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
             ]
         );
-        if ($validate->fails()) return  $this->responseApi(true, $validate->errors());
+        if ($validate->fails()) return  $this->responseApi(false, $validate->errors());
         $teamCheck = $this->team::where(
             'contest_id',
             $request->contest_id
