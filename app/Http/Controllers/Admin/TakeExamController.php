@@ -8,9 +8,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Team;
 use App\Services\Modules\MAnswer\Answer;
 use App\Services\Modules\MContest\Contest;
-use App\Services\Modules\MExam\Exam;
+use App\Services\Modules\MExam\MExamInterface;
 use App\Services\Modules\MQuestion\Question;
-use App\Services\Modules\MResultCapacity\ResultCapacity;
+use App\Services\Modules\MResultCapacity\MResultCapacityInterface;
+use App\Services\Modules\MResultCapacityDetail\MResultCapacityDetailInterface;
 use App\Services\Modules\MRound\Round;
 use App\Services\Modules\MRoundTeam\RoundTeam;
 use App\Services\Modules\MTakeExam\TakeExam;
@@ -24,14 +25,15 @@ class TakeExamController extends Controller
     use TUploadImage, TResponse;
     public function __construct(
         private Round $round,
-        private Exam $exam,
+        private MExamInterface $exam,
         private Contest $contest,
         private  Team $team,
         private  RoundTeam $roundTeam,
         private  TakeExam $takeExam,
-        private  ResultCapacity $resultCapacity,
+        private  MResultCapacityInterface $resultCapacity,
         private  Question $question,
-        private Answer $answer
+        private Answer $answer,
+        private MResultCapacityDetailInterface $resultCapacityDetail
     ) {
     }
     public function takeExamStudent(Request $request)
@@ -327,7 +329,7 @@ class TakeExamController extends Controller
      *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
      * )
      */
-    public function takeExamStudentCapacitySubmit(Request $request)
+    public function takeExamStudentCapacitySubmit(Request $request, DB $db)
     {
         $falseAnswer = 0;
         $trueAnswer = 0;
@@ -374,20 +376,44 @@ class TakeExamController extends Controller
             }
         }
         $resultCapacity =  $this->resultCapacity->findByUserExam($user_id, $request->exam_id);
-        $resultCapacity->update([
-            'scores' => $score,
-            'status' => config('util.STATUS_RESULT_CAPACITY_DONE'),
-        ]);
-        return $this->responseApi(
-            true,
-            $resultCapacity,
-            [
-                'exam' => $exam,
-                'score' => $score,
-                'donotAnswer' => $donotAnswer,
-                'falseAnswer' => $falseAnswer,
-                'trueAnswer' => $trueAnswer
-            ]
-        );
+        $db::beginTransaction();
+        try {
+            $resultCapacity->update([
+                'scores' => $score,
+                'status' => config('util.STATUS_RESULT_CAPACITY_DONE'),
+            ]);
+            foreach ($request->data as $data) {
+                if ($data['type'] == 0) {
+                    $this->resultCapacityDetail->create([
+                        'result_capacity_id' => $resultCapacity->id,
+                        'question_id' => $data['questionId'],
+                        'answer_id' => $data['answerId'],
+                    ]);
+                } else {
+                    foreach ($data['answerIds'] as  $dataAns) {
+                        $this->resultCapacityDetail->create([
+                            'result_capacity_id' => $resultCapacity->id,
+                            'question_id' => $data['questionId'],
+                            'answer_id' => $dataAns,
+                        ]);
+                    }
+                }
+            }
+            $db::commit();
+            return $this->responseApi(
+                true,
+                $resultCapacity,
+                [
+                    'exam' => $exam,
+                    'score' => $score,
+                    'donotAnswer' => $donotAnswer,
+                    'falseAnswer' => $falseAnswer,
+                    'trueAnswer' => $trueAnswer
+                ]
+            );
+        } catch (\Throwable $th) {
+            $db::rollBack();
+            dd($th);
+        }
     }
 }
