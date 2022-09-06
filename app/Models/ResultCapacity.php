@@ -16,7 +16,10 @@ class ResultCapacity extends Model
         'status',
         'exam_id',
         'user_id',
-        'type'
+        'type',
+        'donot_answer',
+        'false_answer',
+        'true_answer',
     ];
     public function user()
     {

@@ -381,6 +381,9 @@ class TakeExamController extends Controller
             $resultCapacity->update([
                 'scores' => $score,
                 'status' => config('util.STATUS_RESULT_CAPACITY_DONE'),
+                'donot_answer' => $donotAnswer,
+                'false_answer' => $falseAnswer,
+                'true_answer' => $trueAnswer,
             ]);
             foreach ($request->data as $data) {
                 if ($data['type'] == 0) {
