@@ -31,7 +31,7 @@ class DashboardController extends Controller
 
         $contests = Contest::where('register_deadline', '>', $dt->subDays(7)->toDateTimeString())
             ->where('status', '<=', 1)
-            ->orderBy('id', 'desc')
+            ->orderBy('register_deadline', 'desc')
             ->get()
             ->map(function ($q) {
                 return [
