@@ -167,7 +167,7 @@
                     <table class="table table-row-bordered table-row-gray-300 gy-7  table-hover ">
                         <thead>
                             <tr>
-                                <th>Tên đề bài </th>
+                                <th>Tên bài làm </th>
                                 <th>Điểm số tối đa </th>
                                 <th>Điểm số qua vòng </th>
                                 <th>Thời gian </th>
@@ -253,6 +253,19 @@
                                     </div>
                                 </div>
 
+                                <div class="col-12 col-lg-2 col-sx-12 col-md-12 col-sm-12 col-xxl-2 col-xl-2">
+                                    <div class="  form-group">
+                                        <label class="form-label">Lấy theo số lượng câu hỏi</label>
+                                        <select id="select-question-has-take"
+                                            class=" form-select mb-2 select2-hidden-accessible" data-control="select2"
+                                            data-hide-search="true" tabindex="-1" aria-hidden="true">
+                                            <option value="10">10</option>
+                                            <option value="20">20</option>
+                                            <option value="60">60</option>
+                                        </select>
+                                    </div>
+                                </div>
+
                             </div>
                             <div id="show-add-questions" class="mt-2 mb-2"></div>
                             <div id="data-save" class="mt-1">
@@ -325,6 +338,8 @@
                                     </div>
                                 </div>
 
+
+
                             </div>
 
                             <table class="table table-row-bordered table-row-gray-300 gy-7  table-hover">
@@ -360,7 +375,7 @@
 @endsection
 @section('page-script')
     <script>
-        const urlApiPublic = "/api/public/";
+        const urlApiPublic = "{{ request()->root() }}/api/public/";
         let questions = null;
         let listSave = [];
         let exam_id = null;

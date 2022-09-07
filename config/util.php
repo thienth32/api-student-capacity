@@ -17,7 +17,7 @@ return [
     'TEACHER_ROLE' => 5,
     "CONTEST_STATUS_REGISTERING" => 0,
     "CONTEST_STATUS_GOING_ON" => 1,
-    "CONTEST_STATUS_DONE" => 3,
+    "CONTEST_STATUS_DONE" => 2,
     "ROLE_DELETE" => "super admin",
     "ROLE_ADMINS" => 'admin|super admin',
     "CONTEST_STATUS_2" => "Cuộc thi đã kết thúc",

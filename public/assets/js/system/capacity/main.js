@@ -198,6 +198,10 @@ function fecthQuestionByExams(id, param = "?", url = null) {
             $("#show-ques-anw").html(html);
             $(".btn-add-question-answ").show();
         },
+        error: function (res) {
+            alert("Đã xảy ra lỗi !");
+            window.location.reload();
+        },
     });
 }
 
@@ -210,6 +214,10 @@ function getApiShowQues(url) {
             if (!res.status) return;
             dataQues = res.payload;
             fetchShowQues(res.payload);
+        },
+        error: function (res) {
+            alert("Đã xảy ra lỗi !");
+            window.location.reload();
         },
     });
 }
@@ -235,6 +243,7 @@ function fetchShowQues(dataQ) {
             .join(" ");
 
         return `
+
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 <div>
                     <a
@@ -358,7 +367,7 @@ const mainPage = {
             $("#show-tast-qs").show();
             $("#show-list-qs").hide();
             showListSave();
-            getApiShowQues("http://127.0.0.1:8000/api/public/questions");
+            getApiShowQues(urlApiPublic + "questions");
         });
     },
     saveQuestion: function () {
@@ -403,7 +412,7 @@ const mainPage = {
     },
     reload: function () {
         $(".btn-reload").on("click", function () {
-            getApiShowQues("http://127.0.0.1:8000/api/public/questions?");
+            getApiShowQues(urlApiPublic + "questions?");
         });
     },
     back: function () {
@@ -418,7 +427,7 @@ const mainPage = {
             var that = this;
             $.ajax({
                 type: "POST",
-                url: "http://127.0.0.1:8000/api/public/questions/save-question",
+                url: urlApiPublic + "questions/save-question",
                 data: {
                     exam_id: exam_id,
                     question_ids: listSave,
@@ -430,6 +439,10 @@ const mainPage = {
                     $("#show-list-qs").show();
                     $("#save-qs").html("Lưu");
                 },
+                error: function (res) {
+                    alert("Đã xảy ra lỗi !");
+                    window.location.reload();
+                },
             });
         });
     },
@@ -437,7 +450,7 @@ const mainPage = {
         $(document).on("click", ".btn-dettach", function () {
             $.ajax({
                 type: "POST",
-                url: "http://127.0.0.1:8000/api/public/questions/dettach-question",
+                url: urlApiPublic + "questions/dettach-question",
                 data: {
                     exam_id: exam_id,
                     questions_id: $(this).data("id"),
@@ -445,6 +458,10 @@ const mainPage = {
                 success: function (response) {
                     if (!response.status) alert("Đã xảy ra lỗi ");
                     fecthQuestionByExams(exam_id);
+                },
+                error: function (res) {
+                    alert("Đã xảy ra lỗi !");
+                    window.location.reload();
                 },
             });
         });
@@ -475,6 +492,11 @@ const mainPage = {
             event.preventDefault()
         );
     },
+    selectQuestionTake: function () {
+        $("#select-question-has-take").on("change", function () {
+            getApiShowQues(urlApiPublic + "questions?take=" + $(this).val());
+        });
+    },
 };
 
 mainPage.addExam();
@@ -489,6 +511,7 @@ mainPage.detachQuestion();
 mainPage.hideDataSave();
 mainPage.paginateClick();
 mainPage.removeByListQuestionById();
+mainPage.selectQuestionTake();
 // mainPage.blockF12();
 
 $("#selectSkill").on("change", function () {
