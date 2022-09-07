@@ -62,13 +62,30 @@ function fetchRoundGet(id) {
                                         ? "Ngày"
                                         : "Trường hợp chưa có trong hệ thống !"
                                 }</td>
-                                <td style="text-align: center;">${
-                                    data.status == 1
-                                        ? "Mở"
-                                        : data.status == 0
-                                        ? "Đóng"
-                                        : ""
-                                }</td>
+                                <td style="text-align: center;">
+                                 <div data-bs-toggle="tooltip" title="Cập nhật trạng thái "
+                                            class="form-check form-switch">
+                                            <input value="${
+                                                data.status
+                                            }" data-id="${data.id}" data-round_id="${id}"
+                                                class="form-select-status form-check-input" ${
+                                                    data.status == 1
+                                                        ? "checked"
+                                                        : ""
+                                                }
+                                                type="checkbox" role="switch">
+
+                                        </div>
+                                 </td>
+                                   <td data-bs-toggle="tooltip" title="Theo dõi tiến trình  " style="text-align: center;">
+                                     <button style="background: #ccc;padding: 1vh 1vh 1vh 2vh;border-radius: 20px;" type="button"
+                                     data-round_id="${id}"
+                                     data-exam_id="${
+                                         data.id
+                                     }" class="btn-click-show-result-exam btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_1">
+                                        <i class="bi bi-graph-down  "></i>
+                                    </button>
+                                </td>
                                 <td data-bs-toggle="tooltip" title="Quản lý câu hỏi câu trả lời " style="text-align: center;">
                                      <button style="background: #ccc;padding: 1vh 1vh 1vh 2vh;border-radius: 20px;" type="button" data-exam_name="${
                                          data.name
@@ -88,6 +105,52 @@ function fetchRoundGet(id) {
         error: function (res) {
             alert("Đã xảy ra lỗi !");
             backClass([".nav-ql", ".nav-list"], [".tab-ql", ".tab-list"]);
+        },
+    });
+}
+
+function fetchHistoryExam(id) {
+    //
+    $("#show-result-exam").html(loading);
+    $.ajax({
+        type: "GET",
+        url: `${urlApiPublic}exam/get-history/${id}`,
+        success: function (res) {
+            $("#print-show").html(`
+                    <button data-exam_id="${id}" type="button" class="print-excel btn btn-warning">Xuất EXEL </button>
+                    <button data-exam_id="${id}"   type="button" class="print-pdf btn btn-primary">Xuất PDF </button>
+            `);
+            if (res.payload.length == 0) {
+                $("#show-result-exam").html(
+                    `<tr>
+                        <td>Không có lịch sử tiến trình  </td>
+                    </tr>`
+                );
+            } else {
+                let html = res.payload
+                    .map(function (data, index) {
+                        return `
+                                <tr>
+                                    <td>${data.user.name}</td>
+                                    <td>${data.user.email}</td>
+                                    <td>${data.scores}</td>
+                                    <td>${
+                                        data.status == 1
+                                            ? "Đã nộp"
+                                            : "Chưa nộp "
+                                    }</td>
+                                    <td>${data.false_answer}</td>
+                                    <td>${data.true_answer}</td>
+                                </tr>
+                            `;
+                    })
+                    .join(" ");
+                $("#show-result-exam").html(html);
+            }
+        },
+        error: function (res) {
+            alert("Đã xảy ra lỗi !");
+            window.location.reload();
         },
     });
 }
@@ -497,6 +560,69 @@ const mainPage = {
             getApiShowQues(urlApiPublic + "questions?take=" + $(this).val());
         });
     },
+    selectStatus: function () {
+        $(document).on("change", ".form-select-status", function () {
+            loadTast();
+            let id = $(this).data("id");
+            var that = this;
+            const url =
+                "/admin/rounds/" + $(this).data("round_id") + "/detail/exam";
+            if ($(this).val() == 1) {
+                $.ajax({
+                    url: `${url}/${id}/un-status`,
+                    method: "POST",
+                    data: {
+                        _token: _token,
+                    },
+                    success: function (data) {
+                        if (!data.status) return alert(data.payload);
+                        $(that).val(0);
+                        loadTast("Thành công !", "success");
+                    },
+                    error: function (request, status, error) {
+                        loadTast("Không thành công !", "info");
+                    },
+                });
+            } else {
+                $.ajax({
+                    url: `${url}/${id}/re-status`,
+                    method: "POST",
+                    data: {
+                        _token: _token,
+                    },
+                    success: function (data) {
+                        if (!data.status) return alert(data.payload);
+                        $(that).val(1);
+                        loadTast("Thành công !", "success");
+                    },
+                    error: function (request, status, error) {
+                        loadTast("Không thành công !", "info");
+                    },
+                });
+            }
+        });
+    },
+    selectShowResult: function () {
+        $(document).on("click", ".btn-click-show-result-exam", function () {
+            fetchHistoryExam($(this).data("exam_id"));
+        });
+    },
+    printPDF: function () {
+        $(document).on("click", ".print-pdf", function () {
+            window.location =
+                "admin/prinft-pdf?type=historyExam&exam_id=" +
+                $(this).data("exam_id");
+            return false;
+        });
+    },
+    printEXCEL: function () {
+        $(document).on("click", ".print-excel", function () {
+            window.location =
+                "admin/prinft-excel?type=historyExam&exam_id=" +
+                $(this).data("exam_id");
+            return false;
+        });
+    },
 };
 
 mainPage.addExam();
@@ -512,6 +638,10 @@ mainPage.hideDataSave();
 mainPage.paginateClick();
 mainPage.removeByListQuestionById();
 mainPage.selectQuestionTake();
+mainPage.selectStatus();
+mainPage.selectShowResult();
+mainPage.printPDF();
+mainPage.printEXCEL();
 // mainPage.blockF12();
 
 $("#selectSkill").on("change", function () {

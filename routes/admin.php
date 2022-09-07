@@ -17,6 +17,8 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EnterpriseController;
 use App\Http\Controllers\Admin\RecruitmentController;
 use App\Http\Controllers\Admin\PostController;
+use App\Http\Controllers\Admin\PrintPDFController;
+use App\Http\Controllers\Admin\PrintExcelController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('dashboard/api-cuoc-thi', [DashboardController::class, 'chartCompetity'])->name('dashboard.chart-competity');
@@ -223,6 +225,8 @@ Route::prefix('contests')->group(function () {
 Route::group([
     'middleware' => 'role_admin'
 ], function () {
+    Route::get('prinft-pdf', [PrintPDFController::class, 'printf'])->name('admin.prinf');
+    Route::get('prinft-excel', [PrintExcelController::class, 'printf'])->name('admin.excel');
 
     Route::prefix('enterprise')->group(function () {
         Route::get('{id}/edit', [EnterpriseController::class, 'edit'])->name('admin.enterprise.edit');

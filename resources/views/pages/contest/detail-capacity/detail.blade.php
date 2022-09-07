@@ -173,6 +173,7 @@
                                 <th>Thời gian </th>
                                 <th>Kiểu thời gian </th>
                                 <th>Tình trạng </th>
+                                <th>Theo dõi tiến trình </th>
                                 <th>Quản lý câu hỏi </th>
                                 <th>Chỉnh sửa </th>
                             </tr>
@@ -371,11 +372,53 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" tabindex="-1" id="kt_modal_1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Theo dõi tiến trình </h5>
+
+                        <!--begin::Close-->
+                        <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal"
+                            aria-label="Close">
+                            <span class="svg-icon svg-icon-2x"></span>
+                        </div>
+                        <!--end::Close-->
+                    </div>
+
+                    <div class="modal-body">
+                        <div id="print-show"></div>
+                        <table class="table table-row-bordered table-row-gray-300 gy-7  table-hover ">
+                            <thead>
+                                <tr>
+                                    <th>Sinh viên</th>
+                                    <th>Mail</th>
+                                    <th>Số điểm</th>
+                                    <th>Trạng thái </th>
+                                    <th>Chọn sai</th>
+                                    <th>Chọn đúng </th>
+                                </tr>
+                            </thead>
+                            <tbody id="show-result-exam">
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="modal-footer">
+
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Thoát </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 @section('page-script')
     <script>
         const urlApiPublic = "{{ request()->root() }}/api/public/";
+        const _token = "{{ csrf_token() }}";
         let questions = null;
         let listSave = [];
         let exam_id = null;

@@ -188,6 +188,7 @@ return [
 
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
     ],
 
     /*
@@ -207,6 +208,7 @@ return [
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'Menu' => App\Services\Manager\FMenu\FMenu::class,
         'Debugbar' => Barryvdh\Debugbar\Facades\Debugbar::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
     ])->toArray(),
 
 ];
