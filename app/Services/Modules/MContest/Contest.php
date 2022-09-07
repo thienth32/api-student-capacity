@@ -215,7 +215,7 @@ class Contest implements MContestInterface
         ];
         if ($type == config('util.TYPE_TEST')) $with = [
             'rounds' => function ($q) {
-                return $q->with(['exams'])->withCount('exams');
+                return $q->with(['exams'])->withCount('results', 'exams', 'posts', 'sliders');
             }
         ];
         try {

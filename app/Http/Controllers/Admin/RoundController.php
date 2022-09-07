@@ -116,12 +116,13 @@ class RoundController extends Controller
             return redirect()->back()->withErrors(['start_time' => 'Thời gian bắt đầu không được bé hơn thời gian bắt đầu của cuộc thi !'])->withInput();
         };
         if (Carbon::parse($request->end_time)->toDateTimeString() > Carbon::parse($contest->register_deadline)->toDateTimeString()) {
-            return redirect()->back()->withErrors(['end_time' => 'Thời gian kết thúc không được lớn hơn thời gian kết thúc của cuộc thi !'])->withInput();
+            return redirect()->back()->withErrors(['end_time' => 'Thời gian kết thúc không được lớn hơn thời gian kết thúc của cuộc thi và test năng lực  !'])->withInput();
         };
         $this->db::beginTransaction();
         try {
             $this->modelDulesRound->store($request);
             $this->db::commit();
+            if ($contest->type == 1)  return redirect()->route('admin.contest.show.capatity', ['id' => $contest->id]);
             return redirect()->route('admin.contest.detail.round', ['id' => $contest->id]);
         } catch (Exception $ex) {
             if ($request->hasFile('image')) {
@@ -167,7 +168,7 @@ class RoundController extends Controller
             if (Carbon::parse($request->end_time)->toDateTimeString() > Carbon::parse($contest->register_deadline)->toDateTimeString()) {
                 return [
                     'status' => false,
-                    'errors' => ['end_time' => 'Thời gian kết thúc không được lớn hơn thời gian kết thúc của cuộc thi !'],
+                    'errors' => ['end_time' => 'Thời gian kết thúc không được lớn hơn thời gian kết thúc của cuộc thi và test năng lực  !'],
                 ];
             };
             $data = null;
@@ -192,6 +193,7 @@ class RoundController extends Controller
         if ($data = $this->updateRound($request, $id)) {
             if (isset($data['status']) && $data['status'] == false)
                 return redirect()->back()->withErrors($data['errors'])->withInput();
+            if (request()->type == 1)  return redirect()->route('admin.contest.show.capatity', ['id' => request()->contest_id]);
             return redirect()->route('admin.contest.detail.round', ['id' => request()->contest_id]);
         }
         return abort(404);
@@ -293,7 +295,7 @@ class RoundController extends Controller
                         return $q->whereIn('id', $arrId);
                     }
                 )
-                ->withCount(['results','exams','posts','sliders'])
+                ->withCount(['results', 'exams', 'posts', 'sliders'])
                 ->paginate(request('limit') ?? 5),
             'contests' => $this->contest::withCount(['teams', 'rounds'])->get(),
             'type_exams' => $this->type_exam::all(),
