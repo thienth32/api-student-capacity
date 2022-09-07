@@ -14,9 +14,9 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        $totalContestRegistering = Contest::where('status', config('util.CONTEST_STATUS_REGISTERING'))->count();
+        // $totalContestRegistering = Contest::where('status', config('util.CONTEST_STATUS_REGISTERING'))->count();
         $totalContestGoingOn = Contest::where('status', config('util.CONTEST_STATUS_GOING_ON'))->count();
-        $totalContestDone = Contest::where('status', config('util.CONTEST_STATUS_DONE'))->count();
+        // $totalContestDone = Contest::where('status', config('util.CONTEST_STATUS_DONE'))->count();
 
         $totalTeamActive = Team::with('contest')
             ->whereHas('contest', function ($q) {
@@ -45,9 +45,9 @@ class DashboardController extends Controller
                 ];
             });
         return view('dashboard.index', compact(
-            'totalContestRegistering',
+            // 'totalContestRegistering',
             'totalContestGoingOn',
-            'totalContestDone',
+            // 'totalContestDone',
             'totalTeamActive',
             'totalStudentAccount',
             'contests'
