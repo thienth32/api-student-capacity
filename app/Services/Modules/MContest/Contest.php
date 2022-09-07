@@ -160,7 +160,9 @@ class Contest implements MContestInterface
         $with = [
             'enterprise',
             'teams' => function ($q) {
-                return $q->withCount('members');
+                return $q
+                    ->with('members')
+                    ->withCount('members');
             },
             'rounds' => function ($q) {
                 return $q->with([
