@@ -99,6 +99,13 @@ class Contest implements MContestInterface
             ->paginate(request('limit') ?? 9);
     }
 
+    public function getConTestCapacityByDateTime()
+    {
+        return $this->contest::where("register_deadline", ">=", request("date"))
+            ->orderBy("register_deadline", "asc")
+            ->get();
+    }
+
     public function store($filename, $request)
     {
 

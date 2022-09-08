@@ -143,7 +143,72 @@
             </div>
             <!--end::Chart widget 18-->
         </div>
-        <div class="col-xl-12 mb-5 mb-xl-10">
+        <div class="col-xl-4 mb-5 mb-xl-10">
+            <!--begin::Col-->
+            <div class=" ">
+                <!--begin::Card-->
+                <div class="card card-flush h-lg-100">
+                    <!--begin::Card header-->
+                    <div class="card-header mt-6">
+                        <!--begin::Card title-->
+                        <div class="card-title flex-column">
+                            <h3 class="fw-bolder mb-1">Hoạt động cuộc thi và test năng lực </h3>
+                        </div>
+                        <!--end::Card title-->
+                        <!--begin::Card toolbar-->
+                        {{-- <div class="card-toolbar">
+                            <!--begin::Select-->
+                            <select name="status" data-control="select2" data-hide-search="true"
+                                class="form-select form-select-solid form-select-sm fw-bolder w-100px">
+                                <option value="1" selected="selected">Options</option>
+                                <option value="2">Option 1</option>
+                                <option value="3">Option 2</option>
+                                <option value="4">Option 3</option>
+                            </select>
+                            <!--end::Select-->
+                        </div> --}}
+                        <!--end::Card toolbar-->
+                    </div>
+                    <!--end::Card header-->
+                    <!--begin::Card body-->
+                    <div class="card-body p-9 pt-4">
+                        <!--begin::Dates-->
+                        <ul class="nav nav-pills d-flex flex-nowrap hover-scroll-x py-2">
+
+                            <!--begin::Date-->
+                            @foreach ($period as $key => $date)
+                                <li class="nav-item me-1">
+                                    <button data-date="{{ $date->format('Y-m-d') }}"
+                                        class="click-showtab nav-link btn d-flex flex-column flex-center rounded-pill min-w-45px me-2 py-4 px-3  {{ $date == $timeNow ? 'btn-active-warning  ' : '' }}  {{ $date == $timeNow ? 'btn-active-primary active' : '' }}"
+                                        data-bs-toggle="tab" href="#kt_schedule_day_1">
+                                        <span class="opacity-50 fs-7 fw-bold">{{ $date->format('l') }}</span>
+                                        <span class="fs-6 fw-bolder">{{ $date->format('Y-m-d') }}</span>
+                                    </button>
+                                </li>
+                            @endforeach
+
+                            <!--end::Date-->
+                        </ul>
+                        <!--end::Dates-->
+                        <!--begin::Tab Content-->
+                        <div class="tab-content">
+
+                            <!--begin::Day-->
+                            <div id="kt_schedule_day_1" class="tab-pane fade show active">
+
+                            </div>
+                            <!--end::Day-->
+
+                        </div>
+                        <!--end::Tab Content-->
+                    </div>
+                    <!--end::Card body-->
+                </div>
+                <!--end::Card-->
+            </div>
+            <!--end::Col-->
+        </div>
+        <div class="col-xl-8 mb-5 mb-xl-10">
             <!--begin::Chart widget 18-->
             <div class="card card-flush h-xl-100">
                 <!--begin::Header-->
@@ -217,6 +282,58 @@
         };
 
         var timeline = new vis.Timeline(container, items, options);
+    </script>
+
+    <script>
+        fetchConTestCapacity("{{ $timeNow }}");
+
+        function fetchConTestCapacity(date) {
+            $('#kt_schedule_day_1').html(`Đang chạy ...`);
+            $.ajax({
+                type: "GET",
+                url: "admin/contest-capacity?date=" + date,
+                success: function(response) {
+                    var html = response.payload.map(function(data) {
+                        return `
+                                <div class="d-flex flex-stack position-relative mt-8">
+                                    <!--begin::Bar-->
+                                    <div class="position-absolute h-100 w-4px bg-secondary rounded top-0 start-0"></div>
+                                    <!--end::Bar-->
+                                    <!--begin::Info-->
+                                    <div class="fw-bold ms-5 text-gray-600">
+                                        <!--begin::Time-->
+                                        <div class="fs-5">
+                                            ${data.date_start} - ${data.register_deadline}
+                                        </div>
+                                        <!--end::Time-->
+                                        <!--begin::Title-->
+                                        <a href="${data.type == 1 ? '/admin/capacity/'+data.id : '/admin/contest/'+data.id+'/detail'}"
+                                            class="fs-5 fw-bolder text-gray-800 text-hover-primary mb-2">
+                                               ${data.type == 1 ? 'Test năng lực : ' : 'Cuộc thi : '} ${data.name}
+                                        </a>
+                                        <!--end::Title-->
+                                        <!--begin::User-->
+                                        <div class="text-gray-400">
+                                            <a href="#">${data.type == 1 ? 'Test năng lực' : 'Cuộc thi'}</a>
+                                        </div>
+                                        <!--end::User-->
+                                    </div>
+                                    <!--end::Info-->
+                                    <!--begin::Action-->
+                                    <a href="${data.type == 1 ? '/admin/capacity/'+data.id : '/admin/contest/'+data.id+'/detail'}" class="btn btn-bg-light btn-active-color-primary btn-sm">Xem chi tiết </a>
+                                    <!--end::Action-->
+                                </div>
+
+                        `;
+                    }).join(" ");
+                    $('#kt_schedule_day_1').html(html);
+                }
+            });
+        }
+        $('.click-showtab').on('click', function() {
+
+            fetchConTestCapacity($(this).data('date'))
+        })
     </script>
 
 @endsection

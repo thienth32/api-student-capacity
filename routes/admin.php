@@ -284,6 +284,7 @@ Route::group([
         Route::get('slider-soft-delete/{id}/backup', [SliderController::class, 'backUpSlider'])->name('admin.sliders.soft.backup');
         Route::get('slider-soft-delete/{id}/delete', [SliderController::class, 'deleteSlider'])->name('admin.sliders.soft.destroy');
     });
+
     Route::prefix('skill')->group(function () {
         Route::get('{id}/edit', [SkillController::class, 'edit'])->name('admin.skill.edit');
         Route::put('{id}', [SkillController::class, 'update'])->name('admin.skill.update');
@@ -307,6 +308,9 @@ Route::group([
     Route::prefix('capacity')->group(function () {
         Route::get('{id}', [ContestController::class, 'show_test_capacity'])->name('admin.contest.show.capatity');
     });
+
+    Route::get('contest-capacity', [ContestController::class, 'getConTestCapacity']);
+
     Route::prefix('recruitment')->group(function () {
         Route::get('{id}/edit', [RecruitmentController::class, 'edit'])->name('admin.recruitment.edit');
         Route::put('{id}', [RecruitmentController::class, 'update'])->name('admin.recruitment.update');
@@ -325,6 +329,7 @@ Route::group([
         Route::post('re-hot/{id}', [RecruitmentController::class, 're_hot'])->name('admin.recruitment.re.hot');
         Route::get('{id}', [RecruitmentController::class, 'detail'])->name('admin.recruitment.detail');
     });
+
     Route::prefix('posts')->group(function () {
         Route::get('{slug}/edit', [PostController::class, 'edit'])->name('admin.post.edit');
         Route::put('{id}', [PostController::class, 'update'])->name('admin.post.update');

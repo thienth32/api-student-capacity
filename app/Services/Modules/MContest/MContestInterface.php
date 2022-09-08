@@ -27,4 +27,6 @@ interface MContestInterface
     public function getContest();
 
     public function getContestRunning();
+
+    public function getConTestCapacityByDateTime();
 }

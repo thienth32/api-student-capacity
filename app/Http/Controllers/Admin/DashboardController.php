@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Menu;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 
 class DashboardController extends Controller
 {
@@ -28,7 +29,8 @@ class DashboardController extends Controller
                 $q->where('id', config('util.STUDENT_ROLE'));
             })->count();
         $dt = Carbon::now('Asia/Ho_Chi_Minh');
-
+        $dt2 = Carbon::now('Asia/Ho_Chi_Minh');
+        $timeNow = $dt->toDateTimeString();
         $contests = Contest::where('register_deadline', '>', $dt->subDays(7)->toDateTimeString())
             ->where('status', '<=', 1)
             ->orderBy('register_deadline', 'desc')
@@ -44,13 +46,17 @@ class DashboardController extends Controller
                         Carbon::parse($q->register_deadline)->diffForHumans()
                 ];
             });
+        $period = CarbonPeriod::create($dt->subDays(2)->toDateTimeString(), $dt2->addDays(7)->toDateTimeString());
+
         return view('dashboard.index', compact(
             // 'totalContestRegistering',
             'totalContestGoingOn',
             // 'totalContestDone',
             'totalTeamActive',
             'totalStudentAccount',
-            'contests'
+            'contests',
+            'period',
+            'timeNow'
         ));
     }
 
