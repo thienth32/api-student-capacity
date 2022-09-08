@@ -11,7 +11,8 @@
 
                     <h1>Quản lý vòng thi
                     </h1>
-                    <span role="button" class="refresh-btn mx-3 svg-icon svg-icon-primary svg-icon-2x">
+                    <span data-bs-toggle="tooltip" title="Tải lại trang " role="button"
+                        class="refresh-btn mx-3 svg-icon svg-icon-primary svg-icon-2x">
                         <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Update.svg--><svg
                             xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                             height="24px" viewBox="0 0 24 24" version="1.1">
@@ -26,7 +27,8 @@
                     </span>
                     <a class="mx-2" href="{{ route('admin.round.soft.delete', 'round_soft_delete=1') }}">
 
-                        <span class=" svg-icon svg-icon-primary svg-icon-2x">
+                        <span data-bs-toggle="tooltip" title="Kho lưu trữ bản xóa "
+                            class=" svg-icon svg-icon-primary svg-icon-2x">
                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Files/Deleted-folder.svg--><svg
                                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                                 height="24px" viewBox="0 0 24 24" version="1.1">
@@ -59,13 +61,13 @@
             <div class="col-lg-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="form-group ">
                     <label class="form-label">Cuộc thi <strong>(CT)</strong> & test năng lực
-                        <strong>(TLL)</strong></label>
+                        <strong>(TNL)</strong></label>
                     <select id="select-contest" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
                         data-hide-search="false" tabindex="-1" aria-hidden="true">
                         <option value="0">Chọn cuộc thi & test năng lực </option>
                         @forelse ($contests as $contest)
                             <option @selected(request('contest_id') == $contest->id) value="{{ $contest->id }}">
-                                {{ $contest->type == 0 ? 'CT-' : 'TLL-' }}
+                                {{ $contest->type == 0 ? 'CT-' : 'TNL-' }}
                                 {{ $contest->name }}
                             </option>
                         @empty
@@ -167,7 +169,7 @@
         </div>
         <div class="back">
             <hr>
-            <span class="btn-hide svg-icon svg-icon-primary svg-icon-2x">
+            <span data-bs-toggle="tooltip" title="Đóng lọc" class="btn-hide svg-icon svg-icon-primary svg-icon-2x">
                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Stockholm-icons/Navigation/Angle-up.svg--><svg
                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                     height="24px" viewBox="0 0 24 24" version="1.1">
@@ -180,7 +182,8 @@
                 </svg>
             </span>
 
-            <span style="display: none" class="btn-show svg-icon svg-icon-primary svg-icon-2x">
+            <span data-bs-toggle="tooltip" title="Mở lọc" style="display: none"
+                class="btn-show svg-icon svg-icon-primary svg-icon-2x">
                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Angle-down.svg--><svg
                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                     height="24px" viewBox="0 0 24 24" version="1.1">
@@ -229,7 +232,7 @@
                             </span>
                         </th> --}}
                         <th scope="col">Vòng thi (VT) && bài làm (BL)
-                            <span role="button" data-key="name"
+                            <span role="button" data-key="name" data-bs-toggle="tooltip" title="Lọc theo tên VT & BL"
                                 class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -261,7 +264,8 @@
                         <th scope="col">Cuộc thi & test năng lực </th>
                         <th scope="col">Loại kiểu thi </th>
                         <th scope="col">Thời gian bắt đầu
-                            <span role="button" data-key="start_time"
+                            <span role="button" data-key="start_time" data-bs-toggle="tooltip"
+                                title="Lọc theo thời gian bắt đầu"
                                 class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -290,7 +294,8 @@
                             </span>
                         </th>
                         <th scope="col">Thời gian kết thúc
-                            <span role="button" data-key="end_time"
+                            <span role="button" data-key="end_time" data-bs-toggle="tooltip"
+                                title="Lọc theo thời gian kết thúc"
                                 class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -363,7 +368,7 @@
                             <td>{{ $round->start_time }}</td>
                             <td>{{ $round->end_time }}</td>
                             <td>
-                                <div class="btn-group dropstart">
+                                <div data-bs-toggle="tooltip" title="Thao tác " class="btn-group dropstart">
                                     <button style="padding: 0" type="button" class="btn   btn-sm dropdown-toggle"
                                         data-bs-toggle="dropdown" aria-expanded="false">
                                         <span class="svg-icon svg-icon-success svg-icon-2x">

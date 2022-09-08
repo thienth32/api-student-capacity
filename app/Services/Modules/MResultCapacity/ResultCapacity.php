@@ -4,7 +4,7 @@ namespace App\Services\Modules\MResultCapacity;
 
 use App\Models\ResultCapacity as ModelsResultCapacity;
 
-class ResultCapacity
+class ResultCapacity implements MResultCapacityInterface
 {
 
     public function __construct(
@@ -29,6 +29,10 @@ class ResultCapacity
     }
     public function find($id)
     {
-        # code...
+    }
+
+    public function where($param = [], $with = [])
+    {
+        return $this->model::hasRequest($param)->with($with)->first();
     }
 }

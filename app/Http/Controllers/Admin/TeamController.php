@@ -179,9 +179,7 @@ class TeamController extends Controller
     public function apiShow($id)
     {
         try {
-            $team = $this->team::find($id);
-            $team->load('members');
-            $team->load('contest');
+            $team = $this->team::find($id)->load(['members', 'contest']);
             return $this->responseApi(true, $team);
         } catch (\Throwable $th) {
             dd($th);
@@ -224,21 +222,22 @@ class TeamController extends Controller
      */
     public function apiEditTeam(Request $request, $team_id)
     {
+        // dd($request->all());
+        $validate = Validator::make(
+            $request->all(),
+            [
+                'name' => 'required',
+                'image' =>  'mimes:jpeg,png,jpg|max:10000',
+            ],
+            [
+                'name.required' => 'Chưa nhập trường này !',
+                'image.mimes' => 'Sai định dạng !',
+                'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
+            ]
+        );
+        if ($validate->fails()) return $this->responseApi(false, $validate->errors());
         DB::beginTransaction();
         try {
-            $validate = Validator::make(
-                $request->all(),
-                [
-                    'name' => 'required',
-                    'image' =>  'mimes:jpeg,png,jpg|max:10000',
-                ],
-                [
-                    'name.required' => 'Chưa nhập trường này !',
-                    'image.mimes' => 'Sai định dạng !',
-                    'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
-                ]
-            );
-            if ($validate->fails()) return $this->responseApi(true, $validate->errors());
             $user_id = auth('sanctum')->user()->id;
             $user = $this->user::find($user_id);
             $teamCheck = $this->team::find($team_id)->load('members');
@@ -327,7 +326,7 @@ class TeamController extends Controller
                 'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
             ]
         );
-        if ($validate->fails()) return  $this->responseApi(true, $validate->errors());
+        if ($validate->fails()) return  $this->responseApi(false, $validate->errors());
         $teamCheck = $this->team::where(
             'contest_id',
             $request->contest_id

@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::redirect('/', '/admin');
-Route::group(['prefix' => 'auth'], function () {
+Route::group(['prefix' => 'auth', 'middleware' => "guest"], function () {
     Route::get('login', [AuthController::class, 'adminLogin'])->name('login');
 
     Route::get('google', [AuthController::class, 'redirectToGoogle'])->name('auth.redirect-google');

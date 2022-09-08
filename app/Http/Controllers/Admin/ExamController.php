@@ -7,12 +7,9 @@ use App\Http\Requests\Exam\RequestExam;
 use App\Models\Exam;
 use App\Models\Question;
 use App\Services\Traits\TUploadImage;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use App\Models\Round;
-use App\Models\User;
+use App\Services\Modules\MExam\MExamInterface;
 use App\Services\Traits\TResponse;
-use App\Services\Traits\TStatus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
@@ -24,11 +21,22 @@ class ExamController extends Controller
     use TUploadImage, TResponse;
 
     public function __construct(
+        private MExamInterface $repoExam,
         private Exam $exam,
         private Round $round,
         private Question $question,
         private DB $db
     ) {
+    }
+
+    public function getHistory($id)
+    {
+        try {
+            $data = $this->repoExam->getResult($id);
+            return $this->responseApi(true, $data);
+        } catch (\Throwable $th) {
+            return $this->responseApi(false, $th->getMessage());
+        }
     }
 
     public function un_status($id, $id_exam)

@@ -195,7 +195,8 @@
                             </span>
                         </th> --}}
                         <th scope="col">{{ \Str::title($contest_type_text) }}
-                            <span role="button" data-key="name"
+                            <span role="button" data-key="name" data-bs-toggle="tooltip"
+                                title="Lọc theo tên {{ $contest_type_text }}"
                                 class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -235,7 +236,8 @@
                             <th scope="col"> Quá trình </th>
                         @endif
                         <th scope="col">Thời gian bắt đầu
-                            <span role="button" data-key="date_start"
+                            <span role="button" data-key="date_start" data-bs-toggle="tooltip"
+                                title="Lọc theo thời gian bắt đầu "
                                 class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -264,7 +266,8 @@
                             </span>
                         </th>
                         <th scope="col">Thời gian kết thúc
-                            <span role="button" data-key="register_deadline"
+                            <span role="button" data-key="register_deadline" data-bs-toggle="tooltip"
+                                title="Lọc theo thời gian kết thúc "
                                 class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
                                     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -294,7 +297,8 @@
                         </th>
                         @if (request('type') != config('util.TYPE_TEST'))
                             <th scope="col">Thời gian bắt đầu đăng ký
-                                <span role="button" data-key="start_register_time"
+                                <span role="button" data-key="start_register_time" data-bs-toggle="tooltip"
+                                    title="Lọc theo thời gian bắt đầu đăng ký"
                                     class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                     <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
                                         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -323,7 +327,8 @@
                                 </span>
                             </th>
                             <th scope="col">Thời gian kết thúc đăng ký
-                                <span role="button" data-key="end_register_time"
+                                <span role="button" data-key="end_register_time" data-bs-toggle="tooltip"
+                                    title="Lọc theo thời gian kết thúc đăng ký "
                                     class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                     <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
                                         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -404,7 +409,8 @@
                             <td>
                                 @hasanyrole('admin|super admin')
                                     @if ($contest->status <= 1)
-                                        <div class="form-check form-switch">
+                                        <div data-bs-toggle="tooltip" title="Cập nhật trạng thái "
+                                            class="form-check form-switch">
                                             <input value="{{ $contest->status }}" data-id="{{ $contest->id }}"
                                                 class="form-select-status form-check-input" @checked($contest->status == 1)
                                                 type="checkbox" role="switch">
@@ -414,8 +420,9 @@
                                         {{ config('util.CONTEST_STATUS_2') }}
                                     @endif
                                 @else
-                                    <div class="form-check form-switch">
-                                        <input value="{{ $contest->status }}" data-id="{{ $contest->id }}"
+                                    <div data-bs-toggle="tooltip" title="Cập nhật trạng thái "
+                                        class="form-check form-switch">
+                                        <input value="{{ $contest->status }}" data-cls="{{ $contest->id }}"
                                             class="form-check-input" @checked($contest->status == 1) type="checkbox" disabled
                                             role="switch">
                                     </div>
@@ -456,7 +463,7 @@
                             @endif
                             @hasanyrole(config('util.ROLE_ADMINS'))
                                 <td>
-                                    <div class="btn-group dropstart">
+                                    <div data-bs-toggle="tooltip" title="Thao tác " class="btn-group dropstart">
                                         <button type="button" class="btn   btn-sm dropdown-toggle" data-bs-toggle="dropdown"
                                             aria-expanded="false">
                                             <span class="svg-icon svg-icon-success svg-icon-2x">

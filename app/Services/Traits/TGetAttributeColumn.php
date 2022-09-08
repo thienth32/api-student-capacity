@@ -2,6 +2,7 @@
 
 namespace App\Services\Traits;
 
+use App\Models\Member;
 use Illuminate\Support\Str;
 
 trait TGetAttributeColumn
@@ -13,11 +14,13 @@ trait TGetAttributeColumn
 
     public function  getStatusUserHasJoinContestAttribute()
     {
+
         if (!auth('sanctum')->check()) return false;
         foreach ($this->teams as $team) {
-            foreach ($team->members as $user) {
-                if (auth('sanctum')->user()->email == $user->email) return true;
-            }
+            if (Member::where('team_id', $team->id)
+                ->where('user_id', auth('sanctum')->id())->exists()
+            )
+                return true;
         }
         return false;
     }

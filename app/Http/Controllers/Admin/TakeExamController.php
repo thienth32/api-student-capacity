@@ -8,9 +8,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Team;
 use App\Services\Modules\MAnswer\Answer;
 use App\Services\Modules\MContest\Contest;
-use App\Services\Modules\MExam\Exam;
+use App\Services\Modules\MExam\MExamInterface;
 use App\Services\Modules\MQuestion\Question;
-use App\Services\Modules\MResultCapacity\ResultCapacity;
+use App\Services\Modules\MResultCapacity\MResultCapacityInterface;
+use App\Services\Modules\MResultCapacityDetail\MResultCapacityDetailInterface;
 use App\Services\Modules\MRound\Round;
 use App\Services\Modules\MRoundTeam\RoundTeam;
 use App\Services\Modules\MTakeExam\TakeExam;
@@ -24,14 +25,15 @@ class TakeExamController extends Controller
     use TUploadImage, TResponse;
     public function __construct(
         private Round $round,
-        private Exam $exam,
+        private MExamInterface $exam,
         private Contest $contest,
         private  Team $team,
         private  RoundTeam $roundTeam,
         private  TakeExam $takeExam,
-        private  ResultCapacity $resultCapacity,
+        private  MResultCapacityInterface $resultCapacity,
         private  Question $question,
-        private Answer $answer
+        private Answer $answer,
+        private MResultCapacityDetailInterface $resultCapacityDetail
     ) {
     }
     public function takeExamStudent(Request $request)
@@ -327,7 +329,7 @@ class TakeExamController extends Controller
      *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
      * )
      */
-    public function takeExamStudentCapacitySubmit(Request $request)
+    public function takeExamStudentCapacitySubmit(Request $request, DB $db)
     {
         $falseAnswer = 0;
         $trueAnswer = 0;
@@ -356,8 +358,10 @@ class TakeExamController extends Controller
                     }
                 }
             } else {
-                if (count($data['answerIds']) <= 1) {
+                if (count($data['answerIds']) > 0 && count($data['answerIds']) <= 1) {
                     $falseAnswer += 1;
+                } else if (count($data['answerIds']) <= 0) {
+                    $donotAnswer += 1;
                 } else {
                     $answer = $this->answer->whereInId(
                         $data['answerIds'],
@@ -374,20 +378,95 @@ class TakeExamController extends Controller
             }
         }
         $resultCapacity =  $this->resultCapacity->findByUserExam($user_id, $request->exam_id);
-        $resultCapacity->update([
-            'scores' => $score,
-            'status' => config('util.STATUS_RESULT_CAPACITY_DONE'),
+        $db::beginTransaction();
+        try {
+            $resultCapacity->update([
+                'scores' => $score,
+                'status' => config('util.STATUS_RESULT_CAPACITY_DONE'),
+                'donot_answer' => $donotAnswer,
+                'false_answer' => $falseAnswer,
+                'true_answer' => $trueAnswer,
+            ]);
+            foreach ($request->data as $data) {
+                if ($data['type'] == 0) {
+                    $this->resultCapacityDetail->create([
+                        'result_capacity_id' => $resultCapacity->id,
+                        'question_id' => $data['questionId'],
+                        'answer_id' => $data['answerId'],
+                    ]);
+                } else {
+                    foreach ($data['answerIds'] as  $dataAns) {
+                        $this->resultCapacityDetail->create([
+                            'result_capacity_id' => $resultCapacity->id,
+                            'question_id' => $data['questionId'],
+                            'answer_id' => $dataAns,
+                        ]);
+                    }
+                }
+            }
+            $db::commit();
+            return $this->responseApi(
+                true,
+                $resultCapacity,
+                [
+                    'exam' => $exam,
+                    'score' => $score,
+                    'donotAnswer' => $donotAnswer,
+                    'falseAnswer' => $falseAnswer,
+                    'trueAnswer' => $trueAnswer
+                ]
+            );
+        } catch (\Throwable $th) {
+            $db::rollBack();
+            dd($th);
+        }
+    }
+
+
+    /**
+     * 
+     * @OA\Post(
+     *     path="/api/v1/take-exam/student-capacity-history",
+     *     description="",
+     *     tags={"TakeExam","TakeExamHistory","Api V1"},
+     *     summary="Authorization",
+     *     security={{"bearer_token":{}}},
+     *     @OA\RequestBody(
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                  @OA\Property(
+     *                      type="number",
+     *                      property="result_capacity_id",
+     *                  ),
+     *                  
+     *              
+     *              ),
+     *          ),
+     *      ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
+    public function takeExamStudentCapacityHistory(Request $request)
+    {
+        $resultCapacity =  $this->resultCapacity->where(['id' => $request->result_capacity_id], ['resultCapacityDetail']);
+        $exam = $this->exam->find($resultCapacity->exam_id);
+        $exam->load([
+            'questions' => function ($q) use ($resultCapacity) {
+                return $q->with([
+                    'answers' => function ($q) {
+                        return $q->select(['id', 'content', 'question_id']);
+                    },
+                    'resultCapacityDetail' => function ($q)  use ($resultCapacity) {
+                        return $q
+                            ->where('result_capacity_id', $resultCapacity->id);
+                        // ->selectRaw('result_capacity_detail.answer_id as answer_id, question_id')
+                        // ->groupBy('question_id');
+                    }
+                ]);
+            }
         ]);
-        return $this->responseApi(
-            true,
-            $resultCapacity,
-            [
-                'exam' => $exam,
-                'score' => $score,
-                'donotAnswer' => $donotAnswer,
-                'falseAnswer' => $falseAnswer,
-                'trueAnswer' => $trueAnswer
-            ]
-        );
+        return $this->responseApi(true, $resultCapacity, ['exam' => $exam]);
     }
 }

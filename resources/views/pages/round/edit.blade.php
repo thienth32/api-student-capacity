@@ -7,8 +7,9 @@
 
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
-                <form id="formAddRound" action="{{ route('admin.round.update', ['id' => $round['id']]) }}" method="post"
-                    enctype="multipart/form-data">
+                <form id="formAddRound"
+                    action="{{ route('admin.round.update', ['id' => $round['id'], 'type' => request('type') ? request('type') : 0]) }}"
+                    method="post" enctype="multipart/form-data">
                     @csrf
                     @method('put')
                     <div class="form-group mb-10">

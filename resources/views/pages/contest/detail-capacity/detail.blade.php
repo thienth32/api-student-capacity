@@ -55,19 +55,20 @@
             }
         }
     </style>
-    <div class=" mb-4">
-        <div class="row">
-            <div class="col-lg-12">
-                <ol class="breadcrumb text-muted fs-6 fw-bold">
-                    <li class="breadcrumb-item pe-3">
-                        <a href="{{ route('admin.contest.list') . '?type=1' }}" class="pe-3">Test năng lực </a>
-                    </li>
-                    <li class="breadcrumb-item px-3 text-muted">{{ $test_capacity->name }}</li>
-                </ol>
+
+    <div class="card card-plush p-2">
+        <div class=" mb-4">
+            <div class="row">
+                <div class="col-lg-12">
+                    <ol class="breadcrumb text-muted fs-6 fw-bold">
+                        <li class="breadcrumb-item pe-3">
+                            <a href="{{ route('admin.contest.list') . '?type=1' }}" class="pe-3">Test năng lực </a>
+                        </li>
+                        <li class="breadcrumb-item px-3 text-muted">{{ $test_capacity->name }}</li>
+                    </ol>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="card card-plush p-2">
         <style>
             .tab-content {
                 width: 80%;
@@ -115,18 +116,42 @@
                 <div class="tab-pane fade active show tab-list" id="kt_vtab_pane_4" role="tabpanel">
                     <h2>
                         Danh sách đề bài thuộc <strong style="color: blue">{{ $test_capacity->name }}</strong>
+                        <a class="mx-2" target="_blank"
+                            href="{{ route('admin.round.soft.delete', 'round_soft_delete=1') }}">
+
+                            <span data-bs-toggle="tooltip" title="Kho lưu trữ bản xóa "
+                                class=" svg-icon svg-icon-primary svg-icon-2x">
+                                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Files/Deleted-folder.svg--><svg
+                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <rect x="0" y="0" width="24" height="24" />
+                                        <path
+                                            d="M3.5,21 L20.5,21 C21.3284271,21 22,20.3284271 22,19.5 L22,8.5 C22,7.67157288 21.3284271,7 20.5,7 L10,7 L7.43933983,4.43933983 C7.15803526,4.15803526 6.77650439,4 6.37867966,4 L3.5,4 C2.67157288,4 2,4.67157288 2,5.5 L2,19.5 C2,20.3284271 2.67157288,21 3.5,21 Z"
+                                            fill="#000000" opacity="0.3" />
+                                        <path
+                                            d="M10.5857864,14 L9.17157288,12.5857864 C8.78104858,12.1952621 8.78104858,11.5620972 9.17157288,11.1715729 C9.56209717,10.7810486 10.1952621,10.7810486 10.5857864,11.1715729 L12,12.5857864 L13.4142136,11.1715729 C13.8047379,10.7810486 14.4379028,10.7810486 14.8284271,11.1715729 C15.2189514,11.5620972 15.2189514,12.1952621 14.8284271,12.5857864 L13.4142136,14 L14.8284271,15.4142136 C15.2189514,15.8047379 15.2189514,16.4379028 14.8284271,16.8284271 C14.4379028,17.2189514 13.8047379,17.2189514 13.4142136,16.8284271 L12,15.4142136 L10.5857864,16.8284271 C10.1952621,17.2189514 9.56209717,17.2189514 9.17157288,16.8284271 C8.78104858,16.4379028 8.78104858,15.8047379 9.17157288,15.4142136 L10.5857864,14 Z"
+                                            fill="#000000" />
+                                    </g>
+                                </svg>
+                                <!--end::Svg Icon-->
+                            </span>
+                        </a>
                     </h2>
                     <a target="_blank"
                         href="{{ route('admin.round.create') . '?contest_id=' . $test_capacity->id . '&type=1' }}"
-                        style="float:right">Thêm bài làm </a>
+                        style="float:right">Thêm đề bài </a>
                     <div style="width: 100%" class="table-responsive table-responsive-md ">
                         <table class="table table-row-bordered table-row-gray-300 gy-7  table-hover ">
                             <thead>
                                 <tr>
-                                    <th>Tên đề bài  </th>
+                                    <th>Tên đề bài </th>
                                     <th>Bài làm</th>
                                     <th>Tổng số bài làm</th>
+                                    <th>Thời gian bắt đầu</th>
+                                    <th>Thời gian kết thúc</th>
                                     <th style="text-align: center">Thao tác </th>
+                                    <th style="text-align: center"> </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -144,10 +169,134 @@
                                             <td>
                                                 {{ $round->exams_count }}
                                             </td>
+                                            <td>{{ $round->start_time }}</td>
+                                            <td>{{ $round->end_time }}</td>
                                             <td style="text-align: center">
-                                                <i role="button" data-round_id="{{ $round->id }}"
+                                                <i role="button" data-bs-toggle="tooltip" title="Quản lý bài làm "
+                                                    data-round_id="{{ $round->id }}"
                                                     data-round_name="{{ $round->name }}"
                                                     class="add-exam m-auto bi bi-plus-circle-fill fs-2x"></i>
+                                            </td>
+                                            <td>
+                                                <div data-bs-toggle="tooltip" title="Thao tác " class="btn-group dropstart">
+                                                    <button style="padding: 0" type="button"
+                                                        class="btn   btn-sm dropdown-toggle" data-bs-toggle="dropdown"
+                                                        aria-expanded="false">
+                                                        <span class="svg-icon svg-icon-success svg-icon-2x">
+                                                            <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Settings-2.svg--><svg
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                                                height="24px" viewBox="0 0 24 24" version="1.1">
+                                                                <g stroke="none" stroke-width="1" fill="none"
+                                                                    fill-rule="evenodd">
+                                                                    <rect x="0" y="0" width="24"
+                                                                        height="24" />
+                                                                    <path
+                                                                        d="M5,8.6862915 L5,5 L8.6862915,5 L11.5857864,2.10050506 L14.4852814,5 L19,5 L19,9.51471863 L21.4852814,12 L19,14.4852814 L19,19 L14.4852814,19 L11.5857864,21.8994949 L8.6862915,19 L5,19 L5,15.3137085 L1.6862915,12 L5,8.6862915 Z M12,15 C13.6568542,15 15,13.6568542 15,12 C15,10.3431458 13.6568542,9 12,9 C10.3431458,9 9,10.3431458 9,12 C9,13.6568542 10.3431458,15 12,15 Z"
+                                                                        fill="#000000" />
+                                                                </g>
+                                                            </svg>
+                                                            <!--end::Svg Icon-->
+                                                        </span>
+                                                    </button>
+                                                    <ul class="dropdown-menu ps-3">
+                                                        <li class="my-3">
+                                                            <a
+                                                                href="{{ route('admin.round.edit', ['id' => $round->id]) . '?type=' . $round->contest->type }}">
+                                                                <span role="button"
+                                                                    class="svg-icon svg-icon-success svg-icon-2x">
+                                                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Design/Edit.svg--><svg
+                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                        xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                        width="24px" height="24px" viewBox="0 0 24 24"
+                                                                        version="1.1">
+                                                                        <g stroke="none" stroke-width="1" fill="none"
+                                                                            fill-rule="evenodd">
+                                                                            <rect x="0" y="0"
+                                                                                width="24" height="24" />
+                                                                            <path
+                                                                                d="M8,17.9148182 L8,5.96685884 C8,5.56391781 8.16211443,5.17792052 8.44982609,4.89581508 L10.965708,2.42895648 C11.5426798,1.86322723 12.4640974,1.85620921 13.0496196,2.41308426 L15.5337377,4.77566479 C15.8314604,5.0588212 16,5.45170806 16,5.86258077 L16,17.9148182 C16,18.7432453 15.3284271,19.4148182 14.5,19.4148182 L9.5,19.4148182 C8.67157288,19.4148182 8,18.7432453 8,17.9148182 Z"
+                                                                                fill="#000000" fill-rule="nonzero"
+                                                                                transform="translate(12.000000, 10.707409) rotate(-135.000000) translate(-12.000000, -10.707409) " />
+                                                                            <rect fill="#000000" opacity="0.3"
+                                                                                x="5" y="20"
+                                                                                width="15" height="2"
+                                                                                rx="1" />
+                                                                        </g>
+                                                                    </svg>
+                                                                </span>
+                                                                Chỉnh sửa
+                                                            </a>
+                                                        </li>
+                                                        <li class="my-3">
+                                                            @hasrole(config('util.ROLE_DELETE'))
+                                                                @if ($round->results_count == 0 &&
+                                                                    $round->exams_count == 0 &&
+                                                                    $round->posts_count == 0 &&
+                                                                    $round->sliders_count == 0)
+                                                                    <form
+                                                                        action="{{ route('admin.round.destroy', ['id' => $round->id]) }}"
+                                                                        method="post">
+                                                                        @csrf
+                                                                        @method('delete')
+                                                                        <button
+                                                                            onclick="return confirm('Bạn có chắc muốn xóa không !')"
+                                                                            style=" background: none ; border: none ; list-style : none"
+                                                                            type="submit">
+                                                                            <span role="button"
+                                                                                class="svg-icon svg-icon-danger svg-icon-2x">
+                                                                                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Trash.svg--><svg
+                                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                                    width="24px" height="24px"
+                                                                                    viewBox="0 0 24 24" version="1.1">
+                                                                                    <g stroke="none" stroke-width="1"
+                                                                                        fill="none" fill-rule="evenodd">
+                                                                                        <rect x="0" y="0"
+                                                                                            width="24" height="24" />
+                                                                                        <path
+                                                                                            d="M6,8 L18,8 L17.106535,19.6150447 C17.04642,20.3965405 16.3947578,21 15.6109533,21 L8.38904671,21 C7.60524225,21 6.95358004,20.3965405 6.89346498,19.6150447 L6,8 Z M8,10 L8.45438229,14.0894406 L15.5517885,14.0339036 L16,10 L8,10 Z"
+                                                                                            fill="#000000"
+                                                                                            fill-rule="nonzero" />
+                                                                                        <path
+                                                                                            d="M14,4.5 L14,3.5 C14,3.22385763 13.7761424,3 13.5,3 L10.5,3 C10.2238576,3 10,3.22385763 10,3.5 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z"
+                                                                                            fill="#000000" opacity="0.3" />
+                                                                                    </g>
+                                                                                </svg>
+                                                                                <!--end::Svg Icon-->
+                                                                            </span>
+                                                                            Xóa bỏ
+                                                                        </button>
+                                                                    </form>
+                                                                @endif
+                                                            @else
+                                                                <span style="cursor: not-allowed; user-select: none"
+                                                                    class="svg-icon svg-icon-danger svg-icon-2x">
+                                                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Code/Lock-circle.svg--><svg
+                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                        xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                        width="24px" height="24px" viewBox="0 0 24 24"
+                                                                        version="1.1">
+                                                                        <g stroke="none" stroke-width="1" fill="none"
+                                                                            fill-rule="evenodd">
+                                                                            <rect x="0" y="0"
+                                                                                width="24" height="24" />
+                                                                            <circle fill="#000000" opacity="0.3"
+                                                                                cx="12" cy="12"
+                                                                                r="10" />
+                                                                            <path
+                                                                                d="M14.5,11 C15.0522847,11 15.5,11.4477153 15.5,12 L15.5,15 C15.5,15.5522847 15.0522847,16 14.5,16 L9.5,16 C8.94771525,16 8.5,15.5522847 8.5,15 L8.5,12 C8.5,11.4477153 8.94771525,11 9.5,11 L9.5,10.5 C9.5,9.11928813 10.6192881,8 12,8 C13.3807119,8 14.5,9.11928813 14.5,10.5 L14.5,11 Z M12,9 C11.1715729,9 10.5,9.67157288 10.5,10.5 L10.5,11 L13.5,11 L13.5,10.5 C13.5,9.67157288 12.8284271,9 12,9 Z"
+                                                                                fill="#000000" />
+                                                                        </g>
+                                                                    </svg>
+                                                                    <!--end::Svg Icon-->
+                                                                </span>
+                                                                Xóa bỏ
+                                                            @endhasrole
+
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -166,12 +315,13 @@
                     <table class="table table-row-bordered table-row-gray-300 gy-7  table-hover ">
                         <thead>
                             <tr>
-                                <th>Tên đề bài </th>
+                                <th>Tên bài làm </th>
                                 <th>Điểm số tối đa </th>
                                 <th>Điểm số qua vòng </th>
                                 <th>Thời gian </th>
                                 <th>Kiểu thời gian </th>
                                 <th>Tình trạng </th>
+                                <th>Theo dõi tiến trình </th>
                                 <th>Quản lý câu hỏi </th>
                                 <th>Chỉnh sửa </th>
                             </tr>
@@ -252,17 +402,32 @@
                                     </div>
                                 </div>
 
+                                <div class="col-12 col-lg-2 col-sx-12 col-md-12 col-sm-12 col-xxl-2 col-xl-2">
+                                    <div class="  form-group">
+                                        <label class="form-label">Lấy theo số lượng câu hỏi</label>
+                                        <select id="select-question-has-take"
+                                            class=" form-select mb-2 select2-hidden-accessible" data-control="select2"
+                                            data-hide-search="true" tabindex="-1" aria-hidden="true">
+                                            <option value="10">10</option>
+                                            <option value="20">20</option>
+                                            <option value="60">60</option>
+                                        </select>
+                                    </div>
+                                </div>
+
                             </div>
                             <div id="show-add-questions" class="mt-2 mb-2"></div>
                             <div id="data-save" class="mt-1">
                                 <div id="show-data-save" class="mb-5"></div>
                                 <div
                                     style="position: fixed; bottom: 20px; transform: translateX(-50%);  left: 50%; z-index: 999999999;">
-                                    <button class="btn btn-primary" id="save-qs">Lưu </button>
-                                    <button class="btn-reload btn btn-success">
+                                    <button data-bs-toggle="tooltip" title="Lưu" class="btn btn-primary"
+                                        id="save-qs">Lưu </button>
+                                    <button data-bs-toggle="tooltip" title="Tải lại câu hỏi "
+                                        class="btn-reload btn btn-success">
                                         <i class="bi bi-arrow-counterclockwise"></i>
                                     </button>
-                                    <button class="btn-back btn btn-warning">
+                                    <button data-bs-toggle="tooltip" title="Trở về " class="btn-back btn btn-warning">
                                         <i class="bi bi-backspace"></i>
                                     </button>
                                 </div>
@@ -322,6 +487,8 @@
                                     </div>
                                 </div>
 
+
+
                             </div>
 
                             <table class="table table-row-bordered table-row-gray-300 gy-7  table-hover">
@@ -331,7 +498,7 @@
                                         <th>Độ khó </th>
                                         <th>Đáp án </th>
                                         <th>Tình trạng</th>
-                                        <th> <i role="button"
+                                        <th> <i role="button" data-bs-toggle="tooltip" title="Thêm câu hỏi câu trả lời "
                                                 class="btn-add-question-answ bi bi-plus-square-fill fs-2x"></i>
                                         </th>
                                     </tr>
@@ -353,11 +520,54 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" tabindex="-1" id="kt_modal_1">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Theo dõi tiến trình </h5>
+
+                        <!--begin::Close-->
+                        <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal"
+                            aria-label="Close">
+                            <span class="svg-icon svg-icon-2x"></span>
+                        </div>
+                        <!--end::Close-->
+                    </div>
+
+                    <div class="modal-body">
+                        <div id="print-show"></div>
+                        <table class="table table-row-bordered table-row-gray-300 gy-7  table-hover ">
+                            <thead>
+                                <tr>
+                                    <th>Sinh viên</th>
+                                    <th>Mail</th>
+                                    <th>Số điểm</th>
+                                    <th>Trạng thái </th>
+                                    <th>Chọn sai</th>
+                                    <th>Chọn đúng </th>
+                                    <th>Đáp án</th>
+                                </tr>
+                            </thead>
+                            <tbody id="show-result-exam">
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="modal-footer">
+
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Thoát </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 @section('page-script')
     <script>
-        const urlApiPublic = "/api/public/";
+        const urlApiPublic = "{{ request()->root() }}/api/public/";
+        const _token = "{{ csrf_token() }}";
         let questions = null;
         let listSave = [];
         let exam_id = null;
