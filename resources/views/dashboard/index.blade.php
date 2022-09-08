@@ -214,7 +214,7 @@
                     </div>
                     <!--end::Card header-->
                     <!--begin::Card body-->
-                    <div class="card-body p-9 pt-4">
+                    <div style=" max-height: 500px;  overflow: auto;" class="card-body p-9 pt-4">
                         <!--begin::Dates-->
                         <ul class="nav nav-pills d-flex flex-nowrap hover-scroll-x py-2">
 
