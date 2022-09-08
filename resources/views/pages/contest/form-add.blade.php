@@ -145,7 +145,6 @@
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
-
                             @endif
                             <div class="form-group ">
                                 <label for="" class="form-label">Ảnh {{ $contest_type_text }}</label>
@@ -239,9 +238,6 @@
     <script src="assets/js/system/date-after/date-after.js"></script>
     <script src="assets/js/system/contest/form.js"></script>
     <script>
-
-        pageCkeditor.classicCk2();
-
         rules.img = {
             required: true,
         };

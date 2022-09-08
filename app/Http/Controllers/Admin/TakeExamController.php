@@ -422,24 +422,51 @@ class TakeExamController extends Controller
         }
     }
 
-    public function takeExamStudentCapacityHistory(Request $request,)
+
+    /**
+     * 
+     * @OA\Post(
+     *     path="/api/v1/take-exam/student-capacity-history",
+     *     description="",
+     *     tags={"TakeExam","TakeExamHistory","Api V1"},
+     *     summary="Authorization",
+     *     security={{"bearer_token":{}}},
+     *     @OA\RequestBody(
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                  @OA\Property(
+     *                      type="number",
+     *                      property="result_capacity_id",
+     *                  ),
+     *                  
+     *              
+     *              ),
+     *          ),
+     *      ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
+    public function takeExamStudentCapacityHistory(Request $request)
     {
-
-        $user_id = auth('sanctum')->user()->id;
-        $resultCapacity =  $this->resultCapacity
-            ->where(['id' => $request->result_capacity_id, 'user_id' => $user_id]);
+        $resultCapacity =  $this->resultCapacity->where(['id' => $request->result_capacity_id], ['resultCapacityDetail']);
         $exam = $this->exam->find($resultCapacity->exam_id);
-
-
-
-        $exam->load(['questions' => function ($q) {
-            return $q->with([
-                'answers' => function ($q) {
-                    return $q->select(['id', 'content', 'question_id', 'is_correct']);
-                }
-            ]);
-        }]);
-
+        $exam->load([
+            'questions' => function ($q) use ($resultCapacity) {
+                return $q->with([
+                    'answers' => function ($q) {
+                        return $q->select(['id', 'content', 'question_id']);
+                    },
+                    'resultCapacityDetail' => function ($q)  use ($resultCapacity) {
+                        return $q
+                            ->where('result_capacity_id', $resultCapacity->id);
+                        // ->selectRaw('result_capacity_detail.answer_id as answer_id, question_id')
+                        // ->groupBy('question_id');
+                    }
+                ]);
+            }
+        ]);
         return $this->responseApi(true, $resultCapacity, ['exam' => $exam]);
     }
 }

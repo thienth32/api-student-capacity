@@ -22,17 +22,18 @@ class ResultCapacity extends Model
         'false_answer',
         'true_answer',
     ];
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
     public function newEloquentBuilder($query)
     {
         return new Builder($query);
     }
 
-
-    public function detail()
+    public function resultCapacityDetail()
     {
         return $this->hasMany(ResultCapacityDetail::class, 'result_capacity_id');
     }
