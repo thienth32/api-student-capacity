@@ -77,7 +77,7 @@
                         <div class="row">
                             <div class="col-8">
                                 <div class="form-group mb-10">
-                                    <label class="form-label" for="">Tên doanh nghiệp</label>
+                                    <label class="form-label" for="email">Tên doanh nghiệp </label>
                                     <input type="text" name="name" value="{{ old('name') }}" class=" form-control"
                                         placeholder="">
                                     @error('name')
