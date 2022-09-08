@@ -56,6 +56,7 @@ Route::prefix('take-exam')->group(function () {
     Route::post('check-student-capacity', [AdminTakeExamController::class, 'checkStudentCapacity']);
     Route::post('student-capacity', [AdminTakeExamController::class, 'takeExamStudentCapacity']);
     Route::post('student-capacity-submit', [AdminTakeExamController::class, 'takeExamStudentCapacitySubmit']);
+    Route::post('student-capacity-history', [AdminTakeExamController::class, 'takeExamStudentCapacityHistory']);
 });
 
 

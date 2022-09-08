@@ -179,9 +179,7 @@ class TeamController extends Controller
     public function apiShow($id)
     {
         try {
-            $team = $this->team::find($id);
-            $team->load('members');
-            $team->load('contest');
+            $team = $this->team::find($id)->load(['members', 'contest']);
             return $this->responseApi(true, $team);
         } catch (\Throwable $th) {
             dd($th);

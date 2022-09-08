@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\Builder\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -24,5 +25,15 @@ class ResultCapacity extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+    public function newEloquentBuilder($query)
+    {
+        return new Builder($query);
+    }
+
+
+    public function detail()
+    {
+        return $this->hasMany(ResultCapacityDetail::class, 'result_capacity_id');
     }
 }

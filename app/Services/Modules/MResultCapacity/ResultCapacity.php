@@ -29,6 +29,10 @@ class ResultCapacity implements MResultCapacityInterface
     }
     public function find($id)
     {
-        # code...
+    }
+
+    public function where($param = [], $with = [])
+    {
+        return $this->model::hasRequest($param)->with($with)->first();
     }
 }

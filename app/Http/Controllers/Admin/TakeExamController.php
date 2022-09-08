@@ -362,7 +362,7 @@ class TakeExamController extends Controller
                     $falseAnswer += 1;
                 } else if (count($data['answerIds']) <= 0) {
                     $donotAnswer += 1;
-                } else { {
+                } else {
                     $answer = $this->answer->whereInId(
                         $data['answerIds'],
                         [
@@ -420,5 +420,26 @@ class TakeExamController extends Controller
             $db::rollBack();
             dd($th);
         }
+    }
+
+    public function takeExamStudentCapacityHistory(Request $request,)
+    {
+
+        $user_id = auth('sanctum')->user()->id;
+        $resultCapacity =  $this->resultCapacity
+            ->where(['id' => $request->result_capacity_id, 'user_id' => $user_id]);
+        $exam = $this->exam->find($resultCapacity->exam_id);
+
+
+
+        $exam->load(['questions' => function ($q) {
+            return $q->with([
+                'answers' => function ($q) {
+                    return $q->select(['id', 'content', 'question_id', 'is_correct']);
+                }
+            ]);
+        }]);
+
+        return $this->responseApi(true, $resultCapacity, ['exam' => $exam]);
     }
 }
