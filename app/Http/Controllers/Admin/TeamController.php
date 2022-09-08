@@ -224,21 +224,22 @@ class TeamController extends Controller
      */
     public function apiEditTeam(Request $request, $team_id)
     {
+        // dd($request->all());
+        $validate = Validator::make(
+            $request->all(),
+            [
+                'name' => 'required',
+                'image' =>  'mimes:jpeg,png,jpg|max:10000',
+            ],
+            [
+                'name.required' => 'Chưa nhập trường này !',
+                'image.mimes' => 'Sai định dạng !',
+                'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
+            ]
+        );
+        if ($validate->fails()) return $this->responseApi(false, $validate->errors());
         DB::beginTransaction();
         try {
-            $validate = Validator::make(
-                $request->all(),
-                [
-                    'name' => 'required',
-                    'image' =>  'mimes:jpeg,png,jpg|max:10000',
-                ],
-                [
-                    'name.required' => 'Chưa nhập trường này !',
-                    'image.mimes' => 'Sai định dạng !',
-                    'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
-                ]
-            );
-            if ($validate->fails()) return $this->responseApi(false, $validate->errors());
             $user_id = auth('sanctum')->user()->id;
             $user = $this->user::find($user_id);
             $teamCheck = $this->team::find($team_id)->load('members');

@@ -358,9 +358,11 @@ class TakeExamController extends Controller
                     }
                 }
             } else {
-                if (count($data['answerIds']) <= 1) {
+                if (count($data['answerIds']) > 0 && count($data['answerIds']) <= 1) {
                     $falseAnswer += 1;
-                } else {
+                } else if (count($data['answerIds']) <= 0) {
+                    $donotAnswer += 1;
+                } else { {
                     $answer = $this->answer->whereInId(
                         $data['answerIds'],
                         [
