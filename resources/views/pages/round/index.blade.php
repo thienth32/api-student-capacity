@@ -61,13 +61,13 @@
             <div class="col-lg-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="form-group ">
                     <label class="form-label">Cuộc thi <strong>(CT)</strong> & test năng lực
-                        <strong>(TLL)</strong></label>
+                        <strong>(TNL)</strong></label>
                     <select id="select-contest" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
                         data-hide-search="false" tabindex="-1" aria-hidden="true">
                         <option value="0">Chọn cuộc thi & test năng lực </option>
                         @forelse ($contests as $contest)
                             <option @selected(request('contest_id') == $contest->id) value="{{ $contest->id }}">
-                                {{ $contest->type == 0 ? 'CT-' : 'TLL-' }}
+                                {{ $contest->type == 0 ? 'CT-' : 'TNL-' }}
                                 {{ $contest->name }}
                             </option>
                         @empty

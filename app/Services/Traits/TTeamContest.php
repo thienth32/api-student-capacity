@@ -129,7 +129,7 @@ trait TTeamContest
                 'name.required' => 'Chưa nhập trường này !',
                 'name.max' => 'Độ dài kí tự không phù hợp !',
 
-                'name.mimes' => 'Sai định dạng ảnh !',
+                'image.mimes' => 'Sai định dạng ảnh !',
                 'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
             ]
         );

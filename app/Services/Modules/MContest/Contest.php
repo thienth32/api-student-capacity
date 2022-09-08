@@ -99,6 +99,13 @@ class Contest implements MContestInterface
             ->paginate(request('limit') ?? 9);
     }
 
+    public function getConTestCapacityByDateTime()
+    {
+        return $this->contest::where("register_deadline", ">=", request("date"))
+            ->orderBy("register_deadline", "asc")
+            ->get();
+    }
+
     public function store($filename, $request)
     {
 
@@ -160,7 +167,9 @@ class Contest implements MContestInterface
         $with = [
             'enterprise',
             'teams' => function ($q) {
-                return $q->withCount('members');
+                return $q
+                    ->with('members')
+                    ->withCount('members');
             },
             'rounds' => function ($q) {
                 return $q->with([
@@ -213,7 +222,7 @@ class Contest implements MContestInterface
         ];
         if ($type == config('util.TYPE_TEST')) $with = [
             'rounds' => function ($q) {
-                return $q->with(['exams'])->withCount('exams');
+                return $q->with(['exams'])->withCount('results', 'exams', 'posts', 'sliders');
             }
         ];
         try {
@@ -246,5 +255,36 @@ class Contest implements MContestInterface
         return $this->contest::where('date_start', '<', date('Y-m-d H:i:'))
             ->where('register_deadline', '>', date('Y-m-d H:i'))
             ->get(['name', 'id']);
+    }
+
+    public function getCountContestGoingOn()
+    {
+        return $this->contest::where('status', config('util.CONTEST_STATUS_GOING_ON'))
+            ->count();
+    }
+
+    public function getContestByDateNow($date)
+    {
+        return $this->contest::whereDate('register_deadline', $date)
+            ->get();
+    }
+
+    public function getContestMapSubDays($date)
+    {
+        return $this->contest::where('register_deadline', '>', $date)
+            ->where('status', '<=', config('util.CONTEST_STATUS_GOING_ON'))
+            ->orderBy('register_deadline', 'desc')
+            ->get()
+            ->map(function ($q) {
+                return [
+                    "start" => $q->date_start,
+                    "end" => $q->register_deadline,
+                    "content" => $q->name .
+                        " - Đã bắt đầu từ " .
+                        Carbon::parse($q->date_start)->diffForHumans() .
+                        " - Kết thúc vào " .
+                        Carbon::parse($q->register_deadline)->diffForHumans()
+                ];
+            });
     }
 }

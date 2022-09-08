@@ -358,8 +358,10 @@ class TakeExamController extends Controller
                     }
                 }
             } else {
-                if (count($data['answerIds']) <= 1) {
+                if (count($data['answerIds']) > 0 && count($data['answerIds']) <= 1) {
                     $falseAnswer += 1;
+                } else if (count($data['answerIds']) <= 0) {
+                    $donotAnswer += 1;
                 } else {
                     $answer = $this->answer->whereInId(
                         $data['answerIds'],
@@ -381,6 +383,9 @@ class TakeExamController extends Controller
             $resultCapacity->update([
                 'scores' => $score,
                 'status' => config('util.STATUS_RESULT_CAPACITY_DONE'),
+                'donot_answer' => $donotAnswer,
+                'false_answer' => $falseAnswer,
+                'true_answer' => $trueAnswer,
             ]);
             foreach ($request->data as $data) {
                 if ($data['type'] == 0) {
@@ -415,5 +420,53 @@ class TakeExamController extends Controller
             $db::rollBack();
             dd($th);
         }
+    }
+
+
+    /**
+     * 
+     * @OA\Post(
+     *     path="/api/v1/take-exam/student-capacity-history",
+     *     description="",
+     *     tags={"TakeExam","TakeExamHistory","Api V1"},
+     *     summary="Authorization",
+     *     security={{"bearer_token":{}}},
+     *     @OA\RequestBody(
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                  @OA\Property(
+     *                      type="number",
+     *                      property="result_capacity_id",
+     *                  ),
+     *                  
+     *              
+     *              ),
+     *          ),
+     *      ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
+    public function takeExamStudentCapacityHistory(Request $request)
+    {
+        $resultCapacity =  $this->resultCapacity->where(['id' => $request->result_capacity_id], ['resultCapacityDetail']);
+        $exam = $this->exam->find($resultCapacity->exam_id);
+        $exam->load([
+            'questions' => function ($q) use ($resultCapacity) {
+                return $q->with([
+                    'answers' => function ($q) {
+                        return $q->select(['id', 'content', 'question_id']);
+                    },
+                    'resultCapacityDetail' => function ($q)  use ($resultCapacity) {
+                        return $q
+                            ->where('result_capacity_id', $resultCapacity->id);
+                        // ->selectRaw('result_capacity_detail.answer_id as answer_id, question_id')
+                        // ->groupBy('question_id');
+                    }
+                ]);
+            }
+        ]);
+        return $this->responseApi(true, $resultCapacity, ['exam' => $exam]);
     }
 }

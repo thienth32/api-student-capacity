@@ -17,6 +17,8 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EnterpriseController;
 use App\Http\Controllers\Admin\RecruitmentController;
 use App\Http\Controllers\Admin\PostController;
+use App\Http\Controllers\Admin\PrintPDFController;
+use App\Http\Controllers\Admin\PrintExcelController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('dashboard/api-cuoc-thi', [DashboardController::class, 'chartCompetity'])->name('dashboard.chart-competity');
@@ -223,6 +225,8 @@ Route::prefix('contests')->group(function () {
 Route::group([
     'middleware' => 'role_admin'
 ], function () {
+    Route::get('prinft-pdf', [PrintPDFController::class, 'printf'])->name('admin.prinf');
+    Route::get('prinft-excel', [PrintExcelController::class, 'printf'])->name('admin.excel');
 
     Route::prefix('enterprise')->group(function () {
         Route::get('{id}/edit', [EnterpriseController::class, 'edit'])->name('admin.enterprise.edit');
@@ -280,6 +284,7 @@ Route::group([
         Route::get('slider-soft-delete/{id}/backup', [SliderController::class, 'backUpSlider'])->name('admin.sliders.soft.backup');
         Route::get('slider-soft-delete/{id}/delete', [SliderController::class, 'deleteSlider'])->name('admin.sliders.soft.destroy');
     });
+
     Route::prefix('skill')->group(function () {
         Route::get('{id}/edit', [SkillController::class, 'edit'])->name('admin.skill.edit');
         Route::put('{id}', [SkillController::class, 'update'])->name('admin.skill.update');
@@ -303,6 +308,9 @@ Route::group([
     Route::prefix('capacity')->group(function () {
         Route::get('{id}', [ContestController::class, 'show_test_capacity'])->name('admin.contest.show.capatity');
     });
+
+    Route::get('contest-capacity', [ContestController::class, 'getConTestCapacity']);
+
     Route::prefix('recruitment')->group(function () {
         Route::get('{id}/edit', [RecruitmentController::class, 'edit'])->name('admin.recruitment.edit');
         Route::put('{id}', [RecruitmentController::class, 'update'])->name('admin.recruitment.update');
@@ -321,6 +329,7 @@ Route::group([
         Route::post('re-hot/{id}', [RecruitmentController::class, 're_hot'])->name('admin.recruitment.re.hot');
         Route::get('{id}', [RecruitmentController::class, 'detail'])->name('admin.recruitment.detail');
     });
+
     Route::prefix('posts')->group(function () {
         Route::get('{slug}/edit', [PostController::class, 'edit'])->name('admin.post.edit');
         Route::put('{id}', [PostController::class, 'update'])->name('admin.post.update');

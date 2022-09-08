@@ -41,7 +41,7 @@ Route::get('get-user-by-token', [UserController::class, 'get_user_by_token']);
 Route::prefix('teams')->group(function () {
     // Route::get('{id}', [AdminTeamController::class, 'apiShow']);
     Route::post('add-team', [AdminTeamController::class, "apiAddTeam"]);
-    Route::put('edit-team/{team_id}', [AdminTeamController::class, "apiEditTeam"]);
+    Route::post('edit-team/{team_id}', [AdminTeamController::class, "apiEditTeam"]);
     Route::get('{id}', [AdminTeamController::class, 'apiShow'])->name('team.api.show');
     Route::get('check-user-team-contest/{id_contest}', [AdminTeamController::class, "checkUserTeamContest"]);
     Route::post('add-user-team-contest/{id_contest}/{id_team}', [AdminTeamController::class, "addUserTeamContest"]);
@@ -56,6 +56,7 @@ Route::prefix('take-exam')->group(function () {
     Route::post('check-student-capacity', [AdminTakeExamController::class, 'checkStudentCapacity']);
     Route::post('student-capacity', [AdminTakeExamController::class, 'takeExamStudentCapacity']);
     Route::post('student-capacity-submit', [AdminTakeExamController::class, 'takeExamStudentCapacitySubmit']);
+    Route::post('student-capacity-history', [AdminTakeExamController::class, 'takeExamStudentCapacityHistory']);
 });
 
 

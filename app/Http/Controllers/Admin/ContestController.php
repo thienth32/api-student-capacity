@@ -32,7 +32,15 @@ class ContestController extends Controller
         private Team $team,
         private DB $db,
         private Storage $storage
-    ) {}
+    ) {
+    }
+
+    public function getConTestCapacity()
+    {
+        if (!auth()->check()) return $this->responseApi(false, "Không thể xem !");
+        $data = $this->contest->getConTestCapacityByDateTime();
+        return $this->responseApi(true, $data);
+    }
 
     private function checkTypeContest()
     {

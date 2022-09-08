@@ -24,6 +24,7 @@ Route::get('sponsors', [AdminSponsorController::class, 'list']);
 Route::get('users', [AdminUserController::class, 'index']); // danh sách user
 
 Route::get('companys', [AdminCompanyController::class, 'listCompany']); // Doanh nghiệp
+
 Route::prefix('contests')->group(function () {
     Route::get('', [AdminContestController::class, 'apiIndex'])->name('contest.api.index');
     Route::get('{id}', [AdminContestController::class, 'apiShow'])->name('contest.api.show');
@@ -59,6 +60,7 @@ Route::prefix('exam')->group(function () {
     Route::get('download', [ExamController::class, 'download'])->name('exam.api.download');
     Route::get('get-by-round/{id}', [ExamController::class, 'get_by_round'])->name('exam.api.get.round');
     Route::get('get-question-by-exam/{id}', [ExamController::class, 'showQuestionAnswerExams'])->name('exam.api.get.questions.exam');
+    Route::get('get-history/{id}', [ExamController::class, 'getHistory']);
 });
 
 Route::prefix('questions')->group(function () {

@@ -31,8 +31,8 @@
                     @method('put')
                     <div class="form-group mb-10">
                         <label class="form-label" for="">Tên {{ $contest_type_text }}</label>
-                        <input type="text" name="name" value="{{ old('name', $contest->name) }}"
-                            class=" form-control" placeholder="">
+                        <input type="text" name="name" value="{{ old('name', $contest->name) }}" class=" form-control"
+                            placeholder="">
                         @error('name')
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
@@ -201,12 +201,9 @@
     <script src="assets/js/system/date-after/date-after.js"></script>
     <script src="assets/js/system/contest/form.js"></script>
     <script>
-        pageCkeditor.classicCk2();
-
         dateAfterEdit('input[type=datetime-local]#begin', 'input[type=datetime-local]#end',
             'input[type=datetime-local]#start_time', 'input[type=datetime-local]#end_time')
         preview.showFile('#file-input', '#image-preview');
-
     </script>
     <script src="assets/js/system/validate/validate.js"></script>
 @endsection

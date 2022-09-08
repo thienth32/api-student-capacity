@@ -76,7 +76,8 @@ class QuestionController extends Controller
     public function indexApi()
     {
         try {
-            if (!($questions = $this->getList()->take(10)->get())) return abort(404);
+            if (!($questions = $this->getList()->take(request('take') ?? 10)->get()))
+                throw new \Exception("Question not found");
             return response()->json([
                 'status' => true,
                 'payload' => $questions,

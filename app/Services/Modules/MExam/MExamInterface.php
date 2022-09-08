@@ -8,4 +8,5 @@ interface MExamInterface
     public function find($id);
     public function whereGet($param = [], $with = []);
     public function where($param = []);
+    public function getResult($id);
 }

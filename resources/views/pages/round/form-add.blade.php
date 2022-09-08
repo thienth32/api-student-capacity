@@ -12,7 +12,8 @@
 
                     <div class="form-group mb-10">
                         <label class="form-label" for="">Tên {{ $nameTypeContest }}</label>
-                        <input type="text" name="name" value="{{ old('name') }}" class=" form-control" placeholder="">
+                        <input type="text" name="name" value="{{ old('name') }}" class=" form-control"
+                            placeholder="">
 
                         @error('name')
                             <p class="text-danger">{{ $message }}</p>
@@ -26,8 +27,9 @@
 
                                 <div class="form-group mb-10">
                                     <label class="form-label" for="">Thời gian bắt đầu</label>
-                                    <input id="begin" max="" type="datetime-local" value="{{ old('start_time') }}"
-                                        name="start_time" class="form-control " placeholder="">
+                                    <input id="begin" max="" type="datetime-local"
+                                        value="{{ old('start_time') }}" name="start_time" class="form-control "
+                                        placeholder="">
                                     @error('start_time')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
@@ -37,20 +39,20 @@
 
                                     <label class="form-label" for="">Thời gian kết thúc</label>
                                     <input id="end" min="" type="datetime-local" name="end_time"
-                                        value="{{ old('end_time') }}" class="form-control  "
-                                        placeholder="Pick date rage" />
+                                        value="{{ old('end_time') }}" class="form-control  " placeholder="Pick date rage" />
                                     @error('end_time')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="form-group mb-10">
-                                    <label for="" class="form-label">Thuộc cuộc thi (CT) & test năng lực (TLL)</label>
+                                    <label for="" class="form-label">Thuộc cuộc thi (CT) & test năng lực
+                                        (TNL)</label>
                                     <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
                                         data-hide-search="false" tabindex="-1" aria-hidden="true" name="contest_id"
                                         value="{{ old('contest_id') }}">
                                         @foreach ($contests as $contest)
                                             <option @selected(request()->has('contest_id') && request('contest_id') == $contest->id) value="{{ $contest->id }}">
-                                                {{ $contest->type == 0 ? 'CT-' : 'TLL-' }}
+                                                {{ $contest->type == 0 ? 'CT-' : 'TNL-' }}
                                                 {{ $contest->name }} -
                                                 {{ $contest->date_start }}
                                                 ->
@@ -103,7 +105,8 @@
                     </div>
 
                     <div class="form-group mb-10 ">
-                        <button type="submit" name="" id="" class="btn btn-success btn-lg btn-block">Lưu </button>
+                        <button type="submit" name="" id="" class="btn btn-success btn-lg btn-block">Lưu
+                        </button>
                     </div>
                 </form>
             </div>

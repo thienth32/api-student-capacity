@@ -6,51 +6,48 @@ use App\Http\Controllers\Controller;
 use App\Models\Contest;
 use App\Models\Team;
 use App\Models\User;
+use App\Services\Modules\MContest\MContestInterface;
+use App\Services\Modules\MTeam\MTeamInterface;
+use App\Services\Modules\MUser\MUserInterface;
 use Illuminate\Http\Request;
-use Menu;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 
 class DashboardController extends Controller
 {
+    public function __construct(
+        private MContestInterface $contest,
+        private Carbon $carbon,
+        private CarbonPeriod $carbonPeriod,
+        private MUserInterface $user,
+        private MTeamInterface $team,
+    ) {
+    }
+
     public function index(Request $request)
     {
-        $totalContestRegistering = Contest::where('status', config('util.CONTEST_STATUS_REGISTERING'))->count();
-        $totalContestGoingOn = Contest::where('status', config('util.CONTEST_STATUS_GOING_ON'))->count();
-        $totalContestDone = Contest::where('status', config('util.CONTEST_STATUS_DONE'))->count();
+        $totalContestGoingOn = $this->contest->getCountContestGoingOn();
 
-        $totalTeamActive = Team::with('contest')
-            ->whereHas('contest', function ($q) {
-                $q->whereIn('status', [config('util.CONTEST_STATUS_REGISTERING'), config('util.CONTEST_STATUS_GOING_ON')]);
-            })
-            ->count();
-        $totalStudentAccount = User::with('roles')
-            ->whereHas('roles', function ($q) {
-                $q->where('id', config('util.STUDENT_ROLE'));
-            })->count();
-        $dt = Carbon::now('Asia/Ho_Chi_Minh');
+        $totalTeamActive = $this->team->getTotalTeamActive();
 
-        $contests = Contest::where('register_deadline', '>', $dt->subDays(7)->toDateTimeString())
-            ->where('status', '<=', 1)
-            ->orderBy('id', 'desc')
-            ->get()
-            ->map(function ($q) {
-                return [
-                    "start" => $q->date_start,
-                    "end" => $q->register_deadline,
-                    "content" => $q->name .
-                        " - Đã bắt đầu từ " .
-                        Carbon::parse($q->date_start)->diffForHumans() .
-                        " - Kết thúc vào " .
-                        Carbon::parse($q->register_deadline)->diffForHumans()
-                ];
-            });
+        $totalStudentAccount = $this->user->getTotalStudentAcount();
+
+        $dt = $this->carbon::now('Asia/Ho_Chi_Minh');
+        $dt2 = $this->carbon::now('Asia/Ho_Chi_Minh');
+
+        $timeNow = $dt->toDateTimeString();
+        $contests = $this->contest->getContestMapSubDays($dt->subDays(5)->toDateTimeString());
+        $contestsDealineNow = $this->contest->getContestByDateNow($timeNow);
+        $period = $this->carbonPeriod::create($dt->subDays(2)->toDateTimeString(), $dt2->addDays(7)->toDateTimeString());
+
         return view('dashboard.index', compact(
-            'totalContestRegistering',
             'totalContestGoingOn',
-            'totalContestDone',
             'totalTeamActive',
             'totalStudentAccount',
-            'contests'
+            'contests',
+            'period',
+            'timeNow',
+            'contestsDealineNow'
         ));
     }
 

@@ -27,4 +27,12 @@ interface MContestInterface
     public function getContest();
 
     public function getContestRunning();
+
+    public function getConTestCapacityByDateTime();
+
+    public function getCountContestGoingOn();
+
+    public function getContestByDateNow($date);
+
+    public function getContestMapSubDays($date);
 }

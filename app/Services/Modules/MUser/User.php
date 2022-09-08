@@ -12,6 +12,7 @@ class User implements MUserInterface
         private Contest $contest
     ) {
     }
+
     public function contestJoined()
     {
         $contestID = [];
@@ -28,5 +29,13 @@ class User implements MUserInterface
             ->sort((request('sort') == 'asc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'contests')
             ->get();
         return $contest;
+    }
+
+    public function getTotalStudentAcount()
+    {
+        return $this->user::with('roles')
+            ->whereHas('roles', function ($q) {
+                $q->where('id', config('util.STUDENT_ROLE'));
+            })->count();
     }
 }

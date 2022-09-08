@@ -15,6 +15,8 @@ use App\Services\Modules\MResultCapacityDetail\MResultCapacityDetailInterface;
 use App\Services\Modules\MResultCapacityDetail\ResultCapacityDetail;
 use App\Services\Modules\MRound\MRoundInterface;
 use App\Services\Modules\MRound\Round;
+use App\Services\Modules\MTeam\MTeamInterface;
+use App\Services\Modules\MTeam\Team;
 use App\Services\Modules\MUser\MUserInterface;
 use App\Services\Modules\MUser\User;
 
@@ -39,10 +41,17 @@ trait RepositorySetup
             MContestInterface::class,
             Contest::class,
         );
+
+        $this->app->bind(
+            MTeamInterface::class,
+            Team::class,
+        );
+
         $this->app->bind(
             MRoundInterface::class,
             Round::class,
         );
+
         $this->app->bind(
             MMajorInterface::class,
             Major::class,
