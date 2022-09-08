@@ -256,4 +256,35 @@ class Contest implements MContestInterface
             ->where('register_deadline', '>', date('Y-m-d H:i'))
             ->get(['name', 'id']);
     }
+
+    public function getCountContestGoingOn()
+    {
+        return $this->contest::where('status', config('util.CONTEST_STATUS_GOING_ON'))
+            ->count();
+    }
+
+    public function getContestByDateNow($date)
+    {
+        return $this->contest::whereDate('register_deadline', $date)
+            ->get();
+    }
+
+    public function getContestMapSubDays($date)
+    {
+        return $this->contest::where('register_deadline', '>', $date)
+            ->where('status', '<=', config('util.CONTEST_STATUS_GOING_ON'))
+            ->orderBy('register_deadline', 'desc')
+            ->get()
+            ->map(function ($q) {
+                return [
+                    "start" => $q->date_start,
+                    "end" => $q->register_deadline,
+                    "content" => $q->name .
+                        " - Đã bắt đầu từ " .
+                        Carbon::parse($q->date_start)->diffForHumans() .
+                        " - Kết thúc vào " .
+                        Carbon::parse($q->register_deadline)->diffForHumans()
+                ];
+            });
+    }
 }
