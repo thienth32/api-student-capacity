@@ -522,7 +522,7 @@
         </div>
 
         <div class="modal fade" tabindex="-1" id="kt_modal_1">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Theo dõi tiến trình </h5>
@@ -546,6 +546,7 @@
                                     <th>Trạng thái </th>
                                     <th>Chọn sai</th>
                                     <th>Chọn đúng </th>
+                                    <th>Đáp án</th>
                                 </tr>
                             </thead>
                             <tbody id="show-result-exam">

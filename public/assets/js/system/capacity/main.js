@@ -117,7 +117,7 @@ function fetchHistoryExam(id) {
         url: `${urlApiPublic}exam/get-history/${id}`,
         success: function (res) {
             $("#print-show").html(`
-                    <button data-exam_id="${id}" type="button" class="print-excel btn btn-warning">Xuất EXEL </button>
+                    <button data-exam_id="${id}" type="button" class="print-excel btn btn-warning">Xuất EXCEL </button>
                     <button data-exam_id="${id}"   type="button" class="print-pdf btn btn-primary">Xuất PDF </button>
             `);
             if (res.payload.length == 0) {
@@ -141,6 +141,11 @@ function fetchHistoryExam(id) {
                                     }</td>
                                     <td>${data.false_answer}</td>
                                     <td>${data.true_answer}</td>
+                                    <td>
+                                         <button data-id="${
+                                             data.id
+                                         }"   type="button" class="print-hítory-dowload-excel btn btn-primary">Xuất lịch sử (excel)</button>
+                                    </td>
                                 </tr>
                             `;
                     })
@@ -623,6 +628,14 @@ const mainPage = {
             return false;
         });
     },
+    printHistoryEXCEL: function () {
+        $(document).on("click", ".print-hítory-dowload-excel", function () {
+            window.location =
+                "admin/prinft-excel?type=historyDetailCapacity&capacity_result_id=" +
+                $(this).data("id");
+            return false;
+        });
+    },
 };
 
 mainPage.addExam();
@@ -642,7 +655,7 @@ mainPage.selectStatus();
 mainPage.selectShowResult();
 mainPage.printPDF();
 mainPage.printEXCEL();
-// mainPage.blockF12();
+mainPage.printHistoryEXCEL();
 
 $("#selectSkill").on("change", function () {
     var value = $(this).val();

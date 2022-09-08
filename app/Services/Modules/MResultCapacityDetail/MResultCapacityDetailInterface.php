@@ -6,4 +6,6 @@ interface MResultCapacityDetailInterface
 {
 
     public function create($data = []);
+
+    public function getHistoryByResultCapacityId($id);
 }
