@@ -46,6 +46,12 @@ const rules = {
         required: true,
         number: true,
     },
+    app1: {
+        required: true,
+    },
+    app2: {
+        required: true,
+    },
 };
 const messages = {
     top1: {
@@ -94,6 +100,12 @@ const messages = {
         min: "Thời gian kết thúc đăng kí phải từ thời gian bắt đầu đăng kí đến thời gian kết thúc cuộc thi !",
         max: "Thời gian kết thúc đăng kí phải nhỏ hơn thời gian bắt đầu cuộc thi!",
     },
+    app2: {
+        required: "Chưa nhập trường này !",
+    },
+    app1: {
+        required: "Chưa nhập trường này !",
+    },
 };
 let getTimeToday = new Date().toJSON().slice(0, 19);
 // $.validator.addMethod(
@@ -117,3 +129,62 @@ let getTimeToday = new Date().toJSON().slice(0, 19);
 //         "Vui  lòng nhập thời gian bắt đầu nhỏ hơn thời gian kết thúc !!"
 //     );
 // });
+
+var end_Time = moment().startOf("hour");
+$("#app1").daterangepicker(
+    {
+        showDropdowns: true,
+        timePicker: true,
+        timePicker24Hour: true,
+        startDate: moment($('input[name="date_start"]').val()).startOf("hour"),
+        endDate: moment($('input[name="register_deadline"]').val()).startOf(
+            "hour"
+        ),
+        minDate: moment().startOf("hour"),
+        opens: "center",
+        drops: "auto",
+        locale: {
+            format: "YYYY/MM/DD HH:MM:SS",
+        },
+    },
+    function (start, end, label) {
+        end_Time = end.format("YYYY-MM-DD");
+        $('input[name="date_start"]').val(start.format("YYYY/MM/DD HH:MM:SS"));
+        $('input[name="register_deadline"]').val(
+            end.format("YYYY/MM/DD HH:MM:SS")
+        );
+        $("#app2").val("");
+        $('input[name="start_register_time"]').val("");
+        $('input[name="end_register_time"]').val("");
+    }
+);
+$("#app2").daterangepicker(
+    {
+        showDropdowns: true,
+        timePicker: true,
+        timePicker24Hour: true,
+        startDate: moment($('input[name="start_register_time"]').val()).startOf(
+            "hour"
+        ),
+        endDate: moment($('input[name="end_register_time"]').val()).startOf(
+            "hour"
+        ),
+        minDate: moment().startOf("hour"),
+        opens: "center",
+        drops: "auto",
+        locale: {
+            format: "YYYY/MM/DD HH:MM:SS",
+        },
+    },
+    function (start, end, label) {
+        $('input[name="start_register_time"]').val(
+            start.format("YYYY/MM/DD HH:MM:SS")
+        );
+        $('input[name="end_register_time"]').val(
+            end.format("YYYY/MM/DD HH:MM:SS")
+        );
+    }
+);
+$("#app2").on("show.daterangepicker", function (ev, picker) {
+    picker.maxDate = moment(end_Time).startOf("hour");
+});

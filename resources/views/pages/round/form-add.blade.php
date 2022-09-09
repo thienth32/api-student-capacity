@@ -24,8 +24,25 @@
 
                         <div class="row">
                             <div class="col-8">
+                                <div>
+                                    <input type="hidden" name="start_time"
+                                        value="{{ \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->addDays(3)->format('Y/m/d h:i:s') }}">
+                                    <input type="hidden" name="end_time"
+                                        value="{{ \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->addDays(5)->format('Y/m/d h:i:s') }}">
 
+                                </div>
                                 <div class="form-group mb-10">
+                                    <label for="" class="form-label">Thời gian bắt đầu & thời gian kết thúc </label>
+                                    <input name="app1" class="form-control form-control-solid"
+                                        placeholder="Pick date rage" id="app1" />
+                                    @error('start_time')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                    @error('end_time')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                {{-- <div class="form-group mb-10">
                                     <label class="form-label" for="">Thời gian bắt đầu</label>
                                     <input id="begin" max="" type="datetime-local"
                                         value="{{ old('start_time') }}" name="start_time" class="form-control "
@@ -39,11 +56,12 @@
 
                                     <label class="form-label" for="">Thời gian kết thúc</label>
                                     <input id="end" min="" type="datetime-local" name="end_time"
-                                        value="{{ old('end_time') }}" class="form-control  " placeholder="Pick date rage" />
+                                        value="{{ old('end_time') }}" class="form-control  "
+                                        placeholder="Pick date rage" />
                                     @error('end_time')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
-                                </div>
+                                </div> --}}
                                 <div class="form-group mb-10">
                                     <label for="" class="form-label">Thuộc cuộc thi (CT) & test năng lực
                                         (TNL)</label>

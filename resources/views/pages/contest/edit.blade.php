@@ -41,8 +41,61 @@
 
                         <div class="row">
                             <div class="col-8">
+                                <div>
+                                    <input type="hidden" name="date_start" value="{{ $contest->date_start }}">
+                                    <input type="hidden" name="register_deadline"
+                                        value="{{ $contest->register_deadline }}">
 
+                                </div>
                                 <div class="form-group mb-10">
+                                    <label for="" class="form-label">Thời gian bắt đầu & thời gian kết thúc </label>
+                                    <input name="app1" class="form-control form-control-solid"
+                                        placeholder="Pick date rage" id="app1" />
+                                    @error('date_start')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                    @error('register_deadline')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                @if (request('type') != config('util.TYPE_TEST'))
+                                    <input type="hidden" name="start_register_time"
+                                        value="{{ $contest->start_register_time }}">
+                                    <input type="hidden" name="end_register_time"
+                                        value="{{ $contest->end_register_time }}">
+                                    <div class="form-group mb-10">
+                                        <label for="" class="form-label">Thời gian bắt đầu đăng ký & thời gian kết
+                                            thúc
+                                            đăng ký </label>
+                                        <input name="app2" class="form-control form-control-solid"
+                                            placeholder="Pick date rage" id="app2" />
+                                        @error('start_register_time')
+                                            <p class="text-danger">{{ $message }}</p>
+                                        @enderror
+                                        @error('end_register_time')
+                                            <p class="text-danger">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                @endif
+                                <div class="form-group mb-10">
+                                    <label for="" class="form-label">Thuộc Chuyên Ngành</label>
+                                    <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                                        data-placeholder="Select an option" tabindex="-1" aria-hidden="true"
+                                        name="major_id">
+                                        <option data-select2-id="select2-data-130-vofb"></option>
+                                        @foreach ($major as $valueMajor)
+                                            <option @selected($contest->major_id == $valueMajor->id) value="{{ $valueMajor->id }}">
+                                                {{ $valueMajor->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('major_id')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-8">
+
+                                {{-- <div class="form-group mb-10">
                                     <label class="form-label" for="">Thời gian bắt đầu</label>
                                     <input value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime($contest->date_start)) }}"
                                         type="datetime-local" id="begin" max="" name="date_start"
@@ -83,7 +136,7 @@
                                             <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
-                                @endif
+                                @endif --}}
                                 <div class="form-group mb-10">
                                     <label for="" class="form-label">Thuộc Chuyên Ngành</label>
                                     <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
@@ -201,8 +254,6 @@
     <script src="assets/js/system/date-after/date-after.js"></script>
     <script src="assets/js/system/contest/form.js"></script>
     <script>
-        dateAfterEdit('input[type=datetime-local]#begin', 'input[type=datetime-local]#end',
-            'input[type=datetime-local]#start_time', 'input[type=datetime-local]#end_time')
         preview.showFile('#file-input', '#image-preview');
     </script>
     <script src="assets/js/system/validate/validate.js"></script>

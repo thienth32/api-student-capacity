@@ -24,8 +24,23 @@
 
                         <div class="row">
                             <div class="col-8">
+                                <div>
+                                    <input type="hidden" name="start_time" value="{{ $round['start_time'] }}">
+                                    <input type="hidden" name="end_time" value="{{ $round['end_time'] }}">
 
+                                </div>
                                 <div class="form-group mb-10">
+                                    <label for="" class="form-label">Thời gian bắt đầu & thời gian kết thúc </label>
+                                    <input name="app1" class="form-control form-control-solid"
+                                        placeholder="Pick date rage" id="app1" />
+                                    @error('start_time')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                    @error('end_time')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                {{-- <div class="form-group mb-10">
                                     <label class="form-label" for="">Thời gian bắt đầu</label>
                                     <input value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime($round['start_time'])) }}"
                                         type="datetime-local" id="begin" max="" name="start_time"
@@ -42,7 +57,7 @@
                                     @error('end_time')
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
-                                </div>
+                                </div> --}}
                                 <div class="form-group mb-10">
 
                                     <label for="" class="form-label">Thuộc cuộc thi</label>
