@@ -14,6 +14,9 @@ const rules = {
     description: {
         required: true,
     },
+    app1: {
+        required: true,
+    },
 };
 const messages = {
     name: {
@@ -33,4 +36,27 @@ const messages = {
         required: "Chưa nhập trường này !",
         min: "Trường thời gian kết thúc không nhỏ hơn trường bắt đầu  !",
     },
+    app1: {
+        required: "Chưa nhập trường này !",
+    },
 };
+
+$("#app1").daterangepicker(
+    {
+        showDropdowns: true,
+        timePicker: true,
+        timePicker24Hour: true,
+        startDate: moment($('input[name="start_time"]').val()).startOf("hour"),
+        endDate: moment($('input[name="end_time"]').val()).startOf("hour"),
+        minDate: moment().startOf("hour"),
+        opens: "center",
+        drops: "auto",
+        locale: {
+            format: "YYYY/MM/DD HH:MM:SS",
+        },
+    },
+    function (start, end, label) {
+        $('input[name="start_time"]').val(start.format("YYYY/MM/DD HH:MM:SS"));
+        $('input[name="end_time"]').val(end.format("YYYY/MM/DD HH:MM:SS"));
+    }
+);

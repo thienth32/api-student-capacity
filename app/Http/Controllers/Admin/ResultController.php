@@ -41,7 +41,6 @@ class ResultController extends Controller
     {
         $round = Round::find($id_round);
         $teams = $this->getList($id_round)->paginate(request('limit') ?? 10);
-        // dd($teams);
         return view('pages.round.detail.result.index', compact('round', 'teams'));
     }
 }

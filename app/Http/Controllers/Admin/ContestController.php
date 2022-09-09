@@ -165,13 +165,14 @@ class ContestController extends Controller
 
     public function store(RequestContest $request, Redirect $redirect)
     {
-
         $this->checkTypeContest();
         $this->db::beginTransaction();
         try {
+
             $filename = $this->uploadFile($request->img);
             $contest = $this->contest->store($filename, $request);
             $this->db::commit();
+            if ($contest->type == 1) return $redirect::route('admin.contest.show.capatity', ['id' => $contest->id])->with('success', 'Thêm mới thành công !');
             return $redirect::route('admin.contest.show', ['id' => $contest->id])->with('success', 'Thêm mới thành công !');
         } catch (Exception $ex) {
             if ($request->hasFile('img')) {
@@ -245,7 +246,7 @@ class ContestController extends Controller
                 }
                 $this->contest->update($contest, $dataSave);
                 $this->db::commit();
-                // return Redirect::route('admin.contest.list');
+                if ($contest->type == 1) return redirect(route('admin.contest.show.capatity', ['id' => $contest->id]))->with('success', 'Thêm mới thành công !');
                 return redirect(route('admin.contest.list') . '?type=' . request('type') ?? 0);
             }
         } catch (\Exception $e) {

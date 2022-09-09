@@ -30,7 +30,7 @@ class SkillController extends Controller
     ) {
     }
 
-    // Danh sách teams phía view
+    // Danh sách skills phía view
     public function index(Request $request)
     {
         try {
@@ -42,6 +42,7 @@ class SkillController extends Controller
             return redirect('error');
         };
     }
+
     // chi tiết skill
     public function detail($id)
     {
@@ -53,6 +54,7 @@ class SkillController extends Controller
             return redirect(abort(404));
         };
     }
+
     public function create(Request $request)
     {
         try {
@@ -63,6 +65,7 @@ class SkillController extends Controller
             return redirect('error');
         };
     }
+
     public function store(RequestsSkill $request)
     {
 
@@ -76,6 +79,7 @@ class SkillController extends Controller
             return redirect('error');
         }
     }
+
     public function edit(Request $request, $id)
     {
 
@@ -84,6 +88,7 @@ class SkillController extends Controller
 
         return view('pages.skill.form-edit', compact('data', 'dataMajor'));
     }
+
     public function update($id, RequestsSkill $request)
     {
         DB::beginTransaction();
@@ -96,6 +101,7 @@ class SkillController extends Controller
             return redirect('error');
         }
     }
+
     public function destroy($id)
     {
 
@@ -117,6 +123,7 @@ class SkillController extends Controller
 
         return view('pages.skill.skill-soft-delete', compact('listSofts'));
     }
+
     public function backUpSkill($id)
     {
         try {
@@ -137,5 +144,11 @@ class SkillController extends Controller
         } catch (\Throwable $th) {
             return abort(404);
         }
+    }
+
+    public function indexApi()
+    {
+        $skills = $this->modulesSkill->getAll();
+        return $this->responseApi(true, $skills);
     }
 }

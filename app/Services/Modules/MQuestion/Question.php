@@ -3,8 +3,9 @@
 namespace App\Services\Modules\MQuestion;
 
 use App\Models\Question as ModelsQuestion;
+use App\Services\Modules\MQuestion\MQuestionInterface;
 
-class Question
+class Question implements MQuestionInterface
 {
 
     public function __construct(

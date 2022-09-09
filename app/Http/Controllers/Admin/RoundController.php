@@ -11,6 +11,7 @@ use App\Models\Enterprise;
 use App\Models\Evaluation;
 use App\Models\HistoryPoint;
 use App\Models\Judge;
+use App\Models\Result;
 use App\Models\Round;
 use App\Models\RoundTeam;
 use App\Models\TakeExam;
@@ -196,7 +197,7 @@ class RoundController extends Controller
         if ($data = $this->updateRound($request, $id)) {
             if (isset($data['status']) && $data['status'] == false)
                 return redirect()->back()->withErrors($data['errors'])->withInput();
-            if ($data['contest']->status == 1)  return redirect()->route('admin.contest.show.capatity', ['id' => $data['contest']->id]);
+            if ($data['contest']->type == 1)  return redirect()->route('admin.contest.show.capatity', ['id' => $data['contest']->id]);
             return redirect()->route('admin.contest.detail.round', ['id' => $data['contest']->id]);
         }
         return abort(404);
@@ -630,6 +631,7 @@ class RoundController extends Controller
      */
     public function roundDetailTeamTakeExamUpdate(Request $request, $id, $teamId, $takeExamId)
     {
+        DB::beginTransaction();
         try {
             $dataCreate = [
                 'point' => $request->final_point,
@@ -638,27 +640,41 @@ class RoundController extends Controller
             ];
 
             $takeExam = TakeExam::find($takeExamId);
+            $result = Result::where('round_id', $id)->where('team_id', $teamId)->first();
+            if ($result) {
+                $result->point = $request->final_point;
+                $result->save();
+            } else {
+                Result::create([
+                    "point" =>  $request->final_point,
+                    "round_id" =>  $id,
+                    "team_id" =>  $teamId,
+                ]);
+            }
             if ($takeExam) {
                 $takeExam->history_point()->create($dataCreate);
                 $takeExam->final_point = $request->final_point;
                 $takeExam->mark_comment = $request->has('mark_comment') ? $request->mark_comment : null;
                 $takeExam->save();
             }
-            $check = RoundTeam::where('round_id', $request->roundId)->where('team_id', $teamId)->first();
+            $check = RoundTeam::where('round_id', $id)->where('team_id', $teamId)->first();
 
             if ($check == null && $request->final_point >= $request->ponit) {
                 RoundTeam::create([
-                    'round_id' => $request->roundId,
+                    'round_id' => $id,
                     'team_id' => $teamId,
                     'status' => config('util.ROUND_TEAM_STATUS_NOT_ANNOUNCED'), // Chưa công bố
                 ]);
             } elseif ($check && $request->final_point < $request->ponit) {
                 $check->delete();
             }
-            echo "<lescript>art('Thành công ')<script/>";
+            DB::commit();
+
+            echo "<script>art('Thành công ')<script/>";
             return redirect()->back();
         } catch (\Throwable $th) {
-            return redirect()->back();
+            DB::rollBack();
+            return redirect()->back()->withErrors(['message', "Đã xảy ra lỗi !"]);
         }
     }
     /**
