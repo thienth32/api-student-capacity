@@ -77,6 +77,26 @@
         <div class="d-flex flex-column flex-md-row rounded border p-10">
             <ul class="nav nav-tabs nav-pills flex-row border-0 flex-md-column me-5 mb-3 mb-md-0 fs-6">
                 <li class="nav-item me-0 mb-md-2">
+                    <a style="width: 100%" class="nav-link btn btn-flex btn-active-light-primary  " data-bs-toggle="tab"
+                        href="#kt_vtab_pane_6">
+                        <!--begin::Svg Icon | path: icons/duotune/general/gen017.svg-->
+                        <span class="svg-icon svg-icon-2 svg-icon-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none">
+                                <path opacity="0.3" d="M5 8.04999L11.8 11.95V19.85L5 15.85V8.04999Z" fill="black"></path>
+                                <path
+                                    d="M20.1 6.65L12.3 2.15C12 1.95 11.6 1.95 11.3 2.15L3.5 6.65C3.2 6.85 3 7.15 3 7.45V16.45C3 16.75 3.2 17.15 3.5 17.25L11.3 21.75C11.5 21.85 11.6 21.85 11.8 21.85C12 21.85 12.1 21.85 12.3 21.75L20.1 17.25C20.4 17.05 20.6 16.75 20.6 16.45V7.45C20.6 7.15 20.4 6.75 20.1 6.65ZM5 15.85V7.95L11.8 4.05L18.6 7.95L11.8 11.95V19.85L5 15.85Z"
+                                    fill="black"></path>
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                        <span class="d-flex flex-column align-items-start">
+                            <span class="fs-4 fw-bolder">Chi tiết </span>
+                        </span>
+                    </a>
+
+                </li>
+                <li class="nav-item me-0 mb-md-2">
                     <a style="width: 100%" class="nav-link nav-list btn btn-flex btn-active-light-success active"
                         data-bs-toggle="tab" href="#kt_vtab_pane_4">
                         <!--begin::Svg Icon | path: icons/duotune/general/gen001.svg-->
@@ -178,7 +198,8 @@
                                                     class="add-exam m-auto bi bi-plus-circle-fill fs-2x"></i>
                                             </td>
                                             <td>
-                                                <div data-bs-toggle="tooltip" title="Thao tác " class="btn-group dropstart">
+                                                <div data-bs-toggle="tooltip" title="Thao tác "
+                                                    class="btn-group dropstart">
                                                     <button style="padding: 0" type="button"
                                                         class="btn   btn-sm dropdown-toggle" data-bs-toggle="dropdown"
                                                         aria-expanded="false">
@@ -332,8 +353,72 @@
                     </table>
                     {{--  --}}
                 </div>
+                <div class="tab-pane fade  " id="kt_vtab_pane_6" role="tabpanel">
+
+                    <!--begin::Post-->
+                    <div class="post d-flex flex-column-fluid" id="kt_post">
+                        <!--begin::Container-->
+                        <div id="kt_content_container" class="container-xxl">
+                            <!--begin::About card-->
+                            <div class="card">
+                                <!--begin::Body-->
+                                <div class="card-body p-lg-17">
+                                    <!--begin::Meet-->
+                                    <div class="mb-18">
+                                        <!--begin::Wrapper-->
+                                        <div class="mb-11">
+                                            <!--begin::Top-->
+                                            <div class="text-center mb-18">
+                                                <!--begin::Title-->
+                                                <h3 class="fs-2hx text-dark mb-6">Test năng lực :
+                                                    <strong>{{ $test_capacity->name }}</strong>
+                                                </h3>
+                                                <!--end::Title-->
+                                                <div class="fs-5 text-muted fw-bold">
+                                                    Bắt đầu : {{ $test_capacity->date_start }}
+                                                    <br>Kết thúc : {{ $test_capacity->register_deadline }}
+                                                </div>
+                                            </div>
+                                            <!--end::Top-->
+                                            <!--begin::Overlay-->
+                                            <div class="overlay">
+                                                <!--begin::Image-->
+                                                <img class="w-100 card-rounded" src="{{ $test_capacity->img }}"
+                                                    alt="" />
+                                                <!--end::Image-->
+                                                <!--begin::Links-->
+                                                <!--end::Links-->
+                                            </div>
+                                            <!--end::Overlay-->
+                                        </div>
+                                        <!--end::Wrapper-->
+                                        <!--begin::Description-->
+                                        <div class="fs-5 fw-bold text-gray-600">
+                                            <!--begin::Text-->
+                                            <p class="m-0">
+                                                {!! $test_capacity->description !!}
+                                            </p>
+                                            <!--end::Text-->
+                                        </div>
+                                        <!--end::Description-->
+                                    </div>
+                                    <!--end::Meet-->
+                                    <!--begin::Team-->
+
+                                </div>
+                                <!--end::Body-->
+                            </div>
+                            <!--end::About card-->
+                        </div>
+                        <!--end::Container-->
+                    </div>
+                    <!--end::Post-->
+                </div>
+                <!--end::Content-->
+
             </div>
         </div>
+        {{-- </div> --}}
 
         <div class="modal bg-white fade" tabindex="-1" id="kt_modal_2">
             <div class="modal-dialog modal-fullscreen">
@@ -556,7 +641,6 @@
                     </div>
 
                     <div class="modal-footer">
-
                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Thoát </button>
                     </div>
                 </div>
