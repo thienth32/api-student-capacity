@@ -32,8 +32,8 @@ class RankUserController extends Controller
     public function getRatingUser(MMajorInterface $majorModel, $slug)
     {
         try {
-            if (!$dataRating = $majorModel->getRatingUserByMajorSlug($slug)) return $this->responseApi(false, 'Không tìm thấy chuyên ngành ' . $slug . '!');
-
+            $dataRating = $majorModel->getRatingUserByMajorSlug($slug);
+            if ($dataRating === false) throw new \Exception('Không tìm thấy chuyên ngành ' . $slug . '!');
             return $this->responseApi(
                 true,
                 $dataRating
