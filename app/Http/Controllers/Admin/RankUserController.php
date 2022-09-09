@@ -15,9 +15,9 @@ class RankUserController extends Controller
     use TResponse;
     /**
      * @OA\Get(
-     *     path="/api/public/rating-major/{slug}",
+     *     path="/api/public/rating/major-contest/{slug}",
      *     description="Description api slider",
-     *     tags={"Rank user" , "User" , "Major"},
+     *     tags={"Rank user" , "User" , "Major"  ,'Rank_contest'},
      *     @OA\Parameter(
      *         name="slug",
      *         in="path",
@@ -82,7 +82,21 @@ class RankUserController extends Controller
     //     return $arrResult;
     // }
 
-
+    /**
+     * @OA\Get(
+     *     path="/api/public/rating/major-capacity/{slug}",
+     *     description="Description api slider",
+     *     tags={"Rank user" , "User" , "Major" ,'Rank_capacity'},
+     *     @OA\Parameter(
+     *         name="slug",
+     *         in="path",
+     *         description="Slug chuyên ngành ",
+     *         required=true,
+     *     ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
     public function getRankUserCapacity($slug)
     {
         try {
