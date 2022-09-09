@@ -606,12 +606,12 @@
                         </tr>
                         @if ($contest->type == 0 && $contest->rounds_count > 0)
                             <tr>
-                                <td colspan="12">
+                                <td style="padding: 0" colspan="12">
                                     <table class="table table-row-dashed table-row-gray-500 gy-5 gs-5 mb-0">
                                         <thead>
                                             <tr class="fw-bold fs-6 text-gray-800">
                                                 <th scope="col"> Vòng thi </th>
-                                                <th scope="col">Xem chi tiết </th>
+                                                <th style="float: right" scope="col">Xem chi tiết </th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -619,8 +619,8 @@
                                             @foreach ($contest->rounds as $round)
                                                 @if (auth()->user()->hasRole(['admin', 'super admin']) || in_array(auth()->id(), $round->judges->pluck('user_id')->toArray()))
                                                     <tr>
-                                                        <th scope="row">{{ $round->name }}</th>
-                                                        <td><a
+                                                        <td style="width: 70%">{{ $round->name }}</td>
+                                                        <td style="width: 30%"><a style="float: right"
                                                                 href="{{ route('admin.round.detail', ['id' => $round->id]) }}">Xem
                                                                 chi tiết</a> </td>
                                                     </tr>

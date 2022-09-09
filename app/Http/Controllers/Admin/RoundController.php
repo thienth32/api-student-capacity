@@ -196,7 +196,7 @@ class RoundController extends Controller
         if ($data = $this->updateRound($request, $id)) {
             if (isset($data['status']) && $data['status'] == false)
                 return redirect()->back()->withErrors($data['errors'])->withInput();
-            if ($data['contest']->status == 1)  return redirect()->route('admin.contest.show.capatity', ['id' => $data['contest']->id]);
+            if ($data['contest']->type == 1)  return redirect()->route('admin.contest.show.capatity', ['id' => $data['contest']->id]);
             return redirect()->route('admin.contest.detail.round', ['id' => $data['contest']->id]);
         }
         return abort(404);
