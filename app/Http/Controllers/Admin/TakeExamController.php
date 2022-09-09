@@ -373,6 +373,8 @@ class TakeExamController extends Controller
                     if (count($data['answerIds']) === count($answer)) {
                         $score += $score_one_question;
                         $trueAnswer += 1;
+                    } else {
+                        $falseAnswer += 1;
                     }
                 }
             }
