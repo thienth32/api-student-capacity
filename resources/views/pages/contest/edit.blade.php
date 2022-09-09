@@ -22,6 +22,7 @@
         </div>
     </div>
     <div class="row">
+
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
                 <form id="formContest"
@@ -73,6 +74,21 @@
                                             <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                         @error('end_register_time')
+                                            <p class="text-danger">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                @else
+                                    <div class="form-group mb-10">
+                                        <label for="" class="form-label">Thuộc kỹ năng </label>
+                                        <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                                            data-hide-search="false" multiple tabindex="-1" aria-hidden="true"
+                                            name="skill[]" value="{{ old('skill') }}">
+                                            @foreach ($skills as $skill)
+                                                <option @selected(in_array($skill->id, $skillContests)) value="{{ $skill->id }}">
+                                                    {{ $skill->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('skill')
                                             <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
@@ -137,21 +153,7 @@
                                         @enderror
                                     </div>
                                 @endif --}}
-                                <div class="form-group mb-10">
-                                    <label for="" class="form-label">Thuộc Chuyên Ngành</label>
-                                    <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
-                                        data-placeholder="Select an option" tabindex="-1" aria-hidden="true"
-                                        name="major_id">
-                                        <option data-select2-id="select2-data-130-vofb"></option>
-                                        @foreach ($major as $valueMajor)
-                                            <option @selected($contest->major_id == $valueMajor->id) value="{{ $valueMajor->id }}">
-                                                {{ $valueMajor->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('major_id')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
-                                </div>
+
                             </div>
                             <div class="col-4">
                                 @if (request('type') != config('util.TYPE_TEST'))
@@ -159,14 +161,21 @@
                                         <label for="" class="form-label">Giới hạn thành viên trong đội</label>
                                         <input value="{{ old('max_user', $contest->max_user) }}" name="max_user"
                                             type='number' class="form-control" />
+                                        @error('max_user')
+                                            <p class="text-danger">{{ $message }}</p>
+                                        @enderror
                                     </div>
                                 @endif
                                 <div class="form-group ">
                                     <label for="" class="form-label">Ảnh {{ $contest_type_text }}</label>
                                     <input value="{{ old('img') }}" name="img" type='file' id="file-input"
                                         class="form-control" accept=".png, .jpg, .jpeg" />
+                                    @error('img')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
                                     <img class="w-100 mt-4 border rounded-3" id="image-preview"
                                         src="{{ $contest->img ? $contest->img : 'https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg' }} " />
+
                                 </div>
                             </div>
 
@@ -180,6 +189,9 @@
                                 <label for="" class="form-label">Top 1</label>
                                 <input value="{{ old('top1', $rewardRankPoint->top1 ?? null) }}" name="top1"
                                     type='number' class="form-control" />
+                                @error('top1')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
                             </div>
                         </div>
                         <div class="col-3">
@@ -187,6 +199,9 @@
                                 <label for="" class="form-label">Top 2</label>
                                 <input value="{{ old('top2', $rewardRankPoint->top2 ?? null) }}" name="top2"
                                     type='number' class="form-control" />
+                                @error('top2')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
                             </div>
                         </div>
                         <div class="col-3">
@@ -194,6 +209,9 @@
                                 <label for="" class="form-label">Top 3</label>
                                 <input value="{{ old('top3', $rewardRankPoint->top3 ?? null) }}" name="top3"
                                     type='number' class="form-control" />
+                                @error('top3')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
                             </div>
                         </div>
                         <div class="col-3">
@@ -201,6 +219,9 @@
                                 <label for="" class="form-label">Còn lại</label>
                                 <input value="{{ old('leave', $rewardRankPoint->leave ?? null) }}" name="leave"
                                     type='number' class="form-control" />
+                                @error('leave')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
                             </div>
                         </div>
 

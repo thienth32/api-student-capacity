@@ -124,6 +124,20 @@
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
+                            @else
+                                <div class="form-group mb-10">
+                                    <label for="" class="form-label">Thuộc kỹ năng </label>
+                                    <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                                        data-hide-search="false" multiple tabindex="-1" aria-hidden="true"
+                                        name="skill[]" value="{{ old('skill') }}">
+                                        @foreach ($skills as $skill)
+                                            <option value="{{ $skill->id }}"> {{ $skill->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('skill')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
                             @endif
                             <div class="form-group mb-10">
                                 <label for="" class="form-label">Thuộc chuyên ngành</label>
@@ -203,6 +217,9 @@
                                 <label for="" class="form-label">Ảnh {{ $contest_type_text }}</label>
                                 <input name="img" type='file' id="file-input" accept=".png, .jpg, .jpeg"
                                     class="form-control" />
+                                @error('img')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
                                 <img class="w-100 mt-4 border rounded-3" id="image-preview"
                                     src="https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg" />
                             </div>
