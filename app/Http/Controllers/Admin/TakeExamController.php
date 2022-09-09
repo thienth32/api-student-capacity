@@ -450,14 +450,12 @@ class TakeExamController extends Controller
      */
     public function takeExamStudentCapacityHistory(Request $request)
     {
-        $resultCapacity =  $this->resultCapacity->where(['id' => $request->result_capacity_id], ['resultCapacityDetail']);
+        $resultCapacity =  $this->resultCapacity->where(['id' => $request->result_capacity_id]);
         $exam = $this->exam->find($resultCapacity->exam_id);
         $exam->load([
             'questions' => function ($q) use ($resultCapacity) {
                 return $q->with([
-                    'answers' => function ($q) {
-                        return $q->select(['id', 'content', 'question_id']);
-                    },
+                    'answers',
                     'resultCapacityDetail' => function ($q)  use ($resultCapacity) {
                         return $q
                             ->where('result_capacity_id', $resultCapacity->id);

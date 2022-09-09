@@ -237,7 +237,14 @@
     <script src="assets/js/system/preview-file/previewImg.js"></script>
     <script src="assets/js/system/date-after/date-after.js"></script>
     <script src="assets/js/system/contest/form.js"></script>
+    <script src="assets/js/system/contest/contest.js"></script>
     <script>
+        contestPage.topScore(
+            "input[name='top1']",
+            "input[name='top2']",
+            "input[name='top3']",
+            "input[name='leave']"
+        );
         rules.img = {
             required: true,
         };
