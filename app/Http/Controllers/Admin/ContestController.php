@@ -212,7 +212,7 @@ class ContestController extends Controller
         $major = $this->major::orderBy('id', 'desc')->get();
         $skills = $this->skill->getAll();
         $contest_type_text = request('type') == 1 ? 'test năng lực' : 'cuộc thi';
-        $contest = $this->getContest($id, request('type') ?? 0)->first();
+        $contest = $this->contest->getContestByIdUpdate($id, request('type') ?? 0);
         if (!$contest) abort(404);
         if ($contest->type != request('type')) abort(404);
         $rewardRankPoint = json_decode($contest->reward_rank_point);
@@ -263,18 +263,6 @@ class ContestController extends Controller
         } catch (\Exception $e) {
             $this->db::rollBack();
             return redirect()->back()->withErrors(['error' => 'Cập nhật thất bại !']);
-        }
-    }
-
-    private function getContest($id, $type = 0)
-    {
-        try {
-            $contest = $this->contest->getContest()::with(['skills' => function ($q) {
-                return $q->select(["skill_id"]);
-            }])->where('id', $id)->where('type', $type);
-            return $contest;
-        } catch (\Throwable $th) {
-            return false;
         }
     }
 
@@ -340,7 +328,7 @@ class ContestController extends Controller
 
     public function show_test_capacity(Request $request, Skill $skillModel, $id)
     {
-        $capacity = $this->contest->show($id, config('util.TYPE_TEST'));
+        $capacity = $this->contest->getContestByIdUpdate($id, config('util.TYPE_TEST'));
         if (!$capacity) abort(404);
         $skills = $skillModel::all();
         return view('pages.contest.detail-capacity.detail', [
@@ -555,22 +543,12 @@ class ContestController extends Controller
 
     public function apiCapacityRelated($id_capacity)
     {
-        $capacityArrId = [];
-        $capacity = $this->contest->find($id_capacity);
-        if (is_null($capacity)) return $this->responseApi(false, 'Không tìm thấy bài test năng lực !');
-        $capacity->load(['recruitment' => function ($q) {
-            return $q->with(['contest']);
-        }]);
-        foreach ($capacity->recruitment as  $recruitment) {
-            if ($recruitment->contest) foreach ($recruitment->contest as $contest) {
-                array_push($capacityArrId, $contest->id);
-            }
+        try {
+            $capacitys = $this->contest->getCapacityRelated($id_capacity);
+            return $this->responseApi(true, $capacitys);
+        } catch (\Throwable $th) {
+            return $this->responseApi(false, $th->getMessage());
         }
-        $capacityArrId = array_unique($capacityArrId);
-        unset($capacityArrId[array_search($id_capacity, $capacityArrId)]);
-        $capacitys = $this->contest->getContest()::whereIn('id', $capacityArrId)->limit(request('limit') ?? 4)->get();
-        $capacitys->load(['rounds', 'skills', 'userCapacityDone']);
-        return $this->responseApi(true, $capacitys);
     }
 }
 
