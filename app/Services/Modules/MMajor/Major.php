@@ -10,7 +10,7 @@ class Major implements MMajorInterface
 
     public function getRatingUserByMajorSlug($slug)
     {
-        if (!$major = $this->major::whereSlug($slug)
+        $major = $this->major::whereSlug($slug)
             ->with([
                 'contest_user' => function ($q) {
                     return $q
@@ -19,7 +19,9 @@ class Major implements MMajorInterface
                         ->orderByDesc('reward_point');
                 }
             ])
-            ->first()) return false;
+            ->first();
+        if ($major == null) return false;
+
         return $major
             ->contest_user
             ->map(function ($q, $index) use (&$rank, &$maxPoin) {
