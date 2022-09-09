@@ -113,7 +113,13 @@
 
 
                     </div>
-
+                    <div class="form-group mb-10">
+                        <label class="form-label" for="">Mô tả ngắn tuyển dụng</label>
+                        <textarea class="form-control" name="short_description" id="kt_docs_ckeditor_classic2" rows="3">{{ $data->short_description }}</textarea>
+                        @error('short_description')
+                            <p class="text-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
                     <div class="form-group mb-10">
                         <label for="">Thông tin tuyển dụng</label>
                         <textarea class="form-control" name="description" id="kt_docs_ckeditor_classic" rows="3">{{ $data->description }}</textarea>

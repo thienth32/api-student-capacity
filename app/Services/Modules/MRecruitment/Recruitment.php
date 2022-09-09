@@ -90,6 +90,7 @@ class Recruitment
         $data = [
             'name' => $request->name,
             'description' => $request->description,
+            'short_description' => $request->short_description,
             'start_time' => $request->start_time,
             'end_time' => $request->end_time,
             'cost' => $request->cost,
@@ -123,6 +124,7 @@ class Recruitment
         $recruitment->description = $request->description;
         $recruitment->cost = $request->cost;
         $recruitment->amount = $request->amount;
+        $recruitment->short_description = $request->short_description;
         if ($request->has('image')) {
             $fileImage =  $request->file('image');
             $image = $this->uploadFile($fileImage);
@@ -170,6 +172,7 @@ class Recruitment
                 foreach ($contest->skills as $skill) {
                     $arrSkill[] = $skill;
                 }
+                // unset($contest->skills);
             }
             $item['skill'] = collect($arrSkill)->unique('id')->values()->all();
             $arrSkill = [];
@@ -180,6 +183,7 @@ class Recruitment
                 foreach ($contest->rounds as $round) {
                     foreach ($round->result_capacity as $users)
                         $arrUser[] = $users->user;
+                    // unset($users);
                 }
             }
             $item['user'] = collect($arrUser)->unique('id')->values()->all();;

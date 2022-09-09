@@ -2,7 +2,6 @@
 @section('title', 'Quản lý tuyển dụng ')
 @section('page-title', 'Quản lý tuyển dụng ')
 @section('content')
-
     <div class="card card-flush p-4">
         <div class="row">
             <div class="col-lg-6">

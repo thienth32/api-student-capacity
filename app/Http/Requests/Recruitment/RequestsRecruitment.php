@@ -29,6 +29,7 @@ class RequestsRecruitment extends FormRequest
         }
         $rule = [
             'name' =>  $ruleName,
+            'short_description' => 'required|max:255',
             'description' => 'required',
             'start_time' => 'required',
             'end_time' => 'required|after:start_time',
@@ -51,6 +52,8 @@ class RequestsRecruitment extends FormRequest
             'end_time.required' => 'Chưa nhập trường này !',
             'end_time.after' => 'Thời gian kết thúc không được nhỏ hơn thời gian bắt đầu !',
             'description.required' => 'Chưa nhập trường này !',
+            'short_description.required' => 'Chưa nhập trường này !',
+            'short_description.max' => 'Trường không được quá 225 ký tự !',
             'image.mimes' => 'Sai định dạng !',
             'image.required' => 'Chưa nhập trường này !',
             'image.max' => 'Dung lượng ảnh không được vượt quá 10MB !',

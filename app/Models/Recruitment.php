@@ -13,7 +13,7 @@ class Recruitment extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = 'recruitments';
-    protected $fillable = ['amount', 'cost', 'hot', 'name', 'description', 'start_time', 'end_time', 'image'];
+    protected $fillable = ['amount', 'cost', 'hot', 'name', 'short_description', 'description', 'start_time', 'end_time', 'image'];
     protected $casts = [
         'created_at' => FormatDate::class,
         'updated_at' =>  FormatDate::class,
