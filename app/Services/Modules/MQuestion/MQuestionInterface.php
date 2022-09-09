@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Modules\MExam;
+namespace App\Services\Modules\MQuestion;
 
 interface MQuestionInterface
 {

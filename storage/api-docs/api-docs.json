@@ -779,6 +779,87 @@
                 ]
             }
         },
+        "/api/v1/take-exam/student-capacity-submit": {
+            "post": {
+                "tags": [
+                    "TakeExam",
+                    "Capacity",
+                    "Api V1"
+                ],
+                "summary": "Authorization",
+                "description": "",
+                "operationId": "684216a5d4dd0d2b54a48e1b1a5fd98b",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "exam_id": {
+                                        "type": "string"
+                                    },
+                                    "data": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/take-exam/student-capacity-history": {
+            "post": {
+                "tags": [
+                    "TakeExam",
+                    "TakeExamHistory",
+                    "Api V1"
+                ],
+                "summary": "Authorization",
+                "description": "",
+                "operationId": "ada059f1ff7d9e2db211cf83eb65ee8e",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "result_capacity_id": {
+                                        "type": "number"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
+            }
+        },
         "/api/v1/teams/{id}": {
             "get": {
                 "tags": [
@@ -1078,6 +1159,86 @@
                         "bearer_token": []
                     }
                 ]
+            }
+        },
+        "/api/v1/users/contest-joined-and-not-joined": {
+            "get": {
+                "tags": [
+                    "User-Joined-Contest"
+                ],
+                "description": "Description api contests",
+                "operationId": "6b0a2ce8eb091b064a99af0eb0ea8aa9",
+                "parameters": [
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "description": "Tìm kiếm ",
+                        "required": false
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Lọc theo trạng thái ",
+                        "required": false
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Lọc theo chiều asc hoặc desc ",
+                        "required": false
+                    },
+                    {
+                        "name": "sort_by",
+                        "in": "query",
+                        "description": "Các cột cần lọc  ",
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/contest-joined": {
+            "get": {
+                "tags": [
+                    "User-Joined-Contest"
+                ],
+                "description": "Description api contests",
+                "operationId": "c7f735a8f229abab1e52c530a64f1c9f",
+                "parameters": [
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "description": "Tìm kiếm ",
+                        "required": false
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "description": "Lọc theo chiều asc hoặc desc ",
+                        "required": false
+                    },
+                    {
+                        "name": "sort_by",
+                        "in": "query",
+                        "description": "Các cột cần lọc  ",
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                }
             }
         },
         "/api/v1/users/edit": {
