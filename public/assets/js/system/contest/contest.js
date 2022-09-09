@@ -64,9 +64,10 @@ const contestPage = {
 
         function setValue(data = [], val) {
             return data.forEach(e => {
-                $(e).val(val);
+                Number($(e).val(val));
             });
         }
+
         $(document).on("keyup change", top1, function(e) {
             e.preventDefault();
             $(top2).prop('disabled', false);
@@ -76,44 +77,38 @@ const contestPage = {
             }
             return
         });
+
         $(document).on("keyup change", top2, function(e) {
             e.preventDefault();
             $(top3).prop('disabled', false);
             if ($(this).val() == '') {
                 disabledInput([top3, leave]);
-                setValue([top2, top3, leave], null);
+                setValue([top3, leave], null);
             }
-            if ($(this).val() >= $(top1).val()) {
-                $(this).val($(top1).val() - 1);
+            if (Number($(this).val()) >= Number($(top1).val())) {
+                Number($(this).val($(top1).val() - 1));
             }
             return
-
         });
+
         $(document).on("keyup change", top3, function(e) {
-            var that = this;
             e.preventDefault();
             $(leave).prop('disabled', false);
             if ($(this).val() == '') {
                 disabledInput([leave]);
                 setValue([leave], null);
-
             }
-            // if ($(this).val() >= $(top2).val()) {
-            //     $(this).val($(top2).val() - 1);
-
-            // }
-            // return
-
+            if (Number($(this).val()) >= Number($(top2).val())) {
+                Number($(this).val($(top2).val() - 1));
+            }
+            return
         });
 
         $(document).on("keyup change", leave, function(e) {
-            // var that = this;
-            // if ($(this).val() >= $(top3).val()) {
-            //     $(this).val($(top3).val() - 1);
-
-            // }
-            // return
-
+            if (Number($(this).val()) >= Number($(top3).val())) {
+                Number($(this).val($(top3).val() - 1));
+            }
+            return
         });
     }
 };

@@ -123,4 +123,9 @@ class Skill
             $this->majorSkill::where('skill_id', $id)->delete();
         }
     }
+
+    public function getAll()
+    {
+        return $this->skill::all();
+    }
 }
