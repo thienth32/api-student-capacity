@@ -320,6 +320,50 @@
                                                 </div>
                                             </td>
                                         </tr>
+                                        @if ($round->exams_count > 0)
+                                            <tr>
+                                                <td style="padding: 0" colspan="12">
+                                                    <table
+                                                        class="table table-row-dashed table-row-gray-500 gy-5 gs-5 mb-0">
+                                                        <thead>
+                                                            <tr class="fw-bold fs-6 text-gray-800">
+                                                                <th scope="col"> Bài làm </th>
+                                                                <th style="float: right" scope="col">Thao tác nhanh
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            @foreach ($round->exams as $exam)
+                                                                <tr>
+                                                                    <td style="width: 70%">{{ $exam->name }}</td>
+                                                                    <td style="width: 30%">
+                                                                        <span style="float: right"
+                                                                            data-bs-toggle="tooltip"
+                                                                            title="Xem nhanh câu hỏi câu trả lời ">
+                                                                            <button
+                                                                                style="background: #ccc;padding: 1vh 1vh 1vh 2vh;border-radius: 20px;"
+                                                                                type="button"
+                                                                                data-exam_name="{{ $exam->name }}"
+                                                                                data-exam_id="{{ $exam->id }}"
+                                                                                class="btn-click-show-exams btn btn-primary"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_modal_2">
+                                                                                <i class="bi bi-ui-checks-grid"></i>
+                                                                            </button>
+                                                                        </span>
+
+
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+
+
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        @endif
                                     @endforeach
                                 @else
                                     <tr>
@@ -512,7 +556,17 @@
 
                             </div>
                             <div id="show-add-questions" class="mt-2 mb-2"></div>
-                            <div id="data-save" class="mt-1">
+                            <div id="data-save"
+                                style="
+                                    position: fixed;
+                                    left: 0;
+                                    bottom: 0;
+                                    right: 0;
+                                    max-height: 500px;
+                                    overflow: auto;
+                                    background: white;
+                                    padding: 10px;"
+                                class="mt-1">
                                 <div id="show-data-save" class="mb-5"></div>
                                 <div
                                     style="position: fixed; bottom: 20px; transform: translateX(-50%);  left: 50%; z-index: 999999999;">

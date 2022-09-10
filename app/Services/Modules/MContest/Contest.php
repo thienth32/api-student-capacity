@@ -316,6 +316,11 @@ class Contest implements MContestInterface
             [
                 'skills' => function ($q) {
                     return $q->select(["skill_id", "name"]);
+                },
+                'rounds' => function ($q) {
+                    return $q
+                        ->with('exams')
+                        ->withCount('exams');
                 }
             ]
         )
