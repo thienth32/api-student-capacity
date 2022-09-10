@@ -2,7 +2,7 @@
     "openapi": "3.0.0",
     "info": {
         "title": "OpenApi Capacity Fpoly",
-        "description": "OpenApi Capacity Fpoly<br>\r\n *      ✅NOTE✅\r\n *      Note: Khi sử dụng api authentication v1 cần nhập token bearer phần Authorize\r\n *      Note: Tìm kiếm api theo các tag\r\n *      Note: Thiếu , gặp bug -> chụp ảnh gửi cho BE sửa 🔧\r\n *      ✅END NOTE✅",
+        "description": "OpenApi Capacity Fpoly<br>\n *      ✅NOTE✅\n *      Note: Khi sử dụng api authentication v1 cần nhập token bearer phần Authorize\n *      Note: Tìm kiếm api theo các tag\n *      Note: Thiếu , gặp bug -> chụp ảnh gửi cho BE sửa 🔧\n *      ✅END NOTE✅",
         "contact": {
             "email": ""
         },
@@ -404,7 +404,7 @@
                     "Major",
                     "Rank_contest"
                 ],
-                "description": "Description api slider",
+                "description": "Description api contest rank",
                 "operationId": "577545ef0fff46db289ede374ef0ed4a",
                 "parameters": [
                     {
@@ -432,7 +432,7 @@
                     "Major",
                     "Rank_capacity"
                 ],
-                "description": "Description api slider",
+                "description": "Description api api capacity rank",
                 "operationId": "d7fa9de5e2c9a8f71174dbff45e84f8d",
                 "parameters": [
                     {
@@ -1328,7 +1328,7 @@
         "securitySchemes": {
             "bearer_token": {
                 "type": "apiKey",
-                "description": "Nhập vào ô input dạng \"Bearer token\" <br> <b>Ví dụ</b>: <strong>Bearer 48|i93gO5EA6cBqiguiLCAiIAOiLkLoMXwoIvEnZvTn</strong>\r\n                     <br><br><hr>",
+                "description": "Nhập vào ô input dạng \"Bearer token\" <br> <b>Ví dụ</b>: <strong>Bearer 48|i93gO5EA6cBqiguiLCAiIAOiLkLoMXwoIvEnZvTn</strong>\n                     <br><br><hr>",
                 "name": "Authorization",
                 "in": "header"
             }
