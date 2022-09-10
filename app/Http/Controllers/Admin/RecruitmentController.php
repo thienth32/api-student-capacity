@@ -181,6 +181,18 @@ class RecruitmentController extends Controller
      *         description="Tuyển dụng thuộc bài test",
      *         required=false,
      *     ),
+     *  @OA\Parameter(
+     *         name="major_id",
+     *         in="query",
+     *         description="Tuyển dụng thuộc chuyên ngành",
+     *         required=false,
+     *     ),
+     * *  @OA\Parameter(
+     *         name="skill_id",
+     *         in="query",
+     *         description="Tuyển dụng thuộc kỹ năng",
+     *         required=false,
+     *     ),
      *    *     @OA\Parameter(
      *         name="recruitmentHot",
      *         in="query",

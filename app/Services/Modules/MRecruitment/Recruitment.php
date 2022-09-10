@@ -4,6 +4,7 @@ namespace App\Services\Modules\MRecruitment;
 
 use App\Models\Contest;
 use App\Models\ContestRecruitment;
+use App\Models\ContestSkill;
 use App\Models\Enterprise;
 use App\Models\EnterpriseRecruitment;
 use App\Models\Recruitment as ModelsRecruitment;
@@ -21,6 +22,7 @@ class Recruitment
         private Carbon $carbon,
         private EnterpriseRecruitment $enterpriseRecruitment,
         private ContestRecruitment $contestRecruitment,
+        private ContestSkill $contestSkill,
     ) {
     }
     public function getList(Request $request)
@@ -28,6 +30,8 @@ class Recruitment
         $keyword = $request->has('keyword') ? $request->keyword : "";
         $enterprise = $request->has('enterprise_id') ? $request->enterprise_id : null;
         $contest = $request->has('contest_id') ? $request->contest_id : null;
+        $major = $request->has('major_id') ? $request->major_id : null;
+        $skill = $request->has('skill_id') ? $request->skill_id : null;
         $recruitmentHot =  $request->has('recruitmentHot') ? $request->recruitmentHot : null;
         $progress = $request->has('progress') ? $request->progress : null;
         $orderBy = $request->has('orderBy') ? $request->orderBy : 'id';
@@ -74,10 +78,21 @@ class Recruitment
             $recruitmentsIdInContest = $this->contestRecruitment::where('contest_id', $contest)->pluck('recruitment_id')->toArray();
             $query->whereIn('id',  $recruitmentsIdInContest);
         }
+        if ($major != null) {
+            $contest_id = $this->contest::where([['major_id', $major], ['type', config('util.TYPE_TEST')]])->pluck('id')->toArray();
+            $recruitmentsIdInContest = $this->contestRecruitment::whereIn('contest_id', array_unique($contest_id))->pluck('recruitment_id')->toArray();
+            $query->whereIn('id', array_unique($recruitmentsIdInContest));
+        }
+        if ($skill != null) {
+            $contest_id = $this->contestSkill::where('skill_id', $skill)->pluck('contest_id')->toArray();
+            $recruitmentsIdInContest = $this->contestRecruitment::whereIn('contest_id', array_unique($contest_id))->pluck('recruitment_id')->toArray();
+            $query->whereIn('id', array_unique($recruitmentsIdInContest));
+        }
         return $query;
     }
     public function index(Request $request)
     {
+        // ->paginate(request('limit') ?? 10);
         return $this->getList($request)->paginate(request('limit') ?? 10);
     }
     public function find($id)
