@@ -366,8 +366,20 @@ class QuestionController extends Controller
     }
     public function import(ImportQuestion $request)
     {
-        Excel::import(new QuestionsImport(), $request->ex_file);
-        return redirect()->back();
+        try {
+            Excel::import(new QuestionsImport(), $request->ex_file);
+            return response()->json([
+                "status" => true,
+                "payload" => "Thành công "
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "status" => false,
+                "errors" => [
+                    "ex_file" => $th->getMessage()
+                ]
+            ], 400);
+        }
     }
 
     public function exportQe()

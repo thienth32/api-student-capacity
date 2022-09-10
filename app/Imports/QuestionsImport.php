@@ -5,6 +5,7 @@ namespace App\Imports;
 use App\Models\Question;
 use App\Services\Modules\MAnswer\MAnswerInterface;
 use App\Services\Modules\MQuestion\MQuestionInterface;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -57,15 +58,10 @@ class QuestionsImport implements ToCollection
 
     public function storeQuestionAnswer($data)
     {
-        DB::beginTransaction();
-        try {
+        DB::transaction(function () use ($data) {
             $question = app(MQuestionInterface::class)->createQuestionsAndAttchSkill($data['questions'], $data['skill']);
             if (!$question) throw new \Exception("Error question ");
             app(MAnswerInterface::class)->createAnswerByIdQuestion($data['answers'], $question->id);
-            DB::commit();
-        } catch (\Throwable $th) {
-            DB::rollback();
-            return redirect()->back()->withErrors(["error", $th->getMessage()]);
-        }
+        });
     }
 }
