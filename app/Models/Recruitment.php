@@ -29,7 +29,7 @@ class Recruitment extends Model
     }
     public function contest()
     {
-        return $this->BelongsToMany(Contest::class, 'contest_recruitments', 'recruitment_id', 'contest_id')->with(['skills', 'rounds'])->withTimestamps();
+        return $this->BelongsToMany(Contest::class, 'contest_recruitments', 'recruitment_id', 'contest_id')->with(['skills:id,name', 'rounds:id,name,contest_id'])->withTimestamps();
     }
     public function posts()
     {
