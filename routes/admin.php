@@ -127,6 +127,7 @@ Route::prefix('rounds')->group(function () {
             Route::post('{id_exam}/re-status', [ExamController::class, 're_status'])->name('admin.exam.re_status');
             Route::put('{id_exam}', [ExamController::class, 'update'])->name('admin.exam.update');
         });
+
         Route::prefix('result')->group(function () {
             Route::get('', [ResultController::class, 'index'])->name('admin.result.index');
         });

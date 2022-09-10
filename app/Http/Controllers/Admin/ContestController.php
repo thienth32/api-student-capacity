@@ -16,6 +16,7 @@ use App\Services\Traits\TResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\ContestUser;
+use App\Services\Modules\MSkill\Skill as MSkillSkill;
 use App\Services\Traits\TTeamContest;
 use App\Services\Traits\TUploadImage;
 use Illuminate\Support\Facades\Storage;
@@ -31,7 +32,8 @@ class ContestController extends Controller
         private Major $major,
         private Team $team,
         private DB $db,
-        private Storage $storage
+        private Storage $storage,
+        private MSkillSkill $skill
     ) {
     }
 
@@ -159,27 +161,31 @@ class ContestController extends Controller
     {
         $this->checkTypeContest();
         $majors = $this->major::all();
+        $skills = $this->skill->getAll();
         $contest_type_text = request('type') == 1 ? 'test năng lực' : 'cuộc thi';
-        return view('pages.contest.form-add', compact('majors', 'contest_type_text'));
+        return view('pages.contest.form-add', compact('majors', 'contest_type_text', 'skills'));
     }
 
     public function store(RequestContest $request, Redirect $redirect)
     {
+        // dd($request->all());
         $this->checkTypeContest();
         $this->db::beginTransaction();
         try {
 
             $filename = $this->uploadFile($request->img);
             $contest = $this->contest->store($filename, $request);
+            $contest->skills()->attach($request->skill);
             $this->db::commit();
-            if ($contest->type == 1) return $redirect::route('admin.contest.show.capatity', ['id' => $contest->id])->with('success', 'Thêm mới thành công !');
-            return $redirect::route('admin.contest.show', ['id' => $contest->id])->with('success', 'Thêm mới thành công !');
+            if ($contest->type == 1) return $redirect::route('admin.contest.show.capatity', ['id' => $contest->id])->withErrors('success', 'Thêm mới thành công !');
+            return $redirect::route('admin.contest.show', ['id' => $contest->id])->withErrors('success', 'Thêm mới thành công !');
         } catch (Exception $ex) {
+            dd($ex->getMessage());
             if ($request->hasFile('img')) {
                 if ($this->storage::disk('s3')->has($filename)) $this->storage::disk('s3')->delete($filename);
             }
             $this->db::rollBack();
-            return $redirect::back()->with('error', 'Thêm mới thất bại !');
+            return $redirect::back()->withErrors('error', 'Thêm mới thất bại !');
         }
     }
 
@@ -204,13 +210,17 @@ class ContestController extends Controller
 
         $this->checkTypeContest();
         $major = $this->major::orderBy('id', 'desc')->get();
+        $skills = $this->skill->getAll();
         $contest_type_text = request('type') == 1 ? 'test năng lực' : 'cuộc thi';
-        $contest = $this->getContest($id, request('type') ?? 0)->first();
+        $contest = $this->contest->getContestByIdUpdate($id, request('type') ?? 0);
         if (!$contest) abort(404);
         if ($contest->type != request('type')) abort(404);
         $rewardRankPoint = json_decode($contest->reward_rank_point);
+        $skillContests = $contest->skills->map(function ($data) {
+            return $data->skill_id;
+        })->toArray();
         if ($contest) {
-            return view('pages.contest.edit', compact('contest', 'major', 'rewardRankPoint', 'contest_type_text'));
+            return view('pages.contest.edit', compact('contest', 'skillContests', 'major', 'rewardRankPoint', 'contest_type_text', 'skills'));
         } else {
             return view('error');
         }
@@ -245,23 +255,14 @@ class ContestController extends Controller
                     ]);
                 }
                 $this->contest->update($contest, $dataSave);
+                $contest->skills()->sync($request->skill);
                 $this->db::commit();
-                if ($contest->type == 1) return redirect(route('admin.contest.show.capatity', ['id' => $contest->id]))->with('success', 'Thêm mới thành công !');
-                return redirect(route('admin.contest.list') . '?type=' . request('type') ?? 0);
+                if ($contest->type == 1) return redirect(route('admin.contest.show.capatity', ['id' => $contest->id]))->withErrors('success', 'Cập nhật thành công !');
+                return redirect(route('admin.contest.list') . '?type=' . request('type') ?? 0)->withErrors('success', 'Cập nhật thành công !');
             }
         } catch (\Exception $e) {
             $this->db::rollBack();
-            return redirect()->back()->with('error', 'Cập nhật thất bại !');
-        }
-    }
-
-    private function getContest($id, $type = 0)
-    {
-        try {
-            $contest = $this->contest->getContest()::where('id', $id)->where('type', $type);
-            return $contest;
-        } catch (\Throwable $th) {
-            return false;
+            return redirect()->back()->withErrors(['error' => 'Cập nhật thất bại !']);
         }
     }
 
@@ -327,7 +328,7 @@ class ContestController extends Controller
 
     public function show_test_capacity(Request $request, Skill $skillModel, $id)
     {
-        $capacity = $this->contest->show($id, config('util.TYPE_TEST'));
+        $capacity = $this->contest->getContestByIdUpdate($id, config('util.TYPE_TEST'));
         if (!$capacity) abort(404);
         $skills = $skillModel::all();
         return view('pages.contest.detail-capacity.detail', [
@@ -542,22 +543,12 @@ class ContestController extends Controller
 
     public function apiCapacityRelated($id_capacity)
     {
-        $capacityArrId = [];
-        $capacity = $this->contest->find($id_capacity);
-        if (is_null($capacity)) return $this->responseApi(false, 'Không tìm thấy bài test năng lực !');
-        $capacity->load(['recruitment' => function ($q) {
-            return $q->with(['contest']);
-        }]);
-        foreach ($capacity->recruitment as  $recruitment) {
-            if ($recruitment->contest) foreach ($recruitment->contest as $contest) {
-                array_push($capacityArrId, $contest->id);
-            }
+        try {
+            $capacitys = $this->contest->getCapacityRelated($id_capacity);
+            return $this->responseApi(true, $capacitys);
+        } catch (\Throwable $th) {
+            return $this->responseApi(false, $th->getMessage());
         }
-        $capacityArrId = array_unique($capacityArrId);
-        unset($capacityArrId[array_search($id_capacity, $capacityArrId)]);
-        $capacitys = $this->contest->getContest()::whereIn('id', $capacityArrId)->limit(request('limit') ?? 4)->get();
-        $capacitys->load(['rounds', 'skills', 'userCapacityDone']);
-        return $this->responseApi(true, $capacitys);
     }
 }
 

@@ -36,7 +36,13 @@
     <div class="row">
         <div class="col-lg-12">
             <div class=" card card-flush ">
+
                 <div class="row p-5 d-flex justify-content-center align-items-center ">
+                    <div class="row">
+                        <button data-id="{{ $round->id }}" class="col-2 print-excel btn btn-warning">Xuất
+                            EXCEL
+                        </button>
+                    </div>
                     <div class="table-responsive">
                         <table class="table table-row-dashed table-row-gray-300 gy-7">
                             <thead>
@@ -54,37 +60,26 @@
                                         <td>
                                             {{ $team->name }}
                                         </td>
-                                        @if (count($team->result) > 0)
+                                        @if ($team->result)
                                             <td>
-                                                @foreach ($team->result as $result)
-                                                    {{ date('d-m-Y H:i:s', strtotime($result->created_at)) }}
-                                                    <br>
-                                                    {{ \Carbon\Carbon::parse($result->created_at)->diffforHumans() }}
-                                                @endforeach
+                                                {{ date('d-m-Y H:i:s', strtotime($team->result->created_at)) }}
+                                                <br>
+                                                {{ \Carbon\Carbon::parse($team->result->created_at)->diffforHumans() }}
 
                                             </td>
                                             <td>
-                                                @foreach ($team->result as $result)
-                                                    {{ $result->point }}
-                                                @endforeach
+                                                {{ $team->result->point }}
                                             </td>
                                         @else
                                             <td>Chưa có điểm thi</td>
                                             <td>Chưa có điểm thi</td>
                                         @endif
-                                        {{-- <td>
-                                            {{ date('d-m-Y H:i:s', strtotime($result->created_at)) }}
-                                            <br>
-                                            {{ \Carbon\Carbon::parse($result->created_at)->diffforHumans() }}
-                                        </td>
-                                        <td>
-                                            {{ $result->point }}
-                                        </td> --}}
+
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
-                        {{-- {{ $results->appends(request()->all())->links('pagination::bootstrap-4') }} --}}
+                        {{ $teams->appends(request()->all())->links('pagination::bootstrap-4') }}
                     </div>
 
 
@@ -98,6 +93,12 @@
         var url = '{{ url()->current() }}' + '?';
         // var url = window.location.href + '?';
         const sort = '{{ request()->has('sort') ? (request('sort') == 'desc' ? 'asc' : 'desc') : 'asc' }}';
+    </script>
+    <script>
+        $('.print-excel').on('click', function() {
+            window.location = "/admin/prinft-excel?type=historyTeamsResultContest&round_id=" + $(this).data('id');
+            return false;
+        })
     </script>
     <script src="assets/js/system/formatlist/formatlis.js"></script>
 

@@ -218,7 +218,8 @@ class Contest implements MContestInterface
                         return $q->whereIn('id', $arrId);
                     }
                 ); //
-            }
+            },
+            'skills'
         ];
         if ($type == config('util.TYPE_TEST')) $with = [
             'rounds' => function ($q) {
@@ -286,5 +287,39 @@ class Contest implements MContestInterface
                         Carbon::parse($q->register_deadline)->diffForHumans()
                 ];
             });
+    }
+
+    public function getCapacityRelated($id_capacity)
+    {
+        $capacityArrId = [];
+        $capacity = $this->contest::find($id_capacity);
+        if (is_null($capacity)) throw new \Exception('Không tìm thấy bài test năng lực !');
+        $capacity->load(['recruitment' => function ($q) {
+            return $q->with(['contest']);
+        }]);
+        foreach ($capacity->recruitment as  $recruitment) {
+            if ($recruitment->contest) foreach ($recruitment->contest as $contest) {
+                array_push($capacityArrId, $contest->id);
+            }
+        }
+        $capacityArrId = array_unique($capacityArrId);
+        unset($capacityArrId[array_search($id_capacity, $capacityArrId)]);
+        return $this->contest::whereIn('id', $capacityArrId)
+            ->limit(request('limit') ?? 4)
+            ->get()
+            ->load(['rounds', 'skills', 'userCapacityDone']);
+    }
+
+    public function getContestByIdUpdate($id, $type = 0)
+    {
+        return $this->contest::with(
+            [
+                'skills' => function ($q) {
+                    return $q->select(["skill_id", "name"]);
+                }
+            ]
+        )
+            ->whereId($id, $type)
+            ->first();
     }
 }

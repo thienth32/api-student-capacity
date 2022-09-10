@@ -375,8 +375,18 @@
                                                 </h3>
                                                 <!--end::Title-->
                                                 <div class="fs-5 text-muted fw-bold">
-                                                    Bắt đầu : {{ $test_capacity->date_start }}
-                                                    <br>Kết thúc : {{ $test_capacity->register_deadline }}
+                                                    <strong>Bắt đầu</strong> : {{ $test_capacity->date_start }}
+                                                    <br><strong>Kết thúc</strong> : {{ $test_capacity->register_deadline }}
+                                                    <br>
+                                                    <p><strong>Kỹ năng</strong></p>
+                                                    @if (count($test_capacity->skills) > 0)
+                                                        @foreach ($test_capacity->skills as $key => $skill)
+                                                            <span
+                                                                class="badge badge-{{ $key % 2 == 0 ? 'secondary' : 'success' }}">{{ $skill->name }}</span>
+                                                        @endforeach
+                                                    @else
+                                                        <span class="badge badge-success">Chưa có kỹ năng !</span>
+                                                    @endif
                                                 </div>
                                             </div>
                                             <!--end::Top-->

@@ -35,4 +35,8 @@ interface MContestInterface
     public function getContestByDateNow($date);
 
     public function getContestMapSubDays($date);
+
+    public function getCapacityRelated($id_capacity);
+
+    public function getContestByIdUpdate($id, $type = 0);
 }

@@ -92,8 +92,26 @@ class Round implements MRoundInterface
         $round->type_exam_id = $request->type_exam_id;
         $round->save();
     }
+
     public function find($id, $with = [])
     {
         return $this->round::whereId($id)->with($with)->first();
+    }
+
+    public function getTeamByRoundId($id, $flagGetAll = false)
+    {
+        $teams = $this->round::find($id)
+            ->teams()
+            ->with([
+                'result' => function ($q) use ($id) {
+                    return $q->where('round_id', $id)
+                        ->orderBy('point', 'desc')
+                        ->orderBy('created_at', 'asc');
+                }
+            ])
+            ->sort((request('sort') == 'desc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'results')
+            ->search(request('q') ?? null, ['name']);
+        if ($flagGetAll) return $teams->get();
+        return $teams->paginate(request('limit') ?? 10);
     }
 }
