@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Exports\QuestionsExport;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Question\ImportQuestion;
 use App\Imports\QuestionsImport;
 use App\Models\Answer;
 use App\Models\Exam;
@@ -363,9 +364,10 @@ class QuestionController extends Controller
             ]);
         }
     }
-    public function exImpost(Request $request)
+    public function import(ImportQuestion $request)
     {
-        Excel::import(new QuestionsImport, $request->ex_file);
+        Excel::import(new QuestionsImport(), $request->ex_file);
+        return redirect()->back();
     }
 
     public function exportQe()

@@ -364,7 +364,7 @@ Route::prefix('questions')->group(function () {
     Route::delete('delete/{id}', [QuestionController::class, 'delete'])->name('admin.question.delete');
     Route::get('restore-delete/{id}', [QuestionController::class, 'restoreDelete'])->name('admin.question.restore');
 
-    Route::post('impost', [QuestionController::class, 'exImpost'])->name('admin.question.excel.impost');
+    Route::post('import', [QuestionController::class, 'import'])->name('admin.question.excel.import');
     Route::get('export', [QuestionController::class, 'exportQe'])->name('admin.question.excel.export');
 });
 
@@ -372,3 +372,7 @@ Route::get('api-view-check', function (App\Services\Modules\MContest\Contest $co
     $data = $contest->apiIndex();
     return view('welcome');
 });
+
+Route::get('dowload-excel', function () {
+    return response()->download(public_path('assets/media/excel/excel-download.xlsx'));
+})->name("admin.download.execel.pass");
