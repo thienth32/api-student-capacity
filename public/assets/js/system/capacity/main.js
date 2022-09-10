@@ -1,6 +1,10 @@
-var flagDataSaveHide = false;
+var flagDataSaveHide = true;
 var dataQues = null;
 var loading = `</div> <h2 class="m-2">Hệ thống đang chạy , vui lòng chờ ...</h2></div>`;
+var tags = ["skill", "level", "type", "q", "page", "take"];
+var urlFetchQs = "";
+var urlFetchSkill = "";
+
 function loadTast(text = "Đang chạy ...", type = "info") {
     toastr.options = {
         closeButton: true,
@@ -160,46 +164,77 @@ function fetchHistoryExam(id) {
     });
 }
 
-function fecthQuestionByExams(id, param = "?", url = null) {
+function checkUrlOut(key, value, urlParams, urlHasFetch) {
+    let searchParams = new URLSearchParams(urlHasFetch);
+
+    if (urlHasFetch.indexOf("?")) {
+        tags.map(function (data) {
+            if (data == key) {
+                urlParams = urlParams + "&" + key + "=" + value;
+            } else {
+                if (searchParams.has(data)) {
+                    urlParams =
+                        urlParams + "&" + data + "=" + searchParams.get(data);
+                }
+            }
+        });
+        return urlParams;
+    }
+    urlParams = urlParams + "?" + key + "=" + value;
+    return urlParams;
+}
+
+function fecthQuestionByExams(id, param = [], url = null) {
     $("#show-ques-anw").html(loading);
     $(".btn-add-question-answ").hide();
+    var urlQuestion = `${urlApiPublic}exam/get-question-by-exam/${id}?`;
+    if (param[0] == -1) {
+        urlFetchQs = urlQuestion;
+    } else {
+        urlFetchQs = checkUrlOut(
+            param[0] ?? "",
+            param[1] ?? "",
+            `${urlApiPublic}exam/get-question-by-exam/${id}?`,
+            urlFetchQs
+        );
+    }
+
     $.ajax({
         type: "GET",
-        url: url ?? `${urlApiPublic}exam/get-question-by-exam/${id}${param}`,
+        url: urlFetchQs + (url ? "&" + url.split("?")[1] : ""),
         success: function (res) {
-            if (res.payload.length == 0)
-                $("#show-ques-anw").html(
-                    `<h2>Không có câu hỏi câu trả lời nào </h2>`
-                );
-            questions = res.question;
-            let html = res.payload.data
-                .map(function (data, index) {
-                    var skillChill = data.skills
-                        .map(function (val_skill) {
-                            return `
+            let html = "";
+            if (res.payload.data.length == 0) {
+                html = `<h2>Không có câu hỏi câu trả lời nào </h2>`;
+            } else {
+                html = res.payload.data
+                    .map(function (data, index) {
+                        var skillChill = data.skills
+                            .map(function (val_skill) {
+                                return `
                         <span style="background: #ccc ; color : white , padding : 2px ; margin : 1px"> ${val_skill.name} </span>
                     `;
-                        })
-                        .join(" ");
-                    let result = listSave.filter(function (dt) {
-                        return dt.id == data.id;
-                    });
-                    if (result.length == 0)
-                        listSave.push({
-                            name: data.content,
-                            id: data.id,
+                            })
+                            .join(" ");
+                        let result = listSave.filter(function (dt) {
+                            return dt.id == data.id;
                         });
+                        if (result.length == 0)
+                            listSave.push({
+                                name: data.content,
+                                id: data.id,
+                            });
 
-                    var htmlChild = data.answers
-                        .map(function (val) {
-                            return `
+                        var htmlChild = data.answers
+                            .map(function (val) {
+                                return `
                                 <p> ${
                                     val.content
                                 } ${val.is_correct == 1 ? " <strong>- Đáp án đúng </strong> " : ""} </p>
                             `;
-                        })
-                        .join(" ");
-                    return `
+                            })
+                            .join(" ");
+                        return `
                             <tr>
                                 <td>
                                     <a  data-bs-toggle="collapse" href="#multiCollapseExample${index}"
@@ -246,8 +281,10 @@ function fecthQuestionByExams(id, param = "?", url = null) {
                                 </td>
                             </tr>
                         `;
-                })
-                .join(" ");
+                    })
+                    .join(" ");
+            }
+            questions = res.question;
             let paginate = res.payload.links
                 .map(function (link, key) {
                     var datapage = `${link.label}`;
@@ -273,11 +310,23 @@ function fecthQuestionByExams(id, param = "?", url = null) {
     });
 }
 
-function getApiShowQues(url) {
+function getApiShowQues(url, param = []) {
     $("#show-add-questions").html(loading);
+
+    if (param[0] == -1) {
+        urlFetchSkill = url;
+    } else {
+        urlFetchSkill = checkUrlOut(
+            param[0] ?? "",
+            param[1] ?? "",
+            url,
+            urlFetchSkill
+        );
+    }
+
     $.ajax({
         type: "GET",
-        url: url,
+        url: urlFetchSkill,
         success: function (res) {
             if (!res.status) return;
             dataQues = res.payload;
@@ -291,26 +340,27 @@ function getApiShowQues(url) {
 }
 
 function fetchShowQues(dataQ) {
-    var html = dataQ.map(function (data, index) {
-        let flagActive = checkQuesSionHas(data);
-        var htmlChild = data.answers
-            .map(function (val) {
-                return `
+    if (dataQ.length > 0)
+        var html = dataQ.map(function (data, index) {
+            let flagActive = checkQuesSionHas(data);
+            var htmlChild = data.answers
+                .map(function (val) {
+                    return `
                                 <p> ${
                                     val.content
                                 } ${val.is_correct == 1 ? "<strong>- Đáp án đúng</strong>  " : ""} </p>
                             `;
-            })
-            .join(" ");
-        var skillChill = data.skills
-            .map(function (val_skill) {
-                return `
+                })
+                .join(" ");
+            var skillChill = data.skills
+                .map(function (val_skill) {
+                    return `
                 <span style="background: #ccc ; color : white , padding : 2px ; margin : 1px"> ${val_skill.name} </span>
             `;
-            })
-            .join(" ");
+                })
+                .join(" ");
 
-        return `
+            return `
 
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 <div>
@@ -371,7 +421,8 @@ function fetchShowQues(dataQ) {
                 </div>
             </div>
         `;
-    });
+        });
+    if (dataQ.length == 0) var html = `Không có bản ghi nào `;
     $("#show-add-questions").html(html);
 }
 
@@ -434,8 +485,10 @@ const mainPage = {
         $(".btn-add-question-answ").on("click", function () {
             $("#show-tast-qs").show();
             $("#show-list-qs").hide();
+            $("#select-question-has-take").val(10);
+            $("select").val(-1);
             showListSave();
-            getApiShowQues(urlApiPublic + "questions");
+            getApiShowQues(urlApiPublic + "questions?", [-1]);
         });
     },
     saveQuestion: function () {
@@ -480,7 +533,7 @@ const mainPage = {
     },
     reload: function () {
         $(".btn-reload").on("click", function () {
-            getApiShowQues(urlApiPublic + "questions?");
+            getApiShowQues(urlApiPublic + "questions?", [-1]);
         });
     },
     back: function () {
@@ -543,7 +596,7 @@ const mainPage = {
     paginateClick: function () {
         $(document).on("click", ".click-paginate-link", function (e) {
             e.preventDefault();
-            fecthQuestionByExams(exam_id, "", $(this).data("link"));
+            fecthQuestionByExams(exam_id, [], $(this).data("link"));
         });
     },
     blockF12: function () {
@@ -562,7 +615,10 @@ const mainPage = {
     },
     selectQuestionTake: function () {
         $("#select-question-has-take").on("change", function () {
-            getApiShowQues(urlApiPublic + "questions?take=" + $(this).val());
+            getApiShowQues(urlApiPublic + "questions?", [
+                "take",
+                $(this).val(),
+            ]);
         });
     },
     selectStatus: function () {
@@ -659,52 +715,52 @@ mainPage.printHistoryEXCEL();
 
 $("#selectSkill").on("change", function () {
     var value = $(this).val();
-    if (value == -1) return getApiShowQues(urlApiPublic + "questions?");
+    if (value == -1) return getApiShowQues(urlApiPublic + "questions?", [-1]);
     skill = "&skill=" + value;
-    getApiShowQues(urlApiPublic + "questions?" + skill + type + level + q);
+    getApiShowQues(urlApiPublic + "questions?", ["skill", value]);
 });
 $("#select-level").on("change", function () {
     var value = $(this).val();
-    if (value == -1) return getApiShowQues(urlApiPublic + "questions?");
+    if (value == -1) return getApiShowQues(urlApiPublic + "questions?", [-1]);
     skill = "&level=" + value;
-    getApiShowQues(urlApiPublic + "questions?" + skill + type + level + q);
+    getApiShowQues(urlApiPublic + "questions?", ["level", value]);
 });
 $("#select-type").on("change", function () {
     var value = $(this).val();
-    if (value == -1) return getApiShowQues(urlApiPublic + "questions?");
+    if (value == -1) return getApiShowQues(urlApiPublic + "questions?", [-1]);
     skill = "&type=" + value;
-    getApiShowQues(urlApiPublic + "questions?" + skill + type + level + q);
+    getApiShowQues(urlApiPublic + "questions?", ["type", value]);
 });
 $("#ip-search").on("keyup", function (e) {
     if (e.key !== "Enter") return;
     var value = $(this).val();
-    if (value == -1) return getApiShowQues(urlApiPublic + "questions?");
+    if (value == -1) return getApiShowQues(urlApiPublic + "questions?", [-1]);
     skill = "&q=" + value;
-    getApiShowQues(urlApiPublic + "questions?" + skill + type + level + q);
+    getApiShowQues(urlApiPublic + "questions?", ["q", value]);
 });
 /////
 $("#selectSkillQs").on("change", function () {
     var value = $(this).val();
-    if (value == -1) return fecthQuestionByExams(exam_id);
+    if (value == -1) return fecthQuestionByExams(exam_id, [-1]);
     skill = "&skill=" + value;
-    fecthQuestionByExams(exam_id, "?" + skill + type + level + q);
+    fecthQuestionByExams(exam_id, ["skill", value]);
 });
 $("#select-levelQs").on("change", function () {
     var value = $(this).val();
-    if (value == -1) return fecthQuestionByExams(exam_id);
+    if (value == -1) return fecthQuestionByExams(exam_id, [-1]);
     skill = "&level=" + value;
-    fecthQuestionByExams(exam_id, "?" + skill + type + level + q);
+    fecthQuestionByExams(exam_id, ["level", value]);
 });
 $("#select-typeQs").on("change", function () {
     var value = $(this).val();
-    if (value == -1) return fecthQuestionByExams(exam_id);
+    if (value == -1) return fecthQuestionByExams(exam_id, [-1]);
     skill = "&type=" + value;
-    fecthQuestionByExams(exam_id, "?" + skill + type + level + q);
+    fecthQuestionByExams(exam_id, ["type", value]);
 });
 $("#ip-searchQs").on("keyup", function (e) {
     if (e.key !== "Enter") return;
     var value = $(this).val();
-    if (value == -1) return fecthQuestionByExams(exam_id);
+    if (value == -1) return fecthQuestionByExams(exam_id, [-1]);
     skill = "&q=" + value;
-    fecthQuestionByExams(exam_id, "?" + skill + type + level + q);
+    fecthQuestionByExams(exam_id, ["q", value]);
 });
