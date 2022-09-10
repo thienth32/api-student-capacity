@@ -417,7 +417,7 @@
 
                                         </div>
                                     @else
-                                        {{ config('util.CONTEST_STATUS_2') }}
+                                        <span class="badge bg-danger"> {{ config('util.CONTEST_STATUS_2') }} </span>
                                     @endif
                                 @else
                                     <div data-bs-toggle="tooltip" title="Cập nhật trạng thái "
@@ -433,10 +433,30 @@
                                 <td>
                                     @if ($contest->status <= 1)
                                         @if ((request('type') ?? 0) == config('util.TYPE_CONTEST') &&
-                                            \Carbon\Carbon::parse($contest->start_register_time)->toDateTimeString() >
+                                            \Carbon\Carbon::parse($contest->date_start)->toDateTimeString() >
                                                 \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
                                             <span class="badge bg-primary">Sắp diễn ra </span>
-                                        @elseif ((request('type') ?? 0) == config('util.TYPE_CONTEST') &&
+                                        @else
+                                            @if ((request('type') ?? 0) == config('util.TYPE_CONTEST') &&
+                                                \Carbon\Carbon::parse($contest->register_deadline)->toDateTimeString() >
+                                                    \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
+                                                <span class="badge bg-success">Đang diễn ra </span>
+                                            @elseif((request('type') ?? 0) == config('util.TYPE_CONTEST') &&
+                                                \Carbon\Carbon::parse($contest->register_deadline)->toDateTimeString() <
+                                                    \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
+                                                <span class="badge bg-danger"> Đã diễn ra </span>
+                                            @endif
+                                        @endif
+
+                                        @if ((request('type') ?? 0) == config('util.TYPE_CONTEST') &&
+                                            \Carbon\Carbon::parse($contest->start_register_time)->toDateTimeString() <
+                                                \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString() &&
+                                            \Carbon\Carbon::parse($contest->end_register_time)->toDateTimeString() >
+                                                \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
+                                            <span class="badge bg-info">Đang mở đăng ký </span>
+                                        @else
+                                            {{-- <span class="badge bg-info">Chưa mở đăng ký </span> --}}
+                                            {{-- @elseif ((request('type') ?? 0) == config('util.TYPE_CONTEST') &&
                                             \Carbon\Carbon::parse($contest->end_register_time)->toDateTimeString() >
                                                 \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
                                             <span class="badge bg-success">Đang mở đăng kí </span>
@@ -447,7 +467,7 @@
                                             \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
                                             <span class="badge bg-success">Đang diễn ra </span>
                                         @else
-                                            <span class="badge bg-danger"> Đã diễn ra </span>
+                                            <span class="badge bg-danger"> Đã diễn ra </span> --}}
                                         @endif
                                     @else
                                         <span class="badge bg-danger"> Đã kết thúc </span>

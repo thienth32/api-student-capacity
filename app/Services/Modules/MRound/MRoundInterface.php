@@ -13,4 +13,6 @@ interface MRoundInterface
     public function store($request);
 
     public function find($id);
+
+    public function getTeamByRoundId($id, $flagGetAll = false);
 }
