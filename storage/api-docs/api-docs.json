@@ -396,15 +396,44 @@
                 }
             }
         },
-        "/api/public/rating-major/{slug}": {
+        "/api/public/rating/major-contest/{slug}": {
             "get": {
                 "tags": [
                     "Rank user",
                     "User",
-                    "Major"
+                    "Major",
+                    "Rank_contest"
+                ],
+                "description": "Description api  rank",
+                "operationId": "577545ef0fff46db289ede374ef0ed4a",
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "Slug chuyên ngành ",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                }
+            }
+        },
+        "/api/public/rating/major-capacity/{slug}": {
+            "get": {
+                "tags": [
+                    "Rank user",
+                    "User",
+                    "Major",
+                    "Rank_capacity"
                 ],
                 "description": "Description api slider",
-                "operationId": "a543ea7b9a6c549431aca0fa06b2a645",
+                "operationId": "d7fa9de5e2c9a8f71174dbff45e84f8d",
                 "parameters": [
                     {
                         "name": "slug",
