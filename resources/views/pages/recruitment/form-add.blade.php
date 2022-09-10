@@ -96,8 +96,19 @@
                                     name="contest_id[]" value="{{ serialize(old('contest_id')) }}">
                                     @foreach ($contest as $item)
                                         <option {{ collect(old('contest_id'))->contains($item->id) ? 'selected' : '' }}
-                                            value="{{ $item->id }}">
-                                            {{ $item->name }}
+                                            value="{{ $item->id }} ">
+                                            {{ $item->name }} @if (count($item->skills) > 0)
+                                                (
+                                                <ol class="breadcrumb text-muted fs-6 fw-bold">
+                                                    @foreach ($item->skills as $skill)
+                                                        <li class="breadcrumb-item px-3 text-muted">
+                                                            {{ $skill->name }} /</li>
+                                                    @endforeach
+
+                                                </ol>
+
+                                                )
+                                            @endif
                                         </option>
                                     @endforeach
                                 </select>
