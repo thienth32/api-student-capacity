@@ -37,7 +37,7 @@ class DashboardController extends Controller
         $dt3 = $this->carbon::now('Asia/Ho_Chi_Minh');
 
         $timeNow = $dt->toDateTimeString();
-        $contests = $this->contest->getContestMapSubDays($dt->subDays(5)->toDateTimeString());
+        $contests = $this->contest->getContestMapSubDays($dt->subDays(2)->toDateTimeString());
         $contestsDealineNow = $this->contest->getContestByDateNow($timeNow);
         $period = $this->carbonPeriod::create($dt3->subDays(2)->toDateTimeString(), $dt2->addDays(7)->toDateTimeString());
 
