@@ -59,9 +59,8 @@ class QuestionsImport implements ToCollection
     {
         DB::beginTransaction();
         try {
-            throw new \Exception("Error question");
             $question = app(MQuestionInterface::class)->createQuestionsAndAttchSkill($data['questions'], $data['skill']);
-            if (!$question) throw new \Exception("Error question");
+            if (!$question) throw new \Exception("Error question ");
             app(MAnswerInterface::class)->createAnswerByIdQuestion($data['answers'], $question->id);
             DB::commit();
         } catch (\Throwable $th) {
