@@ -17,7 +17,7 @@ class RankUserController extends Controller
      * @OA\Get(
      *     path="/api/public/rating/major-contest/{slug}",
      *     description="Description api slider",
-     *     tags={"Rank user" , "User" , "Major"  ,'Rank_contest'},
+     *     tags={"Rank user","User","Major","Rank_contest"},
      *     @OA\Parameter(
      *         name="slug",
      *         in="path",
@@ -86,7 +86,7 @@ class RankUserController extends Controller
      * @OA\Get(
      *     path="/api/public/rating/major-capacity/{slug}",
      *     description="Description api slider",
-     *     tags={"Rank user" , "User" , "Major" ,'Rank_capacity'},
+     *     tags={"Rank user" , "User" , "Major" ,"Rank_capacity"},
      *     @OA\Parameter(
      *         name="slug",
      *         in="path",
