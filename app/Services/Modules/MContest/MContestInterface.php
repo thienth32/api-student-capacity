@@ -39,4 +39,8 @@ interface MContestInterface
     public function getCapacityRelated($id_capacity);
 
     public function getContestByIdUpdate($id, $type = 0);
+
+    public function getContestDeadlineEnd();
+
+    public function getContestDone();
 }

@@ -207,7 +207,6 @@ class ContestController extends Controller
 
     public function edit($id)
     {
-
         $this->checkTypeContest();
         $major = $this->major::orderBy('id', 'desc')->get();
         $skills = $this->skill->getAll();

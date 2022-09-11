@@ -7,7 +7,7 @@
         <div class="col-lg-12">
             <ol class="breadcrumb text-muted fs-6 fw-bold">
                 <li class="breadcrumb-item pe-3">
-                    @if (request('type') == 0)
+                    @contest
                         <a href="{{ route('admin.contest.list') }}" class="pe-3">
                             Danh sách cuộc thi
                         </a>
@@ -15,7 +15,7 @@
                         <a href="{{ route('admin.contest.list', ['type' => 1]) }}" class="pe-3">
                             Danh sách test năng lực
                         </a>
-                    @endif
+                    @endcontest
                 </li>
                 <li class="breadcrumb-item px-3 text-muted">Cập nhập {{ $contest_type_text . ' ' . $contest->name }} </li>
             </ol>
@@ -59,11 +59,10 @@
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
-                                @if (request('type') != config('util.TYPE_TEST'))
+                                @contest
                                     <input type="hidden" name="start_register_time"
                                         value="{{ $contest->start_register_time }}">
-                                    <input type="hidden" name="end_register_time"
-                                        value="{{ $contest->end_register_time }}">
+                                    <input type="hidden" name="end_register_time" value="{{ $contest->end_register_time }}">
                                     <div class="form-group mb-10">
                                         <label for="" class="form-label">Thời gian bắt đầu đăng ký & thời gian kết
                                             thúc
@@ -81,8 +80,8 @@
                                     <div class="form-group mb-10">
                                         <label for="" class="form-label">Thuộc kỹ năng </label>
                                         <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
-                                            data-hide-search="false" multiple tabindex="-1" aria-hidden="true"
-                                            name="skill[]" value="{{ old('skill') }}">
+                                            data-hide-search="false" multiple tabindex="-1" aria-hidden="true" name="skill[]"
+                                            value="{{ old('skill') }}">
                                             @foreach ($skills as $skill)
                                                 <option @selected(in_array($skill->id, $skillContests)) value="{{ $skill->id }}">
                                                     {{ $skill->name }}</option>
@@ -92,7 +91,7 @@
                                             <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
-                                @endif
+                                @endcontest
                                 <div class="form-group mb-10">
                                     <label for="" class="form-label">Thuộc Chuyên Ngành</label>
                                     <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
@@ -156,16 +155,16 @@
 
                             </div>
                             <div class="col-4">
-                                @if (request('type') != config('util.TYPE_TEST'))
+                                @contest
                                     <div class="form-group mb-10">
                                         <label for="" class="form-label">Giới hạn thành viên trong đội</label>
-                                        <input value="{{ old('max_user', $contest->max_user) }}" name="max_user"
-                                            type='number' class="form-control" />
+                                        <input value="{{ old('max_user', $contest->max_user) }}" name="max_user" type='number'
+                                            class="form-control" />
                                         @error('max_user')
                                             <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
-                                @endif
+                                @endcontest
                                 <div class="form-group ">
                                     <label for="" class="form-label">Ảnh {{ $contest_type_text }}</label>
                                     <input value="{{ old('img') }}" name="img" type='file' id="file-input"

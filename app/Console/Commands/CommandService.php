@@ -27,26 +27,26 @@ class CommandService extends Command
      */
     public function handle()
     {
-        $path = './app/Services/Modules';
-        $nameGet = $this->argument('name');
-        if(!file_exists($path.'/M'.$nameGet)) mkdir($path.'/M'.$nameGet,0777,true);
-        $pathFile = $path.'/M'.$nameGet.'/'.$nameGet.'.php';
-        if(!file_exists($pathFile))
-        {
-            $myfile = fopen($pathFile, "w");
-            $data =
-"<?php
-namespace App\Services\M$nameGet;
+        //         $path = './app/Services/Modules';
+        //         $nameGet = $this->argument('name');
+        //         if(!file_exists($path.'/M'.$nameGet)) mkdir($path.'/M'.$nameGet,0777,true);
+        //         $pathFile = $path.'/M'.$nameGet.'/'.$nameGet.'.php';
+        //         if(!file_exists($pathFile))
+        //         {
+        //             $myfile = fopen($pathFile, "w");
+        //             $data =
+        // "<?php
+        // namespace App\Services\M$nameGet;
 
-class $nameGet{
+        // class $nameGet{
 
-}";
-            fwrite($myfile, $data);
-            fclose($myfile);
-            $this->line('🆗 Running');
-            $this->info("✅ Create service $nameGet successful!");
-        }else{
-            $this->line("❌ $nameGet already exists");
-        }
+        // }";
+        //             fwrite($myfile, $data);
+        //             fclose($myfile);
+        //             $this->line('🆗 Running');
+        //             $this->info("✅ Create service $nameGet successful!");
+        //         }else{
+        //             $this->line("❌ $nameGet already exists");
+        //         }
     }
 }

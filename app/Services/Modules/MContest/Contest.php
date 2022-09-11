@@ -328,4 +328,20 @@ class Contest implements MContestInterface
             ->whereId($id, $type)
             ->first();
     }
+
+    public function getContestDeadlineEnd()
+    {
+        return $this->contest::where("register_deadline", "<", date("Y-m-d h:i:s"))
+            ->where("status", "<=", config('util.CONTEST_STATUS_GOING_ON'))
+            ->where("type", config('util.TYPE_CONTEST'))
+            ->get();
+    }
+    public function getContestDone()
+    {
+        return $this->contest::where("status", config('util.CONTEST_STATUS_DONE'))
+            ->where("type", config('util.TYPE_CONTEST'))
+            ->orderBy("date_start", "asc")
+            ->take(3)
+            ->get();
+    }
 }

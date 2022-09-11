@@ -102,11 +102,11 @@
                 <input class="form-control " placeholder="Pick date rage" id="kt_daterangepicker_2" />
             </div>
 
-            @if (request('type') != config('util.TYPE_TEST'))
+            @contest()
                 <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                     <label for="" class="form-label">Hoạt động {{ $contest_type_text }} </label>
-                    <select class="select-date-time-contest form-select mb-2 select2-hidden-accessible"
-                        data-control="select2" data-hide-search="true" tabindex="-1" aria-hidden="true">
+                    <select class="select-date-time-contest form-select mb-2 select2-hidden-accessible" data-control="select2"
+                        data-hide-search="true" tabindex="-1" aria-hidden="true">
                         <option class="form-control">Chọn hoạt động {{ $contest_type_text }}</option>
                         {{-- <option class="form-control" @selected(request()->has('upcoming_date')) value="upcoming_date">Sắp diễn ra
                         </option> --}}
@@ -123,7 +123,7 @@
 
                     </select>
                 </div>
-            @endif
+            @endcontest
         </div>
 
         {{--  --}}
@@ -224,17 +224,17 @@
                                 <!--end::Svg Icon-->
                             </span>
                         </th>
-                        @if (request('type') != config('util.TYPE_TEST'))
+                        @contest()
                             <th scope="col">Đội thi
                             </th>
                             <th scope="col">Ban giám khảo
                             </th>
-                        @endif
+                        @endcontest
                         <th scope="col">Chuyên ngành </th>
                         <th scope="col">Tình trạng </th>
-                        @if (request('type') != config('util.TYPE_TEST'))
+                        @contest()
                             <th scope="col"> Quá trình </th>
-                        @endif
+                        @endcontest
                         <th scope="col">Thời gian bắt đầu
                             <span role="button" data-key="date_start" data-bs-toggle="tooltip"
                                 title="Lọc theo thời gian bắt đầu "
@@ -295,7 +295,7 @@
                                 <!--end::Svg Icon-->
                             </span>
                         </th>
-                        @if (request('type') != config('util.TYPE_TEST'))
+                        @contest()
                             <th scope="col">Thời gian bắt đầu đăng ký
                                 <span role="button" data-key="start_register_time" data-bs-toggle="tooltip"
                                     title="Lọc theo thời gian bắt đầu đăng ký"
@@ -356,32 +356,18 @@
                                     <!--end::Svg Icon-->
                                 </span>
                             </th>
-                        @endif
+                        @endcontest
                         <th colspan="2"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- @php
-                        $total = $contests->total();
-                    @endphp --}}
+
                     @forelse ($contests as $key => $contest)
 
                         <tr>
-                            {{-- @if (request()->has('sort'))
-                                <th scope="row">
-                                    @if (request('sort') == 'desc')
-                                        {{ (request()->has('page') && request('page') !== 1 ? $contests->perPage() * (request('page') - 1) : 0) + $key + 1 }}
-                                    @else
-                                        {{ request()->has('page') && request('page') !== 1 ? $total - $contests->perPage() * (request('page') - 1) - $key : ($total -= ($key == 0 ? 0 : 1)) }}
-                                    @endif
-                                </th>
-                            @else
-                                <th scope="row">
-                                    {{ (request()->has('page') && request('page') !== 1 ? $contests->perPage() * (request('page') - 1) : 0) + $key + 1 }}
-                                </th>
-                            @endif --}}
+
                             <td>
-                                @if (request('type') != config('util.TYPE_TEST'))
+                                @contest()
                                     <a href="{{ route('admin.contest.show', ['id' => $contest->id]) }}">
                                         {{ $contest->name }}
                                     </a>
@@ -389,10 +375,10 @@
                                     <a href="{{ route('admin.contest.show.capatity', ['id' => $contest->id]) }}">
                                         {{ $contest->name }}
                                     </a>
-                                @endif
+                                @endcontest
 
                             </td>
-                            @if (request('type') != config('util.TYPE_TEST'))
+                            @contest
                                 <td class="text-center">
 
                                     {{ $contest->teams_count }}
@@ -404,7 +390,7 @@
                                     {{ $contest->judges_count }}
 
                                 </td>
-                            @endif
+                            @endcontest
                             <td>{{ $contest->major->name ?? 'Chưa có chuyên ngành ' }}</td>
                             <td>
                                 @hasanyrole('admin|super admin')
@@ -429,7 +415,7 @@
                                 @endhasrole
 
                             </td>
-                            @if (request('type') != config('util.TYPE_TEST'))
+                            @contest
                                 <td>
                                     @if ($contest->status <= 1)
                                         @if ((request('type') ?? 0) == config('util.TYPE_CONTEST') &&
@@ -474,13 +460,13 @@
                                     @endif
 
                                 </td>
-                            @endif
+                            @endcontest
                             <td>{{ $contest->date_start }}</td>
                             <td>{{ $contest->register_deadline }}</td>
-                            @if (request('type') != config('util.TYPE_TEST'))
+                            @contest
                                 <td>{{ $contest->start_register_time }}</td>
                                 <td>{{ $contest->end_register_time }}</td>
-                            @endif
+                            @endcontest
                             @hasanyrole(config('util.ROLE_ADMINS'))
                                 <td>
                                     <div data-bs-toggle="tooltip" title="Thao tác " class="btn-group dropstart">
@@ -529,7 +515,6 @@
                                                     </a>
                                                 </li>
                                             @endif
-
                                             @if (request('type') != config('util.TYPE_TEST'))
                                                 <li class="my-3">
                                                     <a href="{{ route('admin.contest.show', ['id' => $contest->id]) }}">

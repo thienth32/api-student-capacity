@@ -16,7 +16,7 @@ class ImportQuestion extends FormRequest
     public function rules()
     {
         return [
-            "ex_file" => "required|mimes:xlsx"
+            "ex_file" => "required|mimes:xlsx,csv"
         ];
     }
 
@@ -24,7 +24,7 @@ class ImportQuestion extends FormRequest
     {
         return [
             "ex_file.required" => "Chưa nhập file , vui lòng nhập file !",
-            "ex_file.mimes" => "File không đúng địng dạng xlsx !"
+            "ex_file.mimes" => "File không đúng địng dạng xlsx,csv !"
         ];
     }
 
