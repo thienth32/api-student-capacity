@@ -381,7 +381,6 @@ class QuestionController extends Controller
             ], 400);
         }
     }
-
     public function exportQe()
     {
         $point = [

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CandidateController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ExamController;
 use App\Http\Controllers\Admin\TeamController;
@@ -348,6 +349,16 @@ Route::group([
             Route::get('{id}/restore', [PostController::class, 'delete'])->name('admin.post.soft.restore');
         });
         Route::get('{slug}', [PostController::class, 'detail'])->name('admin.post.detail');
+    });
+    Route::prefix('candidates')->group(function () {
+        Route::get('', [CandidateController::class, 'index'])->name('admin.candidate.list');
+        Route::delete('{id}', [CandidateController::class, 'destroy'])->name('admin.candidate.destroy');
+        Route::prefix('list-soft-deletes')->group(function () {
+            Route::get('', [CandidateController::class, 'listRecordSoftDeletes'])->name('admin.candidate.list.soft.deletes');
+            Route::get('{id}/delete', [CandidateController::class, 'backUpPost'])->name('admin.candidate.soft.deletes');
+            Route::get('{id}/restore', [CandidateController::class, 'delete'])->name('admin.candidate.soft.restore');
+        });
+        Route::get('{id}', [CandidateController::class, 'detail'])->name('admin.candidate.detail');
     });
 });
 

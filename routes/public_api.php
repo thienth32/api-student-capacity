@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CandidateController;
 use App\Http\Controllers\Admin\CodeManagerController;
 use App\Http\Controllers\Admin\CompanyController as AdminCompanyController;
 use App\Http\Controllers\Admin\ContestController as AdminContestController;
@@ -98,4 +99,7 @@ Route::post('run-code', [CodeManagerController::class, 'run']);
 Route::prefix('skill')->group(function () {
 
     Route::get('', [SkillController::class, 'indexApi']);
+});
+Route::prefix('candidate')->group(function () {
+    Route::post('add', [CandidateController::class, 'ApiAddCandidate']);
 });
