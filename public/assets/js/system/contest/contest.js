@@ -58,7 +58,13 @@ const contestPage = {
 
         function disabledInput(data = [], status = true) {
             return data.forEach(e => {
-                $(e).prop('disabled', status);
+                $(e).attr('readonly', status);
+            });
+        }
+
+        function removeAttr(data = []) {
+            return data.forEach(e => {
+                $(e).removeAttr('readonly');
             });
         }
 
@@ -70,7 +76,7 @@ const contestPage = {
 
         $(document).on("keyup change", top1, function(e) {
             e.preventDefault();
-            $(top2).prop('disabled', false);
+            removeAttr([top2])
             if ($(this).val() == '') {
                 disabledInput([top2, top3, leave]);
                 setValue([top2, top3, leave], null);
@@ -80,7 +86,7 @@ const contestPage = {
 
         $(document).on("keyup change", top2, function(e) {
             e.preventDefault();
-            $(top3).prop('disabled', false);
+            removeAttr([top3])
             if ($(this).val() == '') {
                 disabledInput([top3, leave]);
                 setValue([top3, leave], null);
@@ -93,7 +99,7 @@ const contestPage = {
 
         $(document).on("keyup change", top3, function(e) {
             e.preventDefault();
-            $(leave).prop('disabled', false);
+            removeAttr([leave])
             if ($(this).val() == '') {
                 disabledInput([leave]);
                 setValue([leave], null);

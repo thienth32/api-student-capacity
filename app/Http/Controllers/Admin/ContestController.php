@@ -156,7 +156,6 @@ class ContestController extends Controller
         return $this->responseApi(true, $data);
     }
 
-
     public function create()
     {
         $this->checkTypeContest();
@@ -227,6 +226,7 @@ class ContestController extends Controller
 
     public function update(RequestContest $request, $id, Validator $validatorFacades)
     {
+
         $this->checkTypeContest();
         $this->db::beginTransaction();
         $contest = $this->contest->find($id);
@@ -402,6 +402,7 @@ class ContestController extends Controller
             return redirect()->back();
         }
     }
+
     public function detachEnterprise($id, $enterprise_id)
     {
         try {
@@ -411,7 +412,6 @@ class ContestController extends Controller
             return redirect()->back();
         }
     }
-
 
     public function addFormTeamContest($id)
     {
@@ -472,8 +472,6 @@ class ContestController extends Controller
             return redirect()->back();
         }
     }
-
-
 
     public function sendMail($id)
     {
