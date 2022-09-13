@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Candidate;
 use App\Models\Post;
+use App\Models\Recruitment;
 use App\Services\Modules\MCandidate\Candidate as MCandidateCandidate;
 use App\Services\Traits\TResponse;
 use App\Services\Traits\TStatus;
@@ -28,33 +29,93 @@ class CandidateController extends Controller
     }
     public function index(Request $request)
     {
-        $posts = $this->post::where('');
+        $posts = $this->post::where('postable_type', Recruitment::class)->get();
         $candidates = $this->MCandidate->index($request);
-        return view('pages.candidate.index', ['candidates' => $candidates]);
+        return view('pages.candidate.index', [
+            'candidates' => $candidates,
+            'posts' => $posts
+        ]);
+    }
+    public function detail($id)
+    {
+        $data = $this->candidate::find($id);
+
+        return view('pages.candidate.detail', compact('data'));
+    }
+    public function destroy($id)
+    {
+        try {
+            if (!(auth()->user()->hasRole('super admin'))) return abort(404);
+            $this->db::transaction(function () use ($id) {
+                if (!($this->candidate::where('id', $id)->get())) return abort(404);
+                $this->candidate::where('id', $id)->delete();
+            });
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            return abort(404);
+        }
+    }
+    public function listRecordSoftDeletes(Request $request)
+    {
+        $posts = $this->post::where('postable_type', Recruitment::class)->get();
+        $listSofts = $this->MCandidate->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
+        return view('pages.candidate.candidate-soft-delete', compact('listSofts', 'posts'));
+    }
+    public function backUpPost($id)
+    {
+        try {
+            $this->candidate::withTrashed()->where('id', $id)->restore();
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            return abort(404);
+        }
+    }
+    //xóa vĩnh viễn
+    public function delete($id)
+    {
+        // dd($id);
+        try {
+            if (!(auth()->user()->hasRole('super admin'))) abort(404);
+
+            $this->candidate::withTrashed()->where('id', $id)->forceDelete();
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            return abort(404);
+        }
     }
     /**
      * @OA\Post(
-     *      path="/api/public/candidate",
-     *     description="Đăng kí đội thi đồng thời người đăng kí sẽ là nhóm trưởng",
-     *      tags={"Team","Api V1"},
-     *        summary="Authorization",
-     *     security={{"bearer_token":{}}},
-
+     *      path="/api/public/candidate/add",
+     *     description="Tải Cv lên ",
+     *      tags={"Candidate"},
      *     @OA\RequestBody(
      *          @OA\MediaType(
      *          mediaType="multipart/form-data" ,
      *              @OA\Schema(
      *                  @OA\Property(
      *                      type="number",
-     *                      property="contest_id",
+     *                      property="post_id",
+
      *                  ),
      *                  @OA\Property(
      *                      type="string",
      *                      property="name",
+
+     *                  ),
+     *   @OA\Property(
+     *                      type="string",
+     *                      property="phone",
+
+     *                  ),
+     *   @OA\Property(
+     *                      type="string",
+     *                      property="email",
+
      *                  ),
      *                  @OA\Property(
      *                      type="file",
-     *                      property="image",
+     *                      property="file_link",
+
      *                  ),
      *              ),
      *          ),

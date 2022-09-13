@@ -2,13 +2,56 @@
     "openapi": "3.0.0",
     "info": {
         "title": "OpenApi Capacity Fpoly",
-        "description": "OpenApi Capacity Fpoly<br>\n *      ✅NOTE✅\n *      Note: Khi sử dụng api authentication v1 cần nhập token bearer phần Authorize\n *      Note: Tìm kiếm api theo các tag\n *      Note: Thiếu , gặp bug -> chụp ảnh gửi cho BE sửa 🔧\n *      ✅END NOTE✅",
+        "description": "OpenApi Capacity Fpoly<br>\r\n *      ✅NOTE✅\r\n *      Note: Khi sử dụng api authentication v1 cần nhập token bearer phần Authorize\r\n *      Note: Tìm kiếm api theo các tag\r\n *      Note: Thiếu , gặp bug -> chụp ảnh gửi cho BE sửa 🔧\r\n *      ✅END NOTE✅",
         "contact": {
             "email": ""
         },
         "version": "1.0.0"
     },
     "paths": {
+        "/api/public/candidate/add": {
+            "post": {
+                "tags": [
+                    "Candidate"
+                ],
+                "description": "Tải Cv lên ",
+                "operationId": "0abc943fcb7eee4b9c642021a4f721c6",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "post_id": {
+                                        "type": "number"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "file_link": {
+                                        "type": "file"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                }
+            }
+        },
         "/api/public/companys": {
             "get": {
                 "tags": [
@@ -499,7 +542,7 @@
                     {
                         "name": "recruitmentHot",
                         "in": "query",
-                        "description": "Bài tuyển dụng Hot (recruitmentHot='hot' list tuyển dụng hot ,\r\n     * recruitmentHot='normal' list tuyển dụng bthuong\r\n     * )",
+                        "description": "Bài tuyển dụng Hot (recruitmentHot='hot' list tuyển dụng hot ,\n     * recruitmentHot='normal' list tuyển dụng bthuong\n     * )",
                         "required": false
                     },
                     {
@@ -511,7 +554,7 @@
                     {
                         "name": "progress",
                         "in": "query",
-                        "description": "Trạng thái của bài đăng\r\n     * 'pass_date'= sắp diễn ra,\r\n     * 'registration_date'= đang diễn ra\r\n     * 'miss_date'= đã diễn ra ",
+                        "description": "Trạng thái của bài đăng\n     * 'pass_date'= sắp diễn ra,\n     * 'registration_date'= đang diễn ra\n     * 'miss_date'= đã diễn ra ",
                         "required": false
                     }
                 ],
@@ -1328,7 +1371,7 @@
         "securitySchemes": {
             "bearer_token": {
                 "type": "apiKey",
-                "description": "Nhập vào ô input dạng \"Bearer token\" <br> <b>Ví dụ</b>: <strong>Bearer 48|i93gO5EA6cBqiguiLCAiIAOiLkLoMXwoIvEnZvTn</strong>\n                     <br><br><hr>",
+                "description": "Nhập vào ô input dạng \"Bearer token\" <br> <b>Ví dụ</b>: <strong>Bearer 48|i93gO5EA6cBqiguiLCAiIAOiLkLoMXwoIvEnZvTn</strong>\r\n                     <br><br><hr>",
                 "name": "Authorization",
                 "in": "header"
             }

@@ -26,7 +26,7 @@
                         </span>
                     </a>
 
-                    <a class="mx-2" href="{{ route('admin.candidate.list.soft.deletes', 'recruitment_soft_delete=1') }}">
+                    <a class="mx-2" href="{{ route('admin.candidate.list.soft.deletes', 'candidate_soft_delete=1') }}">
 
                         <span data-bs-toggle="tooltip" title="Kho lưu trữ bản xóa "
                             class=" svg-icon svg-icon-primary svg-icon-2x">
@@ -53,7 +53,7 @@
             <div class=" col-lg-6">
                 <div class=" d-flex flex-row-reverse bd-highlight">
 
-                    <a href="{{ route('admin.recruitment.create') }}" class=" btn btn-primary">Tạo mới tuyển dụng
+                    <a href="{{ route('admin.recruitment.create') }}" class=" btn btn-primary">Tải CV lên
                     </a>
                 </div>
             </div>
@@ -62,76 +62,21 @@
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="form-group p-2">
                     <label class="form-label">Mã tuyển dụng</label>
-                    <select id="selectEnterprise" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
-                        data-hide-search="false" tabindex="-1" aria-hidden="true">
+                    <select id="select-code-recruitment" class="form-select mb-2 select2-hidden-accessible" name="post_id"
+                        data-control="select2" data-hide-search="false" tabindex="-1" aria-hidden="true">
                         <option value="">Chọn mã tuyển dụng</option>
-                        @foreach ($enterprises as $enterprise)
-                            <option @selected(request('enterprise_id') == $enterprise->id) value="{{ $enterprise->id }}">
-                                {{ $enterprise->name }}
+                        @foreach ($posts as $post)
+                            <option @selected(request('post_id') == $post->id) value="{{ $post->id }}">
+                                MTD{{ $post->id }}
                             </option>
                         @endforeach
-
                     </select>
                 </div>
             </div>
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
-                <div class="form-group p-2">
-                    <label class="form-label">Test năng lực </label>
-                    <select id="selectContest" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
-                        data-hide-search="false" tabindex="-1" aria-hidden="true">
-                        <option value="">Chọn Test</option>
-                        @foreach ($contests as $contest)
-                            <option @selected(request('contest_id') == $contest->id) value="{{ $contest->id }}">
-                                {{ $contest->name }}
-                            </option>
-                        @endforeach
-
-                    </select>
-                </div>
-            </div>
-            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
-                <div class="  form-group p-2">
-                    <label class="form-label">Tìm kiếm </label>
-                    <input id="searchTeam" value="{{ request('keyword') ?? '' }}" type="text"
-                        placeholder="'*Enter' tìm kiếm ..." class=" ip-search form-control">
-                </div>
-            </div>
-            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
-                <div class="  form-group p-2">
-                    <label class="form-label"> Loại tuyển dụng </label>
-                    <select class="select-type-recruitment form-select mb-2 select2-hidden-accessible"
-                        data-control="select2" data-hide-search="true" tabindex="-1" aria-hidden="true">
-                        <option class="form-control" value="">Chọn loại tuyển dụng</option>
-                        <option class="form-control" @selected(request('recruitmentHot') == 'hot') value="hot"> Tuyển dụng hot
-                        </option>
-                        <option class="form-control" @selected(request('recruitmentHot') == 'normal') value="normal"> Tuyển dụng
-                            thường
-                        </option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
-                <div class="  form-group p-2">
-                    <label for="" class="form-label">Hoạt động tuyển dụng </label>
-                    <select class="select-date-time form-select mb-2 select2-hidden-accessible" data-control="select2"
-                        data-hide-search="true" tabindex="-1" aria-hidden="true">
-                        <option class="form-control" value="">Chọn hoạt động</option>
-                        <option class="form-control" @selected(request('progress') == 'pass_date') value="pass_date"> Sắp diễn ra
-                        </option>
-                        <option class="form-control" @selected(request('progress') == 'registration_date') value="registration_date"> Đang diễn
-                            ra
-                        </option>
-                        <option class="form-control" @selected(request('progress') == 'miss_date') value="miss_date">Đã diễn ra
-                        </option>
-
-                    </select>
-                </div>
-            </div>
-
-            <div class="col-12 row ">
-                <div class="col-12 row">
+                <div class="  form-group pt-2">
                     <div class="mb-0">
-                        <label class="form-label">Thời gian </label>
+                        <label class="form-label">Thời gian ứng tuyển </label>
                         <div id="reportrange"
                             style="background: #fff; cursor: pointer; padding: 10px 10px; border: 1px solid #ccc; width: 100%">
                             <i class="fa fa-calendar"></i>&nbsp;
@@ -142,6 +87,7 @@
 
                 </div>
             </div>
+
 
         </div>
         <div class="back">
@@ -184,41 +130,6 @@
                         <tr>
 
                             <th scope="col">Mã tuyển dụng
-                                <a
-                                    href="{{ route('admin.recruitment.list', [
-                                        'sortBy' => request()->has('sortBy') ? (request('sortBy') == 'desc' ? 'asc' : 'desc') : 'asc',
-                                        'orderBy' => 'name',
-                                    ]) }}">
-                                    <span role="button" data-key="name" data-bs-toggle="tooltip"
-                                        title="Lọc theo tiêu đề tuyển dụng "
-                                        class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
-                                        <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
-                                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                            style="width: 14px !important ; height: 14px !important" width="24px"
-                                            height="24px" viewBox="0 0 24 24" version="1.1">
-                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                <polygon points="0 0 24 0 24 24 0 24" />
-                                                <rect fill="#000000" opacity="0.3"
-                                                    transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
-                                                    x="5" y="5" width="2" height="12"
-                                                    rx="1" />
-                                                <path
-                                                    d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
-                                                    fill="#000000" fill-rule="nonzero" />
-                                                <rect fill="#000000" opacity="0.3"
-                                                    transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
-                                                    x="17" y="7" width="2" height="12"
-                                                    rx="1" />
-                                                <path
-                                                    d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
-                                                    fill="#000000" fill-rule="nonzero"
-                                                    transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
-                                            </g>
-                                        </svg>
-                                        <!--end::Svg Icon-->
-                                    </span>
-                                </a>
-
                             </th>
                             <th scope="col">Thông tin ứng viên
                             </th>
@@ -229,7 +140,7 @@
                                         'orderBy' => 'created_at',
                                     ]) }}">
                                     <span role="button" data-key="name" data-bs-toggle="tooltip"
-                                        title="Lọc theo thời gian bắt đầu "
+                                        title="Lọc theo thời gian ứng tuyển "
                                         class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
                                         <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
                                             xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -276,7 +187,8 @@
                             <tr>
 
                                 <td>
-                                    {{ $key->post_id }}
+                                    <a href="{{ route('admin.post.detail', ['slug' => $key->post->slug]) }}">
+                                        MTD{{ $key->post_id }}</a>
                                 </td>
                                 <td>
                                     <button class="btn  btn-primary btn-sm" type="button" data-bs-toggle="modal"
@@ -330,40 +242,9 @@
                                     <a class="download_file btn btn-success"
                                         href="{{ route('dowload.file') . '?url=' . $key->file_link }}">Tải
                                         xuống</a>
-                                    {{-- <button data-id="{{ $exam->id }}"
-                                        data-external_url="{{ route('dowload.file') . '?url=' . $exam->external_url }}"
-                                        type="button" class="download_file btn btn-success">Tải xuống</button> --}}
-                                </td>
-                                {{-- <td>
-                                    <button class="btn  btn-primary btn-sm" type="button" data-bs-toggle="modal"
-                                        data-bs-target="#introduce_{{ $key->id }}">
-                                        Xem
-                                    </button>
 
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="introduce_{{ $key->id }}" tabindex="-1"
-                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-lg">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">
-                                                        Thông tin tuyển dụng
-                                                    </h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body  ">
-                                                    {!! $key->description !!}
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-bs-dismiss="modal">Thoát
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td> --}}
+                                </td>
+
                                 <td>
                                     <div data-bs-toggle="tooltip" title="Thao tác " class="btn-group dropstart">
                                         <button type="button" class="btn   btn-sm dropdown-toggle"
@@ -411,7 +292,7 @@
                                                 </a>
                                             </li> --}}
                                             <li class="my-3">
-                                                <a href="{{ route('admin.recruitment.detail', $key->id) }}">
+                                                <a href="{{ route('admin.candidate.detail', $key->id) }}">
                                                     <span class="svg-icon svg-icon-primary svg-icon-2x ">
                                                         <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Text/Redo.svg--><svg
                                                             xmlns="http://www.w3.org/2000/svg"
@@ -434,11 +315,8 @@
                                             </li>
                                             <li class="my-3">
                                                 @hasrole('super admin')
-                                                    @if ($key->recruitmentEnterprise->count() == 0 &&
-                                                        $key->contest->count() == 0 &&
-                                                        $key->enterprise->count() == 0 &&
-                                                        $key->posts->count() == 0)
-                                                        <form action="{{ route('admin.recruitment.destroy', $key->id) }}"
+                                                    @if ($key->post->count() == 0)
+                                                        <form action="{{ route('admin.candidate.destroy', $key->id) }}"
                                                             method="post">
                                                             @csrf
                                                             @method('delete')
@@ -515,7 +393,7 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-    <script src="assets/js/system/recruitment/recruitment.js"></script>
+    <script src="assets/js/system/candidate/candidate.js"></script>
 
     <script src="assets/js/system/formatlist/formatlis.js"></script>
     <script>

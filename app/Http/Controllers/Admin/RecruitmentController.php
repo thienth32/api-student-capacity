@@ -223,7 +223,7 @@ class RecruitmentController extends Controller
      */
     public function apiShow(Request $request)
     {
-        $data = $this->modulesRecruitment->index($request);
+        $data = $this->modulesRecruitment->getList($request)->get();
         if (!$data) abort(404);
         $data->load('contest');
         $data->load('enterprise');

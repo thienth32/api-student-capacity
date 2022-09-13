@@ -21,20 +21,24 @@ class Candidate
         $orderBy = $request->has('orderBy') ? $request->orderBy : 'id';
         $startTime = $request->has('startTime') ? $request->startTime : null;
         $endTime = $request->has('endTime') ? $request->endTime : null;
+        $code_recruitment = $request->has('post_id') ? $request->post_id : null;
         $sortBy = $request->has('sortBy') ? $request->sortBy : "desc";
         $softDelete = $request->has('candidate_soft_delete') ? $request->candidate_soft_delete : null;
         if ($softDelete != null) {
-            $query = $this->post::onlyTrashed()->where('name', 'like', "%$keyword%")->orderByDesc('deleted_at');
+            $query = $this->candidate::onlyTrashed()->where('name', 'like', "%$keyword%")->orderByDesc('deleted_at');
             return $query;
         }
         $query = $this->candidate::where('name', 'like', "%$keyword%");
         if ($endTime != null && $startTime != null) {
-            $query->where('published_at', '>=', \Carbon\Carbon::parse(request('startTime'))->toDateTimeString())->where('published_at', '<=', \Carbon\Carbon::parse(request('endTime'))->toDateTimeString());
+            $query->where('created_at', '>=', \Carbon\Carbon::parse(request('startTime'))->toDateTimeString())->where('created_at', '<=', \Carbon\Carbon::parse(request('endTime'))->toDateTimeString());
         }
         if ($sortBy == "desc") {
             $query->orderByDesc($orderBy);
         } else {
             $query->orderBy($orderBy);
+        }
+        if ($code_recruitment != null) {
+            $query->where('post_id', $code_recruitment);
         }
         return $query;
     }
