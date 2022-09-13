@@ -196,7 +196,7 @@ Route::prefix('contests')->group(function () {
                 Route::post('update-team-select', [ContestController::class, 'contestDetailTeamAddSelect'])->name('admin.contest.detail.team.addSelect');
                 Route::get('add-team-contest-form.html', [ContestController::class, 'addFormTeamContest'])->name('admin.contest.detail.team.add.form');
                 Route::post('add-team-contest-save', [ContestController::class, 'addFormTeamContestSave'])->name('admin.contest.detail.team.add.save');
-                Route::get('{id_team}/edit-team-contest-form.html', [ContestController::class, 'editFormTeamContest'])->name('admin.contest.detail.team.edit.form');
+                Route::get('{id_team}/edit-team-contest-form', [ContestController::class, 'editFormTeamContest'])->name('admin.contest.detail.team.edit.form');
                 Route::put('{id_team}/edit-team-contest-save', [ContestController::class, 'editFormTeamContestSave'])->name('admin.contest.detail.team.save');
             });
             Route::prefix('enterprise')->group(function () {

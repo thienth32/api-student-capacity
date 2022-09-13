@@ -585,6 +585,8 @@
                         enctype="multipart/form-data">
                         @csrf
                         <div class="modal-body text-center">
+                            <div class="HDSD">
+                            </div>
                             <label for="up-file" class="">
                                 <i data-bs-toggle="tooltip" title="Click để upload file" style="font-size: 100px;"
                                     role="button" class="bi bi-cloud-plus-fill"></i>

@@ -11,8 +11,7 @@
                             <a href="{{ route('admin.contest.list') }}" class="pe-3">Cuộc thi </a>
                         </li>
                         <li class="breadcrumb-item px-3 ">
-                            <a href="{{ route('admin.contest.show', ['id' => $round->contest->id]) }}"
-                                class="pe-3">
+                            <a href="{{ route('admin.contest.show', ['id' => $round->contest->id]) }}" class="pe-3">
                                 {{ $round->contest->name }}
                             </a>
                         </li>
@@ -45,8 +44,8 @@
                                     <option value="{{ $teamSelect->id }}"> {{ $teamSelect->name }}</option>
                                 @endforeach
                             @else --}}
-                            @foreach ($roundTeams as $team)
-                                <option value="{{ $team->team->id }}"> {{ $team->team->name }}</option>
+                            @foreach ($teamContest as $team)
+                                <option value="{{ $team->id }}"> {{ $team->name }}</option>
                             @endforeach
 
                         </select>
@@ -71,10 +70,10 @@
                                 <th>Ảnh</th>
                                 <th>Tên đội</th>
                                 <th>Trạng thái làm bài </th>
-                                @if(auth()->user()->hasRole('judge'))
+                                @if (auth()->user()->hasRole('judge'))
                                     <th>Chấm bài </th>
                                 @else
-                                   <th> Xác nhận điểm thi</th>
+                                    <th> Xác nhận điểm thi</th>
                                 @endif
                                 @hasanyrole(config('util.ROLE_ADMINS'))
                                     <th>Thao tác</th>
@@ -98,20 +97,20 @@
                                     </td>
                                     <td>
 
-                                        @if(isset($team->takeExam) && $team->takeExam->status == 2)
+                                        @if (isset($team->takeExam) && $team->takeExam->status == 2)
                                             Đã nộp bài
                                         @else
                                             Chưa nộp bài
                                         @endif
                                     </td>
                                     <td>
-                                        @if(auth()->user()->hasRole('judge'))
+                                        @if (auth()->user()->hasRole('judge'))
                                             <a class="badge bg-primary p-3"
-                                               href="{{ route('admin.round.detail.team.make.exam', ['id' => $round->id, 'teamId' => $team->team->id]) }}">Chấm
+                                                href="{{ route('admin.round.detail.team.make.exam', ['id' => $round->id, 'teamId' => $team->team->id]) }}">Chấm
                                                 bài</a>
                                         @else
                                             <a href="{{ route('admin.round.detail.team.judge', ['id' => $round->id, 'teamId' => $team->team->id]) }}"
-                                               class="badge bg-primary p-3"> Xác nhận điểm thi.
+                                                class="badge bg-primary p-3"> Xác nhận điểm thi.
                                             </a>
                                         @endif
                                     </td>

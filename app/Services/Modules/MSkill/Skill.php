@@ -9,7 +9,7 @@ use App\Services\Traits\TUploadImage;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-class Skill
+class Skill implements MSkillInterface
 {
     use TUploadImage;
     public function __construct(

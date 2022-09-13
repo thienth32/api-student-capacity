@@ -16,7 +16,9 @@ use App\Services\Traits\TResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\ContestUser;
-use App\Services\Modules\MSkill\Skill as MSkillSkill;
+use App\Services\Modules\MMajor\MMajorInterface;
+use App\Services\Modules\MSkill\MSkillInterface;
+use App\Services\Modules\MTeam\MTeamInterface;
 use App\Services\Traits\TTeamContest;
 use App\Services\Traits\TUploadImage;
 use Illuminate\Support\Facades\Storage;
@@ -29,11 +31,13 @@ class ContestController extends Controller
 
     public function __construct(
         private MContestInterface $contest,
-        private Major $major,
+        private MMajorInterface $majorRepo,
+        // private Major $major,
+        private MTeamInterface $teamRepo,
         private Team $team,
         private DB $db,
         private Storage $storage,
-        private MSkillSkill $skill
+        private MSkillInterface $skill
     ) {
     }
 
@@ -61,7 +65,7 @@ class ContestController extends Controller
 
         return view('pages.contest.index', [
             'contests' => $data,
-            'majors' => $this->major::where('parent_id', 0)->with(['majorChils'])->get(),
+            'majors' => $this->majorRepo->getAllMajor(['where' => ['parent_id' => 0]], ['majorChils']),
             'contest_type_text' =>  request('type') == 1 ? 'test năng lực' : 'cuộc thi'
         ]);
     }
@@ -156,11 +160,10 @@ class ContestController extends Controller
         return $this->responseApi(true, $data);
     }
 
-
     public function create()
     {
         $this->checkTypeContest();
-        $majors = $this->major::all();
+        $majors = $this->majorRepo->getAllMajor();
         $skills = $this->skill->getAll();
         $contest_type_text = request('type') == 1 ? 'test năng lực' : 'cuộc thi';
         return view('pages.contest.form-add', compact('majors', 'contest_type_text', 'skills'));
@@ -207,9 +210,8 @@ class ContestController extends Controller
 
     public function edit($id)
     {
-
         $this->checkTypeContest();
-        $major = $this->major::orderBy('id', 'desc')->get();
+        $major = $this->majorRepo->getAllMajor();
         $skills = $this->skill->getAll();
         $contest_type_text = request('type') == 1 ? 'test năng lực' : 'cuộc thi';
         $contest = $this->contest->getContestByIdUpdate($id, request('type') ?? 0);
@@ -228,6 +230,7 @@ class ContestController extends Controller
 
     public function update(RequestContest $request, $id, Validator $validatorFacades)
     {
+
         $this->checkTypeContest();
         $this->db::beginTransaction();
         $contest = $this->contest->find($id);
@@ -340,20 +343,17 @@ class ContestController extends Controller
     public function contestDetailTeam($id)
     {
         $contest = $this->contest->find($id);
-        $teams = $this->team::get()->load('contest');
+        $teams = $this->teamRepo->getAllTeam([], ['contest']);
         return view('pages.contest.detail.team.contest-team', compact('contest', 'teams'));
     }
 
     public function contestDetailTeamAddSelect(Request  $request, Redirect $redirect, $id)
     {
-        $contest = $this->contest->find($id);
-        $team = $this->team::find($request->team_id);
-        if (is_null($contest) && is_null($team)) {
+        try {
+            $this->teamRepo->updateTeam($request->team_id, ['contest_id' => $id]);
             return $redirect::back();
-        } else {
-            $team->contest_id = $id;
-            $team->save();
-            return $redirect::back();
+        } catch (\Throwable $th) {
+            return $redirect::back()->withErrors(["error" => "Đã xảy ra lỗi !"]);
         }
     }
 
@@ -403,6 +403,7 @@ class ContestController extends Controller
             return redirect()->back();
         }
     }
+
     public function detachEnterprise($id, $enterprise_id)
     {
         try {
@@ -412,7 +413,6 @@ class ContestController extends Controller
             return redirect()->back();
         }
     }
-
 
     public function addFormTeamContest($id)
     {
@@ -438,7 +438,7 @@ class ContestController extends Controller
             $userArray = [];
             $users = $user::get();
 
-            $team = $this->team::find($id_team)->load('users');
+            $team = $this->teamRepo->getTeamById($id_team, ['users']);
             foreach ($users as $user) {
                 foreach ($team->users as $me) {
                     if ($user->id == $me->id) {
@@ -473,8 +473,6 @@ class ContestController extends Controller
             return redirect()->back();
         }
     }
-
-
 
     public function sendMail($id)
     {

@@ -7,7 +7,7 @@
             <ol class="breadcrumb text-muted fs-6 fw-bold">
 
                 <li class="breadcrumb-item pe-3">
-                    @if (request('type') == 0)
+                    @contest
                         <a href="{{ route('admin.contest.list') }}" class="pe-3">
                             Danh sách cuộc thi
                         </a>
@@ -15,7 +15,7 @@
                         <a href="{{ route('admin.contest.list', ['type' => 1]) }}" class="pe-3">
                             Danh sách test năng lực
                         </a>
-                    @endif
+                    @endcontest
                 </li>
                 <li class="breadcrumb-item px-3 text-muted">Thêm mới {{ $contest_type_text }}</li>
             </ol>
@@ -106,7 +106,7 @@
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
                             </div>
-                            @if (request('type') != config('util.TYPE_TEST'))
+                            @contest
                                 <input type="hidden" name="start_register_time"
                                     value="{{ \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->addDays(3)->format('Y/m/d h:i:s') }}">
                                 <input type="hidden" name="end_register_time"
@@ -128,8 +128,8 @@
                                 <div class="form-group mb-10">
                                     <label for="" class="form-label">Thuộc kỹ năng </label>
                                     <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
-                                        data-hide-search="false" multiple tabindex="-1" aria-hidden="true"
-                                        name="skill[]" value="{{ old('skill') }}">
+                                        data-hide-search="false" multiple tabindex="-1" aria-hidden="true" name="skill[]"
+                                        value="{{ old('skill') }}">
                                         @foreach ($skills as $skill)
                                             <option value="{{ $skill->id }}"> {{ $skill->name }}</option>
                                         @endforeach
@@ -138,7 +138,7 @@
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
-                            @endif
+                            @endcontest
                             <div class="form-group mb-10">
                                 <label for="" class="form-label">Thuộc chuyên ngành</label>
                                 <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
@@ -204,7 +204,7 @@
                             </div>
                         </div> --}}
                         <div class="col-4">
-                            @if (request('type') != config('util.TYPE_TEST'))
+                            @contest
                                 <div class="form-group mb-10">
                                     <label for="" class="form-label">Giới hạn thành viên trong đội</label>
                                     <input name="max_user" type='number' class="form-control" />
@@ -212,7 +212,7 @@
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
-                            @endif
+                            @endcontest
                             <div class="form-group ">
                                 <label for="" class="form-label">Ảnh {{ $contest_type_text }}</label>
                                 <input name="img" type='file' id="file-input" accept=".png, .jpg, .jpeg"
