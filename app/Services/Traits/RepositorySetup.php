@@ -19,6 +19,8 @@ use App\Services\Modules\MResultCapacityDetail\MResultCapacityDetailInterface;
 use App\Services\Modules\MResultCapacityDetail\ResultCapacityDetail;
 use App\Services\Modules\MRound\MRoundInterface;
 use App\Services\Modules\MRound\Round;
+use App\Services\Modules\MRoundTeam\MRoundTeamInterface;
+use App\Services\Modules\MRoundTeam\RoundTeam;
 use App\Services\Modules\MTeam\MTeamInterface;
 use App\Services\Modules\MTeam\Team;
 use App\Services\Modules\MUser\MUserInterface;
@@ -89,6 +91,11 @@ trait RepositorySetup
         $this->app->bind(
             MResultCapacityDetailInterface::class,
             ResultCapacityDetail::class,
+        );
+
+        $this->app->bind(
+            MRoundTeamInterface::class,
+            RoundTeam::class,
         );
     }
 }

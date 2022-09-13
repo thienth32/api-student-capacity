@@ -11,6 +11,7 @@ class Team implements MTeamInterface
     public function __construct(private ModelsTeam $team)
     {
     }
+
     public function getTotalTeamActive()
     {
         return $this->team::with('contest')
@@ -18,5 +19,10 @@ class Team implements MTeamInterface
                 $q->whereIn('status', [config('util.CONTEST_STATUS_REGISTERING'), config('util.CONTEST_STATUS_GOING_ON')]);
             })
             ->count();
+    }
+
+    public function getTeamByContestId($id)
+    {
+        return $this->team::where("contest_id", $id)->get();
     }
 }
