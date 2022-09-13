@@ -111,4 +111,12 @@ class Major implements MMajorInterface
         );
         return  $major->resultCapacity;
     }
+
+    public function getAllMajor($params = [], $with = [])
+    {
+        return $this->major::hasRequest($params['where'])
+            ->with($with)
+            ->orderBy('id', 'desc')
+            ->get();
+    }
 }
