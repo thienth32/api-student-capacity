@@ -225,10 +225,15 @@ Route::prefix('contests')->group(function () {
 
 // Middleware phân quyền ban giám khảo chấm thi , khi nào gộp code sẽ chỉnh sửa lại route để phân quyền route
 Route::group([
-    'middleware' => 'role_admin'
+    'middleware' => 'role_admin:judge|admin|super admin'
 ], function () {
     Route::get('prinft-pdf', [PrintPDFController::class, 'printf'])->name('admin.prinf');
     Route::get('prinft-excel', [PrintExcelController::class, 'printf'])->name('admin.excel');
+});
+
+Route::group([
+    'middleware' => 'role_admin'
+], function () {
 
     Route::prefix('enterprise')->group(function () {
         Route::get('{id}/edit', [EnterpriseController::class, 'edit'])->name('admin.enterprise.edit');
@@ -379,11 +384,11 @@ Route::prefix('questions')->group(function () {
     Route::get('export', [QuestionController::class, 'exportQe'])->name('admin.question.excel.export');
 });
 
-Route::get('api-view-check', function (App\Services\Modules\MContest\Contest $contest) {
-    $data = $contest->apiIndex();
-    return view('welcome');
-});
+// Route::get('api-view-check', function (App\Services\Modules\MContest\Contest $contest) {
+//     $data = $contest->apiIndex();
+//     return view('welcome');
+// });
 
-Route::get('dowload-excel', function () {
-    return response()->download(public_path('assets/media/excel/excel-download.xlsx'));
+Route::get('dowload-frm-excel', function () {
+    return response()->download(public_path('assets/media/excel/excel_download.xlsx'));
 })->name("admin.download.execel.pass");
