@@ -21,28 +21,31 @@ class QuestionsImport implements ToCollection
             if ($key == 0) continue;
             $line = $key + 1;
 
-            if ($row[0] != null  || trim($row[0]) != "") {
+            if (
+                $row[config('util.EXCEL_QESTIONS')['KEY_COLUMNS']['TYPE']] != null
+                || trim($row[config('util.EXCEL_QESTIONS')['KEY_COLUMNS']['TYPE']]) != ""
+            ) {
                 $count = $count + 1;
                 if ($count > 1) {
                     $this->storeQuestionAnswer($arr);
                 };
                 $arr = [];
-                $arr['questions']['content'] = $this->catchError($row[1], "Thiếu câu hỏi dòng $line");
-                $arr['questions']['type'] = $row[0] == config("util.EXCEL_QESTIONS")["TYPE"] ? 0 : 1;
-                $rank = $this->catchError($row[5], "Thiếu mức độ dòng $line");
-                $arr['questions']['rank'] = ($rank == config("util.EXCEL_QESTIONS")["RANKS"][0]) ? 0 : (($row[5] == config("util.EXCEL_QESTIONS")["RANKS"][1]) ? 1 : 2);
-                $arr['skill']  = explode(",", $this->catchError($row[4], "Thiếu kỹ năng dòng $line"));
+                $arr['questions']['content'] = $this->catchError($row[config('util.EXCEL_QESTIONS')['KEY_COLUMNS']['QUESTION']], "Thiếu câu hỏi dòng $line");
+                $arr['questions']['type'] = $row[config('util.EXCEL_QESTIONS')['KEY_COLUMNS']['TYPE']] == config("util.EXCEL_QESTIONS")["TYPE"] ? 0 : 1;
+                $rank = $this->catchError(config('util.EXCEL_QESTIONS')['KEY_COLUMNS']['RANK'], "Thiếu mức độ dòng $line");
+                $arr['questions']['rank'] = ($rank == config("util.EXCEL_QESTIONS")["RANKS"][0]) ? 0 : (($rank == config("util.EXCEL_QESTIONS")["RANKS"][1]) ? 1 : 2);
+                $arr['skill'] = [];
                 $dataA = [
-                    "content" => $this->catchError($row[2], "Thiếu câu trả lời dòng $line"),
-                    "is_correct" => $row[3] == config("util.EXCEL_QESTIONS")["IS_CORRECT"] ? 1 : 0,
+                    "content" => $this->catchError($row[config('util.EXCEL_QESTIONS')['KEY_COLUMNS']['ANSWER']], "Thiếu câu trả lời dòng $line"),
+                    "is_correct" => $row[config('util.EXCEL_QESTIONS')['KEY_COLUMNS']["IS_CORRECT"]] == config("util.EXCEL_QESTIONS")["IS_CORRECT"] ? 1 : 0,
                 ];
                 $arr['answers'] = [];
                 array_push($arr['answers'], $dataA);
             } else {
-                if (($row[2] == null || trim($row[2]) == "")) continue;
+                if (($row[config('util.EXCEL_QESTIONS')['KEY_COLUMNS']['ANSWER']] == null || trim($row[config('util.EXCEL_QESTIONS')['KEY_COLUMNS']['ANSWER']]) == "")) continue;
                 $dataA = [
-                    "content" => $row[2],
-                    "is_correct" => $row[3] == config("util.EXCEL_QESTIONS")["IS_CORRECT"] ? 1 : 0,
+                    "content" => $row[config('util.EXCEL_QESTIONS')['KEY_COLUMNS']['ANSWER']],
+                    "is_correct" => $row[config('util.EXCEL_QESTIONS')['KEY_COLUMNS']["IS_CORRECT"]] == config("util.EXCEL_QESTIONS")["IS_CORRECT"] ? 1 : 0,
                 ];
                 array_push($arr['answers'], $dataA);
             }

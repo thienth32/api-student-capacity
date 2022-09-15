@@ -569,16 +569,17 @@ const mainPage = {
     },
     detachQuestion: function () {
         $(document).on("click", ".btn-dettach", function () {
+            var question_id = $(this).data("id");
             $.ajax({
                 type: "POST",
                 url: urlApiPublic + "questions/dettach-question",
                 data: {
                     exam_id: exam_id,
-                    questions_id: $(this).data("id"),
+                    questions_id: question_id,
                 },
                 success: function (response) {
                     if (!response.status) alert("Đã xảy ra lỗi ");
-                    fecthQuestionByExams(exam_id);
+                    // fecthQuestionByExams(exam_id);
                 },
                 error: function (res) {
                     alert("Đã xảy ra lỗi !");
@@ -692,8 +693,25 @@ const mainPage = {
             return false;
         });
     },
+    btnHide: function () {
+        $(".btn-hide").on("click", function () {
+            $(".btn-show-" + $(this).data("key")).show();
+            $(".btn-hide-" + $(this).data("key")).hide();
+            $("#" + $(this).data("key")).hide(500);
+        });
+    },
+    btnShow: function () {
+        //
+        $(".btn-show").on("click", function () {
+            $(".btn-hide-" + $(this).data("key")).show();
+            $(".btn-show-" + $(this).data("key")).hide();
+            $("#" + $(this).data("key")).show(500);
+        });
+    },
 };
-
+$(".btn-hide").hide();
+$("#card_1").hide();
+$("#card_2").hide();
 mainPage.addExam();
 mainPage.showExam();
 mainPage.addQuestionSave();
@@ -712,6 +730,8 @@ mainPage.selectShowResult();
 mainPage.printPDF();
 mainPage.printEXCEL();
 mainPage.printHistoryEXCEL();
+mainPage.btnHide();
+mainPage.btnShow();
 
 $("#selectSkill").on("change", function () {
     var value = $(this).val();

@@ -488,9 +488,9 @@
                         <!--end::Close-->
                     </div>
 
-                    <div class="modal-body">
-                        <div id="show-tast-qs">
-                            <div class="row card-format">
+                    <div style="background-color: #f5f8fa;" class="modal-body">
+                        <div id="show-tast-qs" class="card p-2">
+                            <div class="row card-format" id="card_2">
 
                                 <div class="col-12 col-lg-2 col-sx-12 col-md-12 col-sm-12 col-xxl-2 col-xl-2">
                                     <div class="   form-group ">
@@ -555,7 +555,41 @@
                                 </div>
 
                             </div>
-                            <div id="show-add-questions" class="mt-2 mb-2"></div>
+                            <div class="back">
+
+                                <span data-bs-toggle="tooltip" title="Đóng lọc" data-key="card_2"
+                                    class="btn-hide btn-hide-card_2 svg-icon svg-icon-primary svg-icon-2x">
+                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Stockholm-icons/Navigation/Angle-up.svg--><svg
+                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <polygon points="0 0 24 0 24 24 0 24" />
+                                            <path
+                                                d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z"
+                                                fill="#000000" fill-rule="nonzero" />
+                                        </g>
+                                    </svg>
+                                </span>
+
+                                <span data-bs-toggle="tooltip" title="Mở lọc" data-key="card_2"
+                                    class="btn-show btn-show-card_2 svg-icon svg-icon-primary svg-icon-2x">
+                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Angle-down.svg--><svg
+                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <polygon points="0 0 24 0 24 24 0 24" />
+                                            <path
+                                                d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z"
+                                                fill="#000000" fill-rule="nonzero"
+                                                transform="translate(12.000003, 11.999999) rotate(-180.000000) translate(-12.000003, -11.999999) " />
+                                        </g>
+                                    </svg>
+                                    <!--end::Svg Icon-->
+                                </span>
+
+                            </div>
+                            <div id="show-add-questions" style="    max-height: 80vh !important; " class="mt-2 mb-2">
+                            </div>
                             <div id="data-save"
                                 style="
                                     position: fixed;
@@ -583,12 +617,11 @@
                             </div>
                         </div>
 
-                        <div id="show-list-qs">
+                        <div id="show-list-qs" class="card p-2">
 
-                            <div class="row m-1">
-
+                            <div class=" mb-2 row " id="card_1">
                                 <div class="col-12 col-lg-2 col-sx-12 col-md-12 col-sm-12 col-xxl-2 col-xl-2">
-                                    <div class="   form-group ">
+                                    <div class=" form-group ">
                                         <label class="form-label">Skill</label>
                                         <select id="selectSkillQs" class="form-select mb-2 select2-hidden-accessible"
                                             data-control="select2" data-hide-search="true" tabindex="-1"
@@ -635,30 +668,65 @@
                                             class=" ip-search form-control">
                                     </div>
                                 </div>
+                            </div>
+                            <div class="back">
 
+                                <span data-bs-toggle="tooltip" title="Đóng lọc" data-key="card_1"
+                                    class="btn-hide btn-hide-card_1 svg-icon svg-icon-primary svg-icon-2x">
+                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Stockholm-icons/Navigation/Angle-up.svg--><svg
+                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <polygon points="0 0 24 0 24 24 0 24" />
+                                            <path
+                                                d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z"
+                                                fill="#000000" fill-rule="nonzero" />
+                                        </g>
+                                    </svg>
+                                </span>
 
+                                <span data-bs-toggle="tooltip" title="Mở lọc" data-key="card_1"
+                                    class="btn-show btn-show-card_1 svg-icon svg-icon-primary svg-icon-2x">
+                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Angle-down.svg--><svg
+                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <polygon points="0 0 24 0 24 24 0 24" />
+                                            <path
+                                                d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z"
+                                                fill="#000000" fill-rule="nonzero"
+                                                transform="translate(12.000003, 11.999999) rotate(-180.000000) translate(-12.000003, -11.999999) " />
+                                        </g>
+                                    </svg>
+                                    <!--end::Svg Icon-->
+                                </span>
 
                             </div>
+                            {{-- <div class="card ">
+                                <i class="bi bi-gear-fill"></i>
+                            </div> --}}
+                            <div class=" ">
+                                <table class="table table-row-bordered table-row-gray-300 gy-7  table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Câu hỏi </th>
+                                            <th>Độ khó </th>
+                                            <th>Đáp án </th>
+                                            <th>Tình trạng</th>
+                                            <th> <i role="button" data-bs-toggle="tooltip"
+                                                    title="Thêm câu hỏi câu trả lời "
+                                                    class="btn-add-question-answ bi bi-plus-square-fill fs-2x"></i>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="show-ques-anw" class="position-relative">
 
-                            <table class="table table-row-bordered table-row-gray-300 gy-7  table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Câu hỏi </th>
-                                        <th>Độ khó </th>
-                                        <th>Đáp án </th>
-                                        <th>Tình trạng</th>
-                                        <th> <i role="button" data-bs-toggle="tooltip" title="Thêm câu hỏi câu trả lời "
-                                                class="btn-add-question-answ bi bi-plus-square-fill fs-2x"></i>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody id="show-ques-anw" class="position-relative">
-
-                                </tbody>
-                            </table>
-                            <ul style="position: fixed; bottom: 20px; transform: translateX(-50%);  left: 50%; z-index: 999999999;"
-                                id="show-paginate" class="pagination">
-                            </ul>
+                                    </tbody>
+                                </table>
+                                <ul style="position: fixed; bottom: 20px; transform: translateX(-50%);  left: 50%; z-index: 999999999;"
+                                    id="show-paginate" class="pagination">
+                                </ul>
+                            </div>
                         </div>
 
                     </div>

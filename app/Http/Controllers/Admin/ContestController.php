@@ -34,7 +34,7 @@ class ContestController extends Controller
         private MMajorInterface $majorRepo,
         // private Major $major,
         private MTeamInterface $teamRepo,
-        private Team $team,
+        // private Team $team,
         private DB $db,
         private Storage $storage,
         private MSkillInterface $skill
