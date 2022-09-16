@@ -218,7 +218,7 @@ class Contest implements MContestInterface
                         }
                         return $q->whereIn('id', $arrId);
                     }
-                ); //
+                )->with(['judges']); //
             },
             'skills'
         ];
