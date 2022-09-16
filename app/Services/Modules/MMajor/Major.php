@@ -114,7 +114,7 @@ class Major implements MMajorInterface
 
     public function getAllMajor($params = [], $with = [])
     {
-        return $this->major::hasRequest($params['where'])
+        return $this->major::hasRequest($params['where'] ?? [])
             ->with($with)
             ->orderBy('id', 'desc')
             ->get();
