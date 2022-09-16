@@ -134,7 +134,7 @@ class TakeExamController extends Controller
             [
                 'id' => 'required',
                 'result_url' => 'url',
-                'file_url' => 'file|mimes:zip,docx,word'
+                'file_url' => 'file|mimes:zip,docx,word,rar'
             ],
             [
                 'result_url.url' => 'Sai định dạng !!!',
@@ -144,7 +144,7 @@ class TakeExamController extends Controller
             ]
         );
         if ($validate->fails())
-            return $this->responseApi(false, $validate->errors());
+            return $this->responseApi(false,  $validate->errors());
         $dB::beginTransaction();
         try {
             $takeExam = $this->takeExam->find($request->id);

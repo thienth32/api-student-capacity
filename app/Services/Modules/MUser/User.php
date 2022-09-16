@@ -3,29 +3,43 @@
 namespace App\Services\Modules\MUser;
 
 use App\Models\Contest;
+use App\Models\ResultCapacity;
 use App\Models\User as ModelsUser;
 
 class User implements MUserInterface
 {
     public function __construct(
         private  ModelsUser $user,
-        private Contest $contest
+        private Contest $contest,
+        private ResultCapacity $resultCapacity
     ) {
     }
 
     public function contestJoined()
     {
         $contestID = [];
+
         $user_id = auth('sanctum')->user()->id;
         $user = $this->user::find($user_id)->load('teams');
-        foreach ($user->teams as $team) {
-            if ($team->contest) {
-                array_push($contestID, $team->contest->id);
+        if (empty(request('type'))  || request('type') == config('util.TYPE_CONTEST')) {
+            foreach ($user->teams as $team) {
+                if ($team->contest) {
+                    array_push($contestID, $team->contest->id);
+                }
+            }
+        } else {
+            $resultCapacity = $this->resultCapacity::where('user_id', $user_id)
+                ->with('contests')->get();
+            foreach ($resultCapacity as $data) {
+                array_push($contestID, $data->contests->id);
             }
         }
+        $contestID = array_unique($contestID);
+        // dd($contestID);
         $contest = $this->contest::whereIn('id', $contestID)
             ->when(request('type'), function ($q) {
                 $q->hasRequest(['type' => request('type')]);
+                $q->with(['rounds', 'skills', 'userCapacityDone']);
             })
             ->search(request('q') ?? null, ['name', 'description'])
             ->status(request('status'))

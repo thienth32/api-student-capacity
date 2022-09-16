@@ -383,7 +383,6 @@ class UserController extends Controller
         return $this->responseApi(true, $data);
     }
 
-
     /**
      * @OA\Get(
      *     path="/api/v1/users/contest-joined",
@@ -416,7 +415,6 @@ class UserController extends Controller
         $contest = $this->user->contestJoined();
         return $this->responseApi(true, $contest);
     }
-
 
     /**
      * @OA\Post(
