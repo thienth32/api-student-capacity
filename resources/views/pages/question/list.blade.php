@@ -628,9 +628,7 @@
     <script src="{{ asset('assets/js/system/question/index.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js"></script>
     <script>
-        formatPage.selectChangeStatus(
-            "{{ route('admin.question.un.status') }}",
-            "{{ route('admin.question.re.status') }}",
+        question.selectChangeStatus(
             ".form-select-status"
         );
         question.selectSkillList('#selectSkill');

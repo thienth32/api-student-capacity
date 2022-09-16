@@ -86,7 +86,56 @@ const question = {
             }
             checkUrlOut('type', val)
         })
-    }
+    },
 
 
+    selectChangeStatus: function(element) {
+        function removeDisabled(val, element, time) {
+            $(element).val(val);
+            return setTimeout(() => {
+                $(element).prop("disabled", false);
+            }, time);
+        }
+        $(element).on("change", function() {
+            loadTast();
+            var that = this;
+            $(this).prop("disabled", true);
+            let id = $(this).data("id");
+            if ($(this).val() == 1) {
+                $.ajax({
+                    url: `admin/questions/un-status/${id}`,
+                    method: "POST",
+                    data: {
+                        _token: _token,
+                    },
+                    success: function(data) {
+                        if (!data.status) return alert(data.payload);
+                        loadTast(
+                            "Thành công !",
+                            "toastr-bottom-left",
+                            "success"
+                        );
+                        removeDisabled(0, that, 3000);
+                    },
+                });
+            } else {
+                $.ajax({
+                    url: `admin/questions/re-status/${id}`,
+                    method: "POST",
+                    data: {
+                        _token: _token,
+                    },
+                    success: function(data) {
+                        if (!data.status) return alert(data.payload);
+                        loadTast(
+                            "Thành công !",
+                            "toastr-bottom-left",
+                            "success"
+                        );
+                        removeDisabled(1, that, 3000);
+                    },
+                });
+            }
+        });
+    },
 }
