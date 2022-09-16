@@ -96,6 +96,7 @@ class Contest implements MContestInterface
     {
         return $this->getList($flagCapacity, request())
             ->where('type', $flagCapacity ?  config('util.TYPE_TEST') : config('util.TYPE_CONTEST'))
+            ->orderBy('date_start', 'desc')
             ->paginate(request('limit') ?? 9);
     }
 
