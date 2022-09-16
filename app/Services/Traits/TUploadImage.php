@@ -12,7 +12,7 @@ trait TUploadImage
     {
         try {
 
-            if(!$file) return false;
+            if (!$file) return false;
             if ($nameOld) if (Storage::disk('s3')->has($nameOld)) Storage::disk('s3')->delete($nameOld);
             $nameFile = uniqid() . '-' . time() . '.' . $file->getClientOriginalExtension();
             Storage::disk('s3')->putFileAs('', $file, $nameFile);

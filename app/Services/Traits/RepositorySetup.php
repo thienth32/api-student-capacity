@@ -7,6 +7,8 @@ use App\Services\Modules\MAnswer\Answer;
 use App\Services\Modules\MAnswer\MAnswerInterface;
 use App\Services\Modules\MContest\Contest;
 use App\Services\Modules\MContest\MContestInterface;
+use App\Services\Modules\MContestUser\ContestUser;
+use App\Services\Modules\MContestUser\MContestUserInterface;
 use App\Services\Modules\MExam\Exam;
 use App\Services\Modules\MExam\MExamInterface;
 use App\Services\Modules\MMajor\Major;
@@ -103,6 +105,11 @@ trait RepositorySetup
         $this->app->bind(
             MSkillInterface::class,
             Skill::class,
+        );
+
+        $this->app->bind(
+            MContestUserInterface::class,
+            ContestUser::class,
         );
     }
 }

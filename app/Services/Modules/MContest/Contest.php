@@ -270,7 +270,8 @@ class Contest implements MContestInterface
 
     public function getContestByDateNow($date)
     {
-        return $this->contest::whereDate('register_deadline', $date)
+        return $this->contest::whereMonth('register_deadline', $date->format("m"))
+            ->whereDay('register_deadline', $date->format('d'))
             ->get();
     }
 

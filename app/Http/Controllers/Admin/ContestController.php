@@ -16,6 +16,7 @@ use App\Services\Traits\TResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\ContestUser;
+use App\Services\Modules\MContestUser\MContestUserInterface;
 use App\Services\Modules\MMajor\MMajorInterface;
 use App\Services\Modules\MSkill\MSkillInterface;
 use App\Services\Modules\MTeam\MTeamInterface;
@@ -37,7 +38,8 @@ class ContestController extends Controller
         // private Team $team,
         private DB $db,
         private Storage $storage,
-        private MSkillInterface $skill
+        private MSkillInterface $skill,
+        private MContestUserInterface $contestUser,
     ) {
     }
 
@@ -517,22 +519,20 @@ class ContestController extends Controller
             });
             return redirect()->back();
         } catch (\Throwable $th) {
+            dd($th->getMessage());
             return abort(404);
         }
     }
 
-    private function updateUserAddPoint($users, $id, $point, ContestUser $contestUser)
+    private function updateUserAddPoint($users, $id, $point)
     {
+
         foreach ($users as $user) {
-            if (!$contestUser = $contestUser::where('contest_id', $id)
-                ->where('user_id', $user->id)
-                ->first()) $contestUser = $contestUser::create([
+            $this->contestUser->checkExitsAndManager([
                 'contest_id' => $id,
-                'user_id' => $user->id,
-                'reward_point' => 0
+                'user' => $user,
+                'point' => $point
             ]);
-            $contestUser->reward_point = $contestUser->reward_point + $point;
-            $contestUser->save();
         };
     }
 

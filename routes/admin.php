@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CandidateController;
+use App\Http\Controllers\Admin\CkeditorController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ExamController;
 use App\Http\Controllers\Admin\TeamController;
@@ -365,6 +366,8 @@ Route::group([
         });
         Route::get('{id}', [CandidateController::class, 'detail'])->name('admin.candidate.detail');
     });
+
+    Route::post('upload-image', [CkeditorController::class, 'updoadFile'])->name('admin.ckeditor.upfile');
 });
 
 Route::prefix('questions')->group(function () {
