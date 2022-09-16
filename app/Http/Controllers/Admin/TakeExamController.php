@@ -69,7 +69,7 @@ class TakeExamController extends Controller
                 return $this->responseApi(false, 'Bạn không thuộc đội thi nào trong cuộc thi !!');
             $teamRound = $this->roundTeam->where(['team_id' => $team_id, 'round_id' => $request->round_id])->first();
             if (is_null($teamRound)) return $this->responseApi(false, 'Đội thi của bạn đang chờ phê duyệt !!');
-            $takeExamCheck = $this->takeExam->findBy(['round_team_id' => $teamRound->id]);
+            $takeExamCheck = $this->takeExam->findBy(['round_team_id' => $teamRound->id], ['exam']);
             if (is_null($takeExamCheck)) {
                 if (count($this->exam->whereGet(['type' => 0])) == 0)
                     return $this->responseApi(false, "Đề thi chưa cập nhập !!");
@@ -83,23 +83,14 @@ class TakeExamController extends Controller
                 ]);
                 DB::commit();
                 $takeExam = $this->takeExam->find($takeExamModel->id);
-                if (Storage::disk('s3')->has($takeExam->exam->external_url)) {
-                    $urlExam = Storage::disk('s3')->temporaryUrl($takeExam->exam->external_url, now()->addMinutes(5));
-                } else {
-                    $urlExam = $takeExam->exam->external_url;
-                }
                 return $this->responseApi(true, $takeExam, [
-                    'exam' => $urlExam,
+                    'exam' => $takeExam->exam->external_url,
                     'status_take_exam' => $takeExam->status
                 ]);
             }
-            if (Storage::disk('s3')->has($takeExamCheck->exam->external_url)) {
-                $urlExam = Storage::disk('s3')->temporaryUrl($takeExamCheck->exam->external_url, now()->addMinutes(5));
-            } else {
-                $urlExam = $takeExamCheck->exam->external_url;
-            }
-            return $this->responseApi(true, $takeExamCheck, ['exam' => $urlExam]);
+            return $this->responseApi(true, $takeExamCheck);
         } catch (\Throwable $th) {
+            dd($th);
             DB::rollBack();
             return $this->responseApi(false, 'Lỗi hệ thống !!');
         }
@@ -159,22 +150,19 @@ class TakeExamController extends Controller
             $takeExam = $this->takeExam->find($request->id);
             if (is_null($takeExam))
                 return $this->responseApi(false, 'Không tồn tại trên hệ thống !!');
-
-            // dump($takeExam);
-            if ($takeExam->status == config('util.TAKE_EXAM_STATUS_UNFINISHED') && empty($request->result_url) && empty($request->file_url)) {
-                // dump($request->result_url);
-                // dump($request->file_url);
-                // die;
+            if ($takeExam->status == config('util.TAKE_EXAM_STATUS_COMPLETE') && empty($request->result_url) && empty($request->file_url)) {
+                if (Storage::disk('s3')->has($takeExam->file_url ?? "Default")) Storage::disk('s3')->delete($takeExam->file_url);
                 $takeExam->file_url = null;
                 $takeExam->result_url = null;
                 $takeExam->status = config('util.TAKE_EXAM_STATUS_UNFINISHED');
+                $mesg = 'Hủy bài thành công !!';
             } else {
                 if ($request->has('file_url')) {
                     $fileUrl = $request->file('file_url');
                     $filename = $this->uploadFile($fileUrl);
                     $takeExam->file_url = $filename;
                 } else {
-                    if (Storage::disk('s3')->has($takeExam->file_url)) Storage::disk('s3')->delete($takeExam->file_url);
+                    if (Storage::disk('s3')->has($takeExam->file_url ?? "Default")) Storage::disk('s3')->delete($takeExam->file_url);
                     $takeExam->file_url = null;
                 }
                 if (request('result_url')) {
@@ -186,14 +174,11 @@ class TakeExamController extends Controller
                     $takeExam->status = config('util.TAKE_EXAM_STATUS_UNFINISHED');
                 }
                 $takeExam->status = config('util.TAKE_EXAM_STATUS_COMPLETE');
+                $mesg = 'Nộp bài thành công !!';
             }
-
-
-
-
             $takeExam->save();
             $dB::commit();
-            return $this->responseApi(true, 'Nộp bài thành công !!', ['takeExam' => $takeExam]);
+            return $this->responseApi(true, $mesg, ['takeExam' => $takeExam]);
         } catch (\Throwable $th) {
             $dB::rollBack();
             dump($th);

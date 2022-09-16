@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use App\Casts\FormatDate;
 use App\Services\Builder\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class TakeExam extends Model
 {
@@ -22,7 +23,10 @@ class TakeExam extends Model
         'file_url',
         'status'
     ];
-
+    protected $casts = [
+        'created_at' => FormatDate::class,
+        'updated_at' =>  FormatDate::class,
+    ];
     public function newEloquentBuilder($query)
     {
         return new Builder($query);
