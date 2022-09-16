@@ -394,6 +394,18 @@ class UserController extends Controller
      *         description="Tìm kiếm ",
      *         required=false,
      *     ),
+     *       @OA\Parameter(
+     *         name="limit",
+     *         in="query",
+     *         description="Giới hạn hiển thị",
+     *         required=false,
+     *     ),
+     *          @OA\Parameter(
+     *         name="status",
+     *         in="query",
+     *         description="Trạng thái",
+     *         required=false,
+     *     ),
      *     @OA\Parameter(
      *         name="sort",
      *         in="query",

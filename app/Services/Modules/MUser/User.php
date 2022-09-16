@@ -44,7 +44,7 @@ class User implements MUserInterface
             ->search(request('q') ?? null, ['name', 'description'])
             ->status(request('status'))
             ->sort((request('sort') == 'asc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'contests')
-            ->get();
+            ->paginate(request('limit') ?? 5);
         return $contest;
     }
 
