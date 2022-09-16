@@ -367,6 +367,9 @@ Route::group([
         Route::get('{id}', [CandidateController::class, 'detail'])->name('admin.candidate.detail');
     });
 
+    Route::get('dowload-frm-excel', function () {
+        return response()->download(public_path('assets/media/excel/excel_download.xlsx'));
+    })->name("admin.download.execel.pass");
     Route::post('upload-image', [CkeditorController::class, 'updoadFile'])->name('admin.ckeditor.upfile');
 });
 
@@ -391,7 +394,6 @@ Route::prefix('questions')->group(function () {
 //     $data = $contest->apiIndex();
 //     return view('welcome');
 // });
-
-Route::get('dowload-frm-excel', function () {
-    return response()->download(public_path('assets/media/excel/excel_download.xlsx'));
-})->name("admin.download.execel.pass");
+Route::get("dev", function () {
+    return "<h1>Chức năng đang phát triển</h1> ";
+})->name('admin.dev.show');
