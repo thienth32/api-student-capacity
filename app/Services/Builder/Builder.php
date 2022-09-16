@@ -128,9 +128,8 @@ class Builder extends  EloquentBuilder
         if ($search == null) return $this;
         // if (!(\Str::contains($search, '@'))) $search = \Str::slug($search, " ");
 
-        if ($Flagtype) $this->where('type', request('type') ?? 0);
+        // if ($Flagtype) $this->where('type', request('type') ?? 0);
         $this->where($search_by[0], 'LIKE', "%" . $search . "%");
-
         foreach ($search_by as $key => $item) {
             if ($key !== 0) $this->orWhere($item, 'LIKE', "%" . $search . "%");
         }
