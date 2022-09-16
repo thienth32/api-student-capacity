@@ -24,6 +24,9 @@ class User implements MUserInterface
             }
         }
         $contest = $this->contest::whereIn('id', $contestID)
+            ->when(request('type'), function ($q) {
+                $q->hasRequest(['type' => request('type')]);
+            })
             ->search(request('q') ?? null, ['name', 'description'])
             ->status(request('status'))
             ->sort((request('sort') == 'asc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'contests')

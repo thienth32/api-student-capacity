@@ -36,6 +36,7 @@ class TakeExamController extends Controller
         private MResultCapacityDetailInterface $resultCapacityDetail
     ) {
     }
+
     public function takeExamStudent(Request $request)
     {
         $checkUserTeam = false;
@@ -103,6 +104,38 @@ class TakeExamController extends Controller
             return $this->responseApi(false, 'Lỗi hệ thống !!');
         }
     }
+
+    /**
+     * 
+     * @OA\Post(
+     *     path="/api/v1/take-exam/student-submit",
+     *     description="",
+     *     tags={"TakeExam","Contest","Api V1"},
+     *     summary="Authorization",
+     *     security={{"bearer_token":{}}},
+     *     @OA\RequestBody(
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                  @OA\Property(
+     *                      type="number",
+     *                      property="id",
+     *                  ),
+     *                  @OA\Property(
+     *                      type="string",
+     *                      property="result_url",
+     *                  ),
+     *                  @OA\Property(
+     *                      type="string",
+     *                      property="file_url",
+     *                  ),
+     *              ),
+     *          ),
+     *      ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
     public function takeExamStudentSubmit(Request $request, DB $dB)
     {
         $validate = Validator::make(
@@ -120,37 +153,54 @@ class TakeExamController extends Controller
             ]
         );
         if ($validate->fails())
-            return $this->responseApi(true, $validate->errors());
+            return $this->responseApi(false, $validate->errors());
         $dB::beginTransaction();
         try {
-            $takeExam = $this->takeExamModel->find($request->id);
+            $takeExam = $this->takeExam->find($request->id);
             if (is_null($takeExam))
                 return $this->responseApi(false, 'Không tồn tại trên hệ thống !!');
-            if ($request->has('file_url')) {
-                $fileUrl = $request->file('file_url');
-                $filename = $this->uploadFile($fileUrl);
-                $takeExam->file_url = $filename;
-            } else {
-                if (Storage::disk('s3')->has($takeExam->file_url)) Storage::disk('s3')->delete($takeExam->file_url);
+
+            // dump($takeExam);
+            if ($takeExam->status == config('util.TAKE_EXAM_STATUS_UNFINISHED') && empty($request->result_url) && empty($request->file_url)) {
+                // dump($request->result_url);
+                // dump($request->file_url);
+                // die;
                 $takeExam->file_url = null;
-            }
-            if (request('result_url')) {
-                $takeExam->result_url = $request->result_url;
-            } else {
                 $takeExam->result_url = null;
-            }
-            if (!request('file_url') && !request('result_url')) {
                 $takeExam->status = config('util.TAKE_EXAM_STATUS_UNFINISHED');
+            } else {
+                if ($request->has('file_url')) {
+                    $fileUrl = $request->file('file_url');
+                    $filename = $this->uploadFile($fileUrl);
+                    $takeExam->file_url = $filename;
+                } else {
+                    if (Storage::disk('s3')->has($takeExam->file_url)) Storage::disk('s3')->delete($takeExam->file_url);
+                    $takeExam->file_url = null;
+                }
+                if (request('result_url')) {
+                    $takeExam->result_url = $request->result_url;
+                } else {
+                    $takeExam->result_url = null;
+                }
+                if (!request('file_url') && !request('result_url')) {
+                    $takeExam->status = config('util.TAKE_EXAM_STATUS_UNFINISHED');
+                }
+                $takeExam->status = config('util.TAKE_EXAM_STATUS_COMPLETE');
             }
-            $takeExam->status = config('util.TAKE_EXAM_STATUS_COMPLETE');
+
+
+
+
             $takeExam->save();
             $dB::commit();
-            return $this->responseApi(false, 'Nộp bài thành công !!');
+            return $this->responseApi(true, 'Nộp bài thành công !!', ['takeExam' => $takeExam]);
         } catch (\Throwable $th) {
             $dB::rollBack();
+            dump($th);
             return $this->responseApi(false, 'Lỗi hệ thống !!');
         }
     }
+
     private function getContest($id, $type = 0)
     {
         try {
