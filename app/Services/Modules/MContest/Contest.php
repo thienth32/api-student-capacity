@@ -307,6 +307,7 @@ class Contest implements MContestInterface
         $capacityArrId = array_unique($capacityArrId);
         unset($capacityArrId[array_search($id_capacity, $capacityArrId)]);
         return $this->contest::whereIn('id', $capacityArrId)
+            ->orderBy('id', 'desc')
             ->limit(request('limit') ?? 4)
             ->get()
             ->load(['rounds', 'skills', 'userCapacityDone']);
