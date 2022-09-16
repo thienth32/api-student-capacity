@@ -171,24 +171,22 @@ class ContestController extends Controller
 
     public function store(RequestContest $request, Redirect $redirect)
     {
-        // dd($request->all());
         $this->checkTypeContest();
         $this->db::beginTransaction();
         try {
 
             $filename = $this->uploadFile($request->img);
-            $contest = $this->contest->store($filename, $request);
-            $contest->skills()->attach($request->skill);
+            $contest = $this->contest->store($filename, $request, $request->skill ?? []);
+
             $this->db::commit();
             if ($contest->type == 1) return $redirect::route('admin.contest.show.capatity', ['id' => $contest->id])->withErrors('success', 'Thêm mới thành công !');
             return $redirect::route('admin.contest.show', ['id' => $contest->id])->withErrors('success', 'Thêm mới thành công !');
         } catch (Exception $ex) {
-            dd($ex->getMessage());
             if ($request->hasFile('img')) {
                 if ($this->storage::disk('s3')->has($filename)) $this->storage::disk('s3')->delete($filename);
             }
             $this->db::rollBack();
-            return $redirect::back()->withErrors('error', 'Thêm mới thất bại !');
+            return $redirect::back()->withErrors(['error' => 'Thêm mới thất bại !']);
         }
     }
 
@@ -203,7 +201,6 @@ class ContestController extends Controller
             });
             return redirect()->back();
         } catch (\Throwable $th) {
-            dd($th->getMessage());
             return abort(404);
         }
     }
@@ -215,20 +212,17 @@ class ContestController extends Controller
         $skills = $this->skill->getAll();
         $contest_type_text = request('type') == 1 ? 'test năng lực' : 'cuộc thi';
         $contest = $this->contest->getContestByIdUpdate($id, request('type') ?? 0);
-        if (!$contest) abort(404);
-        if ($contest->type != request('type')) abort(404);
+        if (!$contest || $contest->status == 2 || $contest->type != request('type')) abort(404);
+
         $rewardRankPoint = json_decode($contest->reward_rank_point);
         $skillContests = $contest->skills->map(function ($data) {
             return $data->skill_id;
         })->toArray();
-        if ($contest) {
-            return view('pages.contest.edit', compact('contest', 'skillContests', 'major', 'rewardRankPoint', 'contest_type_text', 'skills'));
-        } else {
-            return view('error');
-        }
+
+        return view('pages.contest.edit', compact('contest', 'skillContests', 'major', 'rewardRankPoint', 'contest_type_text', 'skills'));
     }
 
-    public function update(RequestContest $request, $id, Validator $validatorFacades)
+    public function update(RequestContest $request, $id)
     {
 
         $this->checkTypeContest();
@@ -257,8 +251,11 @@ class ContestController extends Controller
                         'reward_rank_point' => $rewardRankPoint,
                     ]);
                 }
-                $this->contest->update($contest, $dataSave);
-                $contest->skills()->sync($request->skill);
+
+                if ($contest->date_start < now()) unset($dataSave['date_start']);
+
+                $this->contest->update($contest, $dataSave, $request->skill ?? []);
+
                 $this->db::commit();
                 if ($contest->type == 1) return redirect(route('admin.contest.show.capatity', ['id' => $contest->id]))->withErrors('success', 'Cập nhật thành công !');
                 return redirect(route('admin.contest.list') . '?type=' . request('type') ?? 0)->withErrors('success', 'Cập nhật thành công !');

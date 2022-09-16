@@ -107,7 +107,7 @@ class Contest implements MContestInterface
             ->get();
     }
 
-    public function store($filename, $request)
+    public function store($filename, $request, $skills = [])
     {
 
         $contest = new $this->contest();
@@ -132,6 +132,8 @@ class Contest implements MContestInterface
         ));
         $contest->reward_rank_point =  $rewardRankPoint;
         $contest->save();
+        if ($contest->type == 1 && count($skills) > 0) $contest->skills()->sync($skills);
+
         return $contest;
     }
 
@@ -242,9 +244,10 @@ class Contest implements MContestInterface
         return $this->contest::find($id);
     }
 
-    public function update($contest, $data)
+    public function update($contest, $data, $skills = [])
     {
         $contest->update($data);
+        if ($contest->type == 1 && count($skills) > 0) $contest->skills()->sync($skills);
     }
 
     public function getContest()

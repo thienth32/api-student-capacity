@@ -185,6 +185,7 @@ class RoundController extends Controller
             } else {
                 $data = request()->all();
             }
+            if ($round->start_time < now()) unset($data['start_time']);
             $round->update($data);
             return [
                 'round' => $round,

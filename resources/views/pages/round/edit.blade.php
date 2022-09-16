@@ -29,17 +29,53 @@
                                     <input type="hidden" name="end_time" value="{{ $round['end_time'] }}">
 
                                 </div>
-                                <div class="form-group mb-10">
-                                    <label for="" class="form-label">Thời gian bắt đầu & thời gian kết thúc </label>
-                                    <input name="app1" class="form-control form-control-solid"
-                                        placeholder="Pick date rage" id="app1" />
-                                    @error('start_time')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
-                                    @error('end_time')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
-                                </div>
+                                @if ($round['start_time'] > now())
+                                    <div class="form-group mb-10">
+                                        <label for="" class="form-label">Thời gian bắt đầu & thời gian kết thúc
+                                        </label>
+                                        <input name="app1" class="form-control form-control-solid"
+                                            placeholder="Pick date rage" id="app1" />
+                                        @error('start_time')
+                                            <p class="text-danger">{{ $message }}</p>
+                                        @enderror
+                                        @error('end_time')
+                                            <p class="text-danger">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                @else
+                                    <!--begin::Alert-->
+                                    <div class="alert alert-warning">
+                                        <!--begin::Icon-->
+                                        <span class="svg-icon svg-icon-2hx svg-icon-primary me-3"><i
+                                                class="bi bi-bell-fill"></i></span>
+                                        <!--end::Icon-->
+
+                                        <!--begin::Wrapper-->
+                                        <div class="d-flex flex-column">
+                                            <!--begin::Title-->
+                                            <h4 class="mb-1 text-dark">{{ \Str::title($nameContestType) }} đang diễn ra
+                                                hoặc đã diễn
+                                                ra </h4>
+                                            <!--end::Title-->
+                                            <!--begin::Content-->
+                                            <span>Thời gian bắt đầu đã bắt đầu vào {{ $round['start_time'] }} và sẽ không
+                                                thể thay đổi !</span>
+                                            <!--end::Content-->
+                                        </div>
+                                        <!--end::Wrapper-->
+                                    </div>
+                                    <!--end::Alert-->
+
+                                    <div class="form-group mb-10">
+                                        <label for="" class="form-label">Thời gian kết thúc</label>
+                                        <input type="text" value="{{ $round['end_time'] }}"
+                                            class="form-control form-control-solid" name="app0" />
+                                        @error('end_time')
+                                            <p class="text-danger">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                @endif
+
                                 {{-- <div class="form-group mb-10">
                                     <label class="form-label" for="">Thời gian bắt đầu</label>
                                     <input value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime($round['start_time'])) }}"

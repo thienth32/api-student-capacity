@@ -52,11 +52,27 @@ $("#app1").daterangepicker(
         opens: "center",
         drops: "auto",
         locale: {
-            format: "YYYY/MM/DD HH:MM:SS",
+            format: "YYYY/MM/DD HH:mm:ss",
         },
     },
     function (start, end, label) {
-        $('input[name="start_time"]').val(start.format("YYYY/MM/DD HH:MM:SS"));
-        $('input[name="end_time"]').val(end.format("YYYY/MM/DD HH:MM:SS"));
+        $('input[name="start_time"]').val(start.format("YYYY/MM/DD HH:mm:ss"));
+        $('input[name="end_time"]').val(end.format("YYYY/MM/DD HH:mm:ss"));
+    }
+);
+$('input[name="app0"]').daterangepicker(
+    {
+        timePicker: true,
+        timePicker24Hour: true,
+        singleDatePicker: true,
+        showDropdowns: true,
+        minDate: moment($('input[name="start_time"]').val()).startOf("hour"),
+        locale: {
+            format: "YYYY/MM/DD HH:mm:ss",
+        },
+    },
+    function (data) {
+        end_Time = data.format("YYYY/MM/DD HH:mm:ss");
+        $('input[name="end_time"]').val(end_Time);
     }
 );
