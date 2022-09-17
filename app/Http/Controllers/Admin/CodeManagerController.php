@@ -30,6 +30,7 @@ class CodeManagerController extends Controller
 
     private function execBashCommand($path = null, $forder = null, $imageBuildDocker = null, $type = null, $extensionFile = null)
     {
+        //Command
         $command = "docker run --rm -v $path$forder:$forder $imageBuildDocker $type $forder/main.$extensionFile $forder/output.txt"; // command
         if ($type == "gcc") {
             if ($extensionFile == "cpp") $type  = "c++";
@@ -99,67 +100,69 @@ class CodeManagerController extends Controller
         }
     }
 
-    // private function runCode($id, $type_id, $status_type_code = false)
-    // {
-    //     $challenge = Challenge::whereId($id)
-    //         ->with(
-    //             [
-    //                 'type_test' => function ($q) use ($status_type_code) {
-    //                     if ($status_type_code) return $q;
-    //                     return $q
-    //                         ->where("status", 1);
-    //                 },
-    //                 'has_cod' => function ($q) use ($type_id) {
-    //                     return $q->where('type_id', $type_id);
-    //                 }
-    //             ]
-    //         )
-    //         ->first();
-    //     $codelanguage = CodeLanguage::find($type_id);
-    //     if (!$codelanguage) return [
-    //         "time" => false,
-    //         "result" => "Không tìm thấy ngôn ngữ bạn đang yêu cầu !",
-    //     ];
-    //     $ntcd = "ntcd_$codelanguage->type";
-    //     $extensionFile = $codelanguage->ex;
-    //     $type = $codelanguage->type;
+    private function runCode($id, $type_id, $status_type_code = false)
+    {
+        $challenge = Challenge::whereId($id)
+            ->with(
+                [
+                    'type_test' => function ($q) use ($status_type_code) {
+                        if ($status_type_code) return $q;
+                        return $q
+                            ->where("status", 1);
+                    },
+                    'has_cod' => function ($q) use ($type_id) {
+                        return $q->where('type_id', $type_id);
+                    }
+                ]
+            )
+            ->first();
+        $nameDocker = config('util.NAME_DOCKER');
+        $codelanguage = CodeLanguage::find($type_id);
+        if (!$codelanguage) return [
+            "time" => false,
+            "result" => "Không tìm thấy ngôn ngữ bạn đang yêu cầu !",
+        ];
+        $ntcd = $codelanguage . "$codelanguage->type";
 
-    //     $path = "/home/vanquang/Htdocs/laravel/LaravelCodChallenge";
+        $extensionFile = $codelanguage->ex;
+        $type = $codelanguage->type;
 
-    //     $resultend = $challenge->has_cod[0]->run_qs_code;
-    //     $fistResultend = explode("(", $resultend)[0] . "(";
-    //     $arrResult = [];
+        $path = "/home/vanquang/Htdocs/laravel/LaravelCodChallenge";
 
-    //     foreach ($challenge->type_test as $key => $value) {
-    //         $arrSave = [];
-    //         $content =  request()->content . $fistResultend . $value->input . ");";
-    //         $stout = $this->acrMultyLgCode(
-    //             [
-    //                 "extensionFile" => $extensionFile,
-    //                 "type" => $type,
-    //             ],
-    //             $ntcd,
-    //             $path,
-    //             $content
-    //         );
-    //         $resultStout = str_replace("\n", "", $stout['result']);
+        $resultend = $challenge->has_cod[0]->run_qs_code;
+        $fistResultend = explode("(", $resultend)[0] . "(";
+        $arrResult = [];
 
-    //         if ($stout['time'] !== "false") {
-    //             if ($resultStout != $value->output) $stout = [
-    //                 'time' => false,
-    //                 'result' => $resultStout,
-    //                 'flag' => false,
-    //                 'hasError' => false
-    //             ];
-    //             if ($resultStout == $value->output) $stout = array_merge($stout, ['flag' => true, 'hasError' => false]);
-    //         } else {
-    //             $stout = array_merge($stout, ['flag' => false, 'hasError' => true]);
-    //         }
-    //         $arrSave = array_merge($arrSave, [...$value->toArray(), ...$stout]);
-    //         array_push($arrResult, $arrSave);
-    //     }
-    //     return $arrResult;
-    // }
+        foreach ($challenge->type_test as $key => $value) {
+            $arrSave = [];
+            $content =  request()->content . $fistResultend . $value->input . ");";
+            $stout = $this->acrMultyLgCode(
+                [
+                    "extensionFile" => $extensionFile,
+                    "type" => $type,
+                ],
+                $ntcd,
+                $path,
+                $content
+            );
+            $resultStout = str_replace("\n", "", $stout['result']);
+
+            if ($stout['time'] !== "false") {
+                if ($resultStout != $value->output) $stout = [
+                    'time' => false,
+                    'result' => $resultStout,
+                    'flag' => false,
+                    'hasError' => false
+                ];
+                if ($resultStout == $value->output) $stout = array_merge($stout, ['flag' => true, 'hasError' => false]);
+            } else {
+                $stout = array_merge($stout, ['flag' => false, 'hasError' => true]);
+            }
+            $arrSave = array_merge($arrSave, [...$value->toArray(), ...$stout]);
+            array_push($arrResult, $arrSave);
+        }
+        return $arrResult;
+    }
 
     // public function runCodechall($id)
     // {

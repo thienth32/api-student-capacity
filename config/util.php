@@ -68,6 +68,7 @@ return [
             "ANSWER" => 2,
             "IS_CORRECT" => 3,
             "RANK" => 4,
+            "SKILL" => 5
         ],
         "IS_CORRECT" => "Đáp án đúng"
     ]
