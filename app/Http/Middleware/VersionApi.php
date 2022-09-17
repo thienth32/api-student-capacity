@@ -16,7 +16,6 @@ class VersionApi
      */
     public function handle(Request $request, Closure $next, $version)
     {
-        // dd($version);
         if ($version == config('app.api_version')) return $next($request);
         return response()->json(["message" => "No api version $version"]);
     }
