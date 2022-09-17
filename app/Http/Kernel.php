@@ -70,5 +70,6 @@ class Kernel extends HttpKernel
         'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
         'role_admin' => \App\Http\Middleware\RoleHasAdmins::class,
         'version.api' => \App\Http\Middleware\VersionApi::class,
+        'auth.admin' => \App\Http\Middleware\AuthenticateAdmin::class
     ];
 }

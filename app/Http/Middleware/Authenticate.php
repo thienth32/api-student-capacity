@@ -14,12 +14,7 @@ class Authenticate extends Middleware
      */
     protected function redirectTo($request)
     {
-        if (auth()->check()) return route('login');
-        if (auth()->user()->hasAnyRole(['admin', 'super admin', 'judge', 'teacher'])) return route('login');
-
         if (!$request->expectsJson()) {
-            // $request->session()->put("url_before", $request->fullUrl());
-            // dd($request->fullUrl());
             return route('login');
         }
     }
