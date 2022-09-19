@@ -11,6 +11,8 @@ use App\Services\Traits\TUploadImage;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
+use function GuzzleHttp\Promise\all;
+
 class Post
 {
     use TUploadImage;
@@ -137,11 +139,10 @@ class Post
     public function update($request, $id)
     {
         $post = $this->post::find($id);
-
-
         if (!$post) {
             return redirect('error');
         }
+
         $post->title = $request->title;
         $post->slug = $request->slug;
         $post->published_at = $request->published_at;

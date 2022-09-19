@@ -118,7 +118,7 @@ class PostController extends Controller
         $this->db::beginTransaction();
         try {
             if ($request->recruitment_id == 0) $request['code_recruitment'] = null;
-            dd($request->all());
+
             $this->modulesPost->store($request);
             $this->db::commit();
             return Redirect::route('admin.post.list');
@@ -143,42 +143,34 @@ class PostController extends Controller
     public function edit(Request $request, $slug)
     {
 
-        $this->db::beginTransaction();
-        try {
-            $round = null;
-            $contest = $this->contest::where('type', 0)->get();
-            $capacity = $this->contest::where('type', 1)->get();
-            $recruitments = $this->recruitment::all();
-            $post = $this->modulesPost->getList($request)->where('slug', $slug)->first();
-            $post->load('postable');
-            if ($post->postable && (get_class($post->postable) == $this->round::class)) {
-                $round = $this->round::find($post->postable->id)->load('contest');
-            }
 
-            return view('pages.post.form-edit', [
-                'round' => $round,
-                'post' => $post,
-                'recruitments' => $recruitments,
-                'contest' => $contest,
-                'capacity' => $capacity,
-                'rounds' => $this->round::all(),
+        $round = null;
+        $contest = $this->contest::where('type', 0)->get();
+        $capacity = $this->contest::where('type', 1)->get();
+        $recruitments = $this->recruitment::all();
+        $post = $this->modulesPost->getList($request)->where('slug', $slug)->first();
+        $post->load('postable');
+        if ($post->postable && (get_class($post->postable) == $this->round::class)) {
+            $round = $this->round::find($post->postable->id)->load('contest');
+        }
 
-            ]);
-        } catch (\Throwable $th) {
-            $this->db::rollBack();
-            return abort(404);
-        };
+        return view('pages.post.form-edit', [
+            'round' => $round,
+            'post' => $post,
+            'recruitments' => $recruitments,
+            'contest' => $contest,
+            'capacity' => $capacity,
+            'rounds' => $this->round::all(),
+
+        ]);
     }
     public function update(RequestsPost $request, $id)
     {
-
-
         DB::beginTransaction();
         try {
-
+            if ($request->recruitment_id == 0) $request['code_recruitment'] = null;
             $this->modulesPost->update($request, $id);
             Db::commit();
-
             return Redirect::route('admin.post.list');
         } catch (\Throwable $th) {
             Db::rollBack();

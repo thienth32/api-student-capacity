@@ -93,7 +93,7 @@
                                         </option>
                                     </select>
                                 </div>
-
+                                <br>
                             </div>
                             <div style="{{ old('recruitment_id') ? '' : 'display:none' }}" id="recruitment">
                                 <div class="form-group mb-10">
@@ -109,14 +109,16 @@
                                     </select>
 
                                 </div>
-                                <div class="form-group mb-10">
-                                    <label class="form-label" for="">Mã tuyển dụng</label>
-                                    <input type="text" name="code_recruitment" value="{{ old('code_recruitment') }}"
-                                        class="form-control" placeholder="">
-                                    @error('code_recruitment')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
-                                </div>
+
+                            </div>
+                            <div class="form-group mb-10">
+                                <label class="form-label" for="">Mã tuyển dụng ( Áp dụng với bài viết tuyển
+                                    dụng ) </label>
+                                <input type="text" name="code_recruitment" value="{{ old('code_recruitment') }}"
+                                    class="form-control" placeholder="">
+                                @error('code_recruitment')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
                             </div>
                         </div>
 

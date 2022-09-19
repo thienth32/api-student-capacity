@@ -145,6 +145,9 @@ class CandidateController extends Controller
         $validator = Validator::make($request->all(), $rules, $message);
         if ($validator->fails()) return $this->responseApi(false, $validator->errors());
         $addCandidate =   $this->MCandidate->store($request);
+        $sizeFile = Storage::disk('s3')->size($addCandidate->file_link);
+        $sizeFileFormat =  number_format($sizeFile / 1048576, 2);
+        $addCandidate['sizeFile'] = $sizeFileFormat;
         if ($addCandidate) return $this->responseApi(true, 'Thành công !', ['data' => $addCandidate]);
     }
 }
