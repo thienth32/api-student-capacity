@@ -36,7 +36,7 @@ class QuestionsImport implements ToCollection
                 $arr['questions']['rank'] = ($rank == config("util.EXCEL_QESTIONS")["RANKS"][0]) ? 0 : (($rank == config("util.EXCEL_QESTIONS")["RANKS"][1]) ? 1 : 2);
                 $arr['skill'] = [];
                 if (isset($row[config("util.EXCEL_QESTIONS")['KEY_COLUMNS']['SKILL']]))
-                    $arr['skill'] = explode(",", $row[config("util.EXCEL_QESTIONS")['KEY_COLUMNS']['SKILL']]);
+                    $arr['skill'] = explode(",", $row[config("util.EXCEL_QESTIONS")['KEY_COLUMNS']['SKILL']] ?? "");
 
                 $dataA = [
                     "content" => $this->catchError($row[config('util.EXCEL_QESTIONS')['KEY_COLUMNS']['ANSWER']], "Thiếu câu trả lời dòng $line"),
