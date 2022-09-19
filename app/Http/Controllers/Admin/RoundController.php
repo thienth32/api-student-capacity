@@ -11,12 +11,15 @@ use App\Models\Enterprise;
 use App\Models\Evaluation;
 use App\Models\HistoryPoint;
 use App\Models\Judge;
+use App\Models\Result;
 use App\Models\Round;
 use App\Models\RoundTeam;
 use App\Models\TakeExam;
 use App\Models\Team;
 use App\Models\TypeExam;
 use App\Services\Modules\MRound\MRoundInterface;
+use App\Services\Modules\MRoundTeam\MRoundTeamInterface;
+use App\Services\Modules\MTeam\MTeamInterface;
 use App\Services\Traits\TResponse;
 use App\Services\Traits\TUploadImage;
 use Carbon\Carbon;
@@ -35,10 +38,12 @@ class RoundController extends Controller
         private Judge $judge,
         private Round $round,
         private RoundTeam $roundTeam,
-        private MRoundInterface $modelDulesRound,
+        private MRoundTeamInterface $roundTeamRepo,
+        private MRoundInterface $roundRepo,
         private Contest $contest,
         private TypeExam $type_exam,
         private Team $team,
+        private MTeamInterface $teamRepo,
         private DB $db
     ) {
     }
@@ -46,7 +51,7 @@ class RoundController extends Controller
     //  View round
     public function index()
     {
-        if (!($rounds = $this->modelDulesRound->index())) return abort(404);
+        if (!($rounds = $this->roundRepo->index())) return abort(404);
         return view('pages.round.index', [
             'rounds' => $rounds,
             'contests' => $this->contest::withCount(['teams', 'rounds'])->get(),
@@ -96,7 +101,7 @@ class RoundController extends Controller
     //  Response round
     public function apiIndex()
     {
-        if (!($data = $this->modelDulesRound->apiIndex())) return $this->responseApi(false);
+        if (!($data = $this->roundRepo->apiIndex())) return $this->responseApi(false);
         return $this->responseApi(true, $data);
     }
 
@@ -120,7 +125,7 @@ class RoundController extends Controller
         };
         $this->db::beginTransaction();
         try {
-            $this->modelDulesRound->store($request);
+            $this->roundRepo->store($request);
             $this->db::commit();
             if ($contest->type == 1)  return redirect()->route('admin.contest.show.capatity', ['id' => $contest->id]);
             return redirect()->route('admin.contest.detail.round', ['id' => $contest->id]);
@@ -180,6 +185,7 @@ class RoundController extends Controller
             } else {
                 $data = request()->all();
             }
+            if ($round->start_time < now()) unset($data['start_time']);
             $round->update($data);
             return [
                 'round' => $round,
@@ -196,7 +202,7 @@ class RoundController extends Controller
         if ($data = $this->updateRound($request, $id)) {
             if (isset($data['status']) && $data['status'] == false)
                 return redirect()->back()->withErrors($data['errors'])->withInput();
-            if ($data['contest']->status == 1)  return redirect()->route('admin.contest.show.capatity', ['id' => $data['contest']->id]);
+            if ($data['contest']->type == 1)  return redirect()->route('admin.contest.show.capatity', ['id' => $data['contest']->id]);
             return redirect()->route('admin.contest.detail.round', ['id' => $data['contest']->id]);
         }
         return abort(404);
@@ -277,7 +283,7 @@ class RoundController extends Controller
 
     public function contestDetailRound($id)
     {
-        if (!($rounds = $this->modelDulesRound->getList())) {
+        if (!($rounds = $this->roundRepo->getList())) {
             return view('not_found');
         }
 
@@ -351,7 +357,7 @@ class RoundController extends Controller
 
     public function softDelete()
     {
-        $listRoundSofts = $this->modelDulesRound->getList()->paginate(request('limit') ?? 5);
+        $listRoundSofts = $this->roundRepo->getList()->paginate(request('limit') ?? 5);
         return view('pages.round.round-soft-delete', [
             'listRoundSofts' => $listRoundSofts,
         ]);
@@ -379,14 +385,13 @@ class RoundController extends Controller
 
     public function roundDetailTeam($id)
     {
-        $round = $this->round::whereId($id)->first();
-        $roundTeams = $this->roundTeam::where('round_id', $id)
-            ->with([
-                'team',
-                'takeExam'
-            ])
-            ->get();
-        return view('pages.round.detail.round-team', compact('round', 'roundTeams'));
+        $round = $this->roundRepo->find($id);
+        $roundTeams = $this->roundTeamRepo->getRoundTeamByRoundId($id, [
+            'team',
+            'takeExam'
+        ]);
+        $teamContest = $this->teamRepo->getTeamByContestId($round->contest_id);
+        return view('pages.round.detail.round-team', compact('round', 'roundTeams', 'teamContest'));
     }
 
     public function attachEnterprise(Request $request, Donor $donor, DonorRound $donorRound, $id)
@@ -630,6 +635,7 @@ class RoundController extends Controller
      */
     public function roundDetailTeamTakeExamUpdate(Request $request, $id, $teamId, $takeExamId)
     {
+        DB::beginTransaction();
         try {
             $dataCreate = [
                 'point' => $request->final_point,
@@ -638,27 +644,41 @@ class RoundController extends Controller
             ];
 
             $takeExam = TakeExam::find($takeExamId);
+            $result = Result::where('round_id', $id)->where('team_id', $teamId)->first();
+            if ($result) {
+                $result->point = $request->final_point;
+                $result->save();
+            } else {
+                Result::create([
+                    "point" =>  $request->final_point,
+                    "round_id" =>  $id,
+                    "team_id" =>  $teamId,
+                ]);
+            }
             if ($takeExam) {
                 $takeExam->history_point()->create($dataCreate);
                 $takeExam->final_point = $request->final_point;
                 $takeExam->mark_comment = $request->has('mark_comment') ? $request->mark_comment : null;
                 $takeExam->save();
             }
-            $check = RoundTeam::where('round_id', $request->roundId)->where('team_id', $teamId)->first();
+            $check = RoundTeam::where('round_id', $id)->where('team_id', $teamId)->first();
 
             if ($check == null && $request->final_point >= $request->ponit) {
                 RoundTeam::create([
-                    'round_id' => $request->roundId,
+                    'round_id' => $id,
                     'team_id' => $teamId,
                     'status' => config('util.ROUND_TEAM_STATUS_NOT_ANNOUNCED'), // Chưa công bố
                 ]);
             } elseif ($check && $request->final_point < $request->ponit) {
                 $check->delete();
             }
-            echo "<lescript>art('Thành công ')<script/>";
+            DB::commit();
+
+            echo "<script>art('Thành công ')<script/>";
             return redirect()->back();
         } catch (\Throwable $th) {
-            return redirect()->back();
+            DB::rollBack();
+            return redirect()->back()->withErrors(['message', "Đã xảy ra lỗi !"]);
         }
     }
     /**

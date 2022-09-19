@@ -77,6 +77,26 @@
         <div class="d-flex flex-column flex-md-row rounded border p-10">
             <ul class="nav nav-tabs nav-pills flex-row border-0 flex-md-column me-5 mb-3 mb-md-0 fs-6">
                 <li class="nav-item me-0 mb-md-2">
+                    <a style="width: 100%" class="nav-link btn btn-flex btn-active-light-primary  " data-bs-toggle="tab"
+                        href="#kt_vtab_pane_6">
+                        <!--begin::Svg Icon | path: icons/duotune/general/gen017.svg-->
+                        <span class="svg-icon svg-icon-2 svg-icon-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none">
+                                <path opacity="0.3" d="M5 8.04999L11.8 11.95V19.85L5 15.85V8.04999Z" fill="black"></path>
+                                <path
+                                    d="M20.1 6.65L12.3 2.15C12 1.95 11.6 1.95 11.3 2.15L3.5 6.65C3.2 6.85 3 7.15 3 7.45V16.45C3 16.75 3.2 17.15 3.5 17.25L11.3 21.75C11.5 21.85 11.6 21.85 11.8 21.85C12 21.85 12.1 21.85 12.3 21.75L20.1 17.25C20.4 17.05 20.6 16.75 20.6 16.45V7.45C20.6 7.15 20.4 6.75 20.1 6.65ZM5 15.85V7.95L11.8 4.05L18.6 7.95L11.8 11.95V19.85L5 15.85Z"
+                                    fill="black"></path>
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                        <span class="d-flex flex-column align-items-start">
+                            <span class="fs-4 fw-bolder">Chi tiết </span>
+                        </span>
+                    </a>
+
+                </li>
+                <li class="nav-item me-0 mb-md-2">
                     <a style="width: 100%" class="nav-link nav-list btn btn-flex btn-active-light-success active"
                         data-bs-toggle="tab" href="#kt_vtab_pane_4">
                         <!--begin::Svg Icon | path: icons/duotune/general/gen001.svg-->
@@ -178,7 +198,8 @@
                                                     class="add-exam m-auto bi bi-plus-circle-fill fs-2x"></i>
                                             </td>
                                             <td>
-                                                <div data-bs-toggle="tooltip" title="Thao tác " class="btn-group dropstart">
+                                                <div data-bs-toggle="tooltip" title="Thao tác "
+                                                    class="btn-group dropstart">
                                                     <button style="padding: 0" type="button"
                                                         class="btn   btn-sm dropdown-toggle" data-bs-toggle="dropdown"
                                                         aria-expanded="false">
@@ -299,6 +320,50 @@
                                                 </div>
                                             </td>
                                         </tr>
+                                        @if ($round->exams_count > 0)
+                                            <tr>
+                                                <td style="padding: 0" colspan="12">
+                                                    <table
+                                                        class="table table-row-dashed table-row-gray-500 gy-5 gs-5 mb-0">
+                                                        <thead>
+                                                            <tr class="fw-bold fs-6 text-gray-800">
+                                                                <th scope="col"> Bài làm </th>
+                                                                <th style="float: right" scope="col">Thao tác nhanh
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            @foreach ($round->exams as $exam)
+                                                                <tr>
+                                                                    <td style="width: 70%">{{ $exam->name }}</td>
+                                                                    <td style="width: 30%">
+                                                                        <span style="float: right"
+                                                                            data-bs-toggle="tooltip"
+                                                                            title="Xem nhanh câu hỏi câu trả lời ">
+                                                                            <button
+                                                                                style="background: #ccc;padding: 1vh 1vh 1vh 2vh;border-radius: 20px;"
+                                                                                type="button"
+                                                                                data-exam_name="{{ $exam->name }}"
+                                                                                data-exam_id="{{ $exam->id }}"
+                                                                                class="btn-click-show-exams btn btn-primary"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_modal_2">
+                                                                                <i class="bi bi-ui-checks-grid"></i>
+                                                                            </button>
+                                                                        </span>
+
+
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+
+
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        @endif
                                     @endforeach
                                 @else
                                     <tr>
@@ -332,8 +397,82 @@
                     </table>
                     {{--  --}}
                 </div>
+                <div class="tab-pane fade  " id="kt_vtab_pane_6" role="tabpanel">
+
+                    <!--begin::Post-->
+                    <div class="post d-flex flex-column-fluid" id="kt_post">
+                        <!--begin::Container-->
+                        <div id="kt_content_container" class="container-xxl">
+                            <!--begin::About card-->
+                            <div class="card">
+                                <!--begin::Body-->
+                                <div class="card-body p-lg-17">
+                                    <!--begin::Meet-->
+                                    <div class="mb-18">
+                                        <!--begin::Wrapper-->
+                                        <div class="mb-11">
+                                            <!--begin::Top-->
+                                            <div class="text-center mb-18">
+                                                <!--begin::Title-->
+                                                <h3 class="fs-2hx text-dark mb-6">Test năng lực :
+                                                    <strong>{{ $test_capacity->name }}</strong>
+                                                </h3>
+                                                <!--end::Title-->
+                                                <div class="fs-5 text-muted fw-bold">
+                                                    <strong>Bắt đầu</strong> : {{ $test_capacity->date_start }}
+                                                    <br><strong>Kết thúc</strong> : {{ $test_capacity->register_deadline }}
+                                                    <br>
+                                                    <p><strong>Kỹ năng</strong></p>
+                                                    @if (count($test_capacity->skills) > 0)
+                                                        @foreach ($test_capacity->skills as $key => $skill)
+                                                            <span
+                                                                class="badge badge-{{ $key % 2 == 0 ? 'secondary' : 'success' }}">{{ $skill->name }}</span>
+                                                        @endforeach
+                                                    @else
+                                                        <span class="badge badge-success">Chưa có kỹ năng !</span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <!--end::Top-->
+                                            <!--begin::Overlay-->
+                                            <div class="overlay">
+                                                <!--begin::Image-->
+                                                <img class="w-100 card-rounded" src="{{ $test_capacity->img }}"
+                                                    alt="" />
+                                                <!--end::Image-->
+                                                <!--begin::Links-->
+                                                <!--end::Links-->
+                                            </div>
+                                            <!--end::Overlay-->
+                                        </div>
+                                        <!--end::Wrapper-->
+                                        <!--begin::Description-->
+                                        <div class="fs-5 fw-bold text-gray-600">
+                                            <!--begin::Text-->
+                                            <p class="m-0">
+                                                {!! $test_capacity->description !!}
+                                            </p>
+                                            <!--end::Text-->
+                                        </div>
+                                        <!--end::Description-->
+                                    </div>
+                                    <!--end::Meet-->
+                                    <!--begin::Team-->
+
+                                </div>
+                                <!--end::Body-->
+                            </div>
+                            <!--end::About card-->
+                        </div>
+                        <!--end::Container-->
+                    </div>
+                    <!--end::Post-->
+                </div>
+                <!--end::Content-->
+
             </div>
         </div>
+        {{-- </div> --}}
 
         <div class="modal bg-white fade" tabindex="-1" id="kt_modal_2">
             <div class="modal-dialog modal-fullscreen">
@@ -349,9 +488,9 @@
                         <!--end::Close-->
                     </div>
 
-                    <div class="modal-body">
-                        <div id="show-tast-qs">
-                            <div class="row card-format">
+                    <div style="background-color: #f5f8fa;" class="modal-body">
+                        <div id="show-tast-qs" class="card p-2">
+                            <div class="row card-format" id="card_2">
 
                                 <div class="col-12 col-lg-2 col-sx-12 col-md-12 col-sm-12 col-xxl-2 col-xl-2">
                                     <div class="   form-group ">
@@ -416,8 +555,52 @@
                                 </div>
 
                             </div>
-                            <div id="show-add-questions" class="mt-2 mb-2"></div>
-                            <div id="data-save" class="mt-1">
+                            <div class="back">
+
+                                <span data-bs-toggle="tooltip" title="Đóng lọc" data-key="card_2"
+                                    class="btn-hide btn-hide-card_2 svg-icon svg-icon-primary svg-icon-2x">
+                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Stockholm-icons/Navigation/Angle-up.svg--><svg
+                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <polygon points="0 0 24 0 24 24 0 24" />
+                                            <path
+                                                d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z"
+                                                fill="#000000" fill-rule="nonzero" />
+                                        </g>
+                                    </svg>
+                                </span>
+
+                                <span data-bs-toggle="tooltip" title="Mở lọc" data-key="card_2"
+                                    class="btn-show btn-show-card_2 svg-icon svg-icon-primary svg-icon-2x">
+                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Angle-down.svg--><svg
+                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <polygon points="0 0 24 0 24 24 0 24" />
+                                            <path
+                                                d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z"
+                                                fill="#000000" fill-rule="nonzero"
+                                                transform="translate(12.000003, 11.999999) rotate(-180.000000) translate(-12.000003, -11.999999) " />
+                                        </g>
+                                    </svg>
+                                    <!--end::Svg Icon-->
+                                </span>
+
+                            </div>
+                            <div id="show-add-questions" style="    max-height: 80vh !important; " class="mt-2 mb-2">
+                            </div>
+                            <div id="data-save"
+                                style="
+                                    position: fixed;
+                                    left: 0;
+                                    bottom: 0;
+                                    right: 0;
+                                    max-height: 500px;
+                                    overflow: auto;
+                                    background: white;
+                                    padding: 10px;"
+                                class="mt-1">
                                 <div id="show-data-save" class="mb-5"></div>
                                 <div
                                     style="position: fixed; bottom: 20px; transform: translateX(-50%);  left: 50%; z-index: 999999999;">
@@ -434,12 +617,11 @@
                             </div>
                         </div>
 
-                        <div id="show-list-qs">
+                        <div id="show-list-qs" class="card p-2">
 
-                            <div class="row m-1">
-
+                            <div class=" mb-2 row " id="card_1">
                                 <div class="col-12 col-lg-2 col-sx-12 col-md-12 col-sm-12 col-xxl-2 col-xl-2">
-                                    <div class="   form-group ">
+                                    <div class=" form-group ">
                                         <label class="form-label">Skill</label>
                                         <select id="selectSkillQs" class="form-select mb-2 select2-hidden-accessible"
                                             data-control="select2" data-hide-search="true" tabindex="-1"
@@ -486,30 +668,65 @@
                                             class=" ip-search form-control">
                                     </div>
                                 </div>
+                            </div>
+                            <div class="back">
 
+                                <span data-bs-toggle="tooltip" title="Đóng lọc" data-key="card_1"
+                                    class="btn-hide btn-hide-card_1 svg-icon svg-icon-primary svg-icon-2x">
+                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Stockholm-icons/Navigation/Angle-up.svg--><svg
+                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <polygon points="0 0 24 0 24 24 0 24" />
+                                            <path
+                                                d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z"
+                                                fill="#000000" fill-rule="nonzero" />
+                                        </g>
+                                    </svg>
+                                </span>
 
+                                <span data-bs-toggle="tooltip" title="Mở lọc" data-key="card_1"
+                                    class="btn-show btn-show-card_1 svg-icon svg-icon-primary svg-icon-2x">
+                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Angle-down.svg--><svg
+                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <polygon points="0 0 24 0 24 24 0 24" />
+                                            <path
+                                                d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z"
+                                                fill="#000000" fill-rule="nonzero"
+                                                transform="translate(12.000003, 11.999999) rotate(-180.000000) translate(-12.000003, -11.999999) " />
+                                        </g>
+                                    </svg>
+                                    <!--end::Svg Icon-->
+                                </span>
 
                             </div>
+                            {{-- <div class="card ">
+                                <i class="bi bi-gear-fill"></i>
+                            </div> --}}
+                            <div class=" ">
+                                <table class="table table-row-bordered table-row-gray-300 gy-7  table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Câu hỏi </th>
+                                            <th>Độ khó </th>
+                                            <th>Đáp án </th>
+                                            <th>Tình trạng</th>
+                                            <th> <i role="button" data-bs-toggle="tooltip"
+                                                    title="Thêm câu hỏi câu trả lời "
+                                                    class="btn-add-question-answ bi bi-plus-square-fill fs-2x"></i>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="show-ques-anw" class="position-relative">
 
-                            <table class="table table-row-bordered table-row-gray-300 gy-7  table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Câu hỏi </th>
-                                        <th>Độ khó </th>
-                                        <th>Đáp án </th>
-                                        <th>Tình trạng</th>
-                                        <th> <i role="button" data-bs-toggle="tooltip" title="Thêm câu hỏi câu trả lời "
-                                                class="btn-add-question-answ bi bi-plus-square-fill fs-2x"></i>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody id="show-ques-anw" class="position-relative">
-
-                                </tbody>
-                            </table>
-                            <ul style="position: fixed; bottom: 20px; transform: translateX(-50%);  left: 50%; z-index: 999999999;"
-                                id="show-paginate" class="pagination">
-                            </ul>
+                                    </tbody>
+                                </table>
+                                <ul style="position: fixed; bottom: 20px; transform: translateX(-50%);  left: 50%; z-index: 999999999;"
+                                    id="show-paginate" class="pagination">
+                                </ul>
+                            </div>
                         </div>
 
                     </div>
@@ -556,7 +773,6 @@
                     </div>
 
                     <div class="modal-footer">
-
                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Thoát </button>
                     </div>
                 </div>

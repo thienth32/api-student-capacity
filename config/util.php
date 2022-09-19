@@ -55,5 +55,21 @@ return [
     "ANSWER_FALSE" => 0,
     "ANSWER_TRUE" => 1,
 
-    "NAME_DOCKER" => "capacity_"
+    "NAME_DOCKER" => "capacity_",
+    "EXCEL_QESTIONS" => [
+        "TYPE" => "Một đáp án",
+        "RANKS" => [
+            "Dễ",
+            "Trung bình",
+        ],
+        "KEY_COLUMNS" => [
+            "TYPE" => 0,
+            "QUESTION" => 1,
+            "ANSWER" => 2,
+            "IS_CORRECT" => 3,
+            "RANK" => 4,
+            "SKILL" => 5
+        ],
+        "IS_CORRECT" => "Đáp án đúng"
+    ]
 ];

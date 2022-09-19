@@ -340,9 +340,9 @@
                                         </a>
                                     </td>
 
-                                    <td>
+                                    <td data-bs-toggle="tooltip" title="Xem chi tiết ">
 
-                                        <button data-bs-toggle="tooltip" title="Xem chi tiết " type="button"
+                                        <button type="button"
                                             style="background: none ; border : none ; list-style  : none "
                                             data-bs-toggle="modal" data-bs-target="#exampleModal_{{ $key }}">
                                             <span class="svg-icon svg-icon-success svg-icon-2x">

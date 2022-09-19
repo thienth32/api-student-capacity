@@ -15,9 +15,9 @@ class RankUserController extends Controller
     use TResponse;
     /**
      * @OA\Get(
-     *     path="/api/public/rating-major/{slug}",
-     *     description="Description api slider",
-     *     tags={"Rank user" , "User" , "Major"},
+     *     path="/api/public/rating/major-contest/{slug}",
+     *     description="Description api contest rank",
+     *     tags={"Rank user" , "User" , "Major"  ,"Rank_contest"},
      *     @OA\Parameter(
      *         name="slug",
      *         in="path",
@@ -25,15 +25,15 @@ class RankUserController extends Controller
      *         required=true,
      *     ),
      *     @OA\Response(response="200", description="{ status: true , data : data }"),
-     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }"),
      * )
      */
     // Xep hang sinh vien theo chuyen nganh
     public function getRatingUser(MMajorInterface $majorModel, $slug)
     {
         try {
-            if (!$dataRating = $majorModel->getRatingUserByMajorSlug($slug)) return $this->responseApi(false, 'Không tìm thấy chuyên ngành ' . $slug . '!');
-
+            $dataRating = $majorModel->getRatingUserByMajorSlug($slug);
+            if ($dataRating === false) throw new \Exception('Không tìm thấy chuyên ngành ' . $slug . '!');
             return $this->responseApi(
                 true,
                 $dataRating
@@ -82,7 +82,21 @@ class RankUserController extends Controller
     //     return $arrResult;
     // }
 
-
+    /**
+     * @OA\Get(
+     *     path="/api/public/rating/major-capacity/{slug}",
+     *     description="Description api api capacity rank",
+     *     tags={"Rank user" , "User" , "Major" ,"Rank_capacity"},
+     *     @OA\Parameter(
+     *         name="slug",
+     *         in="path",
+     *         description="Slug chuyên ngành ",
+     *         required=true,
+     *     ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
     public function getRankUserCapacity($slug)
     {
         try {

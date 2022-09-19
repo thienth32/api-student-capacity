@@ -87,8 +87,9 @@
                                     <h4 class="mb-1 text-dark">Note</h4>
                                     <!--end::Title-->
                                     <!--begin::Content-->
-                                    <p>$name = Tên người nhận</p>
+                                    <p>$fullName = Họ và tên người nhận </p>
                                     <p>$email = Email người nhận</p>
+                                    <p>$name = Tên người nhận</p>
                                     <!--end::Content-->
                                 </div>
                                 <!--end::Wrapper-->
@@ -105,8 +106,8 @@
 
                             <div class="form-group mb-10">
                                 <label for="" class="form-label">Nội dung gửi mail </label>
-
-                                <textarea name="content" id="kt_docs_tinymce_hidden"> {{ old('content') }}</textarea>
+                                <textarea name="content" id="kt_docs_ckeditor_classic"> {{ old('content') }}</textarea>
+                                {{-- <textarea name="content" id="kt_docs_tinymce_hidden"> {{ old('content') }}</textarea> --}}
                                 @error('content')
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
@@ -202,10 +203,32 @@
 
 @endsection
 @section('page-script')
+    <!--CKEditor Build Bundles:: Only include the relevant bundles accordingly-->
+    <script src="assets/plugins/custom/ckeditor/ckeditor-classic.bundle.js"></script>
+    <script src="assets/plugins/custom/ckeditor/ckeditor-inline.bundle.js"></script>
+    <script src="assets/plugins/custom/ckeditor/ckeditor-balloon.bundle.js"></script>
+    <script src="assets/plugins/custom/ckeditor/ckeditor-balloon-block.bundle.js"></script>
+    <script src="assets/plugins/custom/ckeditor/ckeditor-document.bundle.js"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#kt_docs_ckeditor_classic'), {
+                ckfinder: {
+                    uploadUrl: "{{ route('admin.ckeditor.upfile') . '?_token=' . csrf_token() }}"
+                }
+            })
+            .then(editor => {
+                console.log(editor);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+
+
     <script src="assets/plugins/global/plugins.bundle.js"></script>
     <script src="assets/plugins/custom/tinymce/tinymce.bundle.js"></script>
-    <script src="assets/plugins/custom/ckeditor/ckeditor-classic.bundle.js"></script>
     <script src="assets/js/system/config-mail/mail.js"></script>
+
     @if (\Session::has('success'))
         <script>
             // The DOM elements you wish to replace with Tagify

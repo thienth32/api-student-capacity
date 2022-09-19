@@ -96,8 +96,19 @@
                                     name="contest_id[]" value="{{ serialize(old('contest_id')) }}">
                                     @foreach ($contest as $item)
                                         <option {{ collect(old('contest_id'))->contains($item->id) ? 'selected' : '' }}
-                                            value="{{ $item->id }}">
-                                            {{ $item->name }}
+                                            value="{{ $item->id }} ">
+                                            {{ $item->name }} @if (count($item->skills) > 0)
+                                                (
+                                                <ol class="breadcrumb text-muted fs-6 fw-bold">
+                                                    @foreach ($item->skills as $skill)
+                                                        <li class="breadcrumb-item px-3 text-muted">
+                                                            {{ $skill->name }} /</li>
+                                                    @endforeach
+
+                                                </ol>
+
+                                                )
+                                            @endif
                                         </option>
                                     @endforeach
                                 </select>
@@ -126,7 +137,13 @@
 
 
                     </div>
-
+                    <div class="form-group mb-10">
+                        <label class="form-label" for="">Mô tả ngắn tuyển dụng</label>
+                        <textarea class="form-control" name="short_description" id="kt_docs_ckeditor_classic2" rows="3">{{ old('short_description') }}</textarea>
+                        @error('short_description')
+                            <p class="text-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
                     <div class="form-group mb-10">
                         <label class="form-label" for="">Thông tin tuyển dụng</label>
                         <textarea class="form-control" name="description" id="kt_docs_ckeditor_classic" rows="3">{{ old('description') }}</textarea>

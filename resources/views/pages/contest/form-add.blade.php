@@ -7,7 +7,7 @@
             <ol class="breadcrumb text-muted fs-6 fw-bold">
 
                 <li class="breadcrumb-item pe-3">
-                    @if (request('type') == 0)
+                    @contest
                         <a href="{{ route('admin.contest.list') }}" class="pe-3">
                             Danh sách cuộc thi
                         </a>
@@ -15,7 +15,7 @@
                         <a href="{{ route('admin.contest.list', ['type' => 1]) }}" class="pe-3">
                             Danh sách test năng lực
                         </a>
-                    @endif
+                    @endcontest
                 </li>
                 <li class="breadcrumb-item px-3 text-muted">Thêm mới {{ $contest_type_text }}</li>
             </ol>
@@ -88,10 +88,77 @@
                     </div>
                     <div class="row">
                         <div class="col-8">
+                            <div>
+                                <input type="hidden" name="date_start"
+                                    value="{{ \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->addDays(3)->format('Y/m/d h:i:s') }}">
+                                <input type="hidden" name="register_deadline"
+                                    value="{{ \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->addDays(5)->format('Y/m/d h:i:s') }}">
+
+                            </div>
+                            <div class="form-group mb-10">
+                                <label for="" class="form-label">Thời gian bắt đầu & thời gian kết thúc </label>
+                                <input name="app1" class="form-control form-control-solid"
+                                    placeholder="Pick date rage" id="app1" />
+                                @error('date_start')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
+                                @error('register_deadline')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            @contest
+                                <input type="hidden" name="start_register_time"
+                                    value="{{ \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->addDays(3)->format('Y/m/d h:i:s') }}">
+                                <input type="hidden" name="end_register_time"
+                                    value="{{ \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->addDays(5)->format('Y/m/d h:i:s') }}">
+                                <div class="form-group mb-10">
+                                    <label for="" class="form-label">Thời gian bắt đầu đăng ký & thời gian kết
+                                        thúc
+                                        đăng ký </label>
+                                    <input name="app2" class="form-control form-control-solid"
+                                        placeholder="Pick date rage" id="app2" />
+                                    @error('start_register_time')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                    @error('end_register_time')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            @else
+                                <div class="form-group mb-10">
+                                    <label for="" class="form-label">Thuộc kỹ năng </label>
+                                    <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                                        data-hide-search="false" multiple tabindex="-1" aria-hidden="true" name="skill[]"
+                                        value="{{ old('skill') }}">
+                                        @foreach ($skills as $skill)
+                                            <option value="{{ $skill->id }}"> {{ $skill->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('skill')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            @endcontest
+                            <div class="form-group mb-10">
+                                <label for="" class="form-label">Thuộc chuyên ngành</label>
+                                <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                                    data-hide-search="false" tabindex="-1" aria-hidden="true" name="major_id"
+                                    value="{{ old('major_id') }}">
+                                    @foreach ($majors as $major)
+                                        <option value="{{ $major->id }}"> {{ $major->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('major_id')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+                        {{-- <div class="col-8">
                             <div class="form-group mb-10">
                                 <label for="" class="form-label">Thời gian bắt đầu </label>
                                 <input id="begin" value="{{ old('date_start') }}" type="datetime-local"
                                     name="date_start" class="form-control" placeholder="">
+
                                 @error('date_start')
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
@@ -135,9 +202,9 @@
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="col-4">
-                            @if (request('type') != config('util.TYPE_TEST'))
+                            @contest
                                 <div class="form-group mb-10">
                                     <label for="" class="form-label">Giới hạn thành viên trong đội</label>
                                     <input name="max_user" type='number' class="form-control" />
@@ -145,11 +212,14 @@
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
-                            @endif
+                            @endcontest
                             <div class="form-group ">
                                 <label for="" class="form-label">Ảnh {{ $contest_type_text }}</label>
                                 <input name="img" type='file' id="file-input" accept=".png, .jpg, .jpeg"
                                     class="form-control" />
+                                @error('img')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
                                 <img class="w-100 mt-4 border rounded-3" id="image-preview"
                                     src="https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg" />
                             </div>
@@ -233,20 +303,22 @@
     <script src="assets/plugins/custom/ckeditor/ckeditor-classic.bundle.js"></script>
     <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
     <script src="assets/js/system/ckeditor/ckeditor.js"></script>
-
     <script src="assets/js/system/preview-file/previewImg.js"></script>
-    <script src="assets/js/system/date-after/date-after.js"></script>
     <script src="assets/js/system/contest/form.js"></script>
+    <script src="assets/js/system/contest/contest.js"></script>
     <script>
+        contestPage.topScore(
+            "input[name='top1']",
+            "input[name='top2']",
+            "input[name='top3']",
+            "input[name='leave']"
+        );
         rules.img = {
             required: true,
         };
         messages.img = {
             required: 'Chưa nhập trường này !',
         };
-
-        dateAfter('input[type=datetime-local]#begin', 'input[type=datetime-local]#end',
-            'input[type=datetime-local]#start_time', 'input[type=datetime-local]#end_time')
         preview.showFile('#file-input', '#image-preview');
     </script>
     <script src="assets/js/system/validate/validate.js"></script>

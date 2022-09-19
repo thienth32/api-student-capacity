@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Exports\QuestionsExport;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Question\ImportQuestion;
 use App\Imports\QuestionsImport;
 use App\Models\Answer;
 use App\Models\Exam;
@@ -90,11 +91,6 @@ class QuestionController extends Controller
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
 
@@ -107,12 +103,7 @@ class QuestionController extends Controller
         );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
         // dump(count($request->answers));
@@ -177,23 +168,13 @@ class QuestionController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Question  $questions
-     * @return \Illuminate\Http\Response
-     */
+
     public function show(Question $questions)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Question  $questions
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit(Question $questions, $id)
     {
         $skills = $this->skillModel::select('name', 'id')->get();
@@ -205,13 +186,7 @@ class QuestionController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Question  $questions
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, $id)
     {
         $validator = Validator::make(
@@ -281,12 +256,7 @@ class QuestionController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Question  $questions
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy(Question $questions, $id)
     {
         $this->questionModel::find($id)->delete();
@@ -363,11 +333,23 @@ class QuestionController extends Controller
             ]);
         }
     }
-    public function exImpost(Request $request)
+    public function import(ImportQuestion $request)
     {
-        Excel::import(new QuestionsImport, $request->ex_file);
+        try {
+            Excel::import(new QuestionsImport(), $request->ex_file);
+            return response()->json([
+                "status" => true,
+                "payload" => "Thành công "
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "status" => false,
+                "errors" => [
+                    "ex_file" => $th->getMessage()
+                ]
+            ], 400);
+        }
     }
-
     public function exportQe()
     {
         $point = [

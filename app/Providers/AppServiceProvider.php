@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Menu;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Blade;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,6 +33,12 @@ class AppServiceProvider extends ServiceProvider
     {
         Arr::macro('listColumnOfTable', function (string $table) {
             return Schema::getColumnListing($table);
+        });
+        Blade::if("capacity", function () {
+            return request('type') == config('util.TYPE_TEST');
+        });
+        Blade::if("contest", function () {
+            return request('type') != config('util.TYPE_TEST');
         });
         // Model::preventLazyLoading(!app()->isProduction());
     }

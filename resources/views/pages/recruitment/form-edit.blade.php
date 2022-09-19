@@ -27,7 +27,7 @@
                             <div class="form-group mb-10">
                                 <label class="form-label" for="">Thời gian bắt đầu</label>
                                 <input value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime($data['start_time'])) }}"
-                                    type="datetime-local" id="begin" max="" name="start_time"
+                                    type="datetime-local" min="" id="begin" max="" name="start_time"
                                     class="form-control" placeholder="">
                                 @error('start_time')
                                     <p class="text-danger">{{ $message }}</p>
@@ -70,8 +70,7 @@
                                     @foreach ($enterprises as $item)
                                         <option
                                             @foreach ($data->enterprise as $value) @if ($value->id == $item->id)
-                                        {{ 'selected="selected"' }} @endif
-                                            @endforeach
+                                        {{ 'selected="selected"' }} @endif @endforeach
                                             value="{{ $item->id }}">
                                             {{ $item->name }}
                                         </option>
@@ -87,8 +86,8 @@
                                     @foreach ($contests as $item)
                                         <option
                                             @foreach ($data->contest as $value) @if ($value->id == $item->id)
-                                            {{ 'selected="selected"' }} @endif
-                                            @endforeach value="{{ $item->id }}">
+                                            {{ 'selected="selected"' }} @endif @endforeach
+                                            value="{{ $item->id }}">
                                             {{ $item->name }}
                                         </option>
                                     @endforeach
@@ -114,7 +113,13 @@
 
 
                     </div>
-
+                    <div class="form-group mb-10">
+                        <label class="form-label" for="">Mô tả ngắn tuyển dụng</label>
+                        <textarea class="form-control" name="short_description" id="kt_docs_ckeditor_classic2" rows="3">{{ $data->short_description }}</textarea>
+                        @error('short_description')
+                            <p class="text-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
                     <div class="form-group mb-10">
                         <label for="">Thông tin tuyển dụng</label>
                         <textarea class="form-control" name="description" id="kt_docs_ckeditor_classic" rows="3">{{ $data->description }}</textarea>
@@ -139,11 +144,11 @@
     <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
     <script src="assets/js/system/ckeditor/ckeditor.js"></script>
     <script src="assets/js/system/preview-file/previewImg.js"></script>
-    <script src="assets/js/system/recruitment/form.js"></script>
+    <script src="assets/js/system/recruitment/formEdit.js"></script>
     <script src="assets/js/system/recruitment/date-after.js"></script>
     <script>
         preview.showFile('#file-input', '#image-preview');
-        dateAfter('input[type=datetime-local]#begin', 'input[type=datetime-local]#end')
+        dateAfterEdit('input[type=datetime-local]#begin', 'input[type=datetime-local]#end')
     </script>
     <script src="assets/js/system/validate/validate.js"></script>
 @endsection

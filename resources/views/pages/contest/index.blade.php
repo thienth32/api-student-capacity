@@ -102,11 +102,11 @@
                 <input class="form-control " placeholder="Pick date rage" id="kt_daterangepicker_2" />
             </div>
 
-            @if (request('type') != config('util.TYPE_TEST'))
+            @contest()
                 <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                     <label for="" class="form-label">Hoạt động {{ $contest_type_text }} </label>
-                    <select class="select-date-time-contest form-select mb-2 select2-hidden-accessible"
-                        data-control="select2" data-hide-search="true" tabindex="-1" aria-hidden="true">
+                    <select class="select-date-time-contest form-select mb-2 select2-hidden-accessible" data-control="select2"
+                        data-hide-search="true" tabindex="-1" aria-hidden="true">
                         <option class="form-control">Chọn hoạt động {{ $contest_type_text }}</option>
                         {{-- <option class="form-control" @selected(request()->has('upcoming_date')) value="upcoming_date">Sắp diễn ra
                         </option> --}}
@@ -123,7 +123,7 @@
 
                     </select>
                 </div>
-            @endif
+            @endcontest
         </div>
 
         {{--  --}}
@@ -224,17 +224,17 @@
                                 <!--end::Svg Icon-->
                             </span>
                         </th>
-                        @if (request('type') != config('util.TYPE_TEST'))
+                        @contest()
                             <th scope="col">Đội thi
                             </th>
                             <th scope="col">Ban giám khảo
                             </th>
-                        @endif
+                        @endcontest
                         <th scope="col">Chuyên ngành </th>
                         <th scope="col">Tình trạng </th>
-                        @if (request('type') != config('util.TYPE_TEST'))
+                        @contest()
                             <th scope="col"> Quá trình </th>
-                        @endif
+                        @endcontest
                         <th scope="col">Thời gian bắt đầu
                             <span role="button" data-key="date_start" data-bs-toggle="tooltip"
                                 title="Lọc theo thời gian bắt đầu "
@@ -295,7 +295,7 @@
                                 <!--end::Svg Icon-->
                             </span>
                         </th>
-                        @if (request('type') != config('util.TYPE_TEST'))
+                        @contest()
                             <th scope="col">Thời gian bắt đầu đăng ký
                                 <span role="button" data-key="start_register_time" data-bs-toggle="tooltip"
                                     title="Lọc theo thời gian bắt đầu đăng ký"
@@ -356,32 +356,18 @@
                                     <!--end::Svg Icon-->
                                 </span>
                             </th>
-                        @endif
+                        @endcontest
                         <th colspan="2"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- @php
-                        $total = $contests->total();
-                    @endphp --}}
+
                     @forelse ($contests as $key => $contest)
 
                         <tr>
-                            {{-- @if (request()->has('sort'))
-                                <th scope="row">
-                                    @if (request('sort') == 'desc')
-                                        {{ (request()->has('page') && request('page') !== 1 ? $contests->perPage() * (request('page') - 1) : 0) + $key + 1 }}
-                                    @else
-                                        {{ request()->has('page') && request('page') !== 1 ? $total - $contests->perPage() * (request('page') - 1) - $key : ($total -= ($key == 0 ? 0 : 1)) }}
-                                    @endif
-                                </th>
-                            @else
-                                <th scope="row">
-                                    {{ (request()->has('page') && request('page') !== 1 ? $contests->perPage() * (request('page') - 1) : 0) + $key + 1 }}
-                                </th>
-                            @endif --}}
+
                             <td>
-                                @if (request('type') != config('util.TYPE_TEST'))
+                                @contest()
                                     <a href="{{ route('admin.contest.show', ['id' => $contest->id]) }}">
                                         {{ $contest->name }}
                                     </a>
@@ -389,10 +375,10 @@
                                     <a href="{{ route('admin.contest.show.capatity', ['id' => $contest->id]) }}">
                                         {{ $contest->name }}
                                     </a>
-                                @endif
+                                @endcontest
 
                             </td>
-                            @if (request('type') != config('util.TYPE_TEST'))
+                            @contest
                                 <td class="text-center">
 
                                     {{ $contest->teams_count }}
@@ -404,7 +390,7 @@
                                     {{ $contest->judges_count }}
 
                                 </td>
-                            @endif
+                            @endcontest
                             <td>{{ $contest->major->name ?? 'Chưa có chuyên ngành ' }}</td>
                             <td>
                                 @hasanyrole('admin|super admin')
@@ -417,7 +403,7 @@
 
                                         </div>
                                     @else
-                                        {{ config('util.CONTEST_STATUS_2') }}
+                                        <span class="badge bg-danger"> {{ config('util.CONTEST_STATUS_2') }} </span>
                                     @endif
                                 @else
                                     <div data-bs-toggle="tooltip" title="Cập nhật trạng thái "
@@ -429,14 +415,34 @@
                                 @endhasrole
 
                             </td>
-                            @if (request('type') != config('util.TYPE_TEST'))
+                            @contest
                                 <td>
                                     @if ($contest->status <= 1)
                                         @if ((request('type') ?? 0) == config('util.TYPE_CONTEST') &&
-                                            \Carbon\Carbon::parse($contest->start_register_time)->toDateTimeString() >
+                                            \Carbon\Carbon::parse($contest->date_start)->toDateTimeString() >
                                                 \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
                                             <span class="badge bg-primary">Sắp diễn ra </span>
-                                        @elseif ((request('type') ?? 0) == config('util.TYPE_CONTEST') &&
+                                        @else
+                                            @if ((request('type') ?? 0) == config('util.TYPE_CONTEST') &&
+                                                \Carbon\Carbon::parse($contest->register_deadline)->toDateTimeString() >
+                                                    \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
+                                                <span class="badge bg-success">Đang diễn ra </span>
+                                            @elseif((request('type') ?? 0) == config('util.TYPE_CONTEST') &&
+                                                \Carbon\Carbon::parse($contest->register_deadline)->toDateTimeString() <
+                                                    \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
+                                                <span class="badge bg-danger"> Đã diễn ra </span>
+                                            @endif
+                                        @endif
+
+                                        @if ((request('type') ?? 0) == config('util.TYPE_CONTEST') &&
+                                            \Carbon\Carbon::parse($contest->start_register_time)->toDateTimeString() <
+                                                \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString() &&
+                                            \Carbon\Carbon::parse($contest->end_register_time)->toDateTimeString() >
+                                                \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
+                                            <span class="badge bg-info">Đang mở đăng ký </span>
+                                        @else
+                                            {{-- <span class="badge bg-info">Chưa mở đăng ký </span> --}}
+                                            {{-- @elseif ((request('type') ?? 0) == config('util.TYPE_CONTEST') &&
                                             \Carbon\Carbon::parse($contest->end_register_time)->toDateTimeString() >
                                                 \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
                                             <span class="badge bg-success">Đang mở đăng kí </span>
@@ -447,20 +453,20 @@
                                             \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
                                             <span class="badge bg-success">Đang diễn ra </span>
                                         @else
-                                            <span class="badge bg-danger"> Đã diễn ra </span>
+                                            <span class="badge bg-danger"> Đã diễn ra </span> --}}
                                         @endif
                                     @else
                                         <span class="badge bg-danger"> Đã kết thúc </span>
                                     @endif
 
                                 </td>
-                            @endif
+                            @endcontest
                             <td>{{ $contest->date_start }}</td>
                             <td>{{ $contest->register_deadline }}</td>
-                            @if (request('type') != config('util.TYPE_TEST'))
+                            @contest
                                 <td>{{ $contest->start_register_time }}</td>
                                 <td>{{ $contest->end_register_time }}</td>
-                            @endif
+                            @endcontest
                             @hasanyrole(config('util.ROLE_ADMINS'))
                                 <td>
                                     <div data-bs-toggle="tooltip" title="Thao tác " class="btn-group dropstart">
@@ -509,7 +515,6 @@
                                                     </a>
                                                 </li>
                                             @endif
-
                                             @if (request('type') != config('util.TYPE_TEST'))
                                                 <li class="my-3">
                                                     <a href="{{ route('admin.contest.show', ['id' => $contest->id]) }}">
@@ -606,12 +611,12 @@
                         </tr>
                         @if ($contest->type == 0 && $contest->rounds_count > 0)
                             <tr>
-                                <td colspan="12">
+                                <td style="padding: 0" colspan="12">
                                     <table class="table table-row-dashed table-row-gray-500 gy-5 gs-5 mb-0">
                                         <thead>
                                             <tr class="fw-bold fs-6 text-gray-800">
                                                 <th scope="col"> Vòng thi </th>
-                                                <th scope="col">Xem chi tiết </th>
+                                                <th style="float: right" scope="col">Xem chi tiết </th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -619,8 +624,8 @@
                                             @foreach ($contest->rounds as $round)
                                                 @if (auth()->user()->hasRole(['admin', 'super admin']) || in_array(auth()->id(), $round->judges->pluck('user_id')->toArray()))
                                                     <tr>
-                                                        <th scope="row">{{ $round->name }}</th>
-                                                        <td><a
+                                                        <td style="width: 70%">{{ $round->name }}</td>
+                                                        <td style="width: 30%"><a style="float: right"
                                                                 href="{{ route('admin.round.detail', ['id' => $round->id]) }}">Xem
                                                                 chi tiết</a> </td>
                                                     </tr>

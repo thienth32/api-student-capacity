@@ -115,7 +115,7 @@
                                 <hr>
                                 <div class="row">
                                     <div class="col-12 text-center">
-                                        @if ($contest->status == 1 && strtotime($contest->register_deadline) > strtotime(now()))
+                                        @if ($contest->status == 1 && strtotime($contest->register_deadline) < strtotime(now()))
                                             <a style="background-color: red !important" type="button"
                                                 href="{{ route('contest.register.deadline', ['id' => $contest->id]) }}"
                                                 class="btn btn-primary">

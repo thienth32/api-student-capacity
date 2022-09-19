@@ -339,6 +339,7 @@
                             </th>
                             <th scope="col">Thuộc thành phần
                             </th>
+                            <td></td>
                             <th scope="col">Trạng thái
                             </th>
                             <th scope="col">Quá trình
@@ -431,6 +432,14 @@
                                                 href="{{ route('admin.contest.show.capatity', ['id' => $key->postable->id]) }}">{{ $key->postable->name }}</a></b>
                                     @endif
                                 </td>
+                                <td>
+                                    @if (get_class($key->postable) == \App\Models\Recruitment::class)
+                                        <a href="{{ route('admin.post.create') }}" class=" btn btn-primary btn-sm">Danh
+                                            sách ứng tuyển
+                                        </a>
+                                    @endif
+                                </td>
+
                                 <td>
                                     @hasanyrole('admin|super admin')
 

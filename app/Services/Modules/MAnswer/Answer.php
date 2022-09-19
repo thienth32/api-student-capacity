@@ -18,6 +18,7 @@ class Answer
             ->with($with)->first();
         return $query;
     }
+
     public function whereInId($id = [], $param = [])
     {
         // $query = $this->model::whereIn('id', $id)
@@ -26,5 +27,12 @@ class Answer
         // dd($param);
         $query = $this->model::whereIn('id', $id)->hasRequest($param)->get();
         return $query;
+    }
+
+    public function createAnswerByIdQuestion($data, $id)
+    {
+        foreach ($data as $value) {
+            $this->model::create($value + ['question_id' => $id]);
+        }
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SendMail\RequestSendMail;
+use App\Jobs\NotifySendMailUserContest;
 use App\Mail\FinnalPass;
 use App\Models\Contest;
 use App\Models\Round;
@@ -21,47 +22,48 @@ class SendMailController extends Controller
         $this->user = $user;
         $this->mail = $mail;
     }
-    private function senMail($users = [], $data = [])
-    {
-        foreach ($users as $user) {
-            $userFind = $this->user::where('email', $user)->first();
-            $content = $this->repLaceParams([
-                'name' => $userFind->name,
-                'email' => $userFind->email,
-            ], $data['content']);
-            $subject = $this->repLaceParams([
-                'name' => $userFind->name,
-                'email' => $userFind->email,
-            ], $data['subject']);
+    // private function senMail($users = [], $data = [])
+    // {
+    //     foreach ($users as $user) {
+    //         $userFind = $this->user::where('email', $user)->first();
+    //         $content = $this->repLaceParams([
+    //             'name' => $userFind->name,
+    //             'email' => $userFind->email,
+    //         ], $data['content']);
+    //         $subject = $this->repLaceParams([
+    //             'name' => $userFind->name,
+    //             'email' => $userFind->email,
+    //         ], $data['subject']);
 
-            $this->mail::to($userFind->email)
-                ->cc(isset($data['cc']) ? $data['cc'] : [])
-                ->send(new FinnalPass([
-                    'subject' => $subject,
-                    'content' => $content,
-                ]));
-        }
-    }
+    //         $this->mail::to($userFind->email)
+    //             ->cc(isset($data['cc']) ? $data['cc'] : [])
+    //             ->send(new FinnalPass([
+    //                 'subject' => $subject,
+    //                 'content' => $content,
+    //             ]));
+    //     }
+    // }
 
-    public function repLaceParams($dataKey, $content)
-    {
-        $data = str_replace('$name', $dataKey['name'], $content);
-        $data = str_replace('$email', $dataKey['email'], $data);
-        return $data;
-    }
+    // public function repLaceParams($dataKey, $content)
+    // {
+    //     $data = str_replace('$name', $dataKey['name'], $content);
+    //     $data = str_replace('$email', $dataKey['email'], $data);
+    //     return $data;
+    // }
 
     public function sendMailRoundUser(RequestSendMail $request, $id)
     {
         if (!$request->has('users')) return redirect()->back()->withErrors(['users' => 'Tài khoản nhận mail không thể bỏ trống !'])->withInput($request->input());
         $users = $request->users;
-        $this->senMail(
+        $cc = isset($request->cc) ? array_column(json_decode($request->cc), 'value') : [];
+        dispatch(new NotifySendMailUserContest(
             array_unique($users),
             [
                 'content' => $request->content,
                 'subject' => $request->subject,
-                'cc' => isset($request->cc) ? explode(",", $request->cc) : []
+                'cc' => $cc
             ]
-        );
+        ));
         return redirect()->back()->with('success', 'Gửi mail thành công ');
     }
 
@@ -69,14 +71,15 @@ class SendMailController extends Controller
     {
         if (!$request->has('users')) return redirect()->back()->withErrors(['users' => 'Tài khoản nhận mail không thể bỏ trống !'])->withInput($request->input());
         $users = $request->users;
-        $this->senMail(
+        $cc = isset($request->cc) ? array_column(json_decode($request->cc), 'value') : [];
+        dispatch(new NotifySendMailUserContest(
             array_unique($users),
             [
                 'content' => $request->content,
                 'subject' => $request->subject,
-                'cc' => isset($request->cc) ? explode(",", $request->cc) : []
+                'cc' => $cc
             ]
-        );
+        ));
         return redirect()->back()->with('success', 'Gửi mail thành công ');
     }
 }

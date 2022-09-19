@@ -8,7 +8,7 @@ interface MContestInterface
 
     public function apiIndex($flagCapacity = false);
 
-    public function store($filename, $request);
+    public function store($filename, $request, $skills = []);
 
     public function sendMail($id);
 
@@ -22,7 +22,7 @@ interface MContestInterface
 
     public function find($id);
 
-    public function update($contest, $data);
+    public function update($contest, $data, $skills = []);
 
     public function getContest();
 
@@ -35,4 +35,12 @@ interface MContestInterface
     public function getContestByDateNow($date);
 
     public function getContestMapSubDays($date);
+
+    public function getCapacityRelated($id_capacity);
+
+    public function getContestByIdUpdate($id, $type = 0);
+
+    public function getContestDeadlineEnd();
+
+    public function getContestDone();
 }

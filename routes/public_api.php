@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CandidateController;
 use App\Http\Controllers\Admin\CodeManagerController;
 use App\Http\Controllers\Admin\CompanyController as AdminCompanyController;
 use App\Http\Controllers\Admin\ContestController as AdminContestController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\Admin\RankUserController;
 use App\Http\Controllers\Admin\RecruitmentController;
 use App\Http\Controllers\Admin\ResultController;
 use App\Http\Controllers\Admin\RoundController;
+use App\Http\Controllers\Admin\SkillController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\SponsorController as AdminSponsorController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
@@ -82,12 +84,21 @@ Route::prefix('posts')->group(function () {
     Route::get('', [PostController::class, 'apiShow']);
     Route::get('{slug}', [PostController::class, 'apiDetail']);
 });
-Route::get('rating-major/{slug}', [RankUserController::class, 'getRatingUser']);
+// Route::get('rating-major/{slug}', [RankUserController::class, 'getRatingUser']);
 
 Route::prefix('rating')->group(function () {
     Route::get('major-capacity/{slug}', [RankUserController::class, 'getRankUserCapacity']);
+    Route::get('major-contest/{slug}', [RankUserController::class, 'getRatingUser']);
 });
 
 Route::get('support-capacity', [\App\Http\Controllers\Admin\SupportController::class, 'support']);
 
 Route::post('run-code', [CodeManagerController::class, 'run']);
+
+Route::prefix('skill')->group(function () {
+
+    Route::get('', [SkillController::class, 'indexApi']);
+});
+Route::prefix('candidate')->group(function () {
+    Route::post('add', [CandidateController::class, 'ApiAddCandidate']);
+});

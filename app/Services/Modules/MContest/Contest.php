@@ -96,6 +96,7 @@ class Contest implements MContestInterface
     {
         return $this->getList($flagCapacity, request())
             ->where('type', $flagCapacity ?  config('util.TYPE_TEST') : config('util.TYPE_CONTEST'))
+            ->orderBy('date_start', 'desc')
             ->paginate(request('limit') ?? 9);
     }
 
@@ -106,7 +107,7 @@ class Contest implements MContestInterface
             ->get();
     }
 
-    public function store($filename, $request)
+    public function store($filename, $request, $skills = [])
     {
 
         $contest = new $this->contest();
@@ -131,6 +132,8 @@ class Contest implements MContestInterface
         ));
         $contest->reward_rank_point =  $rewardRankPoint;
         $contest->save();
+        if ($contest->type == 1 && count($skills) > 0) $contest->skills()->sync($skills);
+
         return $contest;
     }
 
@@ -217,8 +220,9 @@ class Contest implements MContestInterface
                         }
                         return $q->whereIn('id', $arrId);
                     }
-                ); //
-            }
+                )->with(['judges']); //
+            },
+            'skills'
         ];
         if ($type == config('util.TYPE_TEST')) $with = [
             'rounds' => function ($q) {
@@ -240,9 +244,10 @@ class Contest implements MContestInterface
         return $this->contest::find($id);
     }
 
-    public function update($contest, $data)
+    public function update($contest, $data, $skills = [])
     {
         $contest->update($data);
+        if ($contest->type == 1 && count($skills) > 0) $contest->skills()->sync($skills);
     }
 
     public function getContest()
@@ -265,7 +270,8 @@ class Contest implements MContestInterface
 
     public function getContestByDateNow($date)
     {
-        return $this->contest::whereDate('register_deadline', $date)
+        return $this->contest::whereMonth('register_deadline', $date->format("m"))
+            ->whereDay('register_deadline', $date->format('d'))
             ->get();
     }
 
@@ -279,12 +285,69 @@ class Contest implements MContestInterface
                 return [
                     "start" => $q->date_start,
                     "end" => $q->register_deadline,
-                    "content" => $q->name .
+                    "content" => ($q->type == 1 ? "Test năng lực : " : "Cuộc thi : ") .
+                        $q->name .
                         " - Đã bắt đầu từ " .
                         Carbon::parse($q->date_start)->diffForHumans() .
                         " - Kết thúc vào " .
                         Carbon::parse($q->register_deadline)->diffForHumans()
                 ];
             });
+    }
+
+    public function getCapacityRelated($id_capacity)
+    {
+        $capacityArrId = [];
+        $capacity = $this->contest::find($id_capacity);
+        if (is_null($capacity)) throw new \Exception('Không tìm thấy bài test năng lực !');
+        $capacity->load(['recruitment' => function ($q) {
+            return $q->with(['contest']);
+        }]);
+        foreach ($capacity->recruitment as  $recruitment) {
+            if ($recruitment->contest) foreach ($recruitment->contest as $contest) {
+                array_push($capacityArrId, $contest->id);
+            }
+        }
+        $capacityArrId = array_unique($capacityArrId);
+        unset($capacityArrId[array_search($id_capacity, $capacityArrId)]);
+        return $this->contest::whereIn('id', $capacityArrId)
+            ->orderBy('id', 'desc')
+            ->limit(request('limit') ?? 4)
+            ->get()
+            ->load(['rounds', 'skills', 'userCapacityDone']);
+    }
+
+    public function getContestByIdUpdate($id, $type = 0)
+    {
+        return $this->contest::with(
+            [
+                'skills' => function ($q) {
+                    return $q->select(["skill_id", "name"]);
+                },
+                'rounds' => function ($q) {
+                    return $q
+                        ->with('exams')
+                        ->withCount('exams');
+                }
+            ]
+        )
+            ->whereId($id, $type)
+            ->first();
+    }
+
+    public function getContestDeadlineEnd()
+    {
+        return $this->contest::where("register_deadline", "<", date("Y-m-d h:i:s"))
+            ->where("status", "<=", config('util.CONTEST_STATUS_GOING_ON'))
+            ->where("type", config('util.TYPE_CONTEST'))
+            ->get();
+    }
+    public function getContestDone()
+    {
+        return $this->contest::where("status", config('util.CONTEST_STATUS_DONE'))
+            ->where("type", config('util.TYPE_CONTEST'))
+            ->orderBy("date_start", "asc")
+            ->take(3)
+            ->get();
     }
 }
