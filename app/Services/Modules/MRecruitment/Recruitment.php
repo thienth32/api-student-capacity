@@ -142,7 +142,7 @@ class Recruitment
         $recruitment->short_description = $request->short_description;
         if ($request->has('image')) {
             $fileImage =  $request->file('image');
-            $image = $this->uploadFile($fileImage);
+            $image = $this->uploadFile($fileImage, $recruitment->image);
             $recruitment->image = $image;
         }
         $recruitment->save();

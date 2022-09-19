@@ -84,6 +84,37 @@
                                 </div>
                             </div>
                         </div>
+
+                        @if ($data->code_recruitment != null)
+                            <div class="fs-4 text-white mt-5">
+                                <div class="opacity-75">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <h3>Mã tuyển dụng</h3>
+                                        </div>
+                                        <div class="col-8">
+                                            <button type="button"
+                                                class="btn btn-primary">{{ $data->code_recruitment }}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fs-4 text-white mt-5">
+                                <div class="opacity-75">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <h3>Danh sách</h3>
+                                        </div>
+                                        <div class="col-8">
+                                            <a href="{{ route('admin.candidate.list', ['post_id' => $data->id]) }}"
+                                                class=" btn btn-primary">Danh
+                                                sách ứng tuyển
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                         <div class="fs-4 text-white mt-5">
                             <div class="opacity-75">
                                 <div class="row">

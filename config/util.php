@@ -63,5 +63,9 @@ return [
             "Trung bình",
         ],
         "IS_CORRECT" => "Đáp án đúng"
-    ]
+    ],
+    "post-contest" => "post-contest",
+    "post-capacity" => "post-capacity",
+    "post-round" => "post-round",
+    "post-recruitment" => "post-recruitment",
 ];

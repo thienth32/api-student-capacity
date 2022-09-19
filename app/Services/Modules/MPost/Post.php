@@ -86,13 +86,13 @@ class Post
     }
     private function loadAble($query, $post = null)
     {
-        if ($post == 'post-contest') {
+        if ($post == config('util.post-contest')) {
             $query->where('status_capacity', 0)->where('postable_type', $this->contest::class);
-        } elseif ($post == 'post-capacity') {
+        } elseif ($post == config('util.post-capacity')) {
             $query->where('status_capacity', 1)->where('postable_type', $this->contest::class);
-        } elseif ($post == 'post-round') {
+        } elseif ($post == config('util.post-round')) {
             $query->where('postable_type', $this->round::class);
-        } elseif ($post == 'post-recruitment') {
+        } elseif ($post == config('util.post-recruitment')) {
             $query->where('postable_type', $this->recruitment::class);
         }
     }
@@ -109,6 +109,7 @@ class Post
             'content' => $request->content ? $request->content : null,
             'slug' => $request->slug,
             'link_to' => $request->link_to ? $request->link_to : null,
+            'code_recruitment' => $request->code_recruitment ? $request->code_recruitment : null,
             'user_id' => auth()->user()->id,
         ];
 
@@ -147,10 +148,11 @@ class Post
         $post->description = $request->description;
         $post->content = $request->content ?  $request->content : null;
         $post->link_to = $request->link_to ?  $request->link_to : null;
+        $post->code_recruitment = $request->code_recruitment ? $request->code_recruitment : null;
 
         if ($request->has('thumbnail_url')) {
             $fileImage =  $request->file('thumbnail_url');
-            $image = $this->uploadFile($fileImage);
+            $image = $this->uploadFile($fileImage,  $post->thumbnail_url);
             $post->thumbnail_url = $image;
         }
         if ($request->contest_id != 0) {

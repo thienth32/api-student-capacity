@@ -7,7 +7,6 @@
             <div class="card card-flush h-lg-100 p-10">
                 <form id="formPost" action="{{ route('admin.post.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
-
                     <div class="form-group mb-10">
                         <label class="form-label" for="">Tiêu đề bài viết</label>
                         <input type="text" name="title" value="{{ old('title') }}" class="name-sl form-control"
@@ -57,9 +56,7 @@
                                             </option>
                                         @endforeach
                                     </select>
-
                                 </div>
-
                             </div>
                             <div style="{{ old('capacity_id') ? '' : 'display:none' }}" id="capacity">
                                 <div class="form-group mb-10">
@@ -112,7 +109,14 @@
                                     </select>
 
                                 </div>
-
+                                <div class="form-group mb-10">
+                                    <label class="form-label" for="">Mã tuyển dụng</label>
+                                    <input type="text" name="code_recruitment" value="{{ old('code_recruitment') }}"
+                                        class="form-control" placeholder="">
+                                    @error('code_recruitment')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
 
@@ -132,10 +136,7 @@
                                 @error('published_at')
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
-
                             </div>
-
-
                             <div class="form-group mb-10">
                                 <label class="form-label" for="">Mô tả ngắn bài viết</label>
                                 <textarea class="form-control" name="description" id="kt_docs_ckeditor_classic" rows="3">{{ old('description') }}</textarea>
@@ -143,8 +144,6 @@
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
                             </div>
-
-
                         </div>
                         <div class="col-4">
                             <div class="form-group ">
@@ -153,7 +152,6 @@
                                     class="form-control" />
                                 <img class="w-100 mt-4 border rounded-3" id="image-preview"
                                     src="https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg" />
-
                             </div>
                             @error('thumbnail_url')
                                 <p class="text-danger">{{ $message }}</p>
@@ -167,7 +165,6 @@
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
                     </div>
-
                     <div class="form-group mb-10 ">
                         <button type="submit" name="" id=""
                             class="btn btn-success btn-lg btn-block">Lưu

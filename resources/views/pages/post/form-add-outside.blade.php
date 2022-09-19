@@ -2,6 +2,7 @@
 @section('title', 'Thêm bài viết bên ngoài trang')
 @section('page-title', 'Thêm bài viết bên ngoài trang')
 @section('content')
+
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
@@ -110,18 +111,20 @@
                                             </option>
                                         @endforeach
                                     </select>
-
                                 </div>
-
+                            </div>
+                            <div class="form-group mb-10">
+                                <label class="form-label" for="">Mã tuyển dụng</label>
+                                <input type="text" name="code_recruitment" value="{{ old('code_recruitment') }}"
+                                    class="form-control" placeholder="">
+                                @error('code_recruitment')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
                             </div>
                         </div>
 
                     </div>
                     <div class="row">
-
-
-
-
                         <div class="col-8">
 
                             <div class="form-group mb-10">

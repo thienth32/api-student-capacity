@@ -102,7 +102,7 @@ class Skill implements MSkillInterface
         $skill->short_name = $request->short_name;
         $skill->description = $request->description;
         if ($request->has('image_url')) {
-            $fileImage =  $request->file('image_url');
+            $fileImage =  $request->file('image_url', $skill->image_url);
             $logo = $this->uploadFile($fileImage);
             $skill->image_url = $logo;
         }

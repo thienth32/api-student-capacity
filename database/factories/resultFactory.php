@@ -22,7 +22,7 @@ class resultFactory extends Factory
     {
         return [
             'team_id' => Team::all()->random()->id,
-            'round_id' => Round::all()->random()->id,
+            'round_id' => 1,
             'point' => mt_rand(1, 10),
         ];
     }
