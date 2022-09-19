@@ -44,8 +44,10 @@ class NotifySendMailUserContest implements ShouldQueue
 
     public function repLaceParams($dataKey, $content)
     {
-        $data = str_replace('$name', $dataKey['name'], $content);
+        $data = str_replace('$fullName', $dataKey['name'], $content);
         $data = str_replace('$email', $dataKey['email'], $data);
+        $strName = explode(' ', $dataKey['name']);
+        $data = str_replace('$name', $strName[count($strName) - 1], $data);
         return $data;
     }
 }

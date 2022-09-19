@@ -87,8 +87,9 @@
                                     <h4 class="mb-1 text-dark">Note</h4>
                                     <!--end::Title-->
                                     <!--begin::Content-->
-                                    <p>$name = Tên người nhận</p>
+                                    <p>$fullName = Họ và tên người nhận </p>
                                     <p>$email = Email người nhận</p>
+                                    <p>$name = Tên người nhận</p>
                                     <!--end::Content-->
                                 </div>
                                 <!--end::Wrapper-->
