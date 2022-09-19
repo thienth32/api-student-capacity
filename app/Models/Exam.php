@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Casts\FormatDate;
+use App\Casts\FormatImageGet;
 use App\Services\Builder\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Exam extends Model
 {
@@ -13,7 +15,11 @@ class Exam extends Model
     protected $table = 'exams';
     protected $fillable = ['name', 'description', 'max_ponit', 'ponit', 'external_url', 'round_id', 'time', 'time_type', "type", "status"];
     use HasFactory;
-
+    protected $casts = [
+        'created_at' => FormatDate::class,
+        'updated_at' =>  FormatDate::class,
+        'external_url' => FormatImageGet::class,
+    ];
     public function newEloquentBuilder($query)
     {
         return new Builder($query);

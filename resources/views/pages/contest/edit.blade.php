@@ -46,19 +46,55 @@
                                     <input type="hidden" name="date_start" value="{{ $contest->date_start }}">
                                     <input type="hidden" name="register_deadline"
                                         value="{{ $contest->register_deadline }}">
+                                </div>
+                                @if ($contest->date_start > now())
+                                    <div class="form-group mb-10">
+                                        <label for="" class="form-label">Thời gian bắt đầu & thời gian kết thúc
+                                        </label>
 
-                                </div>
-                                <div class="form-group mb-10">
-                                    <label for="" class="form-label">Thời gian bắt đầu & thời gian kết thúc </label>
-                                    <input name="app1" class="form-control form-control-solid"
-                                        placeholder="Pick date rage" id="app1" />
-                                    @error('date_start')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
-                                    @error('register_deadline')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
-                                </div>
+                                        <input name="app1" class="form-control form-control-solid"
+                                            placeholder="Pick date rage" id="app1" />
+                                        @error('date_start')
+                                            <p class="text-danger"> {{ $message }}</p>
+                                        @enderror
+                                        @error('register_deadline')
+                                            <p class="text-danger"> {{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                @else
+                                    <!--begin::Alert-->
+                                    <div class="alert alert-warning">
+                                        <!--begin::Icon-->
+                                        <span class="svg-icon svg-icon-2hx svg-icon-primary me-3"><i
+                                                class="bi bi-bell-fill"></i></span>
+                                        <!--end::Icon-->
+
+                                        <!--begin::Wrapper-->
+                                        <div class="d-flex flex-column">
+                                            <!--begin::Title-->
+                                            <h4 class="mb-1 text-dark">{{ \Str::title($contest_type_text) }} đang diễn ra
+                                                hoặc đã diễn
+                                                ra </h4>
+                                            <!--end::Title-->
+                                            <!--begin::Content-->
+                                            <span>Thời gian bắt đầu đã bắt đầu vào {{ $contest->date_start }} và sẽ không
+                                                thể thay đổi !</span>
+                                            <!--end::Content-->
+                                        </div>
+                                        <!--end::Wrapper-->
+                                    </div>
+                                    <!--end::Alert-->
+
+                                    <div class="form-group mb-10">
+                                        <label for="" class="form-label">Thời gian kết thúc</label>
+                                        <input type="text" value="{{ $contest->register_deadline }}"
+                                            class="form-control form-control-solid" name="app0" />
+                                        @error('register_deadline')
+                                            <p class="text-danger">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                @endif
+
                                 @contest
                                     <input type="hidden" name="start_register_time"
                                         value="{{ $contest->start_register_time }}">
@@ -108,9 +144,9 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-8">
+                            {{-- <div class="col-8">
 
-                                {{-- <div class="form-group mb-10">
+                                <div class="form-group mb-10">
                                     <label class="form-label" for="">Thời gian bắt đầu</label>
                                     <input value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime($contest->date_start)) }}"
                                         type="datetime-local" id="begin" max="" name="date_start"
@@ -151,15 +187,15 @@
                                             <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
-                                @endif --}}
+                                @endif
 
-                            </div>
+                            </div> --}}
                             <div class="col-4">
                                 @contest
                                     <div class="form-group mb-10">
                                         <label for="" class="form-label">Giới hạn thành viên trong đội</label>
-                                        <input value="{{ old('max_user', $contest->max_user) }}" name="max_user" type='number'
-                                            class="form-control" />
+                                        <input value="{{ old('max_user', $contest->max_user) }}" name="max_user"
+                                            type='number' class="form-control" />
                                         @error('max_user')
                                             <p class="text-danger">{{ $message }}</p>
                                         @enderror

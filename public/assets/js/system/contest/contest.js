@@ -15,8 +15,16 @@ const contestPage = {
     },
 
     selectChangeStatus: function() {
+        function removeDisabled(val, element, time) {
+            $(element).val(val);
+            return setTimeout(() => {
+                $(element).prop("disabled", false);
+            }, time);
+        }
         $(".form-select-status").on("change", function() {
             loadTast();
+            var that = this;
+            $(this).prop("disabled", true);
             let id = $(this).data("id");
             if ($(this).val() == 1) {
                 $.ajax({
@@ -32,6 +40,7 @@ const contestPage = {
                             "toastr-bottom-left",
                             "success"
                         );
+                        removeDisabled(0, that, 3000);
                     },
                 });
             } else {
@@ -48,6 +57,7 @@ const contestPage = {
                             "toastr-bottom-left",
                             "success"
                         );
+                        removeDisabled(1, that, 3000);
                     },
                 });
             }

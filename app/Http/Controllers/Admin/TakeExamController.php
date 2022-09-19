@@ -36,6 +36,7 @@ class TakeExamController extends Controller
         private MResultCapacityDetailInterface $resultCapacityDetail
     ) {
     }
+
     public function takeExamStudent(Request $request)
     {
         $checkUserTeam = false;
@@ -68,7 +69,7 @@ class TakeExamController extends Controller
                 return $this->responseApi(false, 'Bạn không thuộc đội thi nào trong cuộc thi !!');
             $teamRound = $this->roundTeam->where(['team_id' => $team_id, 'round_id' => $request->round_id])->first();
             if (is_null($teamRound)) return $this->responseApi(false, 'Đội thi của bạn đang chờ phê duyệt !!');
-            $takeExamCheck = $this->takeExam->findBy(['round_team_id' => $teamRound->id]);
+            $takeExamCheck = $this->takeExam->findBy(['round_team_id' => $teamRound->id], ['exam']);
             if (is_null($takeExamCheck)) {
                 if (count($this->exam->whereGet(['type' => 0])) == 0)
                     return $this->responseApi(false, "Đề thi chưa cập nhập !!");
@@ -82,27 +83,50 @@ class TakeExamController extends Controller
                 ]);
                 DB::commit();
                 $takeExam = $this->takeExam->find($takeExamModel->id);
-                if (Storage::disk('s3')->has($takeExam->exam->external_url)) {
-                    $urlExam = Storage::disk('s3')->temporaryUrl($takeExam->exam->external_url, now()->addMinutes(5));
-                } else {
-                    $urlExam = $takeExam->exam->external_url;
-                }
                 return $this->responseApi(true, $takeExam, [
-                    'exam' => $urlExam,
+                    'exam' => $takeExam->exam->external_url,
                     'status_take_exam' => $takeExam->status
                 ]);
             }
-            if (Storage::disk('s3')->has($takeExamCheck->exam->external_url)) {
-                $urlExam = Storage::disk('s3')->temporaryUrl($takeExamCheck->exam->external_url, now()->addMinutes(5));
-            } else {
-                $urlExam = $takeExamCheck->exam->external_url;
-            }
-            return $this->responseApi(true, $takeExamCheck, ['exam' => $urlExam]);
+            return $this->responseApi(true, $takeExamCheck);
         } catch (\Throwable $th) {
+            dd($th);
             DB::rollBack();
             return $this->responseApi(false, 'Lỗi hệ thống !!');
         }
     }
+
+    /**
+     * 
+     * @OA\Post(
+     *     path="/api/v1/take-exam/student-submit",
+     *     description="",
+     *     tags={"TakeExam","Contest","Api V1"},
+     *     summary="Authorization",
+     *     security={{"bearer_token":{}}},
+     *     @OA\RequestBody(
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                  @OA\Property(
+     *                      type="number",
+     *                      property="id",
+     *                  ),
+     *                  @OA\Property(
+     *                      type="string",
+     *                      property="result_url",
+     *                  ),
+     *                  @OA\Property(
+     *                      type="string",
+     *                      property="file_url",
+     *                  ),
+     *              ),
+     *          ),
+     *      ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
     public function takeExamStudentSubmit(Request $request, DB $dB)
     {
         $validate = Validator::make(
@@ -110,7 +134,7 @@ class TakeExamController extends Controller
             [
                 'id' => 'required',
                 'result_url' => 'url',
-                'file_url' => 'file|mimes:zip,docx,word'
+                'file_url' => 'file|mimes:zip,docx,word,rar'
             ],
             [
                 'result_url.url' => 'Sai định dạng !!!',
@@ -120,37 +144,48 @@ class TakeExamController extends Controller
             ]
         );
         if ($validate->fails())
-            return $this->responseApi(true, $validate->errors());
+            return $this->responseApi(false,  $validate->errors());
         $dB::beginTransaction();
         try {
-            $takeExam = $this->takeExamModel->find($request->id);
+            $takeExam = $this->takeExam->find($request->id);
             if (is_null($takeExam))
                 return $this->responseApi(false, 'Không tồn tại trên hệ thống !!');
-            if ($request->has('file_url')) {
-                $fileUrl = $request->file('file_url');
-                $filename = $this->uploadFile($fileUrl);
-                $takeExam->file_url = $filename;
-            } else {
-                if (Storage::disk('s3')->has($takeExam->file_url)) Storage::disk('s3')->delete($takeExam->file_url);
+            if ($takeExam->status == config('util.TAKE_EXAM_STATUS_COMPLETE') && empty($request->result_url) && empty($request->file_url)) {
+                if (Storage::disk('s3')->has($takeExam->file_url ?? "Default")) Storage::disk('s3')->delete($takeExam->file_url);
                 $takeExam->file_url = null;
-            }
-            if (request('result_url')) {
-                $takeExam->result_url = $request->result_url;
-            } else {
                 $takeExam->result_url = null;
-            }
-            if (!request('file_url') && !request('result_url')) {
                 $takeExam->status = config('util.TAKE_EXAM_STATUS_UNFINISHED');
+                $mesg = 'Hủy bài thành công !!';
+            } else {
+                if ($request->has('file_url')) {
+                    $fileUrl = $request->file('file_url');
+                    $filename = $this->uploadFile($fileUrl);
+                    $takeExam->file_url = $filename;
+                } else {
+                    if (Storage::disk('s3')->has($takeExam->file_url ?? "Default")) Storage::disk('s3')->delete($takeExam->file_url);
+                    $takeExam->file_url = null;
+                }
+                if (request('result_url')) {
+                    $takeExam->result_url = $request->result_url;
+                } else {
+                    $takeExam->result_url = null;
+                }
+                if (!request('file_url') && !request('result_url')) {
+                    $takeExam->status = config('util.TAKE_EXAM_STATUS_UNFINISHED');
+                }
+                $takeExam->status = config('util.TAKE_EXAM_STATUS_COMPLETE');
+                $mesg = 'Nộp bài thành công !!';
             }
-            $takeExam->status = config('util.TAKE_EXAM_STATUS_COMPLETE');
             $takeExam->save();
             $dB::commit();
-            return $this->responseApi(false, 'Nộp bài thành công !!');
+            return $this->responseApi(true, $mesg, ['takeExam' => $takeExam]);
         } catch (\Throwable $th) {
             $dB::rollBack();
+            dump($th);
             return $this->responseApi(false, 'Lỗi hệ thống !!');
         }
     }
+
     private function getContest($id, $type = 0)
     {
         try {

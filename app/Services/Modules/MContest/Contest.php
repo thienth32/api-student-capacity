@@ -96,6 +96,7 @@ class Contest implements MContestInterface
     {
         return $this->getList($flagCapacity, request())
             ->where('type', $flagCapacity ?  config('util.TYPE_TEST') : config('util.TYPE_CONTEST'))
+            ->orderBy('date_start', 'desc')
             ->paginate(request('limit') ?? 9);
     }
 
@@ -106,7 +107,7 @@ class Contest implements MContestInterface
             ->get();
     }
 
-    public function store($filename, $request)
+    public function store($filename, $request, $skills = [])
     {
 
         $contest = new $this->contest();
@@ -131,6 +132,8 @@ class Contest implements MContestInterface
         ));
         $contest->reward_rank_point =  $rewardRankPoint;
         $contest->save();
+        if ($contest->type == 1 && count($skills) > 0) $contest->skills()->sync($skills);
+
         return $contest;
     }
 
@@ -217,7 +220,7 @@ class Contest implements MContestInterface
                         }
                         return $q->whereIn('id', $arrId);
                     }
-                ); //
+                )->with(['judges']); //
             },
             'skills'
         ];
@@ -241,9 +244,10 @@ class Contest implements MContestInterface
         return $this->contest::find($id);
     }
 
-    public function update($contest, $data)
+    public function update($contest, $data, $skills = [])
     {
         $contest->update($data);
+        if ($contest->type == 1 && count($skills) > 0) $contest->skills()->sync($skills);
     }
 
     public function getContest()
@@ -266,7 +270,8 @@ class Contest implements MContestInterface
 
     public function getContestByDateNow($date)
     {
-        return $this->contest::whereDate('register_deadline', $date)
+        return $this->contest::whereMonth('register_deadline', $date->format("m"))
+            ->whereDay('register_deadline', $date->format('d'))
             ->get();
     }
 
@@ -306,6 +311,7 @@ class Contest implements MContestInterface
         $capacityArrId = array_unique($capacityArrId);
         unset($capacityArrId[array_search($id_capacity, $capacityArrId)]);
         return $this->contest::whereIn('id', $capacityArrId)
+            ->orderBy('id', 'desc')
             ->limit(request('limit') ?? 4)
             ->get()
             ->load(['rounds', 'skills', 'userCapacityDone']);

@@ -39,6 +39,7 @@
                     </select>
                 </div>
             </div>
+
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="form-group">
                     <label class="form-label">Tình trạng </label>
@@ -102,33 +103,6 @@
             <table class="table table-row-bordered table-row-gray-300 gy-7  table-hover ">
                 <thead>
                     <tr>
-                        {{-- <th scope="col">
-                            <span role="button" data-key="id"
-                                class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
-                                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
-                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                    style="width: 14px !important ; height: 14px !important" width="24px" height="24px"
-                                    viewBox="0 0 24 24" version="1.1">
-                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                        <polygon points="0 0 24 0 24 24 0 24" />
-                                        <rect fill="#000000" opacity="0.3"
-                                            transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
-                                            x="5" y="5" width="2" height="12" rx="1" />
-                                        <path
-                                            d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
-                                            fill="#000000" fill-rule="nonzero" />
-                                        <rect fill="#000000" opacity="0.3"
-                                            transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
-                                            x="17" y="7" width="2" height="12" rx="1" />
-                                        <path
-                                            d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
-                                            fill="#000000" fill-rule="nonzero"
-                                            transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
-                                    </g>
-                                </svg>
-                                <!--end::Svg Icon-->
-                            </span>
-                        </th> --}}
                         <th>
                             Tên tài khoản
                         </th>
@@ -140,25 +114,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- @php
-                        $total = $users->total();
-                    @endphp --}}
                     @forelse ($users as $key => $user)
                         <tr>
-                            {{-- @if (request()->has('sort'))
-                                <th scope="row">
-                                    @if (request('sort') == 'desc')
-                                        {{ (request()->has('page') && request('page') !== 1 ? $users->perPage() * (request('page') - 1) : 0) + $key + 1 }}
-                                    @else
-                                        {{ request()->has('page') && request('page') !== 1 ? $total - $users->perPage() * (request('page') - 1) - $key : ($total -= ($key == 0 ? 0 : 1)) }}
-                                    @endif
-                                </th>
-                            @else
-                                <th scope="row">
-                                    {{ (request()->has('page') && request('page') !== 1 ? $users->perPage() * (request('page') - 1) : 0) + $key + 1 }}
-                                </th>
-                            @endif --}}
-
                             <td>
                                 {{ $user->name }}
                             </td>

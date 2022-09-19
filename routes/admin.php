@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CandidateController;
+use App\Http\Controllers\Admin\CkeditorController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ExamController;
 use App\Http\Controllers\Admin\TeamController;
@@ -225,10 +226,15 @@ Route::prefix('contests')->group(function () {
 
 // Middleware phân quyền ban giám khảo chấm thi , khi nào gộp code sẽ chỉnh sửa lại route để phân quyền route
 Route::group([
-    'middleware' => 'role_admin'
+    'middleware' => 'role_admin:judge|admin|super admin'
 ], function () {
     Route::get('prinft-pdf', [PrintPDFController::class, 'printf'])->name('admin.prinf');
     Route::get('prinft-excel', [PrintExcelController::class, 'printf'])->name('admin.excel');
+});
+
+Route::group([
+    'middleware' => 'role_admin'
+], function () {
 
     Route::prefix('enterprise')->group(function () {
         Route::get('{id}/edit', [EnterpriseController::class, 'edit'])->name('admin.enterprise.edit');
@@ -360,6 +366,11 @@ Route::group([
         });
         Route::get('{id}', [CandidateController::class, 'detail'])->name('admin.candidate.detail');
     });
+
+    Route::get('dowload-frm-excel', function () {
+        return response()->download(public_path('assets/media/excel/excel_download.xlsx'));
+    })->name("admin.download.execel.pass");
+    Route::post('upload-image', [CkeditorController::class, 'updoadFile'])->name('admin.ckeditor.upfile');
 });
 
 Route::prefix('questions')->group(function () {
@@ -369,8 +380,8 @@ Route::prefix('questions')->group(function () {
     Route::get('edit/{id}', [QuestionController::class, 'edit'])->name('admin.question.edit');
     Route::post('update/{id}', [QuestionController::class, 'update'])->name('admin.question.update');
     Route::delete('destroy/{id}', [QuestionController::class, 'destroy'])->name('admin.question.destroy');
-    Route::post('un-status', [QuestionController::class, 'un_status'])->name('admin.question.un.status');
-    Route::post('re-status', [QuestionController::class, 're_status'])->name('admin.question.re.status');
+    Route::post('un-status/{id}', [QuestionController::class, 'un_status'])->name('admin.question.un.status');
+    Route::post('re-status/{id}', [QuestionController::class, 're_status'])->name('admin.question.re.status');
     Route::get('soft-delete', [QuestionController::class, 'softDeleteList'])->name('admin.question.soft.delete');
     Route::delete('delete/{id}', [QuestionController::class, 'delete'])->name('admin.question.delete');
     Route::get('restore-delete/{id}', [QuestionController::class, 'restoreDelete'])->name('admin.question.restore');
@@ -379,11 +390,10 @@ Route::prefix('questions')->group(function () {
     Route::get('export', [QuestionController::class, 'exportQe'])->name('admin.question.excel.export');
 });
 
-Route::get('api-view-check', function (App\Services\Modules\MContest\Contest $contest) {
-    $data = $contest->apiIndex();
-    return view('welcome');
-});
-
-Route::get('dowload-excel', function () {
-    return response()->download(public_path('assets/media/excel/excel-download.xlsx'));
-})->name("admin.download.execel.pass");
+// Route::get('api-view-check', function (App\Services\Modules\MContest\Contest $contest) {
+//     $data = $contest->apiIndex();
+//     return view('welcome');
+// });
+Route::get("dev", function () {
+    return "<h1>Chức năng đang phát triển</h1> ";
+})->name('admin.dev.show');

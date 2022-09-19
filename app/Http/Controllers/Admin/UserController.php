@@ -383,7 +383,6 @@ class UserController extends Controller
         return $this->responseApi(true, $data);
     }
 
-
     /**
      * @OA\Get(
      *     path="/api/v1/users/contest-joined",
@@ -393,6 +392,18 @@ class UserController extends Controller
      *         name="q",
      *         in="query",
      *         description="Tìm kiếm ",
+     *         required=false,
+     *     ),
+     *       @OA\Parameter(
+     *         name="limit",
+     *         in="query",
+     *         description="Giới hạn hiển thị",
+     *         required=false,
+     *     ),
+     *          @OA\Parameter(
+     *         name="status",
+     *         in="query",
+     *         description="Trạng thái",
      *         required=false,
      *     ),
      *     @OA\Parameter(
@@ -416,7 +427,6 @@ class UserController extends Controller
         $contest = $this->user->contestJoined();
         return $this->responseApi(true, $contest);
     }
-
 
     /**
      * @OA\Post(

@@ -62,6 +62,14 @@ return [
             "Dễ",
             "Trung bình",
         ],
+        "KEY_COLUMNS" => [
+            "TYPE" => 0,
+            "QUESTION" => 1,
+            "ANSWER" => 2,
+            "IS_CORRECT" => 3,
+            "RANK" => 4,
+            "SKILL" => 5
+        ],
         "IS_CORRECT" => "Đáp án đúng"
     ],
     "post-contest" => "post-contest",

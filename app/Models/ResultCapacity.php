@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ResultCapacity extends Model
 {
     use HasFactory, SoftDeletes;
+    use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
+    use \Znck\Eloquent\Traits\BelongsToThrough;
     protected $table = "result_capacity";
     protected $primaryKey = "id";
     public $fillable = [
@@ -36,5 +38,19 @@ class ResultCapacity extends Model
     public function resultCapacityDetail()
     {
         return $this->hasMany(ResultCapacityDetail::class, 'result_capacity_id');
+    }
+
+    public function contests()
+    {
+
+        return $this->belongsToThrough(
+            Contest::class,
+            [Round::class, Exam::class],
+            [
+                'contest_id',
+                'round_id',
+                'exam_id',
+            ]
+        );
     }
 }

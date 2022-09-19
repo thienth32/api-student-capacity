@@ -363,7 +363,7 @@
                                     </div>
                                     <!--end::Info-->
                                     <!--begin::Action-->
-                                    <a href="${data.type == 1 ? '/admin/capacity/'+data.id : '/admin/contest/'+data.id+'/detail'}" class="btn btn-bg-light btn-active-color-primary btn-sm">Xem chi tiết </a>
+                                    <a href="${data.type == 1 ? '/admin/capacity/'+data.id : '/admin/contests/'+data.id+'/detail'}" class="btn btn-bg-light btn-active-color-primary btn-sm">Xem chi tiết </a>
                                     <!--end::Action-->
                                 </div>
 
