@@ -67,7 +67,7 @@
                         <option value="">Chọn mã tuyển dụng</option>
                         @foreach ($posts as $post)
                             <option @selected(request('post_id') == $post->id) value="{{ $post->id }}">
-                                MTD{{ $post->id }}
+                                {{ $post->code_recruitment }}
                             </option>
                         @endforeach
                     </select>
@@ -188,7 +188,7 @@
 
                                 <td>
                                     <a href="{{ route('admin.post.detail', ['slug' => $key->post->slug]) }}">
-                                        MTD{{ $key->post_id }}</a>
+                                        {{ $key->post->code_recruitment }}</a>
                                 </td>
                                 <td>
                                     <button class="btn  btn-primary btn-sm" type="button" data-bs-toggle="modal"
@@ -383,7 +383,7 @@
                 </table>
                 {{ $candidates->appends(request()->all())->links('pagination::bootstrap-4') }}
             @else
-                <h2>Không tìm thấy thông tin tuyển dụng !!!</h2>
+                <h2>Chưa có thông tin tuyển dụng !!!</h2>
             @endif
 
         </div>

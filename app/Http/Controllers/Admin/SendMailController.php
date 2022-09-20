@@ -55,7 +55,7 @@ class SendMailController extends Controller
     {
         if (!$request->has('users')) return redirect()->back()->withErrors(['users' => 'Tài khoản nhận mail không thể bỏ trống !'])->withInput($request->input());
         $users = $request->users;
-        $cc = isset($request->cc) ? array_column(json_decode($request->cc), 'value') : [];
+        $cc = isset($request->cc) ? explode(",", $request->cc) : [];
         dispatch(new NotifySendMailUserContest(
             array_unique($users),
             [
@@ -71,7 +71,7 @@ class SendMailController extends Controller
     {
         if (!$request->has('users')) return redirect()->back()->withErrors(['users' => 'Tài khoản nhận mail không thể bỏ trống !'])->withInput($request->input());
         $users = $request->users;
-        $cc = isset($request->cc) ? array_column(json_decode($request->cc), 'value') : [];
+        $cc = isset($request->cc) ? explode(",", $request->cc) : [];
         dispatch(new NotifySendMailUserContest(
             array_unique($users),
             [

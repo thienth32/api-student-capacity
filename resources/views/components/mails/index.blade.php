@@ -87,8 +87,9 @@
                                     <h4 class="mb-1 text-dark">Note</h4>
                                     <!--end::Title-->
                                     <!--begin::Content-->
-                                    <p>$name = Tên người nhận</p>
+                                    <p>$fullName = Họ và tên người nhận </p>
                                     <p>$email = Email người nhận</p>
+                                    <p>$name = Tên người nhận</p>
                                     <!--end::Content-->
                                 </div>
                                 <!--end::Wrapper-->
@@ -115,7 +116,7 @@
                             <div class="form-group mb-10">
                                 <label class="form-label">CC</label>
                                 <input class="form-control form-control-solid" name="cc" value=""
-                                    id="kt_tagify_2" placeholder="Có thể để trống !" />
+                                    placeholder="Có thể để trống !" />
                                 {{-- <label for="" class="form-label">CC</label> --}}
                                 {{-- <select class="form-select form-select-solid" data-control="select2"
                                     data-placeholder="Select an option" data-allow-clear="true" name="users_cc[]"

@@ -44,8 +44,15 @@ trait TStatus
         return $data;
     }
 
+    /**
+     * Note
+     * dùng cho recruitment và post hoặc có trạng thái nổi bật .
+     * public function getModelDataHot($id)
+     * {
+     *      return $this->model->find($id);
+     * }
+     */
 
-    // dùng cho recruitment
     public function un_hot($id)
     {
         try {

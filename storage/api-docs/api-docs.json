@@ -368,6 +368,12 @@
                         "required": false
                     },
                     {
+                        "name": "postHot",
+                        "in": "query",
+                        "description": "Bài viết tuyển dụng hot,nổi bật (postHot='hot' list bài viết  hot, nổi bật ,\n     *         postHot='normal' list  bài viết bthuong",
+                        "required": false
+                    },
+                    {
                         "name": "orderBy",
                         "in": "query",
                         "description": "Các cột cần lọc  ",
@@ -376,7 +382,7 @@
                     {
                         "name": "post",
                         "in": "query",
-                        "description": "  post='post-contest' -> bài viết thuộc cuộc thi\r\n     *         post='post-capacity' -> bài viết thuộc test nl .\r\n     *         post='post-round' -> bài viết thuộc vòng thi .\r\n     *          post='post-recruitment' -> bài viết thuộc tuyển dụng\r\n     * ",
+                        "description": "  post='post-contest' -> bài viết thuộc cuộc thi\n     *         post='post-capacity' -> bài viết thuộc test nl .\n     *         post='post-round' -> bài viết thuộc vòng thi .\n     *          post='post-recruitment' -> bài viết thuộc tuyển dụng\n     * ",
                         "required": false
                     },
                     {
@@ -542,7 +548,7 @@
                     {
                         "name": "recruitmentHot",
                         "in": "query",
-                        "description": "Bài tuyển dụng Hot (recruitmentHot='hot' list tuyển dụng hot ,\n     * recruitmentHot='normal' list tuyển dụng bthuong\n     * )",
+                        "description": "Bài tuyển dụng Hot (recruitmentHot='hot' list tuyển dụng hot ,\r\n     * recruitmentHot='normal' list tuyển dụng bthuong\r\n     * )",
                         "required": false
                     },
                     {
@@ -554,7 +560,7 @@
                     {
                         "name": "progress",
                         "in": "query",
-                        "description": "Trạng thái của bài đăng\n     * 'pass_date'= sắp diễn ra,\n     * 'registration_date'= đang diễn ra\n     * 'miss_date'= đã diễn ra ",
+                        "description": "Trạng thái của bài đăng\r\n     * 'pass_date'= sắp diễn ra,\r\n     * 'registration_date'= đang diễn ra\r\n     * 'miss_date'= đã diễn ra ",
                         "required": false
                     }
                 ],
@@ -783,6 +789,51 @@
                         "description": "{ status: false , message : 'Not found' }"
                     }
                 }
+            }
+        },
+        "/api/v1/take-exam/student-submit": {
+            "post": {
+                "tags": [
+                    "TakeExam",
+                    "Contest",
+                    "Api V1"
+                ],
+                "summary": "Authorization",
+                "description": "",
+                "operationId": "3bcbd8c3f67dcf118cbe7c841579f8a1",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "id": {
+                                        "type": "number"
+                                    },
+                                    "result_url": {
+                                        "type": "string"
+                                    },
+                                    "file_url": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                },
+                "security": [
+                    {
+                        "bearer_token": []
+                    }
+                ]
             }
         },
         "/api/v1/take-exam/check-student-capacity": {
@@ -1300,6 +1351,18 @@
                         "name": "q",
                         "in": "query",
                         "description": "Tìm kiếm ",
+                        "required": false
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Giới hạn hiển thị",
+                        "required": false
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Trạng thái",
                         "required": false
                     },
                     {
