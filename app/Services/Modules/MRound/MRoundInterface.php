@@ -15,4 +15,8 @@ interface MRoundInterface
     public function find($id);
 
     public function getTeamByRoundId($id, $flagGetAll = false);
+
+    public function where($param);
+
+    public function whereIn($key, $val = []);
 }

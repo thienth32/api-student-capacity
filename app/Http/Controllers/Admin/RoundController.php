@@ -17,6 +17,7 @@ use App\Models\RoundTeam;
 use App\Models\TakeExam;
 use App\Models\Team;
 use App\Models\TypeExam;
+use App\Services\Modules\MContest\MContestInterface;
 use App\Services\Modules\MRound\MRoundInterface;
 use App\Services\Modules\MRoundTeam\MRoundTeamInterface;
 use App\Services\Modules\MTeam\MTeamInterface;
@@ -44,7 +45,8 @@ class RoundController extends Controller
         private TypeExam $type_exam,
         private Team $team,
         private MTeamInterface $teamRepo,
-        private DB $db
+        private DB $db,
+        private MContestInterface $mContestInterfacet
     ) {
     }
 
@@ -323,6 +325,7 @@ class RoundController extends Controller
             ->get();
         return view('pages.round.detail.detail', ['round' => $round, 'roundTeam' => $roundTeam]);
     }
+
     /**
      * Update trạng thái đội thi trong vòng thi tiếp theo
      */
@@ -681,6 +684,7 @@ class RoundController extends Controller
             return redirect()->back()->withErrors(['message', "Đã xảy ra lỗi !"]);
         }
     }
+
     /**
      * chi tiết đề thi theo từng đội thi trong vòng thi
      */
@@ -703,7 +707,6 @@ class RoundController extends Controller
             return redirect()->back();
         }
     }
-
 
     public function roundDetailTeamJudge($id, $teamId)
     {
@@ -764,7 +767,6 @@ class RoundController extends Controller
         return view('pages.round.add-mail', ['round' => $round, 'judges' => $judges, 'users' => array_unique($users)]);
     }
 
-
     /**
      * @OA\Get(
      *     path="/api/v1/round/{id_round}/team-me",
@@ -802,6 +804,40 @@ class RoundController extends Controller
             return $this->responseApi(true, $team);
         } catch (\Throwable $th) {
             return $this->responseApi(false);
+        }
+    }
+
+    public function nextRoundCapacity(Request $request)
+    {
+        try {
+            $user_id = auth('sanctum')->user()->id;
+            $contest = $this->mContestInterfacet->find($request->contest_id);
+            if (is_null($contest)) return $this->responseApi(false, 'Không tìm thấy cuộc thi !!');
+            $rounds = $this->roundRepo->where(['contest_id' => $request->contest_id])
+                ->select('id')->with(['result_capacity' => function ($q)  use ($user_id) {
+                    $q->where('result_capacity.user_id', $user_id);
+                }])->get();
+            $userJoinedRound = [];
+            $userHasNotJoinedRound = [];
+            foreach ($rounds as $round) {
+                if (count($round->result_capacity) > 0) {
+                    array_push($userJoinedRound, $round->id);
+                } else {
+                    array_push($userHasNotJoinedRound, $round->id);
+                }
+            }
+            // $roundNotJoinne = $this->roundRepo->whereIn('id', $userHasNotJoinedRound)
+            //     ->whereDate('start_time', '>=', now())->get();
+            if (count($rounds) === count($userJoinedRound)) {
+                return $this->responseApi(true, 'Bạn đã hoàn thành tất cả các vòng thi !!');
+            }
+            if (count($rounds) >= count($userHasNotJoinedRound)) {
+                $round = $this->roundRepo->whereIn('id', $userHasNotJoinedRound)
+                    ->orderBy('start_time', 'asc')->first();
+                return $this->responseApi(true, $round);
+            }
+        } catch (\Throwable $th) {
+            dd($th);
         }
     }
 }
