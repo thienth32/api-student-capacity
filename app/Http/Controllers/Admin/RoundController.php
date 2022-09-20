@@ -839,7 +839,7 @@ class RoundController extends Controller
             // $roundNotJoinne = $this->roundRepo->whereIn('id', $userHasNotJoinedRound)
             //     ->whereDate('start_time', '>=', now())->get();
             if (count($rounds) === count($userJoinedRound)) {
-                return $this->responseApi(true, 'Bạn đã hoàn thành tất cả các vòng thi !!');
+                return $this->responseApi(false, 'Bạn đã hoàn thành tất cả các vòng thi !!');
             }
             if (count($rounds) >= count($userHasNotJoinedRound)) {
                 $round = $this->roundRepo->whereIn('id', $userHasNotJoinedRound)
