@@ -60,7 +60,7 @@ class Enterprise
         $enterprise->link_web = $request->link_web;
         if ($request->has('logo')) {
             $fileImage =  $request->file('logo');
-            $logo = $this->uploadFile($fileImage);
+            $logo = $this->uploadFile($fileImage, $enterprise->logo);
             $enterprise->logo = $logo;
         }
         $enterprise->save();

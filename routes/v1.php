@@ -70,3 +70,5 @@ Route::prefix('users')->group(function () {
     Route::get('contest-joined', [UserController::class, 'contestJoined']);
     Route::post('edit', [UserController::class, 'updateDetailUser']);
 });
+
+Route::post('get-next-round-capacity', [RoundController::class, 'nextRoundCapacity']);

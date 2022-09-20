@@ -85,8 +85,10 @@
                                     name="contest_id[]" value="{{ serialize(old('contest_id')) }}">
                                     @foreach ($contests as $item)
                                         <option
-                                            @foreach ($data->contest as $value) @if ($value->id == $item->id)
-                                            {{ 'selected="selected"' }} @endif @endforeach
+                                            @foreach ($data->contest as $value)
+                                             @if ($value->id == $item->id)
+                                                {{ 'selected="selected"' }}
+                                                 @endif @endforeach
                                             value="{{ $item->id }}">
                                             {{ $item->name }}
                                         </option>

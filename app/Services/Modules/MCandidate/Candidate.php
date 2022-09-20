@@ -48,16 +48,41 @@ class Candidate
     }
     public function store($request)
     {
-        $ckeck = [
+        $ckeck_exist = $this->candidate::where('email', $request->email)->where('post_id', $request->post_id)->first();
+        // $oldCandiate = $ckeck_exist ? $ckeck_exist->file_link : null;
+        // $ckeck = [
+        //     'post_id' => $request->post_id,
+        //     'email' => $request->email,
+        // ];
+        // $updateOrCreate = [
+        //     'name' => $request->name,
+        //     'phone' => $request->phone,
+        //     'file_link' => $this->uploadFile($request->file_link, $oldCandiate),
+        // ];
+        if ($ckeck_exist) {
+            return  null;
+        }
+        $data = [
             'post_id' => $request->post_id,
             'email' => $request->email,
-        ];
-        $updateOrCreate = [
             'name' => $request->name,
             'phone' => $request->phone,
-            'file_link' => $this->uploadFile($request->file_link)
+            'file_link' => $this->uploadFile($request->file_link),
         ];
-        $candidate = $this->candidate::updateOrCreate($ckeck, $updateOrCreate);
+        $candidate = $this->candidate::create($data);
         return $candidate;
+    }
+    public function update($request)
+    {
+        $candidate = $this->candidate::find($request->id);
+        $candidate->email = $request->email;
+        $candidate->name = $request->name;
+        $candidate->phone = $request->phone;
+        if ($request->has('file_link')) {
+            $fileImage =  $request->file('file_link');
+            $file = $this->uploadFile($fileImage, $candidate->file_link);
+            $candidate->file_link = $file;
+        }
+        $candidate->save();
     }
 }
