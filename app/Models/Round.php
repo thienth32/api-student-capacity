@@ -21,6 +21,7 @@ class Round extends Model
     protected $primaryKey = "id";
     protected $appends = [
         'slug_name',
+        'user_status_join',
     ];
     public $fillable = [
         'name',
