@@ -76,4 +76,9 @@ return [
     "post-capacity" => "post-capacity",
     "post-round" => "post-round",
     "post-recruitment" => "post-recruitment",
+    /**bÀI VIẾT TUYỂN DỤNG HOT */
+    "POST_HOT" => 1,
+    /** bÀI VIẾT TUYỂN DỤNG THƯỜNG  */
+    "POST_NORMAL" => 0,
+
 ];

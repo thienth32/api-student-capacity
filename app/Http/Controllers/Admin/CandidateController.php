@@ -149,11 +149,17 @@ class CandidateController extends Controller
         if ($validator->fails()) return $this->responseApi(false, $validator->errors());
         $addCandidate =   $this->MCandidate->store($request);
         if (!$addCandidate) return $this->responseApi(false, ' Email của bạn đã ứng tuyển cho vị trị này !');
+
         $sizeFile = Storage::disk('s3')->size($addCandidate->file_link);
+
         $sizeFileFormat =  number_format($sizeFile / 1048576, 2);
+
         $addCandidate['sizeFile'] = $sizeFileFormat;
+
         $email = new SendMailUploadCV($addCandidate);
+
         dispatch($email);
+
         return $this->responseApi(true, 'Thành công !', ['data' => $addCandidate]);
     }
     public function ApiDetailCandidate($id)

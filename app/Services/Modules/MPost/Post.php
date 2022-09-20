@@ -40,6 +40,7 @@ class Post
         $startTime = $request->has('startTime') ? $request->startTime : null;
         $endTime = $request->has('endTime') ? $request->endTime : null;
         $sortBy = $request->has('sortBy') ? $request->sortBy : "desc";
+        $postHot =  $request->has('postHot') ? $request->postHot : null;
         $softDelete = $request->has('post_soft_delete') ? $request->post_soft_delete : null;
         if ($softDelete != null) {
             $query = $this->post::onlyTrashed()->where('title', 'like', "%$keyword%")->orderByDesc('deleted_at');
@@ -48,6 +49,13 @@ class Post
         $query = $this->post::where('title', 'like', "%$keyword%");
         if ($status != null) {
             $query->where('status', $status);
+        }
+        if ($postHot != null) {
+            if ($postHot == 'hot') {
+                $query->where('hot', config('util.POST_HOT'));
+            } elseif ($postHot == 'normal') {
+                $query->where('hot', config('util.POST_NORMAL'));
+            }
         }
         if ($progress != null) {
             if ($progress == 'unpublished') {

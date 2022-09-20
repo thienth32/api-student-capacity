@@ -63,6 +63,10 @@ class PostController extends Controller
     {
         return $this->modulesPost->find($id);
     }
+    public function getModelDataHot($id)
+    {
+        return $this->modulesPost->find($id);
+    }
     public function create(Request $request)
     {
         $this->db::beginTransaction();
@@ -230,6 +234,14 @@ class PostController extends Controller
      *         description="Lọc theo chiều asc hoặc desc ",
      *         required=false,
      *     ),
+     *
+     *         @OA\Parameter(
+     *         name="postHot",
+     *         in="query",
+     *         description="Bài viết tuyển dụng hot,nổi bật (postHot='hot' list bài viết  hot, nổi bật ,
+     *         postHot='normal' list  bài viết bthuong",
+     *         required=false,
+     *         ),
      *     @OA\Parameter(
      *         name="orderBy",
      *         in="query",

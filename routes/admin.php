@@ -347,6 +347,8 @@ Route::group([
 
         Route::post('un-status/{id}', [PostController::class, 'un_status'])->name('admin.post.un.status');
         Route::post('re-status/{id}', [PostController::class, 're_status'])->name('admin.post.re.status');
+        Route::post('un-hot/{id}', [PostController::class, 'un_hot'])->name('admin.post.un.hot');
+        Route::post('re-hot/{id}', [PostController::class, 're_hot'])->name('admin.post.re.hot');
         Route::post('store', [PostController::class, 'store'])->name('admin.post.store');
         Route::delete('{slug}', [PostController::class, 'destroy'])->name('admin.post.destroy');
         Route::prefix('list-soft-deletes')->group(function () {

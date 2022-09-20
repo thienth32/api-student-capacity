@@ -12,7 +12,7 @@ class Post extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = 'posts';
-    protected $fillable = ['code_recruitment', 'status_capacity', 'content', 'status', 'description', 'published_at', 'postable_id', 'postable_type', 'title', 'slug', 'thumbnail_url', 'link_to', 'user_id'];
+    protected $fillable = ['hot', 'code_recruitment', 'status_capacity', 'content', 'status', 'description', 'published_at', 'postable_id', 'postable_type', 'title', 'slug', 'thumbnail_url', 'link_to', 'user_id'];
     protected $casts = [
         'created_at' => FormatDate::class,
         'updated_at' =>  FormatDate::class,
