@@ -817,15 +817,25 @@ class RoundController extends Controller
                 ->select('id')->with(['result_capacity' => function ($q)  use ($user_id) {
                     $q->where('result_capacity.user_id', $user_id);
                 }])->get();
+
+            // dump($rounds->toArray());
             $userJoinedRound = [];
             $userHasNotJoinedRound = [];
             foreach ($rounds as $round) {
                 if (count($round->result_capacity) > 0) {
-                    array_push($userJoinedRound, $round->id);
+                    // dump($round->result_capacity[0]['status']);
+                    if ($round->result_capacity[0]['status'] == config('util.STATUS_RESULT_CAPACITY_DOING')) {
+                        array_push($userHasNotJoinedRound, $round->id);
+                    } else {
+                        array_push($userJoinedRound, $round->id);
+                    }
                 } else {
                     array_push($userHasNotJoinedRound, $round->id);
                 }
             }
+            // dump($userJoinedRound);
+            // dump($userHasNotJoinedRound);
+            // die;
             // $roundNotJoinne = $this->roundRepo->whereIn('id', $userHasNotJoinedRound)
             //     ->whereDate('start_time', '>=', now())->get();
             if (count($rounds) === count($userJoinedRound)) {
