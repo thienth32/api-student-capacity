@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendMailUploadCV;
+use App\Mail\MailUploadCV;
 use App\Models\Candidate;
 use App\Models\Post;
 use App\Models\Recruitment;
@@ -12,6 +14,7 @@ use App\Services\Traits\TStatus;
 use App\Services\Traits\TUploadImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -145,9 +148,21 @@ class CandidateController extends Controller
         $validator = Validator::make($request->all(), $rules, $message);
         if ($validator->fails()) return $this->responseApi(false, $validator->errors());
         $addCandidate =   $this->MCandidate->store($request);
+        if (!$addCandidate) return $this->responseApi(false, ' Email của bạn đã ứng tuyển cho vị trị này !');
         $sizeFile = Storage::disk('s3')->size($addCandidate->file_link);
         $sizeFileFormat =  number_format($sizeFile / 1048576, 2);
         $addCandidate['sizeFile'] = $sizeFileFormat;
-        if ($addCandidate) return $this->responseApi(true, 'Thành công !', ['data' => $addCandidate]);
+        $email = new SendMailUploadCV($addCandidate);
+        dispatch($email);
+        return $this->responseApi(true, 'Thành công !', ['data' => $addCandidate]);
+    }
+    public function ApiDetailCandidate($id)
+    {
+        $data = $this->candidate::find($id);
+        if (!$data) abort(404);
+        return $this->responseApi(
+            true,
+            $data
+        );
     }
 }

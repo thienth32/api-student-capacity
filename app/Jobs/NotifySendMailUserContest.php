@@ -32,7 +32,6 @@ class NotifySendMailUserContest implements ShouldQueue
                 'name' => $userFind->name,
                 'email' => $userFind->email,
             ], $this->data['subject']);
-
             Mail::to($userFind->email)
                 ->cc($this->data['cc'])
                 ->send(new FinnalPass([
