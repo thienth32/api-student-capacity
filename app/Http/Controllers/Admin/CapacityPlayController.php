@@ -209,7 +209,27 @@ class CapacityPlayController extends Controller
         }
     }
 
-    public function end($id)
+    public function end($code)
     {
+        $exam = $this->examRepo->getExamBtyTokenRoom($code, ['questions' => function ($q) {
+            return $q->with(['answers:id,quesion_id,content']);
+        }], ['questions']);
+
+        $PROGRESS = json_decode($exam->room_progress) ?? [];
+        if (count($PROGRESS) == $exam->questions_count) {
+            DB::beginTransaction();
+            try {
+                $this->resultCapacityRepo->updateStatusEndRenderScores([
+                    'exam' => $exam
+                ]);
+                DB::commit();
+                return redirect()->route('admin.capacit.play.show', ['id' => $exam->id]);
+            } catch (\Throwable $th) {
+                DB::rollBack();
+                return redirect()->back()->with('error', $th->getMessage());
+            }
+        } else {
+            return redirect()->back()->with('error', 'Chưa hoàn thành hết các câu hỏi !');
+        }
     }
 }

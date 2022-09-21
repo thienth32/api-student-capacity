@@ -8,6 +8,7 @@
             <div class="col-lg-6">
                 <div class="d-flex justify-content-start">
                     <h1>Chi tiết trò chơi {{ $exam->name }}
+                        <a href="{{ route('admin.capacit.play.run', ['id' => $exam->id]) }}">Bắt đầu </a>
                     </h1>
                 </div>
             </div>
