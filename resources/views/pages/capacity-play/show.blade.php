@@ -4,21 +4,36 @@
 @section('content')
 
     <div class="card card-flush p-4">
-        <a href="{{ route('admin.capacit.play.run', ['id' => $exam->room_code]) }}" class="btn btn-primary">Bắt đầu </a>
+        @if ($exam->status == 2)
+            <div class="alert alert-primary text-center">
+                <h2 class="text-primary"> <i class="bi bi-list-check"></i>Trò chơi đã kết thúc <button
+                        class="btn btn-primary">Xuất danh sách</button></h2>
+            </div>
+        @else
+            <div class="alert alert-primary text-center">
 
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="d-flex justify-content-start">
-                    <h2>{{ $exam->name }}
-                    </h2>
+                <a href="{{ route('admin.capacit.play.run', ['id' => $exam->room_code]) }}" class="btn btn-primary">
+                    <i class="bi bi-align-start"></i>Bắt đầu
+                </a>
+            </div>
+        @endif
+
+        <div class="row mb-3">
+            <div class="col-lg-3 col-12 mb-1">
+                <div class="bg-primary p-3 rounded  ">
+                    <div class="card card-flush p-2">
+                        <h2>Trò chơi : {{ $exam->name }} </h2>
+                        <h2>Mã trò chơi : <i>{{ $exam->room_code }}</i> </h2>
+                    </div>
                 </div>
             </div>
 
-            <div class="col-lg-6">
-                <div class="d-flex justify-content-start">
+            <div class="col-lg-9 col-12 mb-1">
+                <div class="bg-primary p-3 rounded   text-center">
                     <h2 class="mb-2">Mô tả</h2>
-                    <br>
-                    {!! $exam->description !!}
+                    <div class="card p-3 card-flush">
+                        {!! $exam->description !!}
+                    </div>
                 </div>
             </div>
 
