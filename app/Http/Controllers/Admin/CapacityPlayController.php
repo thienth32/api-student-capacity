@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Events\EndGameEvent;
 use App\Events\NextGameEvent;
 use App\Events\PlayGameEvent;
+use App\Events\UpdateGameEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Capacity\CapacityPlay;
 use App\Services\Modules\MAnswer\MAnswerInterface;
@@ -89,13 +90,13 @@ class CapacityPlayController extends Controller
             "exam_id" => $exam->id,
         ], ['user'], true, $exam->status == 2 ? 100 : 5)->toArray();
         $PROGRESS = json_decode($exam->room_progress) ?? [];
-        $data['question'] = count($PROGRESS) == 0 ? $exam->questions[0] : $this->questionRepo->findById(end($PROGRESS), ['answers:id,question_id,content']);
+        if (count($PROGRESS) == 0) return $this->responseApi(true, $data + ['status' => false]);
+        $data['question'] = $this->questionRepo->findById(end($PROGRESS), ['answers:id,question_id,content']);
         return $this->responseApi(true, $data);
     }
 
     public function start($code)
     {
-        // broadcast(new PlayGameEvent($code, 1, []));
         $exam = $this->examRepo->getExamBtyTokenRoom($code, ['questions' => function ($q) {
             return $q->with(['answers:id,question_id,content']);
         }], ['questions']);
@@ -138,12 +139,11 @@ class CapacityPlayController extends Controller
                             "room_progress" => json_encode($PROGRESS)
                         ]);
 
-                        broadcast(new NextGameEvent($code, $exam->token, $data['question'], $data['ranks']));
+                        broadcast(new NextGameEvent($code, $exam->token, $data['question']->toArray(), $data['ranks']));
                         return view('pages.capacity-play.play', $data);
                     } else {
 
                         $data['question'] = count($PROGRESS) == 0 ? $exam->questions[0] : $this->questionRepo->findById(end($PROGRESS));
-                        // if (count($PROGRESS) == 0) broadcast(new PlayGameEvent($code, $exam->token, $data['question']));
                         return view('pages.capacity-play.play', $data);
                     }
                 }
@@ -153,7 +153,7 @@ class CapacityPlayController extends Controller
                 $data['exam'] = $this->examRepo->updateCapacityPlay($exam->id, [
                     "room_progress" => json_encode($roomProgressUpdate)
                 ]);
-                broadcast(new PlayGameEvent($code, $exam->token, $data['question'], $data['ranks']));
+                broadcast(new PlayGameEvent($code, $exam->token, $data['question']->toArray(), $data['ranks']));
                 return view('pages.capacity-play.play', $data);
             }
         } else {
@@ -163,7 +163,7 @@ class CapacityPlayController extends Controller
             ]);
             $data['question'] = $exam->questions[0];
 
-            broadcast(new PlayGameEvent($code, $exam->token, $data['question'], $data['ranks']));
+            broadcast(new PlayGameEvent($code, $exam->token, $data['question']->toArray(), $data['ranks']));
             return view('pages.capacity-play.play', $data);
         }
     }
@@ -238,9 +238,8 @@ class CapacityPlayController extends Controller
             DB::commit();
             $dataRank = $this->resultCapacityRepo->where([
                 "exam_id" => $exam->id,
-                // "user_id" => auth('sanctum')->id(),
             ], ['user'], true, 5);
-
+            broadcast(new UpdateGameEvent($token, $dataRank->toArray()));
             return $this->responseApi(true, [
                 "ranks" => $dataRank
             ]);
