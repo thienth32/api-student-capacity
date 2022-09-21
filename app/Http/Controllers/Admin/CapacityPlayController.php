@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\EndGameEvent;
 use App\Events\NextGameEvent;
 use App\Events\PlayGameEvent;
 use App\Http\Controllers\Controller;
@@ -77,46 +78,82 @@ class CapacityPlayController extends Controller
         return view('pages.capacity-play.show', $data);
     }
 
-    public function start($code)
+    public function userContinueTest($code)
     {
         $exam = $this->examRepo->getExamBtyTokenRoom($code, ['questions' => function ($q) {
-            return $q->with(['answers:id,quesion_id,content']);
+            return $q->with(['answers:id,question_id,content']);
         }], ['questions']);
         $data = [];
+        $data['exam'] = $exam;
+        $data['ranks'] = $this->resultCapacityRepo->where([
+            "exam_id" => $exam->id,
+        ], ['user'], true, 5)->toArray();
+        $PROGRESS = json_decode($exam->room_progress) ?? [];
+        $data['question'] = count($PROGRESS) == 0 ? $exam->questions[0] : $this->questionRepo->findById(end($PROGRESS), ['answers:id,question_id,content']);
+        return $this->responseApi(true, $data);
+    }
 
+    public function start($code)
+    {
+        // broadcast(new PlayGameEvent($code, 1, []));
+        $exam = $this->examRepo->getExamBtyTokenRoom($code, ['questions' => function ($q) {
+            return $q->with(['answers:id,question_id,content']);
+        }], ['questions']);
+        // $data['question'] = $exam->questions[0];
+        // return view('pages.capacity-play.play', $data);
+
+        //
+        $data = [];
+        $data['exam'] = $exam;
+        $data['ranks'] = $this->resultCapacityRepo->where([
+            "exam_id" => $exam->id,
+            // "user_id" => auth('sanctum')->id(),
+        ], ['user'], true, 5)->toArray();
         if ($exam->room_token) {
-            if ($exam->room_progress) {
+            if (count(json_decode($exam->room_progress) ?? []) != 0) {
                 $PROGRESS = json_decode($exam->room_progress) ?? [];
 
-                if ($exam->questions_count >= count($PROGRESS)) {
-
-                    return redirect()->back()->with('error', 'Trò chơi đã kết thúc !');
+                if ($exam->questions_count == count($PROGRESS) && $exam->status == 2) {
+                    return redirect()->route('admin.capacit.play.show', ['id' => $exam->id])->with('error', 'Trò chơi đã kết thúc !');
                 } else {
-
                     if (request()->has('next')) {
 
-                        if (in_array(request()->next, $PROGRESS))
-                            return redirect()->back()->with('error', 'Câu hỏi đã làm !');
+                        if (in_array(request()->next, $PROGRESS)) {
+                            $data['question'] = $this->questionRepo->findById(request()->next, ['answers:id,question_id,content']);
+                            return view('pages.capacity-play.play', $data)->with('error', 'Câu hỏi đã làm !');
+                        }
 
-                        $qusesions = $exam->questions->map(function ($exam) {
+                        $questions = $exam->questions->map(function ($exam) {
                             return $exam->id;
                         });
 
-                        if (!in_array(request()->next, $qusesions))
-                            return redirect()->back()->with('error', 'Không tồn tại câu hỏi !');
+                        if (!in_array(request()->next, $questions->toArray())) {
+                            $data['question'] = $this->questionRepo->findById(request()->next, ['answers:id,question_id,content']);
+                            return view('pages.capacity-play.play', $data)->with('error', 'Không tồn tại câu hỏi !');
+                        }
 
-                        $data['question'] = $this->questionRepo->findById(request()->next);
-                        broadcast(new NextGameEvent($code, $exam->token, $data['question']));
+                        $data['question'] = $this->questionRepo->findById(request()->next, ['answers:id,question_id,content']);
+                        array_push($PROGRESS, $data['question']->id);
+                        $data['exam'] = $this->examRepo->updateCapacityPlay($exam->id, [
+                            "room_progress" => json_encode($PROGRESS)
+                        ]);
+
+                        broadcast(new NextGameEvent($code, $exam->token, $data['question'], $data['ranks']));
                         return view('pages.capacity-play.play', $data);
                     } else {
 
-                        $data['question'] = $this->questionRepo->findById(end($PROGRESS));
+                        $data['question'] = count($PROGRESS) == 0 ? $exam->questions[0] : $this->questionRepo->findById(end($PROGRESS));
+                        // if (count($PROGRESS) == 0) broadcast(new PlayGameEvent($code, $exam->token, $data['question']));
                         return view('pages.capacity-play.play', $data);
                     }
                 }
             } else {
-
-                $data['question'] = $exam->question[0];
+                $data['question'] = $exam->questions[0];
+                $roomProgressUpdate = [$data['question']->id];
+                $data['exam'] = $this->examRepo->updateCapacityPlay($exam->id, [
+                    "room_progress" => json_encode($roomProgressUpdate)
+                ]);
+                broadcast(new PlayGameEvent($code, $exam->token, $data['question'], $data['ranks']));
                 return view('pages.capacity-play.play', $data);
             }
         } else {
@@ -124,9 +161,9 @@ class CapacityPlayController extends Controller
             $exam = $this->examRepo->updateCapacityPlay($exam->id, [
                 "room_token" => MD5(uniqid() . time())
             ]);
-            $data['question'] = $exam->question[0];
+            $data['question'] = $exam->questions[0];
 
-            broadcast(new PlayGameEvent($code, $exam->token, $data['question']));
+            broadcast(new PlayGameEvent($code, $exam->token, $data['question'], $data['ranks']));
             return view('pages.capacity-play.play', $data);
         }
     }
@@ -201,8 +238,8 @@ class CapacityPlayController extends Controller
             DB::commit();
             $dataRank = $this->resultCapacityRepo->where([
                 "exam_id" => $exam->id,
-                "user_id" => auth('sanctum')->id(),
-            ], ['user'], true);
+                // "user_id" => auth('sanctum')->id(),
+            ], ['user'], true, 5);
 
             return $this->responseApi(true, [
                 "ranks" => $dataRank
@@ -215,25 +252,35 @@ class CapacityPlayController extends Controller
 
     public function end($code)
     {
+        // broadcast(new EndGameEvent($code));
+        // return 1;
         $exam = $this->examRepo->getExamBtyTokenRoom($code, ['questions' => function ($q) {
-            return $q->with(['answers:id,quesion_id,content']);
+            return $q->with(['answers:id,question_id,content']);
         }], ['questions']);
-
+        $data = [];
+        $data['exam'] = $exam;
         $PROGRESS = json_decode($exam->room_progress) ?? [];
         if (count($PROGRESS) == $exam->questions_count) {
             DB::beginTransaction();
             try {
+                $this->examRepo->updateCapacityPlay($exam->id, [
+                    "status" => 2
+                ]);
                 $this->resultCapacityRepo->updateStatusEndRenderScores([
                     'exam' => $exam
                 ]);
+
                 DB::commit();
+                broadcast(new EndGameEvent($code));
                 return redirect()->route('admin.capacit.play.show', ['id' => $exam->id]);
             } catch (\Throwable $th) {
                 DB::rollBack();
-                return redirect()->back()->with('error', $th->getMessage());
+                $data['question'] = $exam->questions[end($PROGRESS)];
+                return view('pages.capacity-play.play', $data)->with('error', $th->getMessage());
             }
         } else {
-            return redirect()->back()->with('error', 'Chưa hoàn thành hết các câu hỏi !');
+            $data['question'] = count($PROGRESS) == 0 ? $exam->questions[0] : $exam->questions[end($PROGRESS)];
+            return view('pages.capacity-play.play', $data)->with('error', 'Chưa hoàn thành hết các câu hỏi !');
         }
     }
 }

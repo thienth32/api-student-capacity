@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Exam;
 use Illuminate\Support\Facades\Broadcast;
 
 /*
@@ -17,7 +18,9 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
 
-Broadcast::channel('room.{room}', function ($user, $id) {
-
+// Broadcast::channel('room.{room}', [CapacityPlayController::class, 'channel']);
+Broadcast::channel('room.{room}', function ($user, $room) {
+    $exam = Exam::where('room_code', $room)->first();
+    if ($exam->status == 2) return false;
     return $user;
 });

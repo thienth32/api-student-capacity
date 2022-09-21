@@ -14,7 +14,7 @@ class PlayGameEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public function __construct(public $room, public $token, public $question)
+    public function __construct(public $room, public $token, public $question, public $ranks)
     {
     }
 

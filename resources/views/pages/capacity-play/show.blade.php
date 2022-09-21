@@ -4,6 +4,8 @@
 @section('content')
 
     <div class="card card-flush p-4">
+        <a href="{{ route('admin.capacit.play.run', ['id' => $exam->room_code]) }}" class="btn btn-primary">Bắt đầu </a>
+
         <div class="row">
             <div class="col-lg-6">
                 <div class="d-flex justify-content-start">
@@ -11,13 +13,13 @@
                     </h2>
                 </div>
             </div>
+
             <div class="col-lg-6">
                 <div class="d-flex justify-content-start">
                     <h2 class="mb-2">Mô tả</h2>
                     <br>
                     {!! $exam->description !!}
                 </div>
-
             </div>
 
         </div>

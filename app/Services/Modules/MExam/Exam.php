@@ -80,7 +80,9 @@ class Exam implements MExamInterface
 
     public function updateCapacityPlay($id, $data)
     {
-        return $this->model::whereId($id)->update($data);
+        $model = $this->model::whereId($id)->withCount(['questions'])->first();
+        $model->update($data);
+        return $model;
     }
 
     public function getExamBtyTokenRoom($code, $with = [], $withCount = [])

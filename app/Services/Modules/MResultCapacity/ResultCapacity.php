@@ -31,32 +31,30 @@ class ResultCapacity implements MResultCapacityInterface
 
     public function update($id, $data)
     {
-        return $this->model::wherId($id)->update($data);
+        return $this->model::whereId($id)->update($data);
     }
 
     public function find($id)
     {
     }
 
-    public function where($param = [], $with = [], $flagGet = false)
+    public function where($param = [], $with = [], $flagGet = false, $limit = 0)
     {
         $model = $this->model::hasRequest($param)->with($with);
         if ($flagGet)
-            return $model->orderBy('true_answer', 'desc')->get();
+            return $model->orderBy('true_answer', 'desc')->take($limit)->get();
         return $model->first();
     }
 
     public function updateStatusEndRenderScores($data = [])
     {
-        $resultCapacity = $this->where([
-            "exam_id" => $data['exam']->id,
-            "user_id" => auth('sanctum')->id(),
-        ], ['user'], true);
+        $resultCapacity = $this->model::where("exam_id", $data['exam']->id)
+            ->get();
         foreach ($resultCapacity as $key => $result) {
-            $cores = $data['exam']->true_answer / $data['exam']->questions_count;
+            $cores = ($result->true_answer / $data['exam']->questions_count) *  $data['exam']->max_ponit;
             $result->update([
                 "status" => 1,
-                "cores" => $cores
+                "scores" => $cores
             ]);
         };
     }
