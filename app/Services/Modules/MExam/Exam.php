@@ -69,10 +69,25 @@ class Exam implements MExamInterface
                 "name" => $data->name,
                 "description" => $data->description,
                 "max_ponit" => $data->max_ponit,
+                "ponit" => $data->max_ponit,
+                "external_url" => "null",
                 "room_code" => MD5(uniqid() . time()),
             ]
         );
         $exam->questions()->attach($data->questions ?? []);
         return $exam;
+    }
+
+    public function updateCapacityPlay($id, $data)
+    {
+        return $this->model::whereId($id)->update($data);
+    }
+
+    public function getExamBtyTokenRoom($code, $with = [], $withCount = [])
+    {
+        return $this->model::where('room_code', $code)
+            ->with($with)
+            ->withCount($withCount)
+            ->first();
     }
 }

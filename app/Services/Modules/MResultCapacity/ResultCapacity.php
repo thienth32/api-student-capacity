@@ -23,16 +23,26 @@ class ResultCapacity implements MResultCapacityInterface
         return $this->model::where('user_id', $user_id)
             ->whereIn('exam_id', $examArr)->first();
     }
+
     public function create($data = [])
     {
         return $this->model::create($data);
     }
+
+    public function update($id, $data)
+    {
+        return $this->model::wherId($id)->update($data);
+    }
+
     public function find($id)
     {
     }
 
-    public function where($param = [], $with = [])
+    public function where($param = [], $with = [], $flagGet = false)
     {
-        return $this->model::hasRequest($param)->with($with)->first();
+        $model = $this->model::hasRequest($param)->with($with);
+        if ($flagGet)
+            return $model->orderBy('true_answer', 'desc')->get();
+        return $model->first();
     }
 }

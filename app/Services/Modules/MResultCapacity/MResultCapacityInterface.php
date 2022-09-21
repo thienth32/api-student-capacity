@@ -7,6 +7,7 @@ interface MResultCapacityInterface
     public function findByUserExam($user_id, $exam_id);
     public function whereInExamUser($examArr = [], $user_id);
     public function create($data = []);
+    public function update($id, $data);
     public function find($id);
     public function where($param = [], $with = []);
 }

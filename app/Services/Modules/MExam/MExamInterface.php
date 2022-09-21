@@ -17,4 +17,8 @@ interface MExamInterface
     public function getExamCapacityPlay($params = [], $with = []);
 
     public function storeCapacityPlay($data);
+
+    public function updateCapacityPlay($id, $data);
+
+    public function getExamBtyTokenRoom($code, $with = []);
 }
