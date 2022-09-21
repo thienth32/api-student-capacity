@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\SendMailController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EnterpriseController;
+use App\Http\Controllers\admin\KeywordController;
 use App\Http\Controllers\Admin\RecruitmentController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\PrintPDFController;
@@ -367,6 +368,21 @@ Route::group([
             Route::get('{id}/restore', [CandidateController::class, 'delete'])->name('admin.candidate.soft.restore');
         });
         Route::get('{id}', [CandidateController::class, 'detail'])->name('admin.candidate.detail');
+    });
+    Route::prefix('keywords')->group(function () {
+        Route::get('{slug}/edit', [KeywordController::class, 'edit'])->name('admin.keyword.edit');
+        Route::put('{id}', [KeywordController::class, 'update'])->name('admin.keyword.update');
+        Route::get('', [KeywordController::class, 'index'])->name('admin.keyword.list');
+        Route::get('insert', [KeywordController::class, 'insert'])->name('admin.keyword.insert');
+        Route::post('un-status/{id}', [KeywordController::class, 'un_status'])->name('admin.keyword.un.status');
+        Route::post('re-status/{id}', [KeywordController::class, 're_status'])->name('admin.pokeywordst.re.status');
+        Route::post('store', [KeywordController::class, 'store'])->name('admin.keyword.store');
+        Route::delete('{slug}', [KeywordController::class, 'destroy'])->name('admin.keyword.destroy');
+        Route::prefix('list-soft-deletes')->group(function () {
+            Route::get('', [KeywordController::class, 'listRecordSoftDeletes'])->name('admin.keyword.list.soft.deletes');
+            Route::get('{id}/delete', [KeywordController::class, 'backUpPost'])->name('admin.keyword.soft.deletes');
+            Route::get('{id}/restore', [KeywordController::class, 'delete'])->name('admin.keyword.soft.restore');
+        });
     });
 
     Route::get('dowload-frm-excel', function () {

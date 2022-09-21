@@ -49,16 +49,6 @@ class Candidate
     public function store($request)
     {
         $ckeck_exist = $this->candidate::where('email', $request->email)->where('post_id', $request->post_id)->first();
-        // $oldCandiate = $ckeck_exist ? $ckeck_exist->file_link : null;
-        // $ckeck = [
-        //     'post_id' => $request->post_id,
-        //     'email' => $request->email,
-        // ];
-        // $updateOrCreate = [
-        //     'name' => $request->name,
-        //     'phone' => $request->phone,
-        //     'file_link' => $this->uploadFile($request->file_link, $oldCandiate),
-        // ];
         if ($ckeck_exist) {
             return  null;
         }
