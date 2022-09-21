@@ -46,6 +46,10 @@ class CapacityPlayController extends Controller
     {
         $data = [];
         $data['exam'] = $this->examRepo->findById($id);
+        $data['exam']->load(['questions' => function ($q) {
+            return $q->with(['answers']);
+        }]);
+        // dd($data['exam']->toArray());
         return view('pages.capacity-play.show', $data);
     }
 }

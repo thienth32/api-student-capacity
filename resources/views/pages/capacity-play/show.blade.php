@@ -7,11 +7,75 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="d-flex justify-content-start">
-                    <h1>Chi tiết trò chơi {{ $exam->name }}
-                    </h1>
+                    <h2>{{ $exam->name }}
+                    </h2>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="d-flex justify-content-start">
+                    <h2 class="mb-2">Mô tả</h2>
+                    <br>
+                    {!! $exam->description !!}
+                </div>
+
+            </div>
+
+        </div>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalId">
+            DANH SÁCH CÂU HỎI
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="modalId" tabindex="-1" role="dialog" aria-labelledby="modalTitleId"
+            aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalTitleId">Danh sách câu hỏi</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="list-group">
+                                @foreach ($exam->questions as $key => $question)
+                                    <div class="list-group-item list-group-item-action">
+                                        <div
+                                            class="d-flex w-100 justify-content-between align-content-center align-items-center mb-4">
+                                            <h5 class="mb-1 d-flex">{{ $key + 1 }} : {!! $question->content !!}</h5>
+                                            {{-- <small class="text-muted">3 days ago</small> --}}
+                                            <div>
+                                                <span>Mức độ câu hỏi</span>
+                                                @if ($question->rank == config('util.RANK_QUESTION_EASY'))
+                                                    <small class="btn badge bg-success">DỄ</small>
+                                                @elseif($question->rank == config('util.RANK_QUESTION_MEDIUM'))
+                                                    <small class="btn badge bg-success">VỪA PHẢI</small>
+                                                @elseif($question->rank == config('util.RANK_QUESTION_DIFFICULT'))
+                                                    <small class="btn badge bg-success">KHÓ</small>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <ul class=" list-group-flush">
+                                            @foreach ($question->answers as $answer)
+                                                <li
+                                                    class="list-group-item {{ $answer->is_correct == config('util.ANSWER_TRUE') ? 'active' : '' }}">
+                                                    {{ $answer->content }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endforeach
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+                    </div>
                 </div>
             </div>
         </div>
+
 
     </div>
 
