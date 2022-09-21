@@ -26,9 +26,11 @@
                 <thead>
                     <tr>
                         <th>Tên trò chơi </th>
+                        <th>Mã trò chơi </th>
                         <th>Chi tiết trò chơi </th>
                         <th>Số điểm </th>
                         <th>Tình trạng </th>
+                        <th>Tiến độ </th>
                         <th>Thao tác </th>
                     </tr>
                 </thead>
@@ -36,10 +38,13 @@
                     @forelse ($exams as $key => $exam)
                         <tr>
                             <td> {{ $exam->name }} </td>
+                            <td> {{ $exam->room_code }} </td>
                             <td> {{ $exam->description }} </td>
                             <td> {{ $exam->max_ponit }} </td>
-                            <td> {{ $exam->max_ponit }} </td>
-                            <td> Tiếp tục </td>
+                            <td> {{ $exam->room_token == null ? 'Chưa bắt đầu' : 'Đã bắt đầu ' }} </td>
+                            <td> {{ count($exam->questions) }} / {{ count(json_decode($exam->room_progress) ?? []) }} </td>
+                            <td> <a href="{{ route('admin.capacit.play.show', ['id' => $exam->id]) }}">Xem chi tiết </a>
+                            </td>
                         </tr>
                     @empty
                     @endforelse

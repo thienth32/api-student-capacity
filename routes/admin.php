@@ -147,6 +147,7 @@ Route::group([
         Route::get('create', [CapacityPlayController::class, 'create'])->name('admin.capacit.play.create');
         Route::post('store', [CapacityPlayController::class, 'store'])->name('admin.capacit.play.store');
         Route::get('{id}', [CapacityPlayController::class, 'show'])->name('admin.capacit.play.show');
+        Route::get('run-now/{id}', [CapacityPlayController::class, 'start'])->name('admin.capacit.play.run');
     });
 
     Route::prefix('teams')->group(function () {
