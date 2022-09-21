@@ -87,7 +87,7 @@ class CapacityPlayController extends Controller
         $data['exam'] = $exam;
         $data['ranks'] = $this->resultCapacityRepo->where([
             "exam_id" => $exam->id,
-        ], ['user'], true, 5)->toArray();
+        ], ['user'], true, $exam->status == 2 ? 100 : 5)->toArray();
         $PROGRESS = json_decode($exam->room_progress) ?? [];
         $data['question'] = count($PROGRESS) == 0 ? $exam->questions[0] : $this->questionRepo->findById(end($PROGRESS), ['answers:id,question_id,content']);
         return $this->responseApi(true, $data);
