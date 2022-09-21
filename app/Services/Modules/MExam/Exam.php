@@ -54,4 +54,25 @@ class Exam implements MExamInterface
             ->with(['user'])
             ->get();
     }
+
+    public function getExamCapacityPlay($params = [], $with = [])
+    {
+        return $this->model::whereNull('round_id')
+            ->with($with)
+            ->paginate(request('limit') ?? 5);
+    }
+
+    public function storeCapacityPlay($data)
+    {
+        $exam = $this->model::create(
+            [
+                "name" => $data->name,
+                "description" => $data->description,
+                "max_ponit" => $data->max_ponit,
+                "room_code" => MD5(uniqid() . time()),
+            ]
+        );
+        $exam->questions()->attach($data->questions ?? []);
+        return $exam;
+    }
 }
