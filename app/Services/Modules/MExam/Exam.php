@@ -58,6 +58,9 @@ class Exam implements MExamInterface
     public function getExamCapacityPlay($params = [], $with = [])
     {
         return $this->model::whereNull('round_id')
+            ->where(function ($q) {
+                return $q->search(request()->q ?? null, ['name', 'room_code', 'description']);
+            })
             ->with($with)
             ->orderBy('id', 'desc')
             ->paginate(request('limit') ?? 5);
