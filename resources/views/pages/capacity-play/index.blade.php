@@ -42,7 +42,7 @@
                             <td> {{ $exam->description }} </td>
                             <td> {{ $exam->max_ponit }} </td>
                             <td>
-                                <div class="alert alert-primary">
+                                <div class="alert {{ $exam->status == 2 ? 'alert-primary' : 'alert-info' }} ">
                                     {{ $exam->status == 2 ? 'Đã kết thúc' : ($exam->room_token ? 'Đã bắt đầu ' : 'Chưa bắt đầu') }}
                                 </div>
                             </td>
