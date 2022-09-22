@@ -155,24 +155,48 @@
 
     @error('success')
         <script>
+            toastr.options = {
+                closeButton: true,
+                debug: false,
+                newestOnTop: false,
+                progressBar: true,
+                positionClass: "toastr-bottom-left",
+                preventDuplicates: false,
+                onclick: null,
+                showDuration: "300",
+                hideDuration: "1000",
+                timeOut: "5000",
+                extendedTimeOut: "1000",
+                showEasing: "swing",
+                hideEasing: "linear",
+                showMethod: "fadeIn",
+                hideMethod: "fadeOut",
+            };
             toastr.success("{{ $message }}");
         </script>
     @enderror
     @error('error')
         <script>
+            toastr.options = {
+                closeButton: true,
+                debug: false,
+                newestOnTop: false,
+                progressBar: true,
+                positionClass: "toastr-bottom-left",
+                preventDuplicates: false,
+                onclick: null,
+                showDuration: "300",
+                hideDuration: "1000",
+                timeOut: "5000",
+                extendedTimeOut: "1000",
+                showEasing: "swing",
+                hideEasing: "linear",
+                showMethod: "fadeIn",
+                hideMethod: "fadeOut",
+            };
             toastr.error("{{ $message }}");
         </script>
     @enderror
-    @if (session()->has('error'))
-        <script>
-            toastr.warning("{{ session()->get('error') }}");
-        </script>
-    @endif
-    @if (session()->has('success'))
-        <script>
-            toastr.success("{{ session()->get('success') }}");
-        </script>
-    @endif
     <!--end::Page Custom Javascript-->
     <!--end::Javascript-->
 </body>

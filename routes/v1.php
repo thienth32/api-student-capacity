@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\CapacityPlayController;
 use App\Http\Controllers\Admin\ContestController;
 use App\Http\Controllers\Admin\RoundController;
 use App\Http\Controllers\Admin\TakeExamController as AdminTakeExamController;
@@ -73,7 +72,3 @@ Route::prefix('users')->group(function () {
 });
 
 Route::post('get-next-round-capacity', [RoundController::class, 'nextRoundCapacity']);
-
-Route::get("auth-room-play/{room}", [CapacityPlayController::class, 'autTokenPlay']);
-Route::get("connect-room/{room}", [CapacityPlayController::class, 'userContinueTest']);
-Route::post("sumit-room/{code}", [CapacityPlayController::class, 'submitQuestionCapacityPlay']);

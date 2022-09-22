@@ -117,12 +117,6 @@ return [
                 "link" => "admin.question.index",
                 "role" => $ROLE_HAS_ADMINS
             ],
-            [
-                "name" => "Trò chơi đánh giá trực tiếp ",
-                "param" => '',
-                "link" => "admin.capacit.play.index",
-                "role" => $ROLE_HAS_ADMINS
-            ],
         ]
     ], // Test nang luc
     [

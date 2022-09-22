@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Admin\CandidateController;
-use App\Http\Controllers\Admin\CapacityPlayController;
 use App\Http\Controllers\Admin\CkeditorController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ExamController;
@@ -142,15 +141,6 @@ Route::prefix('rounds')->group(function () {
 Route::group([
     'middleware' => 'role_admin'
 ], function () {
-    Route::prefix('capacity-play')->group(function () {
-        Route::get('', [CapacityPlayController::class, 'index'])->name('admin.capacit.play.index');
-        Route::get('create', [CapacityPlayController::class, 'create'])->name('admin.capacit.play.create');
-        Route::post('store', [CapacityPlayController::class, 'store'])->name('admin.capacit.play.store');
-        Route::get('{id}', [CapacityPlayController::class, 'show'])->name('admin.capacit.play.show');
-        Route::get('run-now/{id}', [CapacityPlayController::class, 'start'])->name('admin.capacit.play.run');
-        Route::get('end/{id}', [CapacityPlayController::class, 'end'])->name('admin.capacit.play.end');
-    });
-
     Route::prefix('teams')->group(function () {
         //list
         Route::get('', [TeamController::class, 'ListTeam'])->name('admin.teams'); // Api list Danh sách teams theo cuộc thi. phía view

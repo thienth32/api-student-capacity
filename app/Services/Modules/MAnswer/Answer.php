@@ -4,7 +4,7 @@ namespace App\Services\Modules\MAnswer;
 
 use App\Models\Answer as ModelsAnswer;
 
-class Answer implements MAnswerInterface
+class Answer
 {
 
     public function __construct(

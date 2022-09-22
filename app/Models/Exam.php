@@ -13,7 +13,7 @@ class Exam extends Model
 {
     use SoftDeletes;
     protected $table = 'exams';
-    protected $fillable = ['name', 'description', 'max_ponit', 'ponit', 'external_url', 'round_id', 'time', 'time_type', "type", "status", "room_code", "room_token", "room_progress"];
+    protected $fillable = ['name', 'description', 'max_ponit', 'ponit', 'external_url', 'round_id', 'time', 'time_type', "type", "status"];
     use HasFactory;
     protected $casts = [
         'created_at' => FormatDate::class,
