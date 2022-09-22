@@ -384,7 +384,7 @@
                                             @if (count($question->answers) > 0)
                                                 @foreach ($question->answers as $answer)
                                                     <li
-                                                        class="list-group-item {{ $answer->is_correct == 1 ? 'active' : '' }}">
+                                                        class="list-group-item {{ $answer->is_correct == config('util.ANSWER_TRUE') ? 'active' : '' }}">
                                                         {{ $answer->content }}</li>
                                                 @endforeach
                                             @endif

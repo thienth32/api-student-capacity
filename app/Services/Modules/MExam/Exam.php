@@ -54,4 +54,43 @@ class Exam implements MExamInterface
             ->with(['user'])
             ->get();
     }
+
+    public function getExamCapacityPlay($params = [], $with = [])
+    {
+        return $this->model::whereNull('round_id')
+            ->with($with)
+            ->orderBy('id', 'desc')
+            ->paginate(request('limit') ?? 5);
+    }
+
+    public function storeCapacityPlay($data)
+    {
+        $exam = $this->model::create(
+            [
+                "name" => $data->name,
+                "description" => $data->description,
+                "max_ponit" => $data->max_ponit,
+                "ponit" => $data->max_ponit,
+                "external_url" => "null",
+                "room_code" => MD5(uniqid() . time()),
+            ]
+        );
+        $exam->questions()->attach($data->questions ?? []);
+        return $exam;
+    }
+
+    public function updateCapacityPlay($id, $data)
+    {
+        $model = $this->model::whereId($id)->withCount(['questions'])->first();
+        $model->update($data);
+        return $model;
+    }
+
+    public function getExamBtyTokenRoom($code, $with = [], $withCount = [])
+    {
+        return $this->model::where('room_code', $code)
+            ->with($with)
+            ->withCount($withCount)
+            ->first();
+    }
 }
