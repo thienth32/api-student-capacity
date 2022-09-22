@@ -130,4 +130,26 @@
 
 @endsection
 @section('page-script')
+    <script>
+        const code = "{{ $exam->room_code }}";
+        const token = "{{ auth()->user()->createToken('token_admin')->plainTextToken }}";
+    </script>
+    <script src="http://localhost:6002/socket.io/socket.io.js"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
+    <script>
+        window.Echo.channel("public.channel").listen("PublicChannel", function(data) {
+            console.log(data);
+        });
+
+        window.Echo.join('room.' + code)
+            .here((users) => {
+                console.log('User online ', users); //
+            })
+            .joining((user) => {
+                console.log('User joining', user); //
+            })
+            .leaving((user) => {
+                this.users = us;
+            })
+    </script>
 @endsection
