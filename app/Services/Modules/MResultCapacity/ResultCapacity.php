@@ -36,6 +36,7 @@ class ResultCapacity implements MResultCapacityInterface
 
     public function find($id)
     {
+        return $this->model::find($id);
     }
 
     public function where($param = [], $with = [], $flagGet = false, $limit = 0)
@@ -46,16 +47,16 @@ class ResultCapacity implements MResultCapacityInterface
         return $model->first();
     }
 
-    public function updateStatusEndRenderScores($data = [])
-    {
-        $resultCapacity = $this->model::where("exam_id", $data['exam']->id)
-            ->get();
-        foreach ($resultCapacity as $key => $result) {
-            $cores = ($result->true_answer / $data['exam']->questions_count) *  $data['exam']->max_ponit;
-            $result->update([
-                "status" => 1,
-                "scores" => $cores
-            ]);
-        };
-    }
+    // public function updateStatusEndRenderScores($data = [])
+    // {
+    //     $resultCapacity = $this->model::where("exam_id", $data['exam']->id)
+    //         ->get();
+    //     foreach ($resultCapacity as $result) {
+    //         $cores = (int) $result->true_answer / (int) count(json_decode($data['exam']->room_progress) ?? []);
+    //         $result->update([
+    //             "status" => 1,
+    //             "scores" => $cores * (int) $data['exam']->max_ponit
+    //         ]);
+    //     };
+    // }
 }

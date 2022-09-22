@@ -6,42 +6,73 @@
     <div class="card card-flush p-4">
         @if ($exam->status == 2)
             <div class="alert alert-primary text-center">
-                <h2 class="text-primary"> <i class="bi bi-list-check"></i>Trò chơi đã kết thúc <button
-                        class="btn btn-primary">Xuất danh sách</button></h2>
+                <h2 class="text-primary"> Trò chơi đã kết thúc </h2>
             </div>
         @else
             <div class="alert alert-primary text-center">
 
                 <a href="{{ route('admin.capacit.play.run', ['id' => $exam->room_code]) }}" class="btn btn-primary">
-                    <i class="bi bi-align-start"></i>Bắt đầu
+                    Bắt đầu
                 </a>
             </div>
         @endif
 
         <div class="row mb-3">
-            <div class="col-lg-3 col-12 mb-1">
-                <div class="bg-primary p-3 rounded  ">
+            <div class="col-lg-4 col-12 mb-1">
+                <div class="alert alert-primary p-3 rounded  ">
                     <div class="card card-flush p-2">
                         <h2>Trò chơi : {{ $exam->name }} </h2>
                         <h2>Mã trò chơi : <i>{{ $exam->room_code }}</i> </h2>
+                        <h2>Điểm thưởng : <strong>{{ $exam->max_ponit }}</strong>
+                        </h2>
+                        <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal"
+                            data-bs-target="#modalId">
+                            Bộ câu hỏi
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <div class="col-lg-9 col-12 mb-1">
-                <div class="bg-primary p-3 rounded   text-center">
+            <div class="col-lg-8 col-12 mb-1">
+                <div class="alert alert-primary p-3 rounded   text-center">
                     <h2 class="mb-2">Mô tả</h2>
                     <div class="card p-3 card-flush">
                         {!! $exam->description !!}
                     </div>
+
                 </div>
             </div>
 
         </div>
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalId">
-            DANH SÁCH CÂU HỎI
-        </button>
+
+
+        <div class="col-lg-12 col-12 mt-1">
+            <div class="alert alert-primary p-3 rounded   text-center">
+                <h2 class="mb-2">Danh sách tài khoản </h2>
+                <div class="row">
+                    @if (count($ranks) > 0)
+                        @foreach ($ranks as $key => $rank)
+                            <div class="col-lg-3 col-12 mb-1">
+                                <div class="card   p-3 card-flush">
+                                    <h3>{{ $rank->user->name }} - <i class="bi bi-award-fill"></i> Top {{ $key + 1 }}
+                                    </h3>
+                                    <span>Điểm : {{ $rank->scores }}</span>
+                                    <span>Trả lời đúng : {{ $rank->true_answer }}</span>
+                                    <span>Trả lời sai : {{ $rank->false_answer }}</span>
+                                </div>
+                            </div>
+                        @endforeach
+                    @else
+                        <div class="   col-12 mb-1">
+                            <div class="card   p-3 card-flush">
+                                <h3>Chưa có danh sách !</h3>
+                            </div>
+                        </div>
+                    @endif
+
+                </div>
+            </div>
+        </div>
 
         <!-- Modal -->
         <div class="modal fade" id="modalId" tabindex="-1" role="dialog" aria-labelledby="modalTitleId"

@@ -41,7 +41,11 @@
                             <td> {{ $exam->room_code }} </td>
                             <td> {{ $exam->description }} </td>
                             <td> {{ $exam->max_ponit }} </td>
-                            <td> {{ $exam->room_token == null ? 'Chưa bắt đầu' : 'Đã bắt đầu ' }} </td>
+                            <td>
+                                <div class="alert alert-primary">
+                                    {{ $exam->status == 2 ? 'Đã kết thúc' : ($exam->room_token ? 'Đã bắt đầu ' : 'Chưa bắt đầu') }}
+                                </div>
+                            </td>
                             <td> {{ count($exam->questions) }} / {{ count(json_decode($exam->room_progress) ?? []) }} </td>
                             <td> <a href="{{ route('admin.capacit.play.show', ['id' => $exam->id]) }}">Xem chi tiết </a>
                             </td>

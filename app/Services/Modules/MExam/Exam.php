@@ -59,6 +59,7 @@ class Exam implements MExamInterface
     {
         return $this->model::whereNull('round_id')
             ->with($with)
+            ->orderBy('id', 'desc')
             ->paginate(request('limit') ?? 5);
     }
 

@@ -21,6 +21,6 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 // Broadcast::channel('room.{room}', [CapacityPlayController::class, 'channel']);
 Broadcast::channel('room.{room}', function ($user, $room) {
     $exam = Exam::where('room_code', $room)->first();
-    if ($exam->status == 2) return false;
+    if ($exam->status == 2 || $exam->room_token) return false;
     return $user;
 });

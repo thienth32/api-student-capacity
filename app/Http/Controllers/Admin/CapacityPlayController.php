@@ -70,11 +70,17 @@ class CapacityPlayController extends Controller
 
     public function show($id)
     {
+        // $result = $this->resultCapacityRepo->find(237);
+        // $cores = (int) $result->true_answer / (int) count(json_decode($data['exam']->room_progress) ?? []);
+        // dd($cores);
         $data = [];
         $data['exam'] = $this->examRepo->findById($id);
         $data['exam']->load(['questions' => function ($q) {
             return $q->with(['answers']);
         }]);
+        $data['ranks'] = $this->resultCapacityRepo->where([
+            "exam_id" => $id,
+        ], ['user'], true, 100);
         // dd($data['exam']->toArray());
         return view('pages.capacity-play.show', $data);
     }
@@ -84,11 +90,17 @@ class CapacityPlayController extends Controller
         $exam = $this->examRepo->getExamBtyTokenRoom($code, ['questions' => function ($q) {
             return $q->with(['answers:id,question_id,content']);
         }], ['questions']);
+        if (!$exam) return $this->responseApi(false);
         $data = [];
         $data['exam'] = $exam;
         $data['ranks'] = $this->resultCapacityRepo->where([
             "exam_id" => $exam->id,
         ], ['user'], true, $exam->status == 2 ? 100 : 5)->toArray();
+        $data['rank'] = $this->resultCapacityRepo->where([
+            "exam_id" => $exam->id,
+            "user_id" => auth('sanctum')->id()
+        ], ['user']) ?? false;
+        if ($data['rank']) $data['rank'] = $data['rank']->toArray();
         $PROGRESS = json_decode($exam->room_progress) ?? [];
         if (count($PROGRESS) == 0) return $this->responseApi(true, $data + ['status' => false]);
         $data['question'] = $this->questionRepo->findById(end($PROGRESS), ['answers:id,question_id,content']);
@@ -110,6 +122,12 @@ class CapacityPlayController extends Controller
             "exam_id" => $exam->id,
             // "user_id" => auth('sanctum')->id(),
         ], ['user'], true, 5)->toArray();
+        $data['rank'] = $this->resultCapacityRepo->where([
+            "exam_id" => $exam->id,
+            "user_id" => auth('sanctum')->id()
+        ], ['user']);
+
+        if ($data['rank']) $data['rank'] = $data['rank']->toArray();
         if ($exam->room_token) {
             if (count(json_decode($exam->room_progress) ?? []) != 0) {
                 $PROGRESS = json_decode($exam->room_progress) ?? [];
@@ -148,7 +166,10 @@ class CapacityPlayController extends Controller
                     }
                 }
             } else {
-                $data['question'] = $exam->questions[0];
+
+                $data['question'] = request()->next ?
+                    $this->questionRepo->findById(request()->next, ['answers:id,question_id,content']) :
+                    $exam->questions[0];
                 $roomProgressUpdate = [$data['question']->id];
                 $data['exam'] = $this->examRepo->updateCapacityPlay($exam->id, [
                     "room_progress" => json_encode($roomProgressUpdate)
@@ -158,12 +179,15 @@ class CapacityPlayController extends Controller
             }
         } else {
 
+            $data['question'] = $data['exam']->questions[0];
             $exam = $this->examRepo->updateCapacityPlay($exam->id, [
-                "room_token" => MD5(uniqid() . time())
+                "room_token" => MD5(uniqid() . time()),
+                "room_progress" => json_encode([$data['question']->id])
             ]);
-            $data['question'] = $exam->questions[0];
+
 
             broadcast(new PlayGameEvent($code, $exam->token, $data['question']->toArray(), $data['ranks']));
+            $data['exam'] = $exam;
             return view('pages.capacity-play.play', $data);
         }
     }
@@ -175,18 +199,41 @@ class CapacityPlayController extends Controller
         $flagIsCorrect = 0;
         $flagIsNotCorrect = 0;
         $flagDonot = 0;
-
-        if (count($request->answers) > 0) {
-            foreach ($answers as $answer) {
-                if ($this->answerRepo->findById($answer)->is_correct) {
-                    $flagIsCorrect++;
-                } else {
-                    $flagIsNotCorrect++;
+        $answersIsCorrect = $this->questionRepo->findById($request->question_id, ['answers' => function ($q) {
+            return $q->where('is_correct', 1);
+        }])->answers->map(function ($data) {
+            return $data->id;
+        });
+        if (count($answers) >= 0) {
+            if (count($answersIsCorrect) == count($answers)) {
+                $count = 0;
+                foreach ($answersIsCorrect as $k => $v) {
+                    $flag = false;
+                    if (in_array($v, $answers)) $flag = true;
+                    if ($flag) $count = $count + 1;
                 }
+                if ($count == count($answersIsCorrect)) {
+                    $flagIsCorrect = 1;
+                } else {
+                    $flagIsNotCorrect = 1;
+                }
+            } else {
+                $flagIsNotCorrect = 1;
             }
         } else {
             $flagDonot = 1;
         }
+        // if (count($request->answers) > 0) {
+        //     foreach ($answers as $answer) {
+        //         if ($this->answerRepo->findById($answer)->is_correct) {
+        //             $flagIsCorrect++;
+        //         } else {
+        //             $flagIsNotCorrect++;
+        //         }
+        //     }
+        // } else {
+        //     $flagDonot = 1;
+        // }
 
         DB::beginTransaction();
         try {
@@ -199,12 +246,22 @@ class CapacityPlayController extends Controller
                 $true_answer = $resultCapacity->true_answer + $flagIsCorrect;
                 $false_answer = $resultCapacity->false_answer + $flagIsNotCorrect;
                 $donot_answer = $resultCapacity->donot_answer + $flagDonot;
-
-                $this->resultCapacityRepo->update($resultCapacity->id, [
-                    "true_answer" => $true_answer,
-                    "false_answer" => $false_answer,
-                    "donot_answer" => $donot_answer
-                ]);
+                if ($request->flagEvent) {
+                    $scores = (int) $true_answer / (int) count(json_decode($exam->room_progress) ?? []);
+                    $this->resultCapacityRepo->update($resultCapacity->id, [
+                        "true_answer" => $true_answer,
+                        "false_answer" => $false_answer,
+                        "donot_answer" => $donot_answer,
+                        "scores" => $scores * $exam->max_ponit,
+                        'status' => 1
+                    ]);
+                } else {
+                    $this->resultCapacityRepo->update($resultCapacity->id, [
+                        "true_answer" => $true_answer,
+                        "false_answer" => $false_answer,
+                        "donot_answer" => $donot_answer
+                    ]);
+                }
             } else {
                 $resultCapacity = $this->resultCapacityRepo->create([
                     "status" => 0,
@@ -239,9 +296,16 @@ class CapacityPlayController extends Controller
             $dataRank = $this->resultCapacityRepo->where([
                 "exam_id" => $exam->id,
             ], ['user'], true, 5);
+            $rank = $this->resultCapacityRepo->where([
+                "exam_id" => $exam->id,
+                "user_id" => auth('sanctum')->id()
+            ], ['user']);
+            if ($rank) $rank = $rank->toArray();
             broadcast(new UpdateGameEvent($token, $dataRank->toArray()));
+
             return $this->responseApi(true, [
-                "ranks" => $dataRank
+                "ranks" => $dataRank,
+                'rank' => $rank
             ]);
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -262,12 +326,12 @@ class CapacityPlayController extends Controller
         if (count($PROGRESS) == $exam->questions_count) {
             DB::beginTransaction();
             try {
-                $this->examRepo->updateCapacityPlay($exam->id, [
+                $data['exam'] = $this->examRepo->updateCapacityPlay($exam->id, [
                     "status" => 2
                 ]);
-                $this->resultCapacityRepo->updateStatusEndRenderScores([
-                    'exam' => $exam
-                ]);
+                // $this->resultCapacityRepo->updateStatusEndRenderScores([
+                //     'exam' => $exam
+                // ]);
 
                 DB::commit();
                 broadcast(new EndGameEvent($code));

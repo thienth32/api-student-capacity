@@ -10,5 +10,5 @@ interface MResultCapacityInterface
     public function update($id, $data);
     public function find($id);
     public function where($param = [], $with = [], $flagGet = false, $limit = 0);
-    public function updateStatusEndRenderScores($data = []);
+    // public function updateStatusEndRenderScores($data = []);
 }
