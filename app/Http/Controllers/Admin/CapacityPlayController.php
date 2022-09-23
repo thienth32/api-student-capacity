@@ -301,7 +301,7 @@ class CapacityPlayController extends Controller
                 "user_id" => auth('sanctum')->id()
             ], ['user']);
             if ($rank) $rank = $rank->toArray();
-            broadcast(new UpdateGameEvent($token, $dataRank->toArray()));
+            broadcast(new UpdateGameEvent($token, $dataRank->toArray()))->toOthers();
 
             return $this->responseApi(true, [
                 "ranks" => $dataRank,
