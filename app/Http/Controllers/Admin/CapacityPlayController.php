@@ -75,6 +75,7 @@ class CapacityPlayController extends Controller
         // dd($cores);
         $data = [];
         $data['exam'] = $this->examRepo->findById($id);
+        if ($data['exam']->round_id) abort(404);
         $data['exam']->load(['questions' => function ($q) {
             return $q->with(['answers']);
         }]);
