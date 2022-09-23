@@ -1,8 +1,19 @@
 @extends('layouts.main')
-@section('title', 'Chi tiết trò chơi ')
-@section('page-title', 'Chi tiết trò chơi ')
+@section('title', 'Quản lý trò chơi trực tiếp')
+@section('page-title', 'Quản lý trò chơi trực tiếp')
 @section('content')
-
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <ol class="breadcrumb text-muted fs-6 fw-bold">
+                <li class="breadcrumb-item pe-3">
+                    <a href="{{ route('admin.capacit.play.index') }}" class="pe-3">
+                        Danh sách trò chơi trực tiếp
+                    </a>
+                </li>
+                <li class="breadcrumb-item px-3 text-muted">Chi tiết </li>
+            </ol>
+        </div>
+    </div>
     <div class="card card-flush p-4">
         @if ($exam->status == 2)
             <div class="alert alert-primary text-center">
@@ -22,7 +33,8 @@
                 <div class="alert alert-primary p-3 rounded  ">
                     <div class="card card-flush p-2">
                         <h2>Trò chơi : {{ $exam->name }} </h2>
-                        <h2>Mã trò chơi : <i>{{ $exam->room_code }}</i> </h2>
+                        <h2>Mã trò chơi : <button data-bs-toggle="tooltip" title="Copy to" type="button"
+                                class="copy_to btn btn-primary btn-sm">{{ $exam->room_code }}</button> </h2>
                         <h2>Điểm thưởng : <strong>{{ $exam->max_ponit }}</strong>
                         </h2>
                         <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal"
@@ -130,4 +142,5 @@
 
 @endsection
 @section('page-script')
+    <script src="{{ asset('assets/js/system/capacity-play/capacity-play.js') }}"></script>
 @endsection
