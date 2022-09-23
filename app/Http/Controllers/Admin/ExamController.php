@@ -98,25 +98,16 @@ class ExamController extends Controller
     {
         try {
             $type = 0;
-
             $round = $this->round::find($id_round)->load('contest');
             if (is_null($round)) return abort(404);
-
             if ($round->contest->type == 1) $type = 1;
             if ($type == 0) {
                 $validatorContest = Validator::make(
                     $request->all(),
                     [
-                        'external_url' => 'required|mimes:zip,docx,word|file|max:10000',
-                    ],
-                    [
-                        'external_url.mimes' => trans('validate.mimes'),
-                        'external_url.required' => trans('validate.required'),
-                        'external_url.file' => trans('validate.file'),
-                        'external_url.max' => trans('validate.maxFile'),
+                        'external_url' => 'required|mimes:zip,docx,word|max:10000',
                     ]
                 );
-
                 if ($validatorContest->fails()) {
                     return redirect()->back()->withErrors($validatorContest)->withInput();
                 }
@@ -127,12 +118,7 @@ class ExamController extends Controller
                         'time' => 'required',
                         'time_type' => 'required'
                     ],
-                    [
-                        'time.required' => trans('validate.required'),
-                        'time_type.required' => trans('validate.required'),
-                    ]
                 );
-
                 if ($validatorCapacity->fails()) {
                     return redirect()->back()->withErrors($validatorCapacity)->withInput();
                 }

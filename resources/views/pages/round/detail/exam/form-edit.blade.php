@@ -1,54 +1,53 @@
 @extends('layouts.main')
-@section('title', 'Chỉnh đề thi')
-@section('page-title', 'Chỉnh đề thi ')
+@if ($round->contest->type !== 1)
+    @section('title', 'Quản lý cuộc thi')
+    @section('page-title', 'Quản lý cuộc thi ')
+@else
+    @section('title', 'Quản lý test năng lực')
+    @section('page-title', 'Quản lý test năng lực ')
+@endif
 @section('content')
-    <div class=" card card-flush p-5">
-        <div class=" mb-4">
-            <div class="row">
-                <div class="col-lg-12">
-                    <ol class="breadcrumb text-muted fs-6 fw-bold">
 
-                        @if ($round->contest->type !== 1)
-                            <li class="breadcrumb-item pe-3">
-                                <a href="{{ route('admin.contest.list') }}" class="pe-3">Cuộc thi </a>
-                            </li>
-                            <li class="breadcrumb-item px-3 ">
-                                <a href="{{ route('admin.contest.show', ['id' => $round->contest->id]) }}" class="pe-3">
-                                    {{ $round->contest->name }}
-                                </a>
-                            </li>
-                            <li class="breadcrumb-item pe-3">
-                                <a href="{{ route('admin.round.list') }}" class="pe-3">Vòng thi </a>
-                            </li>
-                            <li class="breadcrumb-item px-3 text-muted">
-                                <a href="{{ route('admin.round.detail', ['id' => $round->id]) }}">
-                                    {{ $round->name }}
-                                </a>
-                            </li>
-                            <li class="breadcrumb-item pe-3">
-                                <a href="{{ route('admin.exam.index', ['id' => $round->id]) }}">
-                                    Danh sách đề
-                                </a>
-                            </li>
-                            <li class="breadcrumb-item px-3 text-muted">Chỉnh sửa đề thi</li>
-                        @else
-                            <li class="breadcrumb-item pe-3">
-                                <a href="{{ route('admin.contest.list') . '?type=1' }}" class="pe-3">Test năng lực </a>
-                            </li>
-                            <li class="breadcrumb-item px-3 ">
-                                <a href="{{ route('admin.contest.show.capatity', ['id' => $round->contest->id]) }}"
-                                    class="pe-3">
-                                    Capacity {{ $round->contest->name }}
-                                </a>
-                            </li>
-                            <li class="breadcrumb-item px-3 text-muted">Chỉnh sửa đề thi</li>
-                        @endif
-                    </ol>
-                </div>
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <ol class="breadcrumb text-muted fs-6 fw-bold">
 
-            </div>
+                @if ($round->contest->type !== 1)
+                    <li class="breadcrumb-item pe-3">
+                        <a href="{{ route('admin.contest.list') }}" class="pe-3">Danh sách cuộc thi </a>
+                    </li>
+                    <li class="breadcrumb-item px-3 ">
+                        <a href="{{ route('admin.contest.show', ['id' => $round->contest->id]) }}" class="pe-3">
+                            {{ $round->contest->name }}
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item pe-3">
+                        <a href="{{ route('admin.contest.detail.round', ['id' => $round->contest->id], 'contest_id=' . $round->contest->id) }}"
+                            class="pe-3">Danh sách vòng thi </a>
+                    </li>
+                    <li class="breadcrumb-item px-3 text-muted">
+                        <a href="{{ route('admin.round.detail', ['id' => $round->id]) }}">
+                            {{ $round->name }}
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item pe-3">
+                        <a href="{{ route('admin.exam.index', ['id' => $round->id]) }}">
+                            Danh sách đề
+                        </a>
+                    </li>
+                @else
+                    <li class="breadcrumb-item pe-3">
+                        <a href="{{ route('admin.contest.list') . '?type=1' }}" class="pe-3">Danh sách test năng lực </a>
+                    </li>
+                    <li class="breadcrumb-item px-3 ">
+                        <a href="{{ route('admin.contest.show.capatity', ['id' => $round->contest->id]) }}" class="pe-3">
+                            Capacity :{{ $round->contest->name }}
+                        </a>
+                    </li>
+                @endif
+                <li class="breadcrumb-item px-3 text-muted">Chỉnh sửa đề thi</li>
+            </ol>
         </div>
-
 
     </div>
 
@@ -58,8 +57,8 @@
 
             <div class=" card card-flush  p-5">
                 <form id="myForm"
-                    action="{{ route('admin.exam.update', ['id_exam' => $exam->id, 'id' => $round->id]) }}"
-                    method="post" enctype="multipart/form-data">
+                    action="{{ route('admin.exam.update', ['id_exam' => $exam->id, 'id' => $round->id]) }}" method="post"
+                    enctype="multipart/form-data">
                     @method('put')
                     @csrf
                     <div class="row">
@@ -110,8 +109,9 @@
                                 </div>
                             @endif
                         </div>
-                        @if ($round->contest->type == config('util.TYPE_TEST'))
-                            <div class="col-lg-12 row form-group mb-4">
+                        <div class="col-lg-12 row">
+
+                            @if ($round->contest->type == config('util.TYPE_TEST'))
                                 <div class="col-lg-6 form-group mb-4">
                                     <label class="form-label" for="">Kiểu thi </label>
                                     <select id="select-contest" name="time_type"
@@ -134,8 +134,8 @@
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
-                            </div>
-                        @endif
+                            @endif
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-primary">Lưu</button>
                 </form>

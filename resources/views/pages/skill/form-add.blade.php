@@ -23,7 +23,7 @@
                     @csrf
 
                     <div class="form-group mb-10">
-                        <label for="">Tên kỹ năng</label>
+                        <label class=" form-label" for="">Tên kỹ năng</label>
                         <input type="text" name="name" value="{{ old('name') }}" class=" form-control"
                             placeholder="">
                         @error('name')
@@ -37,7 +37,7 @@
                             <div class="col-8">
 
                                 <div class="form-group mb-10">
-                                    <label for="">Mã kỹ năng</label>
+                                    <label class=" form-label"for="">Mã kỹ năng</label>
                                     <input type="text" name="short_name" value="{{ old('short_name') }}"
                                         class=" form-control" placeholder="">
                                     @error('short_name')
@@ -63,9 +63,13 @@
                                             ])
                                         @endforeach
                                     </select>
-
-
-
+                                </div>
+                                <div class="form-group mb-10">
+                                    <label class=" form-label"for="">Mô tả kỹ năng</label>
+                                    <textarea class="form-control" name="description" id="kt_docs_ckeditor_classic" rows="3">{{ old('description') }}</textarea>
+                                    @error('description')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="col-4">
@@ -88,13 +92,7 @@
 
                     </div>
 
-                    <div class="form-group mb-10">
-                        <label for="">Mô tả kỹ năng</label>
-                        <textarea class="form-control" name="description" id="kt_docs_ckeditor_classic" rows="3">{{ old('description') }}</textarea>
-                        @error('description')
-                            <p class="text-danger">{{ $message }}</p>
-                        @enderror
-                    </div>
+
 
                     <div class="form-group mb-10 ">
                         <button type="submit" name="" id="" class="btn btn-success btn-lg btn-block">Lưu

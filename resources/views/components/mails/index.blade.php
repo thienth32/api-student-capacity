@@ -3,10 +3,10 @@
 @section('page-title', 'Thông báo ')
 @section('content')
 
+    {!! $bred !!}
     <div class="card card-flush p-4">
 
         {{-- Breadcrumb --}}
-        {!! $bred !!}
 
         <form id="formContest" action="{{ $link }}" method="post" enctype="multipart/form-data">
             @csrf

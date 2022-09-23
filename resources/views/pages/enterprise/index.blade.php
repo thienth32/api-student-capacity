@@ -1,12 +1,12 @@
 @extends('layouts.main')
-@section('title', 'Danh sách doanh nghiệp')
-@section('page-title', 'Danh sách doanh nghiệp')
+@section('title', 'Quản lý doanh nghiệp')
+@section('page-title', 'Quản lý doanh nghiệp')
 @section('content')
     <div class="card card-flush p-4">
         <div class="row">
             <div class="col-lg-6">
                 <div class="d-flex justify-content-start">
-                    <h1>Quản lý doanh nghiệp</h1>
+                    <h1>Danh sách doanh nghiệp</h1>
                     <a class="mx-3" href="{{ route('admin.enterprise.list') }}">
                         <span data-bs-toggle="tooltip" title="Tải lại trang " role="button"
                             class="refresh-btn svg-icon svg-icon-primary svg-icon-2x">

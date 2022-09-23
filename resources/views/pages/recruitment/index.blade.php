@@ -7,7 +7,7 @@
             <div class="col-lg-6">
                 <div class="d-flex justify-content-start">
                     <h1>
-                        Quản lý tuyển dụng
+                        Danh sách tuyển dụng
                     </h1>
                     <a class="mx-2" href="{{ route('admin.recruitment.list') }}">
                         <span data-bs-toggle="tooltip" title="Tải lại trang " role="button"

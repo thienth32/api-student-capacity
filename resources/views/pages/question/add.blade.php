@@ -1,6 +1,6 @@
 @extends('layouts.main')
-@section('title', 'Thêm mới câu hỏi')
-@section('page-title', 'Thêm mới câu hỏi')
+@section('title', 'Quản lý bộ câu hỏi')
+@section('page-title', 'Quản lý bộ câu hỏi')
 @section('content')
     <div class="row mb-4">
         <div class="col-lg-12">
@@ -14,9 +14,9 @@
             </ol>
         </div>
     </div>
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card card-flush h-lg-100 p-10">
+    <div class="card card-flush h-lg-100 p-10">
+        <div class="row">
+            <div class="col-lg-12">
 
                 <form id="formQuestion" action="{{ route('admin.question.store') }}" method="post"
                     enctype="multipart/form-data">

@@ -1,36 +1,36 @@
 @extends('layouts.main')
-@section('title', 'Doanh nghiệp tài trợ ')
-@section('page-title', 'Doanh nghiệp tài trợ ')
+@section('title', 'Quản lý cuộc thi')
+@section('page-title', 'Quản lý cuộc thi')
 @section('content')
-    <div class=" card card-flush p-5">
-        <div class="row pb-5">
-            <div class="col-lg-12">
-                <ol class="breadcrumb text-muted fs-6 fw-bold">
-                    <li class="breadcrumb-item pe-3">
-                        <a href="{{ route('admin.contest.list') }}" class="pe-3">Cuộc
-                            thi</a>
-                    </li>
-                    <li class="breadcrumb-item px-3 ">
-                        <a href="{{ route('admin.contest.show', ['id' => $contest->id]) }}" class="pe-3">
-                            {{ $contest->name }}
-                        </a>
-                    </li>
-                    <li class="breadcrumb-item px-3 text-muted">
-                        Danh sách doanh nghiệp tài trợ
-                    </li>
-                </ol>
-            </div>
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <ol class="breadcrumb text-muted fs-6 fw-bold">
+                <li class="breadcrumb-item pe-3">
+                    <a href="{{ route('admin.contest.list') }}" class="pe-3">
+                        Danh sách cuộc thi
+                    </a>
+                </li>
+                <li class="breadcrumb-item px-3 ">
+                    <a href="{{ route('admin.contest.show', ['id' => $contest->id]) }}" class="pe-3">
+                        {{ $contest->name }}
+                    </a>
+                </li>
+                <li class="breadcrumb-item px-3 text-muted">
+                    Danh sách doanh nghiệp tài trợ
+                </li>
+            </ol>
         </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <form id="formTeam" action="{{ route('admin.contest.detail.enterprise.attach', ['id' => $contest->id]) }}"
-                    method="POST">
+    </div>
+    <div class=" card card-flush p-5">
+        <form id="formTeam" action="{{ route('admin.contest.detail.enterprise.attach', ['id' => $contest->id]) }}"
+            method="POST">
+            <div class="row">
+                <div class="col-11">
                     @csrf
                     <label for="" class="form-label">Doanh nghiệp</label>
-                    <select multiple class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                    <select multiple class="form-select select2-hidden-accessible" data-control="select2"
                         data-hide-search="false" tabindex="-1" aria-hidden="true" name="enterprise_id[]"
                         value="{{ old('enterprise_id') }}">
-
                         @php
                             $index = -1;
                         @endphp
@@ -47,12 +47,14 @@
                             @endif
                         @endforeach
                     </select>
+                </div>
+                <div class="col-1 mt-auto">
                     <button type="submit" class="btn btn-primary"> Thêm </button>
-                </form>
+                </div>
             </div>
-        </div>
-
+        </form>
     </div>
+
 
     <div class="row">
 

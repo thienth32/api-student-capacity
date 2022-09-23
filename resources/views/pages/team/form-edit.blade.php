@@ -1,6 +1,6 @@
 @extends('layouts.main')
-@section('title', 'Cập nhập đội thi')
-@section('page-title', 'Cập nhập đội thi')
+@section('title', 'Quản lý đội thi')
+@section('page-title', 'Quản lý đội thi')
 @section('content')
     <div class="row mb-4">
         <div class="col-lg-12">

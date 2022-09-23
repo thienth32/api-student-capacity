@@ -36,7 +36,7 @@
                         <div id="resultArrayUser" class="">
                         </div>
                     </div>
-                    <button type="button" id="attachJudges" class="btn btn-primary"> Thêm </button>
+                    <button type="button" id="attachJudges" class="btn btn-primary btn-sm"> Thêm </button>
                 </form>
             </div>
         </div>
