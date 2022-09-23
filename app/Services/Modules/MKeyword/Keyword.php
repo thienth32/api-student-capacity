@@ -3,13 +3,10 @@
 namespace App\Services\Modules\MKeyword;
 
 use App\Models\Keyword as ModelsKeyword;
-use App\Services\Traits\TUploadImage;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
 
-class Keyword
+
+class Keyword implements MKeywordInterface
 {
-    use TUploadImage;
     public function __construct(
 
         private ModelsKeyword $modelKeyword,
@@ -17,37 +14,24 @@ class Keyword
     ) {
     }
 
-    public function getList(Request $request)
+    public function getList($request)
     {
-        $keyword = $request->has('keyword') ? $request->keyword : "";
-        $status = $request->has('status') ? $request->status : null;
 
-        $orderBy = $request->has('orderBy') ? $request->orderBy : 'id';
-        $startTime = $request->has('startTime') ? $request->startTime : null;
-        $endTime = $request->has('endTime') ? $request->endTime : null;
-        $sortBy = $request->has('sortBy') ? $request->sortBy : "desc";
-        $softDelete = $request->has('keyword_soft_delete') ? $request->keyword_soft_delete : null;
-        if ($softDelete != null) {
-            $query = $this->modelKeyword::onlyTrashed()->where('keyword', 'like', "%$keyword%")->orderByDesc('deleted_at');
-            return $query;
-        }
-        $query = $this->modelKeyword::where('title', 'like', "%$keyword%");
-        if ($status != null) {
-            $query->where('status', $status);
-        }
-        // if ($endTime != null && $startTime != null) {
-        //     $query->where('published_at', '>=', \Carbon\Carbon::parse(request('startTime'))->toDateTimeString())->where('published_at', '<=', \Carbon\Carbon::parse(request('endTime'))->toDateTimeString());
-        // }
-        if ($sortBy == "desc") {
-            $query->orderByDesc($orderBy);
-        } else {
-            $query->orderBy($orderBy);
-        }
+        $query = $this->modelKeyword::query();
+        $query->orderBy('updated_at', 'desc');
+        $query->when($request->has('q'), function ($q) use ($request) {
+            return $q->search($request->q ?? null, ['keyword', 'keyword_en'], true);
+        });
+        $query->when($request->has('type'), function ($q) {
+            $q->where('type', request('type'));
+        });
+        if ($request->has('status')) $query->status($request->status);
+        if ($request->has('sort')) $query->sort(($request->sort == 'asc' ? 'asc' : 'desc'), $request->sort_by ?? null, 'keywords');
         return $query;
     }
-    public function index(Request $request)
+    public function list()
     {
-        return $this->getList($request)->paginate(request('limit') ?? 10);
+        return $this->getList(request())->paginate(request('limit') ?? 5);
     }
 
     public function find($id)
@@ -56,37 +40,6 @@ class Keyword
     }
     public function store($request)
     {
-        $data = [
-            'title' => $request->title,
-            'description' => $request->description,
-            'published_at' => $request->published_at,
-            'content' => $request->content ? $request->content : null,
-            'slug' => $request->slug,
-            'link_to' => $request->link_to ? $request->link_to : null,
-            'user_id' => auth()->user()->id,
-        ];
-    }
-    public function update($request, $id)
-    {
-        $post = $this->post::find($id);
-
-
-        if (!$post) {
-            return redirect('error');
-        }
-        $post->title = $request->title;
-        $post->slug = $request->slug;
-        $post->published_at = $request->published_at;
-        $post->description = $request->description;
-        $post->content = $request->content ?  $request->content : null;
-        $post->link_to = $request->link_to ?  $request->link_to : null;
-
-        if ($request->has('thumbnail_url')) {
-            $fileImage =  $request->file('thumbnail_url');
-            $image = $this->uploadFile($fileImage);
-            $post->thumbnail_url = $image;
-        }
-
-        $post->save();
+        return $this->modelKeyword::create($request);
     }
 }

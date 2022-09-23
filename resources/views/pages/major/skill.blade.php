@@ -1,6 +1,6 @@
 @extends('layouts.main')
-@section('title', 'Danh sách kỹ năng theo chuyên ngành')
-@section('page-title', 'Danh sách kỹ năng theo chuyên ngành')
+@section('title', 'Quản lý chuyên ngành')
+@section('page-title', 'Quản lý chuyên ngành')
 @section('content')
     <div class="row mb-4">
         <div class="col-lg-12">
@@ -14,50 +14,52 @@
                     </a>
                 </li>
                 <li class="breadcrumb-item px-3 text-muted">
-                    Danh sách kỹ năng
+                    Danh sách kỹ năng theo chuyên ngành
                 </li>
             </ol>
         </div>
     </div>
-    <div class=" card card-flush p-5">
+    <div class=" card card-flush  p-5">
         <div class="row">
             <div class="col-lg-12">
                 <form id="formTeam" action="{{ route('admin.major.skill.attach', ['slug' => $major->slug]) }}"
                     method="POST">
                     @csrf
-                    <label for="" class="form-label">Kỹ năng</label>
-                    <select multiple class="form-select mb-2 select2-hidden-accessible" data-control="select2"
-                        data-hide-search="false" tabindex="-1" aria-hidden="true" name="skill_id[]"
-                        value="{{ old('skill_id') }}">
+                    <div class="row">
 
-                        @php
-                            $index = -1;
-                        @endphp
-                        @foreach ($listSkill as $key => $itemSkill)
-                            @foreach ($parentSkill as $item)
-                                @if ($itemSkill->id == $item->id)
-                                    @php
-                                        $index = $item->id;
-                                    @endphp
-                                @endif
-                            @endforeach
-                            @if ($itemSkill->id != $index)
-                                <option value="{{ $itemSkill->id }}">Kỹ năng: {{ $itemSkill->name }}</option>
-                            @endif
-                        @endforeach
-                    </select>
-                    <button type="submit" class="btn btn-primary"> Thêm </button>
+                        <div class=" col-10 form-group">
+                            <label for="" class="form-label">Kỹ năng</label>
+                            <select multiple class="form-select select2-hidden-accessible" data-control="select2"
+                                data-hide-search="false" tabindex="-1" aria-hidden="true" name="skill_id[]"
+                                value="{{ old('skill_id') }}">
+
+                                @php
+                                    $index = -1;
+                                @endphp
+                                @foreach ($listSkill as $key => $itemSkill)
+                                    @foreach ($parentSkill as $item)
+                                        @if ($itemSkill->id == $item->id)
+                                            @php
+                                                $index = $item->id;
+                                            @endphp
+                                        @endif
+                                    @endforeach
+                                    @if ($itemSkill->id != $index)
+                                        <option value="{{ $itemSkill->id }}">Kỹ năng: {{ $itemSkill->name }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class=" col-2 form-group mt-auto">
+                            <button type="submit" class="btn btn-primary"> Thêm </button>
+                        </div>
+                    </div>
+
                 </form>
             </div>
         </div>
-
-    </div>
-
-    <div class="row">
-
-        <div class="col-lg-12">
-
-            <div class=" card card-flush  p-5">
+        <div class="row">
+            <div class="col-lg-12">
                 <div class="table-responsive">
                     @if (count($skills) > 0)
                         <table class="table table-row-dashed table-row-gray-300 gy-7">
@@ -85,9 +87,9 @@
 
                                         <td>
 
-                                            <button class="badge bg-primary" type="button" data-bs-toggle="modal"
+                                            <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal"
                                                 data-bs-target="#introduce_{{ $item->id }}">
-                                                Xem thông tin...
+                                                Xem
                                             </button>
 
                                             <!-- Modal -->
@@ -116,7 +118,8 @@
                                         </td>
                                         <td>
                                             <a href="{{ route('admin.major.skill.detach', ['slug' => $major->slug, 'skill_id' => $item->id]) }}"
-                                                class="btn btn-danger deleteTeams"><i class="fas fa-trash-alt"></i></a>
+                                                class="btn btn-danger btn-sm deleteTeams"><i
+                                                    class="fas fa-trash-alt"></i></a>
                                         </td>
 
                                     </tr>

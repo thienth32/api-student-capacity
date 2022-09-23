@@ -22,6 +22,8 @@ trait TStatus
             $data = $this->updateStatus($this->getModelDataStatus($id), 0);
             return $this->responseApi(true, $data);
         } catch (\Throwable $th) {
+            dump($th);
+            return $this->responseApi(false, $th);
             return $this->responseApi(false, 'Không thể câp nhật trạng thái !');
         }
     }

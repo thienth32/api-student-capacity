@@ -1,6 +1,6 @@
 @extends('layouts.main')
-@section('title', 'Cập nhật kỹ năng')
-@section('page-title', 'Cập nhật kỹ năng')
+@section('title', 'Quản lý kỹ năng ')
+@section('page-title', 'Quản lý kỹ năng')
 @section('content')
 
     <div class="row mb-4">
@@ -57,8 +57,7 @@
                                             @endphp
                                             <option
                                                 @foreach ($data->majorSkill as $item) @if ($item->id == $itemMajor->id)
-                                        {{ 'selected="selected"' }} @endif
-                                                @endforeach
+                                        {{ 'selected="selected"' }} @endif @endforeach
                                                 value="{{ $itemMajor->id }}">
                                                 Ngành: {{ $itemMajor->name }}
                                             </option>

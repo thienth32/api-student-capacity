@@ -11,6 +11,8 @@ use App\Services\Modules\MContestUser\ContestUser;
 use App\Services\Modules\MContestUser\MContestUserInterface;
 use App\Services\Modules\MExam\Exam;
 use App\Services\Modules\MExam\MExamInterface;
+use App\Services\Modules\MKeyword\Keyword;
+use App\Services\Modules\MKeyword\MKeywordInterface;
 use App\Services\Modules\MMajor\Major;
 use App\Services\Modules\MMajor\MMajorInterface;
 use App\Services\Modules\MQuestion\MQuestionInterface;
@@ -110,6 +112,10 @@ trait RepositorySetup
         $this->app->bind(
             MContestUserInterface::class,
             ContestUser::class,
+        );
+        $this->app->bind(
+            MKeywordInterface::class,
+            Keyword::class,
         );
     }
 }

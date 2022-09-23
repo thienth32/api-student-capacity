@@ -81,4 +81,8 @@ return [
     /** bÀI VIẾT TUYỂN DỤNG THƯỜNG  */
     "POST_NORMAL" => 0,
 
+    'TYPE_POSTS' => 0,
+    'TYPE_RECRUITMENTS' => 1,
+    'TYPE_CAPACITY_TEST' => 2,
+
 ];

@@ -1,14 +1,14 @@
 @extends('layouts.main')
-@section('title', 'Thêm đội thi trong cuộc thi')
-@section('page-title', 'Thêm đội thi trong cuộc thi')
+@section('title', 'Quản lý cuộc thi')
+@section('page-title', 'Quản lý cuộc thi')
 @section('content')
     <div class="card card-flush h-lg-100 p-10">
         <div class="row mb-10">
             <div class="col-lg-12">
                 <ol class="breadcrumb text-muted fs-6 fw-bold">
                     <li class="breadcrumb-item pe-3">
-                        <a href="{{ route('admin.contest.list') }}" class="pe-3">Cuộc
-                            thi</a>
+                        <a href="{{ route('admin.contest.list') }}" class="pe-3">
+                            Danh sách cuộc thi</a>
                     </li>
                     <li class="breadcrumb-item px-3 ">
                         <a href="{{ route('admin.contest.show', ['id' => $contest->id]) }}" class="pe-3">
@@ -17,7 +17,7 @@
                     </li>
                     <li class="breadcrumb-item px-3 ">
                         <a href="{{ route('admin.contest.detail.team', ['id' => $contest->id]) }}">
-                            Danh sách đội thi thuộc cuộc thi : {{ $contest->name }}
+                            Danh sách đội thi cuộc thi : {{ $contest->name }}
                         </a>
                     </li>
                     <li class="breadcrumb-item px-3 text-muted">
@@ -127,7 +127,7 @@
         preview.showFile('#file-input', '#image-preview');
         var userArray = @json($userArray ?? []);
         var id_contest = 0;
-
+        var team = 0;
         var _token = "{{ csrf_token() }}"
         var max_user = "{{ $contest->max_user }}"
         var urlSearch = "{{ route('admin.user.team.search', ['id_contest' => $contest->id]) }}"

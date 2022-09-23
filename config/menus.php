@@ -192,6 +192,12 @@ return [
                 "role" => $ROLE_HAS_ADMINS,
             ],
             [
+                "name" => "Từ khóa tìm kiếm",
+                "param" => '',
+                "link" => "admin.keyword.list",
+                "role" => $ROLE_HAS_ADMINS,
+            ],
+            [
                 "name" => "Tài khoản",
                 "role" => $ROLE_HAS_ADMINS,
                 "param" => '',

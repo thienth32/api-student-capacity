@@ -1,6 +1,6 @@
 @extends('layouts.main')
-@section('title', 'Danh sách vòng thi ')
-@section('page-title', 'Danh sách vòng thi')
+@section('title', 'Quản lý cuộc thi ')
+@section('page-title', 'Quản lý cuộc thi')
 @section('content')
 
     <div class="row">
@@ -11,8 +11,9 @@
                     <div class="col-lg-12">
                         <ol class="breadcrumb text-muted fs-6 fw-bold">
                             <li class="breadcrumb-item pe-3">
-                                <a href="{{ route('admin.contest.list') }}" class="pe-3">Cuộc
-                                    thi</a>
+                                <a href="{{ route('admin.contest.list') }}" class="pe-3">
+                                    Danh sách cuộc thi
+                                </a>
                             </li>
                             <li class="breadcrumb-item px-3 ">
                                 <a href="{{ route('admin.contest.show', ['id' => $contest->id]) }}" class="pe-3">
@@ -27,7 +28,7 @@
                 </div>
                 <div class="row">
                     <div class=" col-lg-6">
-                        <h1>Quản lý vòng thi
+                        <h1>Danh sách vòng thi
                             <span data-bs-toggle="tooltip" title="Tải lại trang " role="button"
                                 class="refresh-btn svg-icon svg-icon-primary svg-icon-2x">
                                 <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Update.svg--><svg
@@ -316,7 +317,7 @@
                         </thead>
                         <tbody>
                             @php
-
+                                
                                 $total = $rounds->total();
                             @endphp
                             @forelse ($rounds as $key => $round)
@@ -379,7 +380,7 @@
                                                             aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body  ">
-                                                        {{ $round->description }}
+                                                        {!! $round->description !!}
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary"

@@ -7,8 +7,7 @@ use App\Services\Traits\TUploadImage;
 use App\Services\Traits\TStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Keyword\RequestKeyword;
-use App\Models\Keyword;
-use App\Services\Modules\MKeyword\Keyword as MKeywordKeyword;
+use App\Services\Modules\MKeyword\MKeywordInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -19,35 +18,41 @@ class KeywordController extends Controller
 
     use TResponse, TStatus;
     public function __construct(
-
         private DB $db,
-        private Keyword $keyword,
-        private MKeywordKeyword $modulesKeyword,
+        private MKeywordInterface $keyword,
         private Storage $storage
     ) {
     }
-    public function index(Request $request)
+    public function index()
     {
-
-        $round = null;
-        if (request()->has('round_id')) $round = $this->round::find(request('round_id'))->load('contest');
-
-        $contest = $this->contest::where('type', 0)->get();
-        $capacity = $this->contest::where('type', 1)->get();
-        $recruitments = $this->recruitment::all();
-        $rounds = $this->round::all();
-        $posts = $this->modulesPost->index($request);
-
-        return view('pages.post.index', [
-            'posts' => $posts,
-            'contest' => $contest,
-            'capacity' => $capacity,
-            'recruitments' => $recruitments,
-            'rounds' => $rounds,
-            'round' => $round
+        $data = $this->keyword->list();
+        return view('pages.keyword.index', [
+            'datas' => $data
         ]);
     }
-    public function insert(Request $request)
+
+    /**
+     * @OA\Get(
+     *     path="/api/public/keywords",
+     *     description="Description api keywords",
+     *     tags={"Keywords"},
+     *     @OA\Parameter(
+     *         name="type",
+     *         in="query",
+     *          type="number",
+     *         description="",
+     *         required=false,
+     *     ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
+    public function indexApi()
+    {
+        $data = $this->keyword->getList(request())->get();
+        return $this->responseApi(true, $data);
+    }
+    public function create()
     {
         try {
             return view('pages.keyword.form-add');
@@ -55,74 +60,62 @@ class KeywordController extends Controller
             return redirect('error');
         };
     }
-    public function store($request)
+    public function store(RequestKeyword $request)
     {
         $this->db::beginTransaction();
         try {
-            $this->modulesPost->store($request);
+            $this->keyword->store($request->all());
             $this->db::commit();
-
-            return Redirect::route('admin.post.list');
+            return redirect()->route('admin.keyword.list');
         } catch (\Throwable $th) {
             $this->db::rollBack();
             return redirect('error');
         }
     }
-    public function destroy($slug)
+    public function destroy($id)
     {
         try {
-            if (!(auth()->user()->hasRole('super admin'))) return abort(404);
-            $this->db::transaction(function () use ($slug) {
-                if (!($this->post::where('slug', $slug)->get())) return abort(404);
-                $this->post::where('slug', $slug)->delete();
-            });
-            return redirect()->back();
+            $data = $this->keyword->find($id);
+            if (is_null($data)) {
+                return abort('error');
+            } else {
+                $data->delete();
+                return redirect()->route('admin.keyword.list');
+            }
         } catch (\Throwable $th) {
-            return abort(404);
+            return abort('error');
         }
     }
-    public function edit(Request $request, $slug)
+    public function edit(Request $request, $id)
     {
 
-        $this->db::beginTransaction();
         try {
-            $round = null;
-            $contest = $this->contest::where('type', 0)->get();
-            $capacity = $this->contest::where('type', 1)->get();
-            $recruitments = $this->recruitment::all();
-            $post = $this->modulesPost->getList($request)->where('slug', $slug)->first();
-            $post->load('postable');
-            if ($post->postable && (get_class($post->postable) == $this->round::class)) {
-                $round = $this->round::find($post->postable->id)->load('contest');
+            $data = $this->keyword->find($id);
+            if (is_null($data)) {
+                return redirect()->route('admin.keyword.list');
+            } else {
+
+                return view('pages.keyword.form-edit', compact('data'));
             }
-
-            return view('pages.post.form-edit', [
-                'round' => $round,
-                'post' => $post,
-                'recruitments' => $recruitments,
-                'contest' => $contest,
-                'capacity' => $capacity,
-                'rounds' => $this->round::all(),
-
-            ]);
         } catch (\Throwable $th) {
-            $this->db::rollBack();
-            return abort(404);
+            return abort('error');
         };
     }
     public function update(RequestKeyword $request, $id)
     {
 
-
-        DB::beginTransaction();
+        $this->db::beginTransaction();
         try {
-
-            $this->modulesPost->update($request, $id);
-            Db::commit();
-
-            return Redirect::route('admin.post.list');
+            $data = $this->keyword->find($id);
+            if (is_null($data)) {
+                return redirect()->back();
+            } else {
+                $data->update($request->all());
+                $this->db::commit();
+                return redirect()->route('admin.keyword.list');
+            }
         } catch (\Throwable $th) {
-            Db::rollBack();
+            $this->db::rollBack();
             return redirect('error');
         }
     }
@@ -154,5 +147,10 @@ class KeywordController extends Controller
         } catch (\Throwable $th) {
             return abort(404);
         }
+    }
+
+    public function getModelDataStatus($id)
+    {
+        return $this->keyword->find($id);
     }
 }
