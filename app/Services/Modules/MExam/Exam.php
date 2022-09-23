@@ -96,4 +96,9 @@ class Exam implements MExamInterface
             ->withCount($withCount)
             ->first();
     }
+
+    public function attachQuestion($id, $questionsId)
+    {
+        return $this->model::find($id)->questions()->attach([$questionsId]);
+    }
 }

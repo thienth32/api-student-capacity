@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Models\Question;
 use App\Services\Modules\MAnswer\MAnswerInterface;
+use App\Services\Modules\MExam\MExamInterface;
 use App\Services\Modules\MQuestion\MQuestionInterface;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Maatwebsite\Excel\Concerns\ToModel;
@@ -13,6 +14,10 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 
 class QuestionsImport implements ToCollection
 {
+    public function __construct(public $exam_id = null)
+    {
+    }
+
     public function collection(Collection  $rows)
     {
         $arr = [];
@@ -69,6 +74,7 @@ class QuestionsImport implements ToCollection
         DB::transaction(function () use ($data) {
             $question = app(MQuestionInterface::class)->createQuestionsAndAttchSkill($data['questions'], $data['skill']);
             if (!$question) throw new \Exception("Error create question ");
+            if ($this->exam_id) app(MExamInterface::class)->attachQuestion($this->exam_id, $question->id);
             app(MAnswerInterface::class)->createAnswerByIdQuestion($data['answers'], $question->id);
         });
     }

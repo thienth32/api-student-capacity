@@ -182,11 +182,12 @@ class Builder extends  EloquentBuilder
         if (!(\Spatie\Permission\Models\Role::where('name', $role)->exists())) $role = \Spatie\Permission\Models\Role::first()->name;
         return $this->role($role);
     }
-    public function whenWhereHasRelationship($value = null, $relation = null, $tableColumn = null)
+    public function whenWhereHasRelationship($value = null, $relation = null, $tableColumn = null, $flagDosenHave = false)
     {
         if ($value == null) return $this;
         if ($relation == null) return $this;
         if ($tableColumn == null) return $this;
+        if ($flagDosenHave) return $this->doesntHave($relation);
         return $this->whereHas($relation, function ($query) use ($value,  $tableColumn) {
             $query->where($tableColumn, $value);
         });

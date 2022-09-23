@@ -40,27 +40,23 @@ class QuestionController extends Controller
      */
     public function getList()
     {
-        try {
-            $now = Carbon::now('Asia/Ho_Chi_Minh');
-            $data = $this->questionModel::when(request()->has('question_soft_delete'), function ($q) {
-                return $q->onlyTrashed();
+        $now = Carbon::now('Asia/Ho_Chi_Minh');
+        $data = $this->questionModel::when(request()->has('question_soft_delete'), function ($q) {
+            return $q->onlyTrashed();
+        })
+            ->status(request('status'))
+            ->search(request('q') ?? null, ['content'])
+            ->sort((request('sort') == 'asc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'questions')
+            ->whenWhereHasRelationship(request('skill') ?? null, 'skills', 'skills.id', (request()->has('skill') && request('skill') == 0) ? true : false)
+            // ->hasRequest(['rank' => request('level') ?? null, 'type' => request('type') ?? null]);
+            ->when(request()->has('level'), function ($q) {
+                $q->where('rank', request('level'));
             })
-                ->status(request('status'))
-                ->search(request('q') ?? null, ['content'])
-                ->sort((request('sort') == 'asc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'questions')
-                ->whenWhereHasRelationship(request('skill') ?? null, 'skills', 'skills.id')
-                // ->hasRequest(['rank' => request('level') ?? null, 'type' => request('type') ?? null]);
-                ->when(request()->has('level'), function ($q) {
-                    $q->where('rank', request('level'));
-                })
-                ->when(request()->has('type'), function ($q) {
-                    $q->where('type', request('type'));
-                });
-            $data->with(['skills', 'answers']);
-            return $data;
-        } catch (\Throwable $th) {
-            dd($th);
-        }
+            ->when(request()->has('type'), function ($q) {
+                $q->where('type', request('type'));
+            });
+        $data->with(['skills', 'answers']);
+        return $data;
     }
     public function index()
     {
@@ -86,7 +82,7 @@ class QuestionController extends Controller
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
-                'payload' => 'Hệ thống đã xảy ra lỗi ! ',
+                'payload' => 'Hệ thống đã xảy ra lỗi ! ' . $th->getMessage(),
             ], 404);
         }
     }
@@ -350,6 +346,25 @@ class QuestionController extends Controller
             ], 400);
         }
     }
+
+    public function importAndRunExam(ImportQuestion $request, $exam_id)
+    {
+        try {
+            Excel::import(new QuestionsImport($exam_id), $request->ex_file);
+            return response()->json([
+                "status" => true,
+                "payload" => "Thành công "
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "status" => false,
+                "errors" => [
+                    "ex_file" => $th->getMessage()
+                ]
+            ], 400);
+        }
+    }
+
     public function exportQe()
     {
         $point = [

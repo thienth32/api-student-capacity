@@ -309,7 +309,7 @@ class ExamController extends Controller
                 ->status(request('status'))
                 ->search(request('q') ?? null, ['content'])
                 ->sort((request('sort') == 'asc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'questions')
-                ->whenWhereHasRelationship(request('skill') ?? null, 'skills', 'skills.id')
+                ->whenWhereHasRelationship(request('skill') ?? null, 'skills', 'skills.id', (request()->has('skill') && request('skill') == 0) ? true : false)
                 ->when(request()->has('level'), function ($q) {
                     $q->where('rank', request('level'));
                 })

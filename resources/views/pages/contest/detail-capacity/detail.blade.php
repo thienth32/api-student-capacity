@@ -328,7 +328,8 @@
                                                         <thead>
                                                             <tr class="fw-bold fs-6 text-gray-800">
                                                                 <th scope="col"> Bài làm </th>
-                                                                <th style="float: right" scope="col">Thao tác nhanh
+                                                                <th scope="col">Tải bộ excel</th>
+                                                                <th style="float: right" scope="col">Nhanh
                                                                 </th>
                                                             </tr>
                                                         </thead>
@@ -336,8 +337,97 @@
 
                                                             @foreach ($round->exams as $exam)
                                                                 <tr>
-                                                                    <td style="width: 70%">{{ $exam->name }}</td>
-                                                                    <td style="width: 30%">
+                                                                    <td style="width: 80%">{{ $exam->name }}</td>
+                                                                    <td style="width: 20%">
+                                                                        <label data-bs-toggle="modal"
+                                                                            data-bs-target="#kt_modal_exc" type="button"
+                                                                            class="btn btn-light-primary me-3"
+                                                                            id="kt_file_manager_new_folder">
+                                                                            <!--begin::Svg Icon | path: icons/duotune/files/fil013.svg-->
+                                                                            <span class="svg-icon svg-icon-2">
+                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                    width="24" height="24"
+                                                                                    viewBox="0 0 24 24" fill="none">
+                                                                                    <path opacity="0.3"
+                                                                                        d="M10 4H21C21.6 4 22 4.4 22 5V7H10V4Z"
+                                                                                        fill="black">
+                                                                                    </path>
+                                                                                    <path
+                                                                                        d="M10.4 3.60001L12 6H21C21.6 6 22 6.4 22 7V19C22 19.6 21.6 20 21 20H3C2.4 20 2 19.6 2 19V4C2 3.4 2.4 3 3 3H9.2C9.7 3 10.2 3.20001 10.4 3.60001ZM16 12H13V9C13 8.4 12.6 8 12 8C11.4 8 11 8.4 11 9V12H8C7.4 12 7 12.4 7 13C7 13.6 7.4 14 8 14H11V17C11 17.6 11.4 18 12 18C12.6 18 13 17.6 13 17V14H16C16.6 14 17 13.6 17 13C17 12.4 16.6 12 16 12Z"
+                                                                                        fill="black"></path>
+                                                                                    <path opacity="0.3"
+                                                                                        d="M11 14H8C7.4 14 7 13.6 7 13C7 12.4 7.4 12 8 12H11V14ZM16 12H13V14H16C16.6 14 17 13.6 17 13C17 12.4 16.6 12 16 12Z"
+                                                                                        fill="black"></path>
+                                                                                </svg>
+                                                                            </span>
+                                                                            <!--end::Svg Icon-->Tải Excel
+                                                                        </label>
+
+                                                                        <div class="modal fade" tabindex="-1"
+                                                                            id="kt_modal_exc">
+                                                                            <div class="modal-dialog">
+                                                                                <div class="modal-content">
+                                                                                    <div class="modal-header">
+                                                                                        <h5 class="modal-title">Tải lên
+                                                                                        </h5>
+
+                                                                                        <!--begin::Close-->
+                                                                                        <div class="btn btn-icon btn-sm btn-active-light-primary ms-2"
+                                                                                            data-bs-dismiss="modal"
+                                                                                            aria-label="Close">
+                                                                                            <span
+                                                                                                class="svg-icon svg-icon-2x"></span>
+                                                                                        </div>
+                                                                                        <!--end::Close-->
+                                                                                    </div>
+                                                                                    <form class="form-submit"
+                                                                                        action="{{ route('admin.question.excel.import.exam', ['exam' => $exam->id]) }}"
+                                                                                        method="POST"
+                                                                                        enctype="multipart/form-data">
+                                                                                        @csrf
+                                                                                        <div
+                                                                                            class="modal-body text-center">
+                                                                                            <div class="HDSD">
+                                                                                            </div>
+                                                                                            <label for="up-file"
+                                                                                                class="">
+                                                                                                <i data-bs-toggle="tooltip"
+                                                                                                    title="Click để upload file"
+                                                                                                    style="font-size: 100px;"
+                                                                                                    role="button"
+                                                                                                    class="bi bi-cloud-plus-fill"></i>
+                                                                                            </label>
+                                                                                            <input style="display: none"
+                                                                                                type="file"
+                                                                                                name="ex_file"
+                                                                                                id="up-file">
+                                                                                            <div style="display: none"
+                                                                                                class="progress show-p mt-3 h-25px w-100">
+                                                                                                <div class="progress-bar bg-primary progress-bar-striped progress-bar-animated"
+                                                                                                    role="progressbar"
+                                                                                                    style="width: 0%"
+                                                                                                    aria-valuenow="0"
+                                                                                                    aria-valuemin="0"
+                                                                                                    aria-valuemax="100">
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <p class="show-name"></p>
+                                                                                            <p
+                                                                                                class="text-danger error_ex_file">
+                                                                                            </p>
+                                                                                        </div>
+
+                                                                                        <div class="modal-footer">
+                                                                                            <button type="submit"
+                                                                                                class="upload-file btn btn-primary">Tải
+                                                                                                lên </button>
+                                                                                        </div>
+                                                                                    </form>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td style="width: 20%">
                                                                         <span style="float: right"
                                                                             data-bs-toggle="tooltip"
                                                                             title="Xem nhanh câu hỏi câu trả lời ">
@@ -374,6 +464,9 @@
                         </table>
                     </div>
                 </div>
+
+
+
                 <div class="tab-pane fade tab-ql" id="kt_vtab_pane_5" role="tabpanel">
                     {{--  --}}
                     <h2 id="show-exam-round"></h2>
@@ -489,7 +582,7 @@
                     </div>
 
                     <div style="background-color: #f5f8fa;" class="modal-body">
-                        <div id="show-tast-qs" class="card p-2">
+                        <div id="show-tast-qs" class="card p-6">
                             <div class="row card-format" id="card_2">
 
                                 <div class="col-12 col-lg-2 col-sx-12 col-md-12 col-sm-12 col-xxl-2 col-xl-2">
@@ -499,6 +592,7 @@
                                             data-control="select2" data-hide-search="true" tabindex="-1"
                                             aria-hidden="true">
                                             <option value="-1">Chọn skill</option>
+                                            <option value="0">Không có skill</option>
                                             @foreach ($skills as $skill)
                                                 <option @selected(request('skill') == $skill->id) value="{{ $skill->id }}">
                                                     {{ $skill->name }}
@@ -617,7 +711,7 @@
                             </div>
                         </div>
 
-                        <div id="show-list-qs" class="card p-2">
+                        <div id="show-list-qs" class="card p-6">
 
                             <div class=" mb-2 row " id="card_1">
                                 <div class="col-12 col-lg-2 col-sx-12 col-md-12 col-sm-12 col-xxl-2 col-xl-2">
@@ -627,6 +721,7 @@
                                             data-control="select2" data-hide-search="true" tabindex="-1"
                                             aria-hidden="true">
                                             <option value="-1">Chọn skill</option>
+                                            <option value="0">Không có skill</option>
                                             @foreach ($skills as $skill)
                                                 <option @selected(request('skill') == $skill->id) value="{{ $skill->id }}">
                                                     {{ $skill->name }}
@@ -794,5 +889,40 @@
         let q = '';
     </script>
     <script src="assets/js/system/capacity/main.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#up-file').on("change", function() {
+                $('.show-name').html($(this)[0].files[0].name);
+            })
+            $('.form-submit').ajaxForm({
+                beforeSend: function() {
+                    $(".error_ex_file").html("");
+                    $(".upload-file").html("Đang tải dữ liệu ..")
+                    $(".progress").show();
+                    var percentage = '0';
+                },
+                uploadProgress: function(event, position, total, percentComplete) {
+                    var percentage = percentComplete;
+                    $('.progress .progress-bar').css("width", percentage + '%', function() {
+                        return $(this).attr("aria-valuenow", percentage) + "%";
+                    })
+                },
+                success: function() {
+                    $(".progress").hide();
+                    $(".upload-file").html("Tải lên")
+                    // window.location.reload();
+                },
+                error: function(xhr, status, error) {
+                    $(".upload-file").html("Tải lên")
+                    $('.progress .progress-bar').css("width", 0 + '%', function() {
+                        return $(this).attr("aria-valuenow", 0) + "%";
+                    })
+                    $(".progress").hide();
+                    var err = JSON.parse(xhr.responseText);
+                    if (err.errors) $(".error_ex_file").html(err.errors.ex_file);
+                }
+            });
+        })
+    </script>
 @endsection

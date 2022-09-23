@@ -21,4 +21,6 @@ interface MExamInterface
     public function updateCapacityPlay($id, $data);
 
     public function getExamBtyTokenRoom($code, $with = []);
+
+    public function attachQuestion($id, $questionsId);
 }

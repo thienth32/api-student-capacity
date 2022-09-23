@@ -416,6 +416,7 @@ Route::prefix('questions')->group(function () {
     Route::get('restore-delete/{id}', [QuestionController::class, 'restoreDelete'])->name('admin.question.restore');
 
     Route::post('import', [QuestionController::class, 'import'])->name('admin.question.excel.import');
+    Route::post('import/{exam}', [QuestionController::class, 'importAndRunExam'])->name('admin.question.excel.import.exam');
     Route::get('export', [QuestionController::class, 'exportQe'])->name('admin.question.excel.export');
 });
 
