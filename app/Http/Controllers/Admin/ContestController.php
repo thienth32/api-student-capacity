@@ -435,21 +435,22 @@ class ContestController extends Controller
         $contest = $this->contest->find($id);
         if (!is_null($contest)) {
             $userArray = [];
-            $users = $user::get();
+            $contest->load(['teams' => function ($q) use ($id_team) {
+                return $q->with('members')->whereId($id_team)->first();
+            }]);
 
-            $team = $this->teamRepo->getTeamById($id_team, ['users']);
-            foreach ($users as $user) {
-                foreach ($team->users as $me) {
-                    if ($user->id == $me->id) {
-                        array_push($userArray, [
-                            'id_user' => $user->id,
-                            'email_user' => $user->email,
-                            'name_user' => $user->name
-                        ]);
-                    }
+            foreach ($contest->teams as  $team) {
+                foreach ($team->members as  $me) {
+                    array_push($userArray, [
+                        'id_user' => $me->id,
+                        'email_user' => $me->email,
+                        'name_user' => $me->name,
+                        'bot' => $me->pivot->bot,
+                    ]);
                 }
             }
-            // dd($userArray);
+            $team = $this->teamRepo->find($id_team);
+
             return view(
                 'pages.contest.detail.team.form-edit-team-contest',
                 [

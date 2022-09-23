@@ -41,4 +41,8 @@ class Team implements MTeamInterface
         $result = $this->team::find($id)->update($data);
         return $result;
     }
+    public function find($id)
+    {
+        return $this->team::find($id);
+    }
 }

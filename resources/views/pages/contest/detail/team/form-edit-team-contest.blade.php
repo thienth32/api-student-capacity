@@ -2,31 +2,31 @@
 @section('title', 'Chỉnh sửa đội thi : ' . $team->name)
 @section('page-title', 'Chỉnh sửa đội thi : ' . $team->name)
 @section('content')
-    <div class="card card-flush h-lg-100 p-10">
-        <div class="row mb-10">
-            <div class="col-lg-12">
-                <ol class="breadcrumb text-muted fs-6 fw-bold">
-                    <li class="breadcrumb-item pe-3">
-                        <a href="{{ route('admin.contest.list') }}" class="pe-3">Cuộc
-                            thi</a>
-                    </li>
-                    <li class="breadcrumb-item px-3 ">
-                        <a href="{{ route('admin.contest.show', ['id' => $contest->id]) }}" class="pe-3">
-                            {{ $contest->name }}
-                        </a>
-                    </li>
-                    <li class="breadcrumb-item px-3 ">
-                        <a href="{{ route('admin.contest.detail.team', ['id' => $contest->id]) }}">
-                            Danh sách đội thi thuộc cuộc thi : {{ $contest->name }}
-                        </a>
-                    </li>
-                    <li class="breadcrumb-item px-3 text-muted">
-                        Chỉnh sửa đội thi của cuộc thi : {{ $contest->name }}
-                    </li>
-                </ol>
-            </div>
-
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <ol class="breadcrumb text-muted fs-6 fw-bold">
+                <li class="breadcrumb-item pe-3">
+                    <a href="{{ route('admin.contest.list') }}" class="pe-3">Cuộc
+                        thi</a>
+                </li>
+                <li class="breadcrumb-item px-3 ">
+                    <a href="{{ route('admin.contest.show', ['id' => $contest->id]) }}" class="pe-3">
+                        {{ $contest->name }}
+                    </a>
+                </li>
+                <li class="breadcrumb-item px-3 ">
+                    <a href="{{ route('admin.contest.detail.team', ['id' => $contest->id]) }}">
+                        Danh sách đội thi thuộc cuộc thi : {{ $contest->name }}
+                    </a>
+                </li>
+                <li class="breadcrumb-item px-3 text-muted">
+                    Chỉnh sửa đội thi của cuộc thi : {{ $contest->name }}
+                </li>
+            </ol>
         </div>
+
+    </div>
+    <div class="card card-flush h-lg-100 p-10">
         <div class="row">
             <div class="col-lg-12">
 

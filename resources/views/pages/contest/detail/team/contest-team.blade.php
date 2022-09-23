@@ -2,31 +2,8 @@
 @section('title', 'Quản lý cuộc thi')
 @section('page-title', 'Quản lý cuộc thi')
 @section('content')
-    <div class=" card card-flush p-5">
-        <div class="row pb-5">
-            <div class="col-lg-10">
-                <ol class="breadcrumb text-muted fs-6 fw-bold">
-                    <li class="breadcrumb-item pe-3">
-                        <a href="{{ route('admin.contest.list') }}" class="pe-3">
-                            Danh sách cuộc thi</a>
-                    </li>
-                    <li class="breadcrumb-item px-3 ">
-                        <a href="{{ route('admin.contest.show', ['id' => $contest->id]) }}" class="pe-3">
-                            {{ $contest->name }}
-                        </a>
-                    </li>
-                    <li class="breadcrumb-item px-3 text-muted">
-                        Danh sách đội thi
-                    </li>
-                </ol>
-            </div>
-            <div class="col-lg-2">
-                <a class="ms-auto btn btn-primary"
-                    href="{{ route('admin.contest.detail.team.add.form', ['id' => $contest->id]) }}">Tạo mới đội
-                    thi</a>
-            </div>
-        </div>
-        {{-- <div class="row">
+
+    {{-- <div class="row">
             <div class="col-lg-12">
                 <form id="formTeam" action="{{ route('admin.contest.detail.team.addSelect', ['id' => $contest->id]) }}"
                     method="POST">
@@ -48,14 +25,38 @@
                 </form>
             </div>
         </div> --}}
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <ol class="breadcrumb text-muted fs-6 fw-bold">
+                <li class="breadcrumb-item pe-3">
+                    <a href="{{ route('admin.contest.list') }}" class="pe-3">
+                        Danh sách cuộc thi</a>
+                </li>
+                <li class="breadcrumb-item px-3 ">
+                    <a href="{{ route('admin.contest.show', ['id' => $contest->id]) }}" class="pe-3">
+                        {{ $contest->name }}
+                    </a>
+                </li>
+                <li class="breadcrumb-item px-3 text-muted">
+                    Danh sách đội thi
+                </li>
+            </ol>
+        </div>
 
     </div>
+    <div class=" card card-flush  p-5">
+        <div class="row">
+            <div class="col-lg-12 ">
+                <div class=" d-flex justify-end">
 
-    <div class="row">
-
-        <div class="col-lg-12">
-
-            <div class=" card card-flush  p-5">
+                    <a class="ms-auto btn btn-primary"
+                        href="{{ route('admin.contest.detail.team.add.form', ['id' => $contest->id]) }}">Tạo mới đội
+                        thi</a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
                 <div class="table-responsive">
                     <table class="table table-row-dashed table-row-gray-300 gy-7">
                         <thead>

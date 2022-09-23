@@ -13,4 +13,5 @@ interface MTeamInterface
     public function getAllTeam($params = [], $with = []);
 
     public function updateTeam($id, $data);
+    public function find($id);
 }
