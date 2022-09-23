@@ -2,8 +2,6 @@
 @section('title', 'Danh sách đội thi')
 @section('page-title', 'Danh sách đội thi')
 @section('content')
-
-
     <div class="card card-flush p-4">
         <div class="row">
             <div class=" col-lg-6">

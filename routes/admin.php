@@ -380,20 +380,21 @@ Route::group([
         Route::get('{id}', [CandidateController::class, 'detail'])->name('admin.candidate.detail');
     });
     Route::prefix('keywords')->group(function () {
-        Route::get('{slug}/edit', [KeywordController::class, 'edit'])->name('admin.keyword.edit');
+        Route::get('{id}/edit', [KeywordController::class, 'edit'])->name('admin.keyword.edit');
         Route::put('{id}', [KeywordController::class, 'update'])->name('admin.keyword.update');
         Route::get('', [KeywordController::class, 'index'])->name('admin.keyword.list');
-        Route::get('insert', [KeywordController::class, 'insert'])->name('admin.keyword.insert');
+        Route::get('add', [KeywordController::class, 'create'])->name('admin.keyword.create');
         Route::post('un-status/{id}', [KeywordController::class, 'un_status'])->name('admin.keyword.un.status');
-        Route::post('re-status/{id}', [KeywordController::class, 're_status'])->name('admin.pokeywordst.re.status');
-        Route::post('store', [KeywordController::class, 'store'])->name('admin.keyword.store');
-        Route::delete('{slug}', [KeywordController::class, 'destroy'])->name('admin.keyword.destroy');
+        Route::post('re-status/{id}', [KeywordController::class, 're_status'])->name('admin.keyword.re.status');
+        Route::post('add-save', [KeywordController::class, 'store'])->name('admin.keyword.store');
+        Route::delete('{id}', [KeywordController::class, 'destroy'])->name('admin.keyword.destroy');
         Route::prefix('list-soft-deletes')->group(function () {
             Route::get('', [KeywordController::class, 'listRecordSoftDeletes'])->name('admin.keyword.list.soft.deletes');
             Route::get('{id}/delete', [KeywordController::class, 'backUpPost'])->name('admin.keyword.soft.deletes');
             Route::get('{id}/restore', [KeywordController::class, 'delete'])->name('admin.keyword.soft.restore');
         });
     });
+
 
     Route::get('dowload-frm-excel', function () {
         return response()->download(public_path('assets/media/excel/excel_download.xlsx'));
@@ -417,6 +418,7 @@ Route::prefix('questions')->group(function () {
     Route::post('import', [QuestionController::class, 'import'])->name('admin.question.excel.import');
     Route::get('export', [QuestionController::class, 'exportQe'])->name('admin.question.excel.export');
 });
+
 
 // Route::get('api-view-check', function (App\Services\Modules\MContest\Contest $contest) {
 //     $data = $contest->apiIndex();

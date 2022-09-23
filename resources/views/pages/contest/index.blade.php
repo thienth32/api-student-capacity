@@ -1,13 +1,14 @@
 @extends('layouts.main')
-@section('title', 'Danh sách ' . $contest_type_text)
-@section('page-title', 'Danh sách ' . $contest_type_text)
+@section('title', 'Quản lý ' . $contest_type_text)
+@section('page-title', 'Quản lý ' . $contest_type_text)
 @section('content')
 
     <div class="card card-flush p-4">
         <div class="row">
             <div class=" col-lg-6">
 
-                <h1>Quản lý {{ $contest_type_text }}
+                <h1>
+                    Danh sách {{ $contest_type_text }}
                     <span role="button" data-bs-toggle="tooltip" title="Tải lại trang "
                         class="refresh-btn svg-icon svg-icon-primary svg-icon-2x">
                         <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Update.svg--><svg

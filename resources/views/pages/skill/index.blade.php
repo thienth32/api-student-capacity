@@ -8,7 +8,7 @@
             <div class="col-lg-6">
                 <div class="d-flex justify-content-start">
                     <h1>
-                        Quản lý kỹ năng
+                        Danh sách kĩ năng
                     </h1>
                     <a class="mx-2" href="{{ route('admin.skill.index') }}">
                         <span data-bs-toggle="tooltip" title="Tải lại trang " role="button"

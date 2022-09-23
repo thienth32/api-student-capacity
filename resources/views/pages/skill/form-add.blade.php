@@ -1,6 +1,6 @@
 @extends('layouts.main')
-@section('title', 'Thêm mới kỹ năng')
-@section('page-title', 'Thêm mới kỹ năng')
+@section('title', 'Quản lý kỹ năng ')
+@section('page-title', 'Quản lý kỹ năng')
 @section('content')
     <div class="row mb-4">
         <div class="col-lg-12">
@@ -19,8 +19,7 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
-                <form id="formSkill" action="{{ route('admin.skill.store') }}" method="post"
-                    enctype="multipart/form-data">
+                <form id="formSkill" action="{{ route('admin.skill.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
 
                     <div class="form-group mb-10">

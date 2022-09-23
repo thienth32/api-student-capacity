@@ -16,15 +16,17 @@ class RequestKeyword extends FormRequest
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, mixed>
-     */
     public function rules()
     {
-        return [
-            //
+        $ruleKeyword = 'required|unique:keywords,keyword|min:4|max:255';
+        if ($this->route()->id) $ruleKeyword = 'required|min:4|max:255|unique:keywords,keyword,' . $this->route()->id . ',id';
+        $rule = [
+            'keyword' => $ruleKeyword,
+            'keyword_en' => 'required|min:4',
+            'keyword_slug' => 'required|min:4',
+            'type' => 'required|integer',
+            'status' => 'required|integer',
         ];
+        return $rule;
     }
 }

@@ -1,6 +1,6 @@
 @extends('layouts.main')
-@section('title', 'Cập nhật chuyên ngành ')
-@section('page-title', 'Cập nhật chuyên ngành ')
+@section('title', 'Quản lý chuyên ngành')
+@section('page-title', 'Quản lý chuyên ngành')
 @section('content')
     <div class="row mb-4">
         <div class="col-lg-12">
@@ -74,7 +74,7 @@
                             data-hide-search="false" tabindex="-1" aria-hidden="true" name="parent_id"
                             value="{{ old('parent_id') }}">
                             @if ($major->parent != null)
-                                <option value="0">Không Thuộc chuyên ngành nào</option>
+                                <option value="0">Không thuộc chuyên ngành nào</option>
                                 @foreach ($dataMajor as $Major)
                                     @php
                                         $dash = '';
@@ -87,7 +87,7 @@
                                     ])
                                 @endforeach
                             @else
-                                <option value="0">Không Thuộc chuyên ngành nào</option>
+                                <option value="0">Không thuộc chuyên ngành nào</option>
                                 @foreach ($dataMajor as $Major)
                                     @php
                                         $dash = '';

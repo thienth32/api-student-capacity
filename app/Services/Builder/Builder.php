@@ -125,7 +125,9 @@ class Builder extends  EloquentBuilder
      */
     public function search($search = null, $search_by = null, $Flagtype = false)
     {
-        if ($search == null) return $this;
+        if ($search == null)
+
+            return $this;
         // if (!(\Str::contains($search, '@'))) $search = \Str::slug($search, " ");
 
         // if ($Flagtype) $this->where('type', request('type') ?? 0);

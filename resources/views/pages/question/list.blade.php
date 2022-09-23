@@ -266,7 +266,7 @@
                             <th scope="col">Nội dung câu hỏi
                                 <a
                                     href="{{ route('admin.teams', [
-                                        'sortBy' => request()->has('sortBy') ? (request('sortBy') == 'desc' ? 'asc' : 'desc') : 'asc',
+                                        'sort_by' => request()->has('sort_by') ? (request('sort_by') == 'desc' ? 'asc' : 'desc') : 'asc',
                                         'orderBy' => 'name',
                                     ]) }}">
                                     <span role="button" data-key="name" data-bs-toggle="tooltip"

@@ -1,6 +1,6 @@
 @extends('layouts.main')
-@section('title', 'Thêm ' . $contest_type_text)
-@section('page-title', 'Thêm mới ' . $contest_type_text)
+@section('title', 'Quản lý ' . $contest_type_text)
+@section('page-title', 'Quản lý ' . $contest_type_text)
 @section('content')
     <div class="row mb-4">
         <div class="col-lg-12">

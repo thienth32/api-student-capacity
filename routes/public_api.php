@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\CompanyController as AdminCompanyController;
 use App\Http\Controllers\Admin\ContestController as AdminContestController;
 use App\Http\Controllers\Admin\EnterpriseController;
 use App\Http\Controllers\Admin\ExamController;
+use App\Http\Controllers\admin\KeywordController;
 use App\Http\Controllers\Admin\MajorController as AdminMajorController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\QuestionController;
@@ -101,4 +102,7 @@ Route::prefix('skill')->group(function () {
 });
 Route::prefix('candidate')->group(function () {
     Route::post('add', [CandidateController::class, 'ApiAddCandidate']);
+});
+Route::prefix('keywords')->group(function () {
+    Route::get('', [KeywordController::class, 'indexApi']);
 });
