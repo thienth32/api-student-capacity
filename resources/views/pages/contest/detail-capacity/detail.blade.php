@@ -195,7 +195,7 @@
                                                 <i role="button" data-bs-toggle="tooltip" title="Quản lý bài làm "
                                                     data-round_id="{{ $round->id }}"
                                                     data-round_name="{{ $round->name }}"
-                                                    class="add-exam m-auto bi bi-plus-circle-fill fs-2x"></i>
+                                                    class="add-exam m-auto bi bi-text-indent-left fs-2x"></i>
                                             </td>
                                             <td>
                                                 <div data-bs-toggle="tooltip" title="Thao tác "
@@ -339,9 +339,13 @@
                                                                 <tr>
                                                                     <td style="width: 80%">{{ $exam->name }}</td>
                                                                     <td style="width: 20%">
-                                                                        <label data-bs-toggle="modal"
-                                                                            data-bs-target="#kt_modal_exc" type="button"
-                                                                            class="btn btn-light-primary me-3"
+                                                                        <button
+                                                                            style="background: #ccc;
+    padding: 1vh 1vh 1vh 2vh;
+    border-radius: 20px;"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#kt_modal_exc_{{ $exam->id }}"
+                                                                            type="button" class="btn   me-3"
                                                                             id="kt_file_manager_new_folder">
                                                                             <!--begin::Svg Icon | path: icons/duotune/files/fil013.svg-->
                                                                             <span class="svg-icon svg-icon-2">
@@ -360,15 +364,17 @@
                                                                                         fill="black"></path>
                                                                                 </svg>
                                                                             </span>
-                                                                            <!--end::Svg Icon-->Tải Excel
-                                                                        </label>
+                                                                            <!--end::Svg Icon-->
+                                                                        </button>
 
                                                                         <div class="modal fade" tabindex="-1"
-                                                                            id="kt_modal_exc">
+                                                                            id="kt_modal_exc_{{ $exam->id }}">
                                                                             <div class="modal-dialog">
                                                                                 <div class="modal-content">
                                                                                     <div class="modal-header">
                                                                                         <h5 class="modal-title">Tải lên
+                                                                                            excel
+                                                                                            <strong>{{ $exam->name }}</strong>
                                                                                         </h5>
 
                                                                                         <!--begin::Close-->
@@ -389,7 +395,8 @@
                                                                                             class="modal-body text-center">
                                                                                             <div class="HDSD">
                                                                                             </div>
-                                                                                            <label for="up-file"
+                                                                                            <label
+                                                                                                for="up-file{{ $exam->id }}"
                                                                                                 class="">
                                                                                                 <i data-bs-toggle="tooltip"
                                                                                                     title="Click để upload file"
@@ -400,7 +407,8 @@
                                                                                             <input style="display: none"
                                                                                                 type="file"
                                                                                                 name="ex_file"
-                                                                                                id="up-file">
+                                                                                                class="up-file"
+                                                                                                id="up-file{{ $exam->id }}">
                                                                                             <div style="display: none"
                                                                                                 class="progress show-p mt-3 h-25px w-100">
                                                                                                 <div class="progress-bar bg-primary progress-bar-striped progress-bar-animated"
@@ -439,7 +447,8 @@
                                                                                 class="btn-click-show-exams btn btn-primary"
                                                                                 data-bs-toggle="modal"
                                                                                 data-bs-target="#kt_modal_2">
-                                                                                <i class="bi bi-ui-checks-grid"></i>
+                                                                                {{-- <i class="bi bi-ui-checks-grid"></i> --}}
+                                                                                <i class="bi bi-arrows-move"></i>
                                                                             </button>
                                                                         </span>
 
@@ -892,7 +901,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('#up-file').on("change", function() {
+            $('.up-file').on("change", function() {
                 $('.show-name').html($(this)[0].files[0].name);
             })
             $('.form-submit').ajaxForm({
@@ -911,6 +920,8 @@
                 success: function() {
                     $(".progress").hide();
                     $(".upload-file").html("Tải lên")
+                    toastr.success("Tải lên thành công !");
+                    $('.up-file').val('');
                     // window.location.reload();
                 },
                 error: function(xhr, status, error) {

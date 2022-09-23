@@ -94,7 +94,8 @@ function fetchRoundGet(id) {
                                      <button style="background: #ccc;padding: 1vh 1vh 1vh 2vh;border-radius: 20px;" type="button" data-exam_name="${
                                          data.name
                                      }" data-exam_id="${data.id}" class="btn-click-show-exams btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_2">
-                                        <i class="bi bi-ui-checks-grid"></i>
+
+                                        <i class="bi bi-arrows-move"></i>
                                     </button>
                                 </td>
                                 <td>
@@ -212,10 +213,12 @@ function fecthQuestionByExams(id, param = [], url = null) {
                         var skillChill = data.skills
                             .map(function (val_skill) {
                                 return `
-                        <span style="background: #ccc ; color : white , padding : 2px ; margin : 1px"> ${val_skill.name} </span>
-                    `;
+                                    <span style="background: #ccc ; color : white ; padding : 5px ; margin : 1px"> ${val_skill.name} </span>
+                                `;
                             })
                             .join(" ");
+                        if (data.skills.length == 0)
+                            skillChill = `  <span style="background: #ccc ; color : white ; padding : 5px ; margin : 1px"> Không có skill </span>`;
                         let result = listSave.filter(function (dt) {
                             return dt.id == data.id;
                         });
