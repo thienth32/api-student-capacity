@@ -55,38 +55,38 @@ class RequestContest extends FormRequest
      *
      * @return array
      */
-    public function messages()
-    {
-        return [
-            'top1.required' => trans('validate.required'),
-            'top1.numeric' =>  trans('validate.numeric'),
-            'top2.required' => trans('validate.required'),
-            'top2.numeric' =>  trans('validate.numeric'),
-            'top3.required' => trans('validate.required'),
-            'top3.numeric' =>  trans('validate.numeric'),
-            'leave.required' => trans('validate.required'),
-            'leave.numeric' =>  trans('validate.numeric'),
+    // public function messages()
+    // {
+    //     return [
+    //         'top1.required' => trans('validate.required'),
+    //         'top1.numeric' =>  trans('validate.numeric'),
+    //         'top2.required' => trans('validate.required'),
+    //         'top2.numeric' =>  trans('validate.numeric'),
+    //         'top3.required' => trans('validate.required'),
+    //         'top3.numeric' =>  trans('validate.numeric'),
+    //         'leave.required' => trans('validate.required'),
+    //         'leave.numeric' =>  trans('validate.numeric'),
 
-            'name.required' => trans('validate.required'),
-            'post_new.required' => trans('validate.required'),
-            'max_user.required' => trans('validate.required'),
-            'max_user.numeric' =>  trans('validate.numeric'),
-            'name.unique' => trans('validate.unique'),
-            'name.max' => trans('validate.max'),
-            'img.mimes' => trans('validate.mimes'),
-            'img.required' => trans('validate.required'),
-            'img.max' => trans('validate.maxImage'),
-            'date_start.required' => "Chưa nhập thời gian bắt đầu ",
-            'date_start.date' => trans('validate.date'),
-            'start_register_time.required' => "Chưa nhập thời gian bắt đầu đăng ký !",
-            'start_register_time.date' => trans('validate.date'),
+    //         'name.required' => trans('validate.required'),
+    //         'post_new.required' => trans('validate.required'),
+    //         'max_user.required' => trans('validate.required'),
+    //         'max_user.numeric' =>  trans('validate.numeric'),
+    //         'name.unique' => trans('validate.unique'),
+    //         'name.max' => trans('validate.max'),
+    //         'img.mimes' => trans('validate.mimes'),
+    //         'img.required' => trans('validate.required'),
+    //         'img.max' => trans('validate.maxImage'),
+    //         'date_start.required' => "Chưa nhập thời gian bắt đầu ",
+    //         'date_start.date' => trans('validate.date'),
+    //         'start_register_time.required' => "Chưa nhập thời gian bắt đầu đăng ký !",
+    //         'start_register_time.date' => trans('validate.date'),
 
-            'end_register_time.required' => "Chưa nhập thời gian kết thúc đăng ký !",
-            'end_register_time.date' => trans('validate.date'),
-            'register_deadline.required' => "Chưa nhập thời gian kết thúc",
-            'register_deadline.after_or_equal' => trans('validate.end_time:date_after'),
-            'register_deadline.date' => trans('validate.date'),
-            'description.required' => trans('validate.required'),
-        ];
-    }
+    //         'end_register_time.required' => "Chưa nhập thời gian kết thúc đăng ký !",
+    //         'end_register_time.date' => trans('validate.date'),
+    //         'register_deadline.required' => "Chưa nhập thời gian kết thúc",
+    //         'register_deadline.after_or_equal' => trans('validate.end_time:date_after'),
+    //         'register_deadline.date' => trans('validate.date'),
+    //         'description.required' => trans('validate.required'),
+    //     ];
+    // }
 }

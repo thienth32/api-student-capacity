@@ -29,14 +29,14 @@ class RequestSendMail extends FormRequest
         ];
     }
 
-    public function messages()
-    {
-        return [
-            'content.required' => trans('validate.required'),
-            'content.min' => trans('validate.min'),
-            'subject.min' => trans('validate.min'),
-            'subject.required' => trans('validate.required'),
-        ];
-    }
+    // public function messages()
+    // {
+    //     return [
+    //         'content.required' => trans('validate.required'),
+    //         'content.min' => trans('validate.min'),
+    //         'subject.min' => trans('validate.min'),
+    //         'subject.required' => trans('validate.required'),
+    //     ];
+    // }
 
 }

@@ -21,13 +21,13 @@ class CapacityPlay extends FormRequest
         ];
     }
 
-    public function messages()
-    {
-        return [
-            "name.required" => "Tên trò chơi không để trống !",
-            "max_ponit.required" => "Điểm trò chơi không để trống !",
-            "description.required" => "Chi tiết trò chơi không để trống !",
-            "questions.required" => "Bộ câu hỏi không bỏ trống !",
-        ];
-    }
+    // public function messages()
+    // {
+    //     return [
+    //         "name.required" => "Tên trò chơi không để trống !",
+    //         "max_ponit.required" => "Điểm trò chơi không để trống !",
+    //         "description.required" => "Chi tiết trò chơi không để trống !",
+    //         "questions.required" => "Bộ câu hỏi không bỏ trống !",
+    //     ];
+    // }
 }
