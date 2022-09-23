@@ -8,7 +8,7 @@
             <div class="col-lg-6">
 
                 <div class="d-flex justify-content-start">
-                    <h1>Quản lý trò chơi trực tiếp
+                    <h1>Danh sách trò chơi trực tiếp
                         <span role="button" data-bs-toggle="tooltip" title="Tải lại trang "
                             class="refresh-btn svg-icon svg-icon-primary svg-icon-2x">
                             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Update.svg--><svg
@@ -62,7 +62,8 @@
                                     {{ $exam->status == 2 ? 'Đã kết thúc' : ($exam->room_token ? 'Đã bắt đầu ' : 'Chưa bắt đầu') }}
                                 </div>
                             </td>
-                            <td> {{ count($exam->questions) }} / {{ count(json_decode($exam->room_progress) ?? []) }} </td>
+                            <td> {{ count($exam->questions) }} / {{ count(json_decode($exam->room_progress) ?? []) }}
+                            </td>
                             <td> <a href="{{ route('admin.capacit.play.show', ['id' => $exam->id]) }}">Xem chi tiết </a>
                             </td>
                         </tr>
