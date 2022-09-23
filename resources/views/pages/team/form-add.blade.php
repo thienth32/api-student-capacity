@@ -1,6 +1,6 @@
 @extends('layouts.main')
-@section('title', 'Thêm đội mới thi')
-@section('page-title', 'Thêm mới đội thi')
+@section('title', 'Quản lý đội thi')
+@section('page-title', 'Quản lý đội thi')
 @section('content')
     <div class="row mb-4">
         <div class="col-lg-12">
@@ -19,8 +19,7 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
-                <form id="formTeam" action="{{ route('admin.teams.store') }}" method="post"
-                    enctype="multipart/form-data">
+                <form id="formTeam" action="{{ route('admin.teams.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-lg-8">

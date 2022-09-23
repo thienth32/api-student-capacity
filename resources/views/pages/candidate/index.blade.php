@@ -7,7 +7,7 @@
             <div class="col-lg-6">
                 <div class="d-flex justify-content-start">
                     <h1>
-                        Thông tin ứng tuyển
+                        Danh sách thông tin ứng tuyển
                     </h1>
                     <a class="mx-2" href="{{ route('admin.candidate.list') }}">
                         <span data-bs-toggle="tooltip" title="Tải lại trang " role="button"
@@ -234,12 +234,12 @@
 
                                 <td>
 
-                                    <a class="show_file btn btn-primary" target="_blank"
+                                    <a class="show_file btn btn-primary btn-sm" target="_blank"
                                         href="{{ Storage::disk('s3')->temporaryUrl($key->file_link, now()->addMinutes(5)) }}">Xem</a>
                                 </td>
 
                                 <td>
-                                    <a class="download_file btn btn-success"
+                                    <a class="download_file btn btn-success btn-sm"
                                         href="{{ route('dowload.file') . '?url=' . $key->file_link }}">Tải
                                         xuống</a>
 

@@ -7,7 +7,7 @@
             <div class="col-lg-6">
                 <div class="d-flex justify-content-start">
                     <h1>
-                        Quản lý bài viết
+                        Danh sách bài viết
                     </h1>
                     <a class="mx-2" href="{{ route('admin.post.list') }}">
                         <span role="button" data-bs-toggle="tooltip" title="Tải lại trang "

@@ -1,6 +1,6 @@
 @extends('layouts.main')
-@section('title', 'Danh sách câu hỏi')
-@section('page-title', 'Danh sách câu hỏi')
+@section('title', 'Quản lý bộ câu hỏi')
+@section('page-title', 'Quản lý bộ câu hỏi')
 @section('content')
 
 
@@ -9,7 +9,7 @@
         <div class="row mb-4">
             <div class=" col-lg-6">
 
-                <h1>Quản lý câu hỏi
+                <h1>Danh sách bộ câu hỏi
                     <span data-bs-toggle="tooltip" title="Tải lại trang " role="button"
                         class="refresh-btn svg-icon svg-icon-primary svg-icon-2x">
                         <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Update.svg--><svg

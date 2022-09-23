@@ -1,11 +1,11 @@
 @extends('layouts.main')
-@section('title', 'Danh sách đội thi')
-@section('page-title', 'Danh sách đội thi')
+@section('title', 'Quản lý đội thi')
+@section('page-title', 'Quản lý đội thi')
 @section('content')
     <div class="card card-flush p-4">
         <div class="row">
             <div class=" col-lg-6">
-                <h1>Quản lý đội thi
+                <h1>Danh sách đội thi
                     <a href="{{ route('admin.teams') }}">
                         <span role="button" data-bs-toggle="tooltip" title="Tải lại trang "
                             class="refresh-btn svg-icon svg-icon-primary svg-icon-2x">

@@ -2,29 +2,30 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\Contest\RequestContest;
-use App\Services\Modules\MContest\MContestInterface;
-use App\Services\Traits\TStatus;
 use Exception;
 use App\Models\Team;
 use App\Models\User;
 use App\Models\Major;
 use App\Models\Skill;
 use App\Models\Enterprise;
+use App\Models\ContestUser;
 use Illuminate\Http\Request;
+use App\Services\Traits\TStatus;
 use App\Services\Traits\TResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\ContestUser;
-use App\Services\Modules\MContestUser\MContestUserInterface;
-use App\Services\Modules\MMajor\MMajorInterface;
-use App\Services\Modules\MSkill\MSkillInterface;
-use App\Services\Modules\MTeam\MTeamInterface;
 use App\Services\Traits\TTeamContest;
 use App\Services\Traits\TUploadImage;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\Contest\RequestContest;
+use App\Services\Modules\MTeam\MTeamInterface;
+use App\Services\Modules\MMajor\MMajorInterface;
+use App\Services\Modules\MSkill\MSkillInterface;
+use App\Services\Modules\MContest\MContestInterface;
+use App\Services\Modules\MContestUser\MContestUserInterface;
 
 class ContestController extends Controller
 {
