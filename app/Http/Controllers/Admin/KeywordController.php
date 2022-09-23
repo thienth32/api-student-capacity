@@ -39,8 +39,7 @@ class KeywordController extends Controller
      *     @OA\Parameter(
      *         name="type",
      *         in="query",
-     *          type="number",
-     *         description="",
+     *         description="Các cột cần lọc  ",
      *         required=false,
      *     ),
      *     @OA\Response(response="200", description="{ status: true , data : data }"),
