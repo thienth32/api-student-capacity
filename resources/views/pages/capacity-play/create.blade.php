@@ -1,17 +1,22 @@
 @extends('layouts.main')
-@section('title', 'Thêm mới trò chơi trực tiếp ')
-@section('page-title', 'Thêm mới trò chơi trực tiếp ')
+@section('title', 'Quản lý trò chơi trực tiếp ')
+@section('page-title', 'Quản lý trò chơi trực tiếp ')
 @section('content')
 
-    <div class="card card-flush p-4">
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="d-flex justify-content-start">
-                    <h1>Thêm mới trò chơi trực tiếp | <a href="{{ route('admin.capacit.play.index') }}"> Quản lý </a>
-                    </h1>
-                </div>
-            </div>
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <ol class="breadcrumb text-muted fs-6 fw-bold">
+                <li class="breadcrumb-item pe-3">
+                    <a href="{{ route('admin.capacit.play.index') }}" class="pe-3">
+                        Danh sách trò chơi trực tiếp
+                    </a>
+                </li>
+                <li class="breadcrumb-item px-3 text-muted">Thêm mới trò chơi trực tiếp</li>
+            </ol>
         </div>
+    </div>
+    <div class="card card-flush p-4">
+
         <div class="row">
             <div class="col-lg-12">
                 <div class="card card-flush h-lg-100 p-10">
