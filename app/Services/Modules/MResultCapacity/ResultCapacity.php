@@ -31,7 +31,9 @@ class ResultCapacity implements MResultCapacityInterface
 
     public function update($id, $data)
     {
-        return $this->model::whereId($id)->update($data);
+        $model = $this->model::whereId($id)->first();
+        $model->update($data);
+        return $model;
     }
 
     public function find($id)

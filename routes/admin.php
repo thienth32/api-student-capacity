@@ -148,6 +148,7 @@ Route::group([
         Route::post('store', [CapacityPlayController::class, 'store'])->name('admin.capacit.play.store');
         Route::get('{id}', [CapacityPlayController::class, 'show'])->name('admin.capacit.play.show');
         Route::get('run-now/{id}', [CapacityPlayController::class, 'start'])->name('admin.capacit.play.run');
+        Route::get('view-now/{id}', [CapacityPlayController::class, 'viewStart'])->name('admin.capacit.play.view.run');
         Route::get('end/{id}', [CapacityPlayController::class, 'end'])->name('admin.capacit.play.end');
     });
 

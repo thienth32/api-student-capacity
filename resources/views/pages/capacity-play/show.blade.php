@@ -12,6 +12,8 @@
                 </li>
                 <li class="breadcrumb-item px-3 text-muted">Chi tiết </li>
             </ol>
+            <input type="hidden" value="{{ $token }}" class="show-token">
+            <input type="hidden" value="{{ auth()->id() }}" class="id-me">
         </div>
     </div>
     <div class="card card-flush p-4">
@@ -20,11 +22,23 @@
                 <h2 class="text-primary"> Trò chơi đã kết thúc </h2>
             </div>
         @else
-            <div class="alert alert-primary text-center">
+            <div class="alert alert-primary mb-1  text-center">
+                @if ($exam->type == 1)
+                    <a href="{{ route('admin.capacit.play.view.run', ['id' => $exam->room_code]) }}"
+                        class="btn btn-primary">
+                        Bắt đầu
+                    </a>
+                @else
+                    <a href="{{ route('admin.capacit.play.run', ['id' => $exam->room_code]) }}" class="btn btn-primary">
+                        Bắt đầu
+                    </a>
+                @endif
 
-                <a href="{{ route('admin.capacit.play.run', ['id' => $exam->room_code]) }}" class="btn btn-primary">
-                    Bắt đầu
-                </a>
+
+                <h2>Danh sách tài khoản trực tuyến </h2>
+                <div id="show-user-online" class="flex flex-md-column-fluid">
+                    Máy chủ đang khởi động
+                </div>
             </div>
         @endif
 
@@ -58,11 +72,11 @@
         </div>
 
 
-        <div class="col-lg-12 col-12 mt-1">
-            <div class="alert alert-primary p-3 rounded   text-center">
-                <h2 class="mb-2">Danh sách tài khoản </h2>
-                <div class="row">
-                    @if (count($ranks) > 0)
+        @if (count($ranks) > 0)
+            <div class="col-lg-12 col-12 mt-1">
+                <div class="alert alert-primary p-3 rounded   text-center">
+                    <h2 class="mb-2">Danh sách tài khoản </h2>
+                    <div class="row">
                         @foreach ($ranks as $key => $rank)
                             <div class="col-lg-3 col-12 mb-1">
                                 <div class="card   p-3 card-flush">
@@ -74,18 +88,18 @@
                                 </div>
                             </div>
                         @endforeach
-                    @else
+                        {{-- @else
                         <div class="   col-12 mb-1">
                             <div class="card   p-3 card-flush">
                                 <h3>Chưa có danh sách !</h3>
                             </div>
                         </div>
-                    @endif
+                    @endif --}}
 
+                    </div>
                 </div>
             </div>
-        </div>
-
+        @endif
         <!-- Modal -->
         <div class="modal fade" id="modalId" tabindex="-1" role="dialog" aria-labelledby="modalTitleId"
             aria-hidden="true">
@@ -143,4 +157,35 @@
 @endsection
 @section('page-script')
     <script src="{{ asset('assets/js/system/capacity-play/capacity-play.js') }}"></script>
+    <script src="http://localhost:6001/socket.io/socket.io.js"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
+    <script>
+        const code = "{{ $exam->room_code }}";
+        var users = [];
+
+        function renderUser() {
+            var html = users.map(function(data) {
+                return `
+                    <span class="bg-primary p-2 text-light rounded mb-1">${data.id == $('.id-me').val() ? '(Bạn)' : ''} ${data.name}</span>
+                `;
+            }).join(" ");
+            $('#show-user-online').html(html);
+        }
+        window.Echo.join('room.' + code)
+            .here((users) => {
+                this.users = users;
+                renderUser();
+            })
+            .joining((user) => {
+                this.users.push(user);
+                renderUser();
+            })
+            .leaving((user) => {
+                var us = this.users.filter(function(data) {
+                    return data.id !== user.id;
+                });
+                this.users = us;
+                renderUser();
+            })
+    </script>
 @endsection

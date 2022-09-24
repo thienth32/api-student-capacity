@@ -168,7 +168,7 @@
                                     <th>Tổng số bài làm</th>
                                     <th>Thời gian bắt đầu</th>
                                     <th>Thời gian kết thúc</th>
-                                    <th style="text-align: center">Thao tác </th>
+                                    <th style="text-align: center">Quản lý bài làm </th>
                                     <th style="text-align: center"> </th>
                                 </tr>
                             </thead>
