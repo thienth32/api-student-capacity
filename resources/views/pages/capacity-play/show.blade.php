@@ -16,7 +16,10 @@
             <input type="hidden" value="{{ auth()->id() }}" class="id-me">
         </div>
     </div>
-    <div class="card card-flush p-4">
+    <div style="    background-image: url('assets/media/images/quiz-background.webp');
+    background-size: cover;
+}"
+        class="card card-flush p-4">
         @if ($exam->status == 2)
             <div class="alert alert-primary text-center">
                 <h2 class="text-primary"> Trò chơi đã kết thúc </h2>
