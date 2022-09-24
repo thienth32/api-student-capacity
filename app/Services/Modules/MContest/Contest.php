@@ -36,17 +36,20 @@ class Contest implements MContestInterface
 
         if ($flagCapacity)
             $with = [
-                'rounds' => function ($q) {
-                    return $q->with([
-                        'exams' => function ($q) {
-                            return $q->with([
-                                'questions' => function ($q) {
-                                    return $q->with('answers');
-                                }
-                            ]);
-                        }
-                    ]);
-                }
+                'userCapacityDone:contest_id',
+                'skills:name,short_name',
+                'rounds:contest_id'
+                // 'rounds' => function ($q) {
+                //     return $q->with([
+                //         'exams' => function ($q) {
+                //             return $q->with([
+                //                 'questions' => function ($q) {
+                //                     return $q->with('answers');
+                //                 }
+                //             ]);
+                //         }
+                //     ]);
+                // }
             ];
 
         $now = $this->carbon::now('Asia/Ho_Chi_Minh');
@@ -314,7 +317,7 @@ class Contest implements MContestInterface
             ->orderBy('id', 'desc')
             ->limit(request('limit') ?? 4)
             ->get()
-            ->load(['rounds', 'skills', 'userCapacityDone']);
+            ->load(['rounds:contest_id', 'skills:name,short_name', 'userCapacityDone']);
     }
 
     public function getContestByIdUpdate($id, $type = 0)
