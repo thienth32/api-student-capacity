@@ -36,9 +36,9 @@ class Contest implements MContestInterface
 
         if ($flagCapacity)
             $with = [
-                'userCapacityDone:contest_id',
+                // 'userCapacityDone:contest_id',
                 'skills:name,short_name',
-                'rounds:contest_id'
+                // 'rounds:contest_id'
                 // 'rounds' => function ($q) {
                 //     return $q->with([
                 //         'exams' => function ($q) {
@@ -74,9 +74,11 @@ class Contest implements MContestInterface
             if ($request->has('major_id')) $contest->hasRequest(['major_id' => $request->major_id ?? null]);
         });
         if ($request->has('sort')) $contest->sort(($request->sort == 'asc' ? 'asc' : 'desc'), $request->sort_by ?? null, 'contests');
+
+
         return $contest
             ->with($with)
-            ->withCount(['teams', 'rounds']);
+            ->withCount(['teams', 'rounds', 'userCapacityDone']);
     }
 
     public function index()
@@ -190,7 +192,9 @@ class Contest implements MContestInterface
             'judges'
         ];
         if ($type == config('util.TYPE_TEST')) $with = [
-            'rounds',
+            'rounds' => function ($q) {
+                return $q->orderBy('start_time', 'asc');
+            },
             'recruitmentEnterprise',
             'userCapacityDone' => function ($q) {
                 return $q->with('user');
@@ -316,8 +320,9 @@ class Contest implements MContestInterface
         return $this->contest::whereIn('id', $capacityArrId)
             ->orderBy('id', 'desc')
             ->limit(request('limit') ?? 4)
+            ->withCount(['rounds', 'userCapacityDone'])
             ->get()
-            ->load(['rounds:contest_id', 'skills:name,short_name', 'userCapacityDone']);
+            ->load(['skills:name,short_name']);
     }
 
     public function getContestByIdUpdate($id, $type = 0)
