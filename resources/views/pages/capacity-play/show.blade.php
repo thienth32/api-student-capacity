@@ -12,7 +12,7 @@
                 </li>
                 <li class="breadcrumb-item px-3 text-muted">Chi tiết </li>
             </ol>
-            <input type="hidden" value="{{ $token }}" class="show-token">
+            <input type="hidden" value="{{ session()->get('token') }}" class="show-token">
             <input type="hidden" value="{{ auth()->id() }}" class="id-me">
         </div>
     </div>
@@ -157,35 +157,37 @@
 @endsection
 @section('page-script')
     <script src="{{ asset('assets/js/system/capacity-play/capacity-play.js') }}"></script>
-    <script src="http://localhost:6001/socket.io/socket.io.js"></script>
-    <script src="{{ asset('js/app.js') }}"></script>
-    <script>
-        const code = "{{ $exam->room_code }}";
-        var users = [];
+    @if ($exam->status !== 2)
+        <script src="http://localhost:6001/socket.io/socket.io.js"></script>
+        <script src="{{ asset('js/app.js') }}"></script>
+        <script>
+            const code = "{{ $exam->room_code }}";
+            var users = [];
 
-        function renderUser() {
-            var html = users.map(function(data) {
-                return `
+            function renderUser() {
+                var html = users.map(function(data) {
+                    return `
                     <span class="bg-primary p-2 text-light rounded mb-1">${data.id == $('.id-me').val() ? '(Bạn)' : ''} ${data.name}</span>
                 `;
-            }).join(" ");
-            $('#show-user-online').html(html);
-        }
-        window.Echo.join('room.' + code)
-            .here((users) => {
-                this.users = users;
-                renderUser();
-            })
-            .joining((user) => {
-                this.users.push(user);
-                renderUser();
-            })
-            .leaving((user) => {
-                var us = this.users.filter(function(data) {
-                    return data.id !== user.id;
+                }).join(" ");
+                $('#show-user-online').html(html);
+            }
+            window.Echo.join('room.' + code)
+                .here((users) => {
+                    this.users = users;
+                    renderUser();
+                })
+                .joining((user) => {
+                    this.users.push(user);
+                    renderUser();
+                })
+                .leaving((user) => {
+                    var us = this.users.filter(function(data) {
+                        return data.id !== user.id;
+                    });
+                    this.users = us;
+                    renderUser();
                 });
-                this.users = us;
-                renderUser();
-            })
-    </script>
+        </script>
+    @endif
 @endsection
