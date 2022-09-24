@@ -78,14 +78,6 @@ class CapacityPlayController extends Controller
 
         $data = [];
 
-
-        if (!session()->has('token')) {
-            auth()->user()->tokens()->delete();
-            $data['token'] = auth()->user()->createToken("token_admin")->plainTextToken;
-            session()->put('token', $data['token']);
-        } else {
-            $data['token'] = session()->get('token');
-        }
         $data['exam'] = $this->examRepo->findById($id);
         if ($data['exam']->round_id) abort(404);
         $data['exam']->load(['questions' => function ($q) {
@@ -148,8 +140,6 @@ class CapacityPlayController extends Controller
         }], ['questions']);
         if ($exam->type == 1) return abort(404);
         if ($exam->status == 2) return abort(404);
-        // $data['question'] = $exam->questions[0];
-        // return view('pages.capacity-play.play', $data);
 
         //
         $data = [];

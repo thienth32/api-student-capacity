@@ -17,6 +17,7 @@ class AuthController extends Controller
     {
         return view('auth.login');
     }
+
     public function redirectToGoogle()
     {
 
@@ -30,6 +31,11 @@ class AuthController extends Controller
         // dd($user->hasRole(config('util.ADMIN_ROLE')));
         if ($user && $user->hasRole([config('util.SUPER_ADMIN_ROLE'), config('util.ADMIN_ROLE'), config('util.JUDGE_ROLE'), config('util.TEACHER_ROLE')])) {
             Auth::login($user);
+            if (!session()->has('token')) {
+                auth()->user()->tokens()->delete();
+                $token = auth()->user()->createToken("token_admin")->plainTextToken;
+                session()->put('token', $token);
+            }
             return redirect(route('dashboard'));
         }
         return redirect(route('login'))->with('msg', "Tài khoản của bạn không có quyền truy cập!");
@@ -132,6 +138,7 @@ class AuthController extends Controller
 
     public function logout()
     {
+        auth()->user()->tokens()->delete();
         Auth::logout();
         return redirect(route('login'));
     }
