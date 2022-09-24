@@ -147,6 +147,7 @@ class CapacityPlayController extends Controller
             return $q->with(['answers:id,question_id,content']);
         }], ['questions']);
         if ($exam->type == 1) return abort(404);
+        if ($exam->status == 2) return abort(404);
         // $data['question'] = $exam->questions[0];
         // return view('pages.capacity-play.play', $data);
 
