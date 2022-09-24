@@ -2198,15 +2198,16 @@ window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 //     forceTLS: true
 // });
 
+var token = $(".show-token").val();
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   broadcaster: "socket.io",
   host: "".concat(window.location.protocol, "//").concat(window.location.hostname, ":6001"),
-  withCredentials: true // auth: {
-  //     headers: {
-  //         Authorization: `Bearer ${token}`,
-  //     },
-  // },
-
+  withCredentials: true,
+  auth: {
+    headers: {
+      Authorization: "Bearer ".concat(token)
+    }
+  }
 });
 
 /***/ }),

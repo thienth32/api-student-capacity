@@ -46,6 +46,7 @@
                         <th>Chi tiết trò chơi </th>
                         <th>Số điểm </th>
                         <th>Tình trạng </th>
+                        <th>Hình thức </th>
                         <th>Tiến độ </th>
                         <th>Thao tác </th>
                     </tr>
@@ -62,7 +63,9 @@
                                     {{ $exam->status == 2 ? 'Đã kết thúc' : ($exam->room_token ? 'Đã bắt đầu ' : 'Chưa bắt đầu') }}
                                 </div>
                             </td>
-                            <td> {{ count($exam->questions) }} / {{ count(json_decode($exam->room_progress) ?? []) }}
+                            <td> {{ $exam->type == 1 ? 'Tự động' : 'Điều khiển' }} </td>
+                            <td> {{ count($exam->questions) }} /
+                                {{ $exam->type == 1 ? 'NO' : count(json_decode($exam->room_progress) ?? []) }}
                             </td>
                             <td> <a href="{{ route('admin.capacit.play.show', ['id' => $exam->id]) }}">Xem chi tiết </a>
                             </td>

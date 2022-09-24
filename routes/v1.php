@@ -77,3 +77,4 @@ Route::post('get-next-round-capacity', [RoundController::class, 'nextRoundCapaci
 Route::get("auth-room-play/{room}", [CapacityPlayController::class, 'autTokenPlay']);
 Route::get("connect-room/{room}", [CapacityPlayController::class, 'userContinueTest']);
 Route::post("sumit-room/{code}", [CapacityPlayController::class, 'submitQuestionCapacityPlay']);
+Route::post("next-sumit-room/{code}", [CapacityPlayController::class, 'nextQuestionApi']);

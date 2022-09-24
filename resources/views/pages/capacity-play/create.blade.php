@@ -57,6 +57,19 @@
                             </div>
                             <div class="col-12 pb-2">
                                 <div class="form-group mb-4">
+                                    <label for="" class="form-label">Hình thức trực tiếp </label>
+                                    <select class="form-select" data-control="select2" name="type"
+                                        data-placeholder="Select an option">
+                                        <option value="0"> Điều khiển </option>
+                                        <option value="1"> Tự động </option>
+                                    </select>
+                                    @error('type')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-12 pb-2">
+                                <div class="form-group mb-4">
                                     <label for="" class="form-label">Hình thức chọ bộ câu hỏi </label>
                                     <select multiple class="form-select" data-control="select2" name="questions[]"
                                         data-placeholder="Select an option">

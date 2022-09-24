@@ -73,6 +73,7 @@ class Exam implements MExamInterface
                 "name" => $data->name,
                 "description" => $data->description,
                 "max_ponit" => $data->max_ponit,
+                "type" => $data->type,
                 "ponit" => $data->max_ponit,
                 "external_url" => "null",
                 "room_code" => MD5(uniqid() . time()),
