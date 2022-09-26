@@ -50,7 +50,7 @@
                 <div class="alert alert-primary p-3 rounded  ">
                     <div class="card card-flush p-2">
                         <h2>Trò chơi : {{ $exam->name }} </h2>
-                        <h2>Mã trò chơi : <button data-bs-toggle="tooltip" title="Copy to" type="button"
+                        <h2>Mã trò chơi : <button data-bs-toggle="tooltip" title="Copy" type="button"
                                 class="copy_to btn btn-primary btn-sm">{{ $exam->room_code }}</button> </h2>
                         <h2>Điểm thưởng : <strong>{{ $exam->max_ponit }}</strong>
                         </h2>
