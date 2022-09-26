@@ -41,15 +41,14 @@ class CapacityPlayController extends Controller
     {
         $data = [];
         $data['skills'] = $this->skillRepo->getAll(['id', 'name']);
-        dd($data['skills']->toArray());
+        // dd($data['skills']->toArray());
         $data['questions'] = $this->questionRepo->getAllQuestion();
         return view('pages.capacity-play.create', $data);
     }
 
-    // public function store(CapacityPlay $request)
-    public function store(Request $request)
+    public function store(CapacityPlay $request)
+    // public function store(Request $request)
     {
-        dd($request->all());
         DB::beginTransaction();
         try {
             $exam  = $this->examRepo->storeCapacityPlay($request);
