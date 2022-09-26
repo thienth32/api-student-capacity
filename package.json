@@ -16,6 +16,7 @@
         "postcss": "^8.1.14"
     },
     "dependencies": {
-        "laravel-echo": "^1.14.0"
+        "laravel-echo": "^1.14.0",
+        "socket.io-client": "^4.5.2"
     }
 }

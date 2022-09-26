@@ -38,7 +38,7 @@
 
 @endsection
 @section('page-script')
-    <script src="http://localhost:6001/socket.io/socket.io.js"></script>
+    <script src="{{ request()->getScheme() }}://{{ request()->getHost() }}:6001/socket.io/socket.io.js"></script>
     <script src="{{ asset('js/app.js') }}"></script>
     <script>
         var ranks = @json($ranks);

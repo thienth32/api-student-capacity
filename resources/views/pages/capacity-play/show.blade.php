@@ -54,6 +54,8 @@
                                 class="copy_to btn btn-primary btn-sm">{{ $exam->room_code }}</button> </h2>
                         <h2>Điểm thưởng : <strong>{{ $exam->max_ponit }}</strong>
                         </h2>
+                        <h2>Hình thức trực tuyến : <strong>{{ $exam->status == 0 ? 'Tự động' : 'Điều khiển ' }}</strong>
+                        </h2>
                         <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal"
                             data-bs-target="#modalId">
                             Bộ câu hỏi
@@ -156,12 +158,11 @@
 
     </div>
 
-
 @endsection
 @section('page-script')
     <script src="{{ asset('assets/js/system/capacity-play/capacity-play.js') }}"></script>
     @if ($exam->status !== 2)
-        <script src="http://localhost:6001/socket.io/socket.io.js"></script>
+        <script src="{{ request()->getScheme() }}://{{ request()->getHost() }}:6001/socket.io/socket.io.js"></script>
         <script src="{{ asset('js/app.js') }}"></script>
         <script>
             const code = "{{ $exam->room_code }}";
