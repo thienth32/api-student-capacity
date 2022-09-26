@@ -72,6 +72,7 @@ class Contest implements MContestInterface
             if ($request->has('status')) $contest->status($request->status);
             if ($request->has('start_time') && $request->has('end_time')) $contest->hasDateTimeBetween($whereDate, $request->start_time ?? null, $request->end_time ?? null);
             if ($request->has('major_id')) $contest->hasRequest(['major_id' => $request->major_id ?? null]);
+            if ($request->has('skill_id')) $contest->whenWhereHasRelationship(request('skill_id') ?? null, 'skills', 'skills.id', (request()->has('skill_id') && request('skill_id') == 0) ? true : false);
         });
         if ($request->has('sort')) $contest->sort(($request->sort == 'asc' ? 'asc' : 'desc'), $request->sort_by ?? null, 'contests');
 

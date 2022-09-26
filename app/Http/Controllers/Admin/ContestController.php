@@ -153,6 +153,12 @@ class ContestController extends Controller
      *         description="Lọc theo chuyên ngành   ",
      *         required=false,
      *     ),
+     *     @OA\Parameter(
+     *         name="skill_id",
+     *         in="query",
+     *         description="Lọc theo skill   ",
+     *         required=false,
+     *     ),
      *     @OA\Response(response="200", description="{ status: true , data : data }"),
      *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
      * )

@@ -13,6 +13,7 @@ use App\Services\Modules\MExam\MExamInterface;
 use App\Services\Modules\MQuestion\MQuestionInterface;
 use App\Services\Modules\MResultCapacity\MResultCapacityInterface;
 use App\Services\Modules\MResultCapacityDetail\MResultCapacityDetailInterface;
+use App\Services\Modules\MSkill\MSkillInterface;
 use App\Services\Traits\TResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -25,7 +26,8 @@ class CapacityPlayController extends Controller
         public MQuestionInterface $questionRepo,
         public MResultCapacityInterface $resultCapacityRepo,
         public MResultCapacityDetailInterface $resultCapacityDetailRepo,
-        public MAnswerInterface $answerRepo
+        public MAnswerInterface $answerRepo,
+        public MSkillInterface $skillRepo
     ) {
     }
 
@@ -38,12 +40,16 @@ class CapacityPlayController extends Controller
     public function create()
     {
         $data = [];
+        $data['skills'] = $this->skillRepo->getAll(['id', 'name']);
+        dd($data['skills']->toArray());
         $data['questions'] = $this->questionRepo->getAllQuestion();
         return view('pages.capacity-play.create', $data);
     }
 
-    public function store(CapacityPlay $request)
+    // public function store(CapacityPlay $request)
+    public function store(Request $request)
     {
+        dd($request->all());
         DB::beginTransaction();
         try {
             $exam  = $this->examRepo->storeCapacityPlay($request);
