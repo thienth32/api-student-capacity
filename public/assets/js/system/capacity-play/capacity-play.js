@@ -7,7 +7,7 @@ const capacity_play = {
             $temp.val($(this).text()).select();
             document.execCommand("copy");
             $temp.remove();
-            // loadTast();
+            toastr.success("Copied!");
         });
     },
 };
