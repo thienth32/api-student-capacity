@@ -68,7 +68,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            {{-- <div class="col-12 pb-2">
+                            <div class="col-12 pb-2">
                                 <div class="form-group mb-4">
                                     <label for="" class="form-label">Hình thức chọ bộ câu hỏi </label>
                                     <select multiple class="form-select" data-control="select2" name="questions[]"
@@ -85,8 +85,8 @@
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
-                            </div> --}}
-                            <div class="col-12 pb-2">
+                            </div>
+                            {{-- <div class="col-12 pb-2">
                                 <div class="form-group mb-4">
                                     <label for="" class="form-label">Chọn bộ câu hỏi theo skill </label>
                                     <select class="form-select" data-control="select2" name=""
@@ -103,7 +103,7 @@
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                         <div class="form-group mb-10 ">
                             <button type="submit" class="btn btn-success btn-lg btn-block">Lưu
