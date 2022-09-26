@@ -34,7 +34,7 @@
                                 @enderror
                             </div>
                             <div class="col-4 row ">
-                                <div class="col-12">
+                                <div class="col-12 mb-4">
                                     <label class="form-label">Số điểm </label>
                                     <input type="number" min="0" name="max_ponit" value="{{ old('max_ponit') }}"
                                         class=" form-control" placeholder="">
@@ -68,7 +68,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-12 pb-2">
+                            {{-- <div class="col-12 pb-2">
                                 <div class="form-group mb-4">
                                     <label for="" class="form-label">Hình thức chọ bộ câu hỏi </label>
                                     <select multiple class="form-select" data-control="select2" name="questions[]"
@@ -78,6 +78,24 @@
                                                 {{ $question->content }} -
                                                 {{ $question->type == 1 ? 'Nhiều câu trả lời' : 'Một câu trả lời' }} -
                                                 {{ ($question->rank == 0 ? 'Dễ' : $question->rank == 1) ? 'Trung bình' : 'Khó ' }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('questions')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div> --}}
+                            <div class="col-12 pb-2">
+                                <div class="form-group mb-4">
+                                    <label for="" class="form-label">Chọn bộ câu hỏi theo skill </label>
+                                    <select class="form-select" data-control="select2" name=""
+                                        data-placeholder="Select an option">
+                                        @foreach ($skills as $skill)
+                                            <option value="{{ $skill->id }}">
+                                                {{ $skill->name }}
+                                                -------
+                                                {{ $skill->short_name }}
                                             </option>
                                         @endforeach
                                     </select>

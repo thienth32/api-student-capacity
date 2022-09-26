@@ -40,8 +40,7 @@ class CapacityPlayController extends Controller
     public function create()
     {
         $data = [];
-        $data['skills'] = $this->skillRepo->getAll(['id', 'name']);
-        // dd($data['skills']->toArray());
+        $data['skills'] = $this->skillRepo->getAll(['id', 'name', 'short_name']);
         $data['questions'] = $this->questionRepo->getAllQuestion();
         return view('pages.capacity-play.create', $data);
     }

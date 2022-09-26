@@ -124,9 +124,12 @@ class Skill implements MSkillInterface
         }
     }
 
-    public function getAll($select = [])
+    public function getAll($selects = [])
     {
-        // return $this->skill::all();
-        return $this->skill::select($select ?? [])->get();
+        if (count($selects) > 0) {
+            return $this->skill::select($selects ?? [])->get();
+        } else {
+            return $this->skill::all();
+        }
     }
 }
