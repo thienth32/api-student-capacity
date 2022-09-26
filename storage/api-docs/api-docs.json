@@ -155,6 +155,12 @@
                         "in": "query",
                         "description": "Lọc theo chuyên ngành   ",
                         "required": false
+                    },
+                    {
+                        "name": "skill_id",
+                        "in": "query",
+                        "description": "Lọc theo skill   ",
+                        "required": false
                     }
                 ],
                 "responses": {
