@@ -108,7 +108,7 @@
                         </span>
                         <!--end::Svg Icon-->
                         <span class="d-flex flex-column align-items-start">
-                            <span class="fs-4 fw-bolder">Danh sách bài làm </span>
+                            <span class="fs-4 fw-bolder">Danh sách vòng thi </span>
                         </span>
                     </a>
                 </li>
@@ -133,7 +133,7 @@
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade active show tab-list" id="kt_vtab_pane_4" role="tabpanel">
                     <h2>
-                        Danh sách đề bài thuộc <strong style="color: blue">{{ $test_capacity->name }}</strong>
+                        Danh sách vòng thi thuộc <strong style="color: blue">{{ $test_capacity->name }}</strong>
                         <a class="mx-2" target="_blank"
                             href="{{ route('admin.round.soft.delete', 'round_soft_delete=1') }}">
 
@@ -156,33 +156,40 @@
                             </span>
                         </a>
                     </h2>
-                    <a target="_blank"
+                    <a class="btn btn-primary" target="_blank"
                         href="{{ route('admin.round.create') . '?contest_id=' . $test_capacity->id . '&type=1' }}"
-                        style="float:right">Thêm đề bài </a>
+                        style="float:right">Thêm vòng thi </a>
                     <div style="width: 100%" class="table-responsive table-responsive-md ">
                         <table class="table table-striped table-row-bordered table-row-gray-300 gy-7  table-hover ">
                             <thead>
                                 <tr>
-                                    <th>Tên đề bài </th>
-                                    <th>Bài làm</th>
-                                    <th>Tổng số bài làm</th>
+                                    <th>Tên vòng thi </th>
+                                    <th>Đề thi</th>
+                                    <th>Tổng số đề thi</th>
                                     <th>Thời gian bắt đầu</th>
                                     <th>Thời gian kết thúc</th>
-                                    <th style="text-align: center">Quản lý bài làm </th>
+                                    <th style="text-align: center">Quản lý đề thi </th>
                                     <th style="text-align: center"> </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @if ($test_capacity->rounds)
-                                    @foreach ($test_capacity->rounds as $round)
+                                    @foreach ($test_capacity->rounds as $key => $round)
                                         <tr>
-                                            <td>
-                                                {{ $round->name }}
+                                            <td data-bs-toggle="tooltip" title="Xem nhanh các cuộc thi">
+                                                <button style="width:100%" class="btn btn-primary"
+                                                    data-bs-toggle="collapse"
+                                                    data-bs-target="#collapseExample_{{ $round->id }}"
+                                                    aria-expanded="false"
+                                                    aria-controls="collapseExample_{{ $round->id }}">
+                                                    {{ $round->name }}
+                                                </button>
+
                                             </td>
                                             <td>
                                                 <a target="_blank"
                                                     href="{{ route('admin.exam.create', ['id' => $round->id]) . '?type=1' }}">Thêm
-                                                    bài làm</a>
+                                                    đề thi</a>
                                             </td>
                                             <td>
                                                 {{ $round->exams_count }}
@@ -190,7 +197,7 @@
                                             <td>{{ $round->start_time }}</td>
                                             <td>{{ $round->end_time }}</td>
                                             <td style="text-align: center">
-                                                <i role="button" data-bs-toggle="tooltip" title="Quản lý bài làm "
+                                                <i role="button" data-bs-toggle="tooltip" title="Quản lý đề thi "
                                                     data-round_id="{{ $round->id }}"
                                                     data-round_name="{{ $round->name }}"
                                                     class="add-exam m-auto bi bi-text-indent-left fs-2x"></i>
@@ -319,13 +326,15 @@
                                             </td>
                                         </tr>
                                         @if ($round->exams_count > 0)
-                                            <tr>
+                                            <tr class="{{ $key == 0 ?: 'collapse collapse-horizontal' }}"
+                                                id="collapseExample_{{ $round->id }}">
                                                 <td style="padding: 0" colspan="12">
                                                     <table
                                                         class="table table-row-dashed table-row-gray-500 gy-5 gs-5 mb-0">
                                                         <thead>
                                                             <tr class="fw-bold fs-6 text-gray-800">
-                                                                <th scope="col"> Bài làm </th>
+                                                                <th scope="col"> Đề thi </th>
+                                                                <th scope="col"> Tiến trình </th>
                                                                 <th scope="col">Tải bộ excel</th>
                                                                 <th style="float: right" scope="col">Nhanh
                                                                 </th>
@@ -335,12 +344,29 @@
 
                                                             @foreach ($round->exams as $exam)
                                                                 <tr>
-                                                                    <td style="width: 80%">{{ $exam->name }}</td>
-                                                                    <td style="width: 20%">
+                                                                    <td style="width: 70%">{{ $exam->name }}</td>
+                                                                    <td style="width: 10% ; text-align:center"
+                                                                        data-bs-toggle="tooltip"
+                                                                        title="Theo dõi tiến trình  "
+                                                                        style="text-align: center;">
+                                                                        <button
+                                                                            style="background: #ccc;padding: 1vh 1vh 1vh 2vh;border-radius: 20px;"
+                                                                            type="button"
+                                                                            data-round_id="{{ $round->id }}"
+                                                                            data-exam_id="{{ $exam->id }}"
+                                                                            class="btn-click-show-result-exam btn btn-primary"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#kt_modal_1">
+                                                                            <i class="bi bi-graph-down  "></i>
+                                                                        </button>
+                                                                    </td>
+                                                                    <td data-bs-toggle="tooltip"
+                                                                        title="Tải lên bộ câu hỏi bằng excel"
+                                                                        style="width: 10% ; text-align:center">
                                                                         <button
                                                                             style="background: #ccc;
-    padding: 1vh 1vh 1vh 2vh;
-    border-radius: 20px;"
+                                                                                padding: 1vh 1vh 1vh 2vh;
+                                                                                border-radius: 20px;"
                                                                             data-bs-toggle="modal"
                                                                             data-bs-target="#kt_modal_exc_{{ $exam->id }}"
                                                                             type="button" class="btn   me-3"
@@ -433,7 +459,7 @@
                                                                             </div>
                                                                         </div>
                                                                     </td>
-                                                                    <td style="width: 20%">
+                                                                    <td style="width: 10% ; text-align:center">
                                                                         <span style="float: right"
                                                                             data-bs-toggle="tooltip"
                                                                             title="Xem nhanh câu hỏi câu trả lời ">
@@ -464,7 +490,7 @@
                                     @endforeach
                                 @else
                                     <tr>
-                                        <h5>Không có bài làm lào !</h5>
+                                        <h5>Không có đề thi lào !</h5>
                                     </tr>
                                 @endif
                             </tbody>
@@ -480,7 +506,7 @@
                     <table class="table table-row-bordered table-row-gray-300 gy-7  table-hover ">
                         <thead>
                             <tr>
-                                <th>Tên bài làm </th>
+                                <th>Tên đề thi </th>
                                 <th>Điểm số tối đa </th>
                                 <th>Điểm số qua vòng </th>
                                 <th>Thời gian </th>
@@ -574,8 +600,8 @@
         </div>
         {{-- </div> --}}
 
-        <div class="modal bg-white fade" tabindex="-1" id="kt_modal_2">
-            <div class="modal-dialog modal-fullscreen">
+        <div class="modal fade" tabindex="-1" id="kt_modal_2">
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content shadow-none">
                     <div class="modal-header">
                         <h5 class="modal-title">Quản lý câu hỏi câu trả lời </h5>
@@ -651,6 +677,8 @@
                                             <option value="10">10</option>
                                             <option value="20">20</option>
                                             <option value="60">60</option>
+                                            <option value="120">120</option>
+                                            <option value="500">500</option>
                                         </select>
                                     </div>
                                 </div>
@@ -693,9 +721,9 @@
                             </div>
                             <div id="data-save"
                                 style="
-                                    position: fixed;
+                                    position: absolute;
                                     left: 0;
-                                    bottom: 0;
+                                    bottom: -5vh;
                                     right: 0;
                                     max-height: 500px;
                                     overflow: auto;
@@ -704,7 +732,7 @@
                                 class="mt-1">
                                 <div id="show-data-save" class="mb-5"></div>
                                 <div
-                                    style="position: fixed; bottom: 20px; transform: translateX(-50%);  left: 50%; z-index: 999999999;">
+                                    style="position: absolute; bottom: 20px; transform: translateX(-50%);  left: 50%; z-index: 999999999;">
                                     <button data-bs-toggle="tooltip" title="Lưu" class="btn btn-primary"
                                         id="save-qs">Lưu </button>
                                     <button data-bs-toggle="tooltip" title="Tải lại câu hỏi "
@@ -811,6 +839,7 @@
                                 <table class="table table-row-bordered table-row-gray-300 gy-7  table-hover">
                                     <thead>
                                         <tr>
+                                            <th>STT </th>
                                             <th>Câu hỏi </th>
                                             <th>Độ khó </th>
                                             <th>Đáp án </th>
@@ -825,7 +854,7 @@
 
                                     </tbody>
                                 </table>
-                                <ul style="position: fixed; bottom: 20px; transform: translateX(-50%);  left: 50%; z-index: 999999999;"
+                                <ul style="position: absolute; bottom: -10vh; transform: translateX(-50%);  left: 50%; z-index: 999999999;"
                                     id="show-paginate" class="pagination">
                                 </ul>
                             </div>

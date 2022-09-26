@@ -285,9 +285,10 @@ class ExamController extends Controller
     public function showQuestionAnswerExams($id)
     {
         try {
-            $questions = $this->exam::whereId($id)
+            $exam = $this->exam::whereId($id)
                 ->where('type', 1)
-                ->first()
+                ->first();
+            $questions = $exam
                 ->questions()
                 ->with([
                     'answers', 'skills'
@@ -302,19 +303,39 @@ class ExamController extends Controller
                 ->when(request()->has('type'), function ($q) {
                     $q->where('type', request('type'));
                 })
-                ->paginate(request('limit') ?? 5);
+                ->get();
+            // ->paginate(request('limit') ?? 5);
+            // $questionsSave = $exam
+            //     ->questions()
+            //     ->get()
+            //     ->map(function ($data) {
+            //         return [
+            //             'name' => $data->content,
+            //             'id' => $data->id,
+            //         ];
+            //     });
+            $questionsSave = $questions
+                ->map(function ($data) {
+                    return [
+                        'name' => $data->content,
+                        'id' => $data->id,
+                    ];
+                });
             $questionsAll = $this->question::with([
                 'answers', 'skills'
             ])->take(10)->get();
             return response()->json([
                 'status' => true,
-                'payload' => $questions,
-                'question' => $questionsAll
+                'payload' => [
+                    'data' => $questions
+                ],
+                'question' => $questionsAll,
+                'questionsSave' => $questionsSave
             ]);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
-                'payload' => 'Hệ thống đã xảy ra lỗi '
+                'payload' => 'Hệ thống đã xảy ra lỗi ' . $th->getMessage()
             ], 404);
         }
     }
