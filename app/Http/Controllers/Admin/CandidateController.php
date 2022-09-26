@@ -148,7 +148,7 @@ class CandidateController extends Controller
         $validator = Validator::make($request->all(), $rules, $message);
         if ($validator->fails()) return $this->responseApi(false, $validator->errors());
         $addCandidate =   $this->MCandidate->store($request);
-        if (!$addCandidate) return $this->responseApi(false, ' Bạn đã ứng tuyển cho vị trị này rồi !');
+        if (!$addCandidate) return $this->responseApi(false, ' Lỗi upload CV !');
 
         $sizeFile = Storage::disk('s3')->size($addCandidate->file_link);
 
