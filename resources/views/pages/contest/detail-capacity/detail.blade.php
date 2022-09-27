@@ -16,7 +16,7 @@
     <div class="card card-plush p-2">
         <style>
             .tab-content {
-                width: 80%;
+                width: 100%;
             }
         </style>
         <div class="d-flex justify-content-between flex-column flex-md-row">
@@ -55,7 +55,7 @@
                         </span>
                         <!--end::Svg Icon-->
                         <span class="d-flex flex-column align-items-start">
-                            <span class="fs-4 fw-bolder">Danh sách vòng thi </span>
+                            <span class="fs-4 fw-bolder">D.Sách</span>
                         </span>
                     </a>
                 </li>
@@ -72,7 +72,7 @@
                         </span>
                         <!--end::Svg Icon-->
                         <span class="d-flex flex-column align-items-start">
-                            <span class="fs-4 fw-bolder">Câu hỏi câu trả lời </span>
+                            <span class="fs-4 fw-bolder">Đề thi </span>
                         </span>
                     </a>
                 </li>
