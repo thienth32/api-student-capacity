@@ -119,11 +119,12 @@
                                     <th style="text-align: center"> </th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="panel">
                                 @if ($test_capacity->rounds)
                                     @foreach ($test_capacity->rounds as $key => $round)
                                         <tr>
-                                            <td data-bs-toggle="tooltip" title="Xem nhanh các cuộc thi">
+                                            <td class="panel-heading" data-bs-toggle="tooltip"
+                                                title="Xem nhanh các cuộc thi">
                                                 <button style="width:100%" class="btn btn-primary"
                                                     data-bs-toggle="collapse"
                                                     data-bs-target="#collapseExample_{{ $round->id }}"
@@ -273,8 +274,9 @@
                                             </td>
                                         </tr>
                                         @if (count($round->exams) > 0)
-                                            <tr class="{{ $key == 0 ?: 'collapse collapse-horizontal' }}"
-                                                id="collapseExample_{{ $round->id }}">
+                                            <tr class="{{ $key == 0 ?: 'collapse  panel-collapse' }}"
+                                                id="collapseExample_{{ $round->id }}" role="tabpanel"
+                                                aria-labelledby="headingOne">
                                                 <td style="padding: 0" colspan="12">
                                                     <table
                                                         class="table table-row-dashed table-row-gray-500 gy-5 gs-5 mb-0">
@@ -877,6 +879,16 @@
         let level = '';
         let type = '';
         let q = '';
+        $(".panel-heading").parent('.panel').hover(
+
+            function() {
+                console.log($(this));
+                $(this).children('.collapse').collapse('show');
+            },
+            function() {
+                $(this).children('.collapse').collapse('hide');
+            }
+        );
     </script>
     <script src="assets/js/system/capacity/main.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js"></script>
