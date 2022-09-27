@@ -2,59 +2,6 @@
 @section('title', 'Quản lý test năng lực')
 @section('page-title', 'Quản lý test năng lực')
 @section('content')
-    <style>
-        .loading {
-            width: 6vmax;
-            height: 6vmax;
-            border-right: 4px solid black;
-            border-radius: 100%;
-            animation: spinRight 800ms linear infinite;
-        }
-
-        .loading:before,
-        .loading:after {
-            content: '';
-            width: 4vmax;
-            height: 4vmax;
-            display: block;
-            position: absolute;
-            top: calc(50% - 2vmax);
-            left: calc(50% - 2vmax);
-            border-left: 3px solid black;
-            border-radius: 100%;
-            animation: spinLeft 800ms linear infinite;
-        }
-
-        .loading:after {
-            width: 2vmax;
-            height: 2vmax;
-            top: calc(50% - 1vmax);
-            left: calc(50% - 1vmax);
-            border: 0;
-            border-right: 2px solid black;
-            animation: none;
-        }
-
-        @keyframes spinLeft {
-            from {
-                transform: rotate(0deg);
-            }
-
-            to {
-                transform: rotate(720deg);
-            }
-        }
-
-        @keyframes spinRight {
-            from {
-                transform: rotate(360deg);
-            }
-
-            to {
-                transform: rotate(0deg);
-            }
-        }
-    </style>
 
     <div class="row mb-4">
         <div class="col-lg-12">
@@ -165,7 +112,7 @@
                                 <tr>
                                     <th>Tên vòng thi </th>
                                     <th>Đề thi</th>
-                                    <th>Tổng số đề thi</th>
+                                    {{-- <th>Tổng số đề thi</th> --}}
                                     <th>Thời gian bắt đầu</th>
                                     <th>Thời gian kết thúc</th>
                                     <th style="text-align: center">Quản lý đề thi </th>
@@ -191,9 +138,9 @@
                                                     href="{{ route('admin.exam.create', ['id' => $round->id]) . '?type=1' }}">Thêm
                                                     đề thi</a>
                                             </td>
-                                            <td>
+                                            {{-- <td>
                                                 {{ $round->exams_count }}
-                                            </td>
+                                            </td> --}}
                                             <td>{{ $round->start_time }}</td>
                                             <td>{{ $round->end_time }}</td>
                                             <td style="text-align: center">
@@ -325,7 +272,7 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                        @if ($round->exams_count > 0)
+                                        @if (count($round->exams) > 0)
                                             <tr class="{{ $key == 0 ?: 'collapse collapse-horizontal' }}"
                                                 id="collapseExample_{{ $round->id }}">
                                                 <td style="padding: 0" colspan="12">
@@ -333,10 +280,15 @@
                                                         class="table table-row-dashed table-row-gray-500 gy-5 gs-5 mb-0">
                                                         <thead>
                                                             <tr class="fw-bold fs-6 text-gray-800">
-                                                                <th scope="col"> Đề thi </th>
-                                                                <th scope="col"> Tiến trình </th>
-                                                                <th scope="col">Tải bộ excel</th>
-                                                                <th style="float: right" scope="col">Nhanh
+                                                                <th style="padding: 10px" scope="col"> Đề thi </th>
+                                                                <th style="padding: 10px;text-align: center;"
+                                                                    scope="col">
+                                                                    Tiến trình </th>
+                                                                <th style="padding: 10px;text-align: center;"
+                                                                    scope="col">
+                                                                    Tải bộ excel</th>
+                                                                <th style="float: right;padding: 10px" scope="col">
+                                                                    Nhanh
                                                                 </th>
                                                             </tr>
                                                         </thead>
@@ -344,8 +296,9 @@
 
                                                             @foreach ($round->exams as $exam)
                                                                 <tr>
-                                                                    <td style="width: 70%">{{ $exam->name }}</td>
-                                                                    <td style="width: 10% ; text-align:center"
+                                                                    <td style="width: 70% ; padding: 10px">
+                                                                        {{ $exam->name }}</td>
+                                                                    <td style="width: 10% ; padding: 10px; text-align:center"
                                                                         data-bs-toggle="tooltip"
                                                                         title="Theo dõi tiến trình  "
                                                                         style="text-align: center;">
@@ -362,7 +315,7 @@
                                                                     </td>
                                                                     <td data-bs-toggle="tooltip"
                                                                         title="Tải lên bộ câu hỏi bằng excel"
-                                                                        style="width: 10% ; text-align:center">
+                                                                        style="width: 10% ;padding: 10px; text-align:center">
                                                                         <button
                                                                             style="background: #ccc;
                                                                                 padding: 1vh 1vh 1vh 2vh;
@@ -459,7 +412,8 @@
                                                                             </div>
                                                                         </div>
                                                                     </td>
-                                                                    <td style="width: 10% ; text-align:center">
+                                                                    <td
+                                                                        style="width: 10% ;padding: 10px; text-align:center">
                                                                         <span style="float: right"
                                                                             data-bs-toggle="tooltip"
                                                                             title="Xem nhanh câu hỏi câu trả lời ">
