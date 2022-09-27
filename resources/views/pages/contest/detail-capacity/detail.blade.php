@@ -273,9 +273,9 @@
                                             </td>
                                         </tr>
                                         @if (count($round->exams) > 0)
-                                            <tr class="{{ $key == 0 ?: 'collapse  panel-collapse' }}"
+                                            <tr class="{{ $key == 0 ?: 'collapse  panel-collapse' }} "
                                                 id="collapseExample_{{ $round->id }}" role="tabpanel"
-                                                aria-labelledby="headingOne">
+                                                aria-labelledby="heading{{ $round->id }}">
                                                 <td style="padding: 0" colspan="12">
                                                     <table
                                                         class="table table-row-dashed table-row-gray-500 gy-5 gs-5 mb-0">
