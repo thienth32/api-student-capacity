@@ -211,38 +211,9 @@
 
         <div class="table-responsive table-responsive-md">
             @if (count($questions) > 0)
-                <table class="table table-row-bordered table-row-gray-300 gy-7 table-hover">
+                <table class="table table-row-bordered  table-row-gray-100 gy-1 table-hover">
                     <thead>
                         <tr>
-                            {{-- <th scope="col">
-                                <span role="button" data-key="id"
-                                    class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
-                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
-                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                        style="width: 14px !important ; height: 14px !important" width="24px"
-                                        height="24px" viewBox="0 0 24 24" version="1.1">
-                                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                            <polygon points="0 0 24 0 24 24 0 24" />
-                                            <rect fill="#000000" opacity="0.3"
-                                                transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) "
-                                                x="5" y="5" width="2" height="12"
-                                                rx="1" />
-                                            <path
-                                                d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z"
-                                                fill="#000000" fill-rule="nonzero" />
-                                            <rect fill="#000000" opacity="0.3"
-                                                transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) "
-                                                x="17" y="7" width="2" height="12"
-                                                rx="1" />
-                                            <path
-                                                d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z"
-                                                fill="#000000" fill-rule="nonzero"
-                                                transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
-                                        </g>
-                                    </svg>
-                                    <!--end::Svg Icon-->
-                                </span>
-                            </th> --}}
                             <th scope="col">Nội dung câu hỏi
                                 <a
                                     href="{{ route('admin.teams', [
@@ -293,8 +264,7 @@
                                     <span role="button" data-key="end_time" data-bs-toggle="tooltip"
                                         title="Lọc theo ngày tạo "
                                         class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
-                                        <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg
-                                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                                             style="width: 14px !important ; height: 14px !important" width="24px"
                                             height="24px" viewBox="0 0 24 24" version="1.1">
                                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -316,7 +286,6 @@
                                                     transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
                                             </g>
                                         </svg>
-                                        <!--end::Svg Icon-->
                                     </span>
                                 </a>
 
@@ -336,42 +305,36 @@
                                 $token = uniqid(15);
                             @endphp
                             <tr>
-                                {{-- @if (request()->has('sort'))
-                                    <th scope="row">
-                                        @if (request('sort') == 'desc')
-                                            {{ (request()->has('page') && request('page') !== 1 ? $questions->perPage() * (request('page') - 1) : 0) + $key + 1 }}
-                                        @else
-                                            {{ request()->has('page') && request('page') !== 1 ? $total - $questions->perPage() * (request('page') - 1) - $key : ($total -= 1) }}
-                                        @endif
-                                    </th>
-                                @else
-                                    <th scope="row">
-                                        {{ (request()->has('page') && request('page') !== 1 ? $questions->perPage() * (request('page') - 1) : 0) + $key + 1 }}
-                                    </th>
-                                @endif
-                                </th> --}}
+
                                 <td style="width:30%">
-                                    {!! $question->content !!}
-                                    <br>
-                                    <div class="collapse w-100" id="collapse{{ $token }}">
-                                        <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#collapse{{ $token }}" aria-expanded="false"
-                                            aria-controls="collapse{{ $token }}">
-                                            Đóng
-                                        </button>
-                                        <hr>
-                                        <ul class="list-group list-group-flush">
-                                            @if (count($question->answers) > 0)
-                                                @foreach ($question->answers as $answer)
-                                                    <li
-                                                        class="list-group-item {{ $answer->is_correct == config('util.ANSWER_TRUE') ? 'active' : '' }}">
-                                                        {{ $answer->content }}</li>
-                                                @endforeach
-                                            @endif
+                                    <div class="panel-group" id="accordion">
+                                        <div class="panel panel-default mb-5">
+                                            <div class="panel-heading" role="tab" id="heading{{ $token }}">
+                                                <h6 class="panel-title">
+                                                    <div role="button" data-toggle="collapse" data-parent="#accordion"
+                                                        aria-expanded="true" aria-controls="collapse{{ $token }}">
+                                                        {!! $question->content !!}
+                                                    </div>
+                                                </h6>
+                                            </div>
+                                            <div id="collapse{{ $token }}" class="panel-collapse collapse"
+                                                role="tabpanel" aria-labelledby="heading{{ $token }}">
+                                                <div class="panel-body">
+                                                    <ul class="list-group list-group-flush">
+                                                        @if (count($question->answers) > 0)
+                                                            @foreach ($question->answers as $answer)
+                                                                <li
+                                                                    class="list-group-item {{ $answer->is_correct == config('util.ANSWER_TRUE') ? 'active' : '' }}">
+                                                                    {{ $answer->content }}</li>
+                                                            @endforeach
+                                                        @endif
 
-                                        </ul>
-
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
+
                                 </td>
 
                                 <td style="width:10%">
@@ -405,22 +368,14 @@
 
                                 </td>
                                 <td>
-                                    {{-- @if ($question->status == config('util.INACTIVE_STATUS'))
-                                        Không kích hoạt
-                                    @else
-                                        Kích hoạt
-                                    @endif --}}
-
                                     <div data-bs-toggle="tooltip" title="Cập nhật trạng thái "
                                         class="form-check form-switch">
                                         <input value="{{ $question->status }}" data-id="{{ $question->id }}"
                                             class="form-select-status form-check-input " @checked($question->status == 1)
                                             type="checkbox" role="switch">
-
                                     </div>
                                 </td>
                                 <td>{{ $question->created_at }}</td>
-
                                 <td>
                                     @hasanyrole(config('util.ROLE_ADMINS'))
 
@@ -428,8 +383,7 @@
                                             <button type="button" class="btn   btn-sm dropdown-toggle"
                                                 data-bs-toggle="dropdown" aria-expanded="false">
                                                 <span class="svg-icon svg-icon-success svg-icon-2x">
-                                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Settings-2.svg--><svg
-                                                        xmlns="http://www.w3.org/2000/svg"
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
                                                         xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                                                         height="24px" viewBox="0 0 24 24" version="1.1">
                                                         <g stroke="none" stroke-width="1" fill="none"
@@ -441,15 +395,13 @@
                                                                 fill="#000000" />
                                                         </g>
                                                     </svg>
-                                                    <!--end::Svg Icon-->
                                                 </span>
                                             </button>
                                             <ul class="dropdown-menu  px-4 ">
                                                 <li class="my-3">
                                                     <a href="{{ route('admin.question.edit', ['id' => $question->id]) }}">
                                                         <span role="button" class="svg-icon svg-icon-success svg-icon-2x">
-                                                            <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Design/Edit.svg--><svg
-                                                                xmlns="http://www.w3.org/2000/svg"
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
                                                                 xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                                                                 height="24px" viewBox="0 0 24 24" version="1.1">
                                                                 <g stroke="none" stroke-width="1" fill="none"
@@ -469,32 +421,7 @@
                                                         Chỉnh sửa
                                                     </a>
                                                 </li>
-                                                <li class="my-3">
-                                                    <a class="" data-bs-toggle="collapse"
-                                                        href="#collapse{{ $token }}" role="button"
-                                                        aria-expanded="false" aria-controls="collapse{{ $token }}">
-                                                        <span class="svg-icon svg-icon-primary svg-icon-2x">
-                                                            <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Text/Bullet-list.svg--><svg
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                                                                height="24px" viewBox="0 0 24 24" version="1.1">
-                                                                <g stroke="none" stroke-width="1" fill="none"
-                                                                    fill-rule="evenodd">
-                                                                    <rect x="0" y="0" width="24"
-                                                                        height="24" />
-                                                                    <path
-                                                                        d="M10.5,5 L19.5,5 C20.3284271,5 21,5.67157288 21,6.5 C21,7.32842712 20.3284271,8 19.5,8 L10.5,8 C9.67157288,8 9,7.32842712 9,6.5 C9,5.67157288 9.67157288,5 10.5,5 Z M10.5,10 L19.5,10 C20.3284271,10 21,10.6715729 21,11.5 C21,12.3284271 20.3284271,13 19.5,13 L10.5,13 C9.67157288,13 9,12.3284271 9,11.5 C9,10.6715729 9.67157288,10 10.5,10 Z M10.5,15 L19.5,15 C20.3284271,15 21,15.6715729 21,16.5 C21,17.3284271 20.3284271,18 19.5,18 L10.5,18 C9.67157288,18 9,17.3284271 9,16.5 C9,15.6715729 9.67157288,15 10.5,15 Z"
-                                                                        fill="#000000" />
-                                                                    <path
-                                                                        d="M5.5,8 C4.67157288,8 4,7.32842712 4,6.5 C4,5.67157288 4.67157288,5 5.5,5 C6.32842712,5 7,5.67157288 7,6.5 C7,7.32842712 6.32842712,8 5.5,8 Z M5.5,13 C4.67157288,13 4,12.3284271 4,11.5 C4,10.6715729 4.67157288,10 5.5,10 C6.32842712,10 7,10.6715729 7,11.5 C7,12.3284271 6.32842712,13 5.5,13 Z M5.5,18 C4.67157288,18 4,17.3284271 4,16.5 C4,15.6715729 4.67157288,15 5.5,15 C6.32842712,15 7,15.6715729 7,16.5 C7,17.3284271 6.32842712,18 5.5,18 Z"
-                                                                        fill="#000000" opacity="0.3" />
-                                                                </g>
-                                                            </svg>
-                                                            <!--end::Svg Icon-->
-                                                        </span>
-                                                        Xem đáp án
-                                                    </a>
-                                                </li>
+
                                                 <li class="my-3">
 
                                                     <form
@@ -506,8 +433,7 @@
                                                             style=" background: none ; border: none ; list-style : none"
                                                             type="submit">
                                                             <span role="button" class="svg-icon svg-icon-danger svg-icon-2x">
-                                                                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Trash.svg--><svg
-                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
                                                                     xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
                                                                     height="24px" viewBox="0 0 24 24" version="1.1">
                                                                     <g stroke="none" stroke-width="1" fill="none"
@@ -522,7 +448,7 @@
                                                                             fill="#000000" opacity="0.3" />
                                                                     </g>
                                                                 </svg>
-                                                                <!--end::Svg Icon-->
+
                                                             </span>
                                                             Thùng rác
                                                         </button>
@@ -648,6 +574,17 @@
                     if (err.errors) $(".error_ex_file").html(err.errors.ex_file);
                 }
             });
+
+            $(".panel-heading").parent('.panel').hover(
+                function() {
+                    $(this).children('.collapse').collapse('show');
+                },
+                function() {
+                    $(this).children('.collapse').collapse('hide');
+                }
+            );
+
+
         })
     </script>
 

@@ -70,7 +70,7 @@ class QuestionController extends Controller
     public function index()
     {
         $skills = $this->skillModel::all();
-        if (!($questions = $this->getList()->paginate(request('limit') ?? 5))) return abort(404);
+        if (!($questions = $this->getList()->paginate(request('limit') ?? 10))) return abort(404);
 
         // dd($questions);
         return view('pages.question.list', [
