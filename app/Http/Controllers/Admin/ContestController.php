@@ -339,7 +339,7 @@ class ContestController extends Controller
     {
         $capacity = $this->contest->getContestByIdUpdate($id, config('util.TYPE_TEST'));
         if (!$capacity) abort(404);
-        $skills = $skillModel::all();
+        $skills = $skillModel::all(['name', 'id']);
         return view('pages.contest.detail-capacity.detail', [
             'test_capacity' => $capacity,
             'skills' => $skills

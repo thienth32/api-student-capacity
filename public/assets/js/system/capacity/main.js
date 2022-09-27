@@ -208,6 +208,8 @@ function fecthQuestionByExams(id, param = [], url = null) {
             if (res.payload.data.length == 0) {
                 html = `<h2>Không có câu hỏi câu trả lời nào </h2>`;
             } else {
+                listSave = res.questionsSave;
+
                 html = res.payload.data
                     .map(function (data, index) {
                         var skillChill = data.skills
@@ -239,6 +241,7 @@ function fecthQuestionByExams(id, param = [], url = null) {
                             .join(" ");
                         return `
                             <tr>
+                            <td>${index + 1}</td>
                                 <td>
                                     <a  data-bs-toggle="collapse" href="#multiCollapseExample${index}"
                                     role="button"
@@ -288,21 +291,21 @@ function fecthQuestionByExams(id, param = [], url = null) {
                     .join(" ");
             }
             questions = res.question;
-            let paginate = res.payload.links
-                .map(function (link, key) {
-                    var datapage = `${link.label}`;
-                    if (key == 0)
-                        datapage = `<i class="bi bi-chevron-left"></i>`;
-                    if (key == res.payload.links.length - 1)
-                        datapage = `<i class="bi bi-chevron-right"></i>`;
-                    return `
-                        <li class="page-item ${
-                            link.active == true ? "active" : ""
-                        }" ><a role="button" data-link="${link.url}" class="click-paginate-link page-link" >${datapage}</a></li>
-                    `;
-                })
-                .join(" ");
-            $("#show-paginate").html(paginate);
+            // let paginate = res.payload.links
+            //     .map(function (link, key) {
+            //         var datapage = `${link.label}`;
+            //         if (key == 0)
+            //             datapage = `<i class="bi bi-chevron-left"></i>`;
+            //         if (key == res.payload.links.length - 1)
+            //             datapage = `<i class="bi bi-chevron-right"></i>`;
+            //         return `
+            //             <li class="page-item ${
+            //                 link.active == true ? "active" : ""
+            //             }" ><a role="button" data-link="${link.url}" class="click-paginate-link page-link" >${datapage}</a></li>
+            //         `;
+            //     })
+            //     .join(" ");
+            // $("#show-paginate").html(paginate);
             $("#show-ques-anw").html(html);
             $(".btn-add-question-answ").show();
         },
@@ -333,6 +336,7 @@ function getApiShowQues(url, param = []) {
         success: function (res) {
             if (!res.status) return;
             dataQues = res.payload;
+
             fetchShowQues(res.payload);
         },
         error: function (res) {
@@ -466,7 +470,7 @@ const mainPage = {
         $(".add-exam").on("click", function () {
             backClass([".nav-list", ".nav-ql"], [".tab-list", ".tab-ql"]);
             $("#show-exam-round").html(
-                `Danh sách các bài làm của đề <strong style="color:blue">${$(
+                `Danh sách các đề thi của vòng thi <strong style="color:blue">${$(
                     this
                 ).data("round_name")}</strong>  `
             );

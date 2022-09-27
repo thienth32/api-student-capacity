@@ -111,7 +111,8 @@ class RoundController extends Controller
     {
         $contests = $this->contest::all();
         $typeexams = $typeExam::all();
-        $nameTypeContest = request('type') == 1 ? ' bài làm  ' : ' vòng thi';
+        // $nameTypeContest = request('type') == 1 ? ' bài làm  ' : ' vòng thi';
+        $nameTypeContest = ' vòng thi';
         return view('pages.round.form-add', compact('contests', 'typeexams', 'nameTypeContest'));
     }
 
@@ -152,7 +153,8 @@ class RoundController extends Controller
                 'round' => $round,
                 'contests' => $this->contest::all(),
                 'type_exams' => $this->type_exam::all(),
-                'nameContestType' => request('type') == 1 ? ' bài làm ' : ' vòng thi'
+                'nameContestType' =>   ' vòng thi'
+                // 'nameContestType' => request('type') == 1 ? ' bài làm ' : ' vòng thi'
             ]);
         } catch (\Throwable $th) {
             return abort(404);

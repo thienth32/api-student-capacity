@@ -312,7 +312,8 @@ class QuestionController extends Controller
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
-                'payload' => 'Không thể câp nhật trạng câu hỏi  !',
+                'payload' => 'Không thể câp nhật trạng câu hỏi  ! ' . $th->getMessage(),
+                'data' => $request->all(),
             ]);
         }
     }
