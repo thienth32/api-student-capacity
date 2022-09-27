@@ -122,16 +122,15 @@
                             <tbody class="panel">
                                 @if ($test_capacity->rounds)
                                     @foreach ($test_capacity->rounds as $key => $round)
-                                        <tr>
-                                            <td class="panel-heading" data-bs-toggle="tooltip"
+                                        <tr class="panel-heading" data-key="{{ $round->id }}">
+                                            <td data-key="{{ $round->id }}" data-bs-toggle="tooltip"
                                                 title="Xem nhanh các cuộc thi">
-                                                <button style="width:100%" class="btn btn-primary"
-                                                    data-bs-toggle="collapse"
-                                                    data-bs-target="#collapseExample_{{ $round->id }}"
+                                                <p style="width:100%" class=" " data-bs-toggle="collapse"
+                                                    role="button" data-bs-target="#collapseExample_{{ $round->id }}"
                                                     aria-expanded="false"
                                                     aria-controls="collapseExample_{{ $round->id }}">
                                                     {{ $round->name }}
-                                                </button>
+                                                </p>
 
                                             </td>
                                             <td>
@@ -879,14 +878,10 @@
         let level = '';
         let type = '';
         let q = '';
-        $(".panel-heading").parent('.panel').hover(
-
+        $(".panel-heading").hover(
             function() {
-                console.log($(this));
-                $(this).children('.collapse').collapse('show');
-            },
-            function() {
-                $(this).children('.collapse').collapse('hide');
+                $('.collapse.show').collapse('hide');
+                $("#collapseExample_" + $(this).data('key')).collapse('show');
             }
         );
     </script>
