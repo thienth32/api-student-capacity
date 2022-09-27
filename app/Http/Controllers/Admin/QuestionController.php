@@ -10,6 +10,8 @@ use App\Models\Answer;
 use App\Models\Exam;
 use App\Models\Question;
 use App\Models\Skill;
+use App\Services\Modules\MQuestion\MQuestionInterface;
+use App\Services\Modules\MSkill\MSkillInterface;
 use App\Services\Traits\TStatus;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -25,8 +27,14 @@ class QuestionController extends Controller
     protected $questionModel;
     protected $answerModel;
     protected $examModel;
-    public function __construct(Skill $skill, Question $question, Answer $answer, Exam $exam)
-    {
+    public function __construct(
+        Skill $skill,
+        Question $question,
+        Answer $answer,
+        Exam $exam,
+        private MSkillInterface $skillRepo,
+        private MQuestionInterface $questionRepo
+    ) {
         $this->skillModel = $skill;
         $this->questionModel = $question;
         $this->answerModel = $answer;
@@ -58,6 +66,7 @@ class QuestionController extends Controller
         $data->with(['skills', 'answers']);
         return $data;
     }
+
     public function index()
     {
         $skills = $this->skillModel::all();
@@ -98,7 +107,6 @@ class QuestionController extends Controller
             ]
         );
     }
-
 
     public function store(Request $request)
     {
@@ -164,12 +172,10 @@ class QuestionController extends Controller
         }
     }
 
-
     public function show(Question $questions)
     {
         //
     }
-
 
     public function edit(Question $questions, $id)
     {
@@ -181,7 +187,6 @@ class QuestionController extends Controller
             'question' => $question,
         ]);
     }
-
 
     public function update(Request $request, $id)
     {
@@ -251,7 +256,6 @@ class QuestionController extends Controller
             dd($th);
         }
     }
-
 
     public function destroy(Question $questions, $id)
     {
@@ -379,5 +383,11 @@ class QuestionController extends Controller
         return Excel::download($export, 'abc.xlsx');
         // return Excel::download(new QuestionsExport, 'question.xlsx');
         // return Excel::download(new QuestionsExport, 'invoices.xlsx', true, ['X-Vapor-Base64-Encode' => 'True']);
+    }
+
+    public function skillQuestionApi()
+    {
+        $data = $this->questionRepo->getQuestionSkill();
+        return $this->responseApi(true, $data);
     }
 }

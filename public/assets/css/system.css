@@ -87,3 +87,8 @@ figure.image img {
     padding: 5px;
     font-size: 1.3rem;
 }
+
+#result-question>.list-group {
+    height: 40vh;
+    overflow: auto;
+}

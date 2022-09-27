@@ -17,7 +17,7 @@ class CapacityPlay extends FormRequest
             "name" => "required",
             "max_ponit" => "required",
             "description" => "required",
-            "questions" => "required"
+            "questions" =>   "required"
         ];
     }
 

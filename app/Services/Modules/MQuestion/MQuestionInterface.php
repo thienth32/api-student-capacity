@@ -9,4 +9,6 @@ interface MQuestionInterface
     public function createQuestionsAndAttchSkill($question, $skill);
 
     public function getAllQuestion();
+
+    public function getQuestionSkill();
 }
