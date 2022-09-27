@@ -46,7 +46,6 @@ class CapacityPlayController extends Controller
     }
 
     public function store(CapacityPlay $request)
-    // public function store(Request $request)
     {
         DB::beginTransaction();
         try {

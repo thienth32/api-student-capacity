@@ -55,6 +55,7 @@
                                     @enderror
                                 </div>
                             </div>
+
                             <div class="col-12 pb-2">
                                 <div class="form-group mb-4">
                                     <label for="" class="form-label">Hình thức trực tiếp </label>
@@ -87,22 +88,80 @@
                                 </div>
                             </div> --}}
                             <div class="col-12 pb-2">
-                                <div class="form-group mb-4">
-                                    <label for="" class="form-label">Chọn bộ câu hỏi theo skill </label>
-                                    <select class="form-select" data-control="select2" name=""
-                                        data-placeholder="Select an option">
-                                        @foreach ($skills as $skill)
-                                            <option value="{{ $skill->id }}">
-                                                {{ $skill->name }}
-                                                -------
-                                                {{ $skill->short_name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('questions')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
+                                <div class="row">
+                                    <div class="col-8">
+                                        <div class="form-group mb-4">
+                                            <label for="" class="form-label">Chọn bộ câu hỏi theo skill </label>
+                                            <select class="form-select skill-select" data-control="select2"
+                                                data-placeholder="Select an option">
+                                                <option value="null">Chọn skill</option>
+                                                <option value="0">Không thuộc skill nào</option>
+                                                @foreach ($skills as $skill)
+                                                    <option value="{{ $skill->id }}">
+                                                        {{ $skill->name }}
+                                                        -------
+                                                        {{ $skill->short_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error('questions')
+                                                <p class="text-danger">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+
+                                    </div>
+                                    <div class="col-4">
+                                        <!-- Button trigger modal -->
+                                        <button type="button" class="btn btn-primary btn-lg mt-8" data-bs-toggle="modal"
+                                            data-bs-target="#modalId">
+                                            Danh sách câu hỏi được thêm
+                                        </button>
+                                        @error('questions')
+                                            <p class="text-danger">{{ $message }}</p>
+                                        @enderror
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="modalId" tabindex="-1" role="dialog"
+                                            aria-labelledby="modalTitleId" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="modalTitleId">Danh sách câu hỏi được
+                                                            thêm</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="container-fluid" style="height: 65vh;  overflow: auto;">
+                                                            <div id="result-question-array">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Thoát</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+
+                                    </div>
                                 </div>
+                                <div class="row ">
+
+                                    <div class="col-12">
+                                        <div class="parent-loading"style="min-height: 100px">
+                                            <div id="loading" class="loading">
+                                                <div id="circle-loading" class="circle-loading"></div>
+                                            </div>
+                                            <div id="result-question">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                         <div class="form-group mb-10 ">
@@ -119,4 +178,9 @@
 
 @endsection
 @section('page-script')
+    <script>
+        const _token = "{{ csrf_token() }}";
+        const skillQuestionRoute = "{{ route('admin.question.skill') }}";
+    </script>
+    <script src="{{ asset('assets/js/system/capacity-play/capacity-play.js') }}"></script>
 @endsection
