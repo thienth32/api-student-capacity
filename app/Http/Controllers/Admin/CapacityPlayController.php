@@ -31,6 +31,28 @@ class CapacityPlayController extends Controller
     ) {
     }
 
+    public function un_status($id)
+    {
+        try {
+            $this->examRepo->updateCapacityPlay($id,['status'=>0]);
+            return $this->responseApi(true, ['message' => 'Thành công !']);
+        } catch (\Throwable $th) {
+            return $this->responseApi(false, $th->getMessage());
+        }
+
+    }
+
+    public function re_status($id)
+    {
+        try {
+            $this->examRepo->updateCapacityPlay($id,['status'=>1]);
+            return $this->responseApi(true, ['message' => 'Thành công !']);
+        } catch (\Throwable $th) {
+            return $this->responseApi(false, $th->getMessage());
+        }
+
+    }
+
     public function index()
     {
         $exams = $this->examRepo->getExamCapacityPlay([], ['questions']);
@@ -83,7 +105,7 @@ class CapacityPlayController extends Controller
 
         $data['exam'] = $this->examRepo->findById($id);
 
-        if ($data['exam']->round_id) abort(404);
+        if ($data['exam']->round_id || $data['exam']->status == 0) abort(404);
 
         $data['exam']->load(['questions' => function ($q) {
             return $q->with(['answers']);
