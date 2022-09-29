@@ -111,8 +111,16 @@
                                     class="form-control" />
                                 <img class="w-100 mt-4 border rounded-3" id="image-preview"
                                     src="https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg" />
-
                             </div>
+                            {{-- <div class="form-group ">
+                                <label for="" class="form-label">Logo doanh nghiệp</label>
+
+                                <input name="logo" type='file' id="file-input" accept=".png, .jpg, .jpeg"
+                                    class="form-control" />
+                                <img class="w-100 mt-4 border rounded-3" id="image-preview"
+                                    src="https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg" />
+
+                            </div> --}}
                             @error('logo')
                                 <p class="text-danger">{{ $message }}</p>
                             @enderror

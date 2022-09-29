@@ -225,8 +225,8 @@ class RecruitmentController extends Controller
     {
         $data = $this->modulesRecruitment->getList($request)->get();
         if (!$data) abort(404);
-        $data->load('contest');
-        $data->load('enterprise');
+        $data->load('contest:id,name,img');
+        $data->load('enterprise:id,name,logo');
         $this->modulesRecruitment->LoadSkillAndUserApiShow($data);
         return $this->responseApi(
             true,
@@ -252,8 +252,8 @@ class RecruitmentController extends Controller
     {
         $data = $this->modulesRecruitment->find($id);
         if (!$data) abort(404);
-        $data->load('contest');
-        $data->load('enterprise');
+        $data->load('contest:id,name,image');
+        $data->load('enterprise:id,name,logo');
         $this->modulesRecruitment->loadSkillAndUserApiDetail($data);
         return $this->responseApi(
             true,

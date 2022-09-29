@@ -81,6 +81,12 @@ return [
     /** bÀI VIẾT TUYỂN DỤNG THƯỜNG  */
     "POST_NORMAL" => 0,
 
+    /** trạng thái doanh nghiệp không hiện thị tại trang chủ */
+    "STATUS_ENTERPRISE_HIDDEN" => 0,
+    /** trạng thái doanh nghiệp được hiện thị tại trang chủ */
+    "STATUS_ENTERPRISE_SHOW" => 1,
+
+
     'TYPE_POSTS' => 0,
     'TYPE_RECRUITMENTS' => 1,
     'TYPE_CAPACITY_TEST' => 2,
