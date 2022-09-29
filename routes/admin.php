@@ -150,6 +150,8 @@ Route::group([
         Route::get('run-now/{id}', [CapacityPlayController::class, 'start'])->name('admin.capacit.play.run');
         Route::get('view-now/{id}', [CapacityPlayController::class, 'viewStart'])->name('admin.capacit.play.view.run');
         Route::get('end/{id}', [CapacityPlayController::class, 'end'])->name('admin.capacit.play.end');
+        Route::post('{id_exam}/un-status', [CapacityPlayController::class, 'un_status'])->name('admin.capacit.un_status');
+        Route::post('{id_exam}/re-status', [CapacityPlayController::class, 're_status'])->name('admin.capacit.re_status');
     });
 
     Route::prefix('teams')->group(function () {

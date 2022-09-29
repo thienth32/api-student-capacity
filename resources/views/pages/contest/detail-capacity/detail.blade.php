@@ -59,7 +59,7 @@
                         </span>
                     </a>
                 </li>
-                <li class="nav-item me-0 mb-md-2" style="">
+                {{-- <li class="nav-item me-0 mb-md-2" style="">
                     <a style="width: 100%;cursor: no-drop;" class="nav-link nav-ql btn btn-flex btn-active-light-info ">
                         <!--begin::Svg Icon | path: icons/duotune/general/gen003.svg-->
                         <span class="svg-icon svg-icon-2 svg-icon-primary">
@@ -75,7 +75,7 @@
                             <span class="fs-4 fw-bolder">Đề thi </span>
                         </span>
                     </a>
-                </li>
+                </li> --}}
             </ul>
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade active show tab-list" id="kt_vtab_pane_4" role="tabpanel">
@@ -115,6 +115,7 @@
                                     {{-- <th>Tổng số đề thi</th> --}}
                                     <th>Thời gian bắt đầu</th>
                                     <th>Thời gian kết thúc</th>
+                                    <th class="text-center">Thao tác nhanh</th>
                                     <th style="text-align: center">Quản lý đề thi </th>
                                     <th style="text-align: center"> </th>
                                 </tr>
@@ -143,11 +144,219 @@
                                             </td> --}}
                                             <td>{{ $round->start_time }}</td>
                                             <td>{{ $round->end_time }}</td>
+                                            <td class="text-center" data-bs-toggle="tooltip" title="Thao tác nhanh">
+
+                                                <span role="button" data-bs-toggle="modal"
+                                                    data-bs-target="#kt_modal_round_{{ $round->id }}"
+                                                    class="svg-icon svg-icon-primary svg-icon-2x">
+                                                    <i class="bi bi-arrows-fullscreen fs-2x"></i>
+                                                </span>
+
+                                                <div class="modal fade" tabindex="-1"
+                                                    id="kt_modal_round_{{ $round->id }}">
+                                                    <div class="modal-dialog modal-xl">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">Các đề bài thuộc vòng thi
+                                                                    {{ $round->name }}</h5>
+
+                                                                <!--begin::Close-->
+                                                                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2"
+                                                                    data-bs-dismiss="modal" aria-label="Close">
+                                                                    <span class="svg-icon svg-icon-2x"></span>
+                                                                </div>
+                                                                <!--end::Close-->
+                                                            </div>
+
+                                                            <div class="modal-body">
+                                                                <table
+                                                                    class="table table-row-dashed table-row-gray-500 gy-5 gs-5 mb-0">
+                                                                    <thead>
+                                                                        <tr class="fw-bold fs-6 text-gray-800">
+                                                                            <th style="padding: 10px" scope="col"> Đề
+                                                                                thi </th>
+                                                                            <th style="padding: 10px;text-align: center;"
+                                                                                scope="col">
+                                                                                Tiến trình </th>
+                                                                            <th style="padding: 10px;text-align: center;"
+                                                                                scope="col">
+                                                                                Tải bộ excel</th>
+                                                                            <th style="float: right;padding: 10px"
+                                                                                scope="col">
+                                                                                Nhanh
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @if (count($round->exams) > 0)
+                                                                            @foreach ($round->exams as $exam)
+                                                                                <tr>
+                                                                                    <td style="width: 70% ; padding: 10px">
+                                                                                        {{ $exam->name }}</td>
+                                                                                    <td style="width: 10% ; padding: 10px; text-align:center"
+                                                                                        data-bs-toggle="tooltip"
+                                                                                        title="Theo dõi tiến trình  "
+                                                                                        style="text-align: center;">
+                                                                                        <button
+                                                                                            style="background: #ccc;padding: 1vh 1vh 1vh 2vh;border-radius: 20px;"
+                                                                                            type="button"
+                                                                                            data-round_id="{{ $round->id }}"
+                                                                                            data-exam_id="{{ $exam->id }}"
+                                                                                            class="btn-click-show-result-exam btn btn-primary"
+                                                                                            data-bs-toggle="modal"
+                                                                                            data-bs-target="#kt_modal_1">
+                                                                                            <i
+                                                                                                class="bi bi-graph-down  "></i>
+                                                                                        </button>
+                                                                                    </td>
+                                                                                    <td data-bs-toggle="tooltip"
+                                                                                        title="Tải lên bộ câu hỏi bằng excel"
+                                                                                        style="width: 10% ;padding: 10px; text-align:center">
+                                                                                        <button
+                                                                                            style="background: #ccc;
+                                                                                                                    padding: 1vh 1vh 1vh 2vh;
+                                                                                                                    border-radius: 20px;"
+                                                                                            data-bs-toggle="modal"
+                                                                                            data-bs-target="#kt_modal_exc_{{ $exam->id }}"
+                                                                                            type="button"
+                                                                                            class="btn   me-3"
+                                                                                            id="kt_file_manager_new_folder">
+                                                                                            <!--begin::Svg Icon | path: icons/duotune/files/fil013.svg-->
+                                                                                            <span
+                                                                                                class="svg-icon svg-icon-2">
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                                    width="24"
+                                                                                                    height="24"
+                                                                                                    viewBox="0 0 24 24"
+                                                                                                    fill="none">
+                                                                                                    <path opacity="0.3"
+                                                                                                        d="M10 4H21C21.6 4 22 4.4 22 5V7H10V4Z"
+                                                                                                        fill="black">
+                                                                                                    </path>
+                                                                                                    <path
+                                                                                                        d="M10.4 3.60001L12 6H21C21.6 6 22 6.4 22 7V19C22 19.6 21.6 20 21 20H3C2.4 20 2 19.6 2 19V4C2 3.4 2.4 3 3 3H9.2C9.7 3 10.2 3.20001 10.4 3.60001ZM16 12H13V9C13 8.4 12.6 8 12 8C11.4 8 11 8.4 11 9V12H8C7.4 12 7 12.4 7 13C7 13.6 7.4 14 8 14H11V17C11 17.6 11.4 18 12 18C12.6 18 13 17.6 13 17V14H16C16.6 14 17 13.6 17 13C17 12.4 16.6 12 16 12Z"
+                                                                                                        fill="black">
+                                                                                                    </path>
+                                                                                                    <path opacity="0.3"
+                                                                                                        d="M11 14H8C7.4 14 7 13.6 7 13C7 12.4 7.4 12 8 12H11V14ZM16 12H13V14H16C16.6 14 17 13.6 17 13C17 12.4 16.6 12 16 12Z"
+                                                                                                        fill="black">
+                                                                                                    </path>
+                                                                                                </svg>
+                                                                                            </span>
+                                                                                            <!--end::Svg Icon-->
+                                                                                        </button>
+
+                                                                                    </td>
+                                                                                    <td
+                                                                                        style="width: 10% ;padding: 10px; text-align:center">
+                                                                                        <span style="float: right"
+                                                                                            data-bs-toggle="tooltip"
+                                                                                            title="Xem nhanh câu hỏi câu trả lời ">
+                                                                                            <button
+                                                                                                style="background: #ccc;padding: 1vh 1vh 1vh 2vh;border-radius: 20px;"
+                                                                                                type="button"
+                                                                                                data-exam_name="{{ $exam->name }}"
+                                                                                                data-exam_id="{{ $exam->id }}"
+                                                                                                class="btn-click-show-exams btn btn-primary"
+                                                                                                data-bs-toggle="modal"
+                                                                                                data-bs-target="#kt_modal_2">
+                                                                                                {{-- <i class="bi bi-ui-checks-grid"></i> --}}
+                                                                                                <i
+                                                                                                    class="bi bi-arrows-move"></i>
+                                                                                            </button>
+                                                                                        </span>
+
+
+                                                                                    </td>
+                                                                                </tr>
+                                                                            @endforeach
+                                                                        @else
+                                                                            <h2>Không có đề thi !!</h2>
+                                                                        @endif
+
+
+                                                                    </tbody>
+                                                                </table>
+
+                                                            </div>
+
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-light"
+                                                                    data-bs-dismiss="modal">Thoát </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @if (count($round->exams) > 0)
+                                                    @foreach ($round->exams as $exam)
+                                                        <div class="modal fade" tabindex="-1"
+                                                            id="kt_modal_exc_{{ $exam->id }}">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title">
+                                                                            Tải lên
+                                                                            excel
+                                                                            <strong>{{ $exam->name }}</strong>
+                                                                        </h5>
+
+                                                                        <!--begin::Close-->
+                                                                        <div class="btn btn-icon btn-sm btn-active-light-primary ms-2"
+                                                                            data-bs-dismiss="modal" aria-label="Close">
+                                                                            <span class="svg-icon svg-icon-2x"></span>
+                                                                        </div>
+                                                                        <!--end::Close-->
+                                                                    </div>
+                                                                    <form class="form-submit"
+                                                                        action="{{ route('admin.question.excel.import.exam', ['exam' => $exam->id]) }}"
+                                                                        method="POST" enctype="multipart/form-data">
+                                                                        @csrf
+                                                                        <div class="modal-body text-center">
+                                                                            <div class="HDSD">
+                                                                            </div>
+                                                                            <label for="up-file{{ $exam->id }}"
+                                                                                class="">
+                                                                                <i data-bs-toggle="tooltip"
+                                                                                    title="Click để upload file"
+                                                                                    style="font-size: 100px;"
+                                                                                    role="button"
+                                                                                    class="bi bi-cloud-plus-fill"></i>
+                                                                            </label>
+                                                                            <input style="display: none" type="file"
+                                                                                name="ex_file" class="up-file"
+                                                                                id="up-file{{ $exam->id }}">
+                                                                            <div style="display: none"
+                                                                                class="progress show-p mt-3 h-25px w-100">
+                                                                                <div class="progress-bar bg-primary progress-bar-striped progress-bar-animated"
+                                                                                    role="progressbar" style="width: 0%"
+                                                                                    aria-valuenow="0" aria-valuemin="0"
+                                                                                    aria-valuemax="100">
+                                                                                </div>
+                                                                            </div>
+                                                                            <p class="show-name">
+                                                                            </p>
+                                                                            <p class="text-danger error_ex_file">
+                                                                            </p>
+                                                                        </div>
+
+                                                                        <div class="modal-footer">
+                                                                            <button type="submit"
+                                                                                class="upload-file btn btn-primary">Tải
+                                                                                lên
+                                                                            </button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                @endif
+                                            </td>
                                             <td style="text-align: center">
                                                 <i role="button" data-bs-toggle="tooltip" title="Quản lý đề thi "
                                                     data-round_id="{{ $round->id }}"
                                                     data-round_name="{{ $round->name }}"
-                                                    class="add-exam m-auto bi bi-text-indent-left fs-2x"></i>
+                                                    class="add-exam m-auto bi bi-tools fs-2x"></i>
                                             </td>
                                             <td>
                                                 <div data-bs-toggle="tooltip" title="Thao tác "
@@ -272,7 +481,7 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                        @if (count($round->exams) > 0)
+                                        {{-- @if (count($round->exams) > 0)
                                             <tr class="{{ $key == 0 ?: 'collapse  panel-collapse' }} "
                                                 id="collapseExample_{{ $round->id }}" role="tabpanel"
                                                 aria-labelledby="heading{{ $round->id }}">
@@ -325,7 +534,6 @@
                                                                             data-bs-target="#kt_modal_exc_{{ $exam->id }}"
                                                                             type="button" class="btn   me-3"
                                                                             id="kt_file_manager_new_folder">
-                                                                            <!--begin::Svg Icon | path: icons/duotune/files/fil013.svg-->
                                                                             <span class="svg-icon svg-icon-2">
                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                                     width="24" height="24"
@@ -342,7 +550,6 @@
                                                                                         fill="black"></path>
                                                                                 </svg>
                                                                             </span>
-                                                                            <!--end::Svg Icon-->
                                                                         </button>
 
                                                                         <div class="modal fade" tabindex="-1"
@@ -355,14 +562,12 @@
                                                                                             <strong>{{ $exam->name }}</strong>
                                                                                         </h5>
 
-                                                                                        <!--begin::Close-->
                                                                                         <div class="btn btn-icon btn-sm btn-active-light-primary ms-2"
                                                                                             data-bs-dismiss="modal"
                                                                                             aria-label="Close">
                                                                                             <span
                                                                                                 class="svg-icon svg-icon-2x"></span>
                                                                                         </div>
-                                                                                        <!--end::Close-->
                                                                                     </div>
                                                                                     <form class="form-submit"
                                                                                         action="{{ route('admin.question.excel.import.exam', ['exam' => $exam->id]) }}"
@@ -426,7 +631,6 @@
                                                                                 class="btn-click-show-exams btn btn-primary"
                                                                                 data-bs-toggle="modal"
                                                                                 data-bs-target="#kt_modal_2">
-                                                                                {{-- <i class="bi bi-ui-checks-grid"></i> --}}
                                                                                 <i class="bi bi-arrows-move"></i>
                                                                             </button>
                                                                         </span>
@@ -441,7 +645,7 @@
                                                     </table>
                                                 </td>
                                             </tr>
-                                        @endif
+                                        @endif --}}
                                     @endforeach
                                 @else
                                     <tr>
@@ -451,6 +655,10 @@
                             </tbody>
                         </table>
                     </div>
+
+
+
+
                 </div>
 
 
