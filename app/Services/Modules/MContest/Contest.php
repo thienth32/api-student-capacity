@@ -331,7 +331,7 @@ class Contest implements MContestInterface
         return $this->contest::with(
             [
                 'skills' => function ($q) {
-                    return $q->select(["skill_id", "name"]);
+                    return $q->select(["name"]);
                 },
                 'rounds' => function ($q) use ($type) {
                     return $q
@@ -339,8 +339,8 @@ class Contest implements MContestInterface
                             'exams' => function ($q) use ($type) {
                                 return $q->where('type', $type);
                             }
-                        ])
-                        ->withCount('exams');
+                        ]);
+                    // ->withCount('exams');
                 }
             ]
         )

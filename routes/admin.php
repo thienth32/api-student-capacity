@@ -419,6 +419,9 @@ Route::prefix('questions')->group(function () {
     Route::post('import', [QuestionController::class, 'import'])->name('admin.question.excel.import');
     Route::post('import/{exam}', [QuestionController::class, 'importAndRunExam'])->name('admin.question.excel.import.exam');
     Route::get('export', [QuestionController::class, 'exportQe'])->name('admin.question.excel.export');
+
+
+    Route::get('skill-question-api', [QuestionController::class, 'skillQuestionApi'])->name('admin.question.skill');
 });
 
 

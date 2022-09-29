@@ -830,7 +830,7 @@
     <!--end::Container-->
 
     {{-- Support --}}
-    <div id="kt_drawer_chat" class="bg-body" data-kt-drawer="true" data-kt-drawer-name="chat"
+    {{-- <div id="kt_drawer_chat" class="bg-body" data-kt-drawer="true" data-kt-drawer-name="chat"
         data-kt-drawer-activate="true" data-kt-drawer-overlay="false"
         data-kt-drawer-width="{default:'300px', 'md': '500px'}" data-kt-drawer-direction="end"
         data-kt-drawer-toggle="#kt_drawer_chat_toggle" data-kt-drawer-close="#kt_drawer_chat_close">
@@ -966,45 +966,27 @@
                     <div style="transform: rotate(180deg);" class="show-chat-d">
 
                     </div>
-                    <!--end::Message(in)-->
-                    <!--begin::Message(out)-->
                     @foreach (array_reverse(session('url-history')) as $history)
                         <div style="transform: rotate(180deg);" class="d-flex justify-content-end mb-10">
-                            <!--begin::Wrapper-->
                             <div class="d-flex flex-column align-items-end">
-                                <!--begin::User-->
                                 <div class="d-flex align-items-center mb-2">
-                                    <!--begin::Details-->
                                     <div class="me-3">
                                         <span class="text-muted fs-7 mb-1">{{ $history['time'] }}</span>
                                         <a href="#"
                                             class="fs-5 fw-bolder text-gray-900 text-hover-primary ms-1">You</a>
                                     </div>
-                                    <!--end::Details-->
-                                    <!--begin::Avatar-->
                                     <div class="symbol symbol-35px symbol-circle">
                                         <img alt="Pic" src="assets/media/avatars/300-1.jpg" />
                                     </div>
-                                    <!--end::Avatar-->
                                 </div>
-                                <!--end::User-->
-                                <!--begin::Text-->
                                 <div class="p-5 rounded bg-light-primary text-dark fw-bold mw-lg-400px text-end"
                                     data-kt-element="message-text">Bạn đã truy cập <a href=" {{ $history['url'] }}">
                                         {{ $history['url'] }}</a> </div>
-                                <!--end::Text-->
                             </div>
-
-                            <!--end::Wrapper-->
                         </div>
                     @endforeach
-                    <!--end::Message(out)-->
-
                 </div>
-                <!--end::Messages-->
             </div>
-            <!--end::Card body-->
-            <!--begin::Card footer-->
             <div class="card-footer pt-4" id="kt_drawer_chat_messenger_footer">
                 <div class="row">
                     @foreach (config('support.support-qs') as $supppport)
@@ -1015,26 +997,8 @@
                     @endforeach
                 </div>
 
-                {{-- <!--begin::Input--> --}}
-                {{-- <textarea class="form-control form-control-flush mb-3" rows="1" data-kt-element="input" placeholder="Type a message"></textarea> --}}
-                {{-- <!--end::Input--> --}}
-                {{-- <!--begin:Toolbar--> --}}
-                {{-- <div class="d-flex flex-stack"> --}}
-                {{-- <!--begin::Actions--> --}}
-                {{-- <div class="d-flex align-items-center me-2"> --}}
-
-                {{-- </div> --}}
-                {{-- <!--end::Actions--> --}}
-                {{-- <!--end::Actions--> --}}
-                {{-- <!--begin::Send--> --}}
-                {{-- <button class="btn btn-primary" type="button" data-kt-element="send">Send</button> --}}
-                {{-- <!--end::Send--> --}}
-                {{-- </div> --}}
-                {{-- <!--end::Toolbar--> --}}
             </div>
-            <!--end::Card footer-->
         </div>
-        <!--end::Messenger-->
-    </div>
+    </div> --}}
 
 </div>

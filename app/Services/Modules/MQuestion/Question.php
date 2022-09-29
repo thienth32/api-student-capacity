@@ -33,4 +33,14 @@ class Question implements MQuestionInterface
     {
         return $this->model::where('status', 1)->get();
     }
+    public function getQuestionSkill()
+    {
+        $data  = $this->model::whenWhereHasRelationship(
+            request('skill_id') ?? null,
+            'skills',
+            'skills.id',
+            (request()->has('skill_id') && request('skill_id') == 0) ? true : false
+        )->get();
+        return $data;
+    }
 }
