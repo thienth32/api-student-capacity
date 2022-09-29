@@ -10,6 +10,8 @@ use App\Models\Answer;
 use App\Models\Exam;
 use App\Models\Question;
 use App\Models\Skill;
+use App\Services\Modules\MQuestion\MQuestionInterface;
+use App\Services\Modules\MSkill\MSkillInterface;
 use App\Services\Traits\TStatus;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -25,8 +27,14 @@ class QuestionController extends Controller
     protected $questionModel;
     protected $answerModel;
     protected $examModel;
-    public function __construct(Skill $skill, Question $question, Answer $answer, Exam $exam)
-    {
+    public function __construct(
+        Skill $skill,
+        Question $question,
+        Answer $answer,
+        Exam $exam,
+        private MSkillInterface $skillRepo,
+        private MQuestionInterface $questionRepo
+    ) {
         $this->skillModel = $skill;
         $this->questionModel = $question;
         $this->answerModel = $answer;
@@ -40,32 +48,29 @@ class QuestionController extends Controller
      */
     public function getList()
     {
-        try {
-            $now = Carbon::now('Asia/Ho_Chi_Minh');
-            $data = $this->questionModel::when(request()->has('question_soft_delete'), function ($q) {
-                return $q->onlyTrashed();
+        $now = Carbon::now('Asia/Ho_Chi_Minh');
+        $data = $this->questionModel::when(request()->has('question_soft_delete'), function ($q) {
+            return $q->onlyTrashed();
+        })
+            ->status(request('status'))
+            ->search(request('q') ?? null, ['content'])
+            ->sort((request('sort') == 'asc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'questions')
+            ->whenWhereHasRelationship(request('skill') ?? null, 'skills', 'skills.id', (request()->has('skill') && request('skill') == 0) ? true : false)
+            // ->hasRequest(['rank' => request('level') ?? null, 'type' => request('type') ?? null]);
+            ->when(request()->has('level'), function ($q) {
+                $q->where('rank', request('level'));
             })
-                ->status(request('status'))
-                ->search(request('q') ?? null, ['content'])
-                ->sort((request('sort') == 'asc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'questions')
-                ->whenWhereHasRelationship(request('skill') ?? null, 'skills', 'skills.id')
-                // ->hasRequest(['rank' => request('level') ?? null, 'type' => request('type') ?? null]);
-                ->when(request()->has('level'), function ($q) {
-                    $q->where('rank', request('level'));
-                })
-                ->when(request()->has('type'), function ($q) {
-                    $q->where('type', request('type'));
-                });
-            $data->with(['skills', 'answers']);
-            return $data;
-        } catch (\Throwable $th) {
-            dd($th);
-        }
+            ->when(request()->has('type'), function ($q) {
+                $q->where('type', request('type'));
+            });
+        $data->with(['skills', 'answers']);
+        return $data;
     }
+
     public function index()
     {
         $skills = $this->skillModel::all();
-        if (!($questions = $this->getList()->paginate(request('limit') ?? 5))) return abort(404);
+        if (!($questions = $this->getList()->paginate(request('limit') ?? 10))) return abort(404);
 
         // dd($questions);
         return view('pages.question.list', [
@@ -86,7 +91,7 @@ class QuestionController extends Controller
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
-                'payload' => 'Hệ thống đã xảy ra lỗi ! ',
+                'payload' => 'Hệ thống đã xảy ra lỗi ! ' . $th->getMessage(),
             ], 404);
         }
     }
@@ -102,7 +107,6 @@ class QuestionController extends Controller
             ]
         );
     }
-
 
     public function store(Request $request)
     {
@@ -168,12 +172,10 @@ class QuestionController extends Controller
         }
     }
 
-
     public function show(Question $questions)
     {
         //
     }
-
 
     public function edit(Question $questions, $id)
     {
@@ -185,7 +187,6 @@ class QuestionController extends Controller
             'question' => $question,
         ]);
     }
-
 
     public function update(Request $request, $id)
     {
@@ -256,7 +257,6 @@ class QuestionController extends Controller
         }
     }
 
-
     public function destroy(Question $questions, $id)
     {
         $this->questionModel::find($id)->delete();
@@ -312,7 +312,8 @@ class QuestionController extends Controller
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
-                'payload' => 'Không thể câp nhật trạng câu hỏi  !',
+                'payload' => 'Không thể câp nhật trạng câu hỏi  ! ' . $th->getMessage(),
+                'data' => $request->all(),
             ]);
         }
     }
@@ -350,6 +351,25 @@ class QuestionController extends Controller
             ], 400);
         }
     }
+
+    public function importAndRunExam(ImportQuestion $request, $exam_id)
+    {
+        try {
+            Excel::import(new QuestionsImport($exam_id), $request->ex_file);
+            return response()->json([
+                "status" => true,
+                "payload" => "Thành công "
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "status" => false,
+                "errors" => [
+                    "ex_file" => $th->getMessage()
+                ]
+            ], 400);
+        }
+    }
+
     public function exportQe()
     {
         $point = [
@@ -363,5 +383,11 @@ class QuestionController extends Controller
         return Excel::download($export, 'abc.xlsx');
         // return Excel::download(new QuestionsExport, 'question.xlsx');
         // return Excel::download(new QuestionsExport, 'invoices.xlsx', true, ['X-Vapor-Base64-Encode' => 'True']);
+    }
+
+    public function skillQuestionApi()
+    {
+        $data = $this->questionRepo->getQuestionSkill();
+        return $this->responseApi(true, $data);
     }
 }

@@ -114,4 +114,14 @@ class Round implements MRoundInterface
         if ($flagGetAll) return $teams->get();
         return $teams->paginate(request('limit') ?? 10);
     }
+
+    public function where($param = [])
+    {
+        return $this->round::hasRequest($param);
+    }
+
+    public function whereIn($key, $val = [])
+    {
+        return $this->round::whereIn($key, $val);
+    }
 }

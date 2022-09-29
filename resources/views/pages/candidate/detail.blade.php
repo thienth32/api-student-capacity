@@ -9,6 +9,10 @@
                     <li class="breadcrumb-item pe-3">
                         <a href="{{ route('admin.post.list') }}" class="pe-3">Thông tin ứng tuyển</a>
                     </li>
+                    <li class="breadcrumb-item pe-3">
+                        <a href="{{ route('admin.post.detail', ['slug' => $data->post->slug]) }}" class="pe-3">Mã tuyển dụng
+                            : {{ $data->post->code_recruitment }}</a>
+                    </li>
                     <li class="breadcrumb-item px-3 text-muted">SV:{{ $data->name }}</li>
                 </ol>
             </div>
@@ -70,12 +74,12 @@
                             <div class="opacity-75">
                                 <div class="row">
                                     <div class="col-4">
-                                        <h3>Mã ứng tuyển</h3>
+                                        <h3>Mã tuyển dụng</h3>
                                     </div>
                                     <div class="col-8">
                                         <a class="btn btn-primary"
                                             href="{{ route('admin.post.detail', ['slug' => $data->post->slug]) }}">
-                                            MTD{{ $data->post_id }}</a>
+                                            {{ $data->post->code_recruitment }}</a>
                                     </div>
                                 </div>
                             </div>

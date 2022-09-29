@@ -36,16 +36,16 @@ class RequestsEnterprise extends FormRequest
         ]);
         return $rule;
     }
-    public function messages()
-    {
-        return [
-            'name.required' => 'Chưa nhập trường này !',
-            'name.unique' => 'Đã tồn tại trường này',
-            'description.required' => 'Chưa nhập trường này !',
-            'link_web.required' => 'Chưa nhập trường này !',
-            'logo.mimes' => 'Sai định dạng !',
-            'logo.required' => 'Chưa nhập trường này !',
-            'logo.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
-        ];
-    }
+    // public function messages()
+    // {
+    //     return [
+    //         'name.required' => 'Chưa nhập trường này !',
+    //         'name.unique' => 'Đã tồn tại trường này',
+    //         'description.required' => 'Chưa nhập trường này !',
+    //         'link_web.required' => 'Chưa nhập trường này !',
+    //         'logo.mimes' => 'Sai định dạng !',
+    //         'logo.required' => 'Chưa nhập trường này !',
+    //         'logo.max' => 'Dung lượng ảnh không được vượt quá 10MB !',
+    //     ];
+    // }
 }

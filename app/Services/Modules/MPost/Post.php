@@ -11,6 +11,8 @@ use App\Services\Traits\TUploadImage;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
+use function GuzzleHttp\Promise\all;
+
 class Post
 {
     use TUploadImage;
@@ -38,6 +40,7 @@ class Post
         $startTime = $request->has('startTime') ? $request->startTime : null;
         $endTime = $request->has('endTime') ? $request->endTime : null;
         $sortBy = $request->has('sortBy') ? $request->sortBy : "desc";
+        $postHot =  $request->has('postHot') ? $request->postHot : null;
         $softDelete = $request->has('post_soft_delete') ? $request->post_soft_delete : null;
         if ($softDelete != null) {
             $query = $this->post::onlyTrashed()->where('title', 'like', "%$keyword%")->orderByDesc('deleted_at');
@@ -46,6 +49,13 @@ class Post
         $query = $this->post::where('title', 'like', "%$keyword%");
         if ($status != null) {
             $query->where('status', $status);
+        }
+        if ($postHot != null) {
+            if ($postHot == 'hot') {
+                $query->where('hot', config('util.POST_HOT'));
+            } elseif ($postHot == 'normal') {
+                $query->where('hot', config('util.POST_NORMAL'));
+            }
         }
         if ($progress != null) {
             if ($progress == 'unpublished') {
@@ -86,13 +96,13 @@ class Post
     }
     private function loadAble($query, $post = null)
     {
-        if ($post == 'post-contest') {
+        if ($post == config('util.post-contest')) {
             $query->where('status_capacity', 0)->where('postable_type', $this->contest::class);
-        } elseif ($post == 'post-capacity') {
+        } elseif ($post == config('util.post-capacity')) {
             $query->where('status_capacity', 1)->where('postable_type', $this->contest::class);
-        } elseif ($post == 'post-round') {
+        } elseif ($post == config('util.post-round')) {
             $query->where('postable_type', $this->round::class);
-        } elseif ($post == 'post-recruitment') {
+        } elseif ($post == config('util.post-recruitment')) {
             $query->where('postable_type', $this->recruitment::class);
         }
     }
@@ -109,6 +119,7 @@ class Post
             'content' => $request->content ? $request->content : null,
             'slug' => $request->slug,
             'link_to' => $request->link_to ? $request->link_to : null,
+            'code_recruitment' => $request->code_recruitment ? $request->code_recruitment : null,
             'user_id' => auth()->user()->id,
         ];
 
@@ -136,21 +147,21 @@ class Post
     public function update($request, $id)
     {
         $post = $this->post::find($id);
-
-
         if (!$post) {
             return redirect('error');
         }
+
         $post->title = $request->title;
         $post->slug = $request->slug;
         $post->published_at = $request->published_at;
         $post->description = $request->description;
         $post->content = $request->content ?  $request->content : null;
         $post->link_to = $request->link_to ?  $request->link_to : null;
+        $post->code_recruitment = $request->code_recruitment ? $request->code_recruitment : null;
 
         if ($request->has('thumbnail_url')) {
             $fileImage =  $request->file('thumbnail_url');
-            $image = $this->uploadFile($fileImage);
+            $image = $this->uploadFile($fileImage,  $post->thumbnail_url);
             $post->thumbnail_url = $image;
         }
         if ($request->contest_id != 0) {

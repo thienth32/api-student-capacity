@@ -22,6 +22,8 @@ trait TStatus
             $data = $this->updateStatus($this->getModelDataStatus($id), 0);
             return $this->responseApi(true, $data);
         } catch (\Throwable $th) {
+            dump($th);
+            return $this->responseApi(false, $th);
             return $this->responseApi(false, 'Không thể câp nhật trạng thái !');
         }
     }
@@ -44,8 +46,15 @@ trait TStatus
         return $data;
     }
 
+    /**
+     * Note
+     * dùng cho recruitment và post hoặc có trạng thái nổi bật .
+     * public function getModelDataHot($id)
+     * {
+     *      return $this->model->find($id);
+     * }
+     */
 
-    // dùng cho recruitment
     public function un_hot($id)
     {
         try {

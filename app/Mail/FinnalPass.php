@@ -10,7 +10,6 @@ use Illuminate\Queue\SerializesModels;
 class FinnalPass extends Mailable
 {
     use Queueable, SerializesModels;
-
     /**
      * Create a new message instance.
      *

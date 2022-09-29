@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Services\Manager\FMenu\MenuManager;
 use App\Services\Traits\RepositorySetup;
+use Google\Service\ServiceControl\Auth;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -31,6 +32,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
         Arr::macro('listColumnOfTable', function (string $table) {
             return Schema::getColumnListing($table);
         });

@@ -7,7 +7,7 @@
             <div class="col-lg-6">
                 <div class="d-flex justify-content-start">
                     <h1>
-                        Quản lý bài viết
+                        Danh sách bài viết
                     </h1>
                     <a class="mx-2" href="{{ route('admin.post.list') }}">
                         <span role="button" data-bs-toggle="tooltip" title="Tải lại trang "
@@ -106,6 +106,33 @@
                     <label class="form-label">Tìm kiếm </label>
                     <input id="searchTeam" value="{{ request('keyword') ?? '' }}" type="text"
                         placeholder="'*Enter' tìm kiếm ..." class=" ip-search form-control">
+                </div>
+            </div>
+            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
+                <div class="  form-group pt-2">
+                    <div class="mb-0">
+                        <label class="form-label">Thời gian xuất bản </label>
+                        <div id="reportrange"
+                            style="background: #fff; cursor: pointer; padding: 10px 10px; border: 1px solid #ccc; width: 100%; border-radius: 7px">
+                            <i class="fa fa-calendar"></i>&nbsp;
+                            <span></span> <i class="fa fa-caret-down"></i>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
+                <div class="form-group  pt-2">
+                    <label for="" class="form-label">Bài viết nổi bật</label>
+                    <select class="select-filter-post-hot form-select mb-2 select2-hidden-accessible"
+                        data-control="select2" data-hide-search="true" tabindex="-1" aria-hidden="true">
+                        <option class="form-control" value="">Chọn loại bài viết</option>
+                        <option class="form-control" @selected(request('postHot') == 'hot') value="hot">Bài viết nổi bật.
+                        </option>
+                        <option class="form-control" @selected(request('postHot') == 'normal') value="normal"> Bài viết thường .
+                        </option>
+                    </select>
                 </div>
             </div>
             <div class="col-12 row">
@@ -209,20 +236,6 @@
                     </div>
                 </div>
 
-            </div>
-            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
-                <div class="  form-group pt-2">
-                    <div class="mb-0">
-                        <label class="form-label">Thời gian xuất bản </label>
-                        <div id="reportrange"
-                            style="background: #fff; cursor: pointer; padding: 10px 10px; border: 1px solid #ccc; width: 100%">
-                            <i class="fa fa-calendar"></i>&nbsp;
-                            <span></span> <i class="fa fa-caret-down"></i>
-                        </div>
-
-                    </div>
-
-                </div>
             </div>
 
         </div>
@@ -342,6 +355,8 @@
                             <td></td>
                             <th scope="col">Trạng thái
                             </th>
+                            <th scope="col">Nổi bật
+                            </th>
                             <th scope="col">Quá trình
                             </th>
                             <th scope="col">Ngày xuất bản
@@ -434,7 +449,8 @@
                                 </td>
                                 <td>
                                     @if (get_class($key->postable) == \App\Models\Recruitment::class)
-                                        <a href="{{ route('admin.post.create') }}" class=" btn btn-primary btn-sm">Danh
+                                        <a href="{{ route('admin.candidate.list', ['post_id' => $key->id]) }}"
+                                            class=" btn btn-primary btn-sm">Danh
                                             sách ứng tuyển
                                         </a>
                                     @endif
@@ -449,6 +465,18 @@
                                                 class="form-select-status form-check-input" @checked($key->status == 1)
                                                 type="checkbox" role="switch">
 
+                                        </div>
+                                    @endhasrole
+
+                                </td>
+                                <td>
+                                    @hasanyrole('admin|super admin')
+
+                                        <div data-bs-toggle="tooltip" title="Cập nhật bài viết nổi bật "
+                                            class="form-check form-switch">
+                                            <input value="{{ $key->hot }}" data-id="{{ $key->id }}"
+                                                class="form-select-post-hot form-check-input" @checked($key->hot == config('util.POST_HOT'))
+                                                type="checkbox" role="switch">
                                         </div>
                                     @endhasrole
 

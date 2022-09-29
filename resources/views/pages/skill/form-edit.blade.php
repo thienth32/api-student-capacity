@@ -1,6 +1,6 @@
 @extends('layouts.main')
-@section('title', 'Cập nhật kỹ năng')
-@section('page-title', 'Cập nhật kỹ năng')
+@section('title', 'Quản lý kỹ năng ')
+@section('page-title', 'Quản lý kỹ năng')
 @section('content')
 
     <div class="row mb-4">
@@ -25,7 +25,7 @@
                     @csrf
                     @method('PUT')
                     <div class="form-group mb-10">
-                        <label for="">Tên kỹ năng</label>
+                        <label class=" form-label"for="">Tên kỹ năng</label>
                         <input type="text" name="name" value="{{ $data->name }}" class=" form-control"
                             placeholder="">
                         @error('name')
@@ -39,7 +39,7 @@
                             <div class="col-8">
 
                                 <div class="form-group mb-10">
-                                    <label for="">Mã kỹ năng</label>
+                                    <label class=" form-label"for="">Mã kỹ năng</label>
                                     <input type="text" name="short_name" value="{{ $data->short_name }}"
                                         class=" form-control" placeholder="">
                                     @error('short_name')
@@ -57,8 +57,7 @@
                                             @endphp
                                             <option
                                                 @foreach ($data->majorSkill as $item) @if ($item->id == $itemMajor->id)
-                                        {{ 'selected="selected"' }} @endif
-                                                @endforeach
+                                        {{ 'selected="selected"' }} @endif @endforeach
                                                 value="{{ $itemMajor->id }}">
                                                 Ngành: {{ $itemMajor->name }}
                                             </option>
@@ -68,6 +67,14 @@
                                             ])
                                         @endforeach
                                     </select>
+                                </div>
+                                <div class="form-group mb-10">
+                                    <label class=" form-label"for="">Mô tả kỹ năng</label>
+                                    <textarea class="form-control" name="description" id="kt_docs_ckeditor_classic" rows="3">{{ $data->description }}</textarea>
+                                    {{-- <textarea class="form-control" name="description" id="" rows="3">{{ $data->description }}</textarea> --}}
+                                    @error('description')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="col-4">
@@ -86,14 +93,7 @@
 
                     </div>
 
-                    <div class="form-group mb-10">
-                        <label for="">Mô tả kỹ năng</label>
-                        <textarea class="form-control" name="description" id="kt_docs_ckeditor_classic" rows="3">{{ $data->description }}</textarea>
-                        {{-- <textarea class="form-control" name="description" id="" rows="3">{{ $data->description }}</textarea> --}}
-                        @error('description')
-                            <p class="text-danger">{{ $message }}</p>
-                        @enderror
-                    </div>
+
                     <div class="form-group mb-10 ">
                         <button type="submit" name="" id="" class="btn btn-success btn-lg btn-block">Lưu
                         </button>

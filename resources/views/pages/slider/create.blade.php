@@ -1,16 +1,14 @@
 @extends('layouts.main')
-@section('title', 'Thêm mới slider ')
-@section('page-title', 'Thêm mới slider ')
+@section('title', 'Quản lý slider')
+@section('page-title', 'Quản lý slider')
 @section('content')
     <div class="row mb-4">
         <div class="col-lg-12">
             <ol class="breadcrumb text-muted fs-6 fw-bold">
                 <li class="breadcrumb-item pe-3">
-
                     <a href="{{ route('admin.sliders.list') }}" class="pe-3">
                         Danh sách slider
                     </a>
-
                 </li>
                 <li class="breadcrumb-item px-3 text-muted">Thêm mới slider </li>
             </ol>
@@ -19,15 +17,12 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
-
                 <form id="formAddSlider" action="{{ route('admin.sliders.store') }}" method="post"
                     enctype="multipart/form-data">
                     @csrf
                     <div style="width: 80%" class="text-center m-auto">
                         <img class="pb-4" style=" width: 100%" id="previewImg">
-
                     </div>
-
                     <div class="form-group mb-10">
                         <label for="" class="form-label">Ảnh</label>
                         <input name="image_url" type="file" class="file-change form-control">
@@ -72,14 +67,11 @@
                                 @enderror
                             </div>
                             <div class="col-12">
-
-
                             </div>
-
                         </div>
-                        <div class="col-12 pb-2">
+                        <div class="col-12 mb-10">
                             <label for="" class="form-label">Thuộc thành phần </label>
-                            <div class="row pb-2">
+                            <div class="row mb-10">
                                 <div class="col-4">
                                     <button type="button" class="btn btn-light btn-major">Chuyên ngành </button>
                                 </div>
@@ -100,19 +92,21 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div style="display: none" id="round">
+                            <div style="display: none" id="round" class="">
+                                <div class="form-group mb-10">
 
-                                <label class="form-label">Cuộc thi </label>
-                                <select id="select-contest-p" class="form-select form-contest " data-control="select2"
-                                    data-placeholder="Chọn vòng thi ">
-                                    <option value="0">Chọn cuộc thi</option>
-                                    @foreach ($contests as $contest)
-                                        <option value="{{ $contest->id }}">
-                                            {{ $contest->name }} -
-                                            {{ $contest->rounds_count . ' vòng thi ' }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                    <label class="form-label">Cuộc thi </label>
+                                    <select id="select-contest-p" class="form-select form-contest " data-control="select2"
+                                        data-placeholder="Chọn vòng thi ">
+                                        <option value="0">Chọn cuộc thi</option>
+                                        @foreach ($contests as $contest)
+                                            <option value="{{ $contest->id }}">
+                                                {{ $contest->name }} -
+                                                {{ $contest->rounds_count . ' vòng thi ' }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
                                 <div>
                                     <label class="form-label">Vòng thi </label>
                                     <select id="select-round" name="round_id" class="form-select form-round "

@@ -7,7 +7,7 @@
             <div class="col-lg-6">
                 <div class="d-flex justify-content-start">
                     <h1>
-                        Thông tin ứng tuyển
+                        Danh sách thông tin ứng tuyển
                     </h1>
                     <a class="mx-2" href="{{ route('admin.candidate.list') }}">
                         <span data-bs-toggle="tooltip" title="Tải lại trang " role="button"
@@ -67,7 +67,7 @@
                         <option value="">Chọn mã tuyển dụng</option>
                         @foreach ($posts as $post)
                             <option @selected(request('post_id') == $post->id) value="{{ $post->id }}">
-                                MTD{{ $post->id }}
+                                {{ $post->code_recruitment }}
                             </option>
                         @endforeach
                     </select>
@@ -188,7 +188,7 @@
 
                                 <td>
                                     <a href="{{ route('admin.post.detail', ['slug' => $key->post->slug]) }}">
-                                        MTD{{ $key->post_id }}</a>
+                                        {{ $key->post->code_recruitment }}</a>
                                 </td>
                                 <td>
                                     <button class="btn  btn-primary btn-sm" type="button" data-bs-toggle="modal"
@@ -234,12 +234,12 @@
 
                                 <td>
 
-                                    <a class="show_file btn btn-primary" target="_blank"
+                                    <a class="show_file btn btn-primary btn-sm" target="_blank"
                                         href="{{ Storage::disk('s3')->temporaryUrl($key->file_link, now()->addMinutes(5)) }}">Xem</a>
                                 </td>
 
                                 <td>
-                                    <a class="download_file btn btn-success"
+                                    <a class="download_file btn btn-success btn-sm"
                                         href="{{ route('dowload.file') . '?url=' . $key->file_link }}">Tải
                                         xuống</a>
 
@@ -383,7 +383,7 @@
                 </table>
                 {{ $candidates->appends(request()->all())->links('pagination::bootstrap-4') }}
             @else
-                <h2>Không tìm thấy thông tin tuyển dụng !!!</h2>
+                <h2>Chưa có thông tin tuyển dụng !!!</h2>
             @endif
 
         </div>

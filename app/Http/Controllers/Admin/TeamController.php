@@ -106,7 +106,7 @@ class TeamController extends Controller
     {
         $userArray = [];
         $contests = $this->contest::where('type', 0)->get();
-        $team = $this->team::find($id);
+        $team = $this->team::find($id)->load('members');
         foreach ($team->members as $me) {
             array_push($userArray, [
                 'id_user' => $me->id,

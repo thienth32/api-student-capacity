@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CandidateController;
+use App\Http\Controllers\Admin\CapacityPlayController;
 use App\Http\Controllers\Admin\CkeditorController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ExamController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\SendMailController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EnterpriseController;
+use App\Http\Controllers\admin\KeywordController;
 use App\Http\Controllers\Admin\RecruitmentController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\PrintPDFController;
@@ -140,6 +142,18 @@ Route::prefix('rounds')->group(function () {
 Route::group([
     'middleware' => 'role_admin'
 ], function () {
+    Route::prefix('capacity-play')->group(function () {
+        Route::get('', [CapacityPlayController::class, 'index'])->name('admin.capacit.play.index');
+        Route::get('create', [CapacityPlayController::class, 'create'])->name('admin.capacit.play.create');
+        Route::post('store', [CapacityPlayController::class, 'store'])->name('admin.capacit.play.store');
+        Route::get('{id}', [CapacityPlayController::class, 'show'])->name('admin.capacit.play.show');
+        Route::get('run-now/{id}', [CapacityPlayController::class, 'start'])->name('admin.capacit.play.run');
+        Route::get('view-now/{id}', [CapacityPlayController::class, 'viewStart'])->name('admin.capacit.play.view.run');
+        Route::get('end/{id}', [CapacityPlayController::class, 'end'])->name('admin.capacit.play.end');
+        Route::post('{id_exam}/un-status', [CapacityPlayController::class, 'un_status'])->name('admin.capacit.un_status');
+        Route::post('{id_exam}/re-status', [CapacityPlayController::class, 're_status'])->name('admin.capacit.re_status');
+    });
+
     Route::prefix('teams')->group(function () {
         //list
         Route::get('', [TeamController::class, 'ListTeam'])->name('admin.teams'); // Api list Danh sách teams theo cuộc thi. phía view
@@ -347,6 +361,8 @@ Route::group([
 
         Route::post('un-status/{id}', [PostController::class, 'un_status'])->name('admin.post.un.status');
         Route::post('re-status/{id}', [PostController::class, 're_status'])->name('admin.post.re.status');
+        Route::post('un-hot/{id}', [PostController::class, 'un_hot'])->name('admin.post.un.hot');
+        Route::post('re-hot/{id}', [PostController::class, 're_hot'])->name('admin.post.re.hot');
         Route::post('store', [PostController::class, 'store'])->name('admin.post.store');
         Route::delete('{slug}', [PostController::class, 'destroy'])->name('admin.post.destroy');
         Route::prefix('list-soft-deletes')->group(function () {
@@ -366,6 +382,22 @@ Route::group([
         });
         Route::get('{id}', [CandidateController::class, 'detail'])->name('admin.candidate.detail');
     });
+    Route::prefix('keywords')->group(function () {
+        Route::get('{id}/edit', [KeywordController::class, 'edit'])->name('admin.keyword.edit');
+        Route::put('{id}', [KeywordController::class, 'update'])->name('admin.keyword.update');
+        Route::get('', [KeywordController::class, 'index'])->name('admin.keyword.list');
+        Route::get('add', [KeywordController::class, 'create'])->name('admin.keyword.create');
+        Route::post('un-status/{id}', [KeywordController::class, 'un_status'])->name('admin.keyword.un.status');
+        Route::post('re-status/{id}', [KeywordController::class, 're_status'])->name('admin.keyword.re.status');
+        Route::post('add-save', [KeywordController::class, 'store'])->name('admin.keyword.store');
+        Route::delete('{id}', [KeywordController::class, 'destroy'])->name('admin.keyword.destroy');
+        Route::prefix('list-soft-deletes')->group(function () {
+            Route::get('', [KeywordController::class, 'listRecordSoftDeletes'])->name('admin.keyword.list.soft.deletes');
+            Route::get('{id}/delete', [KeywordController::class, 'backUpPost'])->name('admin.keyword.soft.deletes');
+            Route::get('{id}/restore', [KeywordController::class, 'delete'])->name('admin.keyword.soft.restore');
+        });
+    });
+
 
     Route::get('dowload-frm-excel', function () {
         return response()->download(public_path('assets/media/excel/excel_download.xlsx'));
@@ -387,8 +419,13 @@ Route::prefix('questions')->group(function () {
     Route::get('restore-delete/{id}', [QuestionController::class, 'restoreDelete'])->name('admin.question.restore');
 
     Route::post('import', [QuestionController::class, 'import'])->name('admin.question.excel.import');
+    Route::post('import/{exam}', [QuestionController::class, 'importAndRunExam'])->name('admin.question.excel.import.exam');
     Route::get('export', [QuestionController::class, 'exportQe'])->name('admin.question.excel.export');
+
+
+    Route::get('skill-question-api', [QuestionController::class, 'skillQuestionApi'])->name('admin.question.skill');
 });
+
 
 // Route::get('api-view-check', function (App\Services\Modules\MContest\Contest $contest) {
 //     $data = $contest->apiIndex();

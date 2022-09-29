@@ -138,9 +138,50 @@ const pageSliderForm = {
             }
         });
     },
+    selectChangePostHot: function () {
+        $(".form-select-post-hot").on("change", function () {
+            let id = $(this).data("id");
+            if ($(this).val() == 1) {
+                $.ajax({
+                    url: `admin/posts/un-hot/${id}`,
+                    method: "POST",
+                    data: {
+                        _token: _token,
+                    },
+                    success: function (data) {
+                        console.log(data.payload);
+                        if (!data.status) return alert(data.payload);
+                        loadTast(
+                            "Thành công !",
+                            "toastr-bottom-left",
+                            "success"
+                        );
+                    },
+                });
+            } else {
+                $.ajax({
+                    url: `admin/posts/re-hot/${id}`,
+                    method: "POST",
+                    data: {
+                        _token: _token,
+                    },
+                    success: function (data) {
+                        console.log(data.payload);
+                        if (!data.status) return alert(data.payload);
+                        loadTast(
+                            "Thành công !",
+                            "toastr-bottom-left",
+                            "success"
+                        );
+                    },
+                });
+            }
+        });
+    },
 };
 pageSliderForm.selectRoundChildContest();
 pageSliderForm.selectChangeStatus();
+pageSliderForm.selectChangePostHot();
 
 $(document).ready(function () {
     const url = "admin/posts";
@@ -175,6 +216,10 @@ $(document).ready(function () {
     $(".select-date-time").change(function () {
         let dateTime = $(this).val();
         window.location = url + "?progress=" + dateTime;
+    });
+    $(".select-filter-post-hot").change(function () {
+        let parameter = $(this).val();
+        window.location = url + "?postHot=" + parameter;
     });
 
     $(function () {

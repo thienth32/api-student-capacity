@@ -1,80 +1,25 @@
 @extends('layouts.main')
-@section('title', 'Chi tiết test năng lực')
-@section('page-title', 'Chi tiết test năng lực')
+@section('title', 'Quản lý test năng lực')
+@section('page-title', 'Quản lý test năng lực')
 @section('content')
-    <style>
-        .loading {
-            width: 6vmax;
-            height: 6vmax;
-            border-right: 4px solid black;
-            border-radius: 100%;
-            animation: spinRight 800ms linear infinite;
-        }
 
-        .loading:before,
-        .loading:after {
-            content: '';
-            width: 4vmax;
-            height: 4vmax;
-            display: block;
-            position: absolute;
-            top: calc(50% - 2vmax);
-            left: calc(50% - 2vmax);
-            border-left: 3px solid black;
-            border-radius: 100%;
-            animation: spinLeft 800ms linear infinite;
-        }
-
-        .loading:after {
-            width: 2vmax;
-            height: 2vmax;
-            top: calc(50% - 1vmax);
-            left: calc(50% - 1vmax);
-            border: 0;
-            border-right: 2px solid black;
-            animation: none;
-        }
-
-        @keyframes spinLeft {
-            from {
-                transform: rotate(0deg);
-            }
-
-            to {
-                transform: rotate(720deg);
-            }
-        }
-
-        @keyframes spinRight {
-            from {
-                transform: rotate(360deg);
-            }
-
-            to {
-                transform: rotate(0deg);
-            }
-        }
-    </style>
-
-    <div class="card card-plush p-2">
-        <div class=" mb-4">
-            <div class="row">
-                <div class="col-lg-12">
-                    <ol class="breadcrumb text-muted fs-6 fw-bold">
-                        <li class="breadcrumb-item pe-3">
-                            <a href="{{ route('admin.contest.list') . '?type=1' }}" class="pe-3">Test năng lực </a>
-                        </li>
-                        <li class="breadcrumb-item px-3 text-muted">{{ $test_capacity->name }}</li>
-                    </ol>
-                </div>
-            </div>
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <ol class="breadcrumb text-muted fs-6 fw-bold">
+                <li class="breadcrumb-item pe-3">
+                    <a href="{{ route('admin.contest.list') . '?type=1' }}" class="pe-3">Test năng lực </a>
+                </li>
+                <li class="breadcrumb-item px-3 text-muted">Chi tiết : {{ $test_capacity->name }}</li>
+            </ol>
         </div>
+    </div>
+    <div class="card card-plush p-2">
         <style>
             .tab-content {
-                width: 80%;
+                width: 100%;
             }
         </style>
-        <div class="d-flex flex-column flex-md-row rounded border p-10">
+        <div class="d-flex justify-content-between flex-column flex-md-row">
             <ul class="nav nav-tabs nav-pills flex-row border-0 flex-md-column me-5 mb-3 mb-md-0 fs-6">
                 <li class="nav-item me-0 mb-md-2">
                     <a style="width: 100%" class="nav-link btn btn-flex btn-active-light-primary  " data-bs-toggle="tab"
@@ -110,12 +55,12 @@
                         </span>
                         <!--end::Svg Icon-->
                         <span class="d-flex flex-column align-items-start">
-                            <span class="fs-4 fw-bolder">Danh sách bài làm </span>
+                            <span class="fs-4 fw-bolder">D.Sách</span>
                         </span>
                     </a>
                 </li>
-                <li class="nav-item me-0 mb-md-2">
-                    <a style="width: 100%" class="nav-link nav-ql btn btn-flex btn-active-light-info">
+                <li class="nav-item me-0 mb-md-2" style="">
+                    <a style="width: 100%;cursor: no-drop;" class="nav-link nav-ql btn btn-flex btn-active-light-info ">
                         <!--begin::Svg Icon | path: icons/duotune/general/gen003.svg-->
                         <span class="svg-icon svg-icon-2 svg-icon-primary">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -127,7 +72,7 @@
                         </span>
                         <!--end::Svg Icon-->
                         <span class="d-flex flex-column align-items-start">
-                            <span class="fs-4 fw-bolder">Câu hỏi câu trả lời </span>
+                            <span class="fs-4 fw-bolder">Đề thi </span>
                         </span>
                     </a>
                 </li>
@@ -135,7 +80,7 @@
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade active show tab-list" id="kt_vtab_pane_4" role="tabpanel">
                     <h2>
-                        Danh sách đề bài thuộc <strong style="color: blue">{{ $test_capacity->name }}</strong>
+                        Danh sách vòng thi thuộc <strong style="color: blue">{{ $test_capacity->name }}</strong>
                         <a class="mx-2" target="_blank"
                             href="{{ route('admin.round.soft.delete', 'round_soft_delete=1') }}">
 
@@ -158,44 +103,51 @@
                             </span>
                         </a>
                     </h2>
-                    <a target="_blank"
+                    <a class="btn btn-primary" target="_blank"
                         href="{{ route('admin.round.create') . '?contest_id=' . $test_capacity->id . '&type=1' }}"
-                        style="float:right">Thêm đề bài </a>
+                        style="float:right">Thêm vòng thi </a>
                     <div style="width: 100%" class="table-responsive table-responsive-md ">
-                        <table class="table table-row-bordered table-row-gray-300 gy-7  table-hover ">
+                        <table class="table table-striped table-row-bordered table-row-gray-300 gy-7  table-hover ">
                             <thead>
                                 <tr>
-                                    <th>Tên đề bài </th>
-                                    <th>Bài làm</th>
-                                    <th>Tổng số bài làm</th>
+                                    <th>Tên vòng thi </th>
+                                    <th>Đề thi</th>
+                                    {{-- <th>Tổng số đề thi</th> --}}
                                     <th>Thời gian bắt đầu</th>
                                     <th>Thời gian kết thúc</th>
-                                    <th style="text-align: center">Thao tác </th>
+                                    <th style="text-align: center">Quản lý đề thi </th>
                                     <th style="text-align: center"> </th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="panel">
                                 @if ($test_capacity->rounds)
-                                    @foreach ($test_capacity->rounds as $round)
-                                        <tr>
-                                            <td>
-                                                {{ $round->name }}
+                                    @foreach ($test_capacity->rounds as $key => $round)
+                                        <tr class="panel-heading" data-key="{{ $round->id }}">
+                                            <td data-key="{{ $round->id }}" data-bs-toggle="tooltip"
+                                                title="Xem nhanh các cuộc thi">
+                                                <p style="width:100%" class=" " data-bs-toggle="collapse"
+                                                    role="button" data-bs-target="#collapseExample_{{ $round->id }}"
+                                                    aria-expanded="false"
+                                                    aria-controls="collapseExample_{{ $round->id }}">
+                                                    {{ $round->name }}
+                                                </p>
+
                                             </td>
                                             <td>
                                                 <a target="_blank"
                                                     href="{{ route('admin.exam.create', ['id' => $round->id]) . '?type=1' }}">Thêm
-                                                    bài làm</a>
+                                                    đề thi</a>
                                             </td>
-                                            <td>
+                                            {{-- <td>
                                                 {{ $round->exams_count }}
-                                            </td>
+                                            </td> --}}
                                             <td>{{ $round->start_time }}</td>
                                             <td>{{ $round->end_time }}</td>
                                             <td style="text-align: center">
-                                                <i role="button" data-bs-toggle="tooltip" title="Quản lý bài làm "
+                                                <i role="button" data-bs-toggle="tooltip" title="Quản lý đề thi "
                                                     data-round_id="{{ $round->id }}"
                                                     data-round_name="{{ $round->name }}"
-                                                    class="add-exam m-auto bi bi-plus-circle-fill fs-2x"></i>
+                                                    class="add-exam m-auto bi bi-text-indent-left fs-2x"></i>
                                             </td>
                                             <td>
                                                 <div data-bs-toggle="tooltip" title="Thao tác "
@@ -320,15 +272,24 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                        @if ($round->exams_count > 0)
-                                            <tr>
+                                        @if (count($round->exams) > 0)
+                                            <tr class="{{ $key == 0 ?: 'collapse  panel-collapse' }} "
+                                                id="collapseExample_{{ $round->id }}" role="tabpanel"
+                                                aria-labelledby="heading{{ $round->id }}">
                                                 <td style="padding: 0" colspan="12">
                                                     <table
                                                         class="table table-row-dashed table-row-gray-500 gy-5 gs-5 mb-0">
                                                         <thead>
                                                             <tr class="fw-bold fs-6 text-gray-800">
-                                                                <th scope="col"> Bài làm </th>
-                                                                <th style="float: right" scope="col">Thao tác nhanh
+                                                                <th style="padding: 10px" scope="col"> Đề thi </th>
+                                                                <th style="padding: 10px;text-align: center;"
+                                                                    scope="col">
+                                                                    Tiến trình </th>
+                                                                <th style="padding: 10px;text-align: center;"
+                                                                    scope="col">
+                                                                    Tải bộ excel</th>
+                                                                <th style="float: right;padding: 10px" scope="col">
+                                                                    Nhanh
                                                                 </th>
                                                             </tr>
                                                         </thead>
@@ -336,8 +297,124 @@
 
                                                             @foreach ($round->exams as $exam)
                                                                 <tr>
-                                                                    <td style="width: 70%">{{ $exam->name }}</td>
-                                                                    <td style="width: 30%">
+                                                                    <td style="width: 70% ; padding: 10px">
+                                                                        {{ $exam->name }}</td>
+                                                                    <td style="width: 10% ; padding: 10px; text-align:center"
+                                                                        data-bs-toggle="tooltip"
+                                                                        title="Theo dõi tiến trình  "
+                                                                        style="text-align: center;">
+                                                                        <button
+                                                                            style="background: #ccc;padding: 1vh 1vh 1vh 2vh;border-radius: 20px;"
+                                                                            type="button"
+                                                                            data-round_id="{{ $round->id }}"
+                                                                            data-exam_id="{{ $exam->id }}"
+                                                                            class="btn-click-show-result-exam btn btn-primary"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#kt_modal_1">
+                                                                            <i class="bi bi-graph-down  "></i>
+                                                                        </button>
+                                                                    </td>
+                                                                    <td data-bs-toggle="tooltip"
+                                                                        title="Tải lên bộ câu hỏi bằng excel"
+                                                                        style="width: 10% ;padding: 10px; text-align:center">
+                                                                        <button
+                                                                            style="background: #ccc;
+                                                                                padding: 1vh 1vh 1vh 2vh;
+                                                                                border-radius: 20px;"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#kt_modal_exc_{{ $exam->id }}"
+                                                                            type="button" class="btn   me-3"
+                                                                            id="kt_file_manager_new_folder">
+                                                                            <!--begin::Svg Icon | path: icons/duotune/files/fil013.svg-->
+                                                                            <span class="svg-icon svg-icon-2">
+                                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                                    width="24" height="24"
+                                                                                    viewBox="0 0 24 24" fill="none">
+                                                                                    <path opacity="0.3"
+                                                                                        d="M10 4H21C21.6 4 22 4.4 22 5V7H10V4Z"
+                                                                                        fill="black">
+                                                                                    </path>
+                                                                                    <path
+                                                                                        d="M10.4 3.60001L12 6H21C21.6 6 22 6.4 22 7V19C22 19.6 21.6 20 21 20H3C2.4 20 2 19.6 2 19V4C2 3.4 2.4 3 3 3H9.2C9.7 3 10.2 3.20001 10.4 3.60001ZM16 12H13V9C13 8.4 12.6 8 12 8C11.4 8 11 8.4 11 9V12H8C7.4 12 7 12.4 7 13C7 13.6 7.4 14 8 14H11V17C11 17.6 11.4 18 12 18C12.6 18 13 17.6 13 17V14H16C16.6 14 17 13.6 17 13C17 12.4 16.6 12 16 12Z"
+                                                                                        fill="black"></path>
+                                                                                    <path opacity="0.3"
+                                                                                        d="M11 14H8C7.4 14 7 13.6 7 13C7 12.4 7.4 12 8 12H11V14ZM16 12H13V14H16C16.6 14 17 13.6 17 13C17 12.4 16.6 12 16 12Z"
+                                                                                        fill="black"></path>
+                                                                                </svg>
+                                                                            </span>
+                                                                            <!--end::Svg Icon-->
+                                                                        </button>
+
+                                                                        <div class="modal fade" tabindex="-1"
+                                                                            id="kt_modal_exc_{{ $exam->id }}">
+                                                                            <div class="modal-dialog">
+                                                                                <div class="modal-content">
+                                                                                    <div class="modal-header">
+                                                                                        <h5 class="modal-title">Tải lên
+                                                                                            excel
+                                                                                            <strong>{{ $exam->name }}</strong>
+                                                                                        </h5>
+
+                                                                                        <!--begin::Close-->
+                                                                                        <div class="btn btn-icon btn-sm btn-active-light-primary ms-2"
+                                                                                            data-bs-dismiss="modal"
+                                                                                            aria-label="Close">
+                                                                                            <span
+                                                                                                class="svg-icon svg-icon-2x"></span>
+                                                                                        </div>
+                                                                                        <!--end::Close-->
+                                                                                    </div>
+                                                                                    <form class="form-submit"
+                                                                                        action="{{ route('admin.question.excel.import.exam', ['exam' => $exam->id]) }}"
+                                                                                        method="POST"
+                                                                                        enctype="multipart/form-data">
+                                                                                        @csrf
+                                                                                        <div
+                                                                                            class="modal-body text-center">
+                                                                                            <div class="HDSD">
+                                                                                            </div>
+                                                                                            <label
+                                                                                                for="up-file{{ $exam->id }}"
+                                                                                                class="">
+                                                                                                <i data-bs-toggle="tooltip"
+                                                                                                    title="Click để upload file"
+                                                                                                    style="font-size: 100px;"
+                                                                                                    role="button"
+                                                                                                    class="bi bi-cloud-plus-fill"></i>
+                                                                                            </label>
+                                                                                            <input style="display: none"
+                                                                                                type="file"
+                                                                                                name="ex_file"
+                                                                                                class="up-file"
+                                                                                                id="up-file{{ $exam->id }}">
+                                                                                            <div style="display: none"
+                                                                                                class="progress show-p mt-3 h-25px w-100">
+                                                                                                <div class="progress-bar bg-primary progress-bar-striped progress-bar-animated"
+                                                                                                    role="progressbar"
+                                                                                                    style="width: 0%"
+                                                                                                    aria-valuenow="0"
+                                                                                                    aria-valuemin="0"
+                                                                                                    aria-valuemax="100">
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <p class="show-name"></p>
+                                                                                            <p
+                                                                                                class="text-danger error_ex_file">
+                                                                                            </p>
+                                                                                        </div>
+
+                                                                                        <div class="modal-footer">
+                                                                                            <button type="submit"
+                                                                                                class="upload-file btn btn-primary">Tải
+                                                                                                lên </button>
+                                                                                        </div>
+                                                                                    </form>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td
+                                                                        style="width: 10% ;padding: 10px; text-align:center">
                                                                         <span style="float: right"
                                                                             data-bs-toggle="tooltip"
                                                                             title="Xem nhanh câu hỏi câu trả lời ">
@@ -349,7 +426,8 @@
                                                                                 class="btn-click-show-exams btn btn-primary"
                                                                                 data-bs-toggle="modal"
                                                                                 data-bs-target="#kt_modal_2">
-                                                                                <i class="bi bi-ui-checks-grid"></i>
+                                                                                {{-- <i class="bi bi-ui-checks-grid"></i> --}}
+                                                                                <i class="bi bi-arrows-move"></i>
                                                                             </button>
                                                                         </span>
 
@@ -367,20 +445,23 @@
                                     @endforeach
                                 @else
                                     <tr>
-                                        <h5>Không có bài làm lào !</h5>
+                                        <h5>Không có đề thi lào !</h5>
                                     </tr>
                                 @endif
                             </tbody>
                         </table>
                     </div>
                 </div>
+
+
+
                 <div class="tab-pane fade tab-ql" id="kt_vtab_pane_5" role="tabpanel">
                     {{--  --}}
                     <h2 id="show-exam-round"></h2>
                     <table class="table table-row-bordered table-row-gray-300 gy-7  table-hover ">
                         <thead>
                             <tr>
-                                <th>Tên bài làm </th>
+                                <th>Tên đề thi </th>
                                 <th>Điểm số tối đa </th>
                                 <th>Điểm số qua vòng </th>
                                 <th>Thời gian </th>
@@ -474,8 +555,8 @@
         </div>
         {{-- </div> --}}
 
-        <div class="modal bg-white fade" tabindex="-1" id="kt_modal_2">
-            <div class="modal-dialog modal-fullscreen">
+        <div class="modal fade" tabindex="-1" id="kt_modal_2">
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content shadow-none">
                     <div class="modal-header">
                         <h5 class="modal-title">Quản lý câu hỏi câu trả lời </h5>
@@ -489,7 +570,7 @@
                     </div>
 
                     <div style="background-color: #f5f8fa;" class="modal-body">
-                        <div id="show-tast-qs" class="card p-2">
+                        <div id="show-tast-qs" class="card p-6">
                             <div class="row card-format" id="card_2">
 
                                 <div class="col-12 col-lg-2 col-sx-12 col-md-12 col-sm-12 col-xxl-2 col-xl-2">
@@ -499,6 +580,7 @@
                                             data-control="select2" data-hide-search="true" tabindex="-1"
                                             aria-hidden="true">
                                             <option value="-1">Chọn skill</option>
+                                            <option value="0">Không có skill</option>
                                             @foreach ($skills as $skill)
                                                 <option @selected(request('skill') == $skill->id) value="{{ $skill->id }}">
                                                     {{ $skill->name }}
@@ -550,6 +632,8 @@
                                             <option value="10">10</option>
                                             <option value="20">20</option>
                                             <option value="60">60</option>
+                                            <option value="120">120</option>
+                                            <option value="500">500</option>
                                         </select>
                                     </div>
                                 </div>
@@ -592,9 +676,9 @@
                             </div>
                             <div id="data-save"
                                 style="
-                                    position: fixed;
+                                    position: absolute;
                                     left: 0;
-                                    bottom: 0;
+                                    bottom: -5vh;
                                     right: 0;
                                     max-height: 500px;
                                     overflow: auto;
@@ -603,7 +687,7 @@
                                 class="mt-1">
                                 <div id="show-data-save" class="mb-5"></div>
                                 <div
-                                    style="position: fixed; bottom: 20px; transform: translateX(-50%);  left: 50%; z-index: 999999999;">
+                                    style="position: absolute; bottom: 20px; transform: translateX(-50%);  left: 50%; z-index: 999999999;">
                                     <button data-bs-toggle="tooltip" title="Lưu" class="btn btn-primary"
                                         id="save-qs">Lưu </button>
                                     <button data-bs-toggle="tooltip" title="Tải lại câu hỏi "
@@ -617,7 +701,7 @@
                             </div>
                         </div>
 
-                        <div id="show-list-qs" class="card p-2">
+                        <div id="show-list-qs" class="card p-6">
 
                             <div class=" mb-2 row " id="card_1">
                                 <div class="col-12 col-lg-2 col-sx-12 col-md-12 col-sm-12 col-xxl-2 col-xl-2">
@@ -627,6 +711,7 @@
                                             data-control="select2" data-hide-search="true" tabindex="-1"
                                             aria-hidden="true">
                                             <option value="-1">Chọn skill</option>
+                                            <option value="0">Không có skill</option>
                                             @foreach ($skills as $skill)
                                                 <option @selected(request('skill') == $skill->id) value="{{ $skill->id }}">
                                                     {{ $skill->name }}
@@ -709,6 +794,7 @@
                                 <table class="table table-row-bordered table-row-gray-300 gy-7  table-hover">
                                     <thead>
                                         <tr>
+                                            <th>STT </th>
                                             <th>Câu hỏi </th>
                                             <th>Độ khó </th>
                                             <th>Đáp án </th>
@@ -723,7 +809,7 @@
 
                                     </tbody>
                                 </table>
-                                <ul style="position: fixed; bottom: 20px; transform: translateX(-50%);  left: 50%; z-index: 999999999;"
+                                <ul style="position: absolute; bottom: -10vh; transform: translateX(-50%);  left: 50%; z-index: 999999999;"
                                     id="show-paginate" class="pagination">
                                 </ul>
                             </div>
@@ -792,7 +878,50 @@
         let level = '';
         let type = '';
         let q = '';
+        $(".panel-heading").hover(
+            function() {
+                $('.collapse.show').collapse('hide');
+                $("#collapseExample_" + $(this).data('key')).collapse('show');
+            }
+        );
     </script>
     <script src="assets/js/system/capacity/main.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.up-file').on("change", function() {
+                $('.show-name').html($(this)[0].files[0].name);
+            })
+            $('.form-submit').ajaxForm({
+                beforeSend: function() {
+                    $(".error_ex_file").html("");
+                    $(".upload-file").html("Đang tải dữ liệu ..")
+                    $(".progress").show();
+                    var percentage = '0';
+                },
+                uploadProgress: function(event, position, total, percentComplete) {
+                    var percentage = percentComplete;
+                    $('.progress .progress-bar').css("width", percentage + '%', function() {
+                        return $(this).attr("aria-valuenow", percentage) + "%";
+                    })
+                },
+                success: function() {
+                    $(".progress").hide();
+                    $(".upload-file").html("Tải lên")
+                    toastr.success("Tải lên thành công !");
+                    $('.up-file').val('');
+                    // window.location.reload();
+                },
+                error: function(xhr, status, error) {
+                    $(".upload-file").html("Tải lên")
+                    $('.progress .progress-bar').css("width", 0 + '%', function() {
+                        return $(this).attr("aria-valuenow", 0) + "%";
+                    })
+                    $(".progress").hide();
+                    var err = JSON.parse(xhr.responseText);
+                    if (err.errors) $(".error_ex_file").html(err.errors.ex_file);
+                }
+            });
+        })
+    </script>
 @endsection

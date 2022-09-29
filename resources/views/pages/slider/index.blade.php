@@ -1,6 +1,6 @@
 @extends('layouts.main')
-@section('title', 'Danh sách slider ')
-@section('page-title', 'Danh sách slider')
+@section('title', 'Quản lý slider')
+@section('page-title', 'Quản lý slider')
 @section('content')
 
     {{-- {{ dd(\Carbon\Carbon::parse(request('start_time'))->format('m/d/Y h:i:s A')) }} --}}
@@ -9,7 +9,7 @@
             <div class="col-lg-6">
                 <div class="d-flex justify-content-start">
 
-                    <h1>Quản lý slider
+                    <h1>Danh sách slider
                     </h1>
                     <span data-bs-toggle="tooltip" title="Tải lại trang " role="button"
                         class="mx-2 refresh-btn svg-icon svg-icon-primary svg-icon-2x">

@@ -36,17 +36,20 @@ class Contest implements MContestInterface
 
         if ($flagCapacity)
             $with = [
-                'rounds' => function ($q) {
-                    return $q->with([
-                        'exams' => function ($q) {
-                            return $q->with([
-                                'questions' => function ($q) {
-                                    return $q->with('answers');
-                                }
-                            ]);
-                        }
-                    ]);
-                }
+                // 'userCapacityDone:contest_id',
+                'skills:name,short_name',
+                // 'rounds:contest_id'
+                // 'rounds' => function ($q) {
+                //     return $q->with([
+                //         'exams' => function ($q) {
+                //             return $q->with([
+                //                 'questions' => function ($q) {
+                //                     return $q->with('answers');
+                //                 }
+                //             ]);
+                //         }
+                //     ]);
+                // }
             ];
 
         $now = $this->carbon::now('Asia/Ho_Chi_Minh');
@@ -69,11 +72,14 @@ class Contest implements MContestInterface
             if ($request->has('status')) $contest->status($request->status);
             if ($request->has('start_time') && $request->has('end_time')) $contest->hasDateTimeBetween($whereDate, $request->start_time ?? null, $request->end_time ?? null);
             if ($request->has('major_id')) $contest->hasRequest(['major_id' => $request->major_id ?? null]);
+            if ($request->has('skill_id')) $contest->whenWhereHasRelationship(request('skill_id') ?? null, 'skills', 'skills.id', (request()->has('skill_id') && request('skill_id') == 0) ? true : false);
         });
         if ($request->has('sort')) $contest->sort(($request->sort == 'asc' ? 'asc' : 'desc'), $request->sort_by ?? null, 'contests');
+
+
         return $contest
             ->with($with)
-            ->withCount(['teams', 'rounds']);
+            ->withCount(['teams', 'rounds', 'userCapacityDone']);
     }
 
     public function index()
@@ -187,7 +193,9 @@ class Contest implements MContestInterface
             'judges'
         ];
         if ($type == config('util.TYPE_TEST')) $with = [
-            'rounds',
+            'rounds' => function ($q) {
+                return $q->orderBy('start_time', 'asc');
+            },
             'recruitmentEnterprise',
             'userCapacityDone' => function ($q) {
                 return $q->with('user');
@@ -313,8 +321,9 @@ class Contest implements MContestInterface
         return $this->contest::whereIn('id', $capacityArrId)
             ->orderBy('id', 'desc')
             ->limit(request('limit') ?? 4)
+            ->withCount(['rounds', 'userCapacityDone'])
             ->get()
-            ->load(['rounds', 'skills', 'userCapacityDone']);
+            ->load(['skills:name,short_name']);
     }
 
     public function getContestByIdUpdate($id, $type = 0)
@@ -322,12 +331,16 @@ class Contest implements MContestInterface
         return $this->contest::with(
             [
                 'skills' => function ($q) {
-                    return $q->select(["skill_id", "name"]);
+                    return $q->select(["name"]);
                 },
-                'rounds' => function ($q) {
+                'rounds' => function ($q) use ($type) {
                     return $q
-                        ->with('exams')
-                        ->withCount('exams');
+                        ->with([
+                            'exams' => function ($q) use ($type) {
+                                return $q->where('type', $type);
+                            }
+                        ]);
+                    // ->withCount('exams');
                 }
             ]
         )

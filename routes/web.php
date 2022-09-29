@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\PublicChannel;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -30,3 +31,8 @@ Route::get('download-file', function () {
     if (!\Storage::disk('s3')->has($fileName)) return 'Không tồn tại file trong hệ thống ';
     return \Response::make(\Storage::disk('s3')->get($fileName), 200, $headers);
 })->name('dowload.file');
+
+
+Route::get('test-channel', function () {
+    broadcast(new PublicChannel("This is message"));
+});

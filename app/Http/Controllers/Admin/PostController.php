@@ -63,12 +63,15 @@ class PostController extends Controller
     {
         return $this->modulesPost->find($id);
     }
-
-
+    public function getModelDataHot($id)
+    {
+        return $this->modulesPost->find($id);
+    }
     public function create(Request $request)
     {
         $this->db::beginTransaction();
         try {
+
             $contest = $this->contest::where('type', 0)->get();
             $capacity = $this->contest::where('type', 1)->get();
             $recruitments = $this->recruitment::all();
@@ -118,13 +121,14 @@ class PostController extends Controller
     {
         $this->db::beginTransaction();
         try {
+            if ($request->recruitment_id == 0) $request['code_recruitment'] = null;
+
             $this->modulesPost->store($request);
             $this->db::commit();
-
             return Redirect::route('admin.post.list');
         } catch (\Throwable $th) {
             $this->db::rollBack();
-            return redirect('error');
+            return abort(404);
         }
     }
     public function destroy($slug)
@@ -143,42 +147,34 @@ class PostController extends Controller
     public function edit(Request $request, $slug)
     {
 
-        $this->db::beginTransaction();
-        try {
-            $round = null;
-            $contest = $this->contest::where('type', 0)->get();
-            $capacity = $this->contest::where('type', 1)->get();
-            $recruitments = $this->recruitment::all();
-            $post = $this->modulesPost->getList($request)->where('slug', $slug)->first();
-            $post->load('postable');
-            if ($post->postable && (get_class($post->postable) == $this->round::class)) {
-                $round = $this->round::find($post->postable->id)->load('contest');
-            }
 
-            return view('pages.post.form-edit', [
-                'round' => $round,
-                'post' => $post,
-                'recruitments' => $recruitments,
-                'contest' => $contest,
-                'capacity' => $capacity,
-                'rounds' => $this->round::all(),
+        $round = null;
+        $contest = $this->contest::where('type', 0)->get();
+        $capacity = $this->contest::where('type', 1)->get();
+        $recruitments = $this->recruitment::all();
+        $post = $this->modulesPost->getList($request)->where('slug', $slug)->first();
+        $post->load('postable');
+        if ($post->postable && (get_class($post->postable) == $this->round::class)) {
+            $round = $this->round::find($post->postable->id)->load('contest');
+        }
 
-            ]);
-        } catch (\Throwable $th) {
-            $this->db::rollBack();
-            return abort(404);
-        };
+        return view('pages.post.form-edit', [
+            'round' => $round,
+            'post' => $post,
+            'recruitments' => $recruitments,
+            'contest' => $contest,
+            'capacity' => $capacity,
+            'rounds' => $this->round::all(),
+
+        ]);
     }
     public function update(RequestsPost $request, $id)
     {
-
-
         DB::beginTransaction();
         try {
-
+            if ($request->recruitment_id == 0) $request['code_recruitment'] = null;
             $this->modulesPost->update($request, $id);
             Db::commit();
-
             return Redirect::route('admin.post.list');
         } catch (\Throwable $th) {
             Db::rollBack();
@@ -238,6 +234,14 @@ class PostController extends Controller
      *         description="Lọc theo chiều asc hoặc desc ",
      *         required=false,
      *     ),
+     *
+     *         @OA\Parameter(
+     *         name="postHot",
+     *         in="query",
+     *         description="Bài viết tuyển dụng hot,nổi bật (postHot='hot' list bài viết  hot, nổi bật ,
+     *         postHot='normal' list  bài viết bthuong",
+     *         required=false,
+     *         ),
      *     @OA\Parameter(
      *         name="orderBy",
      *         in="query",
@@ -287,7 +291,8 @@ class PostController extends Controller
     public function apiShow(Request $request)
     {
         $data = $this->modulesPost->index($request);
-        $data->load('user');
+        $data->load('user:id,name,email');
+
         if (!$data) abort(404);
         return $this->responseApi(
             true,
@@ -312,7 +317,7 @@ class PostController extends Controller
     public function apiDetail($slug)
     {
         $data = $this->post::where('slug', $slug)->first();
-        $data->load('user');
+        $data->load('user:id,name,email');
         if (!$data) abort(404);
         return $this->responseApi(
             true,

@@ -1,6 +1,6 @@
 @extends('layouts.main')
-@section('title', 'Thêm mới kỹ năng')
-@section('page-title', 'Thêm mới kỹ năng')
+@section('title', 'Quản lý kỹ năng ')
+@section('page-title', 'Quản lý kỹ năng')
 @section('content')
     <div class="row mb-4">
         <div class="col-lg-12">
@@ -19,12 +19,11 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
-                <form id="formSkill" action="{{ route('admin.skill.store') }}" method="post"
-                    enctype="multipart/form-data">
+                <form id="formSkill" action="{{ route('admin.skill.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
 
                     <div class="form-group mb-10">
-                        <label for="">Tên kỹ năng</label>
+                        <label class=" form-label" for="">Tên kỹ năng</label>
                         <input type="text" name="name" value="{{ old('name') }}" class=" form-control"
                             placeholder="">
                         @error('name')
@@ -38,7 +37,7 @@
                             <div class="col-8">
 
                                 <div class="form-group mb-10">
-                                    <label for="">Mã kỹ năng</label>
+                                    <label class=" form-label"for="">Mã kỹ năng</label>
                                     <input type="text" name="short_name" value="{{ old('short_name') }}"
                                         class=" form-control" placeholder="">
                                     @error('short_name')
@@ -64,9 +63,13 @@
                                             ])
                                         @endforeach
                                     </select>
-
-
-
+                                </div>
+                                <div class="form-group mb-10">
+                                    <label class=" form-label"for="">Mô tả kỹ năng</label>
+                                    <textarea class="form-control" name="description" id="kt_docs_ckeditor_classic" rows="3">{{ old('description') }}</textarea>
+                                    @error('description')
+                                        <p class="text-danger">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="col-4">
@@ -89,13 +92,7 @@
 
                     </div>
 
-                    <div class="form-group mb-10">
-                        <label for="">Mô tả kỹ năng</label>
-                        <textarea class="form-control" name="description" id="kt_docs_ckeditor_classic" rows="3">{{ old('description') }}</textarea>
-                        @error('description')
-                            <p class="text-danger">{{ $message }}</p>
-                        @enderror
-                    </div>
+
 
                     <div class="form-group mb-10 ">
                         <button type="submit" name="" id="" class="btn btn-success btn-lg btn-block">Lưu

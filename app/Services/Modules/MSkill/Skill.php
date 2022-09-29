@@ -102,7 +102,7 @@ class Skill implements MSkillInterface
         $skill->short_name = $request->short_name;
         $skill->description = $request->description;
         if ($request->has('image_url')) {
-            $fileImage =  $request->file('image_url');
+            $fileImage =  $request->file('image_url', $skill->image_url);
             $logo = $this->uploadFile($fileImage);
             $skill->image_url = $logo;
         }
@@ -124,8 +124,12 @@ class Skill implements MSkillInterface
         }
     }
 
-    public function getAll()
+    public function getAll($selects = [])
     {
-        return $this->skill::all();
+        if (count($selects) > 0) {
+            return $this->skill::select($selects ?? [])->get();
+        } else {
+            return $this->skill::all();
+        }
     }
 }

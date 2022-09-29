@@ -68,7 +68,7 @@ let searchParams = new URLSearchParams(window.location.search);
 function checkUrlOut(key, value, valueAdd = "") {
     loadTast();
     if (window.location.href.indexOf("?")) {
-        aListQuery.map(function (data) {
+        aListQuery.map(function(data) {
             if (data == key) {
                 url = url + "&" + key + "=" + value;
             } else {
@@ -85,7 +85,7 @@ function checkUrlOut(key, value, valueAdd = "") {
 
 // Function check match local url
 function checkUrlHasMatchSelectLocal(dataCreate = []) {
-    dataCreate.map(function (data) {
+    dataCreate.map(function(data) {
         if (searchParams.has(data))
             url = url + "&" + data + "=" + searchParams.get(data);
     });
@@ -93,7 +93,7 @@ function checkUrlHasMatchSelectLocal(dataCreate = []) {
 
 // Function check urls
 function checkUrlOuts(key, val) {
-    key.map(function (data, key) {
+    key.map(function(data, key) {
         url = url + "&" + data + "=" + val[key];
     });
     // Check
@@ -102,7 +102,7 @@ function checkUrlOuts(key, val) {
 
 // Funtion check has url
 function checkOutUrl() {
-    aListQuery.map(function (data) {
+    aListQuery.map(function(data) {
         if (searchParams.has(data)) {
             if (!aListHasOne.includes(data)) {
                 url = url + "&" + data + "=" + searchParams.get(data);
@@ -114,8 +114,7 @@ function checkOutUrl() {
 }
 
 // Loas tast
-function loadTast( text = "Đang chạy ...", page = "toastr-bottom-left", type = "info" )
-{
+function loadTast(text = "Đang chạy ...", page = "toastr-bottom-left", type = "info") {
     toastr.options = {
         closeButton: true,
         debug: false,
@@ -139,15 +138,15 @@ function loadTast( text = "Đang chạy ...", page = "toastr-bottom-left", type 
 
 // Page
 const formatPage = {
-    refresh: function () {
-        $(".refresh-btn").on("click", function () {
+    refresh: function() {
+        $(".refresh-btn").on("click", function() {
             loadTast();
             window.location = url;
             return false;
         });
     },
-    formatDatabase: function () {
-        $(".format-database").on("click", function () {
+    formatDatabase: function() {
+        $(".format-database").on("click", function() {
             loadTast();
             window.location =
                 url + "sort_by=" + $(this).data("key") + "&sort=" + sort;
@@ -155,14 +154,14 @@ const formatPage = {
         });
     },
     searchData() {
-        $(".ip-search").on("keyup", function (e) {
+        $(".ip-search").on("keyup", function(e) {
             if (e.keyCode == 13) {
                 checkUrlOut("q", $(this).val());
             }
         });
     },
     startTime() {
-        $(".btn-time").on("click", function (e) {
+        $(".btn-time").on("click", function(e) {
             e.preventDefault();
             let start_time = $(".start_time").val();
             let end_time = $(".end_time").val();
@@ -177,39 +176,37 @@ const formatPage = {
     },
     showPage() {
 
-        let flag = false ;
-        aListQuery.map(function (data) {
+        let flag = false;
+        aListQuery.map(function(data) {
             if (searchParams.has(data)) {
                 flag = true;
             }
         });
 
-        if(!flag)
-        {
+        if (!flag) {
             $(".card-format").hide();
             $(".btn-hide").hide();
             $(".btn-show").show();
-        }else{
+        } else {
             $(".btn-hide").show();
             $(".btn-show").hide();
         }
 
-        $(".btn-hide").on("click", function () {
+        $(".btn-hide").on("click", function() {
             $(".card-format").hide(1000);
             $(this).hide();
             $(".btn-show").show(500);
         });
     },
     hidePage() {
-        $(".btn-show").on("click", function () {
+        $(".btn-show").on("click", function() {
             $(".card-format").show(1000);
             $(".btn-hide").show(500);
             $(this).hide();
         });
     },
     setUpRangpake() {
-        $("#kt_daterangepicker_2").daterangepicker(
-            {
+        $("#kt_daterangepicker_2").daterangepicker({
                 timePicker: true,
                 startDate: moment(start_time).format("DD/MM/YYYY hh:mm:ss A"),
                 endDate: moment(end_time).format("DD/MM/YYYY hh:mm:ss A"),
@@ -217,12 +214,11 @@ const formatPage = {
                     format: "DD/MM/YYYY hh:mm:ss A",
                 },
             },
-            function (start, end) {
+            function(start, end) {
                 loadTast();
                 checkUrlHasMatchSelectLocal(checkOutHasMatchLocal);
                 checkUrlOuts(
-                    ["start_time", "end_time"],
-                    [
+                    ["start_time", "end_time"], [
                         moment(start).format("YYYY-MM-DDThh:mm"),
                         moment(end).format("YYYY-MM-DDThh:mm"),
                     ]
@@ -231,22 +227,22 @@ const formatPage = {
             }
         );
     },
-    addTimeLocal: function () {
-        $(".click-time-local").on("click", function () {
+    addTimeLocal: function() {
+        $(".click-time-local").on("click", function() {
             $("#time").hide();
             $(".click-time").removeClass("btn-primary");
             $(this).addClass("btn-primary");
             $("#time-local").show();
         });
-        $(".click-time").on("click", function () {
+        $(".click-time").on("click", function() {
             $("#time-local").hide();
             $(".click-time-local").removeClass("btn-primary");
             $(this).addClass("btn-primary");
             $("#time").show();
         });
     },
-    selectDateSearch: function () {
-        $(".select-date-serach").on("change", function () {
+    selectDateSearch: function() {
+        $(".select-date-serach").on("change", function() {
             loadTast();
             const value = $(this).val();
             checkUrlHasMatchSelectLocal(checkOutHasMatchLocal);
@@ -286,13 +282,13 @@ const formatPage = {
             }
         });
     },
-    selectStatus: function () {
-        $("#select-status").on("change", function () {
+    selectStatus: function() {
+        $("select#select-status").on("change", function() {
             if ($(this).val() == 3) return (window.location = url);
             checkUrlOut("status", $(this).val());
         });
     },
-    selectChangeStatus: function (
+    selectChangeStatus: function(
         url_un_status,
         url_re_status,
         select = ".form-select-status"
@@ -303,7 +299,7 @@ const formatPage = {
                 $(element).prop("disabled", false);
             }, time);
         }
-        $(select).on("change", function () {
+        $(select).on("change", function() {
 
             var that = this;
             let id = $(this).data("id");
@@ -316,7 +312,7 @@ const formatPage = {
                         _token: _token,
                         id: id,
                     },
-                    success: function (data) {
+                    success: function(data) {
                         if (!data.status) return alert(data.payload);
                         loadTast(
                             "Thành công !",
@@ -334,7 +330,7 @@ const formatPage = {
                         _token: _token,
                         id: id,
                     },
-                    success: function (data) {
+                    success: function(data) {
                         if (!data.status) return alert(data.payload);
                         loadTast(
                             "Thành công !",
@@ -355,7 +351,7 @@ formatPage.formatDatabase();
 formatPage.searchData();
 formatPage.showPage();
 formatPage.hidePage();
-formatPage.setUpRangpake();
 formatPage.addTimeLocal();
 formatPage.selectDateSearch();
 formatPage.selectStatus();
+formatPage.setUpRangpake();

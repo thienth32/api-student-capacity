@@ -21,6 +21,7 @@ class Round extends Model
     protected $primaryKey = "id";
     protected $appends = [
         'slug_name',
+        'user_status_join',
     ];
     public $fillable = [
         'name',
@@ -120,6 +121,14 @@ class Round extends Model
     }
     public function result_capacity()
     {
-        return $this->hasManyThrough(ResultCapacity::class, Exam::class, 'round_id', 'exam_id', 'id')->with('user:id,name,email');
+        return
+            $this->hasManyThrough(
+                ResultCapacity::class,
+                Exam::class,
+                'round_id',
+                'exam_id',
+                'id'
+            )
+            ->with('user:id,name,email');
     }
 }

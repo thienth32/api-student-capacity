@@ -1,14 +1,13 @@
 @extends('layouts.main')
-@section('title', 'Danh sách chuyên ngành ')
-@section('page-title', 'Danh sách chuyên ngành ')
+@section('title', 'Quản lý chuyên ngành')
+@section('page-title', 'Quản lý chuyên ngành')
 @section('content')
 
     <div class="card card-flush p-4">
         <div class="row">
             <div class=" col-lg-6">
                 <div class=" d-flex justify-content-start">
-
-                    <h1 class="me-2">Quản lý chuyên ngành
+                    <h1 class="me-2">Danh sách chuyên ngành
                     </h1>
                     <span data-bs-toggle="tooltip" title="Tải lại trang " role="button"
                         class="refresh-btn svg-icon svg-icon-primary svg-icon-2x">

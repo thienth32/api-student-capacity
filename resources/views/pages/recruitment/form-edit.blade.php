@@ -1,6 +1,6 @@
 @extends('layouts.main')
-@section('title', 'Cập nhật tuyển dụng')
-@section('page-title', 'Cập nhật tuyển dụng')
+@section('title', 'Quản lý tuyển dụng ')
+@section('page-title', 'Quản lý tuyển dụng ')
 @section('content')
     <div class="row">
         <div class="col-lg-12">
@@ -85,8 +85,10 @@
                                     name="contest_id[]" value="{{ serialize(old('contest_id')) }}">
                                     @foreach ($contests as $item)
                                         <option
-                                            @foreach ($data->contest as $value) @if ($value->id == $item->id)
-                                            {{ 'selected="selected"' }} @endif @endforeach
+                                            @foreach ($data->contest as $value)
+                                             @if ($value->id == $item->id)
+                                                {{ 'selected="selected"' }}
+                                                 @endif @endforeach
                                             value="{{ $item->id }}">
                                             {{ $item->name }}
                                         </option>

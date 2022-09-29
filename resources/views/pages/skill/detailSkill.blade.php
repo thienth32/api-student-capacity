@@ -1,6 +1,6 @@
 @extends('layouts.main')
-@section('title', 'Chi tiết kỹ năng')
-@section('page-title', 'Chi tiết kỹ năng')
+@section('title', 'Quản lý kỹ năng ')
+@section('page-title', 'Quản lý kỹ năng')
 @section('content')
     <div class=" mb-4">
         <div class="row">
@@ -9,7 +9,7 @@
                     <li class="breadcrumb-item pe-3">
                         <a href="{{ route('admin.skill.index') }}" class="pe-3">Kỹ năng</a>
                     </li>
-                    <li class="breadcrumb-item px-3 text-muted">{{ $data->name }}</li>
+                    <li class="breadcrumb-item px-3 text-muted">Chi tiết kĩ năng : {{ $data->name }}</li>
                 </ol>
             </div>
         </div>
@@ -74,7 +74,7 @@
                                     <div class="col-8">
                                         {{ date('d-m-Y H:i', strtotime($data->created_at)) }}
                                         <br>
-                                        {{ \Carbon\Carbon::parse($data->created_at)->diffforHumans() }}
+                                        {{ $data->created_at }}
                                     </div>
                                 </div>
                             </div>

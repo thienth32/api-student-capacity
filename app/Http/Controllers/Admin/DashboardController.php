@@ -56,7 +56,7 @@ class DashboardController extends Controller
         $start = date($request->startDate);
         $end = date($request->endDate);
         $lstContest = Contest::with('teams')
-            ->where('status', config('util.CONTEST_STATUS_REGISTERING'))
+            ->where('status', config('util.CONTEST_STATUS_GOING_ON'))
             ->whereBetween('register_deadline', [$start, $end])
             ->orderByDesc('id')
             ->get();

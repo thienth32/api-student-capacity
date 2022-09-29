@@ -2,29 +2,30 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\Contest\RequestContest;
-use App\Services\Modules\MContest\MContestInterface;
-use App\Services\Traits\TStatus;
 use Exception;
 use App\Models\Team;
 use App\Models\User;
 use App\Models\Major;
 use App\Models\Skill;
 use App\Models\Enterprise;
+use App\Models\ContestUser;
 use Illuminate\Http\Request;
+use App\Services\Traits\TStatus;
 use App\Services\Traits\TResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\ContestUser;
-use App\Services\Modules\MContestUser\MContestUserInterface;
-use App\Services\Modules\MMajor\MMajorInterface;
-use App\Services\Modules\MSkill\MSkillInterface;
-use App\Services\Modules\MTeam\MTeamInterface;
 use App\Services\Traits\TTeamContest;
 use App\Services\Traits\TUploadImage;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\Contest\RequestContest;
+use App\Services\Modules\MTeam\MTeamInterface;
+use App\Services\Modules\MMajor\MMajorInterface;
+use App\Services\Modules\MSkill\MSkillInterface;
+use App\Services\Modules\MContest\MContestInterface;
+use App\Services\Modules\MContestUser\MContestUserInterface;
 
 class ContestController extends Controller
 {
@@ -150,6 +151,12 @@ class ContestController extends Controller
      *         name="major_id",
      *         in="query",
      *         description="Lọc theo chuyên ngành   ",
+     *         required=false,
+     *     ),
+     *     @OA\Parameter(
+     *         name="skill_id",
+     *         in="query",
+     *         description="Lọc theo skill   ",
      *         required=false,
      *     ),
      *     @OA\Response(response="200", description="{ status: true , data : data }"),
@@ -332,7 +339,7 @@ class ContestController extends Controller
     {
         $capacity = $this->contest->getContestByIdUpdate($id, config('util.TYPE_TEST'));
         if (!$capacity) abort(404);
-        $skills = $skillModel::all();
+        $skills = $skillModel::all(['name', 'id']);
         return view('pages.contest.detail-capacity.detail', [
             'test_capacity' => $capacity,
             'skills' => $skills
@@ -435,21 +442,22 @@ class ContestController extends Controller
         $contest = $this->contest->find($id);
         if (!is_null($contest)) {
             $userArray = [];
-            $users = $user::get();
+            $contest->load(['teams' => function ($q) use ($id_team) {
+                return $q->with('members')->whereId($id_team)->first();
+            }]);
 
-            $team = $this->teamRepo->getTeamById($id_team, ['users']);
-            foreach ($users as $user) {
-                foreach ($team->users as $me) {
-                    if ($user->id == $me->id) {
-                        array_push($userArray, [
-                            'id_user' => $user->id,
-                            'email_user' => $user->email,
-                            'name_user' => $user->name
-                        ]);
-                    }
+            foreach ($contest->teams as  $team) {
+                foreach ($team->members as  $me) {
+                    array_push($userArray, [
+                        'id_user' => $me->id,
+                        'email_user' => $me->email,
+                        'name_user' => $me->name,
+                        'bot' => $me->pivot->bot,
+                    ]);
                 }
             }
-            // dd($userArray);
+            $team = $this->teamRepo->find($id_team);
+
             return view(
                 'pages.contest.detail.team.form-edit-team-contest',
                 [

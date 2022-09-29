@@ -71,5 +71,18 @@ return [
             "SKILL" => 5
         ],
         "IS_CORRECT" => "Đáp án đúng"
-    ]
+    ],
+    "post-contest" => "post-contest",
+    "post-capacity" => "post-capacity",
+    "post-round" => "post-round",
+    "post-recruitment" => "post-recruitment",
+    /**bÀI VIẾT TUYỂN DỤNG HOT */
+    "POST_HOT" => 1,
+    /** bÀI VIẾT TUYỂN DỤNG THƯỜNG  */
+    "POST_NORMAL" => 0,
+
+    'TYPE_POSTS' => 0,
+    'TYPE_RECRUITMENTS' => 1,
+    'TYPE_CAPACITY_TEST' => 2,
+
 ];

@@ -98,25 +98,16 @@ class ExamController extends Controller
     {
         try {
             $type = 0;
-
             $round = $this->round::find($id_round)->load('contest');
             if (is_null($round)) return abort(404);
-
             if ($round->contest->type == 1) $type = 1;
             if ($type == 0) {
                 $validatorContest = Validator::make(
                     $request->all(),
                     [
-                        'external_url' => 'required|mimes:zip,docx,word|file|max:10000',
-                    ],
-                    [
-                        'external_url.mimes' => trans('validate.mimes'),
-                        'external_url.required' => trans('validate.required'),
-                        'external_url.file' => trans('validate.file'),
-                        'external_url.max' => trans('validate.maxFile'),
+                        'external_url' => 'required|mimes:zip,docx,word|max:10000',
                     ]
                 );
-
                 if ($validatorContest->fails()) {
                     return redirect()->back()->withErrors($validatorContest)->withInput();
                 }
@@ -127,12 +118,7 @@ class ExamController extends Controller
                         'time' => 'required',
                         'time_type' => 'required'
                     ],
-                    [
-                        'time.required' => trans('validate.required'),
-                        'time_type.required' => trans('validate.required'),
-                    ]
                 );
-
                 if ($validatorCapacity->fails()) {
                     return redirect()->back()->withErrors($validatorCapacity)->withInput();
                 }
@@ -299,9 +285,10 @@ class ExamController extends Controller
     public function showQuestionAnswerExams($id)
     {
         try {
-            $questions = $this->exam::whereId($id)
+            $exam = $this->exam::whereId($id)
                 ->where('type', 1)
-                ->first()
+                ->first();
+            $questions = $exam
                 ->questions()
                 ->with([
                     'answers', 'skills'
@@ -309,26 +296,46 @@ class ExamController extends Controller
                 ->status(request('status'))
                 ->search(request('q') ?? null, ['content'])
                 ->sort((request('sort') == 'asc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'questions')
-                ->whenWhereHasRelationship(request('skill') ?? null, 'skills', 'skills.id')
+                ->whenWhereHasRelationship(request('skill') ?? null, 'skills', 'skills.id', (request()->has('skill') && request('skill') == 0) ? true : false)
                 ->when(request()->has('level'), function ($q) {
                     $q->where('rank', request('level'));
                 })
                 ->when(request()->has('type'), function ($q) {
                     $q->where('type', request('type'));
                 })
-                ->paginate(request('limit') ?? 5);
+                ->get();
+            // ->paginate(request('limit') ?? 5);
+            // $questionsSave = $exam
+            //     ->questions()
+            //     ->get()
+            //     ->map(function ($data) {
+            //         return [
+            //             'name' => $data->content,
+            //             'id' => $data->id,
+            //         ];
+            //     });
+            $questionsSave = $questions
+                ->map(function ($data) {
+                    return [
+                        'name' => $data->content,
+                        'id' => $data->id,
+                    ];
+                });
             $questionsAll = $this->question::with([
                 'answers', 'skills'
             ])->take(10)->get();
             return response()->json([
                 'status' => true,
-                'payload' => $questions,
-                'question' => $questionsAll
+                'payload' => [
+                    'data' => $questions
+                ],
+                'question' => $questionsAll,
+                'questionsSave' => $questionsSave
             ]);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
-                'payload' => 'Hệ thống đã xảy ra lỗi '
+                'payload' => 'Hệ thống đã xảy ra lỗi ' . $th->getMessage()
             ], 404);
         }
     }

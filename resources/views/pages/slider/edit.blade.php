@@ -1,6 +1,6 @@
 @extends('layouts.main')
-@section('title', 'Cập nhật slider ')
-@section('page-title', 'Cập nhật slider ')
+@section('title', 'Quản lý slider')
+@section('page-title', 'Quản lý slider')
 @section('content')
     <div class="row mb-4">
         <div class="col-lg-12">
@@ -20,8 +20,8 @@
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
 
-                <form id="formAddSlider" action="{{ route('admin.sliders.update', ['id' => $slider->id]) }}"
-                    method="post" enctype="multipart/form-data">
+                <form id="formAddSlider" action="{{ route('admin.sliders.update', ['id' => $slider->id]) }}" method="post"
+                    enctype="multipart/form-data">
                     @csrf
                     @method('put')
                     <div style="width: 80%" class="text-center m-auto">
@@ -60,8 +60,8 @@
 
                                 <label class="form-label">Thời gian kết thúc</label>
                                 <input id="end"
-                                    value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime($slider->end_time)) }}"
-                                    min="" type="datetime-local" name="end_time" value="{{ old('end_time') }}"
+                                    value="{{ strftime('%Y-%m-%dT%H:%M:%S', strtotime($slider->end_time)) }}" min=""
+                                    type="datetime-local" name="end_time" value="{{ old('end_time') }}"
                                     class="form-control  " placeholder="Pick date rage" />
                                 @error('end_time')
                                     <p class="text-danger">{{ $message }}</p>
@@ -83,9 +83,9 @@
 
                         </div>
                     </div>
-                    <div class="col-12 pb-2 form-group mb-10">
+                    <div class="col-12  form-group mb-10">
                         <label for="" class="form-label">Thuộc thành phần </label>
-                        <div class="row pb-2">
+                        <div class="row mb-10">
                             <div class="col-4">
                                 <button type="button"
                                     class="btn btn-light {{ $slider->sliderable !== null && get_class($slider->sliderable) == \App\Models\Major::class ? 'btn-primary' : 'btn-light' }} btn-major">Chuyên
