@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\BeforNextGame;
 use App\Events\EndGameEvent;
 use App\Events\NextGameEvent;
 use App\Events\PlayGameEvent;
@@ -179,6 +180,7 @@ class CapacityPlayController extends Controller
         if ($exam->type == 1) return abort(404);
         if ($exam->status == 2) return abort(404);
 
+        broadcast(new BeforNextGame($code));
         //
         $data = [];
         $data['exam'] = $exam;
@@ -263,6 +265,8 @@ class CapacityPlayController extends Controller
         }], ['questions']);
         if ($exam->type == 0) return abort(404);
         if ($exam->status == 2) return abort(404);
+
+        broadcast(new BeforNextGame($code));
         $data = [];
         $data['exam'] = $exam;
         $data['ranks'] = $this->resultCapacityRepo->where([
@@ -323,6 +327,7 @@ class CapacityPlayController extends Controller
 
     public function nextQuestionApi(Request $request, $token)
     {
+        broadcast(new BeforNextGame($token));
         $exam = $this->examRepo->getExamBtyTokenRoom($token, ['questions' => function ($q) {
             return $q->with(['answers:id,question_id,content']);
         }]);
@@ -437,6 +442,7 @@ class CapacityPlayController extends Controller
 
     public function submitQuestionCapacityPlay(Request $request, $token)
     {
+        broadcast(new BeforNextGame($token));
         $exam = $this->examRepo->getExamBtyTokenRoom($token);
         $answers = $request->answers;
         $flagIsCorrect = $this->checkAnswerUser($request)['flagIsCorrect'];
@@ -529,6 +535,7 @@ class CapacityPlayController extends Controller
 
     public function end($code)
     {
+        broadcast(new BeforNextGame($code));
         $exam = $this->examRepo->getExamBtyTokenRoom($code, ['questions' => function ($q) {
             return $q->with(['answers:id,question_id,content']);
         }], ['questions']);
