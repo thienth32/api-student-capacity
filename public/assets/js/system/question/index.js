@@ -60,7 +60,7 @@ const question = {
     selectSkillList: function(element = '#selectSkill') {
         $(element).change(function() {
             let idContest = $(this).val();
-            if (idContest == 0) {
+            if (idContest == 'null') {
                 window.location = url;
                 return;
             }

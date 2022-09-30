@@ -114,7 +114,8 @@
                     <label class="form-label">Skill</label>
                     <select id="selectSkill" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
                         data-hide-search="true" tabindex="-1" aria-hidden="true">
-                        <option value="0">Chọn skill</option>
+                        <option @selected(!request()->has('skill')) value="null">Chọn skill</option>
+                        <option @selected(request('skill') == 0) value="0">Không có skill</option>
                         @foreach ($skills as $skill)
                             <option @selected(request('skill') == $skill->id) value="{{ $skill->id }}">
                                 {{ $skill->name }}
