@@ -9,6 +9,7 @@ use App\Models\Team;
 use App\Models\Judge;
 use App\Services\Traits\TUploadImage;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class Contest implements MContestInterface
 {
@@ -348,13 +349,15 @@ class Contest implements MContestInterface
             ->first();
     }
 
-    public function getContestDeadlineEnd()
+    public function getContestDeadlineEnd($with = [])
     {
-        return $this->contest::where("register_deadline", "<", date("Y-m-d h:i:s"))
+        return $this->contest::where("register_deadline", "<", date("Y-m-d H:i:s"))
             ->where("status", "<=", config('util.CONTEST_STATUS_GOING_ON'))
             ->where("type", config('util.TYPE_CONTEST'))
+            ->with($with)
             ->get();
     }
+
     public function getContestDone()
     {
         return $this->contest::where("status", config('util.CONTEST_STATUS_DONE'))
@@ -362,5 +365,54 @@ class Contest implements MContestInterface
             ->orderBy("date_start", "asc")
             ->take(3)
             ->get();
+    }
+
+    public function endContestOutDateRegisterDealine()
+    {
+        $contests = $this->getContestDeadlineEnd(['take_exams']);
+        if(count($contests) > 0)
+        {
+            foreach ($contests as $contest) {
+                $pointAdd = json_decode($contest->reward_rank_point);
+                $take_exams = $contest->take_exams()
+                    ->with([
+                        'teams' => function ($q) use ($contest) {
+                            return $q->where('contest_id', $contest->id)->with('users');
+                        }
+                    ])
+                    ->orderByDesc('final_point')
+                    ->orderByDesc('updated_at')->get();
+
+                DB::transaction(function () use ($contest, $pointAdd, $take_exams) {
+                    foreach ($take_exams as $key => $take_exam) {
+                        if ($key == 0) {
+                            if ($take_exam->teams) $this->updateUserAddPoint($take_exam->teams->users, $contest->id, $pointAdd->top1 ?? 0);
+                        } elseif ($key == 1) {
+                            if ($take_exam->teams) $this->updateUserAddPoint($take_exam->teams->users, $contest->id, $pointAdd->top2 ?? 0);
+                        } elseif ($key == 2) {
+                            if ($take_exam->teams) $this->updateUserAddPoint($take_exam->teams->users, $contest->id, $pointAdd->top3 ?? 0);
+                        } else {
+                            if ($take_exam->teams) $this->updateUserAddPoint($take_exam->teams->users, $contest->id, $pointAdd->leave ?? 0);
+                        }
+                    }
+                    $contest->update([
+                        'status' => 2,
+                    ]);
+                });
+            }
+        }
+
+    }
+
+    private function updateUserAddPoint($users, $id, $point)
+    {
+
+        foreach ($users as $user) {
+            $this->contestUser->checkExitsAndManager([
+                'contest_id' => $id,
+                'user' => $user,
+                'point' => $point
+            ]);
+        };
     }
 }

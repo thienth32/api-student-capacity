@@ -40,7 +40,9 @@ interface MContestInterface
 
     public function getContestByIdUpdate($id, $type = 0);
 
-    public function getContestDeadlineEnd();
+    public function getContestDeadlineEnd($with = []);
 
     public function getContestDone();
+
+    public function endContestOutDateRegisterDealine();
 }
