@@ -64,6 +64,7 @@ class Contest implements MContestInterface
             });
 
         $contest->where(function ($contest) use ($request, $now, $whereDate) {
+            if ($request->has('qq')) $contest->searchKeyword($request->qq ?? null, ['name'], true);
             if ($request->has('q')) $contest->search($request->q ?? null, ['name'], true);
             if ($request->has('miss_date')) $contest->missingDate('register_deadline', $request->miss_date ?? null, $now->toDateTimeString())
                 ->orWhere('status', '>', 1);

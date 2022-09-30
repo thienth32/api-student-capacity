@@ -46,7 +46,10 @@ class Post
             $query = $this->post::onlyTrashed()->where('title', 'like', "%$keyword%")->orderByDesc('deleted_at');
             return $query;
         }
-        $query = $this->post::where('title', 'like', "%$keyword%");
+        // $query = $this->post::where('title', 'like', "%$keyword%");
+        $query = $this->post::query();
+        $query->where('title', 'like', "%$keyword%");
+        // if ($request->has('qq')) $query->searchKeyword(request('qq') ?? null, ['title']);
         if ($status != null) {
             $query->where('status', $status);
         }
