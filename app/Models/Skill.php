@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Casts\FormatDate;
 use App\Casts\FormatImageGet;
+use App\Services\Builder\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Skill extends Model
 {
@@ -18,7 +19,14 @@ class Skill extends Model
         'updated_at' =>  FormatDate::class,
         'image_url' => FormatImageGet::class,
     ];
+
     protected $fillable = ['name', 'short_name', 'image_url', 'description'];
+
+    public function newEloquentBuilder($query)
+    {
+        return new Builder($query);
+    }
+
     public function majorSkill()
     {
         return $this->belongsToMany(Major::class, 'major_skills', 'skill_id', 'major_id')->withTimestamps();

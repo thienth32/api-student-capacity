@@ -129,6 +129,12 @@ class ContestController extends Controller
      *         description="Tìm kiếm ",
      *         required=false,
      *     ),
+     *       @OA\Parameter(
+     *         name="qq",
+     *         in="query",
+     *         description="Tìm kiếm tách chuỗi ",
+     *         required=false,
+     *     ),
      *     @OA\Parameter(
      *         name="status",
      *         in="query",

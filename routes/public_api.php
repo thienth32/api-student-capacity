@@ -97,7 +97,6 @@ Route::get('support-capacity', [\App\Http\Controllers\Admin\SupportController::c
 Route::post('run-code', [CodeManagerController::class, 'run']);
 
 Route::prefix('skill')->group(function () {
-
     Route::get('', [SkillController::class, 'indexApi']);
 });
 Route::prefix('candidate')->group(function () {

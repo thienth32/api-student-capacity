@@ -131,5 +131,8 @@ class Skill implements MSkillInterface
         } else {
             return $this->skill::all();
         }
+
+
+        // return $this->skill::searchKeyword(request('q') ?? null, ['name', 'short_name', 'description'])->get();
     }
 }
