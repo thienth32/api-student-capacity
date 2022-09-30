@@ -271,7 +271,7 @@ class RecruitmentController extends Controller
         $data = $this->modulesRecruitment->find($id);
         if (!$data) abort(404);
         $data->load(['contest' => function ($q) {
-            return $q->with(['skills:id,short_name,name', 'rounds:id,name,contest_id']);
+            return $q->with(['skills:id,short_name,name'])->withCount(['userCapacityDone', 'rounds']);
         }, 'enterprise']);
         $this->modulesRecruitment->loadSkillAndUserApiDetail($data);
         return $this->responseApi(
