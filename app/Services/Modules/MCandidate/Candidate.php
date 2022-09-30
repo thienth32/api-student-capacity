@@ -48,10 +48,10 @@ class Candidate
     }
     public function store($request)
     {
-        $ckeck_exist = $this->candidate::where('email', $request->email)->where('post_id', $request->post_id)->first();
-        if ($ckeck_exist) {
-            return  null;
-        }
+        // $ckeck_exist = $this->candidate::where('email', $request->email)->where('post_id', $request->post_id)->first();
+        // if ($ckeck_exist) {
+        //     return  null;
+        // }
         $data = [
             'post_id' => $request->post_id,
             'email' => $request->email,

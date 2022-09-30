@@ -69,7 +69,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-12 pb-2">
+                            {{-- <div class="col-12 pb-2">
                                 <div class="form-group mb-4">
                                     <label for="" class="form-label">Hình thức chọ bộ câu hỏi </label>
                                     <select multiple class="form-select" data-control="select2" name="questions[]"
@@ -86,7 +86,7 @@
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="col-12 pb-2">
                                 <div class="row">
                                     <div class="col-8">
@@ -131,8 +131,7 @@
                                                             aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <div class="container-fluid"
-                                                            style="height: 65vh;  overflow: auto;">
+                                                        <div class="container-fluid" style="height: 65vh;  overflow: auto;">
                                                             <div id="result-question-array">
                                                             </div>
                                                         </div>

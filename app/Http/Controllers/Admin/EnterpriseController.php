@@ -9,6 +9,7 @@ use App\Models\Enterprise;
 use App\Services\Modules\MEnterprise\Enterprise as MEnterpriseEnterprise;
 use Illuminate\Http\Request;
 use App\Services\Traits\TUploadImage;
+use App\Services\Traits\TStatus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -17,7 +18,7 @@ use App\Services\Traits\TResponse;
 class EnterpriseController extends Controller
 {
     use TUploadImage;
-    use TResponse;
+    use TResponse, TStatus;
 
     public function __construct(
         private Contest $contest,
@@ -36,6 +37,12 @@ class EnterpriseController extends Controller
      *         name="keyword",
      *         in="query",
      *         description="Tìm kiếm ",
+     *         required=false,
+     *     ),
+     *         @OA\Parameter(
+     *         name="status",
+     *         in="query",
+     *         description="Các doanh nghiệp hiện thị ở trag chủ status = 1 , status = 0 là các doanh nghiệp kh hiện thị",
      *         required=false,
      *     ),
      *     @OA\Parameter(
@@ -64,7 +71,7 @@ class EnterpriseController extends Controller
     public function apiIndex(Request $request)
     {
         $data = $this->modulesEnterprise->index($request);
-        $data->load('recruitment');
+        $data->load('recruitment:id,name');
         return $this->responseApi(
             true,
             $data
@@ -76,6 +83,10 @@ class EnterpriseController extends Controller
 
         $listEnterprise = $this->modulesEnterprise->index($request);
         return view('pages.enterprise.index', compact('listEnterprise', 'contest'));
+    }
+    public function getModelDataStatus($id)
+    {
+        return $this->modulesEnterprise->find($id);
     }
     public function destroy($id)
     {
@@ -182,7 +193,7 @@ class EnterpriseController extends Controller
     public function apiDetail($id)
     {
         $data = $this->enterprise::find($id);
-        $data->load('recruitment');
+        $data->load('recruitment:id,name');
 
         return $this->responseApi(true, $data);
     }

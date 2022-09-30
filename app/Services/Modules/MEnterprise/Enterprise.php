@@ -22,6 +22,7 @@ class Enterprise
 
         $keyword = $request->has('keyword') ? $request->keyword : "";
         $contest = $request->has('contest') ? $request->contest : null;
+        $status = $request->has('status') ? $request->status : null;
         $orderBy = $request->has('orderBy') ? $request->orderBy : 'id';
         $sortBy = $request->has('sortBy') ? $request->sortBy : "desc";
         $softDelete = $request->has('enterprise_soft_delete') ? $request->enterprise_soft_delete : null;
@@ -31,7 +32,9 @@ class Enterprise
             return $query;
         }
         $query =  $this->enterprise::where('name', 'like', "%$keyword%");
-
+        if ($status != null) {
+            $query->where('status', $status);
+        }
         if ($sortBy == "desc") {
             $query->orderByDesc($orderBy);
         } else {
@@ -46,6 +49,10 @@ class Enterprise
     public function index(Request $request)
     {
         return $this->getList($request)->paginate(request('limit') ?? config('util.HOMEPAGE_ITEM_AMOUNT'));
+    }
+    public function find($id)
+    {
+        return $this->enterprise::find($id);
     }
     public function store($dataCreate, $request)
     {

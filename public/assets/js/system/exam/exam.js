@@ -74,7 +74,7 @@ const exam = {
 
     selectChangeStatus: function () {
         $(".form-select-status").on("change", function () {
-            loadTast();
+            toastr.info('Đang chạy')
             let id = $(this).data("id");
             var that = this;
             if ($(this).val() == 1) {
@@ -87,18 +87,10 @@ const exam = {
                     success: function (data) {
                         if (!data.status) return alert(data.payload);
                         $(that).val(0);
-                        loadTast(
-                            "Thành công !",
-                            "toastr-bottom-left",
-                            "success"
-                        );
+                        toastr.success('Thành công !');
                     },
                     error: function (request, status, error) {
-                        loadTast(
-                            "Không thành công !",
-                            "toastr-bottom-left",
-                            "info"
-                        );
+                        toastr.info('Không thành công !');
                     },
                 });
             } else {
@@ -111,18 +103,10 @@ const exam = {
                     success: function (data) {
                         if (!data.status) return alert(data.payload);
                         $(that).val(1);
-                        loadTast(
-                            "Thành công !",
-                            "toastr-bottom-left",
-                            "success"
-                        );
+                        toastr.success('Thành công !');
                     },
                     error: function (request, status, error) {
-                        loadTast(
-                            "Không thành công !",
-                            "toastr-bottom-left",
-                            "info"
-                        );
+                        toastr.info('Không thành công !');
                     },
                 });
             }
