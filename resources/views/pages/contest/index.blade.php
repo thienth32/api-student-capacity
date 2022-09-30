@@ -23,6 +23,7 @@
                         </svg>
                         <!--end::Svg Icon-->
                     </span>
+                    @admin()
                     <a
                         href="{{ route('admin.contest.soft.delete', 'contest_soft_delete=1') . '&type=' . (request('type') ?? 0) }}">
 
@@ -44,6 +45,7 @@
                             <!--end::Svg Icon-->
                         </span>
                     </a>
+                    @endadmin
                 </h1>
             </div>
             @hasanyrole(config('util.ROLE_ADMINS'))

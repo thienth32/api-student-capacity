@@ -186,71 +186,73 @@
             </div>
             <!--end::Chart widget 18-->
         </div>
-        <div class="col-xl-4 mb-5 mb-xl-10">
-            <!--begin::Col-->
-            <div class=" ">
-                <!--begin::Card-->
-                <div class="card card-flush h-lg-100">
-                    <!--begin::Card header-->
-                    <div class="card-header mt-6">
-                        <!--begin::Card title-->
-                        <div class="card-title flex-column">
-                            <h3 class="fw-bolder mb-1">Hoạt động cuộc thi và test năng lực </h3>
+        @if (auth()->user()->hasRole(config('util.ROLE_ADMINS')))
+            <div class="col-xl-4 mb-5 mb-xl-10">
+                <!--begin::Col-->
+                <div class=" ">
+                    <!--begin::Card-->
+                    <div class="card card-flush h-lg-100">
+                        <!--begin::Card header-->
+                        <div class="card-header mt-6">
+                            <!--begin::Card title-->
+                            <div class="card-title flex-column">
+                                <h3 class="fw-bolder mb-1">Hoạt động cuộc thi và test năng lực </h3>
+                            </div>
+                            <!--end::Card title-->
+                            <!--begin::Card toolbar-->
+                            {{-- <div class="card-toolbar">
+                                <!--begin::Select-->
+                                <select name="status" data-control="select2" data-hide-search="true"
+                                    class="form-select form-select-solid form-select-sm fw-bolder w-100px">
+                                    <option value="1" selected="selected">Options</option>
+                                    <option value="2">Option 1</option>
+                                    <option value="3">Option 2</option>
+                                    <option value="4">Option 3</option>
+                                </select>
+                                <!--end::Select-->
+                            </div> --}}
+                            <!--end::Card toolbar-->
                         </div>
-                        <!--end::Card title-->
-                        <!--begin::Card toolbar-->
-                        {{-- <div class="card-toolbar">
-                            <!--begin::Select-->
-                            <select name="status" data-control="select2" data-hide-search="true"
-                                class="form-select form-select-solid form-select-sm fw-bolder w-100px">
-                                <option value="1" selected="selected">Options</option>
-                                <option value="2">Option 1</option>
-                                <option value="3">Option 2</option>
-                                <option value="4">Option 3</option>
-                            </select>
-                            <!--end::Select-->
-                        </div> --}}
-                        <!--end::Card toolbar-->
-                    </div>
-                    <!--end::Card header-->
-                    <!--begin::Card body-->
-                    <div style=" max-height: 500px;  overflow: auto;" class="card-body p-9 pt-4">
-                        <!--begin::Dates-->
-                        <ul class="nav nav-pills d-flex flex-nowrap hover-scroll-x py-2">
+                        <!--end::Card header-->
+                        <!--begin::Card body-->
+                        <div style=" max-height: 500px;  overflow: auto;" class="card-body p-9 pt-4">
+                            <!--begin::Dates-->
+                            <ul class="nav nav-pills d-flex flex-nowrap hover-scroll-x py-2">
 
-                            <!--begin::Date-->
-                            @foreach ($period as $key => $date)
-                                <li class="nav-item me-1">
-                                    <button data-date="{{ $date->format('Y-m-d') }}"
-                                        class="click-showtab nav-link btn d-flex flex-column flex-center rounded-pill min-w-45px me-2 py-4 px-3  {{ $date == $timeNow ? 'btn-active-warning  ' : '' }}  {{ $date == $timeNow ? 'btn-active-primary active' : '' }}"
-                                        data-bs-toggle="tab" href="#kt_schedule_day_1">
-                                        <span class="opacity-50 fs-7 fw-bold">{{ $date->format('l') }}</span>
-                                        <span class="fs-6 fw-bolder">{{ $date->format('Y-m-d') }}</span>
-                                    </button>
-                                </li>
-                            @endforeach
+                                <!--begin::Date-->
+                                @foreach ($period as $key => $date)
+                                    <li class="nav-item me-1">
+                                        <button data-date="{{ $date->format('Y-m-d') }}"
+                                            class="click-showtab nav-link btn d-flex flex-column flex-center rounded-pill min-w-45px me-2 py-4 px-3  {{ $date == $timeNow ? 'btn-active-warning  ' : '' }}  {{ $date == $timeNow ? 'btn-active-primary active' : '' }}"
+                                            data-bs-toggle="tab" href="#kt_schedule_day_1">
+                                            <span class="opacity-50 fs-7 fw-bold">{{ $date->format('l') }}</span>
+                                            <span class="fs-6 fw-bolder">{{ $date->format('Y-m-d') }}</span>
+                                        </button>
+                                    </li>
+                                @endforeach
 
-                            <!--end::Date-->
-                        </ul>
-                        <!--end::Dates-->
-                        <!--begin::Tab Content-->
-                        <div class="tab-content">
+                                <!--end::Date-->
+                            </ul>
+                            <!--end::Dates-->
+                            <!--begin::Tab Content-->
+                            <div class="tab-content">
 
-                            <!--begin::Day-->
-                            <div id="kt_schedule_day_1" class="tab-pane fade show active">
+                                <!--begin::Day-->
+                                <div id="kt_schedule_day_1" class="tab-pane fade show active">
+
+                                </div>
+                                <!--end::Day-->
 
                             </div>
-                            <!--end::Day-->
-
+                            <!--end::Tab Content-->
                         </div>
-                        <!--end::Tab Content-->
+                        <!--end::Card body-->
                     </div>
-                    <!--end::Card body-->
+                    <!--end::Card-->
                 </div>
-                <!--end::Card-->
+                <!--end::Col-->
             </div>
-            <!--end::Col-->
-        </div>
+        @endif
         <div class="col-xl-8 mb-5 mb-xl-10">
             <!--begin::Chart widget 18-->
             <div class="card card-flush h-xl-100">
