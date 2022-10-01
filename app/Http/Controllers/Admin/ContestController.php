@@ -550,10 +550,10 @@ class ContestController extends Controller
         };
     }
 
-    public function apiCapacityRelated($id_capacity)
+    public function apiContestRelated($id_capacity)
     {
         try {
-            $capacitys = $this->contest->getCapacityRelated($id_capacity);
+            $capacitys = $this->contest->getContestRelated($id_capacity);
             return $this->responseApi(true, $capacitys);
         } catch (\Throwable $th) {
             return $this->responseApi(false, $th->getMessage());

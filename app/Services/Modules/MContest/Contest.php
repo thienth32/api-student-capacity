@@ -305,27 +305,35 @@ class Contest implements MContestInterface
             });
     }
 
-    public function getCapacityRelated($id_capacity)
+    public function getContestRelated($id_contest)
     {
-        $capacityArrId = [];
-        $capacity = $this->contest::find($id_capacity);
-        if (is_null($capacity)) throw new \Exception('Không tìm thấy bài test năng lực !');
-        $capacity->load(['recruitment' => function ($q) {
-            return $q->with(['contest']);
-        }]);
-        foreach ($capacity->recruitment as  $recruitment) {
-            if ($recruitment->contest) foreach ($recruitment->contest as $contest) {
-                array_push($capacityArrId, $contest->id);
+        $contestArrId = [];
+        $contest = $this->contest::find($id_contest);
+        if (is_null($contest)) throw new \Exception('Cuộc thi này không tồn tại !');
+        $data = $this->contest::query();
+        if ($contest->type == config('util.TYPE_TEST')) {
+            $contest->load(['recruitment' => function ($q) {
+                return $q->with(['contest']);
+            }]);
+            foreach ($contest->recruitment as  $recruitment) {
+                if ($recruitment->contest) foreach ($recruitment->contest as $contest) {
+                    array_push($contestArrId, $contest->id);
+                }
             }
+            $contestArrId = array_unique($contestArrId);
+            unset($contestArrId[array_search($id_contest, $contestArrId)]);
+            $data->whereIn('id', $contestArrId);
         }
-        $capacityArrId = array_unique($capacityArrId);
-        unset($capacityArrId[array_search($id_capacity, $capacityArrId)]);
-        return $this->contest::whereIn('id', $capacityArrId)
-            ->orderBy('id', 'desc')
+        if ($contest->type == config('util.TYPE_CONTEST')) {
+            $data->where('major_id', $contest->major_id);
+        }
+        $data->orderBy('id', 'desc')
             ->limit(request('limit') ?? 4)
             ->withCount(['rounds', 'userCapacityDone'])
-            ->get()
-            ->load(['skills:name,short_name']);
+            ->with(['skills:name,short_name'])
+            ->get();
+        $data =  $data->get();
+        return $data;
     }
 
     public function getContestByIdUpdate($id, $type = 0)
@@ -371,8 +379,7 @@ class Contest implements MContestInterface
     public function endContestOutDateRegisterDealine()
     {
         $contests = $this->getContestDeadlineEnd(['take_exams']);
-        if(count($contests) > 0)
-        {
+        if (count($contests) > 0) {
             foreach ($contests as $contest) {
                 $pointAdd = json_decode($contest->reward_rank_point);
                 $take_exams = $contest->take_exams()
@@ -402,7 +409,6 @@ class Contest implements MContestInterface
                 });
             }
         }
-
     }
 
     private function updateUserAddPoint($users, $id, $point)
