@@ -47,10 +47,11 @@ class User implements MUserInterface
             ->when((!(request()->has('type'))  || request('type') == config('util.TYPE_CONTEST')), function ($q) {
                 $q->withCount(['teams']);
             })
-            ->search(request('q') ?? null, ['name', 'description'])
+            ->search(request('q') ?? null, ['name'])
             ->status(request('status'))
             ->sort((request('sort') == 'asc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'contests')
-            ->get();
+            ->get()
+            ->makeHidden(['teams', 'reward_rank_point', 'description', 'major_id', 'post_new']);
         return $contest;
     }
 

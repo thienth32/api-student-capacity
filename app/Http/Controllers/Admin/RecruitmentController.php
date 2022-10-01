@@ -239,11 +239,12 @@ class RecruitmentController extends Controller
      */
     public function apiShow(Request $request)
     {
-        $data = $this->modulesRecruitment->getList($request)->get();
+        $data = $this->modulesRecruitment->getList($request)->withCount(['contest'])->get();
         if (!$data) abort(404);
-        $data->load(['contest' => function ($q) {
-            return $q->with(['skills:id,short_name,name', 'rounds:id,name,contest_id']);
-        }, 'enterprise']);
+        $data->load(['enterprise'])->makeHidden([
+            'description', 'contest',
+            'deleted_at'
+        ]);
         $this->modulesRecruitment->LoadSkillAndUserApiShow($data);
         return $this->responseApi(
             true,
