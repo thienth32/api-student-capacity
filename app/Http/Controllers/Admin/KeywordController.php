@@ -49,6 +49,11 @@ class KeywordController extends Controller
     public function indexApi()
     {
         $data = $this->keyword->getList(request())->get();
+        $data->makeHidden([
+            'created_at',
+            'updated_at',
+            'deleted_at'
+        ]);
         return $this->responseApi(true, $data);
     }
     public function create()

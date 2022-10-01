@@ -200,7 +200,7 @@ class Contest implements MContestInterface
             },
             'recruitmentEnterprise',
             'userCapacityDone' => function ($q) {
-                return $q->with('user');
+                return $q->with('user')->where('result_capacity.status', config('util.STATUS_RESULT_CAPACITY_DONE'));
             }
         ];
         $contest = $this->whereId($id, $type)
