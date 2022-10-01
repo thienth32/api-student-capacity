@@ -32,7 +32,7 @@ class Contest implements MContestInterface
         $user = auth()->user();
         if (!$flagCapacity)
             $with = [];
-        $whereDate = ['date_start', 'register_deadline', 'start_register_time', 'end_regidter_time'];
+        $whereDate = ['date_start', 'register_deadline', 'start_register_time', 'end_register_time'];
         if (request()->has('type') && request('type') == 1) $whereDate = ['date_start', 'register_deadline'];
 
         if ($flagCapacity)

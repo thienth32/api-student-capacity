@@ -87,6 +87,8 @@ class CapacityPlayController extends Controller
     public function autTokenPlay($code)
     {
         if ($exam = $this->examRepo->getExamBtyTokenRoom($code)) {
+            $PROGRESS = json_decode($exam->room_progress) ?? [];
+            if (($exam->type == 0 && count($PROGRESS) == 0) || $exam->status == 0) return $this->responseApi(false,"Không thể tham gia trò chơi !");
             return $this->responseApi(true, [
                 "exam" => $exam
             ]);
@@ -126,6 +128,7 @@ class CapacityPlayController extends Controller
         }], ['questions']);
 
         if (!$exam) return $this->responseApi(false);
+        if ($exam->status == 0) return $this->responseApi(false);
 
         $data = [];
         $data['exam'] = $exam;
@@ -141,7 +144,7 @@ class CapacityPlayController extends Controller
 
         $PROGRESS = json_decode($exam->room_progress) ?? [];
 
-        if ($exam->type == 0 && count($PROGRESS) == 0) return $this->responseApi(true, $data + ['status' => false]);
+        if (($exam->type == 0 && count($PROGRESS) == 0)) return $this->responseApi(true, $data + ['status' => false]);
 
         $data['question'] = $this->questionRepo->findById(end($PROGRESS), ['answers:id,question_id,content']);
 

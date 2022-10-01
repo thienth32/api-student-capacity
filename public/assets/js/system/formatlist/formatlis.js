@@ -1,6 +1,6 @@
 // Set list query url
 const aListQuery = [
-    "page",
+    // "page",
     "major_id",
     "q",
     "sort_by",
