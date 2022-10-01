@@ -63,7 +63,6 @@ class AuthController extends Controller
 
         $user = User::with('roles')->where('email', $googleUser->email)->first();
         if ($user) {
-            //            $user->avatar = $googleUser->avatar;
             if($user->status == 0 ) return response()->json(
                 [
                     'status' => false,
