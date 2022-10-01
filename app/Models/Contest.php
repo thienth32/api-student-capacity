@@ -107,14 +107,18 @@ class Contest extends Model
     {
         return $this->hasManyDeep(
             ResultCapacity::class,
-            [Round::class, Exam::class],
+            [
+                Round::class,
+                Exam::class
+            ],
             [
                 'contest_id',
                 'round_id',
-                'user_id',
+                'exam_id',
             ]
         );
     }
+
     public function recruitmentEnterprise()
     {
         return $this->hasManyDeep(

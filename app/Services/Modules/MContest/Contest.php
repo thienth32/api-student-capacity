@@ -105,7 +105,7 @@ class Contest implements MContestInterface
         return $this->getList($flagCapacity, request())
             ->where('type', $flagCapacity ?  config('util.TYPE_TEST') : config('util.TYPE_CONTEST'))
             ->orderBy('date_start', 'desc')
-            ->paginate(request('limit') ?? 9);
+            ->paginate(request('limit') ?? 9)->makeHidden(['description', 'reward_rank_point', 'post_new', 'major_id', 'created_at', 'updated_at', 'deleted_at']);
     }
 
     public function getConTestCapacityByDateTime()
@@ -322,17 +322,19 @@ class Contest implements MContestInterface
             }
             $contestArrId = array_unique($contestArrId);
             unset($contestArrId[array_search($id_contest, $contestArrId)]);
-            $data->whereIn('id', $contestArrId);
+            $data->whereIn('id', $contestArrId)->withCount(['userCapacityDone' => function ($q) {
+                return $q->where('result_capacity.status', config('util.STATUS_RESULT_CAPACITY_DONE'));
+            }]);
         }
         if ($contest->type == config('util.TYPE_CONTEST')) {
             $data->where('major_id', $contest->major_id);
         }
-        $data->orderBy('id', 'desc')
+        $data = $data->orderBy('id', 'desc')
             ->limit(request('limit') ?? 4)
-            ->withCount(['rounds', 'userCapacityDone'])
+            ->withCount(['rounds'])
             ->with(['skills:name,short_name'])
             ->get();
-        $data =  $data->get();
+        $data->makeHidden(['description', 'reward_rank_point', 'post_new', 'deleted_at', 'type', 'major_id', 'created_at', 'updated_at']);
         return $data;
     }
 
