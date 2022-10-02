@@ -335,7 +335,7 @@ class Contest implements MContestInterface
             ->limit(request('limit') ?? 4)
             ->withCount(['rounds'])
             ->with(['skills:name,short_name'])
-            ->get();
+            ->paginate(request('limit') ?? 4);
         $data->makeHidden(['description', 'reward_rank_point', 'post_new', 'deleted_at', 'type', 'major_id', 'created_at', 'updated_at']);
         return $data;
     }
