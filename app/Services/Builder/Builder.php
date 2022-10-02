@@ -192,4 +192,23 @@ class Builder extends  EloquentBuilder
             $query->where($tableColumn, $value);
         });
     }
+
+
+
+    /**
+     * Search keyword
+     */
+    public function searchKeyword($request = null, $column = null)
+    {
+        if ($request == null)
+            return $this;
+        $requestArr = explode(" ", $request);
+        $this->where($column[0], 'LIKE', "%" . $requestArr[0] . "%");
+        foreach ($column as $keyColumn => $item) {
+            foreach ($requestArr as $keyRequest => $value) {
+                if ($keyColumn !== 0 &&  $keyRequest !== 0) $this->orWhere($item, 'LIKE', "%" .  $value . "%");
+            }
+        }
+        return $this;
+    }
 }

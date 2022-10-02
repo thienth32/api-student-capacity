@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\BeforNextGame;
 use App\Events\EndGameEvent;
 use App\Events\NextGameEvent;
 use App\Events\PlayGameEvent;
@@ -86,6 +87,9 @@ class CapacityPlayController extends Controller
     public function autTokenPlay($code)
     {
         if ($exam = $this->examRepo->getExamBtyTokenRoom($code)) {
+            $PROGRESS = json_decode($exam->room_progress) ?? [];
+            // if (($exam->type == 0 && count($PROGRESS) == 0)  )
+            if($exam->status == 0) return $this->responseApi(false,$exam);
             return $this->responseApi(true, [
                 "exam" => $exam
             ]);
@@ -125,6 +129,7 @@ class CapacityPlayController extends Controller
         }], ['questions']);
 
         if (!$exam) return $this->responseApi(false);
+        if ($exam->status == 0) return $this->responseApi(false);
 
         $data = [];
         $data['exam'] = $exam;
@@ -140,7 +145,7 @@ class CapacityPlayController extends Controller
 
         $PROGRESS = json_decode($exam->room_progress) ?? [];
 
-        if ($exam->type == 0 && count($PROGRESS) == 0) return $this->responseApi(true, $data + ['status' => false]);
+        if (($exam->type == 0 && count($PROGRESS) == 0)) return $this->responseApi(true, $data + ['status' => false]);
 
         $data['question'] = $this->questionRepo->findById(end($PROGRESS), ['answers:id,question_id,content']);
 
@@ -179,6 +184,7 @@ class CapacityPlayController extends Controller
         if ($exam->type == 1) return abort(404);
         if ($exam->status == 2) return abort(404);
 
+
         //
         $data = [];
         $data['exam'] = $exam;
@@ -214,7 +220,7 @@ class CapacityPlayController extends Controller
                             $data['question'] = $this->questionRepo->findById(request()->next, ['answers:id,question_id,content']);
                             return view('pages.capacity-play.play', $data)->with('error', 'Không tồn tại câu hỏi !');
                         }
-
+                        broadcast(new BeforNextGame($code));
                         $data['question'] = $this->questionRepo->findById(request()->next, ['answers:id,question_id,content']);
                         array_push($PROGRESS, $data['question']->id);
                         $data['exam'] = $this->examRepo->updateCapacityPlay($exam->id, [
@@ -242,7 +248,7 @@ class CapacityPlayController extends Controller
                 return view('pages.capacity-play.play', $data);
             }
         } else {
-
+            broadcast(new BeforNextGame($code));
             $data['question'] = $data['exam']->questions[0];
             $exam = $this->examRepo->updateCapacityPlay($exam->id, [
                 "room_token" => MD5(uniqid() . time()),
@@ -263,6 +269,8 @@ class CapacityPlayController extends Controller
         }], ['questions']);
         if ($exam->type == 0) return abort(404);
         if ($exam->status == 2) return abort(404);
+
+
         $data = [];
         $data['exam'] = $exam;
         $data['ranks'] = $this->resultCapacityRepo->where([
@@ -272,6 +280,7 @@ class CapacityPlayController extends Controller
         if ($exam->room_token) {
             return view('pages.capacity-play.view-play', $data);
         } else {
+            broadcast(new BeforNextGame($code));
             $data['questions'] = $data['exam']->questions[0];
             $exam = $this->examRepo->updateCapacityPlay($exam->id, [
                 "room_token" => MD5(uniqid() . time()),
@@ -323,6 +332,7 @@ class CapacityPlayController extends Controller
 
     public function nextQuestionApi(Request $request, $token)
     {
+        broadcast(new BeforNextGame($token));
         $exam = $this->examRepo->getExamBtyTokenRoom($token, ['questions' => function ($q) {
             return $q->with(['answers:id,question_id,content']);
         }]);
@@ -437,6 +447,7 @@ class CapacityPlayController extends Controller
 
     public function submitQuestionCapacityPlay(Request $request, $token)
     {
+        broadcast(new BeforNextGame($token));
         $exam = $this->examRepo->getExamBtyTokenRoom($token);
         $answers = $request->answers;
         $flagIsCorrect = $this->checkAnswerUser($request)['flagIsCorrect'];
@@ -529,6 +540,7 @@ class CapacityPlayController extends Controller
 
     public function end($code)
     {
+        broadcast(new BeforNextGame($code));
         $exam = $this->examRepo->getExamBtyTokenRoom($code, ['questions' => function ($q) {
             return $q->with(['answers:id,question_id,content']);
         }], ['questions']);

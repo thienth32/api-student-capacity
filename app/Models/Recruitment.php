@@ -21,15 +21,15 @@ class Recruitment extends Model
     ];
     public function recruitmentEnterprise()
     {
-        return $this->BelongsToMany(Recruitment::class, 'enterprise_recruitments', 'recruitment_id', 'enterprise_id')->withTimestamps();
+        return $this->belongsToMany(Recruitment::class, 'enterprise_recruitments', 'recruitment_id', 'enterprise_id')->withTimestamps();
     }
     public function enterprise()
     {
-        return $this->BelongsToMany(Enterprise::class, 'enterprise_recruitments', 'recruitment_id', 'enterprise_id')->withTimestamps();
+        return $this->belongsToMany(Enterprise::class, 'enterprise_recruitments', 'recruitment_id', 'enterprise_id')->withTimestamps();
     }
     public function contest()
     {
-        return $this->BelongsToMany(Contest::class, 'contest_recruitments', 'recruitment_id', 'contest_id')->with(['skills:id,short_name,name', 'rounds:id,name,contest_id'])->withTimestamps();
+        return $this->belongsToMany(Contest::class, 'contest_recruitments', 'recruitment_id', 'contest_id')->withTimestamps();
     }
     public function posts()
     {

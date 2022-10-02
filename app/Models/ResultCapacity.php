@@ -53,4 +53,8 @@ class ResultCapacity extends Model
             ]
         );
     }
+    public function exam()
+    {
+        return $this->hasMany(Exam::class, 'id', 'exam_id');
+    }
 }

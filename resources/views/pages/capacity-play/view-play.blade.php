@@ -23,15 +23,7 @@
         </div>
 
         <div class="text-center show-rank">
-            <div class="border p-2  mt-1">
-                <h2> Chưa có tiến trình làm bài <i class="bi bi-award-fill"></i> : 1</h2>
-                <div style="height: 20px" class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0"
-                        aria-valuemax="100"></div>
-                    <div class="progress-bar bg-danger" role="progressbar" style="width: 0%" aria-valuenow="0"
-                        aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-            </div>
+
         </div>
 
     </div>
@@ -61,6 +53,21 @@
                     </div>
                 `;
             }).join(" ");
+            if (ranks.length == 0) {
+                html = `
+
+                <div class="border p-2  mt-1">
+                    <h2> Chưa có tiến trình làm bài <i class="bi bi-award-fill"></i> : 1</h2>
+                    <div style="height: 20px" class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0"
+                            aria-valuemax="100"></div>
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: 0%" aria-valuenow="0"
+                            aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+
+                `;
+            }
             $('.show-rank').html(html);
         }
         renderRanks();

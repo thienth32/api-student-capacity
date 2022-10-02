@@ -52,6 +52,7 @@ class RecruitmentController extends Controller
             return redirect('error');
         };
     }
+
     public function create(Request $request)
     {
 
@@ -68,6 +69,7 @@ class RecruitmentController extends Controller
             ]);
         };
     }
+
     public function store(RequestsRecruitment $request)
     {
 
@@ -82,6 +84,7 @@ class RecruitmentController extends Controller
             return redirect('error');
         }
     }
+
     public function destroy($id)
     {
         try {
@@ -95,6 +98,7 @@ class RecruitmentController extends Controller
             return abort(404);
         }
     }
+
     public function edit(Request $request, $id)
     {
 
@@ -118,11 +122,13 @@ class RecruitmentController extends Controller
             return redirect('error');
         }
     }
+
     public function listRecordSoftDeletes(Request $request)
     {
         $listSofts = $this->modulesRecruitment->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
         return view('pages.recruitment.soft-delete', compact('listSofts'));
     }
+
     public function backUpRecruitment($id)
     {
         try {
@@ -132,6 +138,7 @@ class RecruitmentController extends Controller
             return abort(404);
         }
     }
+
     //xóa vĩnh viễn
     public function delete($id)
     {
@@ -143,15 +150,18 @@ class RecruitmentController extends Controller
             return abort(404);
         }
     }
+
     public function getModelDataHot($id)
     {
         return $this->modulesRecruitment->find($id);
     }
+
     public function detail($id)
     {
         $data = $this->modulesRecruitment->find($id);
         return view('pages.recruitment.detailRecruitment', compact('data'));
     }
+
     /**
      * @OA\Get(
      *     path="/api/public/recruitments",
@@ -161,6 +171,12 @@ class RecruitmentController extends Controller
      *         name="keyword",
      *         in="query",
      *         description="Tìm kiếm ",
+     *         required=false,
+     *     ),
+     *       @OA\Parameter(
+     *         name="qq",
+     *         in="query",
+     *         description="Tìm kiếm tách chuỗi ",
      *         required=false,
      *     ),
      *     @OA\Parameter(
@@ -223,16 +239,19 @@ class RecruitmentController extends Controller
      */
     public function apiShow(Request $request)
     {
-        $data = $this->modulesRecruitment->getList($request)->get();
+        $data = $this->modulesRecruitment->getList($request)->withCount(['contest'])->get();
         if (!$data) abort(404);
-        $data->load('contest:id,name,img');
-        $data->load('enterprise:id,name,logo');
+        $data->load(['enterprise'])->makeHidden([
+            'description', 'contest',
+            'deleted_at'
+        ]);
         $this->modulesRecruitment->LoadSkillAndUserApiShow($data);
         return $this->responseApi(
             true,
             $data,
         );
     }
+
     /**
      * @OA\Get(
      *     path="/api/public/recruitments/{id}",
@@ -252,8 +271,9 @@ class RecruitmentController extends Controller
     {
         $data = $this->modulesRecruitment->find($id);
         if (!$data) abort(404);
-        $data->load('contest:id,name,image');
-        $data->load('enterprise:id,name,logo');
+        $data->load(['contest' => function ($q) {
+            return $q->with(['skills:id,short_name,name'])->withCount(['userCapacityDone', 'rounds']);
+        }, 'enterprise']);
         $this->modulesRecruitment->loadSkillAndUserApiDetail($data);
         return $this->responseApi(
             true,

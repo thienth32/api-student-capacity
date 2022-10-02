@@ -13,10 +13,12 @@ class Keyword extends Model
     use HasFactory, SoftDeletes;
     protected $table = 'keywords';
     protected $fillable = ['keyword', 'keyword_en', 'keyword_slug', 'type', 'status'];
+
     public function newEloquentBuilder($query)
     {
         return new Builder($query);
     }
+
     protected $casts = [
         'created_at' => FormatDate::class,
         'updated_at' =>  FormatDate::class,

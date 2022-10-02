@@ -26,11 +26,17 @@ trait TGetAttributeColumn
 
     public function getUserStatusJoinAttribute()
     {
-        if (!auth('sanctum')->check()) return false;
-        foreach ($this->result_capacity as $result) {
-            if ($result->user_id == auth('sanctum')->id())
-                return $result->status;
-        }
-        return false;
+        if (!auth('sanctum')->check() || request()->is('admin/*')) return false;
+        $result_capacity = $this->load(['result_capacity' => function ($q) {
+            return $q->where('user_id',auth('sanctum')->id());
+        }])->result_capacity;
+        if(count($result_capacity) == 0) return false;
+        return $result_capacity[0]->status;
+
+        // foreach ($this->result_capacity as $result) {
+        //     if ($result->user_id == auth('sanctum')->id())
+        //         return $result->status;
+        // }
+        // return false;
     }
 }

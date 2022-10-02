@@ -1,6 +1,6 @@
 <?php
 $ROLE_HAS_ADMINS = 'admin|super admin';
-$ROLE_JUDGE = 'admin|super admin|judge';
+$ROLE_JUDGE = 'admin|super admin|judge|teacher';
 $TYPE_CAPACITY = 1;
 return [
     [

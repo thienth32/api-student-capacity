@@ -42,6 +42,9 @@ class AppServiceProvider extends ServiceProvider
         Blade::if("contest", function () {
             return request('type') != config('util.TYPE_TEST');
         });
+        Blade::if('admin', function () {
+            return auth()->user()->hasRole(config('util.ROLE_ADMINS'));
+        });
         // Model::preventLazyLoading(!app()->isProduction());
     }
 }

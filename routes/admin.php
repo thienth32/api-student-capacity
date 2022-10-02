@@ -96,7 +96,7 @@ Route::prefix('rounds')->group(function () {
                     ->name('admin.round.detail.team.takeExam.update')
                     ->middleware('role_admin');
                 Route::group([
-                    'middleware' => 'role_admin:judge'
+                    'middleware' => 'role_admin:judge|super admin'
                 ], function () {
                     Route::get('{teamId}/make', [RoundController::class, 'roundDetailTeamMakeExam'])->name('admin.round.detail.team.make.exam');
                     Route::post('{teamId}/make', [RoundController::class, 'roundDetailFinalTeamMakeExam'])->name('admin.round.detail.team.final.make.exam');

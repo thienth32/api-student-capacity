@@ -230,6 +230,12 @@ class PostController extends Controller
      *         description="Tìm kiếm ",
      *         required=false,
      *     ),
+     *        @OA\Parameter(
+     *         name="qq",
+     *         in="query",
+     *         description="Tìm kiếm  tách chuỗi",
+     *         required=false,
+     *     ),
      *     @OA\Parameter(
      *         name="sortBy",
      *         in="query",
@@ -294,7 +300,6 @@ class PostController extends Controller
     {
         $data = $this->modulesPost->index($request);
         $data->load('user:id,name,email');
-
         if (!$data) abort(404);
         return $this->responseApi(
             true,
