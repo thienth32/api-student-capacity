@@ -88,7 +88,8 @@ class CapacityPlayController extends Controller
     {
         if ($exam = $this->examRepo->getExamBtyTokenRoom($code)) {
             $PROGRESS = json_decode($exam->room_progress) ?? [];
-            if (($exam->type == 0 && count($PROGRESS) == 0) || $exam->status == 0) return $this->responseApi(false,"Không thể tham gia trò chơi !");
+            // if (($exam->type == 0 && count($PROGRESS) == 0)  )
+            if($exam->status == 0) return $this->responseApi(false,$exam);
             return $this->responseApi(true, [
                 "exam" => $exam
             ]);
@@ -183,7 +184,7 @@ class CapacityPlayController extends Controller
         if ($exam->type == 1) return abort(404);
         if ($exam->status == 2) return abort(404);
 
-        broadcast(new BeforNextGame($code));
+
         //
         $data = [];
         $data['exam'] = $exam;
@@ -219,7 +220,7 @@ class CapacityPlayController extends Controller
                             $data['question'] = $this->questionRepo->findById(request()->next, ['answers:id,question_id,content']);
                             return view('pages.capacity-play.play', $data)->with('error', 'Không tồn tại câu hỏi !');
                         }
-
+                        broadcast(new BeforNextGame($code));
                         $data['question'] = $this->questionRepo->findById(request()->next, ['answers:id,question_id,content']);
                         array_push($PROGRESS, $data['question']->id);
                         $data['exam'] = $this->examRepo->updateCapacityPlay($exam->id, [
@@ -247,7 +248,7 @@ class CapacityPlayController extends Controller
                 return view('pages.capacity-play.play', $data);
             }
         } else {
-
+            broadcast(new BeforNextGame($code));
             $data['question'] = $data['exam']->questions[0];
             $exam = $this->examRepo->updateCapacityPlay($exam->id, [
                 "room_token" => MD5(uniqid() . time()),
