@@ -259,7 +259,6 @@ class RoundController extends Controller
         } {
             $round->with('contest');
             $round->with('type_exam');
-            $round->with('exams');
             $round->with(['judges']);
             $round->with(['teams' => function ($q) {
                 return $q->with('members');
@@ -512,14 +511,14 @@ class RoundController extends Controller
 
             $team = Team::where('id', $teamId)->first();
             $takeExam = RoundTeam::where('round_id', $id)
-            ->where('team_id', $teamId)
-            ->with('takeExam', function ($q) use ($round) {
-                return $q->with(['exam', 'evaluations' => function ($q) use ($round) {
-                    $judge = $this->judge::where('contest_id', $round->contest_id)
-                        ->where('user_id', auth()->user()->id)->with('judge_rounds', function ($q) use ($round) {
-                            return $q->where('round_id', $round->id);
-                        })
-                    ->first('id');
+                ->where('team_id', $teamId)
+                ->with('takeExam', function ($q) use ($round) {
+                    return $q->with(['exam', 'evaluations' => function ($q) use ($round) {
+                        $judge = $this->judge::where('contest_id', $round->contest_id)
+                            ->where('user_id', auth()->user()->id)->with('judge_rounds', function ($q) use ($round) {
+                                return $q->where('round_id', $round->id);
+                            })
+                            ->first('id');
                         return $q->where('judge_round_id',   isset($judge->judge_rounds[0]) ?  $judge->judge_rounds[0]->id : []);
                     }]);
                 })
