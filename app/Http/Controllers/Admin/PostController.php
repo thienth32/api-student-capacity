@@ -153,9 +153,11 @@ class PostController extends Controller
         $capacity = $this->contest::where('type', 1)->get();
         $recruitments = $this->recruitment::all();
         $post = $this->modulesPost->getList($request)->where('slug', $slug)->first();
-        $post->load('postable');
+        $post->load(['postable' => function ($q) {
+            $q->select('id', 'name');
+        }]);
         if ($post->postable && (get_class($post->postable) == $this->round::class)) {
-            $round = $this->round::find($post->postable->id)->load('contest');
+            $round = $this->round::find($post->postable->id)->load('contest:id,name');
         }
 
         return view('pages.post.form-edit', [

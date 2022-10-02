@@ -434,14 +434,17 @@
                                 <td>
                                     @if (get_class($key->postable) == \App\Models\Round::class)
                                         Vòng thi : <b><a
-                                                href="{{ route('admin.round.detail', ['id' => $key->postable->id]) }}">{{ $key->postable->name }}</a></b>
+                                                href="{{ route('admin.round.detail', ['id' => $key->postable->id]) }}">{{ $key->postable->name }}
+                                            </a></b>
                                     @elseif (get_class($key->postable) == \App\Models\Recruitment::class)
                                         Tuyển dụng :
                                         <b><a
                                                 href="{{ route('admin.recruitment.detail', ['id' => $key->postable->id]) }}">{{ $key->postable->name }}</a></b>
-                                    @elseif(get_class($key->postable) == \App\Models\Contest::class && $key->postable->type == 0)
+                                    @elseif(get_class($key->postable) == \App\Models\Contest::class && $key->status_capacity == 0)
                                         Cuộc thi : <b><a
-                                                href="{{ route('admin.contest.show', ['id' => $key->postable->id]) }}">{{ $key->postable->name }}</a></b>
+                                                href="{{ route('admin.contest.show', ['id' => $key->postable->id]) }}">{{ $key->postable->name }}
+                                                {{ $key->postable->description }}
+                                            </a></b>
                                     @else
                                         Bài test : <b><a
                                                 href="{{ route('admin.contest.show.capatity', ['id' => $key->postable->id]) }}">{{ $key->postable->name }}</a></b>

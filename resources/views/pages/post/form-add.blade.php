@@ -30,6 +30,7 @@
                             <button id="clickContset" type="button"
                                 class="mygroup btn  {{ old('contest_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light click-contest">
                                 Cuộc thi</button>
+
                             <button type="button"
                                 class="click-capacity  btn {{ old('capacity_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light">
                                 Bài Test</button>
