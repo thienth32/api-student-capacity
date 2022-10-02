@@ -50,8 +50,8 @@ class User implements MUserInterface
             ->search(request('q') ?? null, ['name'])
             ->status(request('status'))
             ->sort((request('sort') == 'asc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'contests')
-            ->paginate(request('limit') ?? 10)
-            ->makeHidden(['teams', 'reward_rank_point', 'description', 'major_id', 'post_new']);
+            ->paginate(request('limit') ?? 10);
+        $contest->setCollection($contest->getCollection()->makeHidden(['teams', 'reward_rank_point', 'description', 'major_id', 'post_new']));;
         return $contest;
     }
 

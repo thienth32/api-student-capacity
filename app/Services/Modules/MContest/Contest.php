@@ -102,12 +102,12 @@ class Contest implements MContestInterface
 
     public function apiIndex($flagCapacity = false)
     {
-        return $this->getList($flagCapacity, request())
+        $data = $this->getList($flagCapacity, request())
             ->where('type', $flagCapacity ?  config('util.TYPE_TEST') : config('util.TYPE_CONTEST'))
             ->orderBy('date_start', 'desc')
-            // ->get();
-            ->paginate(request('limit') ?? 9)
-            ->makeHidden(['description', 'reward_rank_point', 'post_new', 'major_id', 'created_at', 'updated_at', 'deleted_at']);
+            ->paginate(request('limit') ?? 9);
+        $data->setCollection($data->getCollection()->makeHidden(['description', 'reward_rank_point', 'post_new', 'major_id', 'created_at', 'updated_at', 'deleted_at']));
+        return $data;
     }
 
     public function getConTestCapacityByDateTime()
@@ -336,7 +336,7 @@ class Contest implements MContestInterface
             ->withCount(['rounds'])
             ->with(['skills:name,short_name'])
             ->paginate(request('limit') ?? 4);
-        $data->makeHidden(['description', 'reward_rank_point', 'post_new', 'deleted_at', 'type', 'major_id', 'created_at', 'updated_at']);
+        $data->setCollection($data->getCollection()->makeHidden(['description', 'reward_rank_point', 'post_new', 'deleted_at', 'type', 'major_id', 'created_at', 'updated_at']));
         return $data;
     }
 
