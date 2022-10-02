@@ -76,7 +76,10 @@ class Slider
     public function apiIndex()
     {
         try {
-            return $this->getList()->where('status', 1)->get();
+            return $this->getList()
+                ->where('status', 1)
+                ->where('end_time',">", date("Y-m-d H:i:s"))
+                ->get();
         } catch (\Exception $e) {
             return false;
         }
