@@ -148,8 +148,8 @@
 
                                                 <span role="button" data-bs-toggle="modal"
                                                     data-bs-target="#kt_modal_round_{{ $round->id }}"
-                                                    class="svg-icon svg-icon-primary svg-icon-2x">
-                                                    <i class="bi bi-arrows-fullscreen fs-2x"></i>
+                                                    class="btn btn-primary">
+                                                    <i class="bi bi-arrows-fullscreen"></i>
                                                 </span>
 
                                                 <div class="modal fade" tabindex="-1"
@@ -287,6 +287,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
+
                                                 @if (count($round->exams) > 0)
                                                     @foreach ($round->exams as $exam)
                                                         <div class="modal fade" tabindex="-1"
@@ -353,10 +354,14 @@
                                                 @endif
                                             </td>
                                             <td style="text-align: center">
-                                                <i role="button" data-bs-toggle="tooltip" title="Quản lý đề thi "
-                                                    data-round_id="{{ $round->id }}"
-                                                    data-round_name="{{ $round->name }}"
-                                                    class="add-exam m-auto bi bi-tools fs-2x"></i>
+
+                                                <span role="button" class="btn btn-primary">
+                                                    <i role="button" data-bs-toggle="tooltip" title="Quản lý đề thi "
+                                                        data-round_id="{{ $round->id }}"
+                                                        data-round_name="{{ $round->name }}"
+                                                        class="add-exam m-auto bi bi-tools  "></i>
+                                                </span>
+
                                             </td>
                                             <td>
                                                 <div data-bs-toggle="tooltip" title="Thao tác "

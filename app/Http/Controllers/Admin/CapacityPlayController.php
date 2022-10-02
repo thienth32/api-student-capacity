@@ -269,7 +269,7 @@ class CapacityPlayController extends Controller
         if ($exam->type == 0) return abort(404);
         if ($exam->status == 2) return abort(404);
 
-        broadcast(new BeforNextGame($code));
+
         $data = [];
         $data['exam'] = $exam;
         $data['ranks'] = $this->resultCapacityRepo->where([
@@ -279,6 +279,7 @@ class CapacityPlayController extends Controller
         if ($exam->room_token) {
             return view('pages.capacity-play.view-play', $data);
         } else {
+            broadcast(new BeforNextGame($code));
             $data['questions'] = $data['exam']->questions[0];
             $exam = $this->examRepo->updateCapacityPlay($exam->id, [
                 "room_token" => MD5(uniqid() . time()),

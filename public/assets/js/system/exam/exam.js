@@ -86,6 +86,7 @@ const exam = {
                     },
                     success: function (data) {
                         if (!data.status) return alert(data.payload);
+                        if(flagReLoad) window.location.reload();
                         $(that).val(0);
                         toastr.success('Thành công !');
                     },
@@ -102,6 +103,7 @@ const exam = {
                     },
                     success: function (data) {
                         if (!data.status) return alert(data.payload);
+                        if(flagReLoad) window.location.reload();
                         $(that).val(1);
                         toastr.success('Thành công !');
                     },
