@@ -164,6 +164,7 @@
                                                                 <div class="btn btn-icon btn-sm btn-active-light-primary ms-2"
                                                                     data-bs-dismiss="modal" aria-label="Close">
                                                                     <span class="svg-icon svg-icon-2x"></span>
+                                                                    Thoát
                                                                 </div>
                                                                 <!--end::Close-->
                                                             </div>
@@ -281,8 +282,8 @@
                                                             </div>
 
                                                             <div class="modal-footer">
-                                                                <button type="button" class="btn btn-light"
-                                                                    data-bs-dismiss="modal">Thoát </button>
+                                                                {{-- <button type="button" class="btn btn-light"
+                                                                    data-bs-dismiss="modal">Thoát </button> --}}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -305,6 +306,7 @@
                                                                         <div class="btn btn-icon btn-sm btn-active-light-primary ms-2"
                                                                             data-bs-dismiss="modal" aria-label="Close">
                                                                             <span class="svg-icon svg-icon-2x"></span>
+                                                                            Thoát
                                                                         </div>
                                                                         <!--end::Close-->
                                                                     </div>
@@ -778,6 +780,7 @@
                         <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal"
                             aria-label="Close">
                             <span class="svg-icon svg-icon-2x"></span>
+                            Thoát
                         </div>
                         <!--end::Close-->
                     </div>
@@ -1031,7 +1034,7 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Thoát </button>
+                        {{-- <button type="button" class="btn btn-light" data-bs-dismiss="modal">Thoát </button> --}}
                     </div>
                 </div>
             </div>
@@ -1047,6 +1050,7 @@
                         <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal"
                             aria-label="Close">
                             <span class="svg-icon svg-icon-2x"></span>
+                            Thoát
                         </div>
                         <!--end::Close-->
                     </div>
@@ -1072,7 +1076,7 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Thoát </button>
+                        {{-- <button type="button" class="btn btn-light" data-bs-dismiss="modal">Thoát </button> --}}
                     </div>
                 </div>
             </div>

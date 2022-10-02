@@ -105,9 +105,9 @@ class Contest implements MContestInterface
         return $this->getList($flagCapacity, request())
             ->where('type', $flagCapacity ?  config('util.TYPE_TEST') : config('util.TYPE_CONTEST'))
             ->orderBy('date_start', 'desc')
-            ->get();
-            // ->paginate(request('limit') ?? 9)
-            // ->makeHidden(['description', 'reward_rank_point', 'post_new', 'major_id', 'created_at', 'updated_at', 'deleted_at']);
+            // ->get();
+            ->paginate(request('limit') ?? 9)
+            ->makeHidden(['description', 'reward_rank_point', 'post_new', 'major_id', 'created_at', 'updated_at', 'deleted_at']);
     }
 
     public function getConTestCapacityByDateTime()
