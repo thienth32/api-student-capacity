@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Challenge;
+use App\Models\CodeLanguage;
 use Illuminate\Http\Request;
 
 class CodeManagerController extends Controller
@@ -80,14 +82,14 @@ class CodeManagerController extends Controller
             $cwd = str_replace("/public", "", $cwd);
 
             $content = request()->content . " ";
-            $ntcd = config('util.NAME_DOCKER') . request()->type;
+            $imageBuildDocker = config('util.NAME_DOCKER') . request()->type;
             $path = $cwd;
             $stout = $this->acrMultyLgCode(
                 [
                     "extensionFile" => request()->ex,
                     "type" => request()->type,
                 ],
-                $ntcd,
+                $imageBuildDocker,
                 $path,
                 $content
             );
@@ -118,11 +120,13 @@ class CodeManagerController extends Controller
             ->first();
         $nameDocker = config('util.NAME_DOCKER');
         $codelanguage = CodeLanguage::find($type_id);
+
         if (!$codelanguage) return [
             "time" => false,
             "result" => "Không tìm thấy ngôn ngữ bạn đang yêu cầu !",
         ];
-        $ntcd = $codelanguage . "$codelanguage->type";
+
+        $imageBuildDocker = $nameDocker . "$codelanguage->type";
 
         $extensionFile = $codelanguage->ex;
         $type = $codelanguage->type;
@@ -141,7 +145,7 @@ class CodeManagerController extends Controller
                     "extensionFile" => $extensionFile,
                     "type" => $type,
                 ],
-                $ntcd,
+                $imageBuildDocker,
                 $path,
                 $content
             );
@@ -164,19 +168,19 @@ class CodeManagerController extends Controller
         return $arrResult;
     }
 
-    // public function runCodechall($id)
-    // {
-    //     try {
-    //         $arrResult = $this->runCode($id, request()->type_id, false);
-    //         return $arrResult;
-    //     } catch (\Throwable $th) {
-    //         dd($th->getMessage());
-    //         return response()->json([
-    //             'error' => "Không thể đưa vào luồng chạy !",
-    //             'time' => false,
-    //         ]);
-    //     }
-    // }
+    public function runCodechall($id)
+    {
+        try {
+            $arrResult = $this->runCode($id, request()->type_id, false);
+            return $arrResult;
+        } catch (\Throwable $th) {
+            dd($th->getMessage());
+            return response()->json([
+                'error' => "Không thể đưa vào luồng chạy !",
+                'time' => false,
+            ]);
+        }
+    }
 
     // public function runCodeSubmitChall($id)
     // {
@@ -191,7 +195,7 @@ class CodeManagerController extends Controller
     //         }
 
 
-    //         if ($result = Result::where('user_id', 1)->where("challenge_id", $id)->first()) $flagUpdate = true;
+    //         if ($result = Resul::where('user_id', 1)->where("challenge_id", $id)->first()) $flagUpdate = true;
     //         if ($flag === count($arrResult)) {
     //             $flagPass = true;
     //             $challenge =  Challenge::find($id);
@@ -272,19 +276,19 @@ class CodeManagerController extends Controller
     //     }
     // }
 
-    // public function getCodechall($id)
-    // {
-    //     return response()->json([
-    //         "status" => true,
-    //         "payload" => Challenge::find($id)->load(['type_test' => function ($q) {
-    //             return $q
-    //                 ->where("status", 1);
-    //         }, 'has_cod', 'result' => function ($q) {
-    //             $id = auth('sanctum')->user()->id;
-    //             return $q->where('user_id', $id);
-    //         }]),
-    //     ]);
-    // }
+    public function getCodechall($id)
+    {
+        return response()->json([
+            "status" => true,
+            "payload" => Challenge::find($id)->load(['type_test' => function ($q) {
+                return $q
+                    ->where("status", 1);
+            }, 'has_cod', 'result' => function ($q) {
+                $id = auth('sanctum')->user()->id;
+                return $q->where('user_id', $id);
+            }]),
+        ]);
+    }
 
     public function getCodechallAll()
     {
