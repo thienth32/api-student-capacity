@@ -55,71 +55,107 @@ const messages = {
 //     },
 //     "Không được nhỏ hơn thời gian hiện tại !."
 // );
+
 $.validator.addMethod(
     "multipeFieldValidator",
     function (value) {
         var returnVal = false;
         if (
-            $("select[name=contest_id").val() != 0 &&
+            $("select[name=contest_id").val() == 0 &&
             $("select[name=capacity_id").val() == 0 &&
             $("select[name=round_id").val() == 0 &&
             $("select[name=recruitment_id").val() == 0
         ) {
-            returnVal = true;
+            returnVal = false;
         } else if (
-            $("select[name=round_id").val() != 0 &&
-            $("select[name=capacity_id").val() == 0 &&
-            $("select[name=contest_id").val() == 0 &&
-            $("select[name=recruitment_id").val() == 0
-        ) {
-            returnVal = true;
-        } else if (
-            $("select[name=recruitment_id").val() != 0 &&
-            $("select[name=capacity_id").val() == 0 &&
-            $("select[name=contest_id").val() == 0 &&
-            $("select[name=round_id").val() == 0
-        ) {
-            returnVal = true;
-        } else if (
-            $("select[name=capacity_id").val() != 0 &&
-            $("select[name=contest_id").val() == 0 &&
-            $("select[name=recruitment_id").val() == 0 &&
-            $("select[name=round_id").val() == 0
+            $("select[name=round_id").val() != 0 ||
+            $("select[name=capacity_id").val() != 0 ||
+            $("select[name=contest_id").val() != 0 ||
+            $("select[name=recruitment_id").val() != 0
         ) {
             returnVal = true;
         }
+        // else if (
+        //     $("select[name=recruitment_id").val() != 0 &&
+        //     $("select[name=capacity_id").val() == 0 &&
+        //     $("select[name=contest_id").val() == 0 &&
+        //     $("select[name=round_id").val() == 0
+        // ) {
+        //     returnVal = true;
+        // } else if (
+        //     $("select[name=capacity_id").val() != 0 &&
+        //     $("select[name=contest_id").val() == 0 &&
+        //     $("select[name=recruitment_id").val() == 0 &&
+        //     $("select[name=round_id").val() == 0
+        // ) {
+        //     returnVal = true;
+        // }
 
         return returnVal;
     },
     "Yêu cầu chọn một thành phần !"
 );
+$(document).ready(function () {
+    $("select[name=contest_id]").change(function () {
+        $(this).valid();
+        if ($(this).val() != 0) {
+            $("select[name=round_id] ")
+                .val($("select[name=round_id] option:first").val())
+                .change();
+            $("select[name=recruitment_id]")
+                .val($("select[name=recruitment_id] option:first").val())
+                .change();
+            $("select[name=capacity_id]")
+                .val($("select[name=capacity_id] option:first").val())
+                .change();
+        }
+    });
 
-$("select[name=contest_id").change(function () {
-    $(this).valid();
-    $("select[name=round_id").val() == 0;
-    $("select[name=recruitment_id").val() == 0;
-    $("select[name=capacity_id").val() == 0;
+    $("select[name=round_id]").change(function () {
+        $(this).valid();
+        if ($(this).val() != 0) {
+            $("select[name=contest_id]")
+                .val($("select[name=contest_id] option:first").val())
+                .change();
+            $("select[name=recruitment_id]")
+                .val($("select[name=recruitment_id] option:first").val())
+                .change();
+            $("select[name=capacity_id]")
+                .val($("select[name=capacity_id] option:first").val())
+                .change();
+        }
+    });
+
+    $("select[name=recruitment_id]").change(function () {
+        $(this).valid();
+        if ($(this).val() != 0) {
+            $("select[name=contest_id]")
+                .val($("select[name=contest_id] option:first").val())
+                .change();
+            $("select[name=round_id]")
+                .val($("select[name=round_id] option:first").val())
+                .change();
+            $("select[name=capacity_id]")
+                .val($("select[name=capacity_id] option:first").val())
+                .change();
+        }
+    });
+    $("select[name=capacity_id]").change(function () {
+        $(this).valid();
+        if ($(this).val() != 0) {
+            $("select[name=contest_id]")
+                .val($("select[name=contest_id] option:first").val())
+                .change();
+            $("select[name=round]")
+                .val($("select[name=contest_id] option:first").val())
+                .change();
+            $("select[name=recruitment_id]")
+                .val($("select[name=recruitment_id] option:first").val())
+                .change();
+        }
+    });
 });
 
-$("select[name=round_id").change(function () {
-    $(this).valid();
-    $("select[name=contest_id").val() == 0;
-    $("select[name=recruitment_id").val() == 0;
-    $("select[name=capacity_id").val() == 0;
-});
-
-$("select[name=recruitment_id").change(function () {
-    $(this).valid();
-    $("select[name=contest_id").val() == 0;
-    $("select[name=round").val() == 0;
-    $("select[name=capacity_id").val() == 0;
-});
-$("select[name=capacity_id").change(function () {
-    $(this).valid();
-    $("select[name=contest_id").val() == 0;
-    $("select[name=round").val() == 0;
-    $("select[name=recruitment_id").val() == 0;
-});
 $.validator.addMethod(
     "hasSpecial",
     function (value, element) {

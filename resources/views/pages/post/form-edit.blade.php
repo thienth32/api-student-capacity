@@ -30,21 +30,21 @@
                         <div class="row col-12 m-auto">
 
                             <button id="clickContset" type="button"
-                                class="mygroup btn  {{ $post->postable !== null && get_class($post->postable) == \App\Models\Contest::class && $post->postable->type == 0 ? 'btn-primary' : 'btn-light' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3  click-contest">
+                                class="mygroup btn  btn-light {{ $post->postable !== null && get_class($post->postable) == \App\Models\Contest::class && $post->status_capacity == 0 ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3  click-contest">
                                 Cuộc thi</button>
                             <button id="clickCapacity" type="button"
-                                class="mygroup btn  {{ $post->postable !== null && get_class($post->postable) == \App\Models\Contest::class && $post->postable->type == 1 ? 'btn-primary' : 'btn-light' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3  click-capacity">
+                                class="mygroup btn btn-light  {{ $post->postable !== null && get_class($post->postable) == \App\Models\Contest::class && $post->status_capacity == 1 ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3  click-capacity">
                                 Bài test</button>
                             <button type="button"
-                                class="mygroup btn {{ $post->postable !== null && get_class($post->postable) == \App\Models\Round::class ? 'btn-primary' : 'btn-light' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 click-round">
+                                class="mygroup btn btn-light {{ $post->postable !== null && get_class($post->postable) == \App\Models\Round::class ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 click-round">
                                 Vòng thi</button>
                             <button type="button"
-                                class="click-recruitment   btn {{ $post->postable !== null && get_class($post->postable) == \App\Models\Recruitment::class ? 'btn-primary' : 'btn-light' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 ">
+                                class="click-recruitment   btn btn-light{{ $post->postable !== null && get_class($post->postable) == \App\Models\Recruitment::class ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 ">
                                 Tuyển dụng</button>
                         </div>
                         <br>
                         <div class="col-12 pb-2">
-                            <div style=" {{ $post->postable !== null && get_class($post->postable) == \App\Models\Contest::class && $post->postable->type == 0 ? '' : 'display:none' }}"
+                            <div style=" {{ $post->postable !== null && get_class($post->postable) == \App\Models\Contest::class && $post->status_capacity == 0 ? '' : 'display:none' }}"
                                 id="contest">
                                 <div class="form-group mb-10">
                                     <label for="" class="form-label">Cuộc thi</label>
@@ -52,7 +52,7 @@
                                         data-placeholder="Chọn cuộc thi ">
                                         <option value="0">Chọn cuộc thi</option>
                                         @foreach ($contest as $item)
-                                            <option @selected(($post->postable != null ? $post->postable->id : 0) === $item->id && get_class($post->postable) == \App\Models\Contest::class && $post->postable->type == 0) value="{{ $item->id }}">
+                                            <option @selected(($post->postable != null ? $post->postable->id : 0) === $item->id && get_class($post->postable) == \App\Models\Contest::class && $post->status_capacity == 0) value="{{ $item->id }}">
                                                 {{ $item->name }}
                                             </option>
                                         @endforeach
@@ -61,7 +61,7 @@
                                 </div>
 
                             </div>
-                            <div style=" {{ $post->postable !== null && get_class($post->postable) == \App\Models\Contest::class && $post->postable->type == 1 ? '' : 'display:none' }}"
+                            <div style=" {{ $post->postable !== null && get_class($post->postable) == \App\Models\Contest::class && $post->status_capacity == 1 ? '' : 'display:none' }}"
                                 id="capacity">
                                 <div class="form-group mb-10">
                                     <label for="" class="form-label">Bài test</label>
@@ -69,7 +69,7 @@
                                         data-placeholder="Chọn bài test ">
                                         <option value="0">Chọn bài test</option>
                                         @foreach ($capacity as $item)
-                                            <option @selected(($post->postable != null ? $post->postable->id : 0) === $item->id && get_class($post->postable) == \App\Models\Contest::class && $post->postable->type == 1) value="{{ $item->id }}">
+                                            <option @selected(($post->postable != null ? $post->postable->id : 0) === $item->id && get_class($post->postable) == \App\Models\Contest::class && $post->status_capacity == 1) value="{{ $item->id }}">
                                                 {{ $item->name }}
                                             </option>
                                         @endforeach
