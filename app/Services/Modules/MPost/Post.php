@@ -95,9 +95,7 @@ class Post
     }
     public function index(Request $request)
     {
-        return $this->getList($request)->with(['postable' => function ($q) {
-            $q->select('id', 'name');
-        },])->paginate(request('limit') ?? config('util.HOMEPAGE_ITEM_AMOUNT'));
+        return $this->getList($request)->with(['postable:id,name'])->paginate(request('limit') ?? config('util.HOMEPAGE_ITEM_AMOUNT'));
     }
     private function loadAble($query, $post = null)
     {

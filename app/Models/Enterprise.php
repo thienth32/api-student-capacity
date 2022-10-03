@@ -43,7 +43,8 @@ class Enterprise extends Model
     }
     public function recruitment()
     {
-        return $this->BelongsToMany(Recruitment::class, 'enterprise_recruitments', 'enterprise_id', 'recruitment_id')->with('contest:id,name')->withTimestamps();
+        // ->with('contest:id,name')
+        return $this->BelongsToMany(Recruitment::class, 'enterprise_recruitments', 'enterprise_id', 'recruitment_id')->withTimestamps();
     }
     use HasFactory;
 }

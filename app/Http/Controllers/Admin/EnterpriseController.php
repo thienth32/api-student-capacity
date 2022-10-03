@@ -71,7 +71,7 @@ class EnterpriseController extends Controller
     public function apiIndex(Request $request)
     {
         $data = $this->modulesEnterprise->index($request);
-        $data->load('recruitment:id,name');
+        $data->load(['recruitment:id,name', 'recruitment.contest:id,name']);
         return $this->responseApi(
             true,
             $data
