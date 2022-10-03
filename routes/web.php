@@ -33,6 +33,7 @@ Route::get('download-file', function () {
 })->name('dowload.file');
 
 
-Route::get('test-channel', function () {
-    broadcast(new PublicChannel("This is message"));
+Route::get('test', function () {
+    // \Illuminate\Support\Facades\Cookie::queue('test-cookie-laravel', 'value test', 2);
+    // broadcast(new PublicChannel("This is message"));
 });
