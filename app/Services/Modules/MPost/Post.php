@@ -46,7 +46,10 @@ class Post
             $query = $this->post::onlyTrashed()->where('title', 'like', "%$keyword%")->orderByDesc('deleted_at');
             return $query;
         }
-        $query = $this->post::where('title', 'like', "%$keyword%");
+        // $query = $this->post::where('title', 'like', "%$keyword%");
+        $query = $this->post::query();
+        $query->where('title', 'like', "%$keyword%");
+        // if ($request->has('qq')) $query->searchKeyword(request('qq') ?? null, ['title']);
         if ($status != null) {
             $query->where('status', $status);
         }
@@ -92,7 +95,7 @@ class Post
     }
     public function index(Request $request)
     {
-        return $this->getList($request)->paginate(request('limit') ?? config('util.HOMEPAGE_ITEM_AMOUNT'));
+        return $this->getList($request)->with(['postable:id,name'])->paginate(request('limit') ?? config('util.HOMEPAGE_ITEM_AMOUNT'));
     }
     private function loadAble($query, $post = null)
     {

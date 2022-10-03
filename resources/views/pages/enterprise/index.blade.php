@@ -162,6 +162,8 @@
                                 <th scope="col">Logo
 
                                 </th>
+                                <th scope="col">Hiển thị trên trang chủ
+                                </th>
                                 <th scope="col">Giới thiệu
                                 </th>
                                 <th scope="col">Tài trợ
@@ -181,6 +183,20 @@
                                         <img style="width:250px;height:50%"
                                             src="{{ $key->logo ? $key->logo : 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
                                             alt="">
+                                    </td>
+
+                                    <td>
+                                        @hasanyrole('admin|super admin')
+
+                                            <div data-bs-toggle="tooltip" title="Cập nhật trạng thái "
+                                                class="form-check form-switch">
+                                                <input value="{{ $key->status }}" data-id="{{ $key->id }}"
+                                                    class="form-select-status form-check-input" @checked($key->status == config('util.STATUS_ENTERPRISE_SHOW'))
+                                                    type="checkbox" role="switch">
+
+                                            </div>
+                                        @endhasrole
+
                                     </td>
                                     <td>
 
@@ -383,23 +399,8 @@
 @endsection
 @section('page-script')
     <script src="assets/js/system/formatlist/formatlis.js"></script>
+    <script src="assets/js/system/enterprise/enterprise.js"></script>
     <script>
-        $(document).ready(function() {
-            $('#selectContest').change(function() {
-                let idContest = $(this).val();
-                window.location = 'admin/enterprise?contest=' + idContest;
-            })
-            $('#searchTeam').keypress(function(event) {
-                var keycode = (event.keyCode ? event.keyCode : event.which);
-                if (keycode == '13') {
-                    let key = $(this).val();
-                    // alert(key)
-                    window.location = 'admin/enterprise?keyword=' + key;
-                }
-
-            });
-
-
-        })
+        const _token = "{{ csrf_token() }}";
     </script>
 @endsection

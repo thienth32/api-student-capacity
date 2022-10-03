@@ -96,7 +96,7 @@ Route::prefix('rounds')->group(function () {
                     ->name('admin.round.detail.team.takeExam.update')
                     ->middleware('role_admin');
                 Route::group([
-                    'middleware' => 'role_admin:judge'
+                    'middleware' => 'role_admin:judge|super admin'
                 ], function () {
                     Route::get('{teamId}/make', [RoundController::class, 'roundDetailTeamMakeExam'])->name('admin.round.detail.team.make.exam');
                     Route::post('{teamId}/make', [RoundController::class, 'roundDetailFinalTeamMakeExam'])->name('admin.round.detail.team.final.make.exam');
@@ -256,6 +256,8 @@ Route::group([
         Route::get('', [EnterpriseController::class, 'index'])->name('admin.enterprise.list');
         Route::get('form-add', [EnterpriseController::class, 'create'])->name('admin.enterprise.create');
         Route::post('form-add-save', [EnterpriseController::class, 'store'])->name('admin.enterprise.store');
+        Route::post('un-status/{id}', [EnterpriseController::class, 'un_status'])->name('admin.enterprise.un.status');
+        Route::post('re-status/{id}', [EnterpriseController::class, 're_status'])->name('admin.enterprise.re.status');
         Route::delete('{id}', [EnterpriseController::class, 'destroy'])->name('admin.enterprise.destroy');
 
         Route::get('enterprise-soft-delete', [EnterpriseController::class, 'softDelete'])->name('admin.enterprise.soft.delete');

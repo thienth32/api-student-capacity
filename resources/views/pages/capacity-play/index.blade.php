@@ -70,7 +70,6 @@
                                         <input value="{{ $exam->status }}" data-id="{{ $exam->id }}"
                                             class="form-select-status form-check-input" @checked($exam->status == 1)
                                             type="checkbox" role="switch">
-
                                     </div>
                                 @endif
                             </td>
@@ -119,6 +118,7 @@
     <script>
         const url = " {{ request()->url() }}";
         const _token = "{{ csrf_token() }}";
+        const flagReLoad = true;
     </script>
     <script>
         $('.search').on('change', function() {

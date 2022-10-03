@@ -63,7 +63,12 @@ class AuthController extends Controller
 
         $user = User::with('roles')->where('email', $googleUser->email)->first();
         if ($user) {
-            //            $user->avatar = $googleUser->avatar;
+            if($user->status == 0 ) return response()->json(
+                [
+                    'status' => false,
+                    'payload' => "Xác thực thất bại",
+                ]
+            );
             $user->save();
             $token = $user->createToken('auth_token')->plainTextToken;
             return response()->json([

@@ -555,6 +555,6 @@ class TeamController extends Controller
         if (is_null($team))  return $this->responseApi(false, "Thông tin đội bị lỗi !!");
         $userID = $this->user::whereIn('id', $request->user_id)->get()->pluck('id');
         $team->members()->detach($userID);
-        return $this->responseApi(false, "Xóa thành viên thành công !!");
+        return $this->responseApi(true, "Xóa thành viên thành công !!", ['user_id' => $userID]);
     }
 }

@@ -36,11 +36,13 @@ interface MContestInterface
 
     public function getContestMapSubDays($date);
 
-    public function getCapacityRelated($id_capacity);
+    public function getContestRelated($id_contest);
 
     public function getContestByIdUpdate($id, $type = 0);
 
-    public function getContestDeadlineEnd();
+    public function getContestDeadlineEnd($with = []);
 
     public function getContestDone();
+
+    public function endContestOutDateRegisterDealine();
 }

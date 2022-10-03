@@ -9,6 +9,7 @@ use App\Models\Team;
 use App\Models\Judge;
 use App\Services\Traits\TUploadImage;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class Contest implements MContestInterface
 {
@@ -31,7 +32,7 @@ class Contest implements MContestInterface
         $user = auth()->user();
         if (!$flagCapacity)
             $with = [];
-        $whereDate = ['date_start', 'register_deadline', 'start_register_time', 'end_regidter_time'];
+        $whereDate = ['date_start', 'register_deadline', 'start_register_time', 'end_register_time'];
         if (request()->has('type') && request('type') == 1) $whereDate = ['date_start', 'register_deadline'];
 
         if ($flagCapacity)
@@ -63,6 +64,7 @@ class Contest implements MContestInterface
             });
 
         $contest->where(function ($contest) use ($request, $now, $whereDate) {
+            if ($request->has('qq')) $contest->searchKeyword($request->qq ?? null, ['name'], true);
             if ($request->has('q')) $contest->search($request->q ?? null, ['name'], true);
             if ($request->has('miss_date')) $contest->missingDate('register_deadline', $request->miss_date ?? null, $now->toDateTimeString())
                 ->orWhere('status', '>', 1);
@@ -100,10 +102,12 @@ class Contest implements MContestInterface
 
     public function apiIndex($flagCapacity = false)
     {
-        return $this->getList($flagCapacity, request())
+        $data = $this->getList($flagCapacity, request())
             ->where('type', $flagCapacity ?  config('util.TYPE_TEST') : config('util.TYPE_CONTEST'))
             ->orderBy('date_start', 'desc')
             ->paginate(request('limit') ?? 9);
+        $data->setCollection($data->getCollection()->makeHidden(['description', 'reward_rank_point', 'post_new', 'major_id', 'created_at', 'updated_at', 'deleted_at']));
+        return $data;
     }
 
     public function getConTestCapacityByDateTime()
@@ -198,7 +202,7 @@ class Contest implements MContestInterface
             },
             'recruitmentEnterprise',
             'userCapacityDone' => function ($q) {
-                return $q->with('user');
+                return $q->with('user')->where('result_capacity.status', config('util.STATUS_RESULT_CAPACITY_DONE'));
             }
         ];
         $contest = $this->whereId($id, $type)
@@ -303,27 +307,37 @@ class Contest implements MContestInterface
             });
     }
 
-    public function getCapacityRelated($id_capacity)
+    public function getContestRelated($id_contest)
     {
-        $capacityArrId = [];
-        $capacity = $this->contest::find($id_capacity);
-        if (is_null($capacity)) throw new \Exception('Không tìm thấy bài test năng lực !');
-        $capacity->load(['recruitment' => function ($q) {
-            return $q->with(['contest']);
-        }]);
-        foreach ($capacity->recruitment as  $recruitment) {
-            if ($recruitment->contest) foreach ($recruitment->contest as $contest) {
-                array_push($capacityArrId, $contest->id);
+        $contestArrId = [];
+        $contest = $this->contest::find($id_contest);
+        if (is_null($contest)) throw new \Exception('Cuộc thi này không tồn tại !');
+        $data = $this->contest::query();
+        if ($contest->type == config('util.TYPE_TEST')) {
+            $contest->load(['recruitment' => function ($q) {
+                return $q->with(['contest']);
+            }]);
+            foreach ($contest->recruitment as  $recruitment) {
+                if ($recruitment->contest) foreach ($recruitment->contest as $contest) {
+                    array_push($contestArrId, $contest->id);
+                }
             }
+            $contestArrId = array_unique($contestArrId);
+            unset($contestArrId[array_search($id_contest, $contestArrId)]);
+            $data->whereIn('id', $contestArrId)->withCount(['userCapacityDone' => function ($q) {
+                return $q->where('result_capacity.status', config('util.STATUS_RESULT_CAPACITY_DONE'));
+            }]);
         }
-        $capacityArrId = array_unique($capacityArrId);
-        unset($capacityArrId[array_search($id_capacity, $capacityArrId)]);
-        return $this->contest::whereIn('id', $capacityArrId)
-            ->orderBy('id', 'desc')
+        if ($contest->type == config('util.TYPE_CONTEST')) {
+            $data->where('major_id', $contest->major_id);
+        }
+        $data = $data->orderBy('id', 'desc')
             ->limit(request('limit') ?? 4)
-            ->withCount(['rounds', 'userCapacityDone'])
-            ->get()
-            ->load(['skills:name,short_name']);
+            ->withCount(['rounds'])
+            ->with(['skills:name,short_name'])
+            ->paginate(request('limit') ?? 4);
+        $data->setCollection($data->getCollection()->makeHidden(['description', 'reward_rank_point', 'post_new', 'deleted_at', 'type', 'major_id', 'created_at', 'updated_at']));
+        return $data;
     }
 
     public function getContestByIdUpdate($id, $type = 0)
@@ -348,13 +362,15 @@ class Contest implements MContestInterface
             ->first();
     }
 
-    public function getContestDeadlineEnd()
+    public function getContestDeadlineEnd($with = [])
     {
-        return $this->contest::where("register_deadline", "<", date("Y-m-d h:i:s"))
+        return $this->contest::where("register_deadline", "<", date("Y-m-d H:i:s"))
             ->where("status", "<=", config('util.CONTEST_STATUS_GOING_ON'))
             ->where("type", config('util.TYPE_CONTEST'))
+            ->with($with)
             ->get();
     }
+
     public function getContestDone()
     {
         return $this->contest::where("status", config('util.CONTEST_STATUS_DONE'))
@@ -362,5 +378,52 @@ class Contest implements MContestInterface
             ->orderBy("date_start", "asc")
             ->take(3)
             ->get();
+    }
+
+    public function endContestOutDateRegisterDealine()
+    {
+        $contests = $this->getContestDeadlineEnd(['take_exams']);
+        if (count($contests) > 0) {
+            foreach ($contests as $contest) {
+                $pointAdd = json_decode($contest->reward_rank_point);
+                $take_exams = $contest->take_exams()
+                    ->with([
+                        'teams' => function ($q) use ($contest) {
+                            return $q->where('contest_id', $contest->id)->with('users');
+                        }
+                    ])
+                    ->orderByDesc('final_point')
+                    ->orderByDesc('updated_at')->get();
+
+                DB::transaction(function () use ($contest, $pointAdd, $take_exams) {
+                    foreach ($take_exams as $key => $take_exam) {
+                        if ($key == 0) {
+                            if ($take_exam->teams) $this->updateUserAddPoint($take_exam->teams->users, $contest->id, $pointAdd->top1 ?? 0);
+                        } elseif ($key == 1) {
+                            if ($take_exam->teams) $this->updateUserAddPoint($take_exam->teams->users, $contest->id, $pointAdd->top2 ?? 0);
+                        } elseif ($key == 2) {
+                            if ($take_exam->teams) $this->updateUserAddPoint($take_exam->teams->users, $contest->id, $pointAdd->top3 ?? 0);
+                        } else {
+                            if ($take_exam->teams) $this->updateUserAddPoint($take_exam->teams->users, $contest->id, $pointAdd->leave ?? 0);
+                        }
+                    }
+                    $contest->update([
+                        'status' => 2,
+                    ]);
+                });
+            }
+        }
+    }
+
+    private function updateUserAddPoint($users, $id, $point)
+    {
+
+        foreach ($users as $user) {
+            $this->contestUser->checkExitsAndManager([
+                'contest_id' => $id,
+                'user' => $user,
+                'point' => $point
+            ]);
+        };
     }
 }

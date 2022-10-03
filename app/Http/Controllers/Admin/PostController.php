@@ -153,9 +153,11 @@ class PostController extends Controller
         $capacity = $this->contest::where('type', 1)->get();
         $recruitments = $this->recruitment::all();
         $post = $this->modulesPost->getList($request)->where('slug', $slug)->first();
-        $post->load('postable');
+        $post->load(['postable' => function ($q) {
+            $q->select('id', 'name');
+        }]);
         if ($post->postable && (get_class($post->postable) == $this->round::class)) {
-            $round = $this->round::find($post->postable->id)->load('contest');
+            $round = $this->round::find($post->postable->id)->load('contest:id,name');
         }
 
         return view('pages.post.form-edit', [
@@ -228,6 +230,12 @@ class PostController extends Controller
      *         description="Tìm kiếm ",
      *         required=false,
      *     ),
+     *        @OA\Parameter(
+     *         name="qq",
+     *         in="query",
+     *         description="Tìm kiếm  tách chuỗi",
+     *         required=false,
+     *     ),
      *     @OA\Parameter(
      *         name="sortBy",
      *         in="query",
@@ -290,9 +298,8 @@ class PostController extends Controller
      */
     public function apiShow(Request $request)
     {
-        $data = $this->modulesPost->index($request);
-        $data->load('user:id,name,email');
-
+        $data = $this->modulesPost->getList($request)->paginate(request('limit') ?? config('util.HOMEPAGE_ITEM_AMOUNT'));
+        $data->load(['postable:id,name', 'postable.enterprise:id,name,logo', 'user:id,name,email']);
         if (!$data) abort(404);
         return $this->responseApi(
             true,
