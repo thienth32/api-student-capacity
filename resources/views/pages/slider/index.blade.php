@@ -355,7 +355,7 @@
                                 </p>
                             </td>
                             <td>
-                                <img style="width: 200px ; height: 100px"
+                                <img style="width: 200px ; height: 100px;object-fit: cover;"
                                     src="{{ $slider->image_url ?? 'assets/media/avatars/blank.png' }}" alt="">
                             </td>
                             <td>
