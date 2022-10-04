@@ -36,13 +36,13 @@ class User extends Authenticatable
     ];
 
     protected $appends = [
-        'sum_point'
+        // 'sum_point'
     ];
 
-    public function getSumPointAttribute()
-    {
-        return $this->contest_user()->sum('reward_point');
-    }
+    // public function getSumPointAttribute()
+    // {
+    //     return $this->contest_user()->sum('reward_point');
+    // }
 
     public function newEloquentBuilder($query)
     {
