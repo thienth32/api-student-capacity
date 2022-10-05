@@ -66,16 +66,16 @@ class TakeExamController extends Controller
                 }
             }
             if ($checkUserTeam == false)
-                return $this->responseApi(false, 'Bạn không thuộc đội thi nào trong cuộc thi !!');
+                return $this->responseApi(true, ['error' => 'Bạn không thuộc đội thi nào trong cuộc thi !!']);
             $teamRound = $this->roundTeam->where(['team_id' => $team_id, 'round_id' => $request->round_id])->first();
-            if (is_null($teamRound)) return $this->responseApi(false, 'Đội thi của bạn đang chờ phê duyệt !!');
+            if (is_null($teamRound)) return $this->responseApi(true, ['error' => 'Đội thi của bạn đang chờ phê duyệt !!']);
             $takeExamCheck = $this->takeExam->findBy(['round_team_id' => $teamRound->id], ['exam']);
             if (is_null($takeExamCheck)) {
                 if (count($this->exam->whereGet(['round_id' => $request->round_id, 'type' => 0])) == 0)
-                    return $this->responseApi(false, "Đề thi chưa cập nhập !!");
+                    return $this->responseApi(true, ['error' => "Đề thi chưa cập nhập !!"]);
                 $exams = $this->exam->whereGet(['round_id' => $request->round_id, 'type' => 0])->random()->id;
                 if (is_null($exams))
-                    return $this->responseApi(false, "Đề thi chưa cập nhập !!");
+                    return $this->responseApi(true, ['error' => "Đề thi chưa cập nhập !!"]);
                 $takeExamModel = $this->takeExam->create([
                     'exam_id' => $exams,
                     'round_team_id' => $teamRound->id,
