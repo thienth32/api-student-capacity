@@ -2,10 +2,21 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Services\Modules\MMajor\MMajorInterface;
+use Carbon\Carbon;
+use App\Models\Exam;
+use App\Models\Skill;
+use App\Models\Contest;
+use App\Models\Question;
+use Illuminate\Support\Str;
 use App\Services\Traits\TResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use App\Models\Answer;
+use App\Models\ResultCapacity;
+use App\Models\Round;
+use App\Models\User;
+use App\Services\Modules\MMajor\MMajorInterface;
 
 class RankUserController extends Controller
 {
