@@ -126,7 +126,24 @@
                     </div>
                     <div class="row">
                         <div class="col-8">
+                            <div class="form-group mb-10">
+                                <label for="" class="form-label">Tác giả bài viết</label>
+                                <select placeholder="Chọn" class="form-select mb-2 select2-hidden-accessible"
+                                    data-control="select2" data-hide-search="false" tabindex="-1" aria-hidden="true"
+                                    name="user_id" value="{{ old('user_id') }}">
+                                    <option value="0">Chọn tác giả</option>
+                                    @foreach ($users as $user)
+                                        <option {{ old('user_id') == $user->id ? 'selected' : '' }}
+                                            value="{{ $user->id }}">
+                                            {{ $user->name }}&nbsp;
+                                            <small class="badge bg-success">( {{ $user->email }} )</small>
+                                        </option>
+                                    @endforeach
+                                </select>
 
+
+
+                            </div>
                             <div class="form-group mb-10">
                                 <label class="form-label" for="">Thời gian xuất bản</label>
                                 <input id="begin" max="" type="datetime-local"

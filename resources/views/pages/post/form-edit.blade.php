@@ -30,16 +30,16 @@
                         <div class="row col-12 m-auto">
 
                             <button id="clickContset" type="button"
-                                class="mygroup btn  btn-light {{ $post->postable !== null && get_class($post->postable) == \App\Models\Contest::class && $post->status_capacity == 0 ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3  click-contest">
+                                class="mygroup btn  {{ $post->postable !== null && get_class($post->postable) == \App\Models\Contest::class && $post->status_capacity == 0 ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light  click-contest">
                                 Cuộc thi</button>
                             <button id="clickCapacity" type="button"
-                                class="mygroup btn btn-light  {{ $post->postable !== null && get_class($post->postable) == \App\Models\Contest::class && $post->status_capacity == 1 ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3  click-capacity">
+                                class="mygroup btn {{ $post->postable !== null && get_class($post->postable) == \App\Models\Contest::class && $post->status_capacity == 1 ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light click-capacity">
                                 Bài test</button>
                             <button type="button"
-                                class="mygroup btn btn-light {{ $post->postable !== null && get_class($post->postable) == \App\Models\Round::class ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 click-round">
+                                class="mygroup btn {{ $post->postable !== null && get_class($post->postable) == \App\Models\Round::class ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light click-round">
                                 Vòng thi</button>
                             <button type="button"
-                                class="click-recruitment   btn btn-light{{ $post->postable !== null && get_class($post->postable) == \App\Models\Recruitment::class ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 ">
+                                class="click-recruitment btn {{ $post->postable !== null && get_class($post->postable) == \App\Models\Recruitment::class ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 btn-light col-xl-3 ">
                                 Tuyển dụng</button>
                         </div>
                         <br>
@@ -149,7 +149,24 @@
 
 
                         <div class="col-8">
+                            <div class="form-group mb-10">
+                                <label for="" class="form-label">Tác giả bài viết</label>
+                                <select placeholder="Chọn" class="form-select mb-2 select2-hidden-accessible"
+                                    data-control="select2" data-hide-search="false" tabindex="-1" aria-hidden="true"
+                                    name="user_id" value="{{ old('user_id') }}">
+                                    <option value="0">Chọn tác giả</option>
+                                    @foreach ($users as $user)
+                                        <option {{ $post->user_id == $user->id ? 'selected' : '' }}
+                                            value="{{ $user->id }}">
+                                            {{ $user->name }}&nbsp;
+                                            <small class="badge bg-success">( {{ $user->email }} )</small>
+                                        </option>
+                                    @endforeach
+                                </select>
 
+
+
+                            </div>
                             <div class="form-group mb-10">
                                 <label class="form-label" for="">Thời gian xuất bản</label>
                                 <input id="begin" max="" type="datetime-local"

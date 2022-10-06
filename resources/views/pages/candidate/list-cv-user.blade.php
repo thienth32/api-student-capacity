@@ -25,7 +25,7 @@
 
     <div class="table-responsive p-4 card card-flush ">
 
-        @if (count($candidates) > 1)
+        @if (count($candidates) > 0)
             <table class=" table table-hover table-responsive-md ">
                 <thead>
                     <tr>

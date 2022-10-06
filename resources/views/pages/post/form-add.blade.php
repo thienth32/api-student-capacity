@@ -26,11 +26,9 @@
                     <div class="form-group mb-5">
                         <label class="form-label" for="">Thuộc các thành phần</label>
                         <div class="row col-12 m-auto">
-
                             <button id="clickContset" type="button"
                                 class="mygroup btn  {{ old('contest_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light click-contest">
                                 Cuộc thi</button>
-
                             <button type="button"
                                 class="click-capacity  btn {{ old('capacity_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light">
                                 Bài Test</button>
@@ -125,12 +123,25 @@
 
                     </div>
                     <div class="row">
-
-
-
-
                         <div class="col-8">
+                            <div class="form-group mb-10">
+                                <label for="" class="form-label">Tác giả bài viết</label>
+                                <select placeholder="Chọn" class="form-select mb-2 select2-hidden-accessible"
+                                    data-control="select2" data-hide-search="false" tabindex="-1" aria-hidden="true"
+                                    name="user_id" value="{{ old('user_id') }}">
+                                    <option value="0">Chọn tác giả</option>
+                                    @foreach ($users as $user)
+                                        <option {{ old('user_id') == $user->id ? 'selected' : '' }}
+                                            value="{{ $user->id }}">
+                                            {{ $user->name }}&nbsp;
+                                            <small class="badge bg-success">( {{ $user->email }} )</small>
+                                        </option>
+                                    @endforeach
+                                </select>
 
+
+
+                            </div>
                             <div class="form-group mb-10">
                                 <label class="form-label" for="">Thời gian xuất bản</label>
                                 <input id="begin" max="" type="datetime-local"
@@ -163,7 +174,7 @@
                     </div>
                     <div class="form-group mb-10">
                         <label class="form-label" for="">Nội dung bài viết</label>
-                        <textarea class="form-control" name="content" id="kt_docs_ckeditor_classic2" rows="3">{{ old('description') }}</textarea>
+                        <textarea class="form-control" name="content" id="kt_docs_ckeditor_classic2" rows="3">{{ old('content') }}</textarea>
                         @error('content')
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
