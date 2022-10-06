@@ -376,6 +376,7 @@ Route::group([
     });
     Route::prefix('candidates')->group(function () {
         Route::get('', [CandidateController::class, 'index'])->name('admin.candidate.list');
+        Route::get('user-cv', [CandidateController::class, 'listCvUser'])->name('admin.candidate.listCvUser');
         Route::delete('{id}', [CandidateController::class, 'destroy'])->name('admin.candidate.destroy');
         Route::prefix('list-soft-deletes')->group(function () {
             Route::get('', [CandidateController::class, 'listRecordSoftDeletes'])->name('admin.candidate.list.soft.deletes');

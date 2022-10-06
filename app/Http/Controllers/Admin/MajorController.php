@@ -224,10 +224,12 @@ class MajorController extends Controller
     }
     public function skill($slug)
     {
+
         $listSkill = Skill::all();
         $major = $this->getList()->where('slug', $slug)->first();
-        $skills = $this->getList()->where('slug', $slug)->first()->skill()->paginate(6);
+        $skills = $this->getList()->where('slug', $slug)->first()->skill()->paginate(request('limit') ?? 6);
         $parentSkill = $this->getList()->where('slug', $slug)->first()->skill()->get();
+
         return view('pages.major.skill', compact('skills', 'major', 'listSkill', 'parentSkill'));
     }
     public function detachSkill($slug, $skill_id)

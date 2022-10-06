@@ -241,7 +241,7 @@ class RecruitmentController extends Controller
     {
         $data = $this->modulesRecruitment->getList($request)->withCount(['contest'])->get();
         if (!$data) abort(404);
-        $data->load(['enterprise'])->makeHidden([
+        $data->load(['enterprise:id,name,logo'])->makeHidden([
             'description', 'contest',
             'deleted_at'
         ]);

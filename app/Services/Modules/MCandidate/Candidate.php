@@ -5,6 +5,7 @@ namespace App\Services\Modules\MCandidate;
 use App\Models\Candidate as ModelsCandidate;
 use App\Services\Traits\TUploadImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class Candidate
 {
@@ -17,23 +18,23 @@ class Candidate
     }
     public function getList(Request $request)
     {
-        $keyword = $request->has('keyword') ? $request->keyword : "";
-        $orderBy = $request->has('orderBy') ? $request->orderBy : 'id';
+        $orderBy = $request->has('orderBy') ? $request->orderBy : 'created_at';
         $startTime = $request->has('startTime') ? $request->startTime : null;
         $endTime = $request->has('endTime') ? $request->endTime : null;
         $code_recruitment = $request->has('post_id') ? $request->post_id : null;
         $sortBy = $request->has('sortBy') ? $request->sortBy : "desc";
         $softDelete = $request->has('candidate_soft_delete') ? $request->candidate_soft_delete : null;
         if ($softDelete != null) {
-            $query = $this->candidate::onlyTrashed()->where('name', 'like', "%$keyword%")->orderByDesc('deleted_at');
+            $query = $this->candidate::onlyTrashed()->orderByDesc('deleted_at');
             return $query;
         }
-        $query = $this->candidate::where('name', 'like', "%$keyword%");
+        $query = $this->candidate::whereRaw('id IN (select MAX(id) FROM candidates GROUP BY email,post_id)');
+
         if ($endTime != null && $startTime != null) {
-            $query->where('created_at', '>=', \Carbon\Carbon::parse(request('startTime'))->toDateTimeString())->where('created_at', '<=', \Carbon\Carbon::parse(request('endTime'))->toDateTimeString());
+            $query->where('crepated_at', '>=', \Carbon\Carbon::parse(request('startTime'))->toDateTimeString())->where('created_at', '<=', \Carbon\Carbon::parse(request('endTime'))->toDateTimeString());
         }
         if ($sortBy == "desc") {
-            $query->orderByDesc($orderBy);
+            $query->orderByDesc('created_at');
         } else {
             $query->orderBy($orderBy);
         }
@@ -44,7 +45,11 @@ class Candidate
     }
     public function index(Request $request)
     {
-        return $this->getList($request)->paginate(request('limit') ?? 10);
+        return $this->getList($request)->with('post:id,code_recruitment,slug')->paginate(request('limit') ?? 10);
+    }
+    public function listCvUser($request)
+    {
+        return $this->candidate::with('post:id,code_recruitment,slug')->where('post_id', $request->post_id)->where('email', $request->email)->paginate(request('limit') ?? 10);
     }
     public function store($request)
     {

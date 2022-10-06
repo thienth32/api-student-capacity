@@ -299,7 +299,7 @@ class PostController extends Controller
     public function apiShow(Request $request)
     {
         $data = $this->modulesPost->getList($request)->paginate(request('limit') ?? config('util.HOMEPAGE_ITEM_AMOUNT'));
-        $data->load(['postable:id,name', 'postable.enterprise:id,name,logo', 'user:id,name,email']);
+        $data->load(['postable:id,name', 'postable.enterprise:name,logo,link_web', 'user:id,name,email']);
         if (!$data) abort(404);
         return $this->responseApi(
             true,

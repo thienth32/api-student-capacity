@@ -7,7 +7,7 @@
             <div class="col-lg-12">
                 <ol class="breadcrumb text-muted fs-6 fw-bold">
                     <li class="breadcrumb-item pe-3">
-                        <a href="{{ route('admin.post.list') }}" class="pe-3">Thông tin ứng tuyển</a>
+                        <a href="{{ route('admin.candidate.list') }}" class="pe-3">Thông tin ứng tuyển</a>
                     </li>
                     <li class="breadcrumb-item pe-3">
                         <a href="{{ route('admin.post.detail', ['slug' => $data->post->slug]) }}" class="pe-3">Mã tuyển dụng

@@ -351,10 +351,11 @@ class RoundController extends Controller
     // chi tiết doanh nghiệp
     public function roundDetailEnterprise($id)
     {
+
         if (!($round = $this->round->find($id)->load('Donor')->Donor()->paginate(6))) {
             return abort(404);
         }
-
+        // dd($round);
         $enterprise = Enterprise::all();
         return view('pages.round.detail.enterprise', ['round' => $round, 'roundDeltai' => $this->round->find($id), 'enterprise' => $enterprise]);
     }
@@ -403,7 +404,7 @@ class RoundController extends Controller
         try {
             // dd(Round::find($id)->load('Enterprise')->Enterprise->id);
             foreach ($request->enterprise_id as $item) {
-                $data = $donor::where('contest_id', $this->round::find($id)->load('Enterprise')->Enterprise->id)
+                $data = $donor::where('contest_id', $this->round::find($id)->load('enterprise_contest:id')->enterprise_contest->id)
                     ->where('enterprise_id', $item)
                     ->first();
                 if ($data != null) {
@@ -414,7 +415,7 @@ class RoundController extends Controller
                     return redirect()->back();
                 }
                 $data = Donor::create([
-                    'contest_id' => Round::find($id)->load('Enterprise')->Enterprise->id,
+                    'contest_id' => Round::find($id)->load('enterprise_contest:id')->enterprise_contest->id,
                     'enterprise_id' => $item,
                 ]);
                 $donorRound::create([
@@ -713,11 +714,15 @@ class RoundController extends Controller
 
     public function roundDetailTeamJudge($id, $teamId)
     {
+
         try {
             $round = $this->round::find($id);
             $team = Team::where('id', $teamId)->first();
             $takeExam = RoundTeam::where('round_id', $id)->where('team_id', $teamId)->first()->takeExam;
-            if ($takeExam != null) {
+
+
+            if ($takeExam != null && count($takeExam->evaluation) > 0) {
+
                 foreach ($takeExam->evaluation as $key => $item) {
                     $data[$key] = $item->id;
                 }
@@ -741,7 +746,7 @@ class RoundController extends Controller
                 ]
             );
         } catch (\Throwable $th) {
-            return abort(404);
+            abort(404);
         }
     }
 
