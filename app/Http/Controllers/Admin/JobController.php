@@ -22,35 +22,56 @@ class JobController extends Controller
         $data['exams'] = $this->examRepo->getCapacityPlayGameOnline();
         $data['jobs_in_process'] = [
             'id' => '_inprocess',
-            'title' => 'Đang chờ'
+            'title' => 'Đang chờ',
+            'class' => 'alert,alert-info',
+            "dragTo" => ['_working'],
         ];
         $data['jobs_in_error'] = [
             'id' => '_error',
-            'title' => 'Công việc lỗi <a href="' . route('admin.job.destroy') . '" class="btn btn-danger">Xóa toàn bộ</a>'
+            'class' => 'alert,alert-danger',
+            "dragTo" => [],
+            'title' => 'Công việc lỗi <a href="' . route('admin.job.destroy') . '" class="text-danger">Xóa toàn bộ</a>'
         ];
         $data['jobs_in_working'] = [
             'id' => '_working',
+            'class' => 'alert,alert-success',
+            "dragTo" => ['_error'],
             'title' => 'Công việc đang chạy'
         ];
         $data['jobs_in_process']['item'] = JobQueue::where('status', 0)->get()->map(function ($q) {
             $config = json_decode($q->config);
             return [
-                'title' => $config->model
+                'title' => $config->model . " TIME : " . $q->on_date,
+                'id' => $q->id
             ];
         });
         $data['jobs_in_working']['item'] = JobQueue::where('status', 1)->get()->map(function ($q) {
             $config = json_decode($q->config);
             return [
-                'title' => $config->model
+                'title' => $config->model . " TIME : " . $q->on_date,
+                'id' => $q->id
             ];
         });
         $data['jobs_in_error']['item'] = JobQueue::where('status', 3)->get()->map(function ($q) {
             $config = json_decode($q->config);
             return [
-                'title' => $config->model . " -Error :" . $q->error
+                'title' => $config->model . " -Error :" . $q->error,
+                'id' => $q->id
             ];
         });
         return view('pages.job.index', $data);
+    }
+
+    public function updateStatusJob(Request $request)
+    {
+        try {
+            JobQueue::find($request->id)->update([
+                'status' => $request->status
+            ]);
+            return true;
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
 
     public function destroy()

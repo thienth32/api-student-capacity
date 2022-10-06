@@ -136,6 +136,9 @@
     <script src="assets/plugins/custom/ckeditor/ckeditor-balloon-block.bundle.js"></script>
     <script src="assets/plugins/custom/ckeditor/ckeditor-document.bundle.js"></script>
     <script>
+        const _token = "{{ csrf_token() }}";
+    </script>
+    {{-- <script>
         ClassicEditor
             .create(document.querySelector('#kt_docs_ckeditor_classic'), {
                 ckfinder: {
@@ -148,7 +151,7 @@
             .catch(error => {
                 console.error(error);
             });
-    </script>
+    </script> --}}
     <link href="assets/plugins/custom/jkanban/jkanban.bundle.css" rel="stylesheet" type="text/css" />
     <script src="assets/plugins/custom/jkanban/jkanban.bundle.js"></script>
     <script>
@@ -156,10 +159,44 @@
             element: '#kt_docs_jkanban_basic',
             gutter: '0',
             widthBoard: '30%',
+            dragBoards: false,
             boards: [@json($jobs_in_process), @json($jobs_in_working), @json($jobs_in_error)],
             dropEl: function(el, target, source, sibling) {
-                console.log($(el).data('data'));
-                console.log($(target).parent('.kanban-board').data('id'));
+                var id = $(el).data('eid');
+                var type = $(target).parent('.kanban-board').data('id');
+                var typeMe = $(source).parent('.kanban-board').data('id');
+                var flag = false;
+                if (typeMe == "_inprocess" && type == "_working") {
+                    flag = true;
+                    var status = 1;
+                }
+                if (typeMe == "_working" && type == "_error") {
+                    flag = true;
+                    var status = 3;
+                }
+                if (flag) {
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ route('admin.job.status') }}",
+                        data: {
+                            _token: _token,
+                            id: id,
+                            status: status
+                        },
+                        success: function(response) {
+
+                            if (response == false) {
+                                toastr.error('Không cập nhật được trạng thái !');
+                                return;
+                            } else {
+                                toastr.success('Thành công  !');
+                            }
+                        },
+                        error: function(error) {
+                            alert('Đã xảy ra lỗi !!!');
+                        }
+                    });
+                }
             },
         });
     </script>

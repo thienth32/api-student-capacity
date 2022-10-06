@@ -431,6 +431,7 @@ Route::group([
         Route::get('', [JobController::class, 'index'])->name('admin.job');
         Route::post('store', [JobController::class, 'store'])->name('admin.job.store');
         Route::get('destroy-error', [JobController::class, 'destroy'])->name('admin.job.destroy');
+        Route::post('update-status', [JobController::class, 'updateStatusJob'])->name('admin.job.status');
     });
 });
 
