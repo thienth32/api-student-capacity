@@ -46,7 +46,7 @@
                     <select id="select-status" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
                         data-hide-search="true" tabindex="-1" aria-hidden="true">
                         <option value="3" @selected(!request()->has('status'))>Chọn tình trạng</option>
-                        <option @selected(request('status') == 1) value="1">Kích họat
+                        <option @selected(request('status') == 1) value="1">Kích hoạt
                         </option>
                         <option @selected(request()->has('status') && request('status') == 0) value="0">Không kích hoạt
                         </option>
