@@ -62,7 +62,7 @@ class Exam implements MExamInterface
                 return $q->search(request()->q ?? null, ['name', 'room_code', 'description']);
             })
             ->with($with)
-            ->orderBy('id', 'desc')
+            ->orderBy('status', 'asc')
             ->paginate(request('limit') ?? 5);
     }
 
@@ -101,5 +101,13 @@ class Exam implements MExamInterface
     public function attachQuestion($id, $questionsId)
     {
         return $this->model::find($id)->questions()->attach([$questionsId]);
+    }
+
+    public function getCapacityPlayGameOnline()
+    {
+        return $this->model::where('status', 1)
+            ->whereNull('round_id')
+            ->whereNull('room_token')
+            ->get();
     }
 }

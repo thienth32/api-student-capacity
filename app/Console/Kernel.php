@@ -13,6 +13,8 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         $schedule->command('contest:end')
             ->everyMinute();
+        $schedule->command('work:job')
+            ->everyMinute();
     }
 
 

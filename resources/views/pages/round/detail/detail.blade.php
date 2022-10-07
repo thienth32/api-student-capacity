@@ -217,8 +217,8 @@
                                         <tr class="fw-bolder fs-6 text-gray-800">
                                             <th>#</th>
                                             <th>Tên đội</th>
-                                            <th>Bài làm</th>
-                                            @hasanyrole(config('util.ROLE_ADMINS') . '|judge')
+                                            {{-- <th>Bài làm</th> --}}
+                                            @hasanyrole('judge')
                                                 <th>
                                                     Chấm bài
                                                 </th>
@@ -239,12 +239,12 @@
                                                         href="{{ route('admin.round.detail.team.detail', ['id' => $round->id, 'teamId' => $team->id]) }}">
                                                         {{ $team->name }}</a></td>
 
-                                                <td>
+                                                {{-- <td>
                                                     <a href="{{ route('admin.round.detail.team.takeExam', ['id' => $round->id, 'teamId' => $team->id]) }}"
                                                         class="badge bg-primary p-3"> Xem thêm.
                                                     </a>
-                                                </td>
-                                                @hasanyrole(config('util.ROLE_ADMINS') . '|judge')
+                                                </td> --}}
+                                                @hasanyrole('judge')
                                                     <td>
                                                         <a class="badge bg-primary p-3"
                                                             href="{{ route('admin.round.detail.team.make.exam', ['id' => $round->id, 'teamId' => $team->id]) }}">Chấm

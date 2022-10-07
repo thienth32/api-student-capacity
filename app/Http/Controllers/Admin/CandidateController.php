@@ -41,9 +41,20 @@ class CandidateController extends Controller
     }
     public function detail($id)
     {
+        if (!$id) return abort(404);
         $data = $this->candidate::find($id);
 
         return view('pages.candidate.detail', compact('data'));
+    }
+    public function listCvUser(Request $request)
+    {
+        try {
+            if (!$request->has('post_id') || !$request->has('email')) return abort(404);
+            $candidates = $this->MCandidate->listCvUser($request);
+            return view('pages.candidate.list-cv-user', compact('candidates'));
+        } catch (\Throwable $th) {
+            return abort(404);
+        }
     }
     public function destroy($id)
     {
@@ -149,17 +160,12 @@ class CandidateController extends Controller
         if ($validator->fails()) return $this->responseApi(false, $validator->errors());
         $addCandidate =   $this->MCandidate->store($request);
         if (!$addCandidate) return $this->responseApi(false, ' Lỗi upload CV !');
-
         $sizeFile = Storage::disk('s3')->size($addCandidate->file_link);
-
         $sizeFileFormat =  number_format($sizeFile / 1048576, 2);
-
+        $addCandidate['file_link'] = Storage::disk('s3')->temporaryUrl($addCandidate->file_link, now()->addMinutes(5));
         $addCandidate['sizeFile'] = $sizeFileFormat;
-
         $email = new SendMailUploadCV($addCandidate);
-
         dispatch($email);
-
         return $this->responseApi(true, 'Thành công !', ['data' => $addCandidate]);
     }
     public function ApiDetailCandidate($id)

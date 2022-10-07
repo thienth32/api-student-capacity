@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 class RequestsPost extends FormRequest
 {
 
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -25,7 +26,6 @@ class RequestsPost extends FormRequest
      */
     public function rules()
     {
-
         $ruleTitle = 'required|max:255|unique:posts,title';
         $ruleSlug =  'required|unique:posts,slug';
         $ruleCodeRecruiment = 'required|max:20|regex:/^[0-9a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễếệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\ ]+$/u|unique:posts,code_recruitment';
@@ -49,8 +49,8 @@ class RequestsPost extends FormRequest
                         return $fail('Trường chỉ áp dụng với bài viết tuyển dụng');
                     }
                 },
-            'content' => request()->content ? 'required' : '',
-            'link_to' => request()->link_to ? 'required' : '',
+            'content' => request()->content != null  ? 'required' : '',
+            'link_to' => request()->link_to != null  ? 'required' : '',
         ];
 
         if (!$this->route()->id || $this->has('image_url'))  $rule = array_merge($rule, [
