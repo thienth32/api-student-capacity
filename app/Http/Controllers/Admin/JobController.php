@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Job\JobRequest;
 use App\Jobs\GameTypePlay;
+use App\Jobs\SendMailQueue;
+use App\Mail\FinnalPass;
 use App\Models\JobQueue;
 use App\Services\Modules\MExam\MExamInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class JobController extends Controller
 {
@@ -26,6 +29,8 @@ class JobController extends Controller
 
     public function index()
     {
+
+
         $data = [];
         $data['exams'] = $this->examRepo->getCapacityPlayGameOnline();
         $data['jobs_in_process'] = [
@@ -96,9 +101,9 @@ class JobController extends Controller
     public function store(JobRequest $request)
     {
         $dataJobs = $this->getEIdJob();
-        if (in_array($this->exam_code, $dataJobs)) return redirect()->back()->with("error", "Đã có công việc !");
+        if (in_array($this->exam_code ?? "", $dataJobs)) return redirect()->back()->with("error", "Đã có công việc !");
         $dataCreate = [
-            "status" => 1
+            "status" => request()->status,
         ];
         $dataCreate['on_date'] = $request->on_date;
         $dataCreate['token_queue'] = uniqid();
@@ -121,6 +126,15 @@ class JobController extends Controller
                     "time" => $request->time
                 ]);
                 dispatch(new GameTypePlay($request->exam_code, "GAME_TYPE_2", $request->time, $dataCreate['token_queue']))->onQueue($dataCreate['token_queue']);
+                break;
+
+            case 'send_mail':
+                $dataCreate['config'] = json_encode([
+                    "model" => "SEND MAIL",
+                    "id" => $request->subject,
+                ]);
+                dispatch(new SendMailQueue($dataCreate['token_queue'], request()->mails, request()->subject, request()->content, trim(request()->cc) == "" ? [] : explode(',', request()->cc)))
+                    ->onQueue($dataCreate['token_queue']);
                 break;
             default:
                 abort(404);

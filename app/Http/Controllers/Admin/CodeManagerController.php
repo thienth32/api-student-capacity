@@ -110,14 +110,14 @@ class CodeManagerController extends Controller
         $challenge = Challenge::whereId($id)
             ->with(
                 [
-                    'type_test' => function ($q) use ($status_type_code) {
-                        if ($status_type_code) return $q;
-                        return $q
-                            ->where("status", 1);
-                    },
-                    'has_cod' => function ($q) use ($type_id) {
-                        return $q->where('type_id', $type_id);
-                    }
+                    // 'type_test' => function ($q) use ($status_type_code) {
+                    //     if ($status_type_code) return $q;
+                    //     return $q
+                    //         ->where("status", 1);
+                    // },
+                    // 'has_cod' => function ($q) use ($type_id) {
+                    //     return $q->where('type_id', $type_id);
+                    // }
                 ]
             )
             ->first();

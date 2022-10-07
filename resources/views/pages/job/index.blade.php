@@ -16,19 +16,23 @@
         <div class="form">
             <ul class="nav nav-tabs nav-line-tabs mb-5 fs-6">
                 <li class="nav-item">
-                    <a class="nav-link active" data-bs-toggle="tab" href="#kt_tab_pane_2_A">Trò chơi đánh giá trực tuyến tự
+                    <a class="nav-link active " data-bs-toggle="tab" href="#kt_mail">Gửi mail
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " data-bs-toggle="tab" href="#kt_tab_pane_2_A">Trò chơi đánh giá trực tuyến tự
                         động</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link  " data-bs-toggle="tab" href="#kt_tab_pane_2_B">Trò chơi đánh giá trực tuyến
-                        điều
+                    <a class="nav-link  " data-bs-toggle="tab" href="#kt_tab_pane_2_B">Trò chơi đánh giá trực tuyến điều
                         khiển</a>
                 </li>
+
             </ul>
 
             <div class="tab-content" id="myTabContent">
 
-                <div class="tab-pane   active" id="kt_tab_pane_2_A" role="tabpanel">
+                <div class="tab-pane   " id="kt_tab_pane_2_A" role="tabpanel">
                     <form action="{{ route('admin.job.store') }}" method="POST">
                         @csrf
                         <input type="hidden" name="type" value="game_type_1">
@@ -50,6 +54,18 @@
                             @enderror
                         </div>
                         <div class="form-group mb-10">
+                            <label for="" class="form-label">Trạng thái </label>
+                            <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                                data-hide-search="false" tabindex="-1" aria-hidden="true" name="status"
+                                value="{{ old('skill') }}">
+                                <option value="1" selected> Trạng thái chạy </option>
+                                <option value="0"> Trạng thái chờ </option>
+                            </select>
+                            @error('status')
+                                <p class="text-danger">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div class="form-group mb-10">
                             <label for="" class="form-label">Chọn thời gian trò chơi hoạt động (Phút)</label>
                             <input value="{{ old('time') }}" type="number" class="form-control" name="time">
                             @error('time')
@@ -60,7 +76,7 @@
                             <label for="" class="form-label">Thời gian bắt đầu </label>
                             <input class="form-control form-control-solid" placeholder="Pick date rage"
                                 id="kt_daterangepicker_3" />
-                            @error('time')
+                            @error('on_date')
                                 <p class="text-danger">{{ $message }}</p>
                             @enderror
                         </div>
@@ -93,6 +109,18 @@
                             @enderror
                         </div>
                         <div class="form-group mb-10">
+                            <label for="" class="form-label">Trạng thái </label>
+                            <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                                data-hide-search="false" tabindex="-1" aria-hidden="true" name="status"
+                                value="{{ old('skill') }}">
+                                <option value="1" selected> Trạng thái chạy </option>
+                                <option value="0"> Trạng thái chờ </option>
+                            </select>
+                            @error('status')
+                                <p class="text-danger">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div class="form-group mb-10">
                             <label for="" class="form-label">Chọn thời gian mỗi câu hỏi (Giây)</label>
                             <input value="{{ old('time') }}" type="number" class="form-control" name="time">
                             @error('time')
@@ -103,7 +131,7 @@
                             <label for="" class="form-label">Thời gian bắt đầu </label>
                             <input class="form-control form-control-solid" placeholder="Pick date rage"
                                 id="kt_daterangepicker_4" />
-                            @error('time')
+                            @error('on_date')
                                 <p class="text-danger">{{ $message }}</p>
                             @enderror
                         </div>
@@ -113,8 +141,68 @@
                     </form>
 
                 </div>
-                <div class="tab-pane fade" id="kt_tab_pane_3" role="tabpanel">
-                    Sint sit mollit irure quis est nostrud cillum consequat Lorem esse do quis dolor esse fugiat sunt do.
+
+                <div class="tab-pane active" id="kt_mail" role="tabpanel">
+                    <div class="p-2">
+                        <form action="{{ route('admin.job.store') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="type" value="send_mail">
+                            <input type="hidden" id="send_mail" name="on_date">
+                            <div class="form-group mb-10">
+                                <label for="" class="form-label">Danh sách email nhận </label>
+                                <input value="{{ old('mail') }}" type="text" class="form-control" name="mails"
+                                    placeholder="Mail gửi cách nhau bằng dấu , ">
+                                @error('mails')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <div class="form-group mb-10">
+                                <label for="" class="form-label">Tiêu đề gửi mail </label>
+                                <input value="{{ old('subject') }}" type="text" class="form-control" name="subject"
+                                    placeholder="Tiêu đề gửi mail ">
+                                @error('subject')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div class="form-group mb-10">
+                                <label for="" class="form-label">Nội dung gửi mail </label>
+                                <textarea name="content" id="kt_docs_ckeditor_classic"> {{ old('content') }}</textarea>
+                                @error('content')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div class="form-group mb-10">
+                                <label class="form-label">CC</label>
+                                <input class="form-control form-control-solid" name="cc" value=""
+                                    placeholder="Có thể để trống !" />
+                            </div>
+                            <div class="form-group mb-10">
+                                <label for="" class="form-label">Thời gian bắt đầu </label>
+                                <input class="form-control form-control-solid" placeholder="Pick date rage"
+                                    id="kt_daterangepicker_5" />
+                                @error('on_date')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <div class="form-group mb-10">
+                                <label for="" class="form-label">Trạng thái </label>
+                                <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                                    data-hide-search="false" tabindex="-1" aria-hidden="true" name="status"
+                                    value="{{ old('skill') }}">
+                                    <option value="1" selected> Trạng thái chạy </option>
+                                    <option value="0"> Trạng thái chờ </option>
+                                </select>
+                                @error('status')
+                                    <p class="text-danger">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <div class="form-group mb-10">
+                                <button class="btn btn-primary">Lưu</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
 
             </div>
@@ -138,7 +226,7 @@
     <script>
         const _token = "{{ csrf_token() }}";
     </script>
-    {{-- <script>
+    <script>
         ClassicEditor
             .create(document.querySelector('#kt_docs_ckeditor_classic'), {
                 ckfinder: {
@@ -151,7 +239,7 @@
             .catch(error => {
                 console.error(error);
             });
-    </script> --}}
+    </script>
     <link href="assets/plugins/custom/jkanban/jkanban.bundle.css" rel="stylesheet" type="text/css" />
     <script src="assets/plugins/custom/jkanban/jkanban.bundle.js"></script>
     <script>
@@ -184,7 +272,6 @@
                             status: status
                         },
                         success: function(response) {
-
                             if (response == false) {
                                 toastr.error('Không cập nhật được trạng thái !');
                                 return;
@@ -226,6 +313,19 @@
             },
         }, function(start, end, label) {
             $('#game_type_2').val(moment(start).format('YYYY/MM/DD HH:mm:ss'));
+        });
+        $("#kt_daterangepicker_5").daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            timePicker: true,
+            timePicker24Hour: true,
+            minDate: moment().startOf("hour"),
+            maxYear: parseInt(moment().format("YYYY"), 10),
+            locale: {
+                format: "YYYY/MM/DD HH:mm:ss",
+            },
+        }, function(start, end, label) {
+            $('#send_mail').val(moment(start).format('YYYY/MM/DD HH:mm:ss'));
         });
         $('input').on('change', function() {
             $('.text-danger').hide();
