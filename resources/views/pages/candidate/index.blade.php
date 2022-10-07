@@ -78,7 +78,7 @@
                     <div class="mb-0">
                         <label class="form-label">Thời gian ứng tuyển </label>
                         <div id="reportrange"
-                            style="background: #fff; cursor: pointer; padding: 10px 10px; border: 1px solid #ccc; width: 100%">
+                            style="background: #fff; cursor: pointer; padding: 10px 10px; border: 1px solid #e4e6ef ; width: 100%; border-radius: 7px">
                             <i class="fa fa-calendar"></i>&nbsp;
                             <span></span> <i class="fa fa-caret-down"></i>
                         </div>
@@ -134,11 +134,8 @@
                             <th scope="col">Thông tin ứng viên
                             </th>
                             <th scope="col">Thời gian ứng tuyển
-                                <a
-                                    href="{{ route('admin.candidate.list', [
-                                        'sortBy' => request()->has('sortBy') ? (request('sortBy') == 'desc' ? 'asc' : 'desc') : 'asc',
-                                        'orderBy' => 'created_at',
-                                    ]) }}">
+                                <a data-href="{{ request()->has('sortBy') ? (request('sortBy') == 'desc' ? 'asc' : 'desc') : 'asc' }}"
+                                    data-order="created_at" id="time_candidate">
                                     <span role="button" data-key="name" data-bs-toggle="tooltip"
                                         title="Lọc theo thời gian ứng tuyển "
                                         class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
@@ -174,7 +171,8 @@
                             </th>
                             <th scope="col"> Tải CV
                             </th>
-
+                            <th scope="col"> Các CV đã tải trước đó
+                            </th>
                             <th class="text-center" colspan="2">
 
                             </th>
@@ -244,7 +242,14 @@
                                         xuống</a>
 
                                 </td>
+                                <td>
+                                    <a class="btn btn-info btn-sm"
+                                        href="{{ route('admin.candidate.listCvUser', ['post_id' => $key->post_id, 'email' => $key->email]) }}">
+                                        Upload tổng
+                                        {{ $key->countCv($key->email, $key->post_id) }} file
+                                    </a>
 
+                                </td>
                                 <td>
                                     <div data-bs-toggle="tooltip" title="Thao tác " class="btn-group dropstart">
                                         <button type="button" class="btn   btn-sm dropdown-toggle"

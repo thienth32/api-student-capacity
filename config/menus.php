@@ -210,6 +210,12 @@ return [
                 "param" => '',
                 "link" => "admin.acount.list",
             ],
+            [
+                "name" => "Quản lý công việc ",
+                "role" => $ROLE_HAS_ADMINS,
+                "param" => '',
+                "link" => "admin.job",
+            ],
         ]
     ], // Cau hinh
 ];

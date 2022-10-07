@@ -116,8 +116,11 @@
                                 @error('image')
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
+                                {{-- <img class="w-100 mt-4 border rounded-3" id="image-preview"
+                                    src="{{ Storage::disk('s3')->has($team->image) ? Storage::disk('s3')->temporaryUrl($team->image, now()->addMinutes(5)) : 'https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg' }} " /> --}}
                                 <img class="w-100 mt-4 border rounded-3" id="image-preview"
-                                    src="{{ Storage::disk('s3')->has($team->image) ? Storage::disk('s3')->temporaryUrl($team->image, now()->addMinutes(5)) : 'https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg' }} " />
+                                    src="{{ $team->image ?? 'https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg' }} " />
+
                             </div>
                         </div>
                     </div>

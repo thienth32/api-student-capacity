@@ -11,8 +11,7 @@
                             <a href="{{ route('admin.contest.list') }}" class="pe-3">Cuộc thi </a>
                         </li>
                         <li class="breadcrumb-item px-3 ">
-                            <a href="{{ route('admin.contest.show', ['id' => $round->contest->id]) }}"
-                                class="pe-3">
+                            <a href="{{ route('admin.contest.show', ['id' => $round->contest->id]) }}" class="pe-3">
                                 {{ $round->contest->name }}
                             </a>
                         </li>
@@ -96,24 +95,30 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
+                                                            @if ($historyPoint != null)
+                                                                @foreach ($historyPoint as $item)
+                                                                    <tr>
+                                                                        <td></td>
 
-                                                            @foreach ($historyPoint as $item)
+                                                                        <td>
+                                                                            {{ $item->user->email }}
+                                                                        </td>
+                                                                        <td> {{ $item->user->name }}</td>
+
+                                                                        <td>{{ $item->point }}</td>
+                                                                        <td>{{ $item->reason }}</td>
+                                                                        <td> {{ date('d-m-Y H:i:s', strtotime($item->created_at)) }}
+                                                                            <br>
+                                                                            {{ \Carbon\Carbon::parse($item->created_at)->diffforHumans() }}
+                                                                        </td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            @else
                                                                 <tr>
                                                                     <td></td>
-
-                                                                    <td>
-                                                                        {{ $item->user->email }}
-                                                                    </td>
-                                                                    <td> {{ $item->user->name }}</td>
-
-                                                                    <td>{{ $item->point }}</td>
-                                                                    <td>{{ $item->reason }}</td>
-                                                                    <td> {{ date('d-m-Y H:i:s', strtotime($item->created_at)) }}
-                                                                        <br>
-                                                                        {{ \Carbon\Carbon::parse($item->created_at)->diffforHumans() }}
-                                                                    </td>
+                                                                    <td> Chưa có lịch sử thay đổi điểm</td>
                                                                 </tr>
-                                                            @endforeach
+                                                            @endif
                                                         </tbody>
                                                     </table>
 
@@ -131,24 +136,31 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
+                                                            @if ($historyPoint2 != null)
+                                                                @foreach ($historyPoint2 as $item)
+                                                                    <tr>
+                                                                        <td></td>
 
-                                                            @foreach ($historyPoint2 as $item)
+                                                                        <td>
+                                                                            {{ $item->user->email }}
+                                                                        </td>
+                                                                        <td> {{ $item->user->name }}</td>
+
+                                                                        <td>{{ $item->point }}</td>
+                                                                        <td>{{ $item->reason }}</td>
+                                                                        <td> {{ date('d-m-Y H:i:s', strtotime($item->created_at)) }}
+                                                                            <br>
+                                                                            {{ \Carbon\Carbon::parse($item->created_at)->diffforHumans() }}
+                                                                        </td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            @else
                                                                 <tr>
                                                                     <td></td>
-
-                                                                    <td>
-                                                                        {{ $item->user->email }}
-                                                                    </td>
-                                                                    <td> {{ $item->user->name }}</td>
-
-                                                                    <td>{{ $item->point }}</td>
-                                                                    <td>{{ $item->reason }}</td>
-                                                                    <td> {{ date('d-m-Y H:i:s', strtotime($item->created_at)) }}
-                                                                        <br>
-                                                                        {{ \Carbon\Carbon::parse($item->created_at)->diffforHumans() }}
-                                                                    </td>
+                                                                    <td> Chưa có lịch sử thay đổi điểm</td>
                                                                 </tr>
-                                                            @endforeach
+
+                                                            @endif
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -215,15 +227,16 @@
                                                     value=" {{ $judgesResult->exam->ponit }}">
                                                 <div class="mb-3">
                                                     <label for="" class="form-label"> Điểm trung bình:</label>
-                                                    <input type="number" min="0" max="10" step="0.1" size="5"
+                                                    <input type="number" min="0" max="10" step="0.1"
+                                                        size="5"
                                                         value="{{ $judgesResult->final_point ?? round($tong / count($judgesResult->evaluation), 2) }}"
-                                                        class="form-control" name="final_point" id="" placeholder="">
+                                                        class="form-control" name="final_point" id=""
+                                                        placeholder="">
 
                                                 </div>
                                                 <div id="mark_comment" class="mb-3">
-                                                    <textarea style="display:none" size="5" value="" type="text" class="form-control" name="reason" id=""
-                                                        aria-describedby="helpId"
-                                                        placeholder="Lý do thay đổi điểm ( không bắt buộc)"></textarea>
+                                                    <textarea style="display:none" size="5" value="" type="text" class="form-control" name="reason"
+                                                        id="" aria-describedby="helpId" placeholder="Lý do thay đổi điểm ( không bắt buộc)"></textarea>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="" class="form-label">Nhận xét</label>
@@ -241,7 +254,9 @@
                                                             tabindex="-1" aria-hidden="true">
 
                                                             @foreach ($round->contest->rounds as $value)
-                                                                @if ($round->id != $value->id && \Carbon\Carbon::parse($value->start_time)->toDateTimeString() > \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
+                                                                @if ($round->id != $value->id &&
+                                                                    \Carbon\Carbon::parse($value->start_time)->toDateTimeString() >
+                                                                        \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
                                                                     <option value="{{ $value->id }}">
                                                                         {{ $value->name }}
                                                                     </option>
@@ -254,19 +269,22 @@
                                                 </div>
                                                 <div class="form-group mb-10 ">
                                                     @if ($judgesResult->final_point != null)
-                                                        <button type="submit" onsubmit="return confirm('Điểm đã xác nhận. bạn có muốn thay đổi không!')"   name="" id=""
+                                                        <button type="submit"
+                                                            onsubmit="return confirm('Điểm đã xác nhận. bạn có muốn thay đổi không!')"
+                                                            name="" id=""
                                                             class=" btn btn-success btn-lg btn-block">Cập nhật điểm
                                                         </button>
                                                     @else
-                                                        @if(count($judgesResult->evaluation) ==  count($round->judges))
-                                                            <button
-                                                                type="submit" name="" id="submitResult"
+                                                        @if (count($judgesResult->evaluation) == count($round->judges))
+                                                            <button type="submit" name="" id="submitResult"
                                                                 class=" btn btn-success btn-lg btn-block">Xác nhận điểm
                                                             </button>
                                                         @else
-                                                            <p
-                                                                type="button" name="" id="submitResult"
-                                                                class=" btn btn-success btn-lg btn-block">Ban giám khảo chưa hoàn thiện điểm ( {{count($judgesResult->evaluation)  . " / " . count($round->judges)}} )
+                                                            <p type="button" name="" id="submitResult"
+                                                                class=" btn btn-success btn-lg btn-block">Ban giám khảo
+                                                                chưa hoàn thiện điểm (
+                                                                {{ count($judgesResult->evaluation) . ' / ' . count($round->judges) }}
+                                                                )
                                                             </p>
                                                         @endif
                                                     @endif
@@ -275,9 +293,12 @@
                                             </form>
                                         </td>
                                         <td> <label for="" class="form-label"> Trạng thái:
-                                                @if ($judgesResult->status == config('util.TAKE_EXAM_STATUS_COMPLETE') && $judgesResult->final_point >= $judgesResult->exam->ponit)
+                                                @if ($judgesResult->status == config('util.TAKE_EXAM_STATUS_COMPLETE') &&
+                                                    $judgesResult->final_point >= $judgesResult->exam->ponit)
                                                     <span class="badge bg-success  p-3"> Passed </span>
-                                                @elseif($judgesResult->status == config('util.TAKE_EXAM_STATUS_COMPLETE') && $judgesResult->final_point < $judgesResult->exam->ponit && $judgesResult->final_point != null)
+                                                @elseif($judgesResult->status == config('util.TAKE_EXAM_STATUS_COMPLETE') &&
+                                                    $judgesResult->final_point < $judgesResult->exam->ponit &&
+                                                    $judgesResult->final_point != null)
                                                     <span class="badge bg-danger  p-3"> Failed</span>
                                                 @else
                                                     <span class="badge bg-primary p-3"> Chờ xác nhận</span>
@@ -287,10 +308,10 @@
                                 </tbody>
                             </table>
                         @else
-                            <h3>Đội thi chưa có điểm thi !!!</h3>
+                            <h3 style="margin-top:30px">Đội thi chưa có điểm thi !!!</h3>
                         @endif
                     @else
-                        <h3>Đội thi chưa có điểm thi !!!</h3>
+                        <h3 style="margin-top:30px">Đội thi chưa có điểm thi !!!</h3>
                     @endif
                 </div>
             </div>

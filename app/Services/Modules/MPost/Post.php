@@ -123,7 +123,7 @@ class Post
             'slug' => $request->slug,
             'link_to' => $request->link_to ? $request->link_to : null,
             'code_recruitment' => $request->code_recruitment ? $request->code_recruitment : null,
-            'user_id' => auth()->user()->id,
+            'user_id' => $request->user_id != 0 ?  $request->user_id : auth()->user()->id,
         ];
 
         if ($request->has('thumbnail_url')) {
@@ -161,6 +161,7 @@ class Post
         $post->content = $request->content ?  $request->content : null;
         $post->link_to = $request->link_to ?  $request->link_to : null;
         $post->code_recruitment = $request->code_recruitment ? $request->code_recruitment : null;
+        $post->user_id = $request->user_id != 0 ? $request->user_id : auth()->user()->id;
 
         if ($request->has('thumbnail_url')) {
             $fileImage =  $request->file('thumbnail_url');

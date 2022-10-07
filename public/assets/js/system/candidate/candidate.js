@@ -4,6 +4,15 @@ $(document).ready(function () {
         let post_id = $(this).val();
         window.location = UpdateQueryString("post_id", post_id);
     });
+    $("#time_candidate").click(function () {
+        let sortBy = $(this).data("href");
+        let orderBy = $(this).data("order");
+        window.location = UpdateQueryString(
+            "sortBy",
+            sortBy,
+            UpdateQueryString("orderBy", orderBy)
+        );
+    });
     $(function () {
         function getUrlParameter(name) {
             name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");

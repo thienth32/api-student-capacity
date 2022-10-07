@@ -66,9 +66,15 @@
                     <table class="table table-row-dashed table-row-gray-300 gy-7">
                         <thead>
                             <tr class="fw-bolder fs-6 text-gray-800">
-                                <th>#</th>
-                                <th>Ảnh</th>
+                                {{-- <th>Ảnh</th> --}}
                                 <th>Tên đội</th>
+                                <th>Đề bài</th>
+                                <th>Bài làm </th>
+                                <th>Quá trình</th>
+                                <th>Điểm Qua vòng</th>
+                                <th>Điểm thi</th>
+                                <th>Trạng thái</th>
+
                                 <th>Trạng thái làm bài </th>
                                 @if (auth()->user()->hasRole('judge'))
                                     <th>Chấm bài </th>
@@ -86,15 +92,91 @@
                             @endphp
                             @foreach ($roundTeams as $team)
                                 <tr>
-                                    <td>{{ $key++ }}</td>
 
-                                    <td><img class='w-100px'
-                                            src="{{ $team->team->image ? $team->team->image : 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
-                                            {{-- src="{{ Storage::disk('s3')->has($team->image) ? Storage::disk('s3')->temporaryUrl($team->image, now()->addMinutes(5)) : 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}" --}} alt=""></td>
                                     <td> <a
                                             href="{{ route('admin.round.detail.team.detail', ['id' => $round->id, 'teamId' => $team->team->id]) }}">
                                             {{ $team->team->name }}</a>
                                     </td>
+                                    <td>
+                                        {{-- <a href="{{ route('dowload.file') }}?url={{ $team->takeExam->exam->external_url }}" --}}
+                                        @if ($team->takeExam)
+                                            <a href="{{ $team->takeExam->exam->external_url }}"
+                                                class="badge bg-primary p-3">Tải về</a>
+                                        @else
+                                            <span class="badge bg-primary p-3"> Chưa có bài </span>
+                                        @endif
+
+                                    </td>
+                                    <td>
+                                        @if ($team->takeExam)
+                                            @if ($team->takeExam->status == config('util.TAKE_EXAM_STATUS_UNFINISHED'))
+                                                <span class="badge bg-primary p-3"> Chưa có bài </span>
+                                            @elseif($team->takeExam->status == config('util.TAKE_EXAM_STATUS_CANCEL'))
+                                                <span class="badge bg-danger  p-3"> Bài thi bị hủy </span>
+                                            @else
+                                                @if ($team->takeExam->file_url)
+                                                    <a href="{{ route('dowload.file') }}?url={{ $team->takeExam->file_url }}"
+                                                        class="badge bg-primary p-3">Tải về</a>
+                                                @endif
+                                                @if ($team->takeExam->result_url != null)
+                                                    <a href="{{ $team->takeExam->result_url }}"
+                                                        class="badge bg-primary p-3">Link bài làm </a>
+                                                @endif
+                                            @endif
+                                        @else
+                                            <span class="badge bg-primary p-3"> Chưa có bài </span>
+                                        @endif
+
+                                    </td>
+                                    <td>
+                                        @if ($team->takeExam)
+                                            @if ($team->takeExam->status == config('util.TAKE_EXAM_STATUS_UNFINISHED'))
+                                                <span class="badge bg-success  p-3"> Đang làm bài </span>
+                                            @elseif($team->takeExam->status == config('util.TAKE_EXAM_STATUS_COMPLETE'))
+                                                <span class="badge bg-success  p-3"> Đã nộp bài </span>
+                                            @else
+                                                <span class="badge bg-danger  p-3"> Đã hủy bài </span>
+                                            @endif
+                                        @else
+                                            <span class="badge bg-primary p-3"> Chưa có bài </span>
+                                        @endif
+
+                                    </td>
+                                    <td>
+                                        @if ($team->takeExam)
+                                            {{ $team->takeExam->exam->ponit }}
+                                        @else
+                                            <span class="badge bg-primary p-3"> Chưa có bài </span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if ($team->takeExam)
+                                            @if ($team->takeExam->status == config('util.TAKE_EXAM_STATUS_COMPLETE'))
+                                                {{ $team->takeExam->final_point ?? 0 }}/{{ $team->takeExam->exam->max_ponit }}
+                                            @else
+                                                0/{{ $team->takeExam->exam->max_ponit }}
+                                            @endif
+                                        @else
+                                            <span class="badge bg-primary p-3"> Chưa có bài </span>
+                                        @endif
+
+                                    </td>
+                                    <td>
+                                        @if ($team->takeExam)
+                                            @if ($team->takeExam->status == config('util.TAKE_EXAM_STATUS_COMPLETE') &&
+                                                $team->takeExam->final_point >= $team->takeExam->exam->ponit)
+                                                <span class="badge bg-success  p-3"> Passed </span>
+                                            @elseif($team->takeExam->status == config('util.TAKE_EXAM_STATUS_COMPLETE') && $team->takeExam->final_point == null)
+                                                <span class="badge bg-success  p-3">Đang đợi điểm</span>
+                                            @else
+                                                <span class="badge bg-danger  p-3"> Failed</span>
+                                            @endif
+                                        @else
+                                            <span class="badge bg-primary p-3"> Chưa có bài </span>
+                                        @endif
+
+                                    </td>
+
                                     <td>
 
                                         @if (isset($team->takeExam) && $team->takeExam->status == 2)

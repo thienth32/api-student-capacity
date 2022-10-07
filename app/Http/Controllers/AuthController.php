@@ -63,7 +63,7 @@ class AuthController extends Controller
 
         $user = User::with('roles')->where('email', $googleUser->email)->first();
         if ($user) {
-            if($user->status == 0 ) return response()->json(
+            if ($user->status == 0) return response()->json(
                 [
                     'status' => false,
                     'payload' => "Xác thực thất bại",
@@ -147,5 +147,4 @@ class AuthController extends Controller
         Auth::logout();
         return redirect(route('login'));
     }
-
 }

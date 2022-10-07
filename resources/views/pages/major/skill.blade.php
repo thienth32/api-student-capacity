@@ -79,23 +79,21 @@
                                     <tr>
                                         <td> {{ (request()->has('page') && request('page') !== 1 ? $skills->perPage() * (request('page') - 1) : 0) + $key + 1 }}
                                         </td>
-                                        <td>{{ $item->short_name }}</td>
+                                        <td>{{ $item['short_name'] }}</td>
                                         <td>{{ $item->name }}</td>
-                                        <td><img class='w-100px'
-                                                src="{{ Storage::disk('s3')->has($item->image_url) ? Storage::disk('s3')->temporaryUrl($item->image_url, now()->addMinutes(5)) : 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
-                                                alt=""></td>
+                                        <td><img class='w-100px' src="{{ $item['image_url'] }}" alt=""></td>
 
                                         <td>
 
                                             <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="modal"
-                                                data-bs-target="#introduce_{{ $item->id }}">
+                                                data-bs-target="#introduce_{{ $item['id'] }}">
                                                 Xem
                                             </button>
 
                                             <!-- Modal -->
-                                            <div class="modal fade" id="introduce_{{ $item->id }}" tabindex="-1"
+                                            <div class="modal fade" id="introduce_{{ $item['id'] }}" tabindex="-1"
                                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog">
+                                                <div class="modal-dialog modal-lg">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title" id="exampleModalLabel"> Giới Thiệu Về
@@ -105,7 +103,7 @@
                                                                 aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body  ">
-                                                            {{ $item->description }}
+                                                            {{ $item['description'] }}
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary"
@@ -117,7 +115,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <a href="{{ route('admin.major.skill.detach', ['slug' => $major->slug, 'skill_id' => $item->id]) }}"
+                                            <a href="{{ route('admin.major.skill.detach', ['slug' => $major->slug, 'skill_id' => $item['id']]) }}"
                                                 class="btn btn-danger btn-sm deleteTeams"><i
                                                     class="fas fa-trash-alt"></i></a>
                                         </td>

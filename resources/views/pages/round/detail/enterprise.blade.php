@@ -11,8 +11,7 @@
                             <a href="{{ route('admin.contest.list') }}" class="pe-3">Cuộc thi </a>
                         </li>
                         <li class="breadcrumb-item px-3 ">
-                            <a href="{{ route('admin.contest.show', ['id' => $roundDeltai->contest->id]) }}"
-                                class="pe-3">
+                            <a href="{{ route('admin.contest.show', ['id' => $roundDeltai->contest->id]) }}" class="pe-3">
                                 {{ $roundDeltai->contest->name }}
                             </a>
                         </li>
@@ -32,8 +31,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <form id="formTeam"
-                    action="{{ route('admin.round.detail.enterprise.attach', ['id' => $roundDeltai->id]) }}"
-                    method="POST">
+                    action="{{ route('admin.round.detail.enterprise.attach', ['id' => $roundDeltai->id]) }}" method="POST">
                     @csrf
                     <label for="" class="form-label">Doanh nghiệp</label>
                     <select multiple class="form-select mb-2 select2-hidden-accessible" data-control="select2"
@@ -86,21 +84,22 @@
                             @foreach ($round as $item)
                                 <tr>
                                     <td>{{ $key++ }}</td>
-                                    <td><img class='w-100px'
+                                    {{-- <td><img class='w-100px'
                                             src="{{ Storage::disk('s3')->has($item->Enterprise->logo) ? Storage::disk('s3')->temporaryUrl($item->Enterprise->logo, now()->addMinutes(5)) : 'https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg' }}"
-                                            alt=""></td>
+                                            alt=""></td> --}}
+                                    <td><img class='w-100px' src="{{ $item->Enterprise->logo }}" alt=""></td>
                                     <td>{{ $item->Enterprise->name }}</td>
                                     <td>
 
-                                        <button class="badge bg-primary" type="button" data-bs-toggle="modal"
+                                        <button class="btn btn-primary" type="button" data-bs-toggle="modal"
                                             data-bs-target="#introduce_{{ $item->Enterprise->id }}">
-                                            Xem thông tin...
+                                            Xem
                                         </button>
 
                                         <!-- Modal -->
-                                        <div class="modal fade" id="introduce_{{ $item->Enterprise->id }}"
-                                            tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
+                                        <div class="modal fade" id="introduce_{{ $item->Enterprise->id }}" tabindex="-1"
+                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="exampleModalLabel"> Giới Thiệu Về

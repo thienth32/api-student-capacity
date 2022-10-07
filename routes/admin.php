@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\SendMailController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EnterpriseController;
+use App\Http\Controllers\Admin\JobController;
 use App\Http\Controllers\admin\KeywordController;
 use App\Http\Controllers\Admin\RecruitmentController;
 use App\Http\Controllers\Admin\PostController;
@@ -96,7 +97,7 @@ Route::prefix('rounds')->group(function () {
                     ->name('admin.round.detail.team.takeExam.update')
                     ->middleware('role_admin');
                 Route::group([
-                    'middleware' => 'role_admin:judge|super admin'
+                    'middleware' => 'role_admin:judge'
                 ], function () {
                     Route::get('{teamId}/make', [RoundController::class, 'roundDetailTeamMakeExam'])->name('admin.round.detail.team.make.exam');
                     Route::post('{teamId}/make', [RoundController::class, 'roundDetailFinalTeamMakeExam'])->name('admin.round.detail.team.final.make.exam');
@@ -376,6 +377,7 @@ Route::group([
     });
     Route::prefix('candidates')->group(function () {
         Route::get('', [CandidateController::class, 'index'])->name('admin.candidate.list');
+        Route::get('user-cv', [CandidateController::class, 'listCvUser'])->name('admin.candidate.listCvUser');
         Route::delete('{id}', [CandidateController::class, 'destroy'])->name('admin.candidate.destroy');
         Route::prefix('list-soft-deletes')->group(function () {
             Route::get('', [CandidateController::class, 'listRecordSoftDeletes'])->name('admin.candidate.list.soft.deletes');
@@ -405,28 +407,35 @@ Route::group([
         return response()->download(public_path('assets/media/excel/excel_download.xlsx'));
     })->name("admin.download.execel.pass");
     Route::post('upload-image', [CkeditorController::class, 'updoadFile'])->name('admin.ckeditor.upfile');
+    Route::prefix('questions')->group(function () {
+        Route::get('', [QuestionController::class, 'index'])->name('admin.question.index');
+        Route::get('add', [QuestionController::class, 'create'])->name('admin.question.create');
+        Route::post('add', [QuestionController::class, 'store'])->name('admin.question.store');
+        Route::get('edit/{id}', [QuestionController::class, 'edit'])->name('admin.question.edit');
+        Route::post('update/{id}', [QuestionController::class, 'update'])->name('admin.question.update');
+        Route::delete('destroy/{id}', [QuestionController::class, 'destroy'])->name('admin.question.destroy');
+        Route::post('un-status/{id}', [QuestionController::class, 'un_status'])->name('admin.question.un.status');
+        Route::post('re-status/{id}', [QuestionController::class, 're_status'])->name('admin.question.re.status');
+        Route::get('soft-delete', [QuestionController::class, 'softDeleteList'])->name('admin.question.soft.delete');
+        Route::delete('delete/{id}', [QuestionController::class, 'delete'])->name('admin.question.delete');
+        Route::get('restore-delete/{id}', [QuestionController::class, 'restoreDelete'])->name('admin.question.restore');
+
+        Route::post('import', [QuestionController::class, 'import'])->name('admin.question.excel.import');
+        Route::post('import/{exam}', [QuestionController::class, 'importAndRunExam'])->name('admin.question.excel.import.exam');
+        Route::get('export', [QuestionController::class, 'exportQe'])->name('admin.question.excel.export');
+
+
+        Route::get('skill-question-api', [QuestionController::class, 'skillQuestionApi'])->name('admin.question.skill');
+    });
+
+    Route::prefix('job')->group(function () {
+        Route::get('', [JobController::class, 'index'])->name('admin.job');
+        Route::post('store', [JobController::class, 'store'])->name('admin.job.store');
+        Route::get('destroy-error', [JobController::class, 'destroy'])->name('admin.job.destroy');
+        Route::post('update-status', [JobController::class, 'updateStatusJob'])->name('admin.job.status');
+    });
 });
 
-Route::prefix('questions')->group(function () {
-    Route::get('', [QuestionController::class, 'index'])->name('admin.question.index');
-    Route::get('add', [QuestionController::class, 'create'])->name('admin.question.create');
-    Route::post('add', [QuestionController::class, 'store'])->name('admin.question.store');
-    Route::get('edit/{id}', [QuestionController::class, 'edit'])->name('admin.question.edit');
-    Route::post('update/{id}', [QuestionController::class, 'update'])->name('admin.question.update');
-    Route::delete('destroy/{id}', [QuestionController::class, 'destroy'])->name('admin.question.destroy');
-    Route::post('un-status/{id}', [QuestionController::class, 'un_status'])->name('admin.question.un.status');
-    Route::post('re-status/{id}', [QuestionController::class, 're_status'])->name('admin.question.re.status');
-    Route::get('soft-delete', [QuestionController::class, 'softDeleteList'])->name('admin.question.soft.delete');
-    Route::delete('delete/{id}', [QuestionController::class, 'delete'])->name('admin.question.delete');
-    Route::get('restore-delete/{id}', [QuestionController::class, 'restoreDelete'])->name('admin.question.restore');
-
-    Route::post('import', [QuestionController::class, 'import'])->name('admin.question.excel.import');
-    Route::post('import/{exam}', [QuestionController::class, 'importAndRunExam'])->name('admin.question.excel.import.exam');
-    Route::get('export', [QuestionController::class, 'exportQe'])->name('admin.question.excel.export');
-
-
-    Route::get('skill-question-api', [QuestionController::class, 'skillQuestionApi'])->name('admin.question.skill');
-});
 
 
 // Route::get('api-view-check', function (App\Services\Modules\MContest\Contest $contest) {
