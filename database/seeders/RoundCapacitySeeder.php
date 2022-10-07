@@ -88,7 +88,7 @@ class RoundCapacitySeeder extends Seeder
             }
             $paragraph = implode(' ', $selected) . Str::random(10);
             Round::create([
-                'name' => 'Vòng thi ' . $paragraph,
+                'name' => 'Vòng thi cuộc thi ' . $paragraph,
                 'image' =>  $images[array_rand($images)],
                 'start_time' =>  $start,
                 'end_time' =>  $end,
