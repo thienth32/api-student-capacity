@@ -150,7 +150,7 @@
                             <input type="hidden" id="send_mail" name="on_date">
                             <div class="form-group mb-10">
                                 <label for="" class="form-label">Danh sách email nhận </label>
-                                <input value="{{ old('mail') }}" type="text" class="form-control" name="mails"
+                                <input value="{{ old('mails') }}" type="text" class="form-control" name="mails"
                                     placeholder="Mail gửi cách nhau bằng dấu , ">
                                 @error('mails')
                                     <p class="text-danger">{{ $message }}</p>
