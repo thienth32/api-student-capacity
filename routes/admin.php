@@ -427,6 +427,7 @@ Route::group([
 
         Route::get('skill-question-api', [QuestionController::class, 'skillQuestionApi'])->name('admin.question.skill');
     });
+
     Route::prefix('job')->group(function () {
         Route::get('', [JobController::class, 'index'])->name('admin.job');
         Route::post('store', [JobController::class, 'store'])->name('admin.job.store');

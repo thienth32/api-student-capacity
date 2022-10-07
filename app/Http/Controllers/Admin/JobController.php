@@ -16,6 +16,14 @@ class JobController extends Controller
     ) {
     }
 
+    public function getEIdJob()
+    {
+        return JobQueue::all()->map(function ($q) {
+            $data = json_decode($q->config);
+            return $data->id;
+        })->toArray();
+    }
+
     public function index()
     {
         $data = [];
@@ -41,14 +49,14 @@ class JobController extends Controller
         $data['jobs_in_process']['item'] = JobQueue::where('status', 0)->get()->map(function ($q) {
             $config = json_decode($q->config);
             return [
-                'title' => $config->model . " TIME : " . $q->on_date,
+                'title' => $config->model . " TIME : " . $q->on_date . " EID:" . $config->id,
                 'id' => $q->id
             ];
         });
         $data['jobs_in_working']['item'] = JobQueue::where('status', 1)->get()->map(function ($q) {
             $config = json_decode($q->config);
             return [
-                'title' => $config->model . " TIME : " . $q->on_date,
+                'title' => $config->model . " TIME : " . $q->on_date . "  EID:" . $config->id,
                 'id' => $q->id
             ];
         });
@@ -59,6 +67,8 @@ class JobController extends Controller
                 'id' => $q->id
             ];
         });
+        $data['dataJobs'] = $this->getEIdJob();
+
         return view('pages.job.index', $data);
     }
 
@@ -85,23 +95,30 @@ class JobController extends Controller
 
     public function store(JobRequest $request)
     {
+        $dataJobs = $this->getEIdJob();
+        if (in_array($this->exam_code, $dataJobs)) return redirect()->back()->with("error", "Đã có công việc !");
         $dataCreate = [
             "status" => 1
         ];
+        $dataCreate['on_date'] = $request->on_date;
+        $dataCreate['token_queue'] = uniqid();
         switch ($request->type) {
             case 'game_type_1':
-                $dataCreate['on_date'] = $request->on_date;
-                $dataCreate['token_queue'] = uniqid();
+
                 $dataCreate['config'] = json_encode([
                     "model" => "GAME_TYPE_1",
+                    "id" => $request->exam_code,
+                    "time" => $request->time
                 ]);
+
                 dispatch(new GameTypePlay($request->exam_code, "GAME_TYPE_1", $request->time, $dataCreate['token_queue']))->onQueue($dataCreate['token_queue']);
                 break;
             case 'game_type_2':
-                $dataCreate['on_date'] = $request->on_date;
-                $dataCreate['token_queue'] = uniqid();
+
                 $dataCreate['config'] = json_encode([
                     "model" => "GAME_TYPE_2",
+                    "id" => $request->exam_code,
+                    "time" => $request->time
                 ]);
                 dispatch(new GameTypePlay($request->exam_code, "GAME_TYPE_2", $request->time, $dataCreate['token_queue']))->onQueue($dataCreate['token_queue']);
                 break;
@@ -109,9 +126,7 @@ class JobController extends Controller
                 abort(404);
                 break;
         }
-
         JobQueue::create($dataCreate);
-
         return redirect()->back()->with('success', 'Thành công ');
     }
 }

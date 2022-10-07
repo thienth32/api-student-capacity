@@ -39,12 +39,19 @@ class GameTypePlay implements ShouldQueue
         }
     }
 
+    public function getExam()
+    {
+        return $this->examRepo->getExamBtyTokenRoom($this->code, ['questions' => function ($q) {
+            return $q->with(['answers:id,question_id,content']);
+        }], ['questions']);
+    }
+
+
     public function gameType1()
     {
         broadcast(new BeforNextGame($this->code));
-        $exam = $this->examRepo->getExamBtyTokenRoom($this->code, ['questions' => function ($q) {
-            return $q->with(['answers:id,question_id,content']);
-        }], ['questions']);
+        $exam = $this->getExam();
+
         $ranks = $this->resultCapacityRepo->where([
             "exam_id" => $exam->id,
         ], ['user'], true, 5)->toArray();
@@ -53,6 +60,7 @@ class GameTypePlay implements ShouldQueue
         $exam = $this->examRepo->updateCapacityPlay($exam->id, [
             "room_token" => MD5(uniqid() . time()),
         ]);
+
         broadcast(new PlayGameEvent($this->code, $exam->token, $questions->toArray(), $ranks));
         dispatch(new EndGameTypePlay($this->code, $exam->id, $this->tokenQueue))->delay(now()->addMinutes($this->time));
     }
@@ -60,9 +68,8 @@ class GameTypePlay implements ShouldQueue
     public function gameType2()
     {
         broadcast(new BeforNextGame($this->code));
-        $exam = $this->examRepo->getExamBtyTokenRoom($this->code, ['questions' => function ($q) {
-            return $q->with(['answers:id,question_id,content']);
-        }], ['questions']);
+        $exam = $this->getExam();
+
         $ranks = $this->resultCapacityRepo->where([
             "exam_id" => $exam->id,
         ], ['user'], true, 5)->toArray();

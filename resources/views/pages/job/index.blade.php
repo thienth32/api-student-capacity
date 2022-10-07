@@ -39,7 +39,7 @@
                                 data-hide-search="false" tabindex="-1" aria-hidden="true" name="exam_code"
                                 value="{{ old('skill') }}">
                                 @foreach ($exams as $exam)
-                                    @if ($exam->type == 1)
+                                    @if ($exam->type == 1 && !in_array($exam->room_code, $dataJobs))
                                         <option value="{{ $exam->room_code }}"> {{ $exam->name }} - {{ $exam->room_code }}
                                         </option>
                                     @endif
@@ -81,7 +81,7 @@
                                 data-hide-search="false" tabindex="-1" aria-hidden="true" name="exam_code"
                                 value="{{ old('skill') }}">
                                 @foreach ($exams as $exam)
-                                    @if ($exam->type == 0)
+                                    @if ($exam->type == 0 && !in_array($exam->room_code, $dataJobs))
                                         <option value="{{ $exam->room_code }}"> {{ $exam->name }} -
                                             {{ $exam->room_code }}
                                         </option>
@@ -206,6 +206,7 @@
             showDropdowns: true,
             timePicker: true,
             timePicker24Hour: true,
+            minDate: moment().startOf("hour"),
             maxYear: parseInt(moment().format("YYYY"), 10),
             locale: {
                 format: "YYYY/MM/DD HH:mm:ss",
@@ -218,6 +219,7 @@
             showDropdowns: true,
             timePicker: true,
             timePicker24Hour: true,
+            minDate: moment().startOf("hour"),
             maxYear: parseInt(moment().format("YYYY"), 10),
             locale: {
                 format: "YYYY/MM/DD HH:mm:ss",

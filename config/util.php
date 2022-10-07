@@ -61,6 +61,7 @@ return [
         "RANKS" => [
             "Dễ",
             "Trung bình",
+            "Khó",
         ],
         "KEY_COLUMNS" => [
             "TYPE" => 0,
