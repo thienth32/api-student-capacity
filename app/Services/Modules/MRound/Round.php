@@ -2,14 +2,17 @@
 
 namespace App\Services\Modules\MRound;
 
+use App\Models\Result;
 use App\Services\Traits\TUploadImage;
 
 class Round implements MRoundInterface
 {
     use TUploadImage;
     public $round;
-    public function __construct(\App\Models\Round $round)
-    {
+    public function __construct(
+        \App\Models\Round $round,
+        private Result $result
+    ) {
         $this->round = $round;
     }
 
@@ -124,5 +127,20 @@ class Round implements MRoundInterface
     public function whereIn($key, $val = [])
     {
         return $this->round::whereIn($key, $val);
+    }
+
+
+    public function results($id)
+    {
+        $result = $this->result::where('round_id', $id)
+            ->orderBy('point', (request('sort') == 'asc' ? 'asc' : 'desc'))
+            ->orderBy('updated_at', (request('sort') == 'asc' ? 'asc' : 'desc'))
+            ->with(['team' => function ($q) {
+                $q->with('users:name,email,avatar');
+                return $q;
+            }])
+            ->get();
+        // dd($result->);
+        return $result;
     }
 }

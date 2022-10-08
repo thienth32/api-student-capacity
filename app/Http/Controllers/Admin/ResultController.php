@@ -19,7 +19,7 @@ class ResultController extends Controller
     public function indexApi($id_round)
     {
         try {
-            $data = $this->round->getTeamByRoundId($id_round);
+            $data = $this->round->results($id_round);
             if (!$data) throw new \Exception("Không tìm thấy lịch sử ");
             return $this->responseApi(true, $data);
         } catch (\Throwable $th) {

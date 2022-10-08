@@ -106,3 +106,6 @@ Route::prefix('candidate')->group(function () {
 Route::prefix('keywords')->group(function () {
     Route::get('', [KeywordController::class, 'indexApi']);
 });
+
+
+Route::get('test', [KeywordController::class, 'test']);
