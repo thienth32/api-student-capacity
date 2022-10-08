@@ -239,11 +239,17 @@ class RecruitmentController extends Controller
      */
     public function apiShow(Request $request)
     {
-        $data = $this->modulesRecruitment->getList($request)->withCount(['contest'])->get();
+        $data = $this->modulesRecruitment->getList($request)->withCount('contest')->get();
         if (!$data) abort(404);
-        $data->load(['enterprise:id,name,logo'])->makeHidden([
-            'description', 'contest',
-            'deleted_at'
+        $data->load([
+            'contest:id',
+            'contest.resultCapacity:result_capacity.id',
+            'contest.resultCapacity.user:id', 'enterprise:id,name,logo',
+            'skill' => function ($q) {
+                $q->select(['skills.id', 'skills.short_name', 'skills.name'])->distinct();
+            }
+        ])->makeHidden([
+            'description', 'contest', 'resultCapacity',
         ]);
         $this->modulesRecruitment->LoadSkillAndUserApiShow($data);
         return $this->responseApi(
@@ -271,9 +277,20 @@ class RecruitmentController extends Controller
     {
         $data = $this->modulesRecruitment->find($id);
         if (!$data) abort(404);
-        $data->load(['contest' => function ($q) {
-            return $q->with(['skills:id,short_name,name'])->withCount(['userCapacityDone', 'rounds']);
-        }, 'enterprise']);
+        $data->load([
+            'contest:id',
+            'contest.resultCapacity:result_capacity.id',
+            'contest.resultCapacity.user:id', 'enterprise:id,name,logo',
+            'enterprise:id,name,logo', 'skill' => function ($q) {
+                $q->select(['skills.id', 'skills.short_name', 'skills.name'])->distinct();
+            }
+        ])->loadCount('rounds')->makeHidden([
+            'contest',
+        ]);
+
+        // $data->load(['contest' => function ($q) {
+        //     return $q->with(['skills:id,short_name,name'])->withCount(['userCapacityDone', 'rounds']);
+        // }, 'enterprise']);
         $this->modulesRecruitment->loadSkillAndUserApiDetail($data);
         return $this->responseApi(
             true,

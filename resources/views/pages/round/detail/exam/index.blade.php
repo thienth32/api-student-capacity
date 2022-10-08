@@ -98,6 +98,12 @@
                                     <td>{{ $exam->ponit }}</td>
                                     <td>{{ $exam->max_ponit }}</td>
                                     <td>
+                                        {{-- <a href="{{ Storage::disk('s3')->temporaryUrl($exam->external_url, now()->addHour(), [
+                                            'ResponseContentDisposition' => 'attachment',
+                                        ]) }}"
+                                            class=" btn btn-success btn-sm">Tải
+                                            xuống</a>   --}}
+
                                         <button data-id="{{ $exam->id }}"
                                             data-external_url="{{ route('dowload.file') . '?url=' . $exam->external_url }}"
                                             type="button" class="download_file btn btn-success btn-sm">Tải xuống</button>

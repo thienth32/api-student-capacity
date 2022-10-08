@@ -181,49 +181,54 @@ class Recruitment
     }
     public function LoadSkillAndUserApiShow($data)
     {
-        $arrSkill = [];
-        foreach ($data as $item) {
-            foreach ($item->contest as $contest) {
-                foreach ($contest->skills as $skill) {
-                    $arrSkill[] = $skill;
-                }
-                // unset($contest->skills);
-            }
-            $item['skill'] = collect($arrSkill)->unique('id')->values()->all();
-            $arrSkill = [];
-        }
+        // $data->load(['contest:id,name']);
+        // $arrSkill = [];
+        // foreach ($data as $item) {
+        //     foreach ($item->skillHasManyDeep->makeHidden(['created_at', 'description', 'deleted_at', 'updated_at', 'laravel_through_key']) as $skill) {
+        //         $arrSkill[] = $skill;
+        //     }
+        //     $item['skill'] = collect($arrSkill)->unique('id')->values()->all();
+        //     $arrSkill = [];
+        // }
+        // $arrSkill = [];
+        // foreach ($data as $item) {
+        //     foreach ($item->contest as $contest) {
+        //         foreach ($contest->skills->makeHidden(['created_at', 'description', 'deleted_at', 'updated_at']) as $skill) {
+        //             $arrSkill[] = $skill;
+        //         }
+        //     }
+        //     $item['skill'] = collect($arrSkill)->unique('id')->values()->all();
+        //     $arrSkill = [];
+        // }
         $arrUser = [];
         foreach ($data as $item) {
             foreach ($item->contest as $contest) {
-                foreach ($contest->rounds as $round) {
-                    foreach ($round->result_capacity as $users)
-                        $arrUser[] = $users->user;
-                    // unset($users);
-                }
+                foreach ($contest->resultCapacity as $users)
+                    $arrUser[] = $users->user;
             }
-            $item['user'] = collect($arrUser)->unique('id')->values()->all();;
+            $item['count_user'] = count(collect($arrUser)->unique('id')->values()->all());
+            // $item['user'] = collect($arrUser)->unique('id')->values()->all();
             $arrUser = [];
         }
     }
     public function loadSkillAndUserApiDetail($data)
     {
-        $arr = [];
-        foreach ($data->contest as $contest) {
-            foreach ($contest->skills as $skill) {
-                $arr[] = $skill;
-            }
-        }
-        $data['skill'] = collect($arr)->unique('id')->values()->all();
-        $arr = [];
+        // $arr = [];
+        // foreach ($data->contest as $contest) {
+        //     foreach ($contest->skills as $skill) {
+        //         $arr[] = $skill;
+        //     }
+        // }
+        // $data['skill'] = collect($arr)->unique('id')->values()->all();
+        // $arr = [];
 
         $arrUser = [];
         foreach ($data->contest as $contest) {
-            foreach ($contest->rounds as $round) {
-                foreach ($round->result_capacity as $users)
-                    $arrUser[] = $users->user;
-            }
+            foreach ($contest->resultCapacity as $users)
+                $arrUser[] = $users->user;
         }
-        $data['user'] = collect($arrUser)->unique('id')->values()->all();;
+        $data['count_user'] = count(collect($arrUser)->unique('id')->values()->all());
+        // $data['user'] = collect($arrUser)->unique('id')->values()->all();;
         $arrUser = [];
     }
 }
