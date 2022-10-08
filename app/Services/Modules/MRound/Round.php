@@ -103,6 +103,7 @@ class Round implements MRoundInterface
         $teams = $this->round::find($id)
             ->teams()
             ->with([
+                'members:name,email,avatar',
                 'result' => function ($q) use ($id) {
                     return $q->where('round_id', $id)
                         ->orderBy('point', 'desc')
