@@ -243,7 +243,7 @@ class RecruitmentController extends Controller
         if (!$data) abort(404);
         $data->load([
             'contest:id',
-            'contest.resultCapacity:result_capacity.id',
+            'contest.resultCapacity:result_capacity.id,result_capacity.user_id',
             'contest.resultCapacity.user:id', 'enterprise:id,name,logo',
             'skill' => function ($q) {
                 $q->select(['skills.id', 'skills.short_name', 'skills.name'])->distinct();
@@ -279,7 +279,7 @@ class RecruitmentController extends Controller
         if (!$data) abort(404);
         $data->load([
             'contest:id',
-            'contest.resultCapacity:result_capacity.id',
+            'contest.resultCapacity:result_capacity.id,result_capacity.user_id',
             'contest.resultCapacity.user:id', 'enterprise:id,name,logo',
             'enterprise:id,name,logo', 'skill' => function ($q) {
                 $q->select(['skills.id', 'skills.short_name', 'skills.name'])->distinct();
