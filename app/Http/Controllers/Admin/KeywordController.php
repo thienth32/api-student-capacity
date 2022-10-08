@@ -166,4 +166,14 @@ class KeywordController extends Controller
     {
         return $this->keyword->find($id);
     }
+    public function test()
+    {
+        $qltFake = 10;
+        $contests = Contest::find(49);
+        $rounds = Round::where('contest_id', $contests->id)->get()->pluck(['id']);
+        $roundTeams = RoundTeam::whereIn('round_id', $rounds)->has('exams')->doesntHave('takeExam')->with(['exams' => function ($q) {
+            return $q->select(['id', 'round_id']);
+        }])->get()->makeHidden(['created_at', 'updated_at', 'deleted_at', 'status'])->toArray();
+        dd($roundTeams);
+    }
 }
