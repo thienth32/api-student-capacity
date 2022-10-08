@@ -111,7 +111,7 @@ class RankUserController extends Controller
     public function getRankUserCapacity($slug)
     {
         try {
-            if (!$dataRating = $this->major->getRankUserCapacity($slug)) return $this->responseApi(false, 'Không tìm thấy chuyên ngành ' . $slug . '!');
+            if (!$dataRating = $this->major->getRankUserCapacity($slug)) return $this->responseApi(true, ['error' => 'Không tìm thấy chuyên ngành ' . $slug . '!']);
             return $this->responseApi(
                 true,
                 $dataRating

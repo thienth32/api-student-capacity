@@ -2,6 +2,7 @@
 
 use App\Events\PublicChannel;
 use App\Http\Controllers\AuthController;
+use App\Jobs\test;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,6 +35,7 @@ Route::get('download-file', function () {
 
 
 Route::get('test', function () {
+    dispatch(new test())->onQueue('shedule');
     // \Illuminate\Support\Facades\Cookie::queue('test-cookie-laravel', 'value test', 2);
     // broadcast(new PublicChannel("This is message"));
 });

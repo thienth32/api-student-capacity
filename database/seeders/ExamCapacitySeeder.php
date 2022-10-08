@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Carbon\Carbon;
 use App\Models\Exam;
 use App\Models\Round;
 use App\Models\Contest;
@@ -19,14 +20,20 @@ class ExamCapacitySeeder extends Seeder
      */
     public function run()
     {
+        $today = Carbon::now()->format('Y-m-d H:i:s');
         $questions = Question::all();
-        $contests = Contest::where('type', config('util.TYPE_TEST'))->has('rounds')->pluck('id');
-        $roundARR = Round::whereIn('contest_id', $contests)->get()->map(function ($q) {
-            return [
-                'id' => $q->id,
-                'name' => $q->name
-            ];
-        })->toArray();
+        // capacity  
+        // $contests = Contest::where('type', config('util.TYPE_TEST'))->has('rounds')->pluck('id');
+        // $roundARR = Round::whereIn('contest_id', $contests)->get()->map(function ($q) {
+        //     return [
+        //         'id' => $q->id,
+        //         'name' => $q->name
+        //     ];
+        // })->toArray();
+
+        //cuoc thi
+        $contests = Contest::where('type', 0)->whereDate('register_deadline', '<', $today)->has('rounds')->pluck('id');
+        $roundARR = Round::whereIn('contest_id', $contests)->get(['id', 'name']);
 
         $sentences = [
             ["Saab", "Volvo", "BMW"],
@@ -59,28 +66,51 @@ class ExamCapacitySeeder extends Seeder
             'Từ bi và độ lượng không phải là dấu hiệu của yếu đuối, mà thực ra là biểu hiện của sức mạnh.'
         ];
 
-        for ($i = 0; $i < 10; $i++) {
-            $round =   $roundARR[array_rand($roundARR)];
+        // tesst nangw lucjw
+        // for ($i = 0; $i < 10; $i++) {
+        //     $round =   $roundARR[array_rand($roundARR)];
+        //     $selected = array();
+        //     foreach ($sentences as $sentence) {
+        //         $selected[] = $sentence[rand(0, count($sentence) - 1)];
+        //     }
+        //     $paragraph = implode(' ', $selected) . Str::random(5);
+        //     $exam = Exam::create([
+        //         'name' => 'Đề thi : ' . $paragraph . ' ' . $round['name'],
+        //         'description' => 'Triết lý sống: ' .  $texts[array_rand($texts)],
+        //         'round_id' =>  $round['id'],
+        //         'status' => 1,
+        //         'type' => 1,
+        //         'ponit' => 50,
+        //         'max_ponit' => 100,
+        //         'time' => 15,
+        //         'time_type' => 0,
+        //         'external_url' => 'null'
+        //     ]);
+        //     $exam->questions()->syncWithoutDetaching(
+        //         $questions->random(rand(15, 20))->pluck('id')->toArray()
+        //     );
+        // }
+
+
+        // cuoc thi
+        foreach ($roundARR as $key => $round) {
             $selected = array();
             foreach ($sentences as $sentence) {
                 $selected[] = $sentence[rand(0, count($sentence) - 1)];
             }
             $paragraph = implode(' ', $selected) . Str::random(5);
-            $exam = Exam::create([
-                'name' => 'Đề thi : ' . $paragraph . ' ' . $round['name'],
+            Exam::create([
+                'name' => 'Đề thi cuộc thi : ' . $paragraph . ' ' . $round->name,
                 'description' => 'Triết lý sống: ' .  $texts[array_rand($texts)],
-                'round_id' =>  $round['id'],
+                'round_id' =>  $round->id,
                 'status' => 1,
-                'type' => 1,
+                'type' => 0,
                 'ponit' => 50,
                 'max_ponit' => 100,
-                'time' => 15,
-                'time_type' => 0,
-                'external_url' => 'null'
+                'time' => null,
+                'time_type' => null,
+                'external_url' => '633d4576042da-1664959862.zip'
             ]);
-            $exam->questions()->syncWithoutDetaching(
-                $questions->random(rand(15, 20))->pluck('id')->toArray()
-            );
         }
     }
 }

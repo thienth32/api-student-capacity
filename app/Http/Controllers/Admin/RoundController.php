@@ -393,7 +393,9 @@ class RoundController extends Controller
         $round = $this->roundRepo->find($id);
         $roundTeams = $this->roundTeamRepo->getRoundTeamByRoundId($id, [
             'team',
-            'takeExam'
+            'takeExam' => function ($q) {
+                return $q->with('exam');
+            }
         ]);
         $teamContest = $this->teamRepo->getTeamByContestId($round->contest_id);
         return view('pages.round.detail.round-team', compact('round', 'roundTeams', 'teamContest'));
@@ -716,6 +718,7 @@ class RoundController extends Controller
     {
 
         try {
+            $data = [];
             $round = $this->round::find($id);
             $team = Team::where('id', $teamId)->first();
             $takeExam = RoundTeam::where('round_id', $id)->where('team_id', $teamId)->first()->takeExam;
