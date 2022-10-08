@@ -143,6 +143,7 @@ class AuthController extends Controller
 
     public function logout()
     {
+        if (auth()->check() == false) return redirect(route('login'));
         auth()->user()->tokens()->delete();
         Auth::logout();
         return redirect(route('login'));
