@@ -107,17 +107,20 @@ class CodeManagerController extends Controller
 
     private function runCode($id, $type_id, $status_type_code = false)
     {
+        $cwd = str_replace("\\", "/", getcwd());
+        $cwd = str_replace("/public", "", $cwd);
+        $path = $cwd;
         $challenge = Challenge::whereId($id)
             ->with(
                 [
-                    // 'type_test' => function ($q) use ($status_type_code) {
-                    //     if ($status_type_code) return $q;
-                    //     return $q
-                    //         ->where("status", 1);
-                    // },
-                    // 'has_cod' => function ($q) use ($type_id) {
-                    //     return $q->where('type_id', $type_id);
-                    // }
+                    'test_case' => function ($q) use ($status_type_code) {
+                        if ($status_type_code) return $q;
+                        return $q
+                            ->where("status", 1);
+                    },
+                    'sample_code' => function ($q) use ($type_id) {
+                        return $q->where('code_language_id', $type_id);
+                    }
                 ]
             )
             ->first();
@@ -134,13 +137,11 @@ class CodeManagerController extends Controller
         $extensionFile = $codelanguage->ex;
         $type = $codelanguage->type;
 
-        $path = "/home/vanquang/Htdocs/laravel/LaravelCodChallenge";
-
-        $resultend = $challenge->has_cod[0]->run_qs_code;
+        $resultend = $challenge->sample_code[0]->code;
         $fistResultend = explode("(", $resultend)[0] . "(";
         $arrResult = [];
 
-        foreach ($challenge->type_test as $key => $value) {
+        foreach ($challenge->test_case as $key => $value) {
             $arrSave = [];
             $content =  request()->content . $fistResultend . $value->input . ");";
             $stout = $this->acrMultyLgCode(
