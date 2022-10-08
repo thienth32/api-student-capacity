@@ -239,7 +239,7 @@ class RecruitmentController extends Controller
      */
     public function apiShow(Request $request)
     {
-        $data = $this->modulesRecruitment->getList($request)->withCount('contest')->get();
+        $data = $this->modulesRecruitment->getList($request)->withCount('contest')->paginate(request('limit') ?? 6);
         if (!$data) abort(404);
         $data->load([
             'contest:id',

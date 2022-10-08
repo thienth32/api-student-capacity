@@ -12,4 +12,19 @@ class Challenge extends Model
     use SoftDeletes;
     protected $table = 'challenges';
     protected $guarded = [];
+
+    public function sample_code()
+    {
+        return $this->hasMany(SampleChallenge::class);
+    }
+
+    public function result()
+    {
+        return $this->hasMany(ResultCode::class);
+    }
+
+    public function test_case()
+    {
+        return $this->hasMany(TestCase::class);
+    }
 }
