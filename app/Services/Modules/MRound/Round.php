@@ -138,9 +138,7 @@ class Round implements MRoundInterface
             ->with(['team' => function ($q) {
                 $q->with('users:name,email,avatar');
                 return $q;
-            }])
-            ->get();
-        // dd($result->);
-        return $result;
+            }]);
+        return $result->paginate(request('limit') ?? 6);
     }
 }
