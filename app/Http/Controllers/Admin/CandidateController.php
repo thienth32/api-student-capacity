@@ -141,23 +141,25 @@ class CandidateController extends Controller
     public function ApiAddCandidate(Request $request)
     {
         $rules = [
+            'post_id' => 'required',
             'name' => 'required',
             'email' => 'required|email',
             'phone' => 'required',
             'file_link' => 'required|mimes:zip,docx,word,pdf|file|max:10000',
         ];
         $message = [
+            'post_id.required' => 'Mã tuyển dụng không được bỏ trống ',
             'name.required' => 'Họ Tên không được bỏ trống ',
             'email.required' => 'Email không được bỏ trống ',
             'email.email' => 'Email sai định dạng ',
             'phone.required' => 'Số điện thoạt không được bỏ trống ',
             'file_link.required' => 'Link CV không được bỏ trống ',
-            'file_link.mimes' => 'Link CV không đúng định dạng !',
-            'file_link.file' => 'Link CV phải là một file  !',
-            'file_link.max' => 'Link CV dung lượng quá lớn !',
+            'file_link.mimes' => 'Link CV không đúng định dạng . Yêu cầu file zip,docx,word,pdf , tối đa dung lượng file 10MB  !',
+            'file_link.file' => 'Link CV phải là một file  . Yêu cầu file zip,docx,word,pdf , tối đa dung lượng file 10MB  !',
+            'file_link.max' => 'Link CV dung lượng quá lớn. Tối đa 10MB !',
         ];
         $validator = Validator::make($request->all(), $rules, $message);
-        if ($validator->fails()) return $this->responseApi(false, $validator->errors());
+        if ($validator->fails()) return response()->json(['status' => false, 'message' => $validator->errors()], 200);
         $addCandidate =   $this->MCandidate->store($request);
         if (!$addCandidate) return $this->responseApi(false, ' Lỗi upload CV !');
         $sizeFile = Storage::disk('s3')->size($addCandidate->file_link);
@@ -166,7 +168,7 @@ class CandidateController extends Controller
         $addCandidate['sizeFile'] = $sizeFileFormat;
         $email = new SendMailUploadCV($addCandidate);
         dispatch($email);
-        return $this->responseApi(true, 'Thành công !', ['data' => $addCandidate]);
+        return $this->responseApi(true, 'Upload Cv thành công !', ['data' => $addCandidate]);
     }
     public function ApiDetailCandidate($id)
     {
