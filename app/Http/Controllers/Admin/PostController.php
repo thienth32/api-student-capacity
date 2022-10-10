@@ -306,11 +306,11 @@ class PostController extends Controller
      */
     public function apiShow(Request $request)
     {
-        $data = $this->modulesPost->getList($request)->paginate(request('limit') ?? config('util.HOMEPAGE_ITEM_AMOUNT'));
+        $data = $this->modulesPost->getList($request)->paginate(request('limit') ?? $this->post::count());
         $data->load(
             [
                 'postable:id,name',
-                'postable:enterprises.id,enterprises.name,enterprises.logo,enterprises.link_web',
+                'postable.enterprise:enterprises.id,enterprises.name,enterprises.logo,enterprises.link_web',
                 'user:id,name,email'
             ]
         )->makeHidden([
