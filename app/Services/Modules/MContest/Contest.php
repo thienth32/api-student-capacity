@@ -184,20 +184,17 @@ class Contest implements MContestInterface
     public function apiShow($id, $type)
     {
         $with = [
-            'enterprise',
+            // 'enterprise',
             'teams' => function ($q) {
                 return $q
-                    ->with('members')
-                    ->withCount('members');
+                    ->with('members');
             },
             'rounds' => function ($q) {
                 return $q->with([
                     'teams' => function ($q) {
                         return $q->with('members');
                     },
-                    'judges' => function ($q) {
-                        return $q->with('user');
-                    }
+                    'judges'
                 ]);
             },
             'judges'

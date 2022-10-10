@@ -35,7 +35,7 @@ Route::get('download-file', function () {
 
 
 Route::get('test', function () {
-    dispatch(new test())->onQueue('shedule');
+    // dispatch(new test())->onQueue('shedule');
     // \Illuminate\Support\Facades\Cookie::queue('test-cookie-laravel', 'value test', 2);
     // broadcast(new PublicChannel("This is message"));
 });
