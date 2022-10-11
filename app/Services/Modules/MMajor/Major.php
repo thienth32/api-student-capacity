@@ -150,7 +150,7 @@ class Major implements MMajorInterface
                     ->orderByDesc('total_scores');
             }]
         );
-        $apps = $major->resultCapacity()->paginate(20);
+        $apps = $major->resultCapacity()->paginate(10);
         return  $apps;
         // return  $major->resultCapacity;
     }
