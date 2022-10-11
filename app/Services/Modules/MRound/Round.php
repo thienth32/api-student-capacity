@@ -132,7 +132,24 @@ class Round implements MRoundInterface
 
     public function results($id)
     {
+        if (request()->has('q')) {
+            $resultIds = $this->round::find($id)
+                ->teams()
+                ->search(request('q') ?? null, ['name'])
+                ->with([
+                    'result' => function ($q) use ($id) {
+                        return $q->where('round_id', $id);
+                    }
+                ])->get()->map(function ($q) {
+                    return $q->result->id;
+                })->toArray();
+        } else {
+            $resultIds = [];
+        }
         $result = $this->result::where('round_id', $id)
+            ->when(request()->has('q'), function ($q) use ($resultIds) {
+                $q->whereIn('id', $resultIds);
+            })
             ->orderBy('point', (request('sort') == 'asc' ? 'asc' : 'desc'))
             ->orderBy('updated_at', (request('sort') == 'asc' ? 'asc' : 'desc'))
             ->with(['team' => function ($q) {
