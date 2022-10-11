@@ -278,15 +278,13 @@ class RecruitmentController extends Controller
         $data = $this->modulesRecruitment->find($id);
         if (!$data) abort(404);
         $data->load([
-            'contest:id',
+            'contest',
             'contest.resultCapacity:result_capacity.id,result_capacity.user_id',
             'contest.resultCapacity.user:id', 'enterprise:id,name,logo',
             'enterprise:id,name,logo', 'skill' => function ($q) {
                 $q->select(['skills.id', 'skills.short_name', 'skills.name'])->distinct();
             }
-        ])->loadCount('rounds')->makeHidden([
-            'contest',
-        ]);
+        ])->loadCount('rounds');
 
         // $data->load(['contest' => function ($q) {
         //     return $q->with(['skills:id,short_name,name'])->withCount(['userCapacityDone', 'rounds']);
