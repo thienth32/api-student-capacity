@@ -92,4 +92,65 @@ return [
     'TYPE_RECRUITMENTS' => 1,
     'TYPE_CAPACITY_TEST' => 2,
 
+
+    'CHALLENEGE' => [
+        "php" => [
+            "INOPEN" => "
+                <?php
+                function FC(INPUT)
+                {
+                };
+            ",
+            "OUTPEN" => '
+                $result =  FC(INPUT);
+                if(is_array($result))
+                {
+                    foreach($result  as $r)
+                    {
+                        echo $r;
+                    }
+                }else{
+                    echo $result;
+                }
+            ',
+            "TEST_CASE" => "
+                INOPEN
+                OUTPEN
+            "
+        ],
+        "javascript" => [
+            "INOPEN" => "
+                function FC(INPUT)
+                {};
+            ",
+            "OUTPEN" => '
+                var result =  FC(INPUT);
+                if(Array.isArray(result))
+                {
+
+                    for(var i = 0 ; i < result.length ; i ++ )
+                    {
+                        console.log(result[i]);
+                    }
+
+                }else{
+                    console.log(result);
+                }
+            ',
+            "TEST_CASE" => "
+                INOPEN
+                OUTPEN
+            "
+        ],
+        "c" => [
+            "INOPEN" => '
+                void FC(INPUT) {
+                }
+            ',
+            "OUTPEN" => '
+            ',
+            "TEST_CASE" => "
+            "
+        ]
+    ]
 ];

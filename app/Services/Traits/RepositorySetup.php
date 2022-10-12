@@ -5,6 +5,10 @@ namespace App\Services\Traits;
 use App\Services\Manager\FMenu\MenuManager;
 use App\Services\Modules\MAnswer\Answer;
 use App\Services\Modules\MAnswer\MAnswerInterface;
+use App\Services\Modules\MChallenge\Challenge;
+use App\Services\Modules\MChallenge\MChallengeInterface;
+use App\Services\Modules\MCodeLanguage\CodeLanguage;
+use App\Services\Modules\MCodeLanguage\MCodeLanguageInterface;
 use App\Services\Modules\MContest\Contest;
 use App\Services\Modules\MContest\MContestInterface;
 use App\Services\Modules\MContestUser\ContestUser;
@@ -21,6 +25,8 @@ use App\Services\Modules\MResultCapacity\MResultCapacityInterface;
 use App\Services\Modules\MResultCapacity\ResultCapacity;
 use App\Services\Modules\MResultCapacityDetail\MResultCapacityDetailInterface;
 use App\Services\Modules\MResultCapacityDetail\ResultCapacityDetail;
+use App\Services\Modules\MResultCode\MResultCodeInterface;
+use App\Services\Modules\MResultCode\ResultCode;
 use App\Services\Modules\MRound\MRoundInterface;
 use App\Services\Modules\MRound\Round;
 use App\Services\Modules\MRoundTeam\MRoundTeamInterface;
@@ -113,9 +119,25 @@ trait RepositorySetup
             MContestUserInterface::class,
             ContestUser::class,
         );
+
         $this->app->bind(
             MKeywordInterface::class,
             Keyword::class,
+        );
+
+        $this->app->bind(
+            MChallengeInterface::class,
+            Challenge::class,
+        );
+
+        $this->app->bind(
+            MResultCodeInterface::class,
+            ResultCode::class,
+        );
+
+        $this->app->bind(
+            MCodeLanguageInterface::class,
+            CodeLanguage::class,
         );
     }
 }

@@ -155,13 +155,7 @@ return [
             [
                 "name" => "Bộ thử thách ",
                 "param" => '',
-                "link" => "admin.dev.show",
-                "role" => $ROLE_HAS_ADMINS
-            ],
-            [
-                "name" => "Cài đặt",
-                "param" => '',
-                "link" => "admin.dev.show",
+                "link" => "admin.code.manager.list",
                 "role" => $ROLE_HAS_ADMINS
             ],
         ]

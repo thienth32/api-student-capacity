@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\FormatJson;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,6 +13,9 @@ class Challenge extends Model
     use SoftDeletes;
     protected $table = 'challenges';
     protected $guarded = [];
+    protected $casts = [
+        'rank_point' => FormatJson::class,
+    ];
 
     public function sample_code()
     {

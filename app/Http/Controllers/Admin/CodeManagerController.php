@@ -3,12 +3,40 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Challenge;
-use App\Models\CodeLanguage;
+use App\Services\Modules\MChallenge\MChallengeInterface;
+use App\Services\Modules\MCodeLanguage\MCodeLanguageInterface;
+use App\Services\Modules\MResultCode\MResultCodeInterface;
 use Illuminate\Http\Request;
 
 class CodeManagerController extends Controller
 {
+    public function __construct(
+        private MChallengeInterface $challenge,
+        private MCodeLanguageInterface $codeLanguage,
+        private MResultCodeInterface $resultCode
+    ) {
+    }
+
+    public function index()
+    {
+        $data = [];
+
+        return view('pages.code.index', $data);
+    }
+
+    public function create()
+    {
+        $data = [];
+        $data['code_languages'] = $this->codeLanguage->getAllCodeLanguage();
+        return view('pages.code.create', $data);
+    }
+
+    public function store(Request $request)
+    {
+        dd($request->all());
+    }
+
+
     private function unlinkFile($path)
     {
         if (file_exists($path))
@@ -110,22 +138,22 @@ class CodeManagerController extends Controller
         $cwd = str_replace("\\", "/", getcwd());
         $cwd = str_replace("/public", "", $cwd);
         $path = $cwd;
-        $challenge = Challenge::whereId($id)
-            ->with(
-                [
-                    'test_case' => function ($q) use ($status_type_code) {
-                        if ($status_type_code) return $q;
-                        return $q
-                            ->where("status", 1);
-                    },
-                    'sample_code' => function ($q) use ($type_id) {
-                        return $q->where('code_language_id', $type_id);
-                    }
-                ]
-            )
-            ->first();
+        $challenge = $this->challenge->getChallenge(
+            $id,
+            [
+                'test_case' => function ($q) use ($status_type_code) {
+                    if ($status_type_code) return $q;
+                    return $q
+                        ->where("status", 1);
+                },
+                'sample_code' => function ($q) use ($type_id) {
+                    return $q->where('code_language_id', $type_id);
+                }
+            ]
+        );
+
         $nameDocker = config('util.NAME_DOCKER');
-        $codelanguage = CodeLanguage::find($type_id);
+        $codelanguage = $this->codeLanguage->getCodeLanguage($type_id);
 
         if (!$codelanguage) return [
             "time" => false,
@@ -137,13 +165,19 @@ class CodeManagerController extends Controller
         $extensionFile = $codelanguage->ex;
         $type = $codelanguage->type;
 
-        $resultend = $challenge->sample_code[0]->code;
-        $fistResultend = explode("(", $resultend)[0] . "(";
+        $RUNDCODE = str_replace("INOPEN", request()->content, config('util.CHALLENEGE')[$type]['TEST_CASE']);
+        $OUTPEN = str_replace("FC", $challenge->sample_code[0]->code, config('util.CHALLENEGE')[$type]['OUTPEN']);
+        $RUNDCODE = str_replace("OUTPEN", $OUTPEN, $RUNDCODE);
+
+        // $resultend = $challenge->sample_code[0]->code;
+        // $fistResultend = explode("(", $resultend)[0] . "(";
         $arrResult = [];
 
         foreach ($challenge->test_case as $key => $value) {
             $arrSave = [];
-            $content =  request()->content . $fistResultend . $value->input . ");";
+            $content = str_replace("INPUT", $value->input, $RUNDCODE);
+            // dd($content);
+            // $content =  request()->content . $fistResultend . $value->input . ");";
             $stout = $this->acrMultyLgCode(
                 [
                     "extensionFile" => $extensionFile,
@@ -154,15 +188,14 @@ class CodeManagerController extends Controller
                 $content
             );
             $resultStout = str_replace("\n", "", $stout['result']);
-
-            if ($stout['time'] !== "false") {
-                if ($resultStout != $value->output) $stout = [
-                    'time' => false,
+            if ($stout['time'] != "false") {
+                if (trim($resultStout) != $value->output) $stout = [
+                    'time' => $stout['time'],
                     'result' => $resultStout,
                     'flag' => false,
                     'hasError' => false
                 ];
-                if ($resultStout == $value->output) $stout = array_merge($stout, ['flag' => true, 'hasError' => false]);
+                if (trim($resultStout) == $value->output) $stout = array_merge($stout, ['flag' => true, 'hasError' => false]);
             } else {
                 $stout = array_merge($stout, ['flag' => false, 'hasError' => true]);
             }
@@ -178,127 +211,113 @@ class CodeManagerController extends Controller
             $arrResult = $this->runCode($id, request()->type_id, false);
             return $arrResult;
         } catch (\Throwable $th) {
-            dd($th->getMessage());
             return response()->json([
-                'error' => "Không thể đưa vào luồng chạy !",
+                'error' => $th->getMessage() . 'LINE : ' . $th->getLine(),
                 'time' => false,
             ]);
         }
     }
 
-    // public function runCodeSubmitChall($id)
-    // {
-    //     try {
-    //         $arrResult = $this->runCode($id, request()->type_id, true);
-    //         $flag = 0;
-    //         $flagPass = false;
-    //         $flagUpdate = false;
-    //         $flagStatusReturn = false;
-    //         foreach ($arrResult as $k => $v) {
-    //             if ($v['time'] !== false) $flag++;
-    //         }
-
-
-    //         if ($result = Resul::where('user_id', 1)->where("challenge_id", $id)->first()) $flagUpdate = true;
-    //         if ($flag === count($arrResult)) {
-    //             $flagPass = true;
-    //             $challenge =  Challenge::find($id);
-    //             if ($flagUpdate) {
-    //                 $flagPoint = $result->flag_point + 1;
-    //                 $pointSv = ($flagPoint == 2
-    //                     ? $challenge->rank_point->top2
-    //                     : $flagPoint == 3)
-    //                     ?  $challenge->rank_point->top3
-    //                     :  $challenge->rank_point->none;
-    //                 if ($result->point > 0) {
-    //                     $pointSv = $result->point;
-    //                 } else {
-    //                     $flagStatusReturn = true;
-    //                 }
-    //                 $dataUpdate = [
-    //                     "content" => request()->content,
-    //                     "flag_point" => $flagPoint,
-    //                     "type_id" => request()->type_id,
-    //                     "point" => $pointSv
-    //                 ];
-    //             } else {
-    //                 $dataCreate = [
-    //                     "user_id" => auth('sanctum')->user()->id,
-    //                     "challenge_id" => $id,
-    //                     "content" => request()->content,
-    //                     "flag_point" => 1,
-    //                     "point" => $challenge->rank_point->top1,
-    //                     "type_id" => request()->type_id,
-    //                 ];
-    //                 $flagStatusReturn = true;
-    //             }
-    //         } else {
-    //             if ($flagUpdate) {
-    //                 $flagPoint = $result->flag_point + 1;
-    //                 $pointDD = 0;
-    //                 if ($result->point > 0) $pointDD = $result->point;
-    //                 $dataUpdate = [
-    //                     "content" => request()->content,
-    //                     "flag_point" => $flagPoint,
-    //                     "point" => $pointDD,
-    //                     "type_id" => request()->type_id,
-    //                 ];
-    //             } else {
-    //                 $dataCreate = [
-    //                     "user_id" => auth('sanctum')->user()->id,
-    //                     "challenge_id" => $id,
-    //                     "type_id" => request()->type_id,
-    //                     "content" => request()->content,
-    //                     "flag_point" => 1,
-    //                     "point" => 0
-    //                 ];
-    //             }
-    //         }
-    //         if ($flagUpdate) $result->update($dataUpdate);
-    //         if (!$flagUpdate) $result = Result::create($dataCreate);
-
-    //         if ($flagPass) return response()->json(
-    //             [
-    //                 "status" => $flagStatusReturn,
-    //                 "data_result" => $result,
-    //                 "data" => $arrResult
-    //             ]
-    //         );
-    //         return response()->json(
-    //             [
-    //                 "status" => $flagStatusReturn,
-    //                 "data_result" => $result,
-    //                 "data" => $arrResult
-    //             ]
-    //         );
-    //     } catch (\Throwable $th) {
-    //         dd($th->getMessage());
-    //         return response()->json([
-    //             'error' => "Không thể đưa vào luồng chạy !",
-    //             'time' => false,
-    //         ]);
-    //     }
-    // }
-
-    public function getCodechall($id)
+    public function runCodeSubmitChall($id)
     {
-        return response()->json([
-            "status" => true,
-            "payload" => Challenge::find($id)->load(['type_test' => function ($q) {
-                return $q
-                    ->where("status", 1);
-            }, 'has_cod', 'result' => function ($q) {
-                $id = auth('sanctum')->user()->id;
-                return $q->where('user_id', $id);
-            }]),
-        ]);
+        try {
+            $arrResult = $this->runCode($id, request()->type_id, true);
+            $flag = 0;
+            $flagPass = false;
+            $flagUpdate = false;
+            $flagStatusReturn = false;
+            foreach ($arrResult as $k => $v) {
+                if ($v['flag'] == true) $flag++;
+            }
+
+            if ($result = $this->resultCode->getResultCodeByAuthAndChallenge($id)) $flagUpdate = true;
+
+            if ($flag === count($arrResult)) {
+                $flagPass = true;
+                $challenge =  $this->challenge->getChallenge($id);
+                if ($flagUpdate) {
+
+                    $flagPoint = $result->flag_run_code + 1;
+                    $pointSv = ($flagPoint == 2
+                        ? $challenge->rank_point->top2
+                        : $flagPoint == 3)
+                        ?  $challenge->rank_point->top3
+                        :  $challenge->rank_point->leave;
+                    if ($result->point > 0) {
+                        $pointSv = $result->point;
+                    } else {
+                        $flagStatusReturn = true;
+                    }
+                    $dataUpdate = [
+                        "code_result" => request()->content,
+                        "flag_run_code" => $flagPoint,
+                        "code_language_id" => request()->type_id,
+                        "point" => $pointSv,
+                        'status' => 1
+                    ];
+                } else {
+                    $dataCreate = [
+                        "user_id" => auth('sanctum')->user()->id,
+                        "challenge_id" => $id,
+                        "code_result" => request()->content,
+                        "flag_run_code" => 1,
+                        "point" => $challenge->rank_point->top1,
+                        "code_language_id" => request()->type_id,
+                    ];
+                    $flagStatusReturn = true;
+                }
+            } else {
+                if ($flagUpdate) {
+                    $flagPoint = $result->flag_run_code + 1;
+                    $pointDD = 0;
+                    if ($result->point > 0) $pointDD = $result->point;
+                    $dataUpdate = [
+                        "code_result" => request()->content,
+                        "flag_run_code" => $flagPoint,
+                        "point" => $pointDD,
+                        "code_language_id" => request()->type_id,
+                    ];
+                } else {
+                    $dataCreate = [
+                        "user_id" => auth('sanctum')->user()->id,
+                        "challenge_id" => $id,
+                        "code_language_id" => request()->type_id,
+                        "code_result" => request()->content,
+                        "flag_run_code" => 1,
+                        "point" => 0
+                    ];
+                }
+            }
+            if ($flagUpdate) $this->resultCode->updateResultCode($result, $dataUpdate);
+            if (!$flagUpdate) $result = $this->resultCode->createResultCode($dataCreate);
+
+            if ($flagPass) return response()->json(
+                [
+                    "status" => $flagStatusReturn,
+                    "data_result" => $result,
+                    "data" => $arrResult
+                ]
+            );
+            return response()->json(
+                [
+                    "status" => $flagStatusReturn,
+                    "data_result" => $result,
+                    "data" => $arrResult
+                ]
+            );
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => $th->getMessage() . 'LINE : ' . $th->getLine(),
+                'time' => false,
+            ]);
+        }
     }
 
     public function getCodechallAll()
     {
         return response()->json([
             "status" => true,
-            // "payload" => Challenge::with(['has_cod'])->paginate(request()->limit ?? 10),
+            "payload" => $this->challenge->getChallenges(['limit' => request()->limit ?? 10], ['sample_code']),
         ]);
     }
 }
