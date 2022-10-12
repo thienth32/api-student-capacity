@@ -31,10 +31,14 @@ use App\Services\Modules\MRound\MRoundInterface;
 use App\Services\Modules\MRound\Round;
 use App\Services\Modules\MRoundTeam\MRoundTeamInterface;
 use App\Services\Modules\MRoundTeam\RoundTeam;
+use App\Services\Modules\MSampleCode\MSampleCodeInterface;
+use App\Services\Modules\MSampleCode\SampleCode;
 use App\Services\Modules\MSkill\MSkillInterface;
 use App\Services\Modules\MSkill\Skill;
 use App\Services\Modules\MTeam\MTeamInterface;
 use App\Services\Modules\MTeam\Team;
+use App\Services\Modules\MTestCase\MTestCaseInterfave;
+use App\Services\Modules\MTestCase\TestCase;
 use App\Services\Modules\MUser\MUserInterface;
 use App\Services\Modules\MUser\User;
 
@@ -138,6 +142,16 @@ trait RepositorySetup
         $this->app->bind(
             MCodeLanguageInterface::class,
             CodeLanguage::class,
+        );
+
+        $this->app->bind(
+            MSampleCodeInterface::class,
+            SampleCode::class,
+        );
+
+        $this->app->bind(
+            MTestCaseInterfave::class,
+            TestCase::class,
         );
     }
 }

@@ -438,6 +438,7 @@ Route::group([
 
     Route::prefix('code-manager')->group(function () {
         Route::get('', [CodeManagerController::class, 'index'])->name('admin.code.manager.list');
+        Route::get('{id}', [CodeManagerController::class, 'show'])->name('admin.code.manager.show');
         Route::get('create', [CodeManagerController::class, 'create'])->name('admin.code.manager.create');
         Route::post('store', [CodeManagerController::class, 'store'])->name('admin.code.manager.store');
     });

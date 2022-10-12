@@ -12,4 +12,9 @@ class SampleChallenge extends Model
     // use SoftDeletes;
     protected $table = 'sample_challenge';
     protected $guarded = [];
+
+    public function code_language()
+    {
+        return $this->belongsTo(CodeLanguage::class, 'code_language_id');
+    }
 }

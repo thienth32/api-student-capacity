@@ -29,13 +29,6 @@
                             @error('name')
                                 <p class="text-danger">{{ $message }}</p>
                             @enderror
-                            <br>
-                            <label for="" class="form-label">Tên hàm chạy </label>
-                            <input type="text" name="code" value="{{ old('code') }}" class=" form-control"
-                                placeholder="">
-                            @error('code')
-                                <p class="text-danger">{{ $message }}</p>
-                            @enderror
                         </div>
                         <div class="form-group mb-10 col-3">
                             <label for="" class="form-label">Top 1 </label>
@@ -82,10 +75,10 @@
                     </div>
                     <div class="form-group mb-10 col-12">
                         <!--begin::Repeater-->
-                        <div id="kt_docs_repeater_basic">
+                        <div id="test_case">
                             <!--begin::Form group-->
                             <div class="form-group">
-                                <div data-repeater-list="kt_docs_repeater_basic">
+                                <div data-repeater-list="test_case">
                                     <div data-repeater-item>
                                         <div class="form-group row">
                                             <div class="col-md-3">
@@ -134,19 +127,9 @@
                             <!--end::Form group-->
                         </div>
                         <!--end::Repeater-->
-                        {{-- <label for="" class="form-label">Đầu vào </label>
-                        <input type="text" name="name" value="{{ old('name') }}" class=" form-control"
-                            placeholder="">
-                        @error('name')
+                        @error('test_case')
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
-                        <br>
-                        <label for="" class="form-label">Đầu ra </label>
-                        <input type="text" name="code" value="{{ old('code') }}" class=" form-control"
-                            placeholder="">
-                        @error('code')
-                            <p class="text-danger">{{ $message }}</p>
-                        @enderror --}}
                     </div>
                     <div class="form-group mb-10">
                         <label for="" class="form-label">Chọn bộ ngôn ngữ </label>
@@ -176,9 +159,12 @@
 @endsection
 
 @section('page-script')
+    <script src="assets/plugins/custom/ckeditor/ckeditor-classic.bundle.js"></script>
+    <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
+    <script src="assets/js/system/ckeditor/ckeditor.js"></script>
     <script src="assets/plugins/custom/formrepeater/formrepeater.bundle.js"></script>
     <script>
-        $('#kt_docs_repeater_basic').repeater({
+        $('#test_case').repeater({
             initEmpty: false,
 
             defaultValues: {

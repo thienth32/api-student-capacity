@@ -3,24 +3,35 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CodeManager\CodeManagerRequest;
 use App\Services\Modules\MChallenge\MChallengeInterface;
 use App\Services\Modules\MCodeLanguage\MCodeLanguageInterface;
 use App\Services\Modules\MResultCode\MResultCodeInterface;
+use App\Services\Modules\MSampleCode\MSampleCodeInterface;
+use App\Services\Modules\MTestCase\MTestCaseInterfave;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CodeManagerController extends Controller
 {
     public function __construct(
         private MChallengeInterface $challenge,
         private MCodeLanguageInterface $codeLanguage,
-        private MResultCodeInterface $resultCode
+        private MResultCodeInterface $resultCode,
+        private MTestCaseInterfave $testCase,
+        private MSampleCodeInterface $sampleCode
     ) {
     }
 
     public function index()
     {
         $data = [];
-
+        $data['challenges'] = $this->challenge->getChallenges(
+            ['limit' => request('limit') ?? 10],
+            ['sample_code' => function ($q) {
+                return $q->with(['code_language']);
+            }, 'test_case']
+        );
         return view('pages.code.index', $data);
     }
 
@@ -31,9 +42,55 @@ class CodeManagerController extends Controller
         return view('pages.code.create', $data);
     }
 
-    public function store(Request $request)
+    public function store(CodeManagerRequest $request)
     {
-        dd($request->all());
+        DB::beginTransaction();
+        try {
+            $dataChallenge = [
+                'name' => $request->name,
+                'content' => $request->content,
+                'rank_point' => json_encode([
+                    "top1" => $request->top1,
+                    "top2" => $request->top2,
+                    "top3" => $request->top3,
+                    "leave" => $request->leave,
+                ]),
+            ];
+            $challengeCreate = $this->challenge->createChallenege($dataChallenge);
+            foreach (array_unique($request->languages) as $language_id) {
+                $dataSampleCode = [
+                    "code" => \Str::camel($request->name),
+                    "challenge_id" => $challengeCreate->id,
+                    "code_language_id" => $language_id
+                ];
+                $this->sampleCode->createSampleCode($dataSampleCode);
+            }
+            $countInput = 0;
+            foreach ($request->test_case as $key => $test_case) {
+                if ($test_case['input'] == null || $test_case['output'] == null) continue;
+                $inputs = explode(',', $test_case['input']);
+                if ($key == 0) {
+                    $countInput = count($inputs);
+                } else {
+                    if ($countInput < count($inputs)) continue;
+                    array_splice($inputs, $countInput);
+                }
+                $input = implode(',', $inputs);
+
+                $dataTestCaseCreate = [
+                    "input" => $input,
+                    "output" => $test_case['output'],
+                    "challenge_id" => $challengeCreate->id,
+                    "status" => isset($test_case['status']) ? 0 : 1
+                ];
+                $this->testCase->createTestCase($dataTestCaseCreate);
+            }
+            DB::commit();
+            return redirect()->route('admin.code.manager.list')->with('success', 'Thành công ');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return redirect()->route('admin.code.manager.create')->with('error', $th->getMessage())->withInput();
+        }
     }
 
 
@@ -176,7 +233,6 @@ class CodeManagerController extends Controller
         foreach ($challenge->test_case as $key => $value) {
             $arrSave = [];
             $content = str_replace("INPUT", $value->input, $RUNDCODE);
-            // dd($content);
             // $content =  request()->content . $fistResultend . $value->input . ");";
             $stout = $this->acrMultyLgCode(
                 [
@@ -315,9 +371,31 @@ class CodeManagerController extends Controller
 
     public function getCodechallAll()
     {
-        return response()->json([
-            "status" => true,
-            "payload" => $this->challenge->getChallenges(['limit' => request()->limit ?? 10], ['sample_code']),
-        ]);
+        try {
+            return response()->json([
+                "status" => true,
+                "payload" => $this->challenge->getChallenges(['limit' => request()->limit ?? 10], ['sample_code']),
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "status" => true,
+                "payload" => $th->getMessage(),
+            ]);
+        }
+    }
+
+    public function apiShow($id)
+    {
+        try {
+            return response()->json([
+                "status" => true,
+                "payload" => $this->challenge->apiShow($id),
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "status" => true,
+                "payload" => $th->getMessage(),
+            ]);
+        }
     }
 }

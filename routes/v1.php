@@ -80,5 +80,10 @@ Route::get("connect-room/{room}", [CapacityPlayController::class, 'userContinueT
 Route::post("sumit-room/{code}", [CapacityPlayController::class, 'submitQuestionCapacityPlay']);
 Route::post("next-sumit-room/{code}", [CapacityPlayController::class, 'nextQuestionApi']);
 
-Route::post('run-code/{id}', [CodeManagerController::class, 'runCodechall']);
-Route::post('submit-code/{id}', [CodeManagerController::class, 'runCodeSubmitChall']);
+
+Route::prefix('challenege')->group(function () {
+    Route::get('', [CodeManagerController::class, 'getCodechallAll']);
+    Route::get('{id}', [CodeManagerController::class, 'apiShow']);
+    Route::post('run-code/{id}', [CodeManagerController::class, 'runCodechall']);
+    Route::post('submit-code/{id}', [CodeManagerController::class, 'runCodeSubmitChall']);
+});
