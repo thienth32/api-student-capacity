@@ -188,11 +188,11 @@ class Contest implements MContestInterface
             'teams',
             'rounds' => function ($q) {
                 return $q->with([
-                    'teams:name,image',
+                    'teams:name,image,contest_id',
                     'judges'
                 ]);
             },
-            'judges:name,avatar'
+            'judges:name,avatar,email'
         ];
         if ($type == config('util.TYPE_TEST')) $with = [
             'rounds' => function ($q) {
