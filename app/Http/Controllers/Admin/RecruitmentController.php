@@ -286,7 +286,7 @@ class RecruitmentController extends Controller
         //     }
         // ])->loadCount('rounds');
 
-        $data->load(['contest' => function ($q) {
+        $data->load(['skill', 'contest' => function ($q) {
             return $q->with(['skills:id,short_name,name'])->withCount(['userCapacityDone', 'rounds']);
         }, 'enterprise']);
         $this->modulesRecruitment->loadSkillAndUserApiDetail($data);
