@@ -60,7 +60,9 @@
                     <tr>
 
                         <th>Tên bài thử thách </th>
+                        <th>Trạng thái </th>
                         <th>Điểm thưởng </th>
+                        <th>Mức độ </th>
                         <th>Số bài test case </th>
                         <th>Ngôn ngữ hỗ trợ </th>
                         {{-- <th class="text-center" colspan="2">
@@ -76,121 +78,261 @@
                                     href="{{ route('admin.code.manager.show', ['id' => $challenge->id]) }}">{{ $challenge->name }}</a>
                             </td>
                             <td>
+                                <div data-bs-toggle="tooltip" title="Cập nhật trạng thái " class="form-check form-switch">
+                                    <input value="{{ $challenge->status }}" data-id="{{ $challenge->id }}"
+                                        class="form-select-status form-check-input" @checked($challenge->status == 1)
+                                        type="checkbox" role="switch">
+                                </div>
+                            </td>
+                            <td>
                                 {{ 'TOP1 : ' . $challenge->rank_point->top1 }} <br>
                                 {{ 'TOP2 : ' . $challenge->rank_point->top2 }} <br>
                                 {{ 'TOP3 : ' . $challenge->rank_point->top3 }} <br>
                                 {{ 'Leave : ' . $challenge->rank_point->leave }} <br>
                             </td>
                             <td>
-                                {{ count($challenge->test_case) }}
+                                <span class="badge badge-primary">
+                                    {{ $challenge->type == 0 ? 'Dễ' : ($challenge->type == 1 ? 'Trung bình ' : 'Khó') }}</span>
                             </td>
                             <td>
-                                @foreach ($challenge->sample_code as $sample_code)
-                                    <span class="badge badge-primary"> {{ $sample_code->code_language->name }}</span>
-                                @endforeach
-                            </td>
-                            {{-- <td>
-                                <div data-bs-toggle="tooltip" title="Thao tác " class="btn-group dropstart">
-                                    <button style="padding: 0" type="button" class="btn   btn-sm dropdown-toggle"
-                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                        <span class="svg-icon svg-icon-success svg-icon-2x">
-                                            <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/General/Settings-2.svg--><svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
-                                                viewBox="0 0 24 24" version="1.1">
-                                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                    <rect x="0" y="0" width="24" height="24" />
-                                                    <path
-                                                        d="M5,8.6862915 L5,5 L8.6862915,5 L11.5857864,2.10050506 L14.4852814,5 L19,5 L19,9.51471863 L21.4852814,12 L19,14.4852814 L19,19 L14.4852814,19 L11.5857864,21.8994949 L8.6862915,19 L5,19 L5,15.3137085 L1.6862915,12 L5,8.6862915 Z M12,15 C13.6568542,15 15,13.6568542 15,12 C15,10.3431458 13.6568542,9 12,9 C10.3431458,9 9,10.3431458 9,12 C9,13.6568542 10.3431458,15 12,15 Z"
-                                                        fill="#000000" />
-                                                </g>
-                                            </svg>
-                                            <!--end::Svg Icon-->
-                                        </span>
-                                    </button>
-                                    <ul class="dropdown-menu ps-3">
-                                        <li class="my-3">
-                                            <a href="{{ route('admin.sliders.edit', ['id' => $slider->id]) }}">
-                                                <span role="button" class="svg-icon svg-icon-success svg-icon-2x">
-                                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Design/Edit.svg--><svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                                                        height="24px" viewBox="0 0 24 24" version="1.1">
-                                                        <g stroke="none" stroke-width="1" fill="none"
-                                                            fill-rule="evenodd">
-                                                            <rect x="0" y="0" width="24"
-                                                                height="24" />
-                                                            <path
-                                                                d="M8,17.9148182 L8,5.96685884 C8,5.56391781 8.16211443,5.17792052 8.44982609,4.89581508 L10.965708,2.42895648 C11.5426798,1.86322723 12.4640974,1.85620921 13.0496196,2.41308426 L15.5337377,4.77566479 C15.8314604,5.0588212 16,5.45170806 16,5.86258077 L16,17.9148182 C16,18.7432453 15.3284271,19.4148182 14.5,19.4148182 L9.5,19.4148182 C8.67157288,19.4148182 8,18.7432453 8,17.9148182 Z"
-                                                                fill="#000000" fill-rule="nonzero"
-                                                                transform="translate(12.000000, 10.707409) rotate(-135.000000) translate(-12.000000, -10.707409) " />
-                                                            <rect fill="#000000" opacity="0.3" x="5"
-                                                                y="20" width="15" height="2"
-                                                                rx="1" />
-                                                        </g>
-                                                    </svg>
-                                                </span>
-                                                Chỉnh sửa
-                                            </a>
-                                        </li>
-                                        <li class="my-3">
-                                            @hasrole(config('util.ROLE_DELETE'))
-                                                <form action="{{ route('admin.sliders.destroy', ['id' => $slider->id]) }}"
-                                                    method="post">
-                                                    @csrf
-                                                    @method('delete')
-                                                    <button onclick="return confirm('Bạn có chắc muốn xóa không !')"
-                                                        style=" background: none ; border: none ; list-style : none"
-                                                        type="submit">
-                                                        <span role="button" class="svg-icon svg-icon-danger svg-icon-2x">
-                                                            <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Trash.svg--><svg
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                                                                height="24px" viewBox="0 0 24 24" version="1.1">
-                                                                <g stroke="none" stroke-width="1" fill="none"
-                                                                    fill-rule="evenodd">
-                                                                    <rect x="0" y="0" width="24"
-                                                                        height="24" />
-                                                                    <path
-                                                                        d="M6,8 L18,8 L17.106535,19.6150447 C17.04642,20.3965405 16.3947578,21 15.6109533,21 L8.38904671,21 C7.60524225,21 6.95358004,20.3965405 6.89346498,19.6150447 L6,8 Z M8,10 L8.45438229,14.0894406 L15.5517885,14.0339036 L16,10 L8,10 Z"
-                                                                        fill="#000000" fill-rule="nonzero" />
-                                                                    <path
-                                                                        d="M14,4.5 L14,3.5 C14,3.22385763 13.7761424,3 13.5,3 L10.5,3 C10.2238576,3 10,3.22385763 10,3.5 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z"
-                                                                        fill="#000000" opacity="0.3" />
-                                                                </g>
-                                                            </svg>
-                                                            <!--end::Svg Icon-->
-                                                        </span>
-                                                        Xóa bỏ
-                                                    </button>
-                                                </form>
-                                            @else
-                                                <span style="cursor: not-allowed; user-select: none"
-                                                    class="svg-icon svg-icon-danger svg-icon-2x">
-                                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Code/Lock-circle.svg--><svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                                                        height="24px" viewBox="0 0 24 24" version="1.1">
-                                                        <g stroke="none" stroke-width="1" fill="none"
-                                                            fill-rule="evenodd">
-                                                            <rect x="0" y="0" width="24"
-                                                                height="24" />
-                                                            <circle fill="#000000" opacity="0.3" cx="12"
-                                                                cy="12" r="10" />
-                                                            <path
-                                                                d="M14.5,11 C15.0522847,11 15.5,11.4477153 15.5,12 L15.5,15 C15.5,15.5522847 15.0522847,16 14.5,16 L9.5,16 C8.94771525,16 8.5,15.5522847 8.5,15 L8.5,12 C8.5,11.4477153 8.94771525,11 9.5,11 L9.5,10.5 C9.5,9.11928813 10.6192881,8 12,8 C13.3807119,8 14.5,9.11928813 14.5,10.5 L14.5,11 Z M12,9 C11.1715729,9 10.5,9.67157288 10.5,10.5 L10.5,11 L13.5,11 L13.5,10.5 C13.5,9.67157288 12.8284271,9 12,9 Z"
-                                                                fill="#000000" />
-                                                        </g>
-                                                    </svg>
-                                                    <!--end::Svg Icon-->
-                                                </span>
-                                                Xóa bỏ
-                                            @endhasrole
 
-                                        </li>
-                                    </ul>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_{{ $challenge->id }}">
+                                    Xem {{ count($challenge->test_case) }} test case
+                                </button>
+
+                                <div class="modal fade" tabindex="-1" id="kt_modal_{{ $challenge->id }}">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Test case {{ $challenge->name }}</h5>
+                                            </div>
+
+                                            <form
+                                                action="{{ route('admin.code.manager.update.test.case', ['id' => $challenge->id]) }}"
+                                                method="POST">
+                                                @csrf
+                                                <div class="modal-body">
+                                                    <div class="test_case">
+                                                        <!--begin::Form group-->
+                                                        <div class="form-group">
+                                                            <div data-repeater-list="test_case">
+                                                                @if (count($challenge->test_case) > 0)
+                                                                    @foreach ($challenge->test_case as $test_case)
+                                                                        <div data-repeater-item>
+                                                                            <div class="form-group row">
+                                                                                <input type="hidden"
+                                                                                    value="{{ $test_case->id }}"
+                                                                                    name="id_test_case">
+                                                                                <div class="col-md-3">
+                                                                                    <label for=""
+                                                                                        class="form-label">Đầu
+                                                                                        vào </label>
+                                                                                    <input type="text" name="input"
+                                                                                        value="{{ $test_case->input }}"
+                                                                                        class=" form-control"
+                                                                                        placeholder="">
+                                                                                    @error('input')
+                                                                                        <p class="text-danger">
+                                                                                            {{ $message }}
+                                                                                        </p>
+                                                                                    @enderror
+                                                                                </div>
+
+                                                                                <div class="col-md-3">
+                                                                                    <label for=""
+                                                                                        class="form-label">Đầu
+                                                                                        ra </label>
+                                                                                    <input type="text" name="output"
+                                                                                        value="{{ $test_case->output }}"
+                                                                                        class=" form-control"
+                                                                                        placeholder="">
+                                                                                    @error('output')
+                                                                                        <p class="text-danger">
+                                                                                            {{ $message }}
+                                                                                        </p>
+                                                                                    @enderror
+                                                                                </div>
+
+                                                                                <div class="col-md-2">
+                                                                                    <div
+                                                                                        class="form-check form-check-custom form-check-solid mt-2 mt-md-11">
+                                                                                        <input class="form-check-input"
+                                                                                            name="status" type="checkbox"
+                                                                                            value="1"
+                                                                                            @checked($test_case->status == 0)
+                                                                                            id="form_checkbox" />
+                                                                                        <label class="form-check-label"
+                                                                                            for="form_checkbox">
+                                                                                            Test ẩn
+                                                                                        </label>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="col-md-4">
+                                                                                    <a href="javascript:;"
+                                                                                        data-repeater-delete
+                                                                                        class="btn btn-sm btn-light-danger mt-3 mt-md-8">
+                                                                                        <i class="la la-trash-o"></i>Xóa
+                                                                                    </a>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    @endforeach
+                                                                @else
+                                                                    <div data-repeater-item>
+                                                                        <div class="form-group row">
+                                                                            <input type="hidden" name="id_test_case">
+                                                                            <div class="col-md-3">
+                                                                                <label for="" class="form-label">Đầu
+                                                                                    vào </label>
+                                                                                <input type="text" name="input"
+                                                                                    class=" form-control" placeholder="">
+                                                                            </div>
+
+                                                                            <div class="col-md-3">
+                                                                                <label for=""
+                                                                                    class="form-label">Đầu
+                                                                                    ra </label>
+                                                                                <input type="text" name="output"
+                                                                                    class=" form-control" placeholder="">
+                                                                            </div>
+
+                                                                            <div class="col-md-2">
+                                                                                <div
+                                                                                    class="form-check form-check-custom form-check-solid mt-2 mt-md-11">
+                                                                                    <input class="form-check-input"
+                                                                                        name="status" type="checkbox"
+                                                                                        value="1"
+                                                                                        id="form_checkbox" />
+                                                                                    <label class="form-check-label"
+                                                                                        for="form_checkbox">
+                                                                                        Test ẩn
+                                                                                    </label>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="col-md-4">
+                                                                                <a href="javascript:;" data-repeater-delete
+                                                                                    class="btn btn-sm btn-light-danger mt-3 mt-md-8">
+                                                                                    <i class="la la-trash-o"></i>Xóa
+                                                                                </a>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group mt-5">
+                                                            <a href="javascript:;" data-repeater-create
+                                                                class="btn btn-light-primary">
+                                                                <i class="la la-plus"></i>Thêm mới
+                                                            </a>
+                                                        </div>
+
+                                                    </div>
+
+                                                    @error('test_case')
+                                                        <script>
+                                                            toastr.warning("{{ $message }}");
+                                                        </script>
+                                                    @enderror
+
+                                                </div>
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-light"
+                                                        data-bs-dismiss="modal">Thoát
+                                                    </button>
+                                                    <button class="btn btn-primary">Lưu lại</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
-                            </td> --}}
+
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_language_{{ $challenge->id }}">
+                                    @if (count($challenge->sample_code) > 0)
+                                        @foreach ($challenge->sample_code as $sample_code)
+                                            <span class="badge badge-info"> {{ $sample_code->code_language->name }}</span>
+                                        @endforeach
+                                    @else
+                                        Thêm ngôn ngữ
+                                    @endif
+                                </button>
+
+                                <div class="modal fade" tabindex="-1" id="kt_modal_language_{{ $challenge->id }}">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Thêm ngôn ngữ </h5>
+                                                <!--begin::Close-->
+                                                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2"
+                                                    data-bs-dismiss="modal" aria-label="Close">
+                                                    <span class="svg-icon svg-icon-2x"></span>
+                                                </div>
+                                                <!--end::Close-->
+                                            </div>
+                                            <form
+                                                action="{{ route('admin.code.manager.update.sample.code', ['id' => $challenge->id]) }}"
+                                                method="POST">
+                                                @csrf
+                                                <div class="modal-body">
+                                                    @php
+                                                        $listIdSampleCode = $challenge->sample_code
+                                                            ->map(function ($q) {
+                                                                return $q->code_language_id;
+                                                            })
+                                                            ->toArray();
+                                                    @endphp
+                                                    <select class="form-select form-select-solid" data-control="select2"
+                                                        data-placeholder="Select an option" name="languages[]"
+                                                        data-allow-clear="true" multiple="multiple">
+                                                        @foreach ($code_language as $value)
+                                                            <option @selected(in_array($value->id, $listIdSampleCode))
+                                                                value="{{ $value->id }}">
+                                                                {{ $value->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-light"
+                                                        data-bs-dismiss="modal">Thoát </button>
+                                                    <button class="btn btn-primary">Lưu lại</button>
+                                                </div>
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </td>
+                            <td>
+                                <a href=" ">
+                                    <span role="button" class="svg-icon svg-icon-success svg-icon-2x">
+                                        <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Design/Edit.svg--><svg
+                                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                            width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <rect x="0" y="0" width="24" height="24" />
+                                                <path
+                                                    d="M8,17.9148182 L8,5.96685884 C8,5.56391781 8.16211443,5.17792052 8.44982609,4.89581508 L10.965708,2.42895648 C11.5426798,1.86322723 12.4640974,1.85620921 13.0496196,2.41308426 L15.5337377,4.77566479 C15.8314604,5.0588212 16,5.45170806 16,5.86258077 L16,17.9148182 C16,18.7432453 15.3284271,19.4148182 14.5,19.4148182 L9.5,19.4148182 C8.67157288,19.4148182 8,18.7432453 8,17.9148182 Z"
+                                                    fill="#000000" fill-rule="nonzero"
+                                                    transform="translate(12.000000, 10.707409) rotate(-135.000000) translate(-12.000000, -10.707409) " />
+                                                <rect fill="#000000" opacity="0.3" x="5" y="20"
+                                                    width="15" height="2" rx="1" />
+                                            </g>
+                                        </svg>
+                                    </span>
+                                    Chỉnh sửa
+                                </a>
+                            </td>
                         </tr>
                     @empty
                     @endforelse
@@ -204,8 +346,49 @@
 
 @endsection
 @section('page-script')
+    <script src="assets/plugins/custom/formrepeater/formrepeater.bundle.js"></script>
     <script>
         let url = '/admin/code-manager?';
         const _token = "{{ csrf_token() }}";
+        $('.test_case').slideDown();
+        $('.test_case').repeater({
+            initEmpty: false,
+
+            defaultValues: {
+                'text-input': 'foo'
+            },
+
+            show: function() {
+                $(this).slideDown();
+            },
+
+            hide: function(deleteElement) {
+                $(this).slideUp(deleteElement);
+            }
+        });
+        $('.form-select-status').on('change', function() {
+            toastr.info('Đang chạy ....');
+            var status = $(this).val();
+            if (status == 1) {
+                status = 0;
+                $(this).val(0);
+            } else {
+                status = 1;
+                $(this).val(1);
+            }
+            var id = $(this).data('id');
+            $.ajax({
+                type: "POST",
+                url: '/admin/code-manager/update-status/' + id,
+                data: {
+                    _token: _token,
+                    status: status
+                },
+                success: function(response) {
+                    if (response) toastr.success('Thành công !');
+                    if (!response) toastr.info('Không thành công !');
+                }
+            });
+        });
     </script>
 @endsection

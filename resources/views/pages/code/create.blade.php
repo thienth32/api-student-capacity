@@ -132,6 +132,18 @@
                         @enderror
                     </div>
                     <div class="form-group mb-10">
+                        <label for="" class="form-label">Chọn mức độ bài thử thách </label>
+                        <select name="type" class="form-select" data-control="select2"
+                            data-placeholder="Select an option">
+                            <option value="0">Dễ </option>
+                            <option value="1">Trung bình </option>
+                            <option value="2">Khó</option>
+                        </select>
+                        @error('type')
+                            <p class="text-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div class="form-group mb-10">
                         <label for="" class="form-label">Chọn bộ ngôn ngữ </label>
                         <select name="languages[]" class="form-select" multiple data-control="select2"
                             data-placeholder="Select an option">

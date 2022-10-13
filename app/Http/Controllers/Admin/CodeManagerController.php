@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CodeManager\CodeManagerRequest;
+use App\Http\Requests\CodeManager\UpdateTestCaseRequest;
+use App\Models\ResultCode;
 use App\Services\Modules\MChallenge\MChallengeInterface;
 use App\Services\Modules\MCodeLanguage\MCodeLanguageInterface;
 use App\Services\Modules\MResultCode\MResultCodeInterface;
@@ -32,6 +34,7 @@ class CodeManagerController extends Controller
                 return $q->with(['code_language']);
             }, 'test_case']
         );
+        $data['code_language'] = $this->codeLanguage->getAllCodeLanguage();
         return view('pages.code.index', $data);
     }
 
@@ -55,6 +58,7 @@ class CodeManagerController extends Controller
                     "top3" => $request->top3,
                     "leave" => $request->leave,
                 ]),
+                'type' => $request->type
             ];
             $challengeCreate = $this->challenge->createChallenege($dataChallenge);
             foreach (array_unique($request->languages) as $language_id) {
@@ -90,6 +94,73 @@ class CodeManagerController extends Controller
         } catch (\Throwable $th) {
             DB::rollBack();
             return redirect()->route('admin.code.manager.create')->with('error', $th->getMessage())->withInput();
+        }
+    }
+
+    public function updateTestCase(UpdateTestCaseRequest $request, $id)
+    {
+        try {
+            $countInput = 0;
+            $arrTestCaseId = [];
+
+            foreach ($request->test_case as $key => $value) {
+                if ($value['id_test_case'] !== null) array_push($arrTestCaseId, $value['id_test_case']);
+                if ($value['input'] == null || $value['output'] == null) continue;
+                $inputs = explode(',', $value['input']);
+                if ($key == 0) {
+                    $countInput = count($inputs);
+                } else {
+                    if ($countInput < count($inputs)) continue;
+                    array_splice($inputs, $countInput);
+                }
+                $input = implode(',', $inputs);
+
+                $data = [
+                    "input" => $input,
+                    "output" => $value['output'],
+                    'challenge_id' => $id,
+                    'status' => isset($value['status']) ? 0 : 1,
+                    'id_test_case' => (int) $value['id_test_case'] ?? null
+                ];
+                if ($value['id_test_case']) $this->testCase->updateTestCase($data);
+                if ($value['id_test_case'] == null) {
+                    $testCase = $this->testCase->createTestCase($data);
+                    array_push($arrTestCaseId, $testCase->id);
+                }
+            }
+            if (count($arrTestCaseId) > 0) $this->testCase->removeRecod($arrTestCaseId, $id);
+            return redirect()->route('admin.code.manager.list')->with('success', 'Thành công ');
+        } catch (\Throwable $th) {
+            return redirect()->route('admin.code.manager.list')->with('error', $th->getMessage())->withInput();
+        }
+    }
+
+    public function updateSampleCode(Request $request, $id)
+    {
+        try {
+            $challenge = $this->challenge->getChallenge($id, ['sample_code']);
+            $challenge->sample_code()->delete();
+            foreach ($request->languages as $language) {
+                $dataSampleCode = [
+                    "code" => \Str::camel($challenge->name),
+                    "challenge_id" => $id,
+                    "code_language_id" => $language
+                ];
+                $this->sampleCode->createSampleCode($dataSampleCode);
+            }
+            return redirect()->route('admin.code.manager.list')->with('success', 'Thành công ');
+        } catch (\Throwable $th) {
+            return redirect()->route('admin.code.manager.list')->with('error', $th->getMessage())->withInput();
+        }
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        try {
+            $this->challenge->updateStatus($id, $request->status);
+            return true;
+        } catch (\Throwable $th) {
+            return false;
         }
     }
 
@@ -372,9 +443,23 @@ class CodeManagerController extends Controller
     public function getCodechallAll()
     {
         try {
+            $challenge = $this->challenge
+                ->getChallenges(
+                    ['limit' => request()->limit ?? 10],
+                    ['sample_code', 'result']
+                )
+                ->map(function ($q) {
+                    $flag = 0;
+                    $successRef = 0;
+                    foreach ($q->result as $r) {
+                        if ($r->status == 1) $flag++;
+                    }
+                    if (count($q->result) != 0) $successRef = ($flag / count($q->result)) * 100;
+                    return (array) $q->toArray() + ['successRef' => $successRef];
+                });
             return response()->json([
                 "status" => true,
-                "payload" => $this->challenge->getChallenges(['limit' => request()->limit ?? 10], ['sample_code']),
+                "payload" => $challenge,
             ]);
         } catch (\Throwable $th) {
             return response()->json([
@@ -384,12 +469,31 @@ class CodeManagerController extends Controller
         }
     }
 
+    public function show()
+    {
+    }
+
     public function apiShow($id)
     {
         try {
             return response()->json([
                 "status" => true,
                 "payload" => $this->challenge->apiShow($id),
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "status" => true,
+                "payload" => $th->getMessage(),
+            ]);
+        }
+    }
+
+    public function rating($id, $type_id)
+    {
+        try {
+            return response()->json([
+                "status" => true,
+                "payload" => $this->challenge->rating($id, $type_id),
             ]);
         } catch (\Throwable $th) {
             return response()->json([

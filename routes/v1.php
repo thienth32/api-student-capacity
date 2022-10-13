@@ -81,9 +81,10 @@ Route::post("sumit-room/{code}", [CapacityPlayController::class, 'submitQuestion
 Route::post("next-sumit-room/{code}", [CapacityPlayController::class, 'nextQuestionApi']);
 
 
-Route::prefix('challenege')->group(function () {
+Route::prefix('challenge')->group(function () {
     Route::get('', [CodeManagerController::class, 'getCodechallAll']);
     Route::get('{id}', [CodeManagerController::class, 'apiShow']);
+    Route::get('rating/{id}/{type_id}', [CodeManagerController::class, 'rating']);
     Route::post('run-code/{id}', [CodeManagerController::class, 'runCodechall']);
     Route::post('submit-code/{id}', [CodeManagerController::class, 'runCodeSubmitChall']);
 });
