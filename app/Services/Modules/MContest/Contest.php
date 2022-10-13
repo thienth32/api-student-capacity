@@ -186,6 +186,7 @@ class Contest implements MContestInterface
         $with = [
             // 'enterprise',
             'teams',
+            'teams.members:id,name,email,avatar',
             'rounds' => function ($q) {
                 return $q->with([
                     'teams:name,image,contest_id',
