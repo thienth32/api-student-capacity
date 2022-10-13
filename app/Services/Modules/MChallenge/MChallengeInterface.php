@@ -14,5 +14,5 @@ interface MChallengeInterface
 
     public function rating($id, $type_id);
 
-    public function updateStatus($id, $status);
+    public function updateChallenge($id, $data);
 }

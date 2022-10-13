@@ -2,7 +2,9 @@
 @section('title', 'Quản lý bài thử thách ')
 @section('page-title', 'Quản lý bài thử thách ')
 @section('content')
-
+    <script src="assets/plugins/custom/ckeditor/ckeditor-classic.bundle.js"></script>
+    <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
+    <script src="assets/js/system/ckeditor/ckeditor.js"></script>
     <div class="card card-flush p-4">
         <div class="row">
             <div class="col-lg-6">
@@ -65,8 +67,8 @@
                         <th>Mức độ </th>
                         <th>Số bài test case </th>
                         <th>Ngôn ngữ hỗ trợ </th>
-                        {{-- <th class="text-center" colspan="2">
-                        </th> --}}
+                        <th class="text-center" colspan="2">
+                        </th>
 
                     </tr>
                 </thead>
@@ -184,7 +186,8 @@
                                                                         <div class="form-group row">
                                                                             <input type="hidden" name="id_test_case">
                                                                             <div class="col-md-3">
-                                                                                <label for="" class="form-label">Đầu
+                                                                                <label for=""
+                                                                                    class="form-label">Đầu
                                                                                     vào </label>
                                                                                 <input type="text" name="input"
                                                                                     class=" form-control" placeholder="">
@@ -314,7 +317,10 @@
 
                             </td>
                             <td>
-                                <a href=" ">
+
+
+                                <button type="button" class="btn btn-light" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_update_{{ $challenge->id }}">
                                     <span role="button" class="svg-icon svg-icon-success svg-icon-2x">
                                         <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Design/Edit.svg--><svg
                                             xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -331,7 +337,123 @@
                                         </svg>
                                     </span>
                                     Chỉnh sửa
-                                </a>
+                                </button>
+
+                                <div class="modal fade" tabindex="-1" id="kt_modal_update_{{ $challenge->id }}">
+                                    <div class="modal-dialog modal-xl">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Cập nhật thông tin {{ $challenge->name }}</h5>
+
+                                                <!--begin::Close-->
+                                                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2"
+                                                    data-bs-dismiss="modal" aria-label="Close">
+                                                    <span class="svg-icon svg-icon-2x"></span>
+                                                </div>
+                                                <!--end::Close-->
+                                            </div>
+
+                                            <form
+                                                action="{{ route('admin.code.manager.update', ['id' => $challenge->id]) }}"
+                                                method="POST">
+                                                @csrf
+                                                <div class="modal-body row">
+                                                    <div class="col-6">
+                                                        <div class="form-group mb-10  ">
+                                                            <label for="" class="form-label">Tên thử thách
+                                                            </label>
+                                                            <input type="text" name="name"
+                                                                value="{{ $challenge->name }}" class=" form-control"
+                                                                placeholder="">
+                                                            @error('name')
+                                                                <p class="text-danger">{{ $message }}</p>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="form-group mb-10  ">
+                                                            <label for="" class="form-label">Top 1 </label>
+                                                            <input type="number" min="0" name="top1"
+                                                                value="{{ $challenge->rank_point->top1 }}"
+                                                                class=" form-control" placeholder="">
+                                                            @error('top1')
+                                                                <p class="text-danger">{{ $message }}</p>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="form-group mb-10  ">
+                                                            <label for="" class="form-label">Top 2 </label>
+                                                            <input type="number" min="0" name="top2"
+                                                                value="{{ $challenge->rank_point->top2 }}"
+                                                                class=" form-control" placeholder="">
+                                                            @error('top2')
+                                                                <p class="text-danger">{{ $message }}</p>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="form-group mb-10  ">
+                                                            <label for="" class="form-label">Top 3 </label>
+                                                            <input type="number" min="0" name="top3"
+                                                                value="{{ $challenge->rank_point->top3 }}"
+                                                                class=" form-control" placeholder="">
+                                                            @error('top3')
+                                                                <p class="text-danger">{{ $message }}</p>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="form-group mb-10  ">
+                                                            <label for="" class="form-label">Leave</label>
+                                                            <input type="number" min="0" name="leave"
+                                                                value="{{ $challenge->rank_point->leave }}"
+                                                                class=" form-control" placeholder="">
+                                                            @error('leave')
+                                                                <p class="text-danger">{{ $message }}</p>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group mb-10  col-6">
+                                                        <label for="" class="form-label">Nội dung</label>
+                                                        <textarea class="form-control " name="content" id="kt_docs_ckeditor_classic{{ $challenge->id }}" rows="3">
+                                                        {{ $challenge->content }}
+                                                    </textarea>
+                                                        @error('content')
+                                                            <p class="text-danger">{{ $message }}</p>
+                                                        @enderror
+                                                    </div>
+                                                    <script>
+                                                        ClassicEditor
+                                                            .create(document.querySelector('#kt_docs_ckeditor_classic{{ $challenge->id }}'))
+                                                            .then(editor => {})
+                                                            .catch(error => {});
+                                                    </script>
+
+                                                    <div class="form-group mb-10">
+                                                        <label for="" class="form-label">Chọn mức độ bài thử thách
+                                                        </label>
+                                                        <select name="type" class="form-select" data-control="select2"
+                                                            data-placeholder="Select an option">
+                                                            <option @selected($challenge->type == 0) value="0">Dễ
+                                                            </option>
+                                                            <option @selected($challenge->type == 1) value="1">Trung bình
+                                                            </option>
+                                                            <option @selected($challenge->type == 2) value="2">Khó
+                                                            </option>
+                                                        </select>
+                                                        @error('type')
+                                                            <p class="text-danger">{{ $message }}</p>
+                                                        @enderror
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-light"
+                                                        data-bs-dismiss="modal">Thoát
+                                                    </button>
+                                                    <button class="btn btn-primary">Lưu lại </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+
                             </td>
                         </tr>
                     @empty
@@ -346,6 +468,7 @@
 
 @endsection
 @section('page-script')
+
     <script src="assets/plugins/custom/formrepeater/formrepeater.bundle.js"></script>
     <script>
         let url = '/admin/code-manager?';

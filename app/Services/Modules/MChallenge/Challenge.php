@@ -24,6 +24,9 @@ class Challenge implements MChallengeInterface
                 return $q->where('status', 1);
             }
         )
+            ->when(request()->has('type'), function ($q) {
+                return $q->where('type', request('type'));
+            })
             ->with($with)
             ->latest()
             ->paginate($data['limit'] ?? 10);
@@ -49,8 +52,8 @@ class Challenge implements MChallengeInterface
         return $result;
     }
 
-    public function updateStatus($id, $status)
+    public function updateChallenge($id, $data)
     {
-        return $this->model::find($id)->update(['status' => $status]);
+        return $this->model::find($id)->update($data);
     }
 }

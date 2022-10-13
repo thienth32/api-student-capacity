@@ -97,6 +97,31 @@ class CodeManagerController extends Controller
         }
     }
 
+    public function update(CodeManagerRequest $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $dataChallenge = [
+                'name' => $request->name,
+                'content' => $request->content,
+                'rank_point' => json_encode([
+                    "top1" => $request->top1,
+                    "top2" => $request->top2,
+                    "top3" => $request->top3,
+                    "leave" => $request->leave,
+                ]),
+                'type' => $request->type
+            ];
+            $this->challenge->updateChallenge($id, $dataChallenge);
+            $this->sampleCode->updateSampleCodeBuChallengeId($id, ['code' => \Str::camel($request->name)]);
+            DB::commit();
+            return redirect()->route('admin.code.manager.list')->with('success', 'Thành công ');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return redirect()->route('admin.code.manager.list')->with('error', $th->getMessage())->withInput();
+        }
+    }
+
     public function updateTestCase(UpdateTestCaseRequest $request, $id)
     {
         try {
@@ -157,7 +182,7 @@ class CodeManagerController extends Controller
     public function updateStatus(Request $request, $id)
     {
         try {
-            $this->challenge->updateStatus($id, $request->status);
+            $this->challenge->updateChallenge($id, ['status' => $request->status]);
             return true;
         } catch (\Throwable $th) {
             return false;
@@ -478,7 +503,9 @@ class CodeManagerController extends Controller
         try {
             return response()->json([
                 "status" => true,
-                "payload" => $this->challenge->apiShow($id),
+                "payload" => $this->challenge->apiShow($id, ['sample_code' => function ($q) {
+                    return $q->with(['code_language']);
+                }]),
             ]);
         } catch (\Throwable $th) {
             return response()->json([

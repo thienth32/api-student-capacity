@@ -15,6 +15,15 @@ class CodeManagerRequest extends FormRequest
 
     public function rules()
     {
+        $currentAction = $this->route()->getActionMethod();
+        if ($currentAction == "update") return [
+            'name' => 'required',
+            'content' => 'required',
+            'top1' => 'required',
+            'top2' => 'required',
+            'top3' => 'required',
+            'leave' => 'required',
+        ];
         return [
             'name' => 'required',
             'content' => 'required',
