@@ -168,7 +168,7 @@ return [
 result = FC(INPUT);
 if isinstance(result,list):
     for x in result:
-        print(x)
+        print(x + " ")
 else:
     print(result)
             ',
