@@ -146,12 +146,12 @@ return [
         "name" => "Thử thách mã ",
         "role" => $ROLE_HAS_ADMINS,
         "subs-menu" => [
-            [
-                "name" => "Bộ ngôn ngữ ",
-                "param" => '?type=' . $TYPE_CAPACITY,
-                "link" => "admin.dev.show",
-                "role" => $ROLE_HAS_ADMINS
-            ],
+            // [
+            //     "name" => "Bộ ngôn ngữ ",
+            //     "param" => '?type=' . $TYPE_CAPACITY,
+            //     "link" => "admin.dev.show",
+            //     "role" => $ROLE_HAS_ADMINS
+            // ],
             [
                 "name" => "Bộ thử thách ",
                 "param" => '',

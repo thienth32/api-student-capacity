@@ -471,7 +471,9 @@ class CodeManagerController extends Controller
             $challenge = $this->challenge
                 ->getChallenges(
                     ['limit' => request()->limit ?? 10],
-                    ['sample_code', 'result']
+                    ['sample_code' => function ($q) {
+                        return $q->with(['code_language']);
+                    }, 'result']
                 )
                 ->map(function ($q) {
                     $flag = 0;

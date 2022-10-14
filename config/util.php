@@ -142,16 +142,17 @@ return [
                 OUTPEN
             "
         ],
-        "c" => [
-            "INOPEN" => '
-                void FC(INPUT) {
-                }
-            ',
-            "OUTPEN" => '
-            ',
-            "TEST_CASE" => "
-            "
-        ],
+        // "c" => [
+        //     "INOPEN" => '
+        //         #include <stdio.h>
+        //         void FC(INPUT) {
+        //         }
+        //     ',
+        //     "OUTPEN" => '
+        //     ',
+        //     "TEST_CASE" => "
+        //     "
+        // ],
         // 'cpp' => [
         //     "INOPEN" => '',
         //     "OUTPEN" => '
@@ -159,13 +160,23 @@ return [
         //     "TEST_CASE" => "
         //     "
         // ],
-        // 'py' => [
-        //     "INOPEN" => '',
-        //     "OUTPEN" => '
-        //     ',
-        //     "TEST_CASE" => "
-        //     "
-        // ],
+        'py' => [
+            "INOPEN" => '
+                def FC(INPUT):
+            ',
+            "OUTPEN" => '
+result = FC(INPUT);
+if isinstance(result,list):
+    for x in result:
+        print(x)
+else:
+    print(result)
+            ',
+            "TEST_CASE" => "
+INOPEN
+OUTPEN
+            "
+        ],
         // 'java' => [
         //     "INOPEN" => '',
         //     "OUTPEN" => '

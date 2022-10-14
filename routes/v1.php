@@ -88,3 +88,7 @@ Route::prefix('challenge')->group(function () {
     Route::post('run-code/{id}', [CodeManagerController::class, 'runCodechall']);
     Route::post('submit-code/{id}', [CodeManagerController::class, 'runCodeSubmitChall']);
 });
+
+//127.0.0.1:8000/api/v1/challenge/rating/{id challenge }/{id ngôn ngữ } METHOD=POST AUTH=TRUE
+// 127.0.0.1:8000/api/v1/challenge/run-code/{id challenge }  METHOD=POST AUTH=TRUE TEST-CASE=1
+// 127.0.0.1:8000/api/v1/challenge/submit-code/{id challenge }  METHOD=POST AUTH=TRUE TEST-CASE=FULL

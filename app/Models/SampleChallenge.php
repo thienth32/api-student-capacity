@@ -25,6 +25,7 @@ class SampleChallenge extends Model
     }
     public function  getCodeRunAttribute()
     {
+        if (request()->is('api/v1/challenge')) return "";
         $PARAMS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'q', 'k'];
         $code_language = $this->code_language;
         $challenge = $this->challenge->load(['test_case']);
@@ -39,6 +40,9 @@ class SampleChallenge extends Model
                     $inputDone .= '$' . $PARAM . (($key == (count($PARAMS) - 1)) ? '' : ',');
                     break;
                 case 'javascript':
+                    $inputDone .= $PARAM . (($key == (count($PARAMS) - 1)) ? '' : ',');
+                    break;
+                case 'python':
                     $inputDone .= $PARAM . (($key == (count($PARAMS) - 1)) ? '' : ',');
                     break;
                 default:
