@@ -63,7 +63,7 @@ class CodeManagerController extends Controller
             $challengeCreate = $this->challenge->createChallenege($dataChallenge);
             foreach (array_unique($request->languages) as $language_id) {
                 $dataSampleCode = [
-                    "code" => \Str::camel($request->name),
+                    "code" => \Str::camel(\Str::slug($request->name)),
                     "challenge_id" => $challengeCreate->id,
                     "code_language_id" => $language_id
                 ];
@@ -113,7 +113,7 @@ class CodeManagerController extends Controller
                 'type' => $request->type
             ];
             $this->challenge->updateChallenge($id, $dataChallenge);
-            $this->sampleCode->updateSampleCodeBuChallengeId($id, ['code' => \Str::camel($request->name)]);
+            $this->sampleCode->updateSampleCodeBuChallengeId($id, ['code' => \Str::camel(\Str::slug($request->name))]);
             DB::commit();
             return redirect()->route('admin.code.manager.list')->with('success', 'Thành công ');
         } catch (\Throwable $th) {
@@ -167,7 +167,7 @@ class CodeManagerController extends Controller
             $challenge->sample_code()->delete();
             foreach ($request->languages as $language) {
                 $dataSampleCode = [
-                    "code" => \Str::camel($challenge->name),
+                    "code" => \Str::camel(\Str::slug($challenge->name)),
                     "challenge_id" => $id,
                     "code_language_id" => $language
                 ];
