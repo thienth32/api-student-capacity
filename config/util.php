@@ -118,7 +118,7 @@ return [
                 OUTPEN
             "
         ],
-        "javascript" => [
+        "js" => [
             "INOPEN" => "
                 function FC(INPUT)
                 {};
@@ -147,6 +147,27 @@ return [
                 void FC(INPUT) {
                 }
             ',
+            "OUTPEN" => '
+            ',
+            "TEST_CASE" => "
+            "
+        ],
+        'cpp' => [
+            "INOPEN" => '',
+            "OUTPEN" => '
+            ',
+            "TEST_CASE" => "
+            "
+        ],
+        'py' => [
+            "INOPEN" => '',
+            "OUTPEN" => '
+            ',
+            "TEST_CASE" => "
+            "
+        ],
+        'java' => [
+            "INOPEN" => '',
             "OUTPEN" => '
             ',
             "TEST_CASE" => "

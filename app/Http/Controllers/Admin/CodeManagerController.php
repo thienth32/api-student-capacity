@@ -318,8 +318,8 @@ class CodeManagerController extends Controller
         $extensionFile = $codelanguage->ex;
         $type = $codelanguage->type;
 
-        $RUNDCODE = str_replace("INOPEN", request()->content, config('util.CHALLENEGE')[$type]['TEST_CASE']);
-        $OUTPEN = str_replace("FC", $challenge->sample_code[0]->code, config('util.CHALLENEGE')[$type]['OUTPEN']);
+        $RUNDCODE = str_replace("INOPEN", request()->content, config('util.CHALLENEGE')[$extensionFile]['TEST_CASE']);
+        $OUTPEN = str_replace("FC", $challenge->sample_code[0]->code, config('util.CHALLENEGE')[$extensionFile]['OUTPEN']);
         $RUNDCODE = str_replace("OUTPEN", $OUTPEN, $RUNDCODE);
 
         // $resultend = $challenge->sample_code[0]->code;

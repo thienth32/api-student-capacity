@@ -44,7 +44,7 @@ class SampleChallenge extends Model
                     break;
             }
         }
-        $code = str_replace('FC', $this->code, config('util.CHALLENEGE')[$code_language->type]['INOPEN']);
+        $code = str_replace('FC', $this->code, config('util.CHALLENEGE')[$code_language->ex]['INOPEN']);
         $code = str_replace('INPUT', $inputDone, $code);
         return $code;
     }
