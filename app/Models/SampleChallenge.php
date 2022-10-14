@@ -28,6 +28,7 @@ class SampleChallenge extends Model
         $PARAMS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'q', 'k'];
         $code_language = $this->code_language;
         $challenge = $this->challenge->load(['test_case']);
+        if (count($challenge->test_case) == 0) return 'No code';
         $input = $challenge->test_case[0]->input;
         $inputs = explode(',', $input);
         array_splice($PARAMS, count($inputs));

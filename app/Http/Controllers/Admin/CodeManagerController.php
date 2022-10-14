@@ -489,7 +489,7 @@ class CodeManagerController extends Controller
         } catch (\Throwable $th) {
             return response()->json([
                 "status" => true,
-                "payload" => $th->getMessage(),
+                "payload" => $th->getMessage() . $th->getLine() . 'File' . $th->getFile(),
             ]);
         }
     }
