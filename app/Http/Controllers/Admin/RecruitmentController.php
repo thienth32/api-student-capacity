@@ -249,7 +249,7 @@ class RecruitmentController extends Controller
                 $q->select(['skills.id', 'skills.short_name', 'skills.name'])->distinct();
             }
         ])->makeHidden([
-            'description', 'contest', 'resultCapacity',
+            'contest', 'resultCapacity',
         ]);
         $this->modulesRecruitment->LoadSkillAndUserApiShow($data);
         return $this->responseApi(
