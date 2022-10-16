@@ -474,16 +474,37 @@ class CodeManagerController extends Controller
                     ['sample_code' => function ($q) {
                         return $q->with(['code_language']);
                     }, 'result']
-                )
-                ->map(function ($q) {
-                    $flag = 0;
-                    $successRef = 0;
-                    foreach ($q->result as $r) {
-                        if ($r->status == 1) $flag++;
-                    }
-                    if (count($q->result) != 0) $successRef = ($flag / count($q->result)) * 100;
-                    return (array) $q->toArray() + ['successRef' => $successRef];
-                });
+                );
+            // ->map(function ($q) {
+            //     $flag = 0;
+            //     $successRef = 0;
+            //     foreach ($q->result as $r) {
+            //         if ($r->status == 1) $flag++;
+            //     }
+            //     if (count($q->result) != 0) $successRef = ($flag / count($q->result)) * 100;
+            //     return (array) $q->toArray() + ['successRef' => $successRef];
+            // });
+            $challenged = $challenge->getCollection()->transform(function ($q) {
+                $flag = 0;
+                $successRef = 0;
+                foreach ($q->result as $r) {
+                    if ($r->status == 1) $flag++;
+                }
+                if (count($q->result) != 0) $successRef = ($flag / count($q->result)) * 100;
+                return (array) $q->toArray() + ['successRef' => $successRef];
+            });
+            $challenged = new \Illuminate\Pagination\LengthAwarePaginator(
+                $challenged,
+                $challenge->total(),
+                $challenge->perPage(),
+                $challenge->currentPage(),
+                [
+                    'path' => \Request::url(),
+                    'query' => [
+                        'page' => $challenge->currentPage()
+                    ]
+                ]
+            );
             return response()->json([
                 "status" => true,
                 "payload" => $challenge,
