@@ -51,7 +51,7 @@ class SampleChallenge extends Model
         }
         $code = str_replace('FC', $this->code, config('util.CHALLENEGE')[$code_language->ex]['INOPEN']);
         $code = str_replace('INPUT', $inputDone, $code);
-        $code = trim($code);
+        // $code = trim($code);
         return $code;
     }
 }
