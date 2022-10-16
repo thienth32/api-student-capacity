@@ -27,6 +27,12 @@ class Challenge implements MChallengeInterface
             ->when(request()->has('type'), function ($q) {
                 return $q->where('type', request('type'));
             })
+            ->search(request()->q ?? null, ['name'])
+            ->when(request()->has('language_id'), function ($q) {
+                return $q->whereHas('sample_code', function ($q) {
+                    return $q->where('code_language_id', request()->language_id);
+                });
+            })
             ->with($with)
             ->latest()
             ->paginate($data['limit'] ?? 10);
