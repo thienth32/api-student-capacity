@@ -107,5 +107,11 @@ Route::prefix('keywords')->group(function () {
     Route::get('', [KeywordController::class, 'indexApi']);
 });
 
+Route::prefix('challenge')->group(function () {
+    Route::get('', [CodeManagerController::class, 'getCodechallAll']);
+    Route::get('{id}', [CodeManagerController::class, 'apiShow']);
+    Route::get('rating/{id}/{type_id}', [CodeManagerController::class, 'rating']);
+});
+
 
 Route::get('test', [KeywordController::class, 'test']);
