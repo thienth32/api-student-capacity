@@ -112,6 +112,9 @@ Route::prefix('challenge')->group(function () {
     Route::get('{id}', [CodeManagerController::class, 'apiShow']);
     Route::get('rating/{id}/{type_id}', [CodeManagerController::class, 'rating']);
 });
+Route::prefix('code-language')->group(function () {
+    Route::get('', [CodeManagerController::class, 'getCodeLanguageAll']);
+});
 
 
 Route::get('test', [KeywordController::class, 'test']);

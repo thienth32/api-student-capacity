@@ -465,6 +465,22 @@ class CodeManagerController extends Controller
         }
     }
 
+    public function getCodeLanguageAll()
+    {
+        try {
+            $codeLanguage = $this->codeLanguage->getAllCodeLanguage();
+            return response()->json([
+                "status" => true,
+                "payload" => $codeLanguage,
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "status" => false,
+                "payload" => $th->getMessage() . $th->getLine() . 'File' . $th->getFile(),
+            ]);
+        }
+    }
+
     public function getCodechallAll()
     {
         try {
@@ -511,7 +527,7 @@ class CodeManagerController extends Controller
             ]);
         } catch (\Throwable $th) {
             return response()->json([
-                "status" => true,
+                "status" => false,
                 "payload" => $th->getMessage() . $th->getLine() . 'File' . $th->getFile(),
             ]);
         }
@@ -532,7 +548,7 @@ class CodeManagerController extends Controller
             ]);
         } catch (\Throwable $th) {
             return response()->json([
-                "status" => true,
+                "status" => false,
                 "payload" => $th->getMessage(),
             ]);
         }
@@ -547,7 +563,7 @@ class CodeManagerController extends Controller
             ]);
         } catch (\Throwable $th) {
             return response()->json([
-                "status" => true,
+                "status" => false,
                 "payload" => $th->getMessage(),
             ]);
         }
