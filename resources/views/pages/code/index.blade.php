@@ -56,6 +56,36 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-4">
+                <label for="">Chọn mức độ</label>
+                <select class="select-type form-control form-select mb-2 select2-hidden-accessible" data-control="select2"
+                    data-hide-search="true" tabindex="-1" aria-hidden="true">
+                    <option class="form-control" @selected(request('type') == 0) value="0">Dễ
+                    </option>
+                    <option class="form-control" @selected(request('type') == 1) value="1">Trung bình
+                    </option>
+                    <option class="form-control" @selected(request('type') == 2) value="2">Khó
+                    </option>
+                </select>
+            </div>
+            <div class="col-4">
+                <label for="">Chọn ngôn ngữ</label>
+                <select class="select-language form-control form-select mb-2 select2-hidden-accessible"
+                    data-control="select2" data-hide-search="true" tabindex="-1" aria-hidden="true">
+                    @foreach ($code_language as $item)
+                        <option class="form-control" @selected(request('language_id') == $item->id) value="{{ $item->id }}">
+                            {{ $item->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-4">
+                <label for="">Tìm kiếm </label>
+                <input type="text" class="form-control ip-search" placeholder="Tìm kiếm "
+                    value="{{ request('q') ?? '' }}">
+            </div>
+
+        </div>
         <div class="">
             <table class=" table table-row-bordered table-row-gray-300 gy-7  table-hover  ">
                 <thead>
@@ -513,5 +543,14 @@
                 }
             });
         });
+    </script>
+    <script>
+        let url = "/admin/contests?{{ request()->has('type') ? 'type=' . request('type') : '' }}&";
+        const _token = "{{ csrf_token() }}";
+    </script>
+    <script src="assets/js/system/formatlist/formatlis.js"></script>
+    <script>
+        formatPage.searchDataType('.select-language', 'language_id');
+        formatPage.searchDataType('.select-type', 'type');
     </script>
 @endsection
