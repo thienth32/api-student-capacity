@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CapacityPlayController;
+use App\Http\Controllers\Admin\CodeManagerController;
 use App\Http\Controllers\Admin\ContestController;
 use App\Http\Controllers\Admin\RoundController;
 use App\Http\Controllers\Admin\TakeExamController as AdminTakeExamController;
@@ -78,3 +79,16 @@ Route::get("auth-room-play/{room}", [CapacityPlayController::class, 'autTokenPla
 Route::get("connect-room/{room}", [CapacityPlayController::class, 'userContinueTest']);
 Route::post("sumit-room/{code}", [CapacityPlayController::class, 'submitQuestionCapacityPlay']);
 Route::post("next-sumit-room/{code}", [CapacityPlayController::class, 'nextQuestionApi']);
+
+
+Route::prefix('challenge')->group(function () {
+    // Route::get('', [CodeManagerController::class, 'getCodechallAll']);
+    // Route::get('{id}', [CodeManagerController::class, 'apiShow']);
+    // Route::get('rating/{id}/{type_id}', [CodeManagerController::class, 'rating']);
+    Route::post('run-code/{id}', [CodeManagerController::class, 'runCodechall']);
+    Route::post('submit-code/{id}', [CodeManagerController::class, 'runCodeSubmitChall']);
+});
+
+//127.0.0.1:8000/api/v1/challenge/rating/{id challenge }/{id ngôn ngữ } METHOD=POST AUTH=TRUE
+// 127.0.0.1:8000/api/v1/challenge/run-code/{id challenge }  METHOD=POST AUTH=TRUE TEST-CASE=1
+// 127.0.0.1:8000/api/v1/challenge/submit-code/{id challenge }  METHOD=POST AUTH=TRUE TEST-CASE=FULL

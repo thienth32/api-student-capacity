@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\CandidateController;
 use App\Http\Controllers\Admin\CapacityPlayController;
 use App\Http\Controllers\Admin\CkeditorController;
+use App\Http\Controllers\Admin\CodeManagerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ExamController;
 use App\Http\Controllers\Admin\TeamController;
@@ -433,6 +434,17 @@ Route::group([
         Route::post('store', [JobController::class, 'store'])->name('admin.job.store');
         Route::get('destroy-error', [JobController::class, 'destroy'])->name('admin.job.destroy');
         Route::post('update-status', [JobController::class, 'updateStatusJob'])->name('admin.job.status');
+    });
+
+    Route::prefix('code-manager')->group(function () {
+        Route::get('', [CodeManagerController::class, 'index'])->name('admin.code.manager.list');
+        Route::get('show/{id}', [CodeManagerController::class, 'show'])->name('admin.code.manager.show');
+        Route::post('update/{id}', [CodeManagerController::class, 'update'])->name('admin.code.manager.update');
+        Route::get('create', [CodeManagerController::class, 'create'])->name('admin.code.manager.create');
+        Route::post('store', [CodeManagerController::class, 'store'])->name('admin.code.manager.store');
+        Route::post('update-test-case/{id}', [CodeManagerController::class, 'updateTestCase'])->name('admin.code.manager.update.test.case');
+        Route::post('update-sample-code/{id}', [CodeManagerController::class, 'updateSampleCode'])->name('admin.code.manager.update.sample.code');
+        Route::post('update-status/{id}', [CodeManagerController::class, 'updateStatus'])->name('admin.code.manager.update.status');
     });
 });
 

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Services\Builder\Builder;
+use App\Casts\FormatJson;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,6 +14,9 @@ class Challenge extends Model
     use SoftDeletes;
     protected $table = 'challenges';
     protected $guarded = [];
+    protected $casts = [
+        'rank_point' => FormatJson::class,
+    ];
 
     public function sample_code()
     {
@@ -26,5 +31,11 @@ class Challenge extends Model
     public function test_case()
     {
         return $this->hasMany(TestCase::class);
+    }
+
+
+    public function newEloquentBuilder($query)
+    {
+        return new Builder($query);
     }
 }

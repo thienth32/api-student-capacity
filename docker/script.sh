@@ -14,7 +14,5 @@ runtime=$(echo "$END - $START" | bc)
 echo $runtime
 
 else
-
 echo false
-
 fi
