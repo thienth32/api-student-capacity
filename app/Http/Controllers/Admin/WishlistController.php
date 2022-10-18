@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Contest;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\User;
+use App\Models\Contest;
 use App\Models\Wishlist;
+use Illuminate\Http\Request;
 use App\Services\Traits\TResponse;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class WishlistController extends Controller
 {
@@ -21,9 +22,50 @@ class WishlistController extends Controller
         private User $user
     ) {
     }
-    public function addWishlist(Request $request)
+
+
+    /**
+     * @OA\Post(
+     *     path="api/v1/wishlist/add",
+     *     description="Thêm lưu trữ,  Dẩy  type : 'contest' hoặc 'post'    , id : number",
+     *     tags={"WishLish","Api V1"},
+     *     summary="Authorization",
+     *     security={{"bearer_token":{}}},
+     *     @OA\RequestBody(
+     *          @OA\MediaType(
+     *               mediaType="application/json",
+     *              @OA\Schema(
+     *                  @OA\Property(
+     *                      type="number",
+     *                      property="id",
+     *                  ),
+     *            @OA\Property(
+     *                      type="string",
+     *                      property="type",
+     *                  ),
+     *              ),
+     *          ),
+     *      ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
+    public function addWishlist(Request $request, DB $dB)
     {
-        DB::beginTransaction();
+
+        $validate = Validator::make(
+            $request->all(),
+            [
+                "id"    => "required",
+                "type"  => "required",
+            ],
+            [
+                'id.required' => 'Trường này còn thiếu !',
+                'type.required' => 'Trường này còn thiếu !',
+            ]
+        );
+        if ($validate->fails()) return $this->responseApi(false, $validate->errors());
+        $dB::beginTransaction();
         try {
             $user_id = auth('sanctum')->user()->id;
             if ($request->type == 'contest') {
@@ -36,16 +78,53 @@ class WishlistController extends Controller
                 if (is_null($post)) return $this->responseApi(true, ['error' => 'Lỗi hệ thống !!']);
                 $post->wishlist()->create(['user_id' => $user_id]);
             }
-
-            DB::commit();
+            $dB::commit();
             return $this->responseApi(true,  'Lưu thành công !!');
         } catch (\Throwable $th) {
-            DB::rollBack();
+            $dB::rollBack();
         }
     }
 
+    /**
+     * @OA\Post(
+     *     path="api/v1/wishlist/remove",
+     *     description="Xóa lưu trữ ,  Dẩy  type : 'contest' hoặc 'post'    , id : number",
+     *     tags={"WishLish","Api V1"},
+     *     summary="Authorization",
+     *     security={{"bearer_token":{}}},
+     *     @OA\RequestBody(
+     *          @OA\MediaType(
+     *               mediaType="application/json",
+     *              @OA\Schema(
+     *                  @OA\Property(
+     *                      type="number",
+     *                      property="id",
+     *                  ),
+     *            @OA\Property(
+     *                      type="string",
+     *                      property="type",
+     *                  ),
+     *              ),
+     *          ),
+     *      ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
     public function removeWishlist(Request $request)
     {
+        $validate = Validator::make(
+            $request->all(),
+            [
+                "id"    => "required",
+                "type"  => "required",
+            ],
+            [
+                'id.required' => 'Trường này còn thiếu !',
+                'type.required' => 'Trường này còn thiếu !',
+            ]
+        );
+        if ($validate->fails()) return $this->responseApi(false, $validate->errors());
         try {
             $user_id = auth('sanctum')->user()->id;
             if ($request->type == 'contest') {
@@ -65,6 +144,26 @@ class WishlistController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *     path="api/v1/wishlist/user",
+     *     description="Danh sách lưu trữ",
+     *     tags={"WishLish","Api V1"},
+     *     @OA\Parameter(
+     *         name="type",
+     *         in="query",
+     *         description="Thể loại contest hoặc post ",
+     *         required=false,
+     *     ),
+     *       @OA\Parameter(
+     *         name="key",
+     *         in="query",
+     *         description="Nếu type = contest thì nhập key , key = 0 là contest , key= 1 là capacity",
+     *     ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
     public function list()
     {
         $user_id = auth('sanctum')->user()->id;
