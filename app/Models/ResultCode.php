@@ -17,4 +17,9 @@ class ResultCode extends Model
     {
         return $this->belongsTo(CodeLanguage::class, 'code_language_id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }
