@@ -3,6 +3,7 @@
 namespace App\Services\Traits;
 
 use App\Models\Member;
+use App\Models\Wishlist;
 use Illuminate\Support\Str;
 
 trait TGetAttributeColumn
@@ -28,9 +29,9 @@ trait TGetAttributeColumn
     {
         if (!auth('sanctum')->check() || request()->is('admin/*')) return false;
         $result_capacity = $this->load(['result_capacity' => function ($q) {
-            return $q->where('user_id',auth('sanctum')->id());
+            return $q->where('user_id', auth('sanctum')->id());
         }])->result_capacity;
-        if(count($result_capacity) == 0) return false;
+        if (count($result_capacity) == 0) return false;
         return $result_capacity[0]->status;
 
         // foreach ($this->result_capacity as $result) {
@@ -38,5 +39,21 @@ trait TGetAttributeColumn
         //         return $result->status;
         // }
         // return false;
+    }
+
+    public function  getUserWishlistAttribute()
+    {
+
+        if (!auth('sanctum')->id()) return false;
+        $wishlist = Wishlist::where('user_id', auth('sanctum')->id())
+            ->where(function ($query) {
+                $query->where('wishlistable_type', $this::class);
+                $query->where('wishlistable_id', $this->id);
+                return $query;
+            })->first();
+        if ($wishlist) {
+            return true;
+        }
+        return false;
     }
 }

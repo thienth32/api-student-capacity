@@ -533,8 +533,24 @@ class CodeManagerController extends Controller
         }
     }
 
-    public function show()
+    public function show($id)
     {
+        $data = $this->challenge->apiShow($id, [
+            'sample_code' => function ($q) {
+                return $q->with(['code_language']);
+            }, 'test_case',
+            'result' => function ($q) {
+                return $q->with(['user', 'codeLanguage']);
+            }
+        ]);
+        // dd($data->result->toArray());
+
+        foreach ($data->result as $key => $value) {
+
+            dump($value->codeLanguage->toArray());
+        }
+        die;
+        return view('pages.code.detail', compact('data'));
     }
 
     public function apiShow($id)
