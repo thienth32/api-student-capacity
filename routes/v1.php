@@ -1,14 +1,15 @@
 <?php
 
-use App\Http\Controllers\Admin\CapacityPlayController;
-use App\Http\Controllers\Admin\CodeManagerController;
-use App\Http\Controllers\Admin\ContestController;
-use App\Http\Controllers\Admin\RoundController;
-use App\Http\Controllers\Admin\TakeExamController as AdminTakeExamController;
-use App\Http\Controllers\Admin\TeamController as AdminTeamController;
-use App\Http\Controllers\Admin\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\RoundController;
+use App\Http\Controllers\Admin\ContestController;
+use App\Http\Controllers\Admin\WishlistController;
+use App\Http\Controllers\Admin\CodeManagerController;
+use App\Http\Controllers\Admin\CapacityPlayController;
+use App\Http\Controllers\Admin\TeamController as AdminTeamController;
+use App\Http\Controllers\Admin\TakeExamController as AdminTakeExamController;
 
 /*
 |--------------------------------------------------------------------------
@@ -92,3 +93,9 @@ Route::prefix('challenge')->group(function () {
 //127.0.0.1:8000/api/v1/challenge/rating/{id challenge }/{id ngôn ngữ } METHOD=POST AUTH=TRUE
 // 127.0.0.1:8000/api/v1/challenge/run-code/{id challenge }  METHOD=POST AUTH=TRUE TEST-CASE=1
 // 127.0.0.1:8000/api/v1/challenge/submit-code/{id challenge }  METHOD=POST AUTH=TRUE TEST-CASE=FULL
+
+Route::prefix('wishlist')->group(function () {
+    Route::post('add', [WishlistController::class, 'addWishlist']);
+    Route::post('remove', [WishlistController::class, 'removeWishlist']);
+    Route::get('user', [WishlistController::class, 'list']);
+});

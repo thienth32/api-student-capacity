@@ -151,4 +151,13 @@ class Contest extends Model
     {
         return new Builder($query);
     }
+
+    public function wishlist()
+    {
+        return $this->morphOne(Wishlist::class, 'wishlistable');
+    }
+    public function wishlistUsers()
+    {
+        return $this->morphMany(Wishlist::class, 'wishlistable');
+    }
 }

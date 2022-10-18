@@ -32,4 +32,9 @@ class Post extends Model
     {
         return new Builder($query);
     }
+
+    public function wishlist()
+    {
+        return $this->morphOne(Wishlist::class, 'wishlistable');
+    }
 }
