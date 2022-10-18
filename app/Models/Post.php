@@ -19,10 +19,15 @@ class Post extends Model
         'updated_at' =>  FormatDate::class,
         'thumbnail_url' => FormatImageGet::class,
     ];
+    protected $appends = [
+        'user_wishlist'
+    ];
+
     public function postable()
     {
         return $this->morphTo();
     }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
@@ -36,5 +41,20 @@ class Post extends Model
     public function wishlist()
     {
         return $this->morphOne(Wishlist::class, 'wishlistable');
+    }
+
+    public function  getUserWishlistAttribute()
+    {
+        if (!auth('sanctum')->id()) return false;
+        $wishlist = Wishlist::where('user_id', auth('sanctum')->id())
+            ->where(function ($query) {
+                $query->where('wishlistable_type', $this::class);
+                $query->where('wishlistable_id', $this->id);
+                return $query;
+            })->first();
+        if ($wishlist) {
+            return true;
+        }
+        return false;
     }
 }

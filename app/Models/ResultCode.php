@@ -13,6 +13,10 @@ class ResultCode extends Model
     protected $table = 'result_code';
     protected $guarded = [];
 
+    public function challenge()
+    {
+        return $this->hasOne(Challenge::class, 'id', 'challenge_id');
+    }
     public function code_language()
     {
         return $this->belongsTo(CodeLanguage::class, 'code_language_id');

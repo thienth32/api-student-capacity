@@ -25,6 +25,7 @@ class Contest extends Model
     protected $appends = [
         'slug_name',
         'status_user_has_join_contest',
+        'user_wishlist'
     ];
 
     public static function boot()
