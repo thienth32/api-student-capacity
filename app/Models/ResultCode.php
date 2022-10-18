@@ -12,16 +12,18 @@ class ResultCode extends Model
     // use SoftDeletes;
     protected $table = 'result_code';
     protected $guarded = [];
-    public function user()
-    {
-        return $this->hasOne(User::class, 'id', 'user_id');
-    }
+
     public function challenge()
     {
         return $this->hasOne(Challenge::class, 'id', 'challenge_id');
     }
-    public function codeLanguage()
+    public function code_language()
     {
-        return $this->hasOne(CodeLanguage::class, 'id', 'code_language_id');
+        return $this->belongsTo(CodeLanguage::class, 'code_language_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

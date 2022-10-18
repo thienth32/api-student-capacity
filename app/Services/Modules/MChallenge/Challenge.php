@@ -52,9 +52,10 @@ class Challenge implements MChallengeInterface
     public function rating($id, $type_id)
     {
         $result = $this->resultCode::where('challenge_id', $id)
+            ->with(['user'])
             ->where('code_language_id', $type_id)
             ->orderBy('point', 'desc')
-            ->get();
+            ->paginate(request('limit') ?? 10);
         return $result;
     }
 

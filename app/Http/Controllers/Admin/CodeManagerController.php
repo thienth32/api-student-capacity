@@ -446,14 +446,14 @@ class CodeManagerController extends Controller
             if ($flagPass) return response()->json(
                 [
                     "status" => $flagStatusReturn,
-                    "data_result" => $result,
+                    "data_result" => $result->load('code_language'),
                     "data" => $arrResult
                 ]
             );
             return response()->json(
                 [
                     "status" => $flagStatusReturn,
-                    "data_result" => $result,
+                    "data_result" => $result->load('code_language'),
                     "data" => $arrResult
                 ]
             );
@@ -560,7 +560,9 @@ class CodeManagerController extends Controller
                 "status" => true,
                 "payload" => $this->challenge->apiShow($id, ['sample_code' => function ($q) {
                     return $q->with(['code_language']);
-                }, 'test_case', 'result']),
+                }, 'test_case', 'result' => function ($q) {
+                    return $q->with(['code_language']);
+                }]),
             ]);
         } catch (\Throwable $th) {
             return response()->json([
