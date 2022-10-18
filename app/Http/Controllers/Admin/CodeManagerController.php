@@ -446,14 +446,14 @@ class CodeManagerController extends Controller
             if ($flagPass) return response()->json(
                 [
                     "status" => $flagStatusReturn,
-                    "data_result" => $result,
+                    "data_result" => $result->load('code_language'),
                     "data" => $arrResult
                 ]
             );
             return response()->json(
                 [
                     "status" => $flagStatusReturn,
-                    "data_result" => $result,
+                    "data_result" => $result->load('code_language'),
                     "data" => $arrResult
                 ]
             );
