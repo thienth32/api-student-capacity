@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 
 class SliderController extends Controller
 {
-    use TUploadImage,TStatus,TResponse;
+    use TUploadImage, TStatus, TResponse;
 
     private $slider;
     private $major;
@@ -29,7 +29,7 @@ class SliderController extends Controller
         $this->major = $major;
         $this->round = $round;
         $this->contest = $contest;
-        $this->modulesSlider=$modulesSlider;
+        $this->modulesSlider = $modulesSlider;
     }
 
     public function index()
@@ -111,7 +111,7 @@ class SliderController extends Controller
     {
         try {
             $data = $this->modulesSlider->apiIndex();
-            return $this->responseApi(true,$data);
+            return $this->responseApi(true, $data);
         } catch (\Throwable $th) {
             return $this->responseApi(false);
         }
@@ -137,7 +137,7 @@ class SliderController extends Controller
     public function store(RequestSlider $request)
     {
 
-         try {
+        try {
             if ($request->hasFile('image_url')) {
                 $fileImage = $request->file('image_url');
                 $filename = $this->uploadFile($fileImage);
@@ -148,11 +148,11 @@ class SliderController extends Controller
                 'end_time' => $request->end_time,
                 'image_url' => $filename,
                 'status' => 1,
-            ],$request);
-        return redirect()->route('admin.sliders.list');;
-         } catch (\Throwable $th) {
-             return abort(404);
-         }
+            ], $request);
+            return redirect()->route('admin.sliders.list');;
+        } catch (\Throwable $th) {
+            return abort(404);
+        }
     }
 
     public function edit(Request $request, $id)
@@ -197,9 +197,9 @@ class SliderController extends Controller
             } else {
                 $data = array_merge($data, ['sliderable_id' => null, 'sliderable_type' => null]);
             }
-            $this->modulesSlider->update($slider,$data);
+            $this->modulesSlider->update($slider, $data);
             return redirect()->route('admin.sliders.list');
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             abort(404);
         }
     }

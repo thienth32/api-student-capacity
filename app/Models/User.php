@@ -58,4 +58,19 @@ class User extends Authenticatable
     {
         return $this->hasMany(ContestUser::class, 'user_id');
     }
+
+    // public function wishlistContests()
+    // {
+    //     return $this->morphedByMany(Contest::class, 'wishlistable');
+    // }
+
+    // public function wishlistContest()
+    // {
+    //     // return $this->morphOne(Contest::class,  'wishlistable');
+    // }
+
+    public function wishlistContests()
+    {
+        return $this->hasMany(Wishlist::class, 'user_id');
+    }
 }
