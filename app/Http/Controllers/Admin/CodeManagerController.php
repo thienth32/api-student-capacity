@@ -540,16 +540,9 @@ class CodeManagerController extends Controller
                 return $q->with(['code_language']);
             }, 'test_case',
             'result' => function ($q) {
-                return $q->with(['user', 'codeLanguage']);
+                return $q->with(['user', 'code_language']);
             }
         ]);
-        // dd($data->result->toArray());
-
-        foreach ($data->result as $key => $value) {
-
-            dump($value->codeLanguage->toArray());
-        }
-        die;
         return view('pages.code.detail', compact('data'));
     }
 

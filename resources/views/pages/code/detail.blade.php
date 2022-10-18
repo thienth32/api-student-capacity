@@ -34,7 +34,7 @@
                         <span class="h6">Kết quả bài test:</span>
                         <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
                             data-bs-target="#modalId">
-                            Hiển thị
+                            Hiển thị {{ count($data->result) }} kết quả
                         </button>
 
                         <!-- Modal -->
@@ -55,7 +55,8 @@
                                                     <tr>
                                                         <th>Thông tin người làm</th>
                                                         <th>Ngôn ngữ</th>
-                                                        <th>Column 3</th>
+                                                        <th>Điểm</th>
+                                                        <th>Trạng thái</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody class="table-group-divider">
@@ -68,7 +69,10 @@
                                                                     {{ $resu->user->email }}
                                                                 </td>
                                                                 <td>{{ $resu->code_language->name }}</td>
-                                                                <td>R1C3</td>
+                                                                <td> {{ $resu->point }}</td>
+                                                                <td> <span
+                                                                        class="badge badge-primary">{{ $resu->status == 0 ? 'Đang làm' : 'Đã làm xong' }}</span>
+                                                                </td>
                                                             </tr>
                                                         @endforeach
                                                     @endif
@@ -241,7 +245,6 @@
                                                                                 </label>
                                                                             </div>
                                                                         </div>
-
                                                                         <div class="col-md-4">
                                                                             <a href="javascript:;" data-repeater-delete
                                                                                 class="btn btn-sm btn-light-danger mt-3 mt-md-8">
@@ -253,24 +256,19 @@
                                                             @endif
                                                         </div>
                                                     </div>
-
                                                     <div class="form-group mt-5">
                                                         <a href="javascript:;" data-repeater-create
                                                             class="btn btn-light-primary">
                                                             <i class="la la-plus"></i>Thêm mới
                                                         </a>
                                                     </div>
-
                                                 </div>
-
                                                 @error('test_case')
                                                     <script>
                                                         toastr.warning("{{ $message }}");
                                                     </script>
                                                 @enderror
-
                                             </div>
-
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-light btn-sm"
                                                     data-bs-dismiss="modal">Thoát
@@ -285,7 +283,6 @@
                     </div>
                 </div>
             </div>
-
 
         </div>
     </div>
