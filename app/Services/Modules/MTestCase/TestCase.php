@@ -12,6 +12,7 @@ class TestCase implements MTestCaseInterfave
 
     public function createTestCase($data)
     {
+        if (isset($data['id_test_case'])) unset($data['id_test_case']);
         $data = $this->model::create($data);
         return $data;
     }
@@ -19,7 +20,6 @@ class TestCase implements MTestCaseInterfave
     public function updateTestCase($data)
     {
         if ($data['id_test_case'] != 0) {
-            unset($data['challenge_id']);
             $model = $this->model::find($data['id_test_case']);
             unset($data['id_test_case']);
             $model->update($data);
