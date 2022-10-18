@@ -12,4 +12,9 @@ class ResultCode extends Model
     // use SoftDeletes;
     protected $table = 'result_code';
     protected $guarded = [];
+
+    public function code_language()
+    {
+        return $this->belongsTo(CodeLanguage::class, 'code_language_id');
+    }
 }

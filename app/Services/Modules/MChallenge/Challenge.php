@@ -54,7 +54,7 @@ class Challenge implements MChallengeInterface
         $result = $this->resultCode::where('challenge_id', $id)
             ->where('code_language_id', $type_id)
             ->orderBy('point', 'desc')
-            ->get();
+            ->paginate(request('limit') ?? 10);
         return $result;
     }
 

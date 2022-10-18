@@ -544,7 +544,9 @@ class CodeManagerController extends Controller
                 "status" => true,
                 "payload" => $this->challenge->apiShow($id, ['sample_code' => function ($q) {
                     return $q->with(['code_language']);
-                }, 'test_case', 'result']),
+                }, 'test_case', 'result' => function ($q) {
+                    return $q->with(['code_language']);
+                }]),
             ]);
         } catch (\Throwable $th) {
             return response()->json([
