@@ -11,11 +11,13 @@ use App\Services\Modules\MCodeLanguage\MCodeLanguageInterface;
 use App\Services\Modules\MResultCode\MResultCodeInterface;
 use App\Services\Modules\MSampleCode\MSampleCodeInterface;
 use App\Services\Modules\MTestCase\MTestCaseInterfave;
+use App\Services\Traits\TDeadLock;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class CodeManagerController extends Controller
 {
+    use TDeadLock;
     public function __construct(
         private MChallengeInterface $challenge,
         private MCodeLanguageInterface $codeLanguage,
@@ -47,78 +49,88 @@ class CodeManagerController extends Controller
 
     public function store(CodeManagerRequest $request)
     {
-        DB::beginTransaction();
-        try {
-            $dataChallenge = [
-                'name' => $request->name,
-                'content' => $request->content,
-                'rank_point' => json_encode([
-                    "top1" => $request->top1,
-                    "top2" => $request->top2,
-                    "top3" => $request->top3,
-                    "leave" => $request->leave,
-                ]),
-                'type' => $request->type
-            ];
-            $challengeCreate = $this->challenge->createChallenege($dataChallenge);
-            foreach (array_unique($request->languages) as $language_id) {
-                $dataSampleCode = [
-                    "code" => \Str::camel(\Str::slug($request->name)),
-                    "challenge_id" => $challengeCreate->id,
-                    "code_language_id" => $language_id
+        for ($currentAttempt = 0; $currentAttempt < 5; $currentAttempt++) {
+            DB::beginTransaction();
+            try {
+                $dataChallenge = [
+                    'name' => $request->name,
+                    'content' => $request->content,
+                    'rank_point' => json_encode([
+                        "top1" => $request->top1,
+                        "top2" => $request->top2,
+                        "top3" => $request->top3,
+                        "leave" => $request->leave,
+                    ]),
+                    'type' => $request->type
                 ];
-                $this->sampleCode->createSampleCode($dataSampleCode);
-            }
-            $countInput = 0;
-            foreach ($request->test_case as $key => $test_case) {
-                if ($test_case['input'] == null || $test_case['output'] == null) continue;
-                $inputs = explode(',', $test_case['input']);
-                if ($key == 0) {
-                    $countInput = count($inputs);
-                } else {
-                    if ($countInput < count($inputs)) continue;
-                    array_splice($inputs, $countInput);
+                $challengeCreate = $this->challenge->createChallenege($dataChallenge);
+                foreach (array_unique($request->languages) as $language_id) {
+                    $dataSampleCode = [
+                        "code" => \Str::camel(\Str::slug($request->name)),
+                        "challenge_id" => $challengeCreate->id,
+                        "code_language_id" => $language_id
+                    ];
+                    $this->sampleCode->createSampleCode($dataSampleCode);
                 }
-                $input = implode(',', $inputs);
+                $countInput = 0;
+                foreach ($request->test_case as $key => $test_case) {
+                    if ($test_case['input'] == null || $test_case['output'] == null) {
+                        continue;
+                    }
+                    $inputs = explode(',', $test_case['input']);
+                    if ($key == 0) {
+                        $countInput = count($inputs);
+                    } else {
+                        if ($countInput < count($inputs)) {
+                            continue;
+                        }
+                        array_splice($inputs, $countInput);
+                    }
+                    $input = implode(',', $inputs);
 
-                $dataTestCaseCreate = [
-                    "input" => $input,
-                    "output" => $test_case['output'],
-                    "challenge_id" => $challengeCreate->id,
-                    "status" => isset($test_case['status']) ? 0 : 1
-                ];
-                $this->testCase->createTestCase($dataTestCaseCreate);
+                    $dataTestCaseCreate = [
+                        "input" => $input,
+                        "output" => $test_case['output'],
+                        "challenge_id" => $challengeCreate->id,
+                        "status" => isset($test_case['status']) ? 0 : 1
+                    ];
+                    $this->testCase->createTestCase($dataTestCaseCreate);
+                }
+                DB::commit();
+                return redirect()->route('admin.code.manager.list')->with('success', 'Thành công ');
+            } catch (\Throwable $th) {
+                DB::rollBack();
+                if ($this->causedByDeadlock($th)) continue;
+                return redirect()->route('admin.code.manager.create')->with('error', $th->getMessage())->withInput();
             }
-            DB::commit();
-            return redirect()->route('admin.code.manager.list')->with('success', 'Thành công ');
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            return redirect()->route('admin.code.manager.create')->with('error', $th->getMessage())->withInput();
         }
     }
 
     public function update(CodeManagerRequest $request, $id)
     {
-        DB::beginTransaction();
-        try {
-            $dataChallenge = [
-                'name' => $request->name,
-                'content' => $request->content,
-                'rank_point' => json_encode([
-                    "top1" => $request->top1,
-                    "top2" => $request->top2,
-                    "top3" => $request->top3,
-                    "leave" => $request->leave,
-                ]),
-                'type' => $request->type
-            ];
-            $this->challenge->updateChallenge($id, $dataChallenge);
-            $this->sampleCode->updateSampleCodeBuChallengeId($id, ['code' => \Str::camel(\Str::slug($request->name))]);
-            DB::commit();
-            return redirect()->route('admin.code.manager.list')->with('success', 'Thành công ');
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            return redirect()->route('admin.code.manager.list')->with('error', $th->getMessage())->withInput();
+        for ($currentAttempt = 0; $currentAttempt < 5; $currentAttempt++) {
+            DB::beginTransaction();
+            try {
+                $dataChallenge = [
+                    'name' => $request->name,
+                    'content' => $request->content,
+                    'rank_point' => json_encode([
+                        "top1" => $request->top1,
+                        "top2" => $request->top2,
+                        "top3" => $request->top3,
+                        "leave" => $request->leave,
+                    ]),
+                    'type' => $request->type
+                ];
+                $this->challenge->updateChallenge($id, $dataChallenge);
+                $this->sampleCode->updateSampleCodeBuChallengeId($id, ['code' => \Str::camel(\Str::slug($request->name))]);
+                DB::commit();
+                return redirect()->route('admin.code.manager.list')->with('success', 'Thành công ');
+            } catch (\Throwable $th) {
+                DB::rollBack();
+                if ($this->causedByDeadlock($th)) continue;
+                return redirect()->route('admin.code.manager.list')->with('error', $th->getMessage())->withInput();
+            }
         }
     }
 
