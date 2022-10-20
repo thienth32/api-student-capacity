@@ -183,6 +183,14 @@ class WishlistController extends Controller
                     if (request('type') == 'contest') {
                         $q->where('type', request('key'));
                     }
+                    if (request('type') == 'post') {
+                        $q->with([
+                            'postable:id,name',
+                            'postable.enterprise:enterprises.id,enterprises.name,enterprises.logo,enterprises.link_web',
+                        ]);
+                        // $q->with('postable.enterprise:enterprises.id,enterprises.name,enterprises.logo,enterprises.link_web');
+                        // $q->with('postable.enterprise:enterprises.id,enterprises.name,enterprises.logo,enterprises.link_web');
+                    }
                     return $q;
                 }])
                 ->get()->map(function ($q) {
