@@ -107,7 +107,6 @@ class Contest implements MContestInterface
                 ->where('type', $flagCapacity ?  config('util.TYPE_TEST') : config('util.TYPE_CONTEST'))
                 ->orderBy('date_start', 'desc')
                 ->with(['user_top'])
-                ->withCount('user_top')
                 ->paginate(request('limit') ?? 9);
         if (!$flagCapacity)
             $data = $this->getList($flagCapacity, request())
@@ -325,7 +324,7 @@ class Contest implements MContestInterface
             }
             $contestArrId = array_unique($contestArrId);
             unset($contestArrId[array_search($id_contest, $contestArrId)]);
-            $data->whereIn('id', $contestArrId)->withCount(['userCapacityDone' => function ($q) {
+            $data->whereIn('id', $contestArrId)->with('user_top')->withCount(['userCapacityDone' => function ($q) {
                 return $q->where('result_capacity.status', config('util.STATUS_RESULT_CAPACITY_DONE'));
             }]);
         }
