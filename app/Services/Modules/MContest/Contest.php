@@ -2,6 +2,7 @@
 
 namespace App\Services\Modules\MContest;
 
+use App\Http\Resources\DetailCapacityApiResource;
 use App\Models\JudgeRound;
 use App\Models\Major;
 use App\Models\Contest as ModelContest;
@@ -185,7 +186,6 @@ class Contest implements MContestInterface
     public function apiShow($id, $type)
     {
         $with = [
-            // 'enterprise',
             'teams',
             'teams.members:id,name,email,avatar',
             'rounds' => function ($q) {
@@ -196,21 +196,23 @@ class Contest implements MContestInterface
             },
             'judges:name,avatar,email'
         ];
-        if ($type == config('util.TYPE_TEST')) $with = [
-            'rounds' => function ($q) {
-                return $q->orderBy('start_time', 'asc');
-            },
-            'recruitmentEnterprise',
-            'userCapacityDone' => function ($q) {
-                return $q->with('user')->where('result_capacity.status', config('util.STATUS_RESULT_CAPACITY_DONE'));
-            }
-        ];
+        $withCount = ['rounds'];
+        if ($type == config('util.TYPE_TEST')) {
+            $with = [
+                'rounds' => function ($q) {
+                    $q->orderBy('start_time', 'asc');
+                    $q->setEagerLoads([]);
+                    return $q;
+                },
+                'recruitmentEnterprise',
+            ];
+            $withCount = ['rounds', 'userCapacityDone'];
+        }
         $contest = $this->whereId($id, $type)
-            ->with(
-                $with
-            )
-            ->withCount('rounds')
+            ->with($with)
+            ->withCount($withCount)
             ->first();
+        if ($type == config('util.TYPE_TEST')) return new DetailCapacityApiResource($contest);
         return $contest;
     }
 
@@ -309,6 +311,7 @@ class Contest implements MContestInterface
 
     public function getContestRelated($id_contest)
     {
+        $makeHidden = [];
         $contestArrId = [];
         $contest = $this->contest::find($id_contest);
         if (is_null($contest)) throw new \Exception('Cuộc thi này không tồn tại !');
@@ -327,16 +330,18 @@ class Contest implements MContestInterface
             $data->whereIn('id', $contestArrId)->with('user_top')->withCount(['userCapacityDone' => function ($q) {
                 return $q->where('result_capacity.status', config('util.STATUS_RESULT_CAPACITY_DONE'));
             }]);
+            $makeHidden = ['user_wishlist', 'max_user', 'end_register_time', 'status', 'start_register_time', 'status_user_has_join_contest', 'description', 'reward_rank_point', 'post_new', 'deleted_at', 'type', 'major_id', 'created_at', 'updated_at'];
         }
         if ($contest->type == config('util.TYPE_CONTEST')) {
             $data->where('major_id', $contest->major_id);
+            $makeHidden = ['description', 'reward_rank_point', 'post_new', 'deleted_at', 'type', 'major_id', 'created_at', 'updated_at'];
         }
         $data = $data->orderBy('id', 'desc')
             ->limit(request('limit') ?? 4)
             ->withCount(['rounds'])
             ->with(['skills:name,short_name'])
             ->paginate(request('limit') ?? 4);
-        $data->setCollection($data->getCollection()->makeHidden(['description', 'reward_rank_point', 'post_new', 'deleted_at', 'type', 'major_id', 'created_at', 'updated_at']));
+        $data->setCollection($data->getCollection()->makeHidden($makeHidden));
         return $data;
     }
 
