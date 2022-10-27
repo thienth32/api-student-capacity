@@ -15,7 +15,6 @@ class Contest extends Model
     use SoftDeletes;
     use HasFactory, TGetAttributeColumn;
     use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
-
     protected $table = 'contests';
     protected $casts = [
         'created_at' => FormatDate::class,
@@ -25,6 +24,7 @@ class Contest extends Model
     protected $appends = [
         'slug_name',
         'status_user_has_join_contest',
+        'user_wishlist'
     ];
 
     public static function boot()
@@ -116,7 +116,7 @@ class Contest extends Model
                 'round_id',
                 'exam_id',
             ]
-        );
+        )->where('result_capacity.status', config('util.STATUS_RESULT_CAPACITY_DONE'));
     }
 
     public function recruitmentEnterprise()
@@ -150,5 +150,35 @@ class Contest extends Model
     public function newEloquentBuilder($query)
     {
         return new Builder($query);
+    }
+
+    public function wishlist()
+    {
+        return $this->morphOne(Wishlist::class, 'wishlistable');
+    }
+    public function wishlistUsers()
+    {
+        return $this->morphMany(Wishlist::class, 'wishlistable');
+    }
+
+
+    public function user_top()
+    {
+        return $this->hasOneDeep(
+            ResultCapacity::class,
+            [
+                Round::class,
+                Exam::class
+            ],
+            [
+                'contest_id',
+                'round_id',
+                'exam_id',
+            ]
+        )->with('user:id,name,email,status,avatar')
+            ->where('result_capacity.status', config('util.STATUS_RESULT_CAPACITY_DONE'))
+            ->groupBy('result_capacity.user_id')
+            ->selectRaw('sum(result_capacity.scores) as total_scores, result_capacity.user_id')
+            ->orderByDesc('total_scores');
     }
 }

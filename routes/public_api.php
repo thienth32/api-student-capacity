@@ -18,7 +18,7 @@ use App\Http\Controllers\Admin\SkillController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\SponsorController as AdminSponsorController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
-
+use App\Http\Controllers\Admin\WishlistController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -105,4 +105,14 @@ Route::prefix('candidate')->group(function () {
 });
 Route::prefix('keywords')->group(function () {
     Route::get('', [KeywordController::class, 'indexApi']);
+});
+
+Route::prefix('challenge')->group(function () {
+    Route::get('', [CodeManagerController::class, 'getCodechallAll']);
+    Route::get('{id}', [CodeManagerController::class, 'apiShow']);
+    Route::get('rating/{id}/{type_id}', [CodeManagerController::class, 'rating']);
+});
+
+Route::prefix('code-language')->group(function () {
+    Route::get('', [CodeManagerController::class, 'getCodeLanguageAll']);
 });

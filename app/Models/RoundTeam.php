@@ -29,4 +29,8 @@ class RoundTeam extends Model
         return $this->belongsTo(Team::class);
     }
 
+    public function exams()
+    {
+        return $this->hasMany(Exam::class, 'round_id', 'round_id');
+    }
 }

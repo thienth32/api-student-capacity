@@ -2,14 +2,17 @@
 
 namespace App\Services\Modules\MRound;
 
+use App\Models\Result;
 use App\Services\Traits\TUploadImage;
 
 class Round implements MRoundInterface
 {
     use TUploadImage;
     public $round;
-    public function __construct(\App\Models\Round $round)
-    {
+    public function __construct(
+        \App\Models\Round $round,
+        private Result $result
+    ) {
         $this->round = $round;
     }
 
@@ -103,6 +106,7 @@ class Round implements MRoundInterface
         $teams = $this->round::find($id)
             ->teams()
             ->with([
+                'members:name,email,avatar',
                 'result' => function ($q) use ($id) {
                     return $q->where('round_id', $id)
                         ->orderBy('point', 'desc')
@@ -123,5 +127,34 @@ class Round implements MRoundInterface
     public function whereIn($key, $val = [])
     {
         return $this->round::whereIn($key, $val);
+    }
+
+
+    public function results($id)
+    {
+        if (request()->has('q')) {
+            $resultIds = $this->round::find($id)
+                ->teams()
+                ->search(request('q') ?? null, ['name'])
+                ->with([
+                    'result' => function ($q) use ($id) {
+                        return $q->where('round_id', $id);
+                    }
+                ])->get()->map(function ($q) {
+                    return $q->result->id;
+                })->toArray();
+        }
+        $result = $this->result::query();
+        $result->where('round_id', $id);
+        if (request()->has('q')) {
+            $result->whereIn('id', $resultIds);
+        }
+        $result->orderBy('point', (request('sort') == 'asc' ? 'asc' : 'desc'))
+            ->orderBy('updated_at', (request('sort') == 'asc' ? 'asc' : 'desc'))
+            ->with(['team' => function ($q) {
+                $q->with('users:name,email,avatar');
+                return $q;
+            }]);
+        return $result->paginate(request('limit') ?? 6);
     }
 }

@@ -5,6 +5,10 @@ namespace App\Services\Traits;
 use App\Services\Manager\FMenu\MenuManager;
 use App\Services\Modules\MAnswer\Answer;
 use App\Services\Modules\MAnswer\MAnswerInterface;
+use App\Services\Modules\MChallenge\Challenge;
+use App\Services\Modules\MChallenge\MChallengeInterface;
+use App\Services\Modules\MCodeLanguage\CodeLanguage;
+use App\Services\Modules\MCodeLanguage\MCodeLanguageInterface;
 use App\Services\Modules\MContest\Contest;
 use App\Services\Modules\MContest\MContestInterface;
 use App\Services\Modules\MContestUser\ContestUser;
@@ -21,14 +25,20 @@ use App\Services\Modules\MResultCapacity\MResultCapacityInterface;
 use App\Services\Modules\MResultCapacity\ResultCapacity;
 use App\Services\Modules\MResultCapacityDetail\MResultCapacityDetailInterface;
 use App\Services\Modules\MResultCapacityDetail\ResultCapacityDetail;
+use App\Services\Modules\MResultCode\MResultCodeInterface;
+use App\Services\Modules\MResultCode\ResultCode;
 use App\Services\Modules\MRound\MRoundInterface;
 use App\Services\Modules\MRound\Round;
 use App\Services\Modules\MRoundTeam\MRoundTeamInterface;
 use App\Services\Modules\MRoundTeam\RoundTeam;
+use App\Services\Modules\MSampleCode\MSampleCodeInterface;
+use App\Services\Modules\MSampleCode\SampleCode;
 use App\Services\Modules\MSkill\MSkillInterface;
 use App\Services\Modules\MSkill\Skill;
 use App\Services\Modules\MTeam\MTeamInterface;
 use App\Services\Modules\MTeam\Team;
+use App\Services\Modules\MTestCase\MTestCaseInterfave;
+use App\Services\Modules\MTestCase\TestCase;
 use App\Services\Modules\MUser\MUserInterface;
 use App\Services\Modules\MUser\User;
 
@@ -113,9 +123,35 @@ trait RepositorySetup
             MContestUserInterface::class,
             ContestUser::class,
         );
+
         $this->app->bind(
             MKeywordInterface::class,
             Keyword::class,
+        );
+
+        $this->app->bind(
+            MChallengeInterface::class,
+            Challenge::class,
+        );
+
+        $this->app->bind(
+            MResultCodeInterface::class,
+            ResultCode::class,
+        );
+
+        $this->app->bind(
+            MCodeLanguageInterface::class,
+            CodeLanguage::class,
+        );
+
+        $this->app->bind(
+            MSampleCodeInterface::class,
+            SampleCode::class,
+        );
+
+        $this->app->bind(
+            MTestCaseInterfave::class,
+            TestCase::class,
         );
     }
 }

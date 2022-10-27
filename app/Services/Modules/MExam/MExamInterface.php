@@ -23,4 +23,6 @@ interface MExamInterface
     public function getExamBtyTokenRoom($code, $with = []);
 
     public function attachQuestion($id, $questionsId);
+
+    public function getCapacityPlayGameOnline();
 }

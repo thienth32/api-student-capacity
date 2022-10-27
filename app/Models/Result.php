@@ -29,7 +29,7 @@ class Result extends Model
     }
     public function team()
     {
-        return $this->hasOne(Team::class, 'id', 'team_id')->with('users');
+        return $this->hasOne(Team::class, 'id', 'team_id');
     }
     public function round()
     {

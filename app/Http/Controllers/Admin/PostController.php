@@ -13,6 +13,7 @@ use App\Models\Contest;
 use App\Models\Enterprise;
 use App\Models\Recruitment;
 use App\Models\Round;
+use App\Models\User;
 use App\Services\Modules\MPost\Post as MPostPost;
 use App\Services\Traits\TStatus;
 use Illuminate\Support\Facades\Redirect;
@@ -30,6 +31,7 @@ class PostController extends Controller
         private Contest $contest,
         private Post $post,
         private MPostPost $modulesPost,
+        private User $user,
         private Enterprise $enterprise,
         private Recruitment $recruitment,
         private Round $round,
@@ -72,11 +74,12 @@ class PostController extends Controller
         $this->db::beginTransaction();
         try {
 
-            $contest = $this->contest::where('type', 0)->get();
-            $capacity = $this->contest::where('type', 1)->get();
-            $recruitments = $this->recruitment::all();
-            $rounds = $this->round::all();
-
+            $contest = $this->contest::where('type', 0)->get(['id', 'name']);
+            $capacity = $this->contest::where('type', 1)->get(['id', 'name']);
+            $users = $this->user::all(['id', 'name', 'email']);
+            // dd($users);
+            $recruitments = $this->recruitment::all(['id', 'name']);
+            $rounds = $this->round::all(['id', 'name', 'contest_id']);
             $this->db::commit();
             return view(
                 'pages.post.form-add',
@@ -84,7 +87,8 @@ class PostController extends Controller
                     'capacity' => $capacity,
                     'contest' => $contest,
                     'recruitments' => $recruitments,
-                    'rounds' => $rounds
+                    'rounds' => $rounds,
+                    'users' => $users
                 ]
             );
         } catch (\Throwable $th) {
@@ -96,11 +100,12 @@ class PostController extends Controller
     {
         $this->db::beginTransaction();
         try {
-            $contest =  $this->contest::where('type', 0)->get();
-            $capacity = $this->contest::where('type', 1)->get();
-            $recruitments = $this->recruitment::all();
-            $rounds = $this->round::all();
 
+            $contest = $this->contest::where('type', 0)->get(['id', 'name']);
+            $capacity = $this->contest::where('type', 1)->get(['id', 'name']);
+            $users = $this->user::all(['id', 'name', 'email']);
+            $recruitments = $this->recruitment::all(['id', 'name']);
+            $rounds = $this->round::all(['id', 'name', 'contest_id']);
             $this->db::commit();
             return view(
                 'pages.post.form-add-outside',
@@ -110,6 +115,7 @@ class PostController extends Controller
                     'recruitments' => $recruitments,
                     'rounds' => $rounds,
                     'capacity' => $capacity,
+                    'users' => $users
                 ]
             );
         } catch (\Throwable $th) {
@@ -149,9 +155,10 @@ class PostController extends Controller
 
 
         $round = null;
-        $contest = $this->contest::where('type', 0)->get();
-        $capacity = $this->contest::where('type', 1)->get();
-        $recruitments = $this->recruitment::all();
+        $contest = $this->contest::where('type', 0)->get(['id', 'name']);
+        $capacity = $this->contest::where('type', 1)->get(['id', 'name']);
+        $users = $this->user::all(['id', 'name', 'email']);
+        $recruitments = $this->recruitment::all(['id', 'name']);
         $post = $this->modulesPost->getList($request)->where('slug', $slug)->first();
         $post->load(['postable' => function ($q) {
             $q->select('id', 'name');
@@ -166,7 +173,8 @@ class PostController extends Controller
             'recruitments' => $recruitments,
             'contest' => $contest,
             'capacity' => $capacity,
-            'rounds' => $this->round::all(),
+            'rounds' => $this->round::all(['id', 'name', 'contest_id']),
+            'users' => $users
 
         ]);
     }
@@ -298,8 +306,16 @@ class PostController extends Controller
      */
     public function apiShow(Request $request)
     {
-        $data = $this->modulesPost->getList($request)->paginate(request('limit') ?? config('util.HOMEPAGE_ITEM_AMOUNT'));
-        $data->load(['postable:id,name', 'postable.enterprise:id,name,logo', 'user:id,name,email']);
+        $data = $this->modulesPost->getList($request)->paginate(request('limit') ?? $this->post::count());
+        $data->load(
+            [
+                'postable:id,name',
+                'postable.enterprise:enterprises.id,enterprises.name,enterprises.logo,enterprises.link_web',
+                'user:id,name,email'
+            ]
+        )->makeHidden([
+            'deleted_at', 'updated_at',
+        ]);
         if (!$data) abort(404);
         return $this->responseApi(
             true,

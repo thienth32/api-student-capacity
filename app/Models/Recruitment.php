@@ -11,6 +11,8 @@ use App\Casts\FormatImageGet;
 
 class Recruitment extends Model
 {
+    use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
+
     use HasFactory, SoftDeletes;
     protected $table = 'recruitments';
     protected $fillable = ['amount', 'cost', 'hot', 'name', 'short_description', 'description', 'start_time', 'end_time', 'image'];
@@ -34,5 +36,22 @@ class Recruitment extends Model
     public function posts()
     {
         return $this->morphMany(Post::class, 'postable');
+    }
+    public function skill()
+    {
+
+        return $this->hasManyDeep(
+            Skill::class,
+            [
+                'contest_recruitments',
+                Contest::class,
+                'contest_skills'
+            ]
+        );
+    }
+    public function rounds()
+    {
+
+        return $this->hasManyDeep(Round::class, ['contest_recruitments',    Contest::class,]);
     }
 }

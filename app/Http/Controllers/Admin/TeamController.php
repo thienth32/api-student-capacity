@@ -93,7 +93,7 @@ class TeamController extends Controller
 
     public function create()
     {
-        $contests = $this->contest::where('type', 0)->get();
+        $contests = $this->contest::where('type', config('util.TYPE_CONTEST'))->get();
         return view('pages.team.form-add', compact('contests'));
     }
 
@@ -104,18 +104,22 @@ class TeamController extends Controller
 
     public function edit($id)
     {
-        $userArray = [];
-        $contests = $this->contest::where('type', 0)->get();
-        $team = $this->team::find($id)->load('members');
-        foreach ($team->members as $me) {
-            array_push($userArray, [
-                'id_user' => $me->id,
-                'email_user' => $me->email,
-                'name_user' => $me->name,
-                'bot' => $me->pivot->bot,
-            ]);
+        try {
+            $userArray = [];
+            $contests = $this->contest::where('type', config('util.TYPE_CONTEST'))->get();
+            $team = $this->team::find($id)->load('members');
+            foreach ($team->members as $me) {
+                array_push($userArray, [
+                    'id_user' => $me->id,
+                    'email_user' => $me->email,
+                    'name_user' => $me->name,
+                    'bot' => $me->pivot->bot,
+                ]);
+            }
+            return view('pages.team.form-edit', compact('contests', 'team', 'userArray'));
+        } catch (\Throwable $th) {
+            return abort(404);
         }
-        return view('pages.team.form-edit', compact('contests', 'team', 'userArray'));
     }
 
     public function update(Request $request, $id_team)

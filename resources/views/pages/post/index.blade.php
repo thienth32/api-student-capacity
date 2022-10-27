@@ -113,7 +113,7 @@
                     <div class="mb-0">
                         <label class="form-label">Thời gian xuất bản </label>
                         <div id="reportrange"
-                            style="background: #fff; cursor: pointer; padding: 10px 10px; border: 1px solid #ccc; width: 100%; border-radius: 7px">
+                            style="background: #fff; cursor: pointer; padding: 10px 10px; border: 1px solid #e4e6ef ; width: 100%; border-radius: 7px">
                             <i class="fa fa-calendar"></i>&nbsp;
                             <span></span> <i class="fa fa-caret-down"></i>
                         </div>

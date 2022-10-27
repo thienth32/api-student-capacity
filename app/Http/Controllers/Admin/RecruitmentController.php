@@ -239,11 +239,17 @@ class RecruitmentController extends Controller
      */
     public function apiShow(Request $request)
     {
-        $data = $this->modulesRecruitment->getList($request)->withCount(['contest'])->get();
+        $data = $this->modulesRecruitment->getList($request)->withCount('contest')->paginate(request('limit') ?? 6);
         if (!$data) abort(404);
-        $data->load(['enterprise'])->makeHidden([
-            'description', 'contest',
-            'deleted_at'
+        $data->load([
+            'contest:id',
+            'contest.resultCapacity:result_capacity.id,result_capacity.user_id',
+            'contest.resultCapacity.user:id', 'enterprise:id,name,logo',
+            'skill' => function ($q) {
+                $q->select(['skills.id', 'skills.short_name', 'skills.name'])->distinct();
+            }
+        ])->makeHidden([
+            'contest', 'resultCapacity',
         ]);
         $this->modulesRecruitment->LoadSkillAndUserApiShow($data);
         return $this->responseApi(
@@ -271,7 +277,16 @@ class RecruitmentController extends Controller
     {
         $data = $this->modulesRecruitment->find($id);
         if (!$data) abort(404);
-        $data->load(['contest' => function ($q) {
+        // $data->load([
+        //     'contest',
+        //     'contest.resultCapacity:result_capacity.id,result_capacity.user_id',
+        //     'contest.resultCapacity.user:id', 'enterprise:id,name,logo',
+        //     'enterprise:id,name,logo', 'skill' => function ($q) {
+        //         $q->select(['skills.id', 'skills.short_name', 'skills.name'])->distinct();
+        //     }
+        // ])->loadCount('rounds');
+
+        $data->load(['skill', 'contest' => function ($q) {
             return $q->with(['skills:id,short_name,name'])->withCount(['userCapacityDone', 'rounds']);
         }, 'enterprise']);
         $this->modulesRecruitment->loadSkillAndUserApiDetail($data);

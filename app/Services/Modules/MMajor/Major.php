@@ -2,28 +2,72 @@
 
 namespace App\Services\Modules\MMajor;
 
+use App\Models\ContestUser;
+
 class Major implements MMajorInterface
 {
-    public function __construct(public \App\Models\Major $major)
+    public function __construct(public \App\Models\Major $major, public ContestUser $contestUser)
     {
     }
 
     public function getRatingUserByMajorSlug($slug)
     {
-        $major = $this->major::whereSlug($slug)
-            ->with([
-                'contest_user' => function ($q) {
-                    return $q
-                        ->selectRaw('sum(contest_users.reward_point) as reward_point,contest_users.user_id')
-                        ->groupBy('contest_users.user_id')
-                        ->orderByDesc('reward_point');
-                }
-            ])
-            ->first();
-        if ($major == null) return false;
+        // $major = $this->major::whereSlug($slug)
+        //     ->with([
+        //         'contest_user' => function ($q) {
+        //             return $q
+        //                 ->selectRaw('sum(contest_users.reward_point) as reward_point,contest_users.user_id')
+        //                 ->groupBy('contest_users.user_id')
+        //                 ->orderByDesc('reward_point');
+        //         }
+        //     ])
+        //     ->first();
+        // if ($major == null) return false;
 
-        return $major
-            ->contest_user
+        // return $major
+        //     ->contest_user
+        //     ->map(function ($q, $index) use (&$rank, &$maxPoin) {
+        //         if ($index == 0) {
+        //             $maxPoin = $q->reward_point;
+        //         }
+        //         // **
+        //         if ($index == 0) {
+        //             $rank = 1;
+        //         }
+        //         // **
+        //         if ($q->reward_point == $maxPoin) {
+        //             $rank = $rank;
+        //         }
+        //         // **
+        //         if ($q->reward_point < $maxPoin) {
+        //             $rank += 1;
+        //         }
+        //         // **
+        //         if ($q->reward_point < $maxPoin) {
+        //             $maxPoin = $q->reward_point;
+        //         }
+        //         // **
+        //         return [
+        //             'user_name' => $q->user->name,
+        //             'avatar' => $q->user->avatar,
+        //             'rank' => $rank,
+        //             'reward_point' => $q->reward_point,
+        //             'user' => $q->user,
+        //         ];
+        //     })
+        //     ->toArray();
+        $rank = 0;
+        $maxPoin = 0;
+        $major = $this->major::whereSlug($slug)->with(['contest_user', 'contests:id,major_id'])->first();
+        $contest = $major->contests->map(function ($data) {
+            return $data->id;
+        })->toArray();
+        return $this->contestUser::whereIn('contest_id', $contest)
+            ->selectRaw('sum(contest_users.reward_point) as reward_point,contest_users.user_id')
+            ->groupBy('contest_users.user_id')
+            ->orderByDesc('reward_point')
+            ->with(['user'])
+            ->get()
             ->map(function ($q, $index) use (&$rank, &$maxPoin) {
                 if ($index == 0) {
                     $maxPoin = $q->reward_point;
@@ -52,46 +96,43 @@ class Major implements MMajorInterface
                     'reward_point' => $q->reward_point,
                     'user' => $q->user,
                 ];
-            })
-            ->toArray();
-        // $rank = 0;
-        // $maxPoin = 0;
-        // return $major
-        //     ->contest_user()
-        //     ->orderByDesc('reward_point')
-        //     ->with('contest')
-        //     ->get()
-        //     ->map(function ($q, $index) use (&$rank, &$maxPoin) {
-        //         if ($index == 0) {
-        //             $maxPoin = $q->reward_point;
-        //         }
-        //         // **
-        //         if ($index == 0) {
-        //             $rank = 1;
-        //         }
-        //         // **
-        //         if ($q->reward_point == $maxPoin) {
-        //             $rank = $rank;
-        //         }
-        //         // **
-        //         if ($q->reward_point < $maxPoin) {
-        //             $rank += 1;
-        //         }
-        //         // **
-        //         if ($q->reward_point < $maxPoin) {
-        //             $maxPoin = $q->reward_point;
-        //         }
-        //         // **
-        //         return [
-        //             'user_name' => $q->user->name,
-        //             'avatar' => $q->user->avatar,
-        //             'rank' => $rank,
-        //             'reward_point' => $q->reward_point,
-        //             'contest_name' => $q->contest->name,
-        //             'contest' => $q->contest,
-        //             'user' => $q->user,
-        //         ];
-        //     });
+            });
+        return $major
+            ->contest_user()
+            ->orderByDesc('reward_point')
+            ->with('contest')
+            ->get()
+            ->map(function ($q, $index) use (&$rank, &$maxPoin) {
+                if ($index == 0) {
+                    $maxPoin = $q->reward_point;
+                }
+                // **
+                if ($index == 0) {
+                    $rank = 1;
+                }
+                // **
+                if ($q->reward_point == $maxPoin) {
+                    $rank = $rank;
+                }
+                // **
+                if ($q->reward_point < $maxPoin) {
+                    $rank += 1;
+                }
+                // **
+                if ($q->reward_point < $maxPoin) {
+                    $maxPoin = $q->reward_point;
+                }
+                // **
+                return [
+                    'user_name' => $q->user->name,
+                    'avatar' => $q->user->avatar,
+                    'rank' => $rank,
+                    'reward_point' => $q->reward_point,
+                    'contest_name' => $q->contest->name,
+                    'contest' => $q->contest,
+                    'user' => $q->user,
+                ];
+            });
     }
 
 
@@ -109,7 +150,9 @@ class Major implements MMajorInterface
                     ->orderByDesc('total_scores');
             }]
         );
-        return  $major->resultCapacity;
+        $apps = $major->resultCapacity()->paginate(10);
+        return  $apps;
+        // return  $major->resultCapacity;
     }
 
     public function getAllMajor($params = [], $with = [])

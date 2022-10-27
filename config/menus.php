@@ -146,22 +146,16 @@ return [
         "name" => "Thử thách mã ",
         "role" => $ROLE_HAS_ADMINS,
         "subs-menu" => [
-            [
-                "name" => "Bộ ngôn ngữ ",
-                "param" => '?type=' . $TYPE_CAPACITY,
-                "link" => "admin.dev.show",
-                "role" => $ROLE_HAS_ADMINS
-            ],
+            // [
+            //     "name" => "Bộ ngôn ngữ ",
+            //     "param" => '?type=' . $TYPE_CAPACITY,
+            //     "link" => "admin.dev.show",
+            //     "role" => $ROLE_HAS_ADMINS
+            // ],
             [
                 "name" => "Bộ thử thách ",
                 "param" => '',
-                "link" => "admin.dev.show",
-                "role" => $ROLE_HAS_ADMINS
-            ],
-            [
-                "name" => "Cài đặt",
-                "param" => '',
-                "link" => "admin.dev.show",
+                "link" => "admin.code.manager.list",
                 "role" => $ROLE_HAS_ADMINS
             ],
         ]
@@ -209,6 +203,12 @@ return [
                 "role" => $ROLE_HAS_ADMINS,
                 "param" => '',
                 "link" => "admin.acount.list",
+            ],
+            [
+                "name" => "Quản lý công việc ",
+                "role" => $ROLE_HAS_ADMINS,
+                "param" => '',
+                "link" => "admin.job",
             ],
         ]
     ], // Cau hinh

@@ -36,13 +36,13 @@ class User extends Authenticatable
     ];
 
     protected $appends = [
-        'sum_point'
+        // 'sum_point'
     ];
 
-    public function getSumPointAttribute()
-    {
-        return $this->contest_user()->sum('reward_point');
-    }
+    // public function getSumPointAttribute()
+    // {
+    //     return $this->contest_user()->sum('reward_point');
+    // }
 
     public function newEloquentBuilder($query)
     {
@@ -57,5 +57,20 @@ class User extends Authenticatable
     public function contest_user()
     {
         return $this->hasMany(ContestUser::class, 'user_id');
+    }
+
+    // public function wishlistContests()
+    // {
+    //     return $this->morphedByMany(Contest::class, 'wishlistable');
+    // }
+
+    // public function wishlistContest()
+    // {
+    //     // return $this->morphOne(Contest::class,  'wishlistable');
+    // }
+
+    public function wishlistContests()
+    {
+        return $this->hasMany(Wishlist::class, 'user_id');
     }
 }

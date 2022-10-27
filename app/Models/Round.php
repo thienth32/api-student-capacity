@@ -72,13 +72,13 @@ class Round extends Model
     {
         return $this->belongsTo(Contest::class, 'contest_id')->with(['teams', 'rounds']);
     }
-    public function Enterprise()
+    public function enterprise_contest()
     {
-        return $this->belongsTo(Contest::class, 'contest_id')->with('enterprise');
+        return $this->belongsTo(Contest::class, 'contest_id')->with('enterprise:id,name,logo');
     }
     public function Donor()
     {
-        return $this->belongsToMany(Donor::class, 'donor_rounds', 'round_id', 'donor_id')->withPivot('id')->with('Enterprise');
+        return $this->belongsToMany(Donor::class, 'donor_rounds', 'round_id', 'donor_id')->withPivot('id')->with('Enterprise:id,name,logo');
     }
     public function type_exam()
     {
@@ -130,5 +130,28 @@ class Round extends Model
                 'id'
             )
             ->with('user:id,name,email');
+    }
+
+    /** Dùng cho phần call api bài viết thuộc vòng thi có thêm doanh nghiệp */
+    public function enterprise()
+    {
+        return $this->hasManyDeep(
+            Enterprise::class,
+            [
+                'donor_rounds',
+                Donor::class
+            ],
+            [
+                'round_id',
+                'id',
+                'id'
+            ],
+            [
+                'id',               // Local key on "tool_groups" table
+                'donor_id',          // Local key on pivot table
+                'enterprise_id'
+            ]
+
+        );
     }
 }

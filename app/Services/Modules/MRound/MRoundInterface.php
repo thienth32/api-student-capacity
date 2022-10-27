@@ -19,4 +19,6 @@ interface MRoundInterface
     public function where($param);
 
     public function whereIn($key, $val = []);
+
+    public function results($id);
 }
