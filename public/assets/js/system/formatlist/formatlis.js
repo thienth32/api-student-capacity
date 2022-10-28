@@ -161,7 +161,7 @@ const formatPage = {
     searchData() {
         $(".ip-search").on("keyup", function (e) {
             if (e.keyCode == 13) {
-                checkUrlOut("type", $(this).val());
+                checkUrlOut("q", $(this).val());
             }
         });
     },
