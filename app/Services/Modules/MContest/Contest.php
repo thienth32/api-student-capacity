@@ -318,7 +318,8 @@ class Contest implements MContestInterface
         $data = $this->contest::query();
         if ($contest->type == config('util.TYPE_TEST')) {
             $contest->load(['recruitment' => function ($q) {
-                return $q->with(['contest']);
+                $q->with(['contest']);
+                return $q;
             }]);
             foreach ($contest->recruitment as  $recruitment) {
                 if ($recruitment->contest) foreach ($recruitment->contest as $contest) {
@@ -327,17 +328,22 @@ class Contest implements MContestInterface
             }
             $contestArrId = array_unique($contestArrId);
             unset($contestArrId[array_search($id_contest, $contestArrId)]);
-            $data->whereIn('id', $contestArrId)->with('user_top')->withCount(['userCapacityDone' => function ($q) {
-                return $q->where('result_capacity.status', config('util.STATUS_RESULT_CAPACITY_DONE'));
-            }]);
+            $data->where('type', $contest->type);
+            $data->where(function ($q) use ($contestArrId) {
+                return  $q->whereIn('id', $contestArrId);
+            });
+            $data->with('user_top')->withCount(['userCapacityDone']);
             $makeHidden = ['user_wishlist', 'max_user', 'end_register_time', 'status', 'start_register_time', 'status_user_has_join_contest', 'description', 'reward_rank_point', 'post_new', 'deleted_at', 'type', 'major_id', 'created_at', 'updated_at'];
         }
         if ($contest->type == config('util.TYPE_CONTEST')) {
-            $data->where('major_id', $contest->major_id);
+            $data->where(function ($q) use ($contest) {
+                $q->where('major_id', $contest->major_id);
+                $q->where('type', $contest->type);
+                return $q;
+            });
             $makeHidden = ['description', 'reward_rank_point', 'post_new', 'deleted_at', 'type', 'major_id', 'created_at', 'updated_at'];
         }
         $data = $data->orderBy('id', 'desc')
-            ->limit(request('limit') ?? 4)
             ->withCount(['rounds'])
             ->with(['skills:name,short_name'])
             ->paginate(request('limit') ?? 4);
