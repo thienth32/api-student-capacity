@@ -19,30 +19,49 @@ class User implements MUserInterface
     {
         $contestID = [];
         $user_id = auth('sanctum')->user()->id;
-        $user = $this->user::find($user_id)->load('teams');
         if (!(request()->has('type'))  || request('type') == config('util.TYPE_CONTEST')) {
-            foreach ($user->teams as $team) {
-                if ($team->contest) {
-                    array_push($contestID, $team->contest->id);
-                }
-            }
+            $contests = $this->user::find($user_id)->teams()->get()
+                ->map(function ($val, $key) {
+                    return [
+                        'id_contest' => $val->contest->id,
+                    ];
+                });
+            $makeHidden = [
+                "created_at",
+                "updated_at", "deleted_at", 'teams', 'reward_rank_point', 'description', 'major_id', 'post_new'
+            ];
         }
         if (request()->has('type') && request('type') == config('util.TYPE_TEST')) {
-            $resultCapacitys = $this->resultCapacity::where('user_id', $user_id)
-                ->with(['contests' => function ($q) {
-                    return $q->select(['contests.id']);
-                }])->get();
-            foreach ($resultCapacitys as $data) {
-                if ($data->contests) {
-                    array_push($contestID, $data->contests->id);
-                }
-            }
+            $contests = $this->resultCapacity::where('user_id', $user_id)
+                ->has('contests')->with(['contests' => function ($q) {
+                    $q->select(['contests.id']);
+                    $q->setEagerLoads([]);
+                    return $q;
+                }])->get()->map(function ($val, $key) {
+                    return [
+                        'id_contest' => $val->contests->id,
+                    ];
+                });
+            $makeHidden = [
+                'max_user', "created_at",
+                "updated_at", "deleted_at",
+                "start_register_time",
+                "end_register_time",
+                "status_user_has_join_contest",
+                "user_wishlist",
+                'teams', 'reward_rank_point', 'description', 'major_id', 'post_new'
+            ];
+        }
+        foreach ($contests as $contest) {
+            array_push($contestID, $contest['id_contest']);
         }
         $contestID = array_unique($contestID);
         $contest = $this->contest::whereIn('id', $contestID)
             ->when(request('type'), function ($q) {
                 $q->hasRequest(['type' => request('type')]);
-                $q->with(['rounds', 'skills', 'userCapacityDone']);
+                $q->with(['skills:name,short_name']);
+                $q->withCount(['rounds',  'userCapacityDone']);
+                return $q;
             })
             ->when((!(request()->has('type'))  || request('type') == config('util.TYPE_CONTEST')), function ($q) {
                 $q->withCount(['teams']);
@@ -51,7 +70,7 @@ class User implements MUserInterface
             ->status(request('status'))
             ->sort((request('sort') == 'asc' ? 'asc' : 'desc'), request('sort_by') ?? null, 'contests')
             ->paginate(request('limit') ?? 10);
-        $contest->setCollection($contest->getCollection()->makeHidden(['teams', 'reward_rank_point', 'description', 'major_id', 'post_new']));;
+        $contest->setCollection($contest->getCollection()->makeHidden($makeHidden));
         return $contest;
     }
 
