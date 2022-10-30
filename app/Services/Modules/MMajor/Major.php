@@ -159,7 +159,7 @@ class Major implements MMajorInterface
         );
         return  $this->paginate($major->resultCapacity->toArray());
     }
-    public function paginate($items, $perPage = 2, $page = null)
+    public function paginate($items, $perPage = 10, $page = null)
     {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
         $items = $items instanceof Collection ? $items : Collection::make($items);
