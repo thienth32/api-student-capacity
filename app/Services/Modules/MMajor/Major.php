@@ -3,6 +3,10 @@
 namespace App\Services\Modules\MMajor;
 
 use App\Models\ContestUser;
+use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class Major implements MMajorInterface
 {
@@ -143,18 +147,27 @@ class Major implements MMajorInterface
 
         $major->load(
             ['resultCapacity' => function ($q) {
-                return $q->where('contests.type', config('util.TYPE_TEST'))
-                    ->where('result_capacity.status', config('util.STATUS_RESULT_CAPACITY_DONE'))
-                    ->selectRaw('sum(result_capacity.scores) as total_scores, result_capacity.user_id')
+                $q->where(function ($q) {
+                    $q->where('contests.type', config('util.TYPE_TEST'));
+                    $q->where('result_capacity.status', config('util.STATUS_RESULT_CAPACITY_DONE'));
+                    return $q;
+                })->selectRaw('sum(result_capacity.scores) as total_scores, result_capacity.user_id')
                     ->groupBy('result_capacity.user_id')
                     ->orderByDesc('total_scores');
+                return $q;
             }]
         );
-        $apps = $major->resultCapacity()->paginate(10);
-        return  $apps;
-        // return  $major->resultCapacity;
+        return  $this->paginate($major->resultCapacity->toArray());
     }
-
+    public function paginate($items, $perPage = 2, $page = null)
+    {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        $items = $items instanceof Collection ? $items : Collection::make($items);
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, [
+            'path' => Paginator::resolveCurrentPath(),
+            'pageName' => 'page',
+        ]);
+    }
     public function getAllMajor($params = [], $with = [])
     {
         return $this->major::hasRequest($params['where'] ?? [])
