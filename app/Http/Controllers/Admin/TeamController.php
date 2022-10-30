@@ -107,7 +107,9 @@ class TeamController extends Controller
         try {
             $userArray = [];
             $contests = $this->contest::where('type', config('util.TYPE_CONTEST'))->get();
-            $team = $this->team::find($id)->load('members');
+            $team = $this->team::find($id);
+            if (!$team) return abort(404);
+            $team->load('members');
             foreach ($team->members as $me) {
                 array_push($userArray, [
                     'id_user' => $me->id,
@@ -128,7 +130,7 @@ class TeamController extends Controller
         if (!is_null($team)) {
             return $this->editTeamContest($request, $id_team, null, Redirect::route('admin.teams'), Redirect::back());
         } else {
-            return redirect()->back();
+            return redirect()->back()->withErrors(["error" => "Đã xảy ra lỗi !"]);;
         }
     }
 
