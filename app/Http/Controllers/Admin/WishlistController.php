@@ -206,4 +206,23 @@ class WishlistController extends Controller
             dd($th);
         }
     }
+    public function countWishlist()
+    {
+        $user_id = auth('sanctum')->user()->id;
+        try {
+            $countPost = $this->wishlist::where('user_id', $user_id)
+                ->where('wishlistable_type', $this->post::class)->get()->count();
+            $countContest = $this->wishlist::where(function ($q) use ($user_id) {
+                $q->where('user_id', $user_id);
+                $q->where('wishlistable_type', $this->contest::class);
+                return $q;
+            })->with(['wishlistable'])->get()->count();
+            return $this->responseApi(true, [
+                'count_post' => $countPost,
+                'count_contest' => $countContest,
+            ]);
+        } catch (\Throwable $th) {
+            dd($th);
+        }
+    }
 }
