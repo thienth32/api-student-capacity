@@ -244,6 +244,12 @@ class PostController extends Controller
      *         description="Tìm kiếm  tách chuỗi",
      *         required=false,
      *     ),
+     *          @OA\Parameter(
+     *         name="q",
+     *         in="query",
+     *         description="Tìm kiếm từ khóa nổi bật cần chuyền keyword_slug",
+     *         required=false,
+     *     ),
      *     @OA\Parameter(
      *         name="sortBy",
      *         in="query",
