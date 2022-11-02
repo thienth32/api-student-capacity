@@ -66,7 +66,17 @@ const sliderPage = {
     reHome: function () {
         $(".btn-home-re").on("click", function () {
             loadTast();
-            checkUrlOuts(["home"], [1]);
+            window.location = url + "home=1";
+            return false;
+        });
+        $(".btn-code").on("click", function () {
+            loadTast();
+            window.location = url + "code=1";
+            return false;
+        });
+        $(".btn-capacity").on("click", function () {
+            loadTast();
+            window.location = url + "capacity=1";
             return false;
         });
     },

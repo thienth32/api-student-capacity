@@ -26,6 +26,8 @@ const aListQuery = [
     "level",
     "type",
     "language_id",
+    "code",
+    "capacity",
 ];
 
 // Set list query has one
@@ -42,7 +44,7 @@ const aListHasOne = [
     "round",
     "round_id",
 ];
-
+// Check url không trùng
 const checkOutHasMatchLocal = [
     "home",
     "major",

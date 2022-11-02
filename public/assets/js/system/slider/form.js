@@ -70,6 +70,7 @@ const pageSliderForm = {
             $(".btn-major").removeClass("btn-primary");
             $(".btn-code").removeClass("btn-primary");
             $(".btn-home").removeClass("btn-primary");
+            $(".btn-home-re").removeClass("btn-primary");
             $("#major").hide();
             $(".form-round").val(0);
             $("#round").hide();
@@ -82,6 +83,7 @@ const pageSliderForm = {
             $(".btn-major").removeClass("btn-primary");
             $(".btn-home").removeClass("btn-primary");
             $(".btn-capacity").removeClass("btn-primary");
+            $(".btn-home-re").removeClass("btn-primary");
             $("#major").hide();
             $(".form-round").val(0);
             $("#round").hide();

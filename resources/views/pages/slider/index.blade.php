@@ -99,10 +99,16 @@
                         class="btn-home-re {{ request()->has('home') ? 'btn-primary' : '' }} btn col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light">Banner
                         thuộc trang chủ </button>
                     <button
-                        class="btn-major {{ request()->has('major') ? 'btn-primary' : '' }} btn col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light">Banner
+                        class="btn-code {{ request()->has('code') ? 'btn-primary' : '' }} btn col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light">Banner
+                        thuộc code online </button>
+                    <button
+                        class="btn-capacity {{ request()->has('capacity') ? 'btn-primary' : '' }} btn col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light">Banner
+                        thuộc test năng lực </button>
+                    <button
+                        class="btn-major {{ request()->has('major') ? 'btn-primary' : '' }} btn col-12 col-lg-6 col-sx-12 col-md-12 col-sm-12 col-xxl-6 col-xl-6 btn-light">Banner
                         thuộc chuyên ngành</button>
                     <button
-                        class="btn-round {{ request()->has('round') ? 'btn-primary' : '' }} btn col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light">Banner
+                        class="btn-round {{ request()->has('round') ? 'btn-primary' : '' }} btn col-12 col-lg-6 col-sx-12 col-md-12 col-sm-12 col-xxl-6 col-xl-6 btn-light">Banner
                         thuộc vòng thi</button>
 
 
