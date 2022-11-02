@@ -39,8 +39,7 @@ class SliderController extends Controller
         $sliders = $this->modulesSlider->index();
         $majors = $this->major::withCount('sliders')->get();
         $rounds = $this->round::withCount('sliders')->get();
-        $contests = $this->contest::withCount('rounds')->get();
-
+        $contests = $this->contest::withCount('rounds')->where('type', config('util.TYPE_CONTEST'))->get();
         return view('pages.slider.index', [
             'sliders' => $sliders,
             'majors' => $majors,
@@ -126,7 +125,7 @@ class SliderController extends Controller
     {
         $majors = $this->major::withCount('sliders')->get();
         $rounds = $this->round::withCount('sliders')->get();
-        $contests = $this->contest::withCount('rounds')->get();
+        $contests = $this->contest::withCount('rounds')->where('type', config('util.TYPE_CONTEST'))->get();
         return view('pages.slider.create', [
             'majors' => $majors,
             'rounds' => $rounds,
@@ -136,7 +135,6 @@ class SliderController extends Controller
 
     public function store(RequestSlider $request)
     {
-
         try {
             if ($request->hasFile('image_url')) {
                 $fileImage = $request->file('image_url');
@@ -164,7 +162,7 @@ class SliderController extends Controller
             }
             return view('pages.slider.edit', [
                 'slider' => $slider,
-                'contests' => $this->contest::all(),
+                'contests' => $this->contest::where('type', config('util.TYPE_CONTEST'))->get(),
                 'majors' => $this->major::withCount('sliders')->get(),
                 'rounds' => $this->round::withCount('sliders')->get(),
                 'round' => $round
@@ -195,7 +193,7 @@ class SliderController extends Controller
             } elseif ($request->round_id != 0) {
                 $data = array_merge($data, ['sliderable_id' => $request->round_id, 'sliderable_type' => $this->round::class]);
             } else {
-                $data = array_merge($data, ['sliderable_id' => null, 'sliderable_type' => null]);
+                $data = array_merge($data, ['sliderable_id' => null, 'sliderable_type' => $request->able]);
             }
             $this->modulesSlider->update($slider, $data);
             return redirect()->route('admin.sliders.list');

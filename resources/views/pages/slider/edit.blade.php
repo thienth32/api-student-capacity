@@ -85,20 +85,31 @@
                     </div>
                     <div class="col-12  form-group mb-10">
                         <label for="" class="form-label">Thuộc thành phần </label>
+                        <input type="hidden" name="able" class="able">
                         <div class="row mb-10">
-                            <div class="col-4">
+                            <div class="col-2">
                                 <button type="button"
                                     class="btn btn-light {{ $slider->sliderable !== null && get_class($slider->sliderable) == \App\Models\Major::class ? 'btn-primary' : 'btn-light' }} btn-major">Chuyên
                                     ngành </button>
                             </div>
-                            <div class="col-4">
+                            <div class="col-2">
                                 <button type="button"
                                     class="btn {{ $slider->sliderable !== null && get_class($slider->sliderable) == \App\Models\Round::class ? 'btn-primary' : 'btn-light' }} btn-round">Vòng
                                     thi </button>
                             </div>
-                            <div class="col-4">
+                            <div class="col-2">
                                 <button type="button"
-                                    class="btn {{ $slider->sliderable == null ? 'btn-primary' : 'btn-light' }} btn-home">Trang
+                                    class="btn  {{ $slider->sliderable_type == 'App\Models\Contest' ? 'btn-primary' : 'btn-light' }} btn-capacity">Test
+                                    năng lực </button>
+                            </div>
+                            <div class="col-2">
+                                <button type="button"
+                                    class="btn  {{ $slider->sliderable_type == 'App\Models\Challenge' ? 'btn-primary' : 'btn-light' }} btn-code">Code
+                                    online </button>
+                            </div>
+                            <div class="col-2">
+                                <button type="button"
+                                    class="btn {{ $slider->sliderable_type == null ? 'btn-primary' : 'btn-light' }} btn-home">Trang
                                     chủ </button>
                             </div>
                         </div>

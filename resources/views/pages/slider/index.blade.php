@@ -313,19 +313,7 @@
                     @endphp --}}
                     @forelse ($sliders as $key => $slider)
                         <tr>
-                            {{-- @if (request()->has('sort'))
-                                <th scope="row">
-                                    @if (request('sort') == 'desc')
-                                        {{ (request()->has('page') && request('page') !== 1 ? $sliders->perPage() * (request('page') - 1) : 0) + $key + 1 }}
-                                    @else
-                                        {{ request()->has('page') && request('page') !== 1 ? $total - $sliders->perPage() * (request('page') - 1) - $key - 1 : ($total -= ($key == 0 ? 0 : 1)) }}
-                                    @endif
-                                </th>
-                            @else
-                                <th scope="row">
-                                    {{ (request()->has('page') && request('page') !== 1 ? $sliders->perPage() * (request('page') - 1) : 0) + $key + 1 }}
-                                </th>
-                            @endif --}}
+
                             <td width="20%">
                                 <p><span id="text_{{ $slider->id }}">{{ $slider->link_to }}
                                         <span data-bs-toggle="tooltip" title="Sao chép " class="coppyText p-3"
@@ -366,7 +354,13 @@
                                         Chuyên ngành : <b>{{ $slider->sliderable->name }}</b>
                                     @endif
                                 @else
-                                    {{ 'Trang chủ ' }}
+                                    @if ($slider->sliderable_type == 'App\Models\Contest')
+                                        {{ 'Test năng lực ' }}
+                                    @elseif($slider->sliderable_type == 'App\Models\Challenge')
+                                        {{ 'Code online ' }}
+                                    @else
+                                        {{ 'Trang chủ ' }}
+                                    @endif
                                 @endif
                             </td>
 

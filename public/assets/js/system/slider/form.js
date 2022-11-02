@@ -36,6 +36,8 @@ const pageSliderForm = {
             $(this).addClass("btn-primary");
             $(".btn-round").removeClass("btn-primary");
             $(".btn-home").removeClass("btn-primary");
+            $(".btn-code").removeClass("btn-primary");
+            $(".btn-capacity").removeClass("btn-primary");
             $(".btn-home-re").removeClass("btn-primary");
         });
         $(".btn-round").on("click", function (e) {
@@ -45,13 +47,41 @@ const pageSliderForm = {
             $(".btn-major").removeClass("btn-primary");
             $(".btn-home-re").removeClass("btn-primary");
             $(".btn-home").removeClass("btn-primary");
+            $(".btn-code").removeClass("btn-primary");
+            $(".btn-capacity").removeClass("btn-primary");
             $(this).addClass("btn-primary");
         });
         $(".btn-home").on("click", function (e) {
             $(this).addClass("btn-primary");
-
+            $(".able").val(null);
             $(".btn-round").removeClass("btn-primary");
             $(".btn-major").removeClass("btn-primary");
+            $(".btn-code").removeClass("btn-primary");
+            $(".btn-capacity").removeClass("btn-primary");
+            $("#major").hide();
+            $(".form-round").val(0);
+            $("#round").hide();
+            $(".form-major").val(0);
+        });
+        $(".btn-capacity").on("click", function (e) {
+            $(this).addClass("btn-primary");
+            $(".able").val("App\\Models\\Contest");
+            $(".btn-round").removeClass("btn-primary");
+            $(".btn-major").removeClass("btn-primary");
+            $(".btn-code").removeClass("btn-primary");
+            $(".btn-home").removeClass("btn-primary");
+            $("#major").hide();
+            $(".form-round").val(0);
+            $("#round").hide();
+            $(".form-major").val(0);
+        });
+        $(".btn-code").on("click", function (e) {
+            $(this).addClass("btn-primary");
+            $(".able").val("App\\Models\\Challenge");
+            $(".btn-round").removeClass("btn-primary");
+            $(".btn-major").removeClass("btn-primary");
+            $(".btn-home").removeClass("btn-primary");
+            $(".btn-capacity").removeClass("btn-primary");
             $("#major").hide();
             $(".form-round").val(0);
             $("#round").hide();

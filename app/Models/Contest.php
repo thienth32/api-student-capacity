@@ -164,7 +164,7 @@ class Contest extends Model
 
     public function user_top()
     {
-        return $this->hasOneDeep(
+        return $this->hasManyDeep(
             ResultCapacity::class,
             [
                 Round::class,
@@ -175,7 +175,7 @@ class Contest extends Model
                 'round_id',
                 'exam_id',
             ]
-        )->with('user:id,name,email,status,avatar')
+        )
             ->where('result_capacity.status', config('util.STATUS_RESULT_CAPACITY_DONE'))
             ->groupBy('result_capacity.user_id')
             ->selectRaw('sum(result_capacity.scores) as total_scores, result_capacity.user_id')

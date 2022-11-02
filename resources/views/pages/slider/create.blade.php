@@ -71,14 +71,21 @@
                         </div>
                         <div class="col-12 mb-10">
                             <label for="" class="form-label">Thuộc thành phần </label>
+                            <input type="hidden" name="able" class="able">
                             <div class="row mb-10">
-                                <div class="col-4">
+                                <div class="col-2">
                                     <button type="button" class="btn btn-light btn-major">Chuyên ngành </button>
                                 </div>
-                                <div class="col-4">
-                                    <button type="button" class="btn btn-light btn-round">Vòng thi </button>
+                                <div class="col-2">
+                                    <button type="button" class="btn btn-light btn-round">Vòng thi cuộc thi </button>
                                 </div>
-                                <div class="col-4">
+                                <div class="col-2">
+                                    <button type="button" class="btn btn-light btn-capacity">Test năng lực </button>
+                                </div>
+                                <div class="col-2">
+                                    <button type="button" class="btn btn-light btn-code">Code online </button>
+                                </div>
+                                <div class="col-2">
                                     <button type="button" class="btn btn-light btn-home">Trang chủ </button>
                                 </div>
                             </div>
@@ -96,8 +103,8 @@
                                 <div class="form-group mb-10">
 
                                     <label class="form-label">Cuộc thi </label>
-                                    <select id="select-contest-p" class="form-select form-contest " data-control="select2"
-                                        data-placeholder="Chọn vòng thi ">
+                                    <select id="select-contest-p" class="form-select form-contest "
+                                        data-control="select2" data-placeholder="Chọn vòng thi ">
                                         <option value="0">Chọn cuộc thi</option>
                                         @foreach ($contests as $contest)
                                             <option value="{{ $contest->id }}">

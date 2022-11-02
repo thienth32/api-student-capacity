@@ -54,6 +54,12 @@ class Slider
             ->when(request()->has('home'), function ($q) {
                 return $q->whereNull('sliderable_id')->whereNull('sliderable_type');
             })
+            ->when(request()->has('capacity'), function ($q) {
+                return $q->whereNull('sliderable_id')->where('sliderable_type', 'App\Models\Contest');
+            })
+            ->when(request()->has('code'), function ($q) {
+                return $q->whereNull('sliderable_id')->where('sliderable_type', 'App\Models\Challenge');
+            })
             ->hasDateTimeBetween('start_time', request('start_time') ?? null, request('end_time') ?? null)
             ->hasSubTime(
                 $key,
@@ -94,7 +100,7 @@ class Slider
             $round = $this->round::find($request->round_id);
             $round->sliders()->create($dataCreate);
         } else {
-            $dataCreate = array_merge($dataCreate, ['sliderable_id' => null, 'sliderable_type' => null]);
+            $dataCreate = array_merge($dataCreate, ['sliderable_id' => null, 'sliderable_type' => $request->able]);
             $this->slider::create($dataCreate);
         }
     }
