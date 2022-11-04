@@ -332,8 +332,9 @@ class Contest implements MContestInterface
             $data->where(function ($q) use ($contestArrId) {
                 return  $q->whereIn('id', $contestArrId);
             });
-            $data->with('user_top')->withCount(['userCapacityDone']);
+            $data->with('user_top');
             $makeHidden = ['user_wishlist', 'max_user', 'end_register_time', 'status', 'start_register_time', 'status_user_has_join_contest', 'description', 'reward_rank_point', 'post_new', 'deleted_at', 'type', 'major_id', 'created_at', 'updated_at'];
+            $withCount = ['rounds', 'userCapacityDone'];
         }
         if ($contest->type == config('util.TYPE_CONTEST')) {
             $data->where(function ($q) use ($contest) {
@@ -342,9 +343,10 @@ class Contest implements MContestInterface
                 return $q;
             });
             $makeHidden = ['description', 'reward_rank_point', 'post_new', 'deleted_at', 'type', 'major_id', 'created_at', 'updated_at'];
+            $withCount = ['rounds', 'teams'];
         }
         $data = $data->orderBy('id', 'desc')
-            ->withCount(['rounds'])
+            ->withCount($withCount)
             ->with(['skills:name,short_name'])
             ->paginate(request('limit') ?? 4);
         $data->setCollection($data->getCollection()->makeHidden($makeHidden));
