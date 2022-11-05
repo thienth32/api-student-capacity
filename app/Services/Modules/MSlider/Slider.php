@@ -57,6 +57,9 @@ class Slider
             ->when(request()->has('capacity'), function ($q) {
                 return $q->whereNull('sliderable_id')->where('sliderable_type', 'App\Models\Contest');
             })
+            ->when(request()->has('contest'), function ($q) {
+                return $q->where('sliderable_type', 'App\Models\Round');
+            })
             ->when(request()->has('code'), function ($q) {
                 return $q->whereNull('sliderable_id')->where('sliderable_type', 'App\Models\Challenge');
             })

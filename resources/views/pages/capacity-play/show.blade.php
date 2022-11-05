@@ -176,8 +176,10 @@
                 }).join(" ");
                 $('#show-user-online').html(html);
             }
+
             window.Echo.join('room.' + code)
                 .here((users) => {
+
                     this.users = users;
                     renderUser();
                 })
