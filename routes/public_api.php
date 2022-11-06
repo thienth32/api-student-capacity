@@ -37,6 +37,7 @@ Route::prefix('contests')->group(function () {
 Route::prefix('capacity')->group(function () {
     Route::get('', [AdminContestController::class, 'apiIndexCapacity'])->name('capacity.api.index');
     Route::get('{id}', [AdminContestController::class, 'apiShowCapacity'])->name('capacity.api.show');
+    Route::get('user-top/{id}', [AdminContestController::class, 'userTopCapacity']);
     Route::get('{id}/related', [AdminContestController::class, 'apiContestRelated'])->name('capacity.api.related');
 });
 

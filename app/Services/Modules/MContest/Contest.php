@@ -107,14 +107,13 @@ class Contest implements MContestInterface
             $data = $this->getList($flagCapacity, request())
                 ->where('type', $flagCapacity ?  config('util.TYPE_TEST') : config('util.TYPE_CONTEST'))
                 ->orderBy('date_start', 'desc')
-                ->with(['user_top'])
                 ->paginate(request('limit') ?? 9);
         if (!$flagCapacity)
             $data = $this->getList($flagCapacity, request())
                 ->where('type', $flagCapacity ?  config('util.TYPE_TEST') : config('util.TYPE_CONTEST'))
                 ->orderBy('date_start', 'desc')
                 ->get();
-        // $data->setCollection($data->getCollection()->makeHidden(['description', 'reward_rank_point', 'post_new', 'major_id', 'created_at', 'updated_at', 'deleted_at']));
+        $data->setCollection($data->getCollection()->makeHidden(['description', 'reward_rank_point', 'post_new', 'major_id', 'created_at', 'updated_at', 'deleted_at']));
         return $data;
     }
 
@@ -332,7 +331,6 @@ class Contest implements MContestInterface
             $data->where(function ($q) use ($contestArrId) {
                 return  $q->whereIn('id', $contestArrId);
             });
-            $data->with('user_top');
             $makeHidden = ['user_wishlist', 'max_user', 'end_register_time', 'status', 'start_register_time', 'status_user_has_join_contest', 'description', 'reward_rank_point', 'post_new', 'deleted_at', 'type', 'major_id', 'created_at', 'updated_at'];
             $withCount = ['rounds', 'userCapacityDone'];
         }
@@ -438,5 +436,11 @@ class Contest implements MContestInterface
                 'point' => $point
             ]);
         };
+    }
+
+    public function userTopCapacity($id)
+    {
+        $contest = $this->contest::find($id)->load('user_top');
+        return $contest->user_top;
     }
 }
