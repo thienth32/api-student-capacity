@@ -2,6 +2,7 @@
 
 namespace App\Services\Modules\MContest;
 
+use App\Http\Resources\CapacityResource;
 use App\Http\Resources\DetailCapacityApiResource;
 use App\Models\JudgeRound;
 use App\Models\Major;
@@ -38,20 +39,7 @@ class Contest implements MContestInterface
 
         if ($flagCapacity)
             $with = [
-                // 'userCapacityDone:contest_id',
                 'skills:name,short_name',
-                // 'rounds:contest_id'
-                // 'rounds' => function ($q) {
-                //     return $q->with([
-                //         'exams' => function ($q) {
-                //             return $q->with([
-                //                 'questions' => function ($q) {
-                //                     return $q->with('answers');
-                //                 }
-                //             ]);
-                //         }
-                //     ]);
-                // }
             ];
 
         $now = $this->carbon::now('Asia/Ho_Chi_Minh');
@@ -101,13 +89,20 @@ class Contest implements MContestInterface
             ->paginate(request('limit') ?? 5);
     }
 
+    public function capacityResourceCollection($data)
+    {
+        return  CapacityResource::collection($data)->response()->getData(true);
+    }
     public function apiIndex($flagCapacity = false)
     {
-        if ($flagCapacity)
+        if ($flagCapacity) {
+
             $data = $this->getList($flagCapacity, request())
                 ->where('type', $flagCapacity ?  config('util.TYPE_TEST') : config('util.TYPE_CONTEST'))
                 ->orderBy('date_start', 'desc')
                 ->paginate(request('limit') ?? 9);
+            return  $this->capacityResourceCollection($data);
+        }
         if (!$flagCapacity)
             $data = $this->getList($flagCapacity, request())
                 ->where('type', $flagCapacity ?  config('util.TYPE_TEST') : config('util.TYPE_CONTEST'))
@@ -345,10 +340,15 @@ class Contest implements MContestInterface
         }
         $data = $data->orderBy('id', 'desc')
             ->withCount($withCount)
-            ->with(['skills:name,short_name'])
+            ->with(['skills'])
             ->paginate(request('limit') ?? 4);
-        $data->setCollection($data->getCollection()->makeHidden($makeHidden));
-        return $data;
+        if ($contest->type == config('util.TYPE_TEST')) {
+            return  $this->capacityResourceCollection($data);
+        }
+        if ($contest->type == config('util.TYPE_CONTEST')) {
+            $data->setCollection($data->getCollection()->makeHidden($makeHidden));
+            return $data;
+        }
     }
 
     public function getContestByIdUpdate($id, $type = 0)
