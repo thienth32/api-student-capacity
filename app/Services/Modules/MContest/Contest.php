@@ -4,6 +4,7 @@ namespace App\Services\Modules\MContest;
 
 use App\Http\Resources\CapacityResource;
 use App\Http\Resources\DetailCapacityApiResource;
+use App\Http\Resources\DetailContestResource;
 use App\Models\JudgeRound;
 use App\Models\Major;
 use App\Models\Contest as ModelContest;
@@ -207,7 +208,7 @@ class Contest implements MContestInterface
             ->withCount($withCount)
             ->first();
         if ($type == config('util.TYPE_TEST')) return new DetailCapacityApiResource($contest);
-        return $contest;
+        return new DetailContestResource($contest);
     }
 
     public function show($id, $type)
