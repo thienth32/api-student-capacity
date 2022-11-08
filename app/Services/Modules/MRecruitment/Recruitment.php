@@ -44,7 +44,7 @@ class Recruitment
             return $query;
         }
         $query = $this->recruitment::where('name', 'like', "%$keyword%");
-
+        if ($request->has('qq')) $query->searchKeyword($request->qq ?? null, ['name'], true);
         if ($recruitmentHot != null) {
             if ($recruitmentHot == 'hot') {
                 $query->where('hot', 1);

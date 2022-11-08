@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Casts\FormatDate;
 use App\Casts\FormatImageGet;
+use App\Services\Builder\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Recruitment extends Model
 {
@@ -51,7 +52,10 @@ class Recruitment extends Model
     }
     public function rounds()
     {
-
         return $this->hasManyDeep(Round::class, ['contest_recruitments',    Contest::class,]);
+    }
+    public function newEloquentBuilder($query)
+    {
+        return new Builder($query);
     }
 }
