@@ -2,7 +2,9 @@
 
 namespace App\Services\Modules\MContest;
 
+use App\Http\Resources\CapacityResource;
 use App\Http\Resources\DetailCapacityApiResource;
+use App\Http\Resources\DetailContestResource;
 use App\Models\JudgeRound;
 use App\Models\Major;
 use App\Models\Contest as ModelContest;
@@ -38,20 +40,7 @@ class Contest implements MContestInterface
 
         if ($flagCapacity)
             $with = [
-                // 'userCapacityDone:contest_id',
                 'skills:name,short_name',
-                // 'rounds:contest_id'
-                // 'rounds' => function ($q) {
-                //     return $q->with([
-                //         'exams' => function ($q) {
-                //             return $q->with([
-                //                 'questions' => function ($q) {
-                //                     return $q->with('answers');
-                //                 }
-                //             ]);
-                //         }
-                //     ]);
-                // }
             ];
 
         $now = $this->carbon::now('Asia/Ho_Chi_Minh');
@@ -101,20 +90,26 @@ class Contest implements MContestInterface
             ->paginate(request('limit') ?? 5);
     }
 
+    public function capacityResourceCollection($data)
+    {
+        return  CapacityResource::collection($data)->response()->getData(true);
+    }
     public function apiIndex($flagCapacity = false)
     {
-        if ($flagCapacity)
+        if ($flagCapacity) {
+
             $data = $this->getList($flagCapacity, request())
                 ->where('type', $flagCapacity ?  config('util.TYPE_TEST') : config('util.TYPE_CONTEST'))
                 ->orderBy('date_start', 'desc')
-                ->with(['user_top'])
                 ->paginate(request('limit') ?? 9);
+            return  $this->capacityResourceCollection($data);
+        }
         if (!$flagCapacity)
             $data = $this->getList($flagCapacity, request())
                 ->where('type', $flagCapacity ?  config('util.TYPE_TEST') : config('util.TYPE_CONTEST'))
                 ->orderBy('date_start', 'desc')
                 ->get();
-        // $data->setCollection($data->getCollection()->makeHidden(['description', 'reward_rank_point', 'post_new', 'major_id', 'created_at', 'updated_at', 'deleted_at']));
+        $data->setCollection($data->getCollection()->makeHidden(['description', 'reward_rank_point', 'post_new', 'major_id', 'created_at', 'updated_at', 'deleted_at']));
         return $data;
     }
 
@@ -213,7 +208,7 @@ class Contest implements MContestInterface
             ->withCount($withCount)
             ->first();
         if ($type == config('util.TYPE_TEST')) return new DetailCapacityApiResource($contest);
-        return $contest;
+        return new DetailContestResource($contest);
     }
 
     public function show($id, $type)
@@ -332,8 +327,8 @@ class Contest implements MContestInterface
             $data->where(function ($q) use ($contestArrId) {
                 return  $q->whereIn('id', $contestArrId);
             });
-            $data->with('user_top')->withCount(['userCapacityDone']);
             $makeHidden = ['user_wishlist', 'max_user', 'end_register_time', 'status', 'start_register_time', 'status_user_has_join_contest', 'description', 'reward_rank_point', 'post_new', 'deleted_at', 'type', 'major_id', 'created_at', 'updated_at'];
+            $withCount = ['rounds', 'userCapacityDone'];
         }
         if ($contest->type == config('util.TYPE_CONTEST')) {
             $data->where(function ($q) use ($contest) {
@@ -342,13 +337,19 @@ class Contest implements MContestInterface
                 return $q;
             });
             $makeHidden = ['description', 'reward_rank_point', 'post_new', 'deleted_at', 'type', 'major_id', 'created_at', 'updated_at'];
+            $withCount = ['rounds', 'teams'];
         }
         $data = $data->orderBy('id', 'desc')
-            ->withCount(['rounds'])
-            ->with(['skills:name,short_name'])
+            ->withCount($withCount)
+            ->with(['skills'])
             ->paginate(request('limit') ?? 4);
-        $data->setCollection($data->getCollection()->makeHidden($makeHidden));
-        return $data;
+        if ($contest->type == config('util.TYPE_TEST')) {
+            return  $this->capacityResourceCollection($data);
+        }
+        if ($contest->type == config('util.TYPE_CONTEST')) {
+            $data->setCollection($data->getCollection()->makeHidden($makeHidden));
+            return $data;
+        }
     }
 
     public function getContestByIdUpdate($id, $type = 0)
@@ -436,5 +437,11 @@ class Contest implements MContestInterface
                 'point' => $point
             ]);
         };
+    }
+
+    public function userTopCapacity($id)
+    {
+        $contest = $this->contest::find($id)->load('user_top');
+        return $contest->user_top;
     }
 }

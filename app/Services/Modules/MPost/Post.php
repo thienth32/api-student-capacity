@@ -4,6 +4,7 @@ namespace App\Services\Modules\MPost;
 
 use App\Models\Contest;
 use App\Models\Enterprise;
+use App\Models\Keyword;
 use App\Models\Post as ModelsPost;
 use App\Models\Recruitment;
 use App\Models\Round;
@@ -23,13 +24,14 @@ class Post
         private Enterprise $enterprise,
         private Recruitment $recruitment,
         private Round $round,
-
+        private Keyword $keyword,
     ) {
     }
 
     public function getList(Request $request)
     {
         $keyword = $request->has('keyword') ? $request->keyword : "";
+        $q = $request->has('q') ? $request->q : null;
         $status = $request->has('status') ? $request->status : null;
         $contest = $request->has('contest_id') ? $request->contest_id : 0;
         $capacity = $request->has('capacity_id') ? $request->capacity_id : 0;
@@ -49,7 +51,15 @@ class Post
         // $query = $this->post::where('title', 'like', "%$keyword%");
         $query = $this->post::query();
         $query->where('title', 'like', "%$keyword%");
-        // if ($request->has('qq')) $query->searchKeyword(request('qq') ?? null, ['title']);
+
+        //Từ khóa tìm kiếm nổi bật
+        if ($q != null) {
+            // ->orWhere("keyword_en", "LIKE", "%" .  implode(' ', explode('-', $q)) . "%")
+            $k = $this->keyword::where('keyword_slug', 'like', "%$q%")->first();
+            if ($k) $query->where("title", "LIKE", "%$k->keyword%")
+                ->orWhere("title", "LIKE", "%$k->keyword_en%");
+        }
+
         if ($status != null) {
             $query->where('status', $status);
         }

@@ -411,6 +411,12 @@
                         "required": false
                     },
                     {
+                        "name": "q",
+                        "in": "query",
+                        "description": "Tìm kiếm từ khóa nổi bật cần chuyền keyword_slug",
+                        "required": false
+                    },
+                    {
                         "name": "sortBy",
                         "in": "query",
                         "description": "Lọc theo chiều asc hoặc desc ",
@@ -419,7 +425,7 @@
                     {
                         "name": "postHot",
                         "in": "query",
-                        "description": "Bài viết tuyển dụng hot,nổi bật (postHot='hot' list bài viết  hot, nổi bật ,\r\n     *         postHot='normal' list  bài viết bthuong",
+                        "description": "Bài viết tuyển dụng hot,nổi bật (postHot='hot' list bài viết  hot, nổi bật ,\n     *         postHot='normal' list  bài viết bthuong",
                         "required": false
                     },
                     {
@@ -431,7 +437,7 @@
                     {
                         "name": "post",
                         "in": "query",
-                        "description": "  post='post-contest' -> bài viết thuộc cuộc thi\r\n     *         post='post-capacity' -> bài viết thuộc test nl .\r\n     *         post='post-round' -> bài viết thuộc vòng thi .\r\n     *          post='post-recruitment' -> bài viết thuộc tuyển dụng\r\n     * ",
+                        "description": "  post='post-contest' -> bài viết thuộc cuộc thi\n     *         post='post-capacity' -> bài viết thuộc test nl .\n     *         post='post-round' -> bài viết thuộc vòng thi .\n     *          post='post-recruitment' -> bài viết thuộc tuyển dụng\n     * ",
                         "required": false
                     },
                     {

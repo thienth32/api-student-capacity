@@ -99,10 +99,16 @@
                         class="btn-home-re {{ request()->has('home') ? 'btn-primary' : '' }} btn col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light">Banner
                         thuộc trang chủ </button>
                     <button
-                        class="btn-major {{ request()->has('major') ? 'btn-primary' : '' }} btn col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light">Banner
+                        class="btn-code {{ request()->has('code') ? 'btn-primary' : '' }} btn col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light">Banner
+                        thuộc code online </button>
+                    <button
+                        class="btn-capacity {{ request()->has('capacity') ? 'btn-primary' : '' }} btn col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light">Banner
+                        thuộc test năng lực </button>
+                    <button
+                        class="btn-major {{ request()->has('major') ? 'btn-primary' : '' }} btn col-12 col-lg-6 col-sx-12 col-md-12 col-sm-12 col-xxl-6 col-xl-6 btn-light">Banner
                         thuộc chuyên ngành</button>
                     <button
-                        class="btn-round {{ request()->has('round') ? 'btn-primary' : '' }} btn col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light">Banner
+                        class="btn-round {{ request()->has('round') ? 'btn-primary' : '' }} btn col-12 col-lg-6 col-sx-12 col-md-12 col-sm-12 col-xxl-6 col-xl-6 btn-light">Banner
                         thuộc vòng thi</button>
 
 
@@ -313,19 +319,7 @@
                     @endphp --}}
                     @forelse ($sliders as $key => $slider)
                         <tr>
-                            {{-- @if (request()->has('sort'))
-                                <th scope="row">
-                                    @if (request('sort') == 'desc')
-                                        {{ (request()->has('page') && request('page') !== 1 ? $sliders->perPage() * (request('page') - 1) : 0) + $key + 1 }}
-                                    @else
-                                        {{ request()->has('page') && request('page') !== 1 ? $total - $sliders->perPage() * (request('page') - 1) - $key - 1 : ($total -= ($key == 0 ? 0 : 1)) }}
-                                    @endif
-                                </th>
-                            @else
-                                <th scope="row">
-                                    {{ (request()->has('page') && request('page') !== 1 ? $sliders->perPage() * (request('page') - 1) : 0) + $key + 1 }}
-                                </th>
-                            @endif --}}
+
                             <td width="20%">
                                 <p><span id="text_{{ $slider->id }}">{{ $slider->link_to }}
                                         <span data-bs-toggle="tooltip" title="Sao chép " class="coppyText p-3"
@@ -366,7 +360,13 @@
                                         Chuyên ngành : <b>{{ $slider->sliderable->name }}</b>
                                     @endif
                                 @else
-                                    {{ 'Trang chủ ' }}
+                                    @if ($slider->sliderable_type == 'App\Models\Contest')
+                                        {{ 'Test năng lực ' }}
+                                    @elseif($slider->sliderable_type == 'App\Models\Challenge')
+                                        {{ 'Code online ' }}
+                                    @else
+                                        {{ 'Trang chủ ' }}
+                                    @endif
                                 @endif
                             </td>
 

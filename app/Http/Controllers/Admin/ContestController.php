@@ -559,6 +559,16 @@ class ContestController extends Controller
             return $this->responseApi(false, $th->getMessage());
         }
     }
+
+    public function userTopCapacity($id)
+    {
+        try {
+            $data = $this->contest->userTopCapacity($id);
+            return $this->responseApi(true, $data);
+        } catch (\Throwable $th) {
+            return $this->responseApi(false, $th->getMessage());
+        }
+    }
 }
 
 
