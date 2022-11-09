@@ -16,7 +16,6 @@ class Keyword implements MKeywordInterface
 
     public function getList($request)
     {
-
         $query = $this->modelKeyword::query();
         $query->orderBy('updated_at', 'desc');
         $query->when($request->has('q'), function ($q) use ($request) {
