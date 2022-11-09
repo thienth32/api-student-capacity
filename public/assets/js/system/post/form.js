@@ -4,7 +4,7 @@ const rules = {
     title: {
         required: true,
         maxlength: 255,
-        hasSpecial: true,
+        // hasSpecial: true,
     },
     link_to: { required: true },
     slug: {
