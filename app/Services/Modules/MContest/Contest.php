@@ -109,7 +109,9 @@ class Contest implements MContestInterface
                 ->where('type', $flagCapacity ?  config('util.TYPE_TEST') : config('util.TYPE_CONTEST'))
                 ->orderBy('date_start', 'desc')
                 ->get();
-        $data->setCollection($data->getCollection()->makeHidden(['description', 'reward_rank_point', 'post_new', 'major_id', 'created_at', 'updated_at', 'deleted_at']));
+        $data->makeHidden([
+            'description', 'reward_rank_point', 'post_new', 'major_id', 'created_at', 'updated_at', 'deleted_at'
+        ]);
         return $data;
     }
 
