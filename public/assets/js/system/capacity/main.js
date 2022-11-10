@@ -49,34 +49,22 @@ function fetchRoundGet(id) {
             exam = res.payload;
             var html = res.payload
                 .map(function (data) {
-                    return `
+                    return /*html*/ `
                             <tr>
                                 <td>${data.name}</td>
-                                <td style="text-align: center;">${
-                                    data.max_ponit
-                                }</td>
+                                <td style="text-align: center;">${data.max_ponit
+                        }</td>
                                 <td>${data.ponit}</td>
-                                <td>${data.time ?? "Chưa có thời gian "}</td>
-                                <td>${
-                                    data.time_type == 0
-                                        ? "Phút"
-                                        : data.time_type == 1
-                                        ? "Giờ"
-                                        : data.time_type == 2
-                                        ? "Ngày"
-                                        : "Trường hợp chưa có trong hệ thống !"
-                                }</td>
+                                
                                 <td style="text-align: center;">
                                  <div data-bs-toggle="tooltip" title="Cập nhật trạng thái "
                                             class="form-check form-switch">
-                                            <input value="${
-                                                data.status
-                                            }" data-id="${data.id}" data-round_id="${id}"
-                                                class="form-select-status form-check-input" ${
-                                                    data.status == 1
-                                                        ? "checked"
-                                                        : ""
-                                                }
+                                            <input value="${data.status
+                        }" data-id="${data.id}" data-round_id="${id}"
+                                                class="form-select-status form-check-input" ${data.status == 1
+                            ? "checked"
+                            : ""
+                        }
                                                 type="checkbox" role="switch">
 
                                         </div>
@@ -84,16 +72,14 @@ function fetchRoundGet(id) {
                                    <td data-bs-toggle="tooltip" title="Theo dõi tiến trình  " style="text-align: center;">
                                      <button style="background: #ccc;padding: 1vh 1vh 1vh 2vh;border-radius: 20px;" type="button"
                                      data-round_id="${id}"
-                                     data-exam_id="${
-                                         data.id
-                                     }" class="btn-click-show-result-exam btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_1">
+                                     data-exam_id="${data.id
+                        }" class="btn-click-show-result-exam btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_1">
                                         <i class="bi bi-graph-down  "></i>
                                     </button>
                                 </td>
                                 <td data-bs-toggle="tooltip" title="Quản lý câu hỏi câu trả lời " style="text-align: center;">
-                                     <button style="background: #ccc;padding: 1vh 1vh 1vh 2vh;border-radius: 20px;" type="button" data-exam_name="${
-                                         data.name
-                                     }" data-exam_id="${data.id}" class="btn-click-show-exams btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_2">
+                                     <button style="background: #ccc;padding: 1vh 1vh 1vh 2vh;border-radius: 20px;" type="button" data-exam_name="${data.name
+                        }" data-exam_id="${data.id}" class="btn-click-show-exams btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_2">
 
                                         <i class="bi bi-arrows-move"></i>
                                     </button>
@@ -139,17 +125,15 @@ function fetchHistoryExam(id) {
                                     <td>${data.user.name}</td>
                                     <td>${data.user.email}</td>
                                     <td>${data.scores}</td>
-                                    <td>${
-                                        data.status == 1
-                                            ? "Đã nộp"
-                                            : "Chưa nộp "
-                                    }</td>
+                                    <td>${data.status == 1
+                                ? "Đã nộp"
+                                : "Chưa nộp "
+                            }</td>
                                     <td>${data.false_answer}</td>
                                     <td>${data.true_answer}</td>
                                     <td>
-                                         <button data-id="${
-                                             data.id
-                                         }"   type="button" class="print-hítory-dowload-excel btn btn-primary">Xuất lịch sử (excel)</button>
+                                         <button data-id="${data.id
+                            }"   type="button" class="print-hítory-dowload-excel btn btn-primary">Xuất lịch sử (excel)</button>
                                     </td>
                                 </tr>
                             `;
@@ -233,9 +217,8 @@ function fecthQuestionByExams(id, param = [], url = null) {
                         var htmlChild = data.answers
                             .map(function (val) {
                                 return `
-                                <p> ${
-                                    val.content
-                                } ${val.is_correct == 1 ? " <strong>- Đáp án đúng </strong> " : ""} </p>
+                                <p> ${val.content
+                                    } ${val.is_correct == 1 ? " <strong>- Đáp án đúng </strong> " : ""} </p>
                             `;
                             })
                             .join(" ");
@@ -257,33 +240,29 @@ function fecthQuestionByExams(id, param = [], url = null) {
                                     </div>
 
                                     </td>
-                                <td>${
-                                    data.rank == 0
-                                        ? "Dễ"
-                                        : data.rank == 1
-                                        ? "Trung bình "
-                                        : data.rank == 2
+                                <td>${data.rank == 0
+                                ? "Dễ"
+                                : data.rank == 1
+                                    ? "Trung bình "
+                                    : data.rank == 2
                                         ? "Khó"
                                         : "No "
-                                }</td>
-                                <td>${
-                                    data.type == 0
-                                        ? "Một đáp án"
-                                        : data.type == 1
-                                        ? "Nhiều đáp án "
-                                        : "No"
-                                }</td>
-                                <td>${
-                                    data.status == 0
-                                        ? "Đóng "
-                                        : data.status == 1
-                                        ? "Mở"
-                                        : "No"
-                                }</td>
+                            }</td>
+                                <td>${data.type == 0
+                                ? "Một đáp án"
+                                : data.type == 1
+                                    ? "Nhiều đáp án "
+                                    : "No"
+                            }</td>
+                                <td>${data.status == 0
+                                ? "Đóng "
+                                : data.status == 1
+                                    ? "Mở"
+                                    : "No"
+                            }</td>
                                 <td>
-                                    <i data-bs-toggle="tooltip" title="Xóa câu hỏi " role="button" data-id="${
-                                        data.id
-                                    }" class="btn-dettach bi bi-backspace-reverse-fill fs-2x"></i>
+                                    <i data-bs-toggle="tooltip" title="Xóa câu hỏi " role="button" data-id="${data.id
+                            }" class="btn-dettach bi bi-backspace-reverse-fill fs-2x"></i>
                                 </td>
                             </tr>
                         `;
@@ -353,9 +332,8 @@ function fetchShowQues(dataQ) {
             var htmlChild = data.answers
                 .map(function (val) {
                     return `
-                                <p> ${
-                                    val.content
-                                } ${val.is_correct == 1 ? "<strong>- Đáp án đúng</strong>  " : ""} </p>
+                                <p> ${val.content
+                        } ${val.is_correct == 1 ? "<strong>- Đáp án đúng</strong>  " : ""} </p>
                             `;
                 })
                 .join(" ");
@@ -377,44 +355,39 @@ function fetchShowQues(dataQ) {
                     role="button"
                     aria-expanded="false"
                     aria-controls="multiCollapseExample${index}">
-                    ${
-                        data.content
-                    } ${flagActive == true ? '<i class="bi bi-check2-square"></i> ' + '<b style="color:lawngreen">Đã chọn</b> | <i data-bs-toggle="tooltip" title="Xóa" role="button" data-id="' + data.id + '" class="click-remove-save bi bi-slash-circle" title="Hủy chọn"></i>' : ""}
+                    ${data.content
+                } ${flagActive == true ? '<i class="bi bi-check2-square"></i> ' + '<b style="color:lawngreen">Đã chọn</b> | <i data-bs-toggle="tooltip" title="Xóa" role="button" data-id="' + data.id + '" class="click-remove-save bi bi-slash-circle" title="Hủy chọn"></i>' : ""}
 
 
                     </a>
                     <p>
-                    - Mức độ : ${
-                        data.rank == 0
-                            ? "Dễ"
-                            : data.rank == 1
-                            ? "Trung bình "
-                            : data.rank == 2
+                    - Mức độ : ${data.rank == 0
+                    ? "Dễ"
+                    : data.rank == 1
+                        ? "Trung bình "
+                        : data.rank == 2
                             ? "Khó"
                             : "No "
-                    }
-                    - Dạng : ${
-                        data.type == 0
-                            ? "Một đáp án"
-                            : data.type == 1
-                            ? "Nhiều đáp án "
-                            : "No"
-                    } -
-                    Tình trạng : ${
-                        data.status == 0
-                            ? "Đóng "
-                            : data.status == 1
-                            ? "Mở"
-                            : "No"
-                    }
+                }
+                    - Dạng : ${data.type == 0
+                    ? "Một đáp án"
+                    : data.type == 1
+                        ? "Nhiều đáp án "
+                        : "No"
+                } -
+                    Tình trạng : ${data.status == 0
+                    ? "Đóng "
+                    : data.status == 1
+                        ? "Mở"
+                        : "No"
+                }
                     </p>
                     ${skillChill}
                 </div>
                 <div>
                     <button
-                        class=" btn btn-outline btn-outline-dashed ${
-                            flagActive == true ? "disable" : "btn-click-save"
-                        } btn-outline-dark btn-active-light-dark btn-sm p-1"
+                        class=" btn btn-outline btn-outline-dashed ${flagActive == true ? "disable" : "btn-click-save"
+                } btn-outline-dark btn-active-light-dark btn-sm p-1"
                         data-bs-toggle="tooltip" data-bs-html="true" title="Thêm vào danh sách câu hỏi"
                         data-id="${data.id}"
                         data-name="${data.content.replace(/"/g, "'")}" >
