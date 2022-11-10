@@ -98,8 +98,7 @@ class ExamController extends Controller
     {
         try {
             $type = 0;
-            $round = $this->round::find($id_round)->load('contest');
-            if (is_null($round)) return abort(404);
+            $round = $this->round::findOrFail($id_round)->load('contest');
             if ($round->contest->type == 1) $type = 1;
             if ($type == 0) {
                 $validatorContest = Validator::make(
@@ -110,17 +109,6 @@ class ExamController extends Controller
                 );
                 if ($validatorContest->fails()) {
                     return redirect()->back()->withErrors($validatorContest)->withInput();
-                }
-            } else {
-                $validatorCapacity = Validator::make(
-                    $request->all(),
-                    [
-                        'time' => 'required',
-                        'time_type' => 'required'
-                    ],
-                );
-                if ($validatorCapacity->fails()) {
-                    return redirect()->back()->withErrors($validatorCapacity)->withInput();
                 }
             }
             $dataMer = [];
@@ -135,8 +123,6 @@ class ExamController extends Controller
                 'type' => $type,
                 'status' => 1,
                 'external_url' => 'null',
-                'time' => $request->time,
-                'time_type' => $request->time_type,
             ];
 
             // $filename = $this->uploadFile($request->external_url);
@@ -148,7 +134,7 @@ class ExamController extends Controller
             ]), $dataMer);
 
             $this->exam::create($dataCreate);
-            if ($round->contest->type == 1) return Redirect::route('admin.contest.show.capatity', ['id' => $round->contest->id]);
+            if ($round->contest->type == 1) return redirect()->route('admin.contest.show.capatity', ['id' => $round->contest->id]);
             return redirect()->route('admin.exam.index', ['id' => $id_round]);
         } catch (\Throwable $th) {
             Log::info($th->getMessage());
@@ -172,8 +158,7 @@ class ExamController extends Controller
     public function edit($id_round, $id)
     {
 
-        $round = $this->round::find($id_round);
-        if (is_null($round)) return abort(404);
+        $round = $this->round::findOrFail($id_round);
         $exam = $this->exam::whereId($id)->where('round_id', $id_round)->first();
         if (is_null($exam)) return abort(404);
         return view(
@@ -188,10 +173,8 @@ class ExamController extends Controller
     public function update(RequestExam $request, $id_round, $id)
     {
         $type = 0;
-        $examModel = $this->exam::find($id);
-        if (is_null($examModel)) return abort(404);
-        $round = $this->round::find($id_round)->load('contest');
-        if (is_null($round)) return abort(404);
+        $examModel = $this->exam::findOrFail($id);
+        $round = $this->round::findOrFail($id_round)->load('contest');
 
         if ($round->contest->type == 1) $type = 1;
         if ($type == 0) {
@@ -213,22 +196,6 @@ class ExamController extends Controller
                     return redirect()->back()->withErrors($validatorContest)->withInput();
                 }
             }
-        } else {
-            $validatorCapacity = Validator::make(
-                $request->all(),
-                [
-                    'time' => 'required',
-                    'time_type' => 'required'
-                ],
-                [
-                    'time.required' => 'Thời gian không được bỏ trống ',
-                    'time_type.required' => 'Kiểu thời gian không được bỏ trống ',
-                ]
-            );
-
-            if ($validatorCapacity->fails()) {
-                return redirect()->back()->withErrors($validatorCapacity)->withInput();
-            }
         }
 
 
@@ -243,8 +210,7 @@ class ExamController extends Controller
             $examModel->name = $request->name;
             $examModel->description = $request->description;
             $examModel->max_ponit = $request->max_ponit;
-            if ($request->has('time')) $examModel->time = $request->time;
-            if ($request->has('time_type')) $examModel->time_type = $request->time_type;
+
             $examModel->ponit = $request->ponit;
             $examModel->round_id = $id_round;
             $examModel->save();

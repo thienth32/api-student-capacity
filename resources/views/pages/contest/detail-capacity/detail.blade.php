@@ -112,7 +112,6 @@
                                 <tr>
                                     <th>Tên vòng thi </th>
                                     <th>Đề thi</th>
-                                    {{-- <th>Tổng số đề thi</th> --}}
                                     <th>Thời gian bắt đầu</th>
                                     <th>Thời gian kết thúc</th>
                                     <th class="text-center">Thao tác nhanh</th>
@@ -679,8 +678,8 @@
                                 <th>Tên đề thi </th>
                                 <th>Điểm số tối đa </th>
                                 <th>Điểm số qua vòng </th>
-                                <th>Thời gian </th>
-                                <th>Kiểu thời gian </th>
+                                {{-- <th>Thời gian </th> --}}
+                                {{-- <th>Kiểu thời gian </th> --}}
                                 <th>Tình trạng </th>
                                 <th>Theo dõi tiến trình </th>
                                 <th>Quản lý câu hỏi </th>
