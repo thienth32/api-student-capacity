@@ -43,7 +43,7 @@ function fetchRoundGet(id) {
         type: "GET",
         url: `${urlApiPublic}exam/get-by-round/${id}`,
         success: function (res) {
-            // console.log(res);
+            console.log(res);
             if (res.payload.length == 0)
                 return $("#show-exams").html(`<h2>Không có đề bài nào !</h2>`);
             exam = res.payload;
@@ -55,7 +55,7 @@ function fetchRoundGet(id) {
                                 <td style="text-align: center;">${data.max_ponit
                         }</td>
                                 <td>${data.ponit}</td>
-                                
+
                                 <td style="text-align: center;">
                                  <div data-bs-toggle="tooltip" title="Cập nhật trạng thái "
                                             class="form-check form-switch">
@@ -228,12 +228,13 @@ function fecthQuestionByExams(id, param = [], url = null) {
                                 <td>
                                     <a  data-bs-toggle="collapse" href="#multiCollapseExample${index}"
                                     role="button"
+                                    class=" mb-3"
                                     aria-expanded="false"
                                     aria-controls="multiCollapseExample${index}">
-                                    ${data.content} - ${skillChill}
+                                    ${data.content} <br/> ${skillChill}
                                     </a>
 
-                                    <div class="collapse multi-collapse" id="multiCollapseExample${index}">
+                                    <div class="collapse multi-collapse " id="multiCollapseExample${index}">
                                         <div class="card card-body">
                                             ${htmlChild}
                                         </div>
@@ -440,7 +441,7 @@ function showListSave() {
 
 const mainPage = {
     addExam: function () {
-        $(".add-exam").on("click", function () {
+        $(document).on("click", ".add-exam", function () {
             backClass([".nav-list", ".nav-ql"], [".tab-list", ".tab-ql"]);
             $("#show-exam-round").html(
                 `Danh sách các đề thi của vòng thi <strong style="color:blue">${$(

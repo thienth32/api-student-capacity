@@ -356,11 +356,11 @@
                                             </td>
                                             <td style="text-align: center">
 
-                                                <span role="button" class="btn btn-primary">
-                                                    <i role="button" data-bs-toggle="tooltip" title="Quản lý đề thi "
-                                                        data-round_id="{{ $round->id }}"
-                                                        data-round_name="{{ $round->name }}"
-                                                        class="add-exam m-auto bi bi-tools  "></i>
+                                                <span role="button" class="add-exam btn btn-primary"
+                                                    data-bs-toggle="tooltip" title="Quản lý đề thi "
+                                                    data-round_id="{{ $round->id }}"
+                                                    data-round_name="{{ $round->name }}">
+                                                    <i role="button" class=" m-auto bi bi-tools  "></i>
                                                 </span>
 
                                             </td>
