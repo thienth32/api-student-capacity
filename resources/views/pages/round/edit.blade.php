@@ -130,6 +130,41 @@
                                         <p class="text-danger">{{ $message }}</p>
                                     @enderror
                                 </div>
+
+                                @if (request()->has('type') && request('type') == config('util.TYPE_TEST'))
+                                    <div class="col-lg-12 row form-group mb-4">
+                                        <div class="col-lg-6 form-group mb-4">
+                                            <label class="form-label" for="">Kiểu thi </label>
+                                            <select id="select-contest" name="time_type_exam"
+                                                class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                                                data-hide-search="false" tabindex="-1" aria-hidden="true">
+                                                @forelse (config('util.TYPE_TIMES') as $time)
+                                                    <option @selected(old('time_type_exam') == $time['TYPE']) value="{{ $time['TYPE'] }}">
+                                                        {{ $time['VALUE'] }}
+                                                    </option>
+                                                @empty
+                                                    <option disabled>Không có cuộc thi</option>
+                                                @endforelse
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-6 form-group mb-4">
+                                            <label class="form-label" for="">Thời gian </label>
+                                            <input type="number" value="{{ old('time_exam') }}" name="time_exam"
+                                                class="form-control" placeholder="">
+                                            @error('time_exam')
+                                                <p class="text-danger">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+                                        <div class="col-lg-6 form-group mb-4">
+                                            <label class="form-label" for="">Số câu hỏi cho đề trắc nghiệm </label>
+                                            <input type="number" value="{{ old('max_questions_exam') }}"
+                                                name="max_questions_exam" class="form-control" placeholder="">
+                                            @error('max_questions_exam')
+                                                <p class="text-danger">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
                             <div class="col-4">
                                 <div class="form-group ">
@@ -159,7 +194,8 @@
                         @enderror
                     </div>
                     <div class="form-group mb-10 ">
-                        <button type="submit" name="" id="" class="btn btn-success btn-lg btn-block">Lưu
+                        <button type="submit" name="" id=""
+                            class="btn btn-success btn-lg btn-block">Lưu
                         </button>
                     </div>
                 </form>

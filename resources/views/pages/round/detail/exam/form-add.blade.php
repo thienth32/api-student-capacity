@@ -105,7 +105,7 @@
                             @endif
 
                         </div>
-                        @if ($round->contest->type == config('util.TYPE_TEST'))
+                        {{-- @if ($round->contest->type == config('util.TYPE_TEST'))
                             <div class="col-lg-12 row form-group mb-4">
                                 <div class="col-lg-6 form-group mb-4">
                                     <label class="form-label" for="">Kiểu thi </label>
@@ -130,7 +130,7 @@
                                     @enderror
                                 </div>
                             </div>
-                        @endif
+                        @endif --}}
                     </div>
                     <button type="submit" class="btn btn-primary">Lưu</button>
                 </form>
