@@ -852,4 +852,26 @@ class RoundController extends Controller
             dd($th);
         }
     }
+
+    /**
+     * @OA\Get(
+     *     path="/api/public/rounds/{id}/demo",
+     *     description="Description api round by id",
+     *     tags={"Round" ,"RoundDemo"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID vòng thi",
+     *         required=true,
+     *     ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
+    public function showDemo($id)
+    {
+        $round = $this->round::select(['id', 'name'])->whereId($id)->first();
+        if (is_null($round)) return $this->responseApi(false, 'Không tồn tại trong hệ thống !');
+        return $this->responseApi(true, $round);
+    }
 }
