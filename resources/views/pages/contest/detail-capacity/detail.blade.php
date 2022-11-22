@@ -114,7 +114,7 @@
                                     <th>Đề thi</th>
                                     <th>Thời gian bắt đầu</th>
                                     <th>Thời gian kết thúc</th>
-                                    <th class="text-center">Thao tác nhanh</th>
+                                    <th class="text-center">Quản lý đề thi (Nhanh)</th>
                                     <th style="text-align: center">Quản lý đề thi </th>
                                     <th style="text-align: center"> </th>
                                 </tr>
@@ -183,7 +183,7 @@
                                                                                 Tải bộ excel</th>
                                                                             <th style="float: right;padding: 10px"
                                                                                 scope="col">
-                                                                                Nhanh
+                                                                                Câu hỏi & trả lời
                                                                             </th>
                                                                         </tr>
                                                                     </thead>
@@ -249,7 +249,7 @@
                                                                                     </td>
                                                                                     <td
                                                                                         style="width: 10% ;padding: 10px; text-align:center">
-                                                                                        <span style="float: right"
+                                                                                        <span style=""
                                                                                             data-bs-toggle="tooltip"
                                                                                             title="Xem nhanh câu hỏi câu trả lời ">
                                                                                             <button
