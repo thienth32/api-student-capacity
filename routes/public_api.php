@@ -32,6 +32,7 @@ Route::prefix('contests')->group(function () {
     Route::get('', [AdminContestController::class, 'apiIndex'])->name('contest.api.index');
     Route::get('demo', [AdminContestController::class, 'apiIndexDemo'])->name('contest.api.index.demo');
     Route::get('{id}', [AdminContestController::class, 'apiShow'])->name('contest.api.show');
+    Route::get('{id}/demo', [AdminContestController::class, 'apiShowDemo'])->name('contest.api.show.demo');
     Route::get('{id}/related', [AdminContestController::class, 'apiContestRelated'])->name('contest.api.related');
 });
 
@@ -46,7 +47,6 @@ Route::prefix('rounds')->group(function () {
     Route::get('', [RoundController::class, 'apiIndex'])->name('round.api.index');
     Route::prefix('{id}')->group(function () {
         Route::get('', [RoundController::class, 'show'])->name('round.api.show');
-        Route::get('demo', [RoundController::class, 'showDemo'])->name('round.api.show.demo');
     });
 });
 

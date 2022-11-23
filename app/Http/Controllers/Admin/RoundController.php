@@ -868,10 +868,4 @@ class RoundController extends Controller
      *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
      * )
      */
-    public function showDemo($id)
-    {
-        $round = $this->round::select(['id', 'name'])->whereId($id)->first();
-        if (is_null($round)) return $this->responseApi(false, 'Không tồn tại trong hệ thống !');
-        return $this->responseApi(true, $round);
-    }
 }

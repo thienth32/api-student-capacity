@@ -584,6 +584,32 @@ class ContestController extends Controller
             return $this->responseApi(false, $th->getMessage());
         }
     }
+
+    /**
+     * @OA\Get(
+     *     path="/api/public/contests/{id}/demo",
+     *     description="Description api contests",
+     *     tags={"Contest" ,"ContestDemo"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Id cuộc thi ",
+     *         required=true,
+     *     ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
+    public function apiShowDemo($id)
+    {
+        try {
+            if (!($contest = $this->contest->apiShowDemo($id)))
+                return $this->responseApi(false, 'Không thể lấy thông tin cuộc thi  !');
+            return $this->responseApi(true, $contest);
+        } catch (\Throwable $th) {
+            return $this->responseApi(false);
+        }
+    }
 }
 
 

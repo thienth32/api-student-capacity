@@ -2,18 +2,19 @@
 
 namespace App\Services\Modules\MContest;
 
-use App\Http\Resources\CapacityResource;
-use App\Http\Resources\ContestDemoList;
-use App\Http\Resources\DetailCapacityApiResource;
-use App\Http\Resources\DetailContestResource;
-use App\Models\JudgeRound;
-use App\Models\Major;
-use App\Models\Contest as ModelContest;
+use Carbon\Carbon;
 use App\Models\Team;
 use App\Models\Judge;
-use App\Services\Traits\TUploadImage;
-use Carbon\Carbon;
+use App\Models\Major;
+use App\Models\JudgeRound;
 use Illuminate\Support\Facades\DB;
+use App\Services\Traits\TUploadImage;
+use App\Http\Resources\ContestDemoList;
+use App\Models\Contest as ModelContest;
+use App\Http\Resources\CapacityResource;
+use App\Http\Resources\DetailContestResource;
+use App\Http\Resources\RoundDemoListResource;
+use App\Http\Resources\DetailCapacityApiResource;
 
 class Contest implements MContestInterface
 {
@@ -456,5 +457,16 @@ class Contest implements MContestInterface
             ->get();
 
         return ContestDemoList::collection($datas);
+    }
+
+
+
+    public function apiShowDemo($id)
+    {
+
+        $contest =  $this->contest::find($id)->load([
+            'rounds:id,name'
+        ]);
+        return RoundDemoListResource::collection($contest->rounds);
     }
 }

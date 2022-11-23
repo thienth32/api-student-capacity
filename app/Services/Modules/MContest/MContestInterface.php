@@ -49,4 +49,6 @@ interface MContestInterface
     public function userTopCapacity($id);
 
     public function getListDemo();
+
+    public function apiShowDemo($id);
 }
