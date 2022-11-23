@@ -443,7 +443,6 @@
                                     @elseif(get_class($key->postable) == \App\Models\Contest::class && $key->status_capacity == 0)
                                         Cuộc thi : <b><a
                                                 href="{{ route('admin.contest.show', ['id' => $key->postable->id]) }}">{{ $key->postable->name }}
-                                                {{ $key->postable->description }}
                                             </a></b>
                                     @else
                                         Bài test : <b><a
