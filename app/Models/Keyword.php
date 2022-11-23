@@ -12,7 +12,7 @@ class Keyword extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = 'keywords';
-    protected $fillable = ['keyword', 'keyword_en', 'keyword_slug', 'type', 'status'];
+    protected $fillable = ['keyword', 'keyword_en', 'keyword_slug', 'type', 'status', 'short_name'];
 
     public function newEloquentBuilder($query)
     {

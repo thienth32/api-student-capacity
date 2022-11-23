@@ -13,6 +13,9 @@ const rules = {
         required: true,
         minlength: 4,
     },
+    short_name: {
+        required: true,
+    },
 };
 const messages = {
     keyword: {
@@ -26,5 +29,8 @@ const messages = {
     keyword_slug: {
         required: "Trường này không được để trống !",
         minlength: "Tối thiểu là 4 kí tự !",
+    },
+    short_name: {
+        required: "Trường này không được để trống !",
     },
 };

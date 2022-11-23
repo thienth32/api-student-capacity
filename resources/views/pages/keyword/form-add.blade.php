@@ -45,6 +45,14 @@
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
                     </div>
+                    <div class="form-group mb-10">
+                        <label for="">Tags</label>
+                        <input type="text" name="short_name" value="{{ old('short_name') }}" class=" form-control"
+                            placeholder="">
+                        @error('short_name')
+                            <p class="text-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
                     <div class="row">
                         <div class="col-6">
                             <div class="form-group mb-10">
