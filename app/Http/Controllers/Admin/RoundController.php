@@ -118,8 +118,7 @@ class RoundController extends Controller
 
     public function store(RequestRound $request)
     {
-        $contest = $this->contest::find($request->contest_id);
-        if (!$contest) return abort(404);
+        $contest = $this->contest::findOrFail($request->contest_id);
         if (Carbon::parse($request->start_time)->toDateTimeString() < Carbon::parse($contest->date_start)->toDateTimeString()) {
             return redirect()->back()->withErrors(['start_time' => 'Thời gian bắt đầu không được bé hơn thời gian bắt đầu của cuộc thi !'])->withInput();
         };
@@ -135,8 +134,8 @@ class RoundController extends Controller
         } catch (Exception $ex) {
             if ($request->hasFile('image')) {
                 $fileImage = $request->file('image');
-                if (Storage::disk('s3')->has($filename)) {
-                    Storage::disk('s3')->delete($filename);
+                if (Storage::disk('s3')->has($fileImage)) {
+                    Storage::disk('s3')->delete($fileImage);
                 }
             }
             $this->db::rollBack();
@@ -852,5 +851,27 @@ class RoundController extends Controller
         } catch (\Throwable $th) {
             dd($th);
         }
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/public/rounds/{id}/demo",
+     *     description="Description api round by id",
+     *     tags={"Round" ,"RoundDemo"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID vòng thi",
+     *         required=true,
+     *     ),
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
+    public function showDemo($id)
+    {
+        $round = $this->round::select(['id', 'name'])->whereId($id)->first();
+        if (is_null($round)) return $this->responseApi(false, 'Không tồn tại trong hệ thống !');
+        return $this->responseApi(true, $round);
     }
 }

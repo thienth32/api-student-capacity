@@ -120,6 +120,20 @@ class ContestController extends Controller
 
     /**
      * @OA\Get(
+     *     path="/api/public/contests/demo",
+     *     description="Description api contests demo",
+     *     tags={"Contest" , "ContestDemo"},
+     *     @OA\Response(response="200", description="{ status: true , data : data }"),
+     *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
+     * )
+     */
+    public function apiIndexDemo()
+    {
+        if (!($data = $this->contest->getListDemo())) return $this->responseApi(false);
+        return $this->responseApi(true, $data);
+    }
+    /**
+     * @OA\Get(
      *     path="/api/public/capacity",
      *     description="Description api capacity",
      *     tags={"Capacity"},
@@ -346,6 +360,7 @@ class ContestController extends Controller
         $capacity = $this->contest->getContestByIdUpdate($id, config('util.TYPE_TEST'));
         if (!$capacity) abort(404);
         $skills = $skillModel::all(['name', 'id']);
+        // dd($capacity->toArray());
         return view('pages.contest.detail-capacity.detail', [
             'test_capacity' => $capacity,
             'skills' => $skills

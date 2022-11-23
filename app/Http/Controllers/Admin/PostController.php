@@ -312,7 +312,7 @@ class PostController extends Controller
      */
     public function apiShow(Request $request)
     {
-        $data = $this->modulesPost->getList($request)->paginate(request('limit') ?? $this->post::count());
+        $data = $this->modulesPost->getList($request)->paginate(request('limit') ?? 6);
         $data->load(
             [
                 'postable:id,name',

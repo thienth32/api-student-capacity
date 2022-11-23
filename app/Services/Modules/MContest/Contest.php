@@ -3,6 +3,7 @@
 namespace App\Services\Modules\MContest;
 
 use App\Http\Resources\CapacityResource;
+use App\Http\Resources\ContestDemoList;
 use App\Http\Resources\DetailCapacityApiResource;
 use App\Http\Resources\DetailContestResource;
 use App\Models\JudgeRound;
@@ -445,5 +446,15 @@ class Contest implements MContestInterface
     {
         $contest = $this->contest::find($id)->load('user_top');
         return $contest->user_top;
+    }
+
+    public function getListDemo()
+    {
+        $datas = $this->contest::where('type', config('util.TYPE_CONTEST'))
+            ->orderBy('date_start', 'desc')
+            ->with('rounds')
+            ->get();
+
+        return ContestDemoList::collection($datas);
     }
 }

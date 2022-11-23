@@ -23,8 +23,9 @@ class RequestRound extends FormRequest
      */
     public function rules()
     {
+        // dd(request('type'));
         $ruleName = 'required|max:255|regex:/^[0-9a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễếệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\ ]+$/u|unique:rounds,name';
-        if($this->route()->id) $ruleName = 'required|max:255|regex:/^[0-9a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễếệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\ ]+$/u|unique:rounds,name,' . $this->route()->id . ',id';
+        if ($this->route()->id) $ruleName = 'required|max:255|regex:/^[0-9a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễếệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\ ]+$/u|unique:rounds,name,' . $this->route()->id . ',id';
         $rule = [
             'name' => $ruleName,
             'start_time' => "required",
@@ -33,7 +34,12 @@ class RequestRound extends FormRequest
             'contest_id' => "required",
             'type_exam_id' => "required",
         ];
-        if(!$this->route()->id || $this->has('image'))  $rule = array_merge($rule, [
+        if (request()->has('type') && request('type') == config('util.TYPE_TEST'))  $rule = array_merge($rule, [
+            'max_questions_exam' => 'required|integer',
+            'time_exam' => 'required|integer',
+            'time_type_exam' => 'required|integer',
+        ]);
+        if (!$this->route()->id || $this->has('image'))  $rule = array_merge($rule, [
             'image' => 'required|required|mimes:jpeg,png,jpg|max:10000',
         ]);
         return $rule;

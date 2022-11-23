@@ -112,10 +112,9 @@
                                 <tr>
                                     <th>Tên vòng thi </th>
                                     <th>Đề thi</th>
-                                    {{-- <th>Tổng số đề thi</th> --}}
                                     <th>Thời gian bắt đầu</th>
                                     <th>Thời gian kết thúc</th>
-                                    <th class="text-center">Thao tác nhanh</th>
+                                    <th class="text-center">Quản lý đề thi (Nhanh)</th>
                                     <th style="text-align: center">Quản lý đề thi </th>
                                     <th style="text-align: center"> </th>
                                 </tr>
@@ -184,7 +183,7 @@
                                                                                 Tải bộ excel</th>
                                                                             <th style="float: right;padding: 10px"
                                                                                 scope="col">
-                                                                                Nhanh
+                                                                                Câu hỏi & trả lời
                                                                             </th>
                                                                         </tr>
                                                                     </thead>
@@ -250,7 +249,7 @@
                                                                                     </td>
                                                                                     <td
                                                                                         style="width: 10% ;padding: 10px; text-align:center">
-                                                                                        <span style="float: right"
+                                                                                        <span style=""
                                                                                             data-bs-toggle="tooltip"
                                                                                             title="Xem nhanh câu hỏi câu trả lời ">
                                                                                             <button
@@ -357,11 +356,11 @@
                                             </td>
                                             <td style="text-align: center">
 
-                                                <span role="button" class="btn btn-primary">
-                                                    <i role="button" data-bs-toggle="tooltip" title="Quản lý đề thi "
-                                                        data-round_id="{{ $round->id }}"
-                                                        data-round_name="{{ $round->name }}"
-                                                        class="add-exam m-auto bi bi-tools  "></i>
+                                                <span role="button" class="add-exam btn btn-primary"
+                                                    data-bs-toggle="tooltip" title="Quản lý đề thi "
+                                                    data-round_id="{{ $round->id }}"
+                                                    data-round_name="{{ $round->name }}">
+                                                    <i role="button" class=" m-auto bi bi-tools  "></i>
                                                 </span>
 
                                             </td>
@@ -679,8 +678,8 @@
                                 <th>Tên đề thi </th>
                                 <th>Điểm số tối đa </th>
                                 <th>Điểm số qua vòng </th>
-                                <th>Thời gian </th>
-                                <th>Kiểu thời gian </th>
+                                {{-- <th>Thời gian </th> --}}
+                                {{-- <th>Kiểu thời gian </th> --}}
                                 <th>Tình trạng </th>
                                 <th>Theo dõi tiến trình </th>
                                 <th>Quản lý câu hỏi </th>

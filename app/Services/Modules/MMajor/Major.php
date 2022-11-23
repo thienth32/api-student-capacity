@@ -3,13 +3,11 @@
 namespace App\Services\Modules\MMajor;
 
 use App\Models\ContestUser;
-use Illuminate\Http\Request;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
+use App\Services\Traits\TPaginatorCustom;
 
 class Major implements MMajorInterface
 {
+    use TPaginatorCustom;
     public function __construct(public \App\Models\Major $major, public ContestUser $contestUser)
     {
     }
@@ -159,15 +157,7 @@ class Major implements MMajorInterface
         );
         return  $this->paginate($major->resultCapacity->toArray());
     }
-    public function paginate($items, $perPage = 10, $page = null)
-    {
-        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
-        $items = $items instanceof Collection ? $items : Collection::make($items);
-        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, [
-            'path' => Paginator::resolveCurrentPath(),
-            'pageName' => 'page',
-        ]);
-    }
+
     public function getAllMajor($params = [], $with = [])
     {
         return $this->major::hasRequest($params['where'] ?? [])
