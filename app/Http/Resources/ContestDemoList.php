@@ -17,7 +17,7 @@ class ContestDemoList extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'rounds' =>  RoundDemoList::collection($this->whenLoaded('rounds')),
+            'rounds' =>  RoundDemoListResource::collection($this->whenLoaded('rounds')),
         ];
     }
 }
