@@ -603,8 +603,7 @@ class ContestController extends Controller
     public function apiShowDemo($id)
     {
         try {
-            if (!($contest = $this->contest->apiShowDemo($id)))
-                return $this->responseApi(false, 'Không thể lấy thông tin cuộc thi  !');
+            $contest = $this->contest->apiShowDemo($id);
             return $this->responseApi(true, $contest);
         } catch (\Throwable $th) {
             return $this->responseApi(false);

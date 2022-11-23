@@ -465,7 +465,7 @@ class Contest implements MContestInterface
     {
 
         $contest =  $this->contest::find($id)->load([
-            'rounds:id,name'
+            'rounds'
         ]);
         return RoundDemoListResource::collection($contest->rounds);
     }
