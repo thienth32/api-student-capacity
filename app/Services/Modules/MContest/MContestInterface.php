@@ -47,4 +47,8 @@ interface MContestInterface
     public function endContestOutDateRegisterDealine();
 
     public function userTopCapacity($id);
+
+    public function getListDemo();
+
+    public function apiShowDemo($id);
 }

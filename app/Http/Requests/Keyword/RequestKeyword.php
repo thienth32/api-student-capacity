@@ -24,6 +24,7 @@ class RequestKeyword extends FormRequest
             'keyword' => $ruleKeyword,
             'keyword_en' => 'required|min:4',
             'keyword_slug' => 'required|min:4',
+            'short_name' => 'required',
             'type' => 'required|integer',
             'status' => 'required|integer',
         ];

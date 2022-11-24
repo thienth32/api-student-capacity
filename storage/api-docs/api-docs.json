@@ -118,6 +118,24 @@
                 }
             }
         },
+        "/api/public/contests/demo": {
+            "get": {
+                "tags": [
+                    "Contest",
+                    "ContestDemo"
+                ],
+                "description": "Description api contests demo",
+                "operationId": "3b1993493e7ef52e6b5bd19ca6188906",
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                }
+            }
+        },
         "/api/public/capacity": {
             "get": {
                 "tags": [
@@ -216,6 +234,32 @@
                         "name": "id",
                         "in": "path",
                         "description": "Id test năng lực  ",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{ status: true , data : data }"
+                    },
+                    "404": {
+                        "description": "{ status: false , message : 'Not found' }"
+                    }
+                }
+            }
+        },
+        "/api/public/contests/{id}/demo": {
+            "get": {
+                "tags": [
+                    "Contest",
+                    "ContestDemo"
+                ],
+                "description": "Description api contests",
+                "operationId": "83218a571d9ecfdbd3c749be13b7d94e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id cuộc thi ",
                         "required": true
                     }
                 ],
@@ -425,7 +469,7 @@
                     {
                         "name": "postHot",
                         "in": "query",
-                        "description": "Bài viết tuyển dụng hot,nổi bật (postHot='hot' list bài viết  hot, nổi bật ,\n     *         postHot='normal' list  bài viết bthuong",
+                        "description": "Bài viết tuyển dụng hot,nổi bật (postHot='hot' list bài viết  hot, nổi bật ,\r\n     *         postHot='normal' list  bài viết bthuong",
                         "required": false
                     },
                     {
@@ -437,7 +481,7 @@
                     {
                         "name": "post",
                         "in": "query",
-                        "description": "  post='post-contest' -> bài viết thuộc cuộc thi\n     *         post='post-capacity' -> bài viết thuộc test nl .\n     *         post='post-round' -> bài viết thuộc vòng thi .\n     *          post='post-recruitment' -> bài viết thuộc tuyển dụng\n     * ",
+                        "description": "  post='post-contest' -> bài viết thuộc cuộc thi\r\n     *         post='post-capacity' -> bài viết thuộc test nl .\r\n     *         post='post-round' -> bài viết thuộc vòng thi .\r\n     *          post='post-recruitment' -> bài viết thuộc tuyển dụng\r\n     * ",
                         "required": false
                     },
                     {
