@@ -6,7 +6,7 @@
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
                 <form id="formAddRound"
-                    action="{{ route('admin.round.store', ['type' => request('type')]) }}{{ request()->has('contest_id') ? '&contestHasId=' . request('contest_id') : '' }}"
+                    action="{{ route('admin.round.store', ['type' => request()->has('type') ? request('type') : config('util.TYPE_CONTEST')]) }}{{ request()->has('contest_id') ? '&contestHasId=' . request('contest_id') : '' }}"
                     method="post" enctype="multipart/form-data">
                     @csrf
 
@@ -32,8 +32,8 @@
                             </div>
                             <div class="form-group mb-10">
                                 <label for="" class="form-label">Thời gian bắt đầu & thời gian kết thúc </label>
-                                <input name="app1" class="form-control form-control-solid" placeholder="Pick date rage"
-                                    id="app1" />
+                                <input id="app1" name="app1" class="form-control form-control-solid"
+                                    placeholder="Pick date rage" />
                                 @error('start_time')
                                     <p class="text-danger">{{ $message }}</p>
                                 @enderror
@@ -137,9 +137,9 @@
                         <div class="col-4">
                             <div class="form-group ">
                                 <label for="" class="form-label">Ảnh đại diện {{ $nameTypeContest }}</label>
-                                <input name="image" type='file' id="file-input" accept=".png, .jpg, .jpeg"
+                                <input id="file-input" name="image" type='file' accept=".png, .jpg, .jpeg"
                                     class="form-control" />
-                                <img class="w-100 mt-4 border rounded-3" id="image-preview"
+                                <img id="image-preview" class="w-100 mt-4 border rounded-3"
                                     src="https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg" />
                             </div>
                         </div>
@@ -150,14 +150,14 @@
 
                     <div class="form-group mb-10">
                         <label class="form-label" for="">Mô tả {{ $nameTypeContest }}</label>
-                        <textarea class="form-control" name="description" id="kt_docs_ckeditor_classic" rows="3">{{ old('description') }}</textarea>
+                        <textarea id="kt_docs_ckeditor_classic" class="form-control" name="description" rows="3">{{ old('description') }}</textarea>
                         @error('description')
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div class="form-group mb-10 ">
-                        <button type="submit" name="" id=""
+                        <button id="" type="submit" name=""
                             class="btn btn-success btn-lg btn-block">Lưu
                         </button>
                     </div>
