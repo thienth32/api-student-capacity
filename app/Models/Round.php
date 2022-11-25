@@ -31,6 +31,9 @@ class Round extends Model
         'description',
         'contest_id',
         'type_exam_id',
+        'max_questions_exam',
+        'time_exam',
+        'time_type_exam',
     ];
     protected $casts = [
         'created_at' => FormatDate::class,

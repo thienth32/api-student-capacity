@@ -163,7 +163,6 @@ class RoundController extends Controller
     private function updateRound($request, $id)
     {
         try {
-            // dd(request()->all());
             if (!($round = $this->round::find($id))) return false;
             $contest = $this->contest::find($request->contest_id);
             if (!$contest) return false;
