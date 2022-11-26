@@ -45,22 +45,21 @@
                                     <label class="form-label" for="">Thời gian bắt đầu</label>
                                     <input id="begin" max="" type="datetime-local"
                                         value="{{ old('start_time') }}" name="start_time" class="form-control "
-                                        placeholder="">
-                                    @error('start_time')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
+                        placeholder="">
+                        @error('start_time')
+                        <p class="text-danger">{{ $message }}</p>
+                        @enderror
 
-                                </div>
-                                <div class="form-group mb-10">
+                    </div>
+                    <div class="form-group mb-10">
 
-                                    <label class="form-label" for="">Thời gian kết thúc</label>
-                                    <input id="end" min="" type="datetime-local" name="end_time"
-                                        value="{{ old('end_time') }}" class="form-control  "
-                                        placeholder="Pick date rage" />
-                                    @error('end_time')
-                                        <p class="text-danger">{{ $message }}</p>
-                                    @enderror
-                                </div> --}}
+                        <label class="form-label" for="">Thời gian kết thúc</label>
+                        <input id="end" min="" type="datetime-local" name="end_time" value="{{ old('end_time') }}"
+                            class="form-control  " placeholder="Pick date rage" />
+                        @error('end_time')
+                        <p class="text-danger">{{ $message }}</p>
+                        @enderror
+                    </div> --}}
                             <div class="form-group mb-10">
                                 <label for="" class="form-label">Thuộc cuộc thi (CT) & test năng lực
                                     (TNL)</label>
