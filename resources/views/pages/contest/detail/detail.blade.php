@@ -136,6 +136,11 @@
         <div class="col-xl-8 mb-5 mb-xl-10">
 
             <div class="container-fluid  card card-flush">
+                <div class="row mt-5">
+                    <div class="col-lg-12">
+                        <img class="w-100" src="{{ $contest->image_banner }}" alt="">
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-lg-12">
                         <h2 class="my-6">Mô tả cuộc thi</h2>

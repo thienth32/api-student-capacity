@@ -10,15 +10,15 @@ class FormatImageGet implements CastsAttributes
 
     public function get($model, string $key, $value, array $attributes)
     {
-        if (request()->route())
-        {
+        if (request()->route()) {
             $routeName = (request()->route()->getName() ?? "ABS");
             $arrayCheckNameRoute = [
                 "admin.round.detail.team.make.exam",
                 "admin.exam.index"
             ];
-            if(in_array($routeName,$arrayCheckNameRoute)) return $value;
+            if (in_array($routeName, $arrayCheckNameRoute)) return $value;
         };
+        if (request()->method() === "DELETE") return $value;
 
         if (Storage::disk('s3')->has($value ?? "abc.jpg")) return Storage::disk('s3')->temporaryUrl($value, now()->addDays(7));
         // if (Storage::disk('s3')->has($value ?? "abc.jpg")) return Storage::disk('s3')->temporaryUrl($value, now()->addMinutes(60));

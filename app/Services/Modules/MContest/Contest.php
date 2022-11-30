@@ -124,13 +124,12 @@ class Contest implements MContestInterface
             ->get();
     }
 
-    public function store($filename, $request, $skills = [])
+    public function store($filename, $fileBanner, $request, $skills = [])
     {
-
         $contest = new $this->contest();
         $contest->img = $filename;
         $contest->name = $request->name;
-        $contest->img = $filename;
+        $contest->image_banner = $fileBanner ?? null;
         $contest->max_user = $request->max_user ?? 9999;
         $contest->date_start = $request->date_start;
         $contest->start_register_time = $request->start_register_time ?? null;
@@ -141,12 +140,14 @@ class Contest implements MContestInterface
         $contest->major_id = $request->major_id;
         $contest->type = request('type') ?? 0;
         $contest->status = config('util.ACTIVE_STATUS');
-        $rewardRankPoint = json_encode(array(
-            'top1' => $request->top1,
-            'top2' => $request->top2,
-            'top3' => $request->top3,
-            'leave' => $request->leave,
-        ));
+        $rewardRankPoint = json_encode(
+            [
+                'top1' => $request->top1,
+                'top2' => $request->top2,
+                'top3' => $request->top3,
+                'leave' => $request->leave,
+            ]
+        );
         $contest->reward_rank_point =  $rewardRankPoint;
         $contest->save();
         if ($contest->type == 1 && count($skills) > 0) $contest->skills()->sync($skills);
