@@ -179,7 +179,6 @@
 
             window.Echo.join('room.' + code)
                 .here((users) => {
-
                     this.users = users;
                     renderUser();
                 })
