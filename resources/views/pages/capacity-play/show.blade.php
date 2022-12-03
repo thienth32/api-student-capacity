@@ -54,7 +54,7 @@
                                 class="copy_to btn btn-primary btn-sm">{{ $exam->room_code }}</button> </h2>
                         <h2>Điểm thưởng : <strong>{{ $exam->max_ponit }}</strong>
                         </h2>
-                        <h2>Hình thức trực tuyến : <strong>{{ $exam->status == 0 ? 'Tự động' : 'Điều khiển ' }}</strong>
+                        <h2>Hình thức trực tuyến : <strong>{{ $exam->type == 1 ? 'Tự động' : 'Điều khiển ' }}</strong>
                         </h2>
                         <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal"
                             data-bs-target="#modalId">
