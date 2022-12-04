@@ -174,7 +174,6 @@ class SliderController extends Controller
     public function update(RequestSlider $request, $id)
     {
         if (!($slider = $this->slider::find($id))) return abort(404);
-
         try {
 
             $data = null;
