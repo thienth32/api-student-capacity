@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-fullscreen" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 id="modalTitleId" class="modal-title">Modal title</h5>
+                <h5 id="modalTitleId" class="modal-title">Chỉnh sửa hình ảnh</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -13,129 +13,19 @@
                                 <img id="image" src="{{ asset('images/FPT_Polytechnic_Hanoi.webp') }}"
                                     alt="Picture" />
                             </div>
-                            <hr>
-                            <div class=" docs-buttons">
-                                <br>
-                                <button type="button" class="btn btn-secondary mb-4" data-method="getData" data-option
-                                    data-target="#putData">
-                                    <span class="docs-tooltip" data-toggle="tooltip" data-animation="false">
-                                        Get Data
-                                    </span>
-                                </button>
-                                <button type="button" class="btn btn-secondary mb-4" data-method="setData"
-                                    data-target="#putData">
-                                    <span class="docs-tooltip" data-toggle="tooltip" data-animation="false">
-                                        Set Data
-                                    </span>
-                                </button>
-                                <br>
-                                <button type="button" class="btn btn-secondary mb-4" data-method="getContainerData"
-                                    data-option data-target="#putData">
-                                    <span class="docs-tooltip" data-toggle="tooltip" data-animation="false">
-                                        Get Container Data
-                                    </span>
-                                </button>
-                                <button type="button" class="btn btn-secondary mb-4" data-method="getImageData"
-                                    data-option data-target="#putData">
-                                    <span class="docs-tooltip" data-toggle="tooltip" data-animation="false">
-                                        Get Image Data
-                                    </span>
-                                </button>
-                                <br>
-                                <button type="button" class="btn btn-secondary mb-4" data-method="getCanvasData"
-                                    data-option data-target="#putData">
-                                    <span class="docs-tooltip" data-toggle="tooltip" data-animation="false">
-                                        Get Canvas Data
-                                    </span>
-                                </button>
-                                <button type="button" class="btn btn-secondary mb-4" data-method="setCanvasData"
-                                    data-target="#putData">
-                                    <span class="docs-tooltip" data-toggle="tooltip" data-animation="false">
-                                        Set Canvas Data
-                                    </span>
-                                </button>
-                                <br>
-                                <button type="button" class="btn btn-secondary mb-4" data-method="zoomTo"
-                                    data-option="1">
-                                    <span class="docs-tooltip" data-toggle="tooltip" data-animation="false"
-                                        title="cropper.zoomTo(1)">
-                                        Phóng to 100%
-                                    </span>
-                                </button>
-                                <button type="button" class="btn btn-secondary mb-4" data-method="rotateTo"
-                                    data-option="180">
-                                    <span class="docs-tooltip" data-toggle="tooltip" data-animation="false">
-                                        Xoay 180°
-                                    </span>
-                                </button>
-                                <textarea id="putData" type="text" class="form-control fs-4" rows="1"
-                                    placeholder="Get data to here or set data with this value"></textarea>
 
-                            </div>
                         </div>
                         <div class="col-md-4">
-
                             <div class="docs-preview clearfix">
                                 <div class="img-preview preview-lg"></div>
                                 <div class="img-preview preview-md"></div>
-                                <div class="img-preview preview-sm"></div>
-                                <div class="img-preview preview-xs"></div>
-                            </div>
-                            <div class="docs-data">
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-prepend">
-                                        <label class="input-group-text" for="dataX">X</label>
-                                    </span>
-                                    <input id="dataX" type="text" class="form-control" placeholder="x" />
-                                    <span class="input-group-append">
-                                        <span class="input-group-text">px</span>
-                                    </span>
-                                </div>
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-prepend">
-                                        <label class="input-group-text" for="dataY">Y</label>
-                                    </span>
-                                    <input id="dataY" type="text" class="form-control" placeholder="y" />
-                                    <span class="input-group-append">
-                                        <span class="input-group-text">px</span>
-                                    </span>
-                                </div>
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-prepend">
-                                        <label class="input-group-text" for="dataWidth">Width</label>
-                                    </span>
-                                    <input id="dataWidth" type="text" class="form-control" placeholder="width" />
-                                    <span class="input-group-append">
-                                        <span class="input-group-text">px</span>
-                                    </span>
-                                </div>
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-prepend">
-                                        <label class="input-group-text" for="dataHeight">Height</label>
-                                    </span>
-                                    <input id="dataHeight" type="text" class="form-control"
-                                        placeholder="height" />
-                                    <span class="input-group-append">
-                                        <span class="input-group-text">px</span>
-                                    </span>
-                                </div>
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-prepend">
-                                        <label class="input-group-text" for="dataRotate">Rotate</label>
-                                    </span>
-                                    <input id="dataRotate" type="text" class="form-control"
-                                        placeholder="rotate" />
-                                    <span class="input-group-append">
-                                        <span class="input-group-text">deg</span>
-                                    </span>
-                                </div>
-
+                                {{-- <div class="img-preview preview-sm"></div> --}}
+                                {{-- <div class="img-preview preview-xs"></div> --}}
                             </div>
                             <div class="docs-toggles mt-3">
-                                <div class="btn-group" role="group"
-                                    aria-label="Basic checkbox toggle button group">
+                                <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
                                     <div>
-                                        <input id="aspectRatio0" checked value="1.7777777777777777" type="radio"
+                                        <input id="aspectRatio0" value="1.7777777777777777" type="radio"
                                             class="btn-check" name="aspectRatio" autocomplete="off">
                                         <label class="btn btn-outline-primary" for="aspectRatio0"
                                             title="aspectRatio: 16 / 9">
@@ -177,11 +67,11 @@
                                             4:5</label>
                                     </div>
                                     <div>
-                                        <input id="aspectRatio6" value="NaN" type="radio" class="btn-check"
+                                        <input id="aspectRatio6" value="5.2" type="radio" class="btn-check"
                                             name="aspectRatio" autocomplete="off">
                                         <label class="btn btn-outline-primary" for="aspectRatio6"
                                             title="aspectRatio: Free">
-                                            Free</label>
+                                            Mặc định</label>
                                     </div>
 
                                 </div>

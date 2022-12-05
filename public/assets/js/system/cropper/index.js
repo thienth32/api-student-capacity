@@ -8,38 +8,19 @@ const cropperImage = {
             log: function () { }
         };
         var URL = window.URL || window.webkitURL;
-        var $dataX = $("#dataX");
-        var $dataY = $("#dataY");
-        var $dataHeight = $("#dataHeight");
-        var $dataWidth = $("#dataWidth");
-        var $dataRotate = $("#dataRotate");
-        var $dataScaleX = $("#dataScaleX");
-        var $dataScaleY = $("#dataScaleY");
-        var image = document.getElementById('image');
         var $image = $("#image");
-        var $download = $("#download");
-        var cropper;
 
         var options = {
-            aspectRatio: 16 / 9,
-            minContainerWidth: 400,
-            maxContainerWidth: 400,
-            minContainerHeight: 350,
-            maxContainerHeight: 350,
+            aspectRatio: 5.2,
+            autoCrop: true,
+            center: true,
+            // data: {
+            //     height: 300,
+            //     width: 1600
+            // },
             preview: ".img-preview",
-            crop: function (e) {
-                $dataX.val(Math.round(e.detail.x));
-                $dataY.val(Math.round(e.detail.y));
-                $dataHeight.val(Math.round(e.detail.height));
-                $dataWidth.val(Math.round(e.detail.width));
-                $dataRotate.val(e.detail.rotate);
-                $dataScaleX.val(e.detail.scaleX);
-                $dataScaleY.val(e.detail.scaleY);
-            },
         };
         var originalImageURL = $image.attr("src");
-        var uploadedImageName = "cropped.jpg";
-        var uploadedImageType = "image/jpeg";
         var uploadedImageURL;
 
         function runOptionsCropper() {
@@ -63,7 +44,8 @@ const cropperImage = {
         });
 
         $modal.on('shown.bs.modal', function () {
-            $image.on({}).cropper("destroy").cropper(options);
+            $image.on({}).cropper("destroy")
+                .cropper(options);
         }).on('hidden.bs.modal', function () {
             $image.cropper("destroy")
         });

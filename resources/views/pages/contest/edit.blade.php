@@ -144,8 +144,8 @@
         }
 
         .preview-lg {
-            height: 9rem;
-            width: 16rem;
+            height: 10rem;
+            width: 17rem;
         }
 
         .preview-md {
@@ -408,7 +408,7 @@
                                             <label for="upload_image_banner">
                                                 <img id="uploaded_image"
                                                     src="{{ old('image_banner', $contest->image_banner) ?? asset('images/No-Image-2.png') }}"
-                                                    class=" w-100 min-h-250px" />
+                                                    class=" w-100 max-h-250px" />
                                                 <input id="upload_image_banner" type="file" class="image_banner"
                                                     style="display:none" accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff" />
                                             </label>
