@@ -85,7 +85,7 @@
                     </div>
                     <div class="col-12  form-group mb-10">
                         <label for="" class="form-label">Thuộc thành phần </label>
-                        <input type="hidden" name="able" class="able">
+                        <input type="hidden" name="able" class="able" value="{{ $slider->sliderable_type }}">
                         <div class="row mb-10">
                             <div class="col-2">
                                 <button type="button"
