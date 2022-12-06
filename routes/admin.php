@@ -377,7 +377,6 @@ Route::group([
         Route::get('{slug}', [PostController::class, 'detail'])->name('admin.post.detail');
     });
     Route::prefix('candidates')->group(function () {
-        Route::get('', [CandidateController::class, 'index'])->name('admin.candidate.list');
         Route::get('user-cv', [CandidateController::class, 'listCvUser'])->name('admin.candidate.listCvUser');
         Route::delete('{id}', [CandidateController::class, 'destroy'])->name('admin.candidate.destroy');
         Route::prefix('list-soft-deletes')->group(function () {
@@ -386,6 +385,8 @@ Route::group([
             Route::get('{id}/restore', [CandidateController::class, 'delete'])->name('admin.candidate.soft.restore');
         });
         Route::get('{id}', [CandidateController::class, 'detail'])->name('admin.candidate.detail');
+        Route::get('', [CandidateController::class, 'index'])->name('admin.candidate.list');
+
     });
     Route::prefix('keywords')->group(function () {
         Route::get('{id}/edit', [KeywordController::class, 'edit'])->name('admin.keyword.edit');
