@@ -14,6 +14,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="shortcut icon" href="{{ asset('assets/media/logos/poly-favicon.ico') }}" />
     @include('layouts._style')
+    @yield('page-style')
 </head>
 <!--end::Head-->
 <!--begin::Body-->

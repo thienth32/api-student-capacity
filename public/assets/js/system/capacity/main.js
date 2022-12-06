@@ -4,6 +4,7 @@ var loading = `</div> <h2 class="m-2">Hệ thống đang chạy , vui lòng ch�
 var tags = ["skill", "level", "type", "q", "page", "take"];
 var urlFetchQs = "";
 var urlFetchSkill = "";
+var max_questions_exam = 0;
 
 function loadTast(text = "Đang chạy ...", type = "info") {
     toastr.options = {
@@ -52,8 +53,7 @@ function fetchRoundGet(id) {
                     return /*html*/ `
                             <tr>
                                 <td>${data.name}</td>
-                                <td style="text-align: center;">${data.max_ponit
-                        }</td>
+                                <td style="text-align: center;">${data.max_ponit }</td>
                                 <td>${data.ponit}</td>
 
                                 <td style="text-align: center;">
@@ -455,6 +455,8 @@ const mainPage = {
         $(document).on("click", ".btn-click-show-exams", function () {
             $("#show-tast-qs").hide();
             $("#show-list-qs").show();
+
+            max_questions_exam = $(this).data('max_questions_exam');
             exam_id = $(this).data("exam_id");
             const name = $(this).data("exam_name");
             listSave = [];
@@ -560,7 +562,7 @@ const mainPage = {
                 },
                 success: function (response) {
                     if (!response.status) alert("Đã xảy ra lỗi ");
-                    // fecthQuestionByExams(exam_id);
+                    fecthQuestionByExams(exam_id);
                 },
                 error: function (res) {
                     alert("Đã xảy ra lỗi !");

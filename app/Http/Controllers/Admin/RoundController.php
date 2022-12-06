@@ -118,6 +118,7 @@ class RoundController extends Controller
 
     public function store(RequestRound $request)
     {
+
         $contest = $this->contest::findOrFail($request->contest_id);
         if (Carbon::parse($request->start_time)->toDateTimeString() < Carbon::parse($contest->date_start)->toDateTimeString()) {
             return redirect()->back()->withErrors(['start_time' => 'Thời gian bắt đầu không được bé hơn thời gian bắt đầu của cuộc thi !'])->withInput();
@@ -163,7 +164,6 @@ class RoundController extends Controller
     private function updateRound($request, $id)
     {
         try {
-            // dd(request()->all());
             if (!($round = $this->round::find($id))) return false;
             $contest = $this->contest::find($request->contest_id);
             if (!$contest) return false;

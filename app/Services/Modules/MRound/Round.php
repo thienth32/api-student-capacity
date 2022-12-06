@@ -80,19 +80,14 @@ class Round implements MRoundInterface
 
     public function store($request)
     {
-
+        $datas = $request->all();
         if ($request->hasFile('image')) {
             $fileImage = $request->file('image');
             $filename = $this->uploadFile($fileImage);
+            $datas['image'] = $filename;
         }
         $round = new $this->round();
-        $round->name = $request->name;
-        $round->image = $filename;
-        $round->start_time = $request->start_time;
-        $round->end_time = $request->end_time;
-        $round->description = $request->description;
-        $round->contest_id = $request->contest_id;
-        $round->type_exam_id = $request->type_exam_id;
+        $round->fill($datas);
         $round->save();
     }
 

@@ -33,8 +33,8 @@
                                     <div class="form-group mb-10">
                                         <label for="" class="form-label">Thời gian bắt đầu & thời gian kết thúc
                                         </label>
-                                        <input name="app1" class="form-control form-control-solid"
-                                            placeholder="Pick date rage" id="app1" />
+                                        <input id="app1" name="app1" class="form-control form-control-solid"
+                                            placeholder="Pick date rage" />
                                         @error('start_time')
                                             <p class="text-danger">{{ $message }}</p>
                                         @enderror
@@ -139,7 +139,7 @@
                                                 class="form-select mb-2 select2-hidden-accessible" data-control="select2"
                                                 data-hide-search="false" tabindex="-1" aria-hidden="true">
                                                 @forelse (config('util.TYPE_TIMES') as $time)
-                                                    <option @selected(old('time_type_exam') == $time['TYPE']) value="{{ $time['TYPE'] }}">
+                                                    <option @selected(old('time_type_exam', $round['time_type_exam']) == $time['TYPE']) value="{{ $time['TYPE'] }}">
                                                         {{ $time['VALUE'] }}
                                                     </option>
                                                 @empty
@@ -149,15 +149,16 @@
                                         </div>
                                         <div class="col-lg-6 form-group mb-4">
                                             <label class="form-label" for="">Thời gian </label>
-                                            <input type="number" value="{{ old('time_exam') }}" name="time_exam"
-                                                class="form-control" placeholder="">
+                                            <input type="number" value="{{ old('time_exam', $round['time_exam']) }}"
+                                                name="time_exam" class="form-control" placeholder="">
                                             @error('time_exam')
                                                 <p class="text-danger">{{ $message }}</p>
                                             @enderror
                                         </div>
                                         <div class="col-lg-6 form-group mb-4">
                                             <label class="form-label" for="">Số câu hỏi cho đề trắc nghiệm </label>
-                                            <input type="number" value="{{ old('max_questions_exam') }}"
+                                            <input type="number"
+                                                value="{{ old('max_questions_exam', $round['max_questions_exam']) }}"
                                                 name="max_questions_exam" class="form-control" placeholder="">
                                             @error('max_questions_exam')
                                                 <p class="text-danger">{{ $message }}</p>
@@ -169,12 +170,12 @@
                             <div class="col-4">
                                 <div class="form-group ">
                                     <label for="" class="form-label">Ảnh {{ $nameContestType }}</label>
-                                    <input value="{{ old('image') }}" name="image" type='file' id="file-input"
+                                    <input id="file-input" value="{{ old('image') }}" name="image" type='file'
                                         class="form-control" accept=".png, .jpg, .jpeg" />
                                     @error('image')
                                         <p class="text-danger">{{ $message }} </p>
                                     @enderror
-                                    <img class="w-100 mt-4 border rounded-3" id="image-preview"
+                                    <img id="image-preview" class="w-100 mt-4 border rounded-3"
                                         src="{{ $round['image'] !== null ? $round['image'] : 'https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg' }} " />
                                 </div>
                             </div>
@@ -186,7 +187,7 @@
 
                     <div class="form-group mb-10">
                         <label class="form-label" for="">Mô tả {{ $nameContestType }}</label>
-                        <textarea class="form-control" name="description" id="kt_docs_ckeditor_classic" rows="3">
+                        <textarea id="kt_docs_ckeditor_classic" class="form-control" name="description" rows="3">
                             {{ $round['description'] }}
                         </textarea>
                         @error('description')
@@ -194,7 +195,7 @@
                         @enderror
                     </div>
                     <div class="form-group mb-10 ">
-                        <button type="submit" name="" id=""
+                        <button id="" type="submit" name=""
                             class="btn btn-success btn-lg btn-block">Lưu
                         </button>
                     </div>

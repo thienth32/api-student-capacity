@@ -24,8 +24,12 @@ class RequestContest extends FormRequest
      */
     public function rules()
     {
+        $image_banner =  'required';
         $ruleName = 'required|max:255';
-        // if($this->route()->id) $ruleName = 'required|max:255|unique:contests,name,' . $this->route()->id . ',id';
+        if ($this->route()->id) {
+            $image_banner =  '';
+            $ruleName = 'required|max:255|unique:contests,name,' . $this->route()->id . ',id';
+        }
         $rule =   [
             'name' => $ruleName,
             'top1' => 'required|numeric',
@@ -37,15 +41,14 @@ class RequestContest extends FormRequest
             'description' => 'required',
             'post_new' => 'required'
         ];
-
         if (!$this->route()->id || $this->has('img'))  $rule = array_merge($rule, [
             'img' => 'required|mimes:jpeg,png,jpg|max:10000',
         ]);
-
         if (request('type') == config('util.TYPE_CONTEST')) $rule = array_merge($rule, [
             'max_user' => 'required|numeric',
             'start_register_time' => 'required|date',
             'end_register_time' => 'required|date',
+            'image_banner' => $image_banner,
         ]);
         return $rule;
     }

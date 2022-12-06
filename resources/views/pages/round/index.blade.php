@@ -109,15 +109,15 @@
                     class="click-time {{ (request()->has('day') || request()->has('month') || request()->has('year')) && request()->has('op_time') ? 'btn-primary' : 'btn-default' }} btn ">Khoảng
                     thời gian</button>
                 <div class="show-time mt-4">
-                    <div style="{{ request()->has('start_time') && request()->has('end_time') ? '' : 'display : none' }}"
-                        id="time-local">
+                    <div id="time-local"
+                        style="{{ request()->has('start_time') && request()->has('end_time') ? '' : 'display : none' }}">
                         <div class="col-12  ">
                             <label class="form-label">Thời gian </label>
-                            <input class="form-control " placeholder="Pick date rage" id="kt_daterangepicker_2" />
+                            <input id="kt_daterangepicker_2" class="form-control " placeholder="Pick date rage" />
                         </div>
                     </div>
-                    <div style="{{ (request()->has('day') || request()->has('month') || request()->has('year')) && request()->has('op_time') ? '' : 'display : none' }}"
-                        id="time">
+                    <div id="time"
+                        style="{{ (request()->has('day') || request()->has('month') || request()->has('year')) && request()->has('op_time') ? '' : 'display : none' }}">
                         <div class="col-12  ">
                             <label for="" class="form-label">Khoảng thời gian </label>
                             <select class="select-date-serach form-control form-select mb-2 select2-hidden-accessible"
@@ -331,7 +331,7 @@
                 </thead>
                 <tbody>
                     @php
-
+                        
                         $total = $rounds->total();
                     @endphp
                     @forelse ($rounds as $key => $round)

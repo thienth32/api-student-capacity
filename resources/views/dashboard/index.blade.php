@@ -186,6 +186,82 @@
             </div>
             <!--end::Chart widget 18-->
         </div>
+        <div class="col-xl-4 mb-5 mb-xl-10">
+            <!--begin::Col-->
+            <div class=" ">
+                <!--begin::Card-->
+                <div class="card card-flush h-lg-100">
+                    <!--begin::Card header-->
+                    <div class="card-header mt-6">
+                        <!--begin::Card title-->
+                        <div class="card-title flex-column">
+                            <h3 class="fw-bolder mb-1">Xếp hạng cuộc thi  </h3>
+                        </div>
+                        <!--end::Card title-->
+                        <!--begin::Card toolbar-->
+                        {{-- <div class="card-toolbar">
+                            <!--begin::Select-->
+                            <select name="status" data-control="select2" data-hide-search="true"
+                                class="form-select form-select-solid form-select-sm fw-bolder w-100px">
+                                <option value="1" selected="selected">Options</option>
+                                <option value="2">Option 1</option>
+                                <option value="3">Option 2</option>
+                                <option value="4">Option 3</option>
+                            </select>
+                            <!--end::Select-->
+                        </div> --}}
+                        <!--end::Card toolbar-->
+                    </div>
+                    <!--end::Card header-->
+                    <!--begin::Card body-->
+                    <div style=" max-height: 500px;  overflow: auto;" class="card-body p-9 pt-4">
+                        <!--begin::Dates-->
+                        <!--end::Tab Content-->
+                    </div>
+                    <!--end::Card body-->
+                </div>
+                <!--end::Card-->
+            </div>
+            <!--end::Col-->
+        </div>
+        <div class="col-xl-4 mb-5 mb-xl-10">
+            <!--begin::Col-->
+            <div class=" ">
+                <!--begin::Card-->
+                <div class="card card-flush h-lg-100">
+                    <!--begin::Card header-->
+                    <div class="card-header mt-6">
+                        <!--begin::Card title-->
+                        <div class="card-title flex-column">
+                            <h3 class="fw-bolder mb-1">Xếp hạng test năng lực  </h3>
+                        </div>
+                        <!--end::Card title-->
+                        <!--begin::Card toolbar-->
+                        {{-- <div class="card-toolbar">
+                            <!--begin::Select-->
+                            <select name="status" data-control="select2" data-hide-search="true"
+                                class="form-select form-select-solid form-select-sm fw-bolder w-100px">
+                                <option value="1" selected="selected">Options</option>
+                                <option value="2">Option 1</option>
+                                <option value="3">Option 2</option>
+                                <option value="4">Option 3</option>
+                            </select>
+                            <!--end::Select-->
+                        </div> --}}
+                        <!--end::Card toolbar-->
+                    </div>
+                    <!--end::Card header-->
+                    <!--begin::Card body-->
+                    <div style=" max-height: 500px;  overflow: auto;" class="card-body p-9 pt-4">
+                        <!--begin::Dates-->
+                        <!--end::Tab Content-->
+                    </div>
+                    <!--end::Card body-->
+                </div>
+                <!--end::Card-->
+            </div>
+            <!--end::Col-->
+        </div>
         @if (auth()->user()->hasRole(config('util.ROLE_ADMINS')))
             <div class="col-xl-4 mb-5 mb-xl-10">
                 <!--begin::Col-->
@@ -197,6 +273,7 @@
                             <!--begin::Card title-->
                             <div class="card-title flex-column">
                                 <h3 class="fw-bolder mb-1">Hoạt động cuộc thi và test năng lực </h3>
+
                             </div>
                             <!--end::Card title-->
                             <!--begin::Card toolbar-->
@@ -245,6 +322,7 @@
 
                             </div>
                             <!--end::Tab Content-->
+
                         </div>
                         <!--end::Card body-->
                     </div>
@@ -253,7 +331,7 @@
                 <!--end::Col-->
             </div>
         @endif
-        <div class="col-xl-8 mb-5 mb-xl-10">
+        <div class="col-xl-12 mb-5 mb-xl-12">
             <!--begin::Chart widget 18-->
             <div class="card card-flush h-xl-100">
                 <!--begin::Header-->

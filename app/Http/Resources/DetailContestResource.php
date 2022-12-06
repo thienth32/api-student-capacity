@@ -39,6 +39,7 @@ class DetailContestResource extends JsonResource
             'teams' =>  TeamResource::collection($this->whenLoaded('teams')),
             'rounds' => RoundContestResource::collection($this->whenLoaded('rounds')),
             'judges' => $this->whenLoaded('judges'),
+            'image_banner' => $this->image_banner
         ];
     }
 }
