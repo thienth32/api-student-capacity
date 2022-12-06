@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\Contest\RequestContest;
+use App\Models\Contest;
 use App\Services\Modules\MTeam\MTeamInterface;
 use App\Services\Modules\MMajor\MMajorInterface;
 use App\Services\Modules\MSkill\MSkillInterface;
@@ -132,6 +133,7 @@ class ContestController extends Controller
         if (!($data = $this->contest->getListDemo())) return $this->responseApi(false);
         return $this->responseApi(true, $data);
     }
+
     /**
      * @OA\Get(
      *     path="/api/public/capacity",
@@ -203,10 +205,9 @@ class ContestController extends Controller
         $this->checkTypeContest();
         $this->db::beginTransaction();
         try {
-
+            $image_banner = $this->saveImgBase64($request->image_banner);
             $filename = $this->uploadFile($request->img);
-            $contest = $this->contest->store($filename, $request, $request->skill ?? []);
-
+            $contest = $this->contest->store($filename, $image_banner, $request, $request->skill ?? []);
             $this->db::commit();
             if ($contest->type == 1) return $redirect::route('admin.contest.show.capatity', ['id' => $contest->id])->withErrors('success', 'Thêm mới thành công !');
             return $redirect::route('admin.contest.show', ['id' => $contest->id])->withErrors('success', 'Thêm mới thành công !');
@@ -226,6 +227,7 @@ class ContestController extends Controller
             $this->db::transaction(function () use ($id) {
                 $contest = $this->contest->find($id);
                 if ($this->storage::disk('s3')->has($contest->image ?? 'null')) $this->storage::disk('s3')->delete($contest->image);
+                if ($this->storage::disk('s3')->has($contest->image_banner ?? 'null')) $this->storage::disk('s3')->delete($contest->image_banner);
                 $contest->delete();
             });
             return redirect()->back();
@@ -247,13 +249,11 @@ class ContestController extends Controller
         $skillContests = $contest->skills->map(function ($data) {
             return $data->skill_id;
         })->toArray();
-
         return view('pages.contest.edit', compact('contest', 'skillContests', 'major', 'rewardRankPoint', 'contest_type_text', 'skills'));
     }
 
     public function update(RequestContest $request, $id)
     {
-
         $this->checkTypeContest();
         $this->db::beginTransaction();
         $contest = $this->contest->find($id);
@@ -280,11 +280,14 @@ class ContestController extends Controller
                         'reward_rank_point' => $rewardRankPoint,
                     ]);
                 }
-
                 if ($contest->date_start < now()) unset($dataSave['date_start']);
-
+                if ($request->image_banner == null) {
+                    $image_banner = $contest->image_banner;
+                } else {
+                    $image_banner = $this->saveImgBase64($request->image_banner, $contest->image_banner);
+                }
+                $dataSave['image_banner'] = $image_banner;
                 $this->contest->update($contest, $dataSave, $request->skill ?? []);
-
                 $this->db::commit();
                 if ($contest->type == 1) return redirect(route('admin.contest.show.capatity', ['id' => $contest->id]))->withErrors('success', 'Cập nhật thành công !');
                 return redirect(route('admin.contest.list') . '?type=' . request('type') ?? 0)->withErrors('success', 'Cập nhật thành công !');

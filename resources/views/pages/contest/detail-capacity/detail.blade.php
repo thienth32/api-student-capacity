@@ -257,6 +257,7 @@
                                                                                                 type="button"
                                                                                                 data-exam_name="{{ $exam->name }}"
                                                                                                 data-exam_id="{{ $exam->id }}"
+                                                                                                data-max_questions_exam="{{ $round->max_questions_exam }}"
                                                                                                 class="btn-click-show-exams btn btn-primary"
                                                                                                 data-bs-toggle="modal"
                                                                                                 data-bs-target="#kt_modal_2">

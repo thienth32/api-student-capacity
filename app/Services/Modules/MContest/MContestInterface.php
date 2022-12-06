@@ -8,7 +8,7 @@ interface MContestInterface
 
     public function apiIndex($flagCapacity = false);
 
-    public function store($filename, $request, $skills = []);
+    public function store($filename, $fileBanner, $request, $skills = []);
 
     public function sendMail($id);
 

@@ -20,6 +20,7 @@ class Contest extends Model
         'created_at' => FormatDate::class,
         'updated_at' =>  FormatDate::class,
         'img' => FormatImageGet::class,
+        'image_banner' => FormatImageGet::class,
     ];
     protected $appends = [
         'slug_name',
@@ -50,7 +51,8 @@ class Contest extends Model
         'max_user',
         'reward_rank_point',
         'post_new',
-        'img'
+        'img',
+        'image_banner'
     ];
 
     public function recruitment()

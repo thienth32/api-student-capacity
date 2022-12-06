@@ -9,6 +9,51 @@ label#img-error {
     right: -100%;
 }
 
+/* cursor */
+.cursor-auto {
+
+    cursor: auto;
+}
+
+.cursor-default {
+
+    cursor: default;
+}
+
+.cursor-pointer {
+
+    cursor: pointer;
+}
+
+.cursor-wait {
+
+    cursor: wait;
+}
+
+.cursor-text {
+
+    cursor: text;
+}
+
+.cursor-move {
+
+    cursor: move;
+}
+
+.cursor-help {
+
+    cursor: help;
+}
+
+.cursor-not-allowed {
+
+    cursor: not-allowed;
+}
+
+.cursor-pointer {
+    cursor: pointer !important;
+}
+
 #img_contain {
     margin-top: 10px;
 }

@@ -21,4 +21,22 @@ trait TUploadImage
             return false;
         }
     }
+
+    protected function saveImgBase64($param, $nameOld = null)
+    {
+        try {
+            if (!$param) return false;
+            if ($nameOld) if (Storage::disk('s3')->has($nameOld)) Storage::disk('s3')->delete($nameOld);
+            list($extension, $content) = explode(';', $param);
+            $tmpExtension = explode('/', $extension);
+            preg_match('/.([0-9]+) /', microtime(), $m);
+            $fileName = sprintf('img%s%s.%s', date('YmdHis'), $m[1], $tmpExtension[1]);
+            $content = explode(',', $content)[1];
+            $storage = Storage::disk('s3');
+            $storage->put('' . $fileName, base64_decode($content));
+            return $fileName;
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
 }
