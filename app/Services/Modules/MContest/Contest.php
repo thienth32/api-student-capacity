@@ -12,6 +12,7 @@ use App\Services\Traits\TUploadImage;
 use App\Http\Resources\ContestDemoList;
 use App\Models\Contest as ModelContest;
 use App\Http\Resources\CapacityResource;
+use App\Http\Resources\ContestResource;
 use App\Http\Resources\DetailContestResource;
 use App\Http\Resources\RoundDemoListResource;
 use App\Http\Resources\DetailCapacityApiResource;
@@ -99,22 +100,19 @@ class Contest implements MContestInterface
     public function apiIndex($flagCapacity = false)
     {
         if ($flagCapacity) {
-
             $data = $this->getList($flagCapacity, request())
                 ->where('type', $flagCapacity ?  config('util.TYPE_TEST') : config('util.TYPE_CONTEST'))
                 ->orderBy('date_start', 'desc')
                 ->paginate(request('limit') ?? 9);
             return  $this->capacityResourceCollection($data);
         }
-        if (!$flagCapacity)
+        if (!$flagCapacity) {
             $data = $this->getList($flagCapacity, request())
                 ->where('type', $flagCapacity ?  config('util.TYPE_TEST') : config('util.TYPE_CONTEST'))
                 ->orderBy('date_start', 'desc')
                 ->get();
-        $data->makeHidden([
-            'description', 'reward_rank_point', 'post_new', 'major_id', 'created_at', 'updated_at', 'deleted_at'
-        ]);
-        return $data;
+            return  ContestResource::collection($data);
+        }
     }
 
     public function getConTestCapacityByDateTime()
@@ -332,7 +330,7 @@ class Contest implements MContestInterface
             $data->where(function ($q) use ($contestArrId) {
                 return  $q->whereIn('id', $contestArrId);
             });
-            $makeHidden = ['user_wishlist', 'max_user', 'end_register_time', 'status', 'start_register_time', 'status_user_has_join_contest', 'description', 'reward_rank_point', 'post_new', 'deleted_at', 'type', 'major_id', 'created_at', 'updated_at'];
+            // $makeHidden = ['user_wishlist', 'max_user', 'end_register_time', 'status', 'start_register_time', 'status_user_has_join_contest', 'description', 'reward_rank_point', 'post_new', 'deleted_at', 'type', 'major_id', 'created_at', 'updated_at'];
             $withCount = ['rounds', 'userCapacityDone'];
         }
         if ($contest->type == config('util.TYPE_CONTEST')) {
@@ -341,20 +339,16 @@ class Contest implements MContestInterface
                 $q->where('type', $contest->type);
                 return $q;
             });
-            $makeHidden = ['description', 'reward_rank_point', 'post_new', 'deleted_at', 'type', 'major_id', 'created_at', 'updated_at'];
+            // $makeHidden = ['description', 'reward_rank_point', 'post_new', 'deleted_at', 'type', 'major_id', 'created_at', 'updated_at'];
             $withCount = ['rounds', 'teams'];
         }
         $data = $data->orderBy('id', 'desc')
             ->withCount($withCount)
             ->with(['skills'])
             ->paginate(request('limit') ?? 4);
-        if ($contest->type == config('util.TYPE_TEST')) {
-            return  $this->capacityResourceCollection($data);
-        }
-        if ($contest->type == config('util.TYPE_CONTEST')) {
-            $data->setCollection($data->getCollection()->makeHidden($makeHidden));
-            return $data;
-        }
+        if ($contest->type == config('util.TYPE_TEST')) return  $this->capacityResourceCollection($data);
+
+        if ($contest->type == config('util.TYPE_CONTEST'))  return  ContestResource::collection($data);
     }
 
     public function getContestByIdUpdate($id, $type = 0)
