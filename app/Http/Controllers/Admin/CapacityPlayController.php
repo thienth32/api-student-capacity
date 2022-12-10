@@ -579,4 +579,10 @@ class CapacityPlayController extends Controller
             return view('pages.capacity-play.play', $data)->with('error', 'Chưa hoàn thành hết các câu hỏi !');
         }
     }
+
+    public function destroy($id)
+    {
+        $exam = $this->examRepo->findById($id);
+
+    }
 }
