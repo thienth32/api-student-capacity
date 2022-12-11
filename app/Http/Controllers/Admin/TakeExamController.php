@@ -97,7 +97,7 @@ class TakeExamController extends Controller
     }
 
     /**
-     * 
+     *
      * @OA\Post(
      *     path="/api/v1/take-exam/student-submit",
      *     description="",
@@ -197,7 +197,7 @@ class TakeExamController extends Controller
     }
 
     /**
-     * 
+     *
      * @OA\Post(
      *     path="/api/v1/take-exam/check-student-capacity",
      *     description="",
@@ -212,7 +212,7 @@ class TakeExamController extends Controller
      *                      type="number",
      *                      property="round_id",
      *                  ),
-     *              
+     *
      *              ),
      *          ),
      *      ),
@@ -258,10 +258,10 @@ class TakeExamController extends Controller
 
 
     /**
-     * 
+     *
      * @OA\Post(
      *     path="/api/v1/take-exam/student-capacity",
-     *     description="Trả về đề bài test năng lực , nếu lần đầu làm sẽ tạo bản ghi mới với trạng thái là đang làm  , nếu đang làm dở sẽ trả vè bài làm trước đó ",
+     *     description="Trả về đề bài đánh giá năng lực , nếu lần đầu làm sẽ tạo bản ghi mới với trạng thái là đang làm  , nếu đang làm dở sẽ trả vè bài làm trước đó ",
      *     tags={"TakeExam","Capacity","Api V1"},
      *     summary="Authorization",
      *     security={{"bearer_token":{}}},
@@ -273,7 +273,7 @@ class TakeExamController extends Controller
      *                      type="number",
      *                      property="round_id",
      *                  ),
-     *              
+     *
      *              ),
      *          ),
      *      ),
@@ -337,7 +337,7 @@ class TakeExamController extends Controller
     }
 
     /**
-     * 
+     *
      * @OA\Post(
      *     path="/api/v1/take-exam/student-capacity-submit",
      *     description="",
@@ -356,7 +356,7 @@ class TakeExamController extends Controller
      *                      type="string",
      *                      property="data",
      *                  ),
-     *              
+     *
      *              ),
      *          ),
      *      ),
@@ -461,7 +461,7 @@ class TakeExamController extends Controller
 
 
     /**
-     * 
+     *
      * @OA\Post(
      *     path="/api/v1/take-exam/student-capacity-history",
      *     description="",
@@ -476,8 +476,8 @@ class TakeExamController extends Controller
      *                      type="number",
      *                      property="result_capacity_id",
      *                  ),
-     *                  
-     *              
+     *
+     *
      *              ),
      *          ),
      *      ),

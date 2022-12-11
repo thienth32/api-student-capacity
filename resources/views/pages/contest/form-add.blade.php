@@ -270,7 +270,7 @@
                         </a>
                     @else
                         <a href="{{ route('admin.contest.list', ['type' => 1]) }}" class="pe-3">
-                            Danh sách test năng lực
+                            Danh sách đánh giá năng lực
                         </a>
                     @endcontest
                 </li>

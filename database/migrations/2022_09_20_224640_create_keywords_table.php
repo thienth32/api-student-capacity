@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('keyword');
             $table->string('keyword_en');
             $table->string('keyword_slug');
-            $table->integer('type')->default(0)->comment('0 là key thuộc bài viết , 1 là thuộc tuyển dụng , 2 là thuông test năng lực ');
+            $table->integer('type')->default(0)->comment('0 là key thuộc bài viết , 1 là thuộc tuyển dụng , 2 là thuông đánh giá năng lực ');
             $table->integer('status')->default(0);
             $table->softDeletes();
         });

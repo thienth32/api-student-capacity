@@ -67,7 +67,7 @@
                                         Tuyển dụng
                                     </option>
                                     <option @selected($data->type == config('util.TYPE_CAPACITY_TEST')) value="{{ config('util.TYPE_CAPACITY_TEST') }}">
-                                        Test năng lực
+                                        đánh giá năng lực
                                     </option>
                                 </select>
                                 @error('type')

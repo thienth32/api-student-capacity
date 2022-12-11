@@ -21,7 +21,8 @@
             <!--begin::Content-->
             <div class="d-flex flex-column text-light pe-0 pe-sm-10">
                 <h4 class="mb-2 text-light">Thông báo</h4>
-                <span>{{ $item->type == 1 ? 'Test năng lực ' : 'Cuộc thi ' }} {{ $item->name }} sẽ kết thúc vào hôm nay
+                <span>{{ $item->type == 1 ? 'đánh giá năng lực ' : 'Cuộc thi ' }} {{ $item->name }} sẽ kết thúc vào hôm
+                    nay
                     {{ $item->register_deadline }}</span>
             </div>
             <!--end::Content-->
@@ -195,7 +196,7 @@
                     <div class="card-header mt-6">
                         <!--begin::Card title-->
                         <div class="card-title flex-column">
-                            <h3 class="fw-bolder mb-1">Xếp hạng cuộc thi  </h3>
+                            <h3 class="fw-bolder mb-1">Xếp hạng cuộc thi </h3>
                         </div>
                         <!--end::Card title-->
                         <!--begin::Card toolbar-->
@@ -233,7 +234,7 @@
                     <div class="card-header mt-6">
                         <!--begin::Card title-->
                         <div class="card-title flex-column">
-                            <h3 class="fw-bolder mb-1">Xếp hạng test năng lực  </h3>
+                            <h3 class="fw-bolder mb-1">Xếp hạng đánh giá năng lực </h3>
                         </div>
                         <!--end::Card title-->
                         <!--begin::Card toolbar-->
@@ -272,7 +273,7 @@
                         <div class="card-header mt-6">
                             <!--begin::Card title-->
                             <div class="card-title flex-column">
-                                <h3 class="fw-bolder mb-1">Hoạt động cuộc thi và test năng lực </h3>
+                                <h3 class="fw-bolder mb-1">Hoạt động cuộc thi và đánh giá năng lực </h3>
 
                             </div>
                             <!--end::Card title-->
@@ -432,12 +433,12 @@
                                         <!--begin::Title-->
                                         <a href="${data.type == 1 ? '/admin/capacity/'+data.id : '/admin/contest/'+data.id+'/detail'}"
                                             class="fs-5 fw-bolder text-gray-800 text-hover-primary mb-2">
-                                               ${data.type == 1 ? 'Test năng lực : ' : 'Cuộc thi : '} ${data.name}
+                                               ${data.type == 1 ? 'Đánh giá năng lực : ' : 'Cuộc thi : '} ${data.name}
                                         </a>
                                         <!--end::Title-->
                                         <!--begin::User-->
                                         <div class="text-gray-400">
-                                            <a href="#">${data.type == 1 ? 'Test năng lực' : 'Cuộc thi'}</a>
+                                            <a href="#">${data.type == 1 ? 'Đánh giá năng lực' : 'Cuộc thi'}</a>
                                         </div>
                                         <!--end::User-->
                                     </div>

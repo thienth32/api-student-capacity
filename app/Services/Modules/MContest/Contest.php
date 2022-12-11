@@ -297,7 +297,7 @@ class Contest implements MContestInterface
                 return [
                     "start" => $q->date_start,
                     "end" => $q->register_deadline,
-                    "content" => ($q->type == 1 ? "Test năng lực : " : "Cuộc thi : ") .
+                    "content" => ($q->type == 1 ? "Đánh giá năng lực : " : "Cuộc thi : ") .
                         $q->name .
                         " - Đã bắt đầu từ " .
                         Carbon::parse($q->date_start)->diffForHumans() .
