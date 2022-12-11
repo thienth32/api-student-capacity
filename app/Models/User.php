@@ -37,12 +37,13 @@ class User extends Authenticatable
 
     protected $appends = [
         // 'sum_point'
+        "ctv_st_p"
     ];
 
-    // public function getSumPointAttribute()
-    // {
-    //     return $this->contest_user()->sum('reward_point');
-    // }
+    public function getCtvStPAttribute()
+    {
+        return $this->hasRole(config('util.ROLE_ADMINS'));
+    }
 
     public function newEloquentBuilder($query)
     {

@@ -100,3 +100,5 @@ Route::prefix('wishlist')->group(function () {
     Route::get('user', [WishlistController::class, 'list']);
     Route::get('count', [WishlistController::class, 'countWishlist']);
 });
+
+// Route::post('')
