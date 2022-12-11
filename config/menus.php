@@ -210,6 +210,12 @@ return [
                 "param" => '',
                 "link" => "admin.job",
             ],
+            [
+                "name" => "Cộng tác viên  ",
+                "role" => $ROLE_HAS_ADMINS,
+                "param" => '',
+                "link" => "admin.job",
+            ],
         ]
     ], // Cau hinh
 ];
