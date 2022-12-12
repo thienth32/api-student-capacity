@@ -80,7 +80,7 @@
         <!--begin::Content-->
         <div class="flex-lg-row-fluid ms-lg-7 ms-xl-10">
             <!--begin::Messenger-->
-            <div class="card" style="display: none" id="kt_chat_messenger">
+            <div class="card" style="display: none;" id="kt_chat_messenger">
                 <!--begin::Card header-->
                 <div class="card-header" id="kt_chat_messenger_header">
                     <!--begin::Title-->
@@ -106,16 +106,18 @@
                 </div>
                 <!--end::Card header-->
                 <!--begin::Card body-->
-                <div class="card-body" id="kt_chat_messenger_body">
+                <div class="card-body" style="height: 55vh;" id="kt_chat_messenger_body">
                     <!--begin::Messages-->
-                    <div class="scroll-y chat__list  me-n5 pe-5 h-300px h-lg-auto" data-kt-element="messages"
-                        data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}"
-                        data-kt-scroll-max-height="auto"
+                    <style>
+                        .chat__list {
+                            max-height: 50vh !important;
+                        }
+                    </style>
+                    <div style=" transform: rotate(180deg);" class="scroll-y chat__list  me-n5 pe-5 h-300px h-lg-auto"
+                        data-kt-element="messages" data-kt-scroll="true"
+                        data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto"
                         data-kt-scroll-dependencies="#kt_header, #kt_toolbar, #kt_footer, #kt_chat_messenger_header, #kt_chat_messenger_footer"
-                        data-kt-scroll-wrappers="#kt_content, #kt_chat_messenger_body" data-kt-scroll-offset="5px"
-                        style="max-height: 454px; transform: rotate(180deg);">
-
-
+                        data-kt-scroll-wrappers="#kt_content, #kt_chat_messenger_body" data-kt-scroll-offset="5px">
                     </div>
                     <!--end::Messages-->
                 </div>
@@ -132,7 +134,7 @@
                         <div class="d-flex align-items-center me-2">
                             <input style="display: none" type="file" id="file" name="file">
                             <label for="file" class="btn btn-sm btn-icon btn-active-light-primary me-1" type="button"
-                                data-bs-toggle="tooltip" title="" data-bs-original-title="Đang phát triển">
+                                data-bs-toggle="tooltip" title="" data-bs-original-title="Tải lên dữ liệu">
                                 <i class="bi bi-paperclip fs-3"></i>
                             </label>
                         </div>
@@ -264,7 +266,7 @@
 
                                     <!--end::Details-->
                                     <!--begin::Avatar-->
-                                    ${(data.id == ( k == (dataChat.length-1) ? -1 : dataChat[k+1].id))  ? "" : `<div class="symbol symbol-35px symbol-circle"> <img alt="Pic" src="assets/media/avatars/300-1.jpg">  </div>`  }
+                                    ${(data.id == ( k == (dataChat.length-1) ? -1 : dataChat[k+1].id))  ? "" : `<div class="symbol symbol-35px symbol-circle"> <img alt="Pic" src="http://static.ybox.vn/2021/11/3/1637749381062-octagon-team-avatar.png">  </div>`  }
 
                                     <!--end::Avatar-->
                                 </div>
