@@ -211,7 +211,7 @@ return [
                 "link" => "admin.job",
             ],
             [
-                "name" => "Cộng tác viên  ",
+                "name" => "Hỗ trợ viên ",
                 "role" => $ROLE_HAS_ADMINS,
                 "param" => '',
                 "link" => "admin.support",

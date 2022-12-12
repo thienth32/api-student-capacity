@@ -2,10 +2,31 @@
 @section('title', 'Support ')
 @section('page-title', 'Support')
 @section('content')
+    <div style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99;
+    background: rgb(204, 204, 204, .5);
+    width: 100%;
+    height: 100%;
+    "
+        class="bg-hide-s">
+        <button
+            style="
+            position: absolute;
+            opacity: 1;
+            font-size: 40px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);"
+            onclick="playAudio()" class="btn0asas btn btn-primary " type="button">BẮT ĐẦU
+        </button>
+    </div>
     <div class="d-flex flex-column flex-lg-row">
         <input type="hidden" value="{{ session()->get('token') }}" class="show-token">
         <!--begin::Sidebar-->
-        <div class="flex-column flex-lg-row-auto w-100 w-lg-300px w-xl-400px mb-10 mb-lg-0">
+        <div class="flex-column flex-lg-row-auto w-100 w-lg-200px w-xl-300px mb-10 mb-lg-0">
             <!--begin::Contacts-->
             <div class="card card-flush">
                 <!--begin::Card header-->
@@ -159,6 +180,9 @@
                         style="max-height: 454px; ">
                         <h1>Chào mừng bạn đến với hệ thống quản lý và hỗ trợ sinh viên </h1>
                         <h2> Poly chúc bạn một ngày làm việc hiệu quả ❤️</h2>
+
+
+
                         <img style="width: 100%"
                             src="https://jobsgo.vn/blog/wp-content/uploads/2022/03/Support-la-gi-4.jpg" alt="">
                     </div>
@@ -169,6 +193,11 @@
         </div>
         <!--end::Content-->
     </div>
+
+    <audio id="myAudio">
+        <source src="{{ asset('assets/media/mp3/tig.mp3') }}" type="audio/mpeg">
+    </audio>
+
 
 @endsection
 @section('page-script')
@@ -184,9 +213,9 @@
         function renderUser(dataDefault = null) {
 
 
-            data_chat = data_chat.filter(function(data) {
-                return data.user.ctv_st_p == false;
-            })
+            // data_chat = data_chat.filter(function(data) {
+            //     return data.user.ctv_st_p == false;
+            // })
 
             var dataMap = dataDefault ?? data_chat;
             var html = dataMap.map(function(data) {
@@ -207,7 +236,7 @@
                                 <!--begin::Details-->
                                 <div class="ms-5">
                                     <a   class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">${data.user.name}   </a>
-                                    <div class="fw-bold text-muted">${check.length > 0 ? check[0].data.length > 0 ? check[0].data[0].message : '' : ''}</div>
+                                    <div class="fw-bold text-muted">${check.length > 0 ? check[0].data.length > 0 ? check[0].data[0].message.slice(0, 20) : '' : ''}</div>
                                 </div>
                                 <!--end::Details-->
                                 <div class="d-flex flex-column align-items-end ms-2">
@@ -300,6 +329,8 @@
                     console.log(data_chat);
 
                     renderUser();
+
+                    if (e.data.id != authId) $('.btn0asas').click();
                     if (e.data.room != roomCode) return;
                     renderChat(checkUser().data);
 
@@ -341,16 +372,16 @@
 
         window.Echo.join('support.poly')
             .here((users) => {
-                this.users = users;
-                // this.users = [{
-                //     id: 5,
-                //     name: "Nguyễn Văn Trọng  2",
-                //     email: "trongnvph1394922322323232323@fpt.edu.vn"
-                // }, {
-                //     id: 4,
-                //     name: "Nguyễn Văn Trọng ",
-                //     email: "trongnvph13949@fpt.edu.vn"
-                // }, ];
+                // this.users = users;
+                this.users = [{
+                    id: 5,
+                    name: "Nguyễn Văn Trọng  2",
+                    email: "trongnvph1394922322323232323@fpt.edu.vn"
+                }, {
+                    id: 4,
+                    name: "Nguyễn Văn Trọng ",
+                    email: "trongnvph13949@fpt.edu.vn"
+                }, ];
 
 
                 this.users.map(function(user) {
@@ -361,13 +392,14 @@
                         user: user
                     });
                 });
-
+                $('#kt_aside_toggle').click();
                 renderUser();
 
             })
             .joining((user) => {
                 this.users.push(user);
                 privateChannel(user.id + "-" + authId);
+                $('.btn0asas').click();
                 renderUser();
             })
             .leaving((user) => {
@@ -379,4 +411,15 @@
                 renderUser();
             });
     </script>
+
+
+    <script>
+        var x = document.getElementById("myAudio");
+
+        function playAudio() {
+            $('.bg-hide-s').hide();
+            x.play();
+        }
+    </script>
+
 @endsection
