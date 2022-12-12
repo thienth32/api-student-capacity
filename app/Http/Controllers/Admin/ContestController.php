@@ -70,7 +70,7 @@ class ContestController extends Controller
         return view('pages.contest.index', [
             'contests' => $data,
             'majors' => $this->majorRepo->getAllMajor(['where' => ['parent_id' => 0]], ['majorChils']),
-            'contest_type_text' =>  request('type') == 1 ? 'test năng lực' : 'cuộc thi'
+            'contest_type_text' =>  request('type') == 1 ? 'đánh giá năng lực' : 'cuộc thi'
         ]);
     }
 
@@ -196,7 +196,7 @@ class ContestController extends Controller
         $this->checkTypeContest();
         $majors = $this->majorRepo->getAllMajor();
         $skills = $this->skill->getAll();
-        $contest_type_text = request('type') == 1 ? 'test năng lực' : 'cuộc thi';
+        $contest_type_text = request('type') == 1 ? 'đánh giá năng lực' : 'cuộc thi';
         return view('pages.contest.form-add', compact('majors', 'contest_type_text', 'skills'));
     }
 
@@ -241,7 +241,7 @@ class ContestController extends Controller
         $this->checkTypeContest();
         $major = $this->majorRepo->getAllMajor();
         $skills = $this->skill->getAll();
-        $contest_type_text = request('type') == 1 ? 'test năng lực' : 'cuộc thi';
+        $contest_type_text = request('type') == 1 ? 'đánh giá năng lực' : 'cuộc thi';
         $contest = $this->contest->getContestByIdUpdate($id, request('type') ?? 0);
         if (!$contest || $contest->status == 2 || $contest->type != request('type')) abort(404);
 
@@ -332,7 +332,7 @@ class ContestController extends Controller
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
-     *         description="Id test năng lực  ",
+     *         description="Id đánh giá năng lực  ",
      *         required=true,
      *     ),
      *     @OA\Response(response="200", description="{ status: true , data : data }"),
@@ -344,7 +344,7 @@ class ContestController extends Controller
         try {
             $capacity = $this->contest->apiShow($id, config('util.TYPE_TEST'));
             if (is_null($capacity))
-                return $this->responseApi(false, 'Không tìm thấy bài test năng lực !');
+                return $this->responseApi(false, 'Không tìm thấy bài đánh giá năng lực !');
             return $this->responseApi(true, $capacity);
         } catch (\Throwable $th) {
             return $this->responseApi(false);
@@ -390,7 +390,7 @@ class ContestController extends Controller
     public function softDelete()
     {
         $listContestSofts = $this->contest->index();
-        $namePage = request('type') == 1 ? 'Test năng lực' : 'Cuộc thi ';
+        $namePage = request('type') == 1 ? 'Đánh giá năng lực' : 'Cuộc thi ';
         return view('pages.contest.contest-soft-delete', [
             'listContestSofts' => $listContestSofts,
             'namePage' => $namePage

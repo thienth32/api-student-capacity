@@ -233,7 +233,7 @@
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "Id test năng lực  ",
+                        "description": "Id đánh giá năng lực  ",
                         "required": true
                     }
                 ],
@@ -793,7 +793,7 @@
                     {
                         "name": "id_round",
                         "in": "path",
-                        "description": "Id vòng thi  test năng lực  ",
+                        "description": "Id vòng thi  đánh giá năng lực  ",
                         "required": true
                     }
                 ],
@@ -988,7 +988,7 @@
                     "Api V1"
                 ],
                 "summary": "Authorization",
-                "description": "Trả về đề bài test năng lực , nếu lần đầu làm sẽ tạo bản ghi mới với trạng thái là đang làm  , nếu đang làm dở sẽ trả vè bài làm trước đó ",
+                "description": "Trả về đề bài đánh giá năng lực , nếu lần đầu làm sẽ tạo bản ghi mới với trạng thái là đang làm  , nếu đang làm dở sẽ trả vè bài làm trước đó ",
                 "operationId": "0c6bb8678a7cbee5dd56f74daa84d33e",
                 "requestBody": {
                     "content": {

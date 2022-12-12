@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\ChatSupportEvent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
@@ -99,4 +100,17 @@ Route::prefix('wishlist')->group(function () {
     Route::post('remove', [WishlistController::class, 'removeWishlist']);
     Route::get('user', [WishlistController::class, 'list']);
     Route::get('count', [WishlistController::class, 'countWishlist']);
+});
+
+Route::post('fake-post', function () {
+    $t = time();
+    $data = [
+        'id' => auth('sanctum')->user()->id,
+        'message' => request()->message ?? "Default messgae",
+        'room' => request()->room,
+        'time' => date("h:i:s", $t)
+    ];
+    broadcast(new ChatSupportEvent(request()->room, $data));
+
+    return response()->json($data);
 });

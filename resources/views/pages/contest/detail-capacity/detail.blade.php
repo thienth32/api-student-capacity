@@ -1,13 +1,13 @@
 @extends('layouts.main')
-@section('title', 'Quản lý test năng lực')
-@section('page-title', 'Quản lý test năng lực')
+@section('title', 'Quản lý đánh giá năng lực')
+@section('page-title', 'Quản lý đánh giá năng lực')
 @section('content')
 
     <div class="row mb-4">
         <div class="col-lg-12">
             <ol class="breadcrumb text-muted fs-6 fw-bold">
                 <li class="breadcrumb-item pe-3">
-                    <a href="{{ route('admin.contest.list') . '?type=1' }}" class="pe-3">Test năng lực </a>
+                    <a href="{{ route('admin.contest.list') . '?type=1' }}" class="pe-3">Đánh giá năng lực </a>
                 </li>
                 <li class="breadcrumb-item px-3 text-muted">Chi tiết : {{ $test_capacity->name }}</li>
             </ol>
@@ -707,7 +707,7 @@
                                             <!--begin::Top-->
                                             <div class="text-center mb-18">
                                                 <!--begin::Title-->
-                                                <h3 class="fs-2hx text-dark mb-6">Test năng lực :
+                                                <h3 class="fs-2hx text-dark mb-6">đánh giá năng lực :
                                                     <strong>{{ $test_capacity->name }}</strong>
                                                 </h3>
                                                 <!--end::Title-->

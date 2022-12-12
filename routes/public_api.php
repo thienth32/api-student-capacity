@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\ChatSupportEvent;
 use App\Http\Controllers\Admin\CandidateController;
 use App\Http\Controllers\Admin\CodeManagerController;
 use App\Http\Controllers\Admin\CompanyController as AdminCompanyController;
@@ -98,7 +99,7 @@ Route::prefix('rating')->group(function () {
     Route::get('major-contest/{slug}', [RankUserController::class, 'getRatingUser']);
 });
 
-Route::get('support-capacity', [\App\Http\Controllers\Admin\SupportController::class, 'support']);
+// Route::get('support-capacity', [\App\Http\Controllers\Admin\SupportController::class, 'support']);
 
 Route::post('run-code', [CodeManagerController::class, 'run']);
 
@@ -121,3 +122,6 @@ Route::prefix('challenge')->group(function () {
 Route::prefix('code-language')->group(function () {
     Route::get('', [CodeManagerController::class, 'getCodeLanguageAll']);
 });
+
+
+

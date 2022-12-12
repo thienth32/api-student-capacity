@@ -61,7 +61,7 @@
                         @enderror
                     </div> --}}
                             <div class="form-group mb-10">
-                                <label for="" class="form-label">Thuộc cuộc thi (CT) & test năng lực
+                                <label for="" class="form-label">Thuộc cuộc thi (CT) & đánh giá năng lực
                                     (TNL)</label>
                                 <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
                                     data-hide-search="false" tabindex="-1" aria-hidden="true" name="contest_id"

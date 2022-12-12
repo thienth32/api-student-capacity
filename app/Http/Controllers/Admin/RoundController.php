@@ -124,7 +124,7 @@ class RoundController extends Controller
             return redirect()->back()->withErrors(['start_time' => 'Thời gian bắt đầu không được bé hơn thời gian bắt đầu của cuộc thi !'])->withInput();
         };
         if (Carbon::parse($request->end_time)->toDateTimeString() > Carbon::parse($contest->register_deadline)->toDateTimeString()) {
-            return redirect()->back()->withErrors(['end_time' => 'Thời gian kết thúc không được lớn hơn thời gian kết thúc của cuộc thi và test năng lực  !'])->withInput();
+            return redirect()->back()->withErrors(['end_time' => 'Thời gian kết thúc không được lớn hơn thời gian kết thúc của cuộc thi và đánh giá năng lực  !'])->withInput();
         };
         $this->db::beginTransaction();
         try {
@@ -176,7 +176,7 @@ class RoundController extends Controller
             if (Carbon::parse($request->end_time)->toDateTimeString() > Carbon::parse($contest->register_deadline)->toDateTimeString()) {
                 return [
                     'status' => false,
-                    'errors' => ['end_time' => 'Thời gian kết thúc không được lớn hơn thời gian kết thúc của cuộc thi và test năng lực  !'],
+                    'errors' => ['end_time' => 'Thời gian kết thúc không được lớn hơn thời gian kết thúc của cuộc thi và đánh giá năng lực  !'],
                 ];
             };
             $data = null;
@@ -787,7 +787,7 @@ class RoundController extends Controller
      *     @OA\Parameter(
      *         name="id_round",
      *         in="path",
-     *         description="Id vòng thi  test năng lực  ",
+     *         description="Id vòng thi  đánh giá năng lực  ",
      *         required=true,
      *     ),
      *     @OA\Response(response="200", description="{ status: true , data : data }"),

@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\RecruitmentController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\PrintPDFController;
 use App\Http\Controllers\Admin\PrintExcelController;
+use App\Http\Controllers\Admin\SupportController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('dashboard/api-cuoc-thi', [DashboardController::class, 'chartCompetity'])->name('dashboard.chart-competity');
@@ -449,7 +450,7 @@ Route::group([
     });
 });
 
-
+Route::get('support-poly', [SupportController::class, 'index'])->name('admin.support');
 
 // Route::get('api-view-check', function (App\Services\Modules\MContest\Contest $contest) {
 //     $data = $contest->apiIndex();

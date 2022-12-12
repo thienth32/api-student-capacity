@@ -3,8 +3,8 @@
     @section('title', 'Quản lý cuộc thi')
     @section('page-title', 'Quản lý cuộc thi ')
 @else
-    @section('title', 'Quản lý test năng lực')
-    @section('page-title', 'Quản lý test năng lực ')
+    @section('title', 'Quản lý đánh giá năng lực')
+    @section('page-title', 'Quản lý đánh giá năng lực ')
 @endif
 @section('content')
     <div class="row mb-4">

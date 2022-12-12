@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('exams', function (Blueprint $table) {
-            $table->integer('type')->default(0)->comment('0 là dành cho cuộc thi , 1 là cho bài test năng lực');
+            $table->integer('type')->default(0)->comment('0 là dành cho cuộc thi , 1 là cho bài đánh giá năng lực');
         });
     }
 
