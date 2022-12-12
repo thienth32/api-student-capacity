@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ContestController;
 use App\Http\Controllers\Admin\WishlistController;
 use App\Http\Controllers\Admin\CodeManagerController;
 use App\Http\Controllers\Admin\CapacityPlayController;
+use App\Http\Controllers\Admin\SupportController;
 use App\Http\Controllers\Admin\TeamController as AdminTeamController;
 use App\Http\Controllers\Admin\TakeExamController as AdminTakeExamController;
 
@@ -102,15 +103,4 @@ Route::prefix('wishlist')->group(function () {
     Route::get('count', [WishlistController::class, 'countWishlist']);
 });
 
-Route::post('fake-post', function () {
-    $t = time();
-    $data = [
-        'id' => auth('sanctum')->user()->id,
-        'message' => request()->message ?? "Default messgae",
-        'room' => request()->room,
-        'time' => date("h:i:s", $t)
-    ];
-    broadcast(new ChatSupportEvent(request()->room, $data));
-
-    return response()->json($data);
-});
+Route::post('fake-post', [SupportController::class, 'store']);

@@ -130,14 +130,11 @@
                     <div class="d-flex flex-stack">
                         <!--begin::Actions-->
                         <div class="d-flex align-items-center me-2">
-                            <button class="btn btn-sm btn-icon btn-active-light-primary me-1" type="button"
+                            <input style="display: none" type="file" id="file" name="file">
+                            <label for="file" class="btn btn-sm btn-icon btn-active-light-primary me-1" type="button"
                                 data-bs-toggle="tooltip" title="" data-bs-original-title="Đang phát triển">
                                 <i class="bi bi-paperclip fs-3"></i>
-                            </button>
-                            <button class="btn btn-sm btn-icon btn-active-light-primary me-1" type="button"
-                                data-bs-toggle="tooltip" title="" data-bs-original-title="Đang phát triển">
-                                <i class="bi bi-upload fs-3"></i>
-                            </button>
+                            </label>
                         </div>
                         <!--end::Actions-->
                         <!--begin::Send-->
@@ -183,9 +180,6 @@
                         style="max-height: 454px; ">
                         <h1>Chào mừng bạn đến với hệ thống quản lý và hỗ trợ sinh viên </h1>
                         <h2> Poly chúc bạn một ngày làm việc hiệu quả ❤️</h2>
-
-
-
                         <img style="width: 100%"
                             src="https://jobsgo.vn/blog/wp-content/uploads/2022/03/Support-la-gi-4.jpg" alt="">
                     </div>
@@ -349,13 +343,20 @@
             const value = $('textarea').val();
             const room = authFr + '-' + authId;
 
+            var formData = new FormData();
+            if (value.trim() != "") formData.append('message', value);
+            if ($('#file').val() != "") {
+                var file = $('#file')[0].files[0];
+                formData.append('file', file);
+            }
+            formData.append('room', room);
+
             $.ajax({
                 type: "POST",
                 url: "/api/v1/fake-post",
-                data: {
-                    message: value,
-                    room: room
-                },
+                data: formData,
+                processData: false,
+                contentType: false,
                 beforeSend: function(xhr) {
                     const token = $('.show-token').val();
                     xhr.setRequestHeader('Authorization', 'Bearer ' + token);
@@ -369,6 +370,7 @@
             });
 
             $('textarea').val('');
+            $('#file').val('');
 
         });
 
@@ -384,16 +386,6 @@
         window.Echo.join('support.poly')
             .here((users) => {
                 this.users = users;
-                // this.users = [{
-                //     id: 5,
-                //     name: "Nguyễn Văn Trọng  2",
-                //     email: "trongnvph1394922322323232323@fpt.edu.vn"
-                // }, {
-                //     id: 4,
-                //     name: "Nguyễn Văn Trọng ",
-                //     email: "trongnvph13949@fpt.edu.vn"
-                // }, ];
-
 
                 this.users.map(function(user) {
 
