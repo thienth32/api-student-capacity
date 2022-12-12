@@ -172,7 +172,7 @@
                 <!--begin::Card body-->
                 <div class="card-body" id="kt_chat_messenger_body">
                     <!--begin::Messages-->
-                    <div class="scroll-y chat__list  me-n5 pe-5 h-300px h-lg-auto" data-kt-element="messages"
+                    <div class="scroll-y    me-n5 pe-5 h-300px h-lg-auto" data-kt-element="messages"
                         data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}"
                         data-kt-scroll-max-height="auto"
                         data-kt-scroll-dependencies="#kt_header, #kt_toolbar, #kt_footer, #kt_chat_messenger_header, #kt_chat_messenger_footer"
@@ -254,10 +254,11 @@
             $('.show-online').html(html);
         }
 
-        function renderChat(data) {
-            var html = data.map(function(data) {
+        function renderChat(dataChat) {
+            var html = dataChat.map(function(data, k) {
+
                 return `
-                        <div style=" transform: rotate(180deg);" class="d-flex justify-content-${data.id != authId ? 'start' : 'end'} mb-10">
+                        <div style=" transform: rotate(180deg);" class="d-flex justify-content-${data.id != authId ? 'start' : 'end'} mb-1">
                             <!--begin::Wrapper-->
                             <div class="d-flex flex-column align-items-${data.id != authId ? 'start' : 'end'}">
                                 <!--begin::User-->
@@ -266,15 +267,17 @@
 
                                     <!--end::Details-->
                                     <!--begin::Avatar-->
-                                    <div class="symbol symbol-35px symbol-circle">
-                                        <img alt="Pic" src="assets/media/avatars/300-1.jpg">
-                                    </div>
+                                    ${(data.id == ( k == (dataChat.length-1) ? -1 : dataChat[k+1].id))  ? "" : `<div class="symbol symbol-35px symbol-circle"> <img alt="Pic" src="assets/media/avatars/300-1.jpg">  </div>`  }
+
                                     <!--end::Avatar-->
                                 </div>
                                 <!--end::User-->
                                 <!--begin::Text-->
                                 <div class="p-5 rounded bg-light-primary text-dark fw-bold mw-lg-400px text-end"
-                                    data-kt-element="message-text">${data.message}</div>
+                                    data-kt-element="message-text">${data.message}
+                                    </div>
+                                     ${(data.id == ( k == 0 ? -1 : dataChat[k-1].id))  ? "" : ` <div>${data.time}</div>`  }
+
                                 <!--end::Text-->
                             </div>
                             <!--end::Wrapper-->
@@ -283,7 +286,7 @@
 
                 `;
             }).join("");
-            if (data.length == 0) html = `
+            if (dataChat.length == 0) html = `
                 <h2 style="transform: rotate(180deg);">Hãy bắt đầu hỗ trợ !</h2>
             `;
             $('.chat__list').html(html);
@@ -318,6 +321,8 @@
         });
 
         function privateChannel(code = null) {
+            console.log(code ?? roomCode, 'JJOin');
+
             window.Echo.private(`support.poly.${code ?? roomCode}`)
                 .listen('ChatSupportEvent', (e) => {
 
@@ -326,7 +331,6 @@
                     var dataFist = data_chat[0];
                     data_chat[0] = data_chat[k];
                     data_chat[k] = dataFist;
-                    console.log(data_chat);
 
                     renderUser();
 
@@ -344,10 +348,14 @@
 
             $.ajax({
                 type: "POST",
-                url: "http://127.0.0.1:8000/api/public/fake-post",
+                url: "/api/v1/fake-post",
                 data: {
                     message: value,
                     room: room
+                },
+                beforeSend: function(xhr) {
+                    const token = $('.show-token').val();
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + token);
                 },
                 success: function(response) {
                     $(that).html('Gửi');
@@ -372,33 +380,49 @@
 
         window.Echo.join('support.poly')
             .here((users) => {
-                // this.users = users;
-                this.users = [{
-                    id: 5,
-                    name: "Nguyễn Văn Trọng  2",
-                    email: "trongnvph1394922322323232323@fpt.edu.vn"
-                }, {
-                    id: 4,
-                    name: "Nguyễn Văn Trọng ",
-                    email: "trongnvph13949@fpt.edu.vn"
-                }, ];
+                this.users = users;
+                // this.users = [{
+                //     id: 5,
+                //     name: "Nguyễn Văn Trọng  2",
+                //     email: "trongnvph1394922322323232323@fpt.edu.vn"
+                // }, {
+                //     id: 4,
+                //     name: "Nguyễn Văn Trọng ",
+                //     email: "trongnvph13949@fpt.edu.vn"
+                // }, ];
 
 
                 this.users.map(function(user) {
+
+                    const checkHasExits = data_chat.filter(function(data) {
+                        return data.user.id == user.id;
+                    })
+                    if (checkHasExits.length == 0 && user.ctv_st_p == false) {
+                        privateChannel(user.id + "-" + authId);
+                        data_chat.push({
+                            id: user.id + "-" + authId,
+                            data: [],
+                            user: user
+                        });
+                    }
+
+                });
+                $('#kt_aside_toggle').click();
+                renderUser();
+            })
+            .joining((user) => {
+                this.users.push(user);
+                const checkHasExits = data_chat.filter(function(data) {
+                    return data.user.id == user.id;
+                })
+                if (checkHasExits.length == 0 && user.ctv_st_p == false) {
                     privateChannel(user.id + "-" + authId);
                     data_chat.push({
                         id: user.id + "-" + authId,
                         data: [],
                         user: user
                     });
-                });
-                $('#kt_aside_toggle').click();
-                renderUser();
-
-            })
-            .joining((user) => {
-                this.users.push(user);
-                privateChannel(user.id + "-" + authId);
+                }
                 $('.btn0asas').click();
                 renderUser();
             })
@@ -406,8 +430,23 @@
                 var us = this.users.filter(function(data) {
                     return data.id !== user.id;
                 });
-                window.Echo.leaveChannel(`private-support.poly.${user.id + "-" + authId}`);
                 this.users = us;
+
+                window.Echo.leave(`private-support.poly.${user.id + "-" + authId}`);
+
+                const checkHasExits = data_chat.filter(function(data) {
+                    return data.user.id == user.id;
+                })
+
+                if (user.ctv_st_p == false) {
+                    data_chat = data_chat.filter(function(data) {
+                        return data.user.id != user.id;
+                    });
+                }
+                $('#kt_chat_messenger').hide();
+                $('#kt_chat_messenger2').show();
+                console.log(`private-support.poly.${user.id + "-" + authId}`);
+
                 renderUser();
             });
     </script>

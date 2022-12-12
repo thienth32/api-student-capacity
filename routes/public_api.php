@@ -124,13 +124,4 @@ Route::prefix('code-language')->group(function () {
 });
 
 
-Route::post('fake-post', function () {
-    $data = [
-        'id' => auth('sanctum')->user()->id,
-        'message' => request()->message ?? "Default messgae",
-        'room' => request()->room
-    ];
-    broadcast(new ChatSupportEvent(request()->room, $data));
 
-    return response()->json($data);
-});
