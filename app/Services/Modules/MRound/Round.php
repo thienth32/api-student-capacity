@@ -152,4 +152,9 @@ class Round implements MRoundInterface
             }]);
         return $result->paginate(request('limit') ?? 6);
     }
+
+    public function getResult($id)
+    {
+        return $this->round::with('result_capacity')->where('id', $id)->first()->result_capacity;
+    }
 }

@@ -96,6 +96,20 @@ return [
         "role" => $ROLE_HAS_ADMINS,
     ], // Doanh nghiep
     [
+        "icon" => '<span class="svg-icon svg-icon-primary svg-icon-2x"><!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Code/Info-circle.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect x="0" y="0" width="24" height="24"/>
+        <circle fill="#000000" opacity="0.3" cx="12" cy="12" r="10"/>
+        <rect fill="#000000" x="11" y="10" width="2" height="7" rx="1"/>
+        <rect fill="#000000" x="11" y="7" width="2" height="2" rx="1"/>
+    </g>
+</svg><!--end::Svg Icon--></span>',
+        "name" => "Hỗ trợ viên ",
+        "role" => $ROLE_HAS_ADMINS,
+        "param" => '',
+        "link" => "admin.support",
+    ], // Doanh nghiep
+    [
         "icon" => '
         <!--begin::Svg Icon | path: icons/duotune/communication/com013.svg-->
         <span class="svg-icon svg-icon-primary svg-icon-2x">
@@ -209,12 +223,6 @@ return [
                 "role" => $ROLE_HAS_ADMINS,
                 "param" => '',
                 "link" => "admin.job",
-            ],
-            [
-                "name" => "Hỗ trợ viên ",
-                "role" => $ROLE_HAS_ADMINS,
-                "param" => '',
-                "link" => "admin.support",
             ],
         ]
     ], // Cau hinh

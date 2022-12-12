@@ -50,7 +50,7 @@
                         <!--end::Icon-->
                         <!--begin::Input-->
                         <input type="text" class="form-control form-search form-control-solid px-15" name="search"
-                            value="" placeholder="Tìm kiếm theo tên hoặc email">
+                            value="" placeholder="Tìm kiếm">
                         <!--end::Input-->
                     </form>
                     <!--end::Form-->
@@ -87,7 +87,8 @@
                     <div class="card-title">
                         <!--begin::User-->
                         <div class="d-flex justify-content-center flex-column me-3">
-                            <a class="fs-4 fw-bolder text-gray-900 text-hover-primary me-1 mb-2 lh-1">Support
+                            <a role="button"
+                                class="fs-4 back fw-bolder text-gray-900 text-hover-primary me-1 mb-2 lh-1">Support
                                 box </a>
                             <!--begin::Info-->
                             <div class="mb-0 lh-1">
@@ -153,7 +154,9 @@
                     <div class="card-title">
                         <!--begin::User-->
                         <div class="d-flex justify-content-center flex-column me-3">
-                            <a class="fs-4 fw-bolder text-gray-900 text-hover-primary me-1 mb-2 lh-1 ">Support box</a>
+                            <a role="button"
+                                class="fs-4 fw-bolder back text-gray-900 text-hover-primary me-1 mb-2 lh-1 ">Support
+                                box</a>
                             <!--begin::Info-->
                             <div class="mb-0 lh-1">
                                 <span class="badge badge-success badge-circle w-10px h-10px me-1"></span>
@@ -449,6 +452,10 @@
 
                 renderUser();
             });
+        $('.back').on('click', function() {
+            $('#kt_chat_messenger').hide();
+            $('#kt_chat_messenger2').show();
+        });
     </script>
 
 

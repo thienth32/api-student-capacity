@@ -114,6 +114,7 @@
                                     <th>Đề thi</th>
                                     <th>Thời gian bắt đầu</th>
                                     <th>Thời gian kết thúc</th>
+                                    <th>Kết quả</th>
                                     <th class="text-center">Quản lý đề thi (Nhanh)</th>
                                     <th style="text-align: center">Quản lý đề thi </th>
                                     <th style="text-align: center"> </th>
@@ -143,6 +144,16 @@
                                             </td> --}}
                                             <td>{{ $round->start_time }}</td>
                                             <td>{{ $round->end_time }}</td>
+                                            <td data-bs-toggle="tooltip" title="Theo dõi tiến trình  "
+                                                style="text-align: center;">
+                                                <button
+                                                    style="background: #ccc;padding: 1vh 1vh 1vh 2vh;border-radius: 20px;"
+                                                    type="button" data-round_id="{{ $round->id }}"
+                                                    class="btn-click-show-result-exam btn btn-primary"
+                                                    data-bs-toggle="modal" data-bs-target="#kt_modal_1">
+                                                    <i class="bi bi-graph-down  "></i>
+                                                </button>
+                                            </td>
                                             <td class="text-center" data-bs-toggle="tooltip" title="">
 
                                                 <span role="button" data-bs-toggle="modal"
@@ -175,8 +186,8 @@
                                                                                 thi </th>
                                                                             <th> Số
                                                                                 câu hỏi </th>
-                                                                            <th>
-                                                                                Tiến trình </th>
+                                                                            {{-- <th>
+                                                                                Tiến trình </th> --}}
                                                                             <th>
                                                                                 Tải bộ excel</th>
                                                                             <th>
@@ -194,21 +205,7 @@
                                                                                     <td>
                                                                                         {{ $round->max_questions_exam }}
                                                                                     </td>
-                                                                                    <td data-bs-toggle="tooltip"
-                                                                                        title="Theo dõi tiến trình  "
-                                                                                        style="text-align: center;">
-                                                                                        <button
-                                                                                            style="background: #ccc;padding: 1vh 1vh 1vh 2vh;border-radius: 20px;"
-                                                                                            type="button"
-                                                                                            data-round_id="{{ $round->id }}"
-                                                                                            data-exam_id="{{ $exam->id }}"
-                                                                                            class="btn-click-show-result-exam btn btn-primary"
-                                                                                            data-bs-toggle="modal"
-                                                                                            data-bs-target="#kt_modal_1">
-                                                                                            <i
-                                                                                                class="bi bi-graph-down  "></i>
-                                                                                        </button>
-                                                                                    </td>
+
                                                                                     <td data-bs-toggle="tooltip"
                                                                                         title="Tải lên bộ câu hỏi bằng excel">
                                                                                         <button

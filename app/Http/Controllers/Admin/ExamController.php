@@ -9,6 +9,7 @@ use App\Models\Question;
 use App\Services\Traits\TUploadImage;
 use App\Models\Round;
 use App\Services\Modules\MExam\MExamInterface;
+use App\Services\Modules\MRound\MRoundInterface;
 use App\Services\Traits\TResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -23,6 +24,7 @@ class ExamController extends Controller
     public function __construct(
         private MExamInterface $repoExam,
         private Exam $exam,
+        private MRoundInterface $repoRound,
         private Round $round,
         private Question $question,
         private DB $db
@@ -32,7 +34,7 @@ class ExamController extends Controller
     public function getHistory($id)
     {
         try {
-            $data = $this->repoExam->getResult($id);
+            $data = $this->repoRound->getResult($id);
             return $this->responseApi(true, $data);
         } catch (\Throwable $th) {
             return $this->responseApi(false, $th->getMessage());
