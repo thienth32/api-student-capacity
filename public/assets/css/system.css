@@ -123,7 +123,7 @@ figure.image img {
 }
 
 #show-add-questions {
-    max-height: 500px;
+    max-height: 80vh;
     overflow: auto;
     padding-bottom: 20px;
 }
