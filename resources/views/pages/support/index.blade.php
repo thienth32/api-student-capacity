@@ -101,7 +101,11 @@
                     </div>
                     <!--end::Title-->
                     <!--begin::Card toolbar-->
-
+                    <div class="card-toolbar">
+                        <!--begin::Menu-->
+                        <button class="btn btn-primary">Xuất PDF</button>
+                        <!--end::Menu-->
+                    </div>
                     <!--end::Card toolbar-->
                 </div>
                 <!--end::Card header-->
@@ -429,17 +433,19 @@
                 });
                 this.users = us;
 
-                window.Echo.leave(`private-support.poly.${user.id + "-" + authId}`);
 
-                const checkHasExits = data_chat.filter(function(data) {
-                    return data.user.id == user.id;
-                })
 
-                if (user.ctv_st_p == false) {
-                    data_chat = data_chat.filter(function(data) {
-                        return data.user.id != user.id;
-                    });
-                }
+                // const checkHasExits = data_chat.filter(function(data) {
+                //     return data.user.id == user.id;
+                // })
+
+                // window.Echo.leave(`private-support.poly.${user.id + "-" + authId}`);
+                // if (user.ctv_st_p == false) {
+                //     data_chat = data_chat.filter(function(data) {
+                //         return data.user.id != user.id;
+                //     });
+                // }
+
                 $('#kt_chat_messenger').hide();
                 $('#kt_chat_messenger2').show();
                 console.log(`private-support.poly.${user.id + "-" + authId}`);
