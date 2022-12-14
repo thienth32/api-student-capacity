@@ -413,16 +413,16 @@ class RoundController extends Controller
                         'round_id' => $id,
                         'donor_id' => $data->id,
                     ]);
-                    return redirect()->back();
+                } else {
+                    $data = Donor::create([
+                        'contest_id' => Round::find($id)->load('enterprise_contest:id')->enterprise_contest->id,
+                        'enterprise_id' => $item,
+                    ]);
+                    $donorRound::create([
+                        'round_id' => $id,
+                        'donor_id' => $data->id,
+                    ]);
                 }
-                $data = Donor::create([
-                    'contest_id' => Round::find($id)->load('enterprise_contest:id')->enterprise_contest->id,
-                    'enterprise_id' => $item,
-                ]);
-                $donorRound::create([
-                    'round_id' => $id,
-                    'donor_id' => $data->id,
-                ]);
             }
             return redirect()->back();
         } catch (\Throwable $th) {
