@@ -39,7 +39,7 @@ class RequestsPost extends FormRequest
         $rule = [
             'title' => $ruleTitle,
             'description' => 'required',
-            'published_at' => 'required|after_or_equal:today',
+            'published_at' => 'required',
             'slug' =>   $ruleSlug,
             'code_recruitment' =>
             request()->recruitment_id != 0 ?
@@ -66,7 +66,6 @@ class RequestsPost extends FormRequest
             'title.required' => 'Chưa nhập trường này !',
             'title.unique' => 'trường đã tồn tại !',
             'title.max' => 'Trường không được quá 225 ký tự',
-            'published_at.after_or_equal' => 'Thời gian bắt đầu phải sau hoặc bằng ngày hiện tại. ',
             'published_at.required' => 'Chưa nhập trường này !',
             'description.required' => 'Chưa nhập trường này !',
             'content.required' => 'Chưa nhập trường này !',
