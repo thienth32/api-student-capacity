@@ -153,7 +153,6 @@ class TeamController extends Controller
 
     public function destroy($id)
     {
-        // dd($id);
         try {
             if (!(auth()->user()->hasRole('super admin'))) return false;
 
