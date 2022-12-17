@@ -6,12 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Services\Modules\MExam\MExamInterface;
 use Illuminate\Http\Request;
 use App\Exports\ExamExport;
+use App\Services\Modules\MRound\MRoundInterface;
 use PDF;
 use Excel;
 
 class PrintPDFController extends Controller
 {
-    public function __construct(private MExamInterface $exam)
+    public function __construct(private MRoundInterface $roundRp)
     {
     }
 
@@ -29,7 +30,7 @@ class PrintPDFController extends Controller
     public function historyExamPDF($r)
     {
         return [
-            'data' => $this->exam->getResult($r->exam_id),
+            'data' => $this->roundRp->getResult($r->exam_id),
             'view' => 'exam-result'
         ];
     }
