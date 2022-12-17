@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Services\Modules\MExam\MExamInterface;
+use App\Services\Modules\MRound\MRoundInterface;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -15,7 +16,7 @@ class ExamExport implements FromCollection, WithHeadings, WithMapping
 
     public function collection()
     {
-        return app(MExamInterface::class)->getResult($this->id);
+        return app(MRoundInterface::class)->getResult($this->id);
     }
 
     public function headings(): array
