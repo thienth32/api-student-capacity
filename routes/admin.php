@@ -448,9 +448,11 @@ Route::group([
         Route::post('update-sample-code/{id}', [CodeManagerController::class, 'updateSampleCode'])->name('admin.code.manager.update.sample.code');
         Route::post('update-status/{id}', [CodeManagerController::class, 'updateStatus'])->name('admin.code.manager.update.status');
     });
+
+    Route::get('support-poly', [SupportController::class, 'index'])->name('admin.support');
 });
 
-Route::get('support-poly', [SupportController::class, 'index'])->name('admin.support');
+
 
 // Route::get('api-view-check', function (App\Services\Modules\MContest\Contest $contest) {
 //     $data = $contest->apiIndex();

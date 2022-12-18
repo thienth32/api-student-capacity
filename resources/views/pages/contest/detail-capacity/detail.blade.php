@@ -2,7 +2,11 @@
 @section('title', 'Quản lý đánh giá năng lực')
 @section('page-title', 'Quản lý đánh giá năng lực')
 @section('content')
-
+    <style>
+        .select2-container{
+             z-index: 99999999999999999999999999999 !important;
+        }
+    </style>
     <div class="row mb-4">
         <div class="col-lg-12">
             <ol class="breadcrumb text-muted fs-6 fw-bold">
