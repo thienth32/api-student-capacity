@@ -62,7 +62,7 @@
                                     value="{{ old('type') }}">
                                     <option value="{{ config('util.TYPE_POSTS') }}"> Bài viết</option>
                                     <option value="{{ config('util.TYPE_RECRUITMENTS') }}"> Tuyển dụng</option>
-                                    <option value="{{ config('util.TYPE_CAPACITY_TEST') }}"> Test năng lực</option>
+                                    <option value="{{ config('util.TYPE_CAPACITY_TEST') }}"> Đánh giá năng lực</option>
                                 </select>
                                 @error('type')
                                     <p class="text-danger">{{ $message }}</p>

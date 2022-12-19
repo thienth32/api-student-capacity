@@ -103,7 +103,7 @@
                         thuộc code online </button>
                     <button
                         class="btn-capacity {{ request()->has('capacity') ? 'btn-primary' : '' }} btn col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light">Banner
-                        thuộc test năng lực </button>
+                        thuộc đánh giá năng lực </button>
                     <button
                         class="btn-major {{ request()->has('major') ? 'btn-primary' : '' }} btn col-12 col-lg-6 col-sx-12 col-md-12 col-sm-12 col-xxl-6 col-xl-6 btn-light">Banner
                         thuộc chuyên ngành</button>
@@ -361,7 +361,7 @@
                                     @endif
                                 @else
                                     @if ($slider->sliderable_type == 'App\Models\Contest')
-                                        {{ 'Test năng lực ' }}
+                                        {{ 'Đánh giá năng lực ' }}
                                     @elseif($slider->sliderable_type == 'App\Models\Challenge')
                                         {{ 'Code online ' }}
                                     @else

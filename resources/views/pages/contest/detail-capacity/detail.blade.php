@@ -1,13 +1,17 @@
 @extends('layouts.main')
-@section('title', 'Quản lý test năng lực')
-@section('page-title', 'Quản lý test năng lực')
+@section('title', 'Quản lý đánh giá năng lực')
+@section('page-title', 'Quản lý đánh giá năng lực')
 @section('content')
-
+    <style>
+        .select2-container{
+             z-index: 99999999999999999999999999999 !important;
+        }
+    </style>
     <div class="row mb-4">
         <div class="col-lg-12">
             <ol class="breadcrumb text-muted fs-6 fw-bold">
                 <li class="breadcrumb-item pe-3">
-                    <a href="{{ route('admin.contest.list') . '?type=1' }}" class="pe-3">Test năng lực </a>
+                    <a href="{{ route('admin.contest.list') . '?type=1' }}" class="pe-3">Đánh giá năng lực </a>
                 </li>
                 <li class="breadcrumb-item px-3 text-muted">Chi tiết : {{ $test_capacity->name }}</li>
             </ol>
@@ -114,6 +118,7 @@
                                     <th>Đề thi</th>
                                     <th>Thời gian bắt đầu</th>
                                     <th>Thời gian kết thúc</th>
+                                    <th>Kết quả</th>
                                     <th class="text-center">Quản lý đề thi (Nhanh)</th>
                                     <th style="text-align: center">Quản lý đề thi </th>
                                     <th style="text-align: center"> </th>
@@ -143,7 +148,17 @@
                                             </td> --}}
                                             <td>{{ $round->start_time }}</td>
                                             <td>{{ $round->end_time }}</td>
-                                            <td class="text-center" data-bs-toggle="tooltip" title="Thao tác nhanh">
+                                            <td data-bs-toggle="tooltip" title="Theo dõi tiến trình  "
+                                                style="text-align: center;">
+                                                <button
+                                                    style="background: #ccc;padding: 1vh 1vh 1vh 2vh;border-radius: 20px;"
+                                                    type="button" data-round_id="{{ $round->id }}"
+                                                    class="btn-click-show-result-exam btn btn-primary"
+                                                    data-bs-toggle="modal" data-bs-target="#kt_modal_1">
+                                                    <i class="bi bi-graph-down  "></i>
+                                                </button>
+                                            </td>
+                                            <td class="text-center" data-bs-toggle="tooltip" title="">
 
                                                 <span role="button" data-bs-toggle="modal"
                                                     data-bs-target="#kt_modal_round_{{ $round->id }}"
@@ -159,31 +174,28 @@
                                                                 <h5 class="modal-title">Các đề bài thuộc vòng thi
                                                                     {{ $round->name }}</h5>
 
-                                                                <!--begin::Close-->
                                                                 <div class="btn btn-icon btn-sm btn-active-light-primary ms-2"
                                                                     data-bs-dismiss="modal" aria-label="Close">
                                                                     <span class="svg-icon svg-icon-2x"></span>
                                                                     Thoát
                                                                 </div>
-                                                                <!--end::Close-->
                                                             </div>
 
                                                             <div class="modal-body">
                                                                 <table
-                                                                    class="table table-row-dashed table-row-gray-500 gy-5 gs-5 mb-0">
+                                                                    class="table table-row-dashed table-row-gray-300 gy-7">
                                                                     <thead>
-                                                                        <tr class="fw-bold fs-6 text-gray-800">
-                                                                            <th style="padding: 10px" scope="col"> Đề
+                                                                        <tr class="fw-bolder fs-6 text-gray-800">
+                                                                            <th> Đề
                                                                                 thi </th>
-                                                                            <th style="padding: 10px;text-align: center;"
-                                                                                scope="col">
-                                                                                Tiến trình </th>
-                                                                            <th style="padding: 10px;text-align: center;"
-                                                                                scope="col">
+                                                                            <th> Số
+                                                                                câu hỏi </th>
+                                                                            {{-- <th>
+                                                                                Tiến trình </th> --}}
+                                                                            <th>
                                                                                 Tải bộ excel</th>
-                                                                            <th style="float: right;padding: 10px"
-                                                                                scope="col">
-                                                                                Câu hỏi & trả lời
+                                                                            <th>
+                                                                                Bộ câu hỏi
                                                                             </th>
                                                                         </tr>
                                                                     </thead>
@@ -191,27 +203,15 @@
                                                                         @if (count($round->exams) > 0)
                                                                             @foreach ($round->exams as $exam)
                                                                                 <tr>
-                                                                                    <td style="width: 70% ; padding: 10px">
-                                                                                        {{ $exam->name }}</td>
-                                                                                    <td style="width: 10% ; padding: 10px; text-align:center"
-                                                                                        data-bs-toggle="tooltip"
-                                                                                        title="Theo dõi tiến trình  "
-                                                                                        style="text-align: center;">
-                                                                                        <button
-                                                                                            style="background: #ccc;padding: 1vh 1vh 1vh 2vh;border-radius: 20px;"
-                                                                                            type="button"
-                                                                                            data-round_id="{{ $round->id }}"
-                                                                                            data-exam_id="{{ $exam->id }}"
-                                                                                            class="btn-click-show-result-exam btn btn-primary"
-                                                                                            data-bs-toggle="modal"
-                                                                                            data-bs-target="#kt_modal_1">
-                                                                                            <i
-                                                                                                class="bi bi-graph-down  "></i>
-                                                                                        </button>
+                                                                                    <td>
+                                                                                        {{ $exam->name }}
                                                                                     </td>
+                                                                                    <td>
+                                                                                        {{ $round->max_questions_exam }}
+                                                                                    </td>
+
                                                                                     <td data-bs-toggle="tooltip"
-                                                                                        title="Tải lên bộ câu hỏi bằng excel"
-                                                                                        style="width: 10% ;padding: 10px; text-align:center">
+                                                                                        title="Tải lên bộ câu hỏi bằng excel">
                                                                                         <button
                                                                                             style="background: #ccc;
                                                                                                                     padding: 1vh 1vh 1vh 2vh;
@@ -221,7 +221,6 @@
                                                                                             type="button"
                                                                                             class="btn   me-3"
                                                                                             id="kt_file_manager_new_folder">
-                                                                                            <!--begin::Svg Icon | path: icons/duotune/files/fil013.svg-->
                                                                                             <span
                                                                                                 class="svg-icon svg-icon-2">
                                                                                                 <svg xmlns="http://www.w3.org/2000/svg"
@@ -243,15 +242,11 @@
                                                                                                     </path>
                                                                                                 </svg>
                                                                                             </span>
-                                                                                            <!--end::Svg Icon-->
                                                                                         </button>
 
                                                                                     </td>
-                                                                                    <td
-                                                                                        style="width: 10% ;padding: 10px; text-align:center">
-                                                                                        <span style=""
-                                                                                            data-bs-toggle="tooltip"
-                                                                                            title="Xem nhanh câu hỏi câu trả lời ">
+                                                                                    <td>
+                                                                                        <span>
                                                                                             <button
                                                                                                 style="background: #ccc;padding: 1vh 1vh 1vh 2vh;border-radius: 20px;"
                                                                                                 type="button"
@@ -261,7 +256,6 @@
                                                                                                 class="btn-click-show-exams btn btn-primary"
                                                                                                 data-bs-toggle="modal"
                                                                                                 data-bs-target="#kt_modal_2">
-                                                                                                {{-- <i class="bi bi-ui-checks-grid"></i> --}}
                                                                                                 <i
                                                                                                     class="bi bi-arrows-move"></i>
                                                                                             </button>
@@ -278,6 +272,8 @@
 
                                                                     </tbody>
                                                                 </table>
+
+
 
                                                             </div>
 
@@ -360,6 +356,7 @@
                                                 <span role="button" class="add-exam btn btn-primary"
                                                     data-bs-toggle="tooltip" title="Quản lý đề thi "
                                                     data-round_id="{{ $round->id }}"
+                                                    data-max_questions_exam="{{ $round->max_questions_exam }}"
                                                     data-round_name="{{ $round->name }}">
                                                     <i role="button" class=" m-auto bi bi-tools  "></i>
                                                 </span>
@@ -692,6 +689,7 @@
                         </tbody>
                     </table>
                     {{--  --}}
+
                 </div>
                 <div class="tab-pane fade  " id="kt_vtab_pane_6" role="tabpanel">
 
@@ -710,7 +708,7 @@
                                             <!--begin::Top-->
                                             <div class="text-center mb-18">
                                                 <!--begin::Title-->
-                                                <h3 class="fs-2hx text-dark mb-6">Test năng lực :
+                                                <h3 class="fs-2hx text-dark mb-6">đánh giá năng lực :
                                                     <strong>{{ $test_capacity->name }}</strong>
                                                 </h3>
                                                 <!--end::Title-->
@@ -888,7 +886,7 @@
                                 </span>
 
                             </div>
-                            <div id="show-add-questions" style="    max-height: 80vh !important; " class="mt-2 mb-2">
+                            <div id="show-add-questions" style="" class="mt-4 mb-2">
                             </div>
                             <div id="data-save"
                                 style="
@@ -899,13 +897,12 @@
                                     max-height: 500px;
                                     overflow: auto;
                                     background: white;
-                                    padding: 10px;"
+                                    padding: 25px;"
                                 class="mt-1">
                                 <div id="show-data-save" class="mb-5"></div>
                                 <div
-                                    style="position: absolute; bottom: 20px; transform: translateX(-50%);  left: 50%; z-index: 999999999;">
-                                    <button data-bs-toggle="tooltip" title="Lưu" class="btn btn-primary"
-                                        id="save-qs">Lưu </button>
+                                    style="position: relative;  transform: translateX(-50%);  left: 50%; z-index: 999999999;">
+                                    <button class="btn btn-primary" id="save-qs">Lưu </button>
                                     <button data-bs-toggle="tooltip" title="Tải lại câu hỏi "
                                         class="btn-reload btn btn-success">
                                         <i class="bi bi-arrow-counterclockwise"></i>

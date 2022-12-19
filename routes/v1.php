@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\ChatSupportEvent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\Admin\ContestController;
 use App\Http\Controllers\Admin\WishlistController;
 use App\Http\Controllers\Admin\CodeManagerController;
 use App\Http\Controllers\Admin\CapacityPlayController;
+use App\Http\Controllers\Admin\SupportController;
 use App\Http\Controllers\Admin\TeamController as AdminTeamController;
 use App\Http\Controllers\Admin\TakeExamController as AdminTakeExamController;
 
@@ -100,3 +102,5 @@ Route::prefix('wishlist')->group(function () {
     Route::get('user', [WishlistController::class, 'list']);
     Route::get('count', [WishlistController::class, 'countWishlist']);
 });
+
+Route::post('fake-post', [SupportController::class, 'store']);

@@ -32,8 +32,10 @@ class CandidateController extends Controller
     }
     public function index(Request $request)
     {
+
         $posts = $this->post::where('postable_type', Recruitment::class)->get();
         $candidates = $this->MCandidate->index($request);
+
         return view('pages.candidate.index', [
             'candidates' => $candidates,
             'posts' => $posts

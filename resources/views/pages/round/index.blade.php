@@ -60,11 +60,11 @@
 
             <div class="col-lg-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="form-group ">
-                    <label class="form-label">Cuộc thi <strong>(CT)</strong> & test năng lực
+                    <label class="form-label">Cuộc thi <strong>(CT)</strong> & đánh giá năng lực
                         <strong>(TNL)</strong></label>
                     <select id="select-contest" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
                         data-hide-search="false" tabindex="-1" aria-hidden="true">
-                        <option value="0">Chọn cuộc thi & test năng lực </option>
+                        <option value="0">Chọn cuộc thi & đánh giá năng lực </option>
                         @forelse ($contests as $contest)
                             <option @selected(request('contest_id') == $contest->id) value="{{ $contest->id }}">
                                 {{ $contest->type == 0 ? 'CT-' : 'TNL-' }}
@@ -261,7 +261,7 @@
                             </span>
                         </th>
 
-                        <th scope="col">Cuộc thi & test năng lực </th>
+                        <th scope="col">Cuộc thi & đánh giá năng lực </th>
                         <th scope="col">Loại kiểu thi </th>
                         <th scope="col">Thời gian bắt đầu
                             <span role="button" data-key="start_time" data-bs-toggle="tooltip"
@@ -331,7 +331,7 @@
                 </thead>
                 <tbody>
                     @php
-                        
+
                         $total = $rounds->total();
                     @endphp
                     @forelse ($rounds as $key => $round)
@@ -361,7 +361,7 @@
                                 @endif
                             </td>
 
-                            <td>{{ $round->contest->type == 0 ? $round->contest->name ?? 'Chưa có cuộc thi ' : $round->contest->name ?? 'Chưa có test năng lực  ' }}
+                            <td>{{ $round->contest->type == 0 ? $round->contest->name ?? 'Chưa có cuộc thi ' : $round->contest->name ?? 'Chưa có đánh giá năng lực  ' }}
                             </td>
                             <td>{{ $round->type_exam->name ?? 'Chưa có kiểu cuộc thi' }}</td>
 

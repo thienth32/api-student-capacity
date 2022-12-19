@@ -80,7 +80,7 @@
                                     <button type="button" class="btn btn-light btn-round">Vòng thi cuộc thi </button>
                                 </div>
                                 <div class="col-2">
-                                    <button type="button" class="btn btn-light btn-capacity">Test năng lực </button>
+                                    <button type="button" class="btn btn-light btn-capacity">Đánh giá năng lực </button>
                                 </div>
                                 <div class="col-2">
                                     <button type="button" class="btn btn-light btn-code">Code online </button>

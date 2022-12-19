@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\RecruitmentController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\PrintPDFController;
 use App\Http\Controllers\Admin\PrintExcelController;
+use App\Http\Controllers\Admin\SupportController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('dashboard/api-cuoc-thi', [DashboardController::class, 'chartCompetity'])->name('dashboard.chart-competity');
@@ -154,6 +155,7 @@ Route::group([
         Route::get('end/{id}', [CapacityPlayController::class, 'end'])->name('admin.capacit.play.end');
         Route::post('{id_exam}/un-status', [CapacityPlayController::class, 'un_status'])->name('admin.capacit.un_status');
         Route::post('{id_exam}/re-status', [CapacityPlayController::class, 're_status'])->name('admin.capacit.re_status');
+        Route::delete('delete/{id}',  [CapacityPlayController::class, 'destroy'])->name('admin.capacit.delete');
     });
 
     Route::prefix('teams')->group(function () {
@@ -446,6 +448,8 @@ Route::group([
         Route::post('update-sample-code/{id}', [CodeManagerController::class, 'updateSampleCode'])->name('admin.code.manager.update.sample.code');
         Route::post('update-status/{id}', [CodeManagerController::class, 'updateStatus'])->name('admin.code.manager.update.status');
     });
+
+    Route::get('support-poly', [SupportController::class, 'index'])->name('admin.support');
 });
 
 

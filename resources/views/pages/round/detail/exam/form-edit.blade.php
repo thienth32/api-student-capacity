@@ -3,8 +3,8 @@
     @section('title', 'Quản lý cuộc thi')
     @section('page-title', 'Quản lý cuộc thi ')
 @else
-    @section('title', 'Quản lý test năng lực')
-    @section('page-title', 'Quản lý test năng lực ')
+    @section('title', 'Quản lý đánh giá năng lực')
+    @section('page-title', 'Quản lý đánh giá năng lực ')
 @endif
 @section('content')
 
@@ -37,7 +37,8 @@
                     </li>
                 @else
                     <li class="breadcrumb-item pe-3">
-                        <a href="{{ route('admin.contest.list') . '?type=1' }}" class="pe-3">Danh sách test năng lực </a>
+                        <a href="{{ route('admin.contest.list') . '?type=1' }}" class="pe-3">Danh sách đánh giá năng lực
+                        </a>
                     </li>
                     <li class="breadcrumb-item px-3 ">
                         <a href="{{ route('admin.contest.show.capatity', ['id' => $round->contest->id]) }}" class="pe-3">

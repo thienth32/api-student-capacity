@@ -56,10 +56,10 @@ class AuthController extends Controller
                 'payload' => "Tài khoản không tồn tại hoặc xác thực thất bại",
             ]);
         }
-        if (!Str::contains($googleUser->email, config('util.END_EMAIL_FPT'))) return response()->json([
-            'status' => false,
-            'payload' => "Tài khoản không tồn tại hoặc xác thực thất bại",
-        ]);
+        // if (!Str::contains($googleUser->email, config('util.END_EMAIL_FPT'))) return response()->json([
+        //     'status' => false,
+        //     'payload' => "Tài khoản không tồn tại hoặc xác thực thất bại",
+        // ]);
 
         $user = User::with('roles')->where('email', $googleUser->email)->first();
         if ($user) {

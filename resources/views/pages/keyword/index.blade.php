@@ -86,7 +86,8 @@
                         <option @selected(request()->has('type') && request('type') == 0) value="{{ config('util.TYPE_POSTS') }}"> Bài viết</option>
                         <option @selected(request()->has('type') && request('type') == 1) value="{{ config('util.TYPE_RECRUITMENTS') }}"> Tuyển dụng
                         </option>
-                        <option @selected(request()->has('type') && request('type') == 2) value="{{ config('util.TYPE_CAPACITY_TEST') }}"> Test năng lực
+                        <option @selected(request()->has('type') && request('type') == 2) value="{{ config('util.TYPE_CAPACITY_TEST') }}"> Đánh giá năng
+                            lực
                         </option>
                     </select>
                 </div>
@@ -363,7 +364,7 @@
                                     @elseif($key->type == config('util.TYPE_CAPACITY_TEST'))
                                         <button
                                             class=" btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary">
-                                            Test năng lực</button>
+                                            Đánh giá năng lực</button>
                                     @endif
 
                                 </td>
