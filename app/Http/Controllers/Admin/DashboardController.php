@@ -32,6 +32,8 @@ class DashboardController extends Controller
 
         $totalStudentAccount = $this->user->getTotalStudentAcount();
 
+        $listTopCapacity = $this->getTopCapcity($request);
+
         $dt = $this->carbon::now('Asia/Ho_Chi_Minh');
         $dt2 = $this->carbon::now('Asia/Ho_Chi_Minh');
         $dt3 = $this->carbon::now('Asia/Ho_Chi_Minh');
@@ -47,7 +49,8 @@ class DashboardController extends Controller
             'contests',
             'period',
             'timeNow',
-            'contestsDealineNow'
+            'contestsDealineNow',
+            'listTopCapacity'
         ));
     }
 
@@ -64,5 +67,15 @@ class DashboardController extends Controller
             'status' => true,
             'data' => $lstContest
         ]);
+    }
+
+    public function getTopCapcity($request)
+    {
+        $limit = $request->get('limit', 10);
+        $result = Contest::withCount('resultCapacity')
+            ->where('type', config('util.TYPE_TEST'))
+            ->orderByDesc('result_capacity_count')
+            ->paginate($limit);
+        return $result ? $result : false;
     }
 }
