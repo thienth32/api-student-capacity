@@ -28,8 +28,11 @@ use App\Http\Controllers\Admin\PrintExcelController;
 use App\Http\Controllers\Admin\SupportController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-Route::get('dashboard/api-cuoc-thi', [DashboardController::class, 'chartCompetity'])->name('dashboard.chart-competity');
+Route::prefix('dashboard')->group(function () {
+    Route::get('api-cuoc-thi', [DashboardController::class, 'chartCompetity'])->name('dashboard.chart-competity');
+    Route::get('rank-contest', [DashboardController::class, 'getRankContest']);
 
+});
 Route::prefix('rounds')->group(function () {
 
     Route::get('', [RoundController::class, 'index'])->name('admin.round.list')->middleware('role_admin');
