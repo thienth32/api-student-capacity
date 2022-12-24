@@ -21,7 +21,7 @@ class ResultCapacity implements MResultCapacityInterface
     public function whereInExamUser($examArr = [], $user_id)
     {
         return $this->model::where('user_id', $user_id)
-            ->whereIn('exam_id', $examArr)->first()->load('exam:id,max_ponit');
+            ->whereIn('exam_id', $examArr)->first();
     }
 
     public function create($data = [])
