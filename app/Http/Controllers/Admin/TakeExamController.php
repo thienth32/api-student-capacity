@@ -238,7 +238,7 @@ class TakeExamController extends Controller
             $round = $this->round->find($request->round_id);
             $exam = $this->exam->whereGet(['round_id' => $request->round_id])->pluck('id');
             if (is_null($round) || is_null($exam)) return $this->responseApi(false, 'Lỗi truy cập hệ thống !!');
-            $resultCapacity = $this->resultCapacity->whereInExamUser($exam, $user_id);
+            $resultCapacity = $this->resultCapacity->whereInExamUser($exam, $user_id)->load('exam:id,max_ponit');
             if ($resultCapacity) {
                 if ($resultCapacity->status == config('util.STATUS_RESULT_CAPACITY_DOING')) {
                     return $this->responseApi(true, config('util.STATUS_RESULT_CAPACITY_DOING'), ['message' => "Đang làm !!"]);
@@ -328,8 +328,8 @@ class TakeExamController extends Controller
             }
         } catch (\Throwable $th) {
             $dB::rollBack();
+            dd($th);
             return $this->responseApi(false, 'Lỗi hệ thống !!');
-            // dd($th);
         }
     }
 
