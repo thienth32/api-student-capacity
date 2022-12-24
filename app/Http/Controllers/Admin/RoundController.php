@@ -256,10 +256,13 @@ class RoundController extends Controller
         if (is_null($round)) {
             return $this->responseApi(false, 'Không tồn tại trong hệ thống !');
         } {
-            $round->with('contest');
-            $round->with('type_exam');
-            $round->with(['judges']);
-            $round->with(['teams' => function ($q) {
+            $round->with(['contest' => function ($q) {
+                return $q->with(['rounds' => function ($q) {
+                    $q->orderBy('start_time', 'asc');
+                    $q->setEagerLoads([]);
+                    return $q;
+                }]);
+            }, 'type_exam', 'judges', 'teams' => function ($q) {
                 return $q->with('members');
             }]);
 
