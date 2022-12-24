@@ -21,7 +21,7 @@
             <!--begin::Content-->
             <div class="d-flex flex-column text-light pe-0 pe-sm-10">
                 <h4 class="mb-2 text-light">Thông báo</h4>
-                <span>{{ $item->type == 1 ? 'đánh giá năng lực ' : 'Cuộc thi ' }} {{ $item->name }} sẽ kết thúc vào hôm
+                <span>{{ $item->type == 1 ? 'Đánh giá năng lực ' : 'Cuộc thi ' }} {{ $item->name }} sẽ kết thúc vào hôm
                     nay
                     {{ $item->register_deadline }}</span>
             </div>
@@ -513,7 +513,7 @@
                 <!--end::Col-->
             </div>
         @endif
-        <div class="col-xl-12 mb-5 mb-xl-12">
+        {{-- <div class="col-xl-12 mb-5 mb-xl-12">
             <!--begin::Chart widget 18-->
             <div class="card card-flush h-xl-100">
                 <!--begin::Header-->
@@ -539,7 +539,7 @@
                 <!--end: Card Body-->
             </div>
             <!--end::Chart widget 18-->
-        </div>
+        </div> --}}
     </div>
     <input type="hidden" id="url_chart_data" value="{{ route('dashboard.chart-competity') }}">
 @endsection
