@@ -233,14 +233,12 @@ class TakeExamController extends Controller
                 'round_id.integer' => 'Sai định dạng !',
             ]
         );
-        if ($validate->fails())
-            return $this->responseApi(true, $validate->errors());
+        if ($validate->fails()) return $this->responseApi(true, $validate->errors());
         try {
             $round = $this->round->find($request->round_id);
-            if (is_null($round)) return $this->responseApi(false, 'Lỗi truy cập hệ thống !!');
             $exam = $this->exam->whereGet(['round_id' => $request->round_id])->pluck('id');
-            if (is_null($exam)) return $this->responseApi(false, 'Lỗi truy cập hệ thống !!');
-            $resultCapacity = $this->resultCapacity->whereInExamUser($exam, $user_id);
+            if (is_null($round) || is_null($exam)) return $this->responseApi(false, 'Lỗi truy cập hệ thống !!');
+            $resultCapacity = $this->resultCapacity->whereInExamUser($exam, $user_id)->load('exam:id,max_ponit');
             if ($resultCapacity) {
                 if ($resultCapacity->status == config('util.STATUS_RESULT_CAPACITY_DOING')) {
                     return $this->responseApi(true, config('util.STATUS_RESULT_CAPACITY_DOING'), ['message' => "Đang làm !!"]);
@@ -251,7 +249,6 @@ class TakeExamController extends Controller
                 return $this->responseApi(false, "Chưa làm !!");
             }
         } catch (\Throwable $th) {
-            // dd($th);
             return $this->responseApi(false, 'Lỗi hệ thống !!');
         }
     }
@@ -331,8 +328,8 @@ class TakeExamController extends Controller
             }
         } catch (\Throwable $th) {
             $dB::rollBack();
+            dd($th);
             return $this->responseApi(false, 'Lỗi hệ thống !!');
-            // dd($th);
         }
     }
 

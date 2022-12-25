@@ -21,7 +21,7 @@
             <!--begin::Content-->
             <div class="d-flex flex-column text-light pe-0 pe-sm-10">
                 <h4 class="mb-2 text-light">Thông báo</h4>
-                <span>{{ $item->type == 1 ? 'đánh giá năng lực ' : 'Cuộc thi ' }} {{ $item->name }} sẽ kết thúc vào hôm
+                <span>{{ $item->type == 1 ? 'Đánh giá năng lực ' : 'Cuộc thi ' }} {{ $item->name }} sẽ kết thúc vào hôm
                     nay
                     {{ $item->register_deadline }}</span>
             </div>
@@ -196,28 +196,94 @@
                     <div class="card-header mt-6">
                         <!--begin::Card title-->
                         <div class="card-title flex-column">
-                            <h3 class="fw-bolder mb-1">Xếp hạng cuộc thi </h3>
+                            <h3 class="fw-bolder mb-1">Xếp hạng cuộc thi  </h3>
                         </div>
-                        <!--end::Card title-->
-                        <!--begin::Card toolbar-->
-                        {{-- <div class="card-toolbar">
-                            <!--begin::Select-->
-                            <select name="status" data-control="select2" data-hide-search="true"
-                                class="form-select form-select-solid form-select-sm fw-bolder w-100px">
-                                <option value="1" selected="selected">Options</option>
-                                <option value="2">Option 1</option>
-                                <option value="3">Option 2</option>
-                                <option value="4">Option 3</option>
-                            </select>
-                            <!--end::Select-->
-                        </div> --}}
-                        <!--end::Card toolbar-->
+                        <div  style="width:65%;margin-top:7px" class="form-group p-2">
+                                <select id="selectContest" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                                    data-hide-search="false" tabindex="-1" aria-hidden="true" name="" value="">
+                                    @if(count($dataContest)>0)
+                                        @foreach($dataContest as $item )
+                                            <option  @selected(request('old_contest') == $item->id)
+                                                    value="{{$item->id}}">{{ $item->name }}
+                                            </option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                        </div>
                     </div>
-                    <!--end::Card header-->
-                    <!--begin::Card body-->
-                    <div style=" max-height: 500px;  overflow: auto;" class="card-body p-9 pt-4">
-                        <!--begin::Dates-->
-                        <!--end::Tab Content-->
+                    <div
+                        style=" max-height: 500px;  overflow: auto;margin:0"
+                        class="card-body p-9 pt-4">
+                       <div id="rank-contest">
+                            @if(count($listRankContest) >0 )
+                                @foreach ($listRankContest as  $item)
+                                    <h5 style="text-align: center;">{{ $item->name }}</h5>
+                                    <table class="table table-row-dashed table-row-gray-300 gy-7">
+                                        <thead>
+                                            <tr class="fw-bolder fs-6 text-gray-800">
+                                                <th>Hạng</th>
+                                                <th>Đội thi</th>
+                                                <th>Tổng điểm</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="dataTable">
+                                            @if(count($item->results) > 0)
+                                                @foreach ($item->results as $index => $result)
+                                                    <tr>
+                                                        <td
+                                                            style="color: #0e0759;
+                                                            font-size: 16px;
+                                                            line-height: 22.4px;
+                                                            font-weight: 400;
+                                                            vertical-align: middle;
+                                                            height: 60px;
+                                                            padding: 10px;"
+                                                        >{{ ++$index }}
+                                                        </td>
+                                                        <td>
+                                                            <img
+                                                                style="border-radius: 100px;
+                                                                object-fit: cover;
+                                                                display: inline-block;
+                                                                height: 50px;
+                                                                width: 50px;
+                                                                "
+                                                                src="{{ $result->team->image ?? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRI7M4Z0v1HP2Z9tZmfQaZFCuspezuoxter_A&usqp=CAU' }}"
+                                                            >
+                                                        <span
+                                                                style="display: inline-block;
+                                                                color: #0e0759;
+                                                                margin: 0 0 0 10px;
+                                                                font-size: 14px;
+                                                                line-height: 22.4px;
+                                                                font-weight: 400;"
+                                                        >
+                                                                {{$result->team->name ?? 'Không tồn tại'}}
+                                                            </span>
+                                                        </td>
+                                                        <td
+                                                            style="color: var(--my-primary);
+                                                            font-size: 15px;
+                                                            line-height: 22.4px;
+                                                            font-weight: 400;
+                                                            vertical-align: middle;
+                                                            text-align: center;
+                                                            height: 60px;
+                                                            padding: 10px;"
+                                                        >
+                                                            {{$result->point}}
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @else
+                                            <h5>Không có bảng xếp hạng</h5>
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                    <hr>
+                                @endforeach
+                            @endif
+                       </div>
                     </div>
                     <!--end::Card body-->
                 </div>
@@ -234,28 +300,143 @@
                     <div class="card-header mt-6">
                         <!--begin::Card title-->
                         <div class="card-title flex-column">
-                            <h3 class="fw-bolder mb-1">Xếp hạng đánh giá năng lực </h3>
+                            <h3 class="fw-bolder mb-1">Xếp hạng test năng lực  </h3>
                         </div>
-                        <!--end::Card title-->
-                        <!--begin::Card toolbar-->
-                        {{-- <div class="card-toolbar">
-                            <!--begin::Select-->
-                            <select name="status" data-control="select2" data-hide-search="true"
-                                class="form-select form-select-solid form-select-sm fw-bolder w-100px">
-                                <option value="1" selected="selected">Options</option>
-                                <option value="2">Option 1</option>
-                                <option value="3">Option 2</option>
-                                <option value="4">Option 3</option>
-                            </select>
-                            <!--end::Select-->
-                        </div> --}}
-                        <!--end::Card toolbar-->
                     </div>
-                    <!--end::Card header-->
-                    <!--begin::Card body-->
+
                     <div style=" max-height: 500px;  overflow: auto;" class="card-body p-9 pt-4">
-                        <!--begin::Dates-->
-                        <!--end::Tab Content-->
+                        <table class="table table-row-dashed table-row-gray-300 gy-7">
+                            <thead>
+                                <tr class="fw-bolder fs-6 text-gray-800">
+                                    <th>Hạng</th>
+                                    <th>Sinh viên</th>
+                                    <th>Tổng điểm</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if(count($listRankCapacity) > 0)
+                                    @foreach ($listRankCapacity as $index => $item)
+                                        <tr>
+                                            <td
+                                                style="color: #0e0759;
+                                                font-size: 16px;
+                                                line-height: 22.4px;
+                                                font-weight: 400;
+                                                vertical-align: middle;
+                                                height: 60px;
+                                                padding: 10px;"
+                                            >{{ ++$index }}
+                                            </td>
+                                            <td>
+                                                <img
+                                                    style="border-radius: 100px;
+                                                    object-fit: cover;
+                                                    display: inline-block;
+                                                    height: 50px;
+                                                    width: 50px;
+                                                    "
+                                                    src="{{$item->user->avatar}}"
+                                                >
+                                               <span
+                                                    style="display: inline-block;
+                                                    color: #0e0759;
+                                                    margin: 0 0 0 10px;
+                                                    font-size: 14px;
+                                                    line-height: 22.4px;
+                                                    font-weight: 400;"
+                                               >
+                                                    {{$item->user->name}}
+                                                </span>
+                                            </td>
+                                            <td
+                                                style="color: var(--my-primary);
+                                                font-size: 15px;
+                                                line-height: 22.4px;
+                                                font-weight: 400;
+                                                vertical-align: middle;
+                                                text-align: center;
+                                                height: 60px;
+                                                padding: 10px;"
+                                            >
+                                                {{$item->total_scores}}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
+                    <!--end::Card body-->
+                </div>
+                <!--end::Card-->
+            </div>
+            <!--end::Col-->
+        </div>
+        <div class="col-xl-4 mb-5 mb-xl-10">
+            <!--begin::Col-->
+            <div class=" ">
+                <!--begin::Card-->
+                <div class="card card-flush h-lg-100">
+                    <!--begin::Card header-->
+                    <div class="card-header mt-6">
+                        <!--begin::Card title-->
+                        <div class="card-title flex-column">
+                            <h3 class="fw-bolder mb-1">Top 10 bài đánh giá năng lực có lượt tham gia nhiều </h3>
+                        </div>
+                    </div>
+
+                    <div style=" max-height: 500px;  overflow: auto;" class="card-body p-9 pt-4">
+                        <table class="table table-row-dashed table-row-gray-300 gy-7">
+                            <thead>
+                                <tr class="fw-bolder fs-6 text-gray-800">
+                                    <th>Hạng</th>
+                                    <th>Bài Đánh giá</th>
+                                    <th>Sv tham gia</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach ($listTopCapacity as $index => $item)
+                                    <tr>
+                                        <td
+                                            style="color: #0e0759;
+                                            font-size: 16px;
+                                            line-height: 22.4px;
+                                            font-weight: 400;
+                                            vertical-align: middle;
+                                            height: 60px;
+                                            padding: 10px;"
+                                        >{{ ++$index }}
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('admin.contest.show.capatity', $item->id) }}">
+                                                {{$item->name}}
+                                             </a>
+                                        </td>
+                                        <td>
+                                            <span class="svg-icon svg-icon-primary svg-icon-2x">
+                                                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo4/dist/../src/media/svg/icons/Communication/Group.svg--><svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                                    height="24px" viewBox="0 0 24 24" version="1.1">
+                                                    <g stroke="none" stroke-width="1" fill="none"
+                                                        fill-rule="evenodd">
+                                                        <polygon points="0 0 24 0 24 24 0 24" />
+                                                        <path
+                                                            d="M18,14 C16.3431458,14 15,12.6568542 15,11 C15,9.34314575 16.3431458,8 18,8 C19.6568542,8 21,9.34314575 21,11 C21,12.6568542 19.6568542,14 18,14 Z M9,11 C6.790861,11 5,9.209139 5,7 C5,4.790861 6.790861,3 9,3 C11.209139,3 13,4.790861 13,7 C13,9.209139 11.209139,11 9,11 Z"
+                                                            fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                                                        <path
+                                                            d="M17.6011961,15.0006174 C21.0077043,15.0378534 23.7891749,16.7601418 23.9984937,20.4 C24.0069246,20.5466056 23.9984937,21 23.4559499,21 L19.6,21 C19.6,18.7490654 18.8562935,16.6718327 17.6011961,15.0006174 Z M0.00065168429,20.1992055 C0.388258525,15.4265159 4.26191235,13 8.98334134,13 C13.7712164,13 17.7048837,15.2931929 17.9979143,20.2 C18.0095879,20.3954741 17.9979143,21 17.2466999,21 C13.541124,21 8.03472472,21 0.727502227,21 C0.476712155,21 -0.0204617505,20.45918 0.00065168429,20.1992055 Z"
+                                                            fill="#000000" fill-rule="nonzero" />
+                                                    </g>
+                                                </svg>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            {{ $item->result_capacity_count }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                     <!--end::Card body-->
                 </div>
@@ -332,7 +513,7 @@
                 <!--end::Col-->
             </div>
         @endif
-        <div class="col-xl-12 mb-5 mb-xl-12">
+        {{-- <div class="col-xl-12 mb-5 mb-xl-12">
             <!--begin::Chart widget 18-->
             <div class="card card-flush h-xl-100">
                 <!--begin::Header-->
@@ -358,7 +539,7 @@
                 <!--end: Card Body-->
             </div>
             <!--end::Chart widget 18-->
-        </div>
+        </div> --}}
     </div>
     <input type="hidden" id="url_chart_data" value="{{ route('dashboard.chart-competity') }}">
 @endsection
