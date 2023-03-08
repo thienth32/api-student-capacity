@@ -47,8 +47,8 @@ class PostController extends Controller
 
         $contest = $this->contest::where('type', 0)->get();
         $capacity = $this->contest::where('type', 1)->get();
-        $recruitments = $this->recruitment::all();
-        $rounds = $this->round::all();
+        $recruitments = $this->recruitment::select('id', 'name')->get();
+        $rounds = $this->round::select('id', 'name')->get();
         $posts = $this->modulesPost->index($request);
 
         return view('pages.post.index', [

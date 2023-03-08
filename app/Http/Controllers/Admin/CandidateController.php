@@ -145,6 +145,7 @@ class CandidateController extends Controller
         $rules = [
             'post_id' => 'required',
             'name' => 'required',
+            'student_code' => 'required',
             'email' => 'required|email',
             'phone' => 'required',
             'file_link' => 'required|mimes:zip,docx,word,pdf|file|max:10000',
@@ -152,6 +153,7 @@ class CandidateController extends Controller
         $message = [
             'post_id.required' => 'Mã tuyển dụng không được bỏ trống ',
             'name.required' => 'Họ Tên không được bỏ trống ',
+            'student_code.required' => 'Mã sinh viên không được bỏ trống ',
             'email.required' => 'Email không được bỏ trống ',
             'email.email' => 'Email sai định dạng ',
             'phone.required' => 'Số điện thoạt không được bỏ trống ',
@@ -170,7 +172,7 @@ class CandidateController extends Controller
         $addCandidate['sizeFile'] = $sizeFileFormat;
         $email = new SendMailUploadCV($addCandidate);
         dispatch($email);
-        return $this->responseApi(true, 'Upload Cv thành công !', ['data' => $addCandidate]);
+        return $this->responseApi(true, 'Upload CV thành công !', ['data' => $addCandidate]);
     }
     public function ApiDetailCandidate($id)
     {
