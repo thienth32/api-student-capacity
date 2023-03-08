@@ -13,7 +13,7 @@ class Candidate extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = 'candidates';
-    protected $fillable = ['post_id', 'name', 'phone', 'email', 'file_link'];
+    protected $fillable = ['post_id', 'name', 'phone', 'email', 'file_link', 'student_code'];
     // protected $casts = [
     //     'file_link' => FormatImageGet::class,
     // ];

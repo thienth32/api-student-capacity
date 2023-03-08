@@ -61,6 +61,7 @@ class Candidate
             'post_id' => $request->post_id,
             'email' => $request->email,
             'name' => $request->name,
+            'student_code' => $request->student_code,
             'phone' => $request->phone,
             'file_link' => $this->uploadFile($request->file_link),
         ];
@@ -72,6 +73,7 @@ class Candidate
         $candidate = $this->candidate::find($request->id);
         $candidate->email = $request->email;
         $candidate->name = $request->name;
+        $candidate->student_code = $request->student_code;
         $candidate->phone = $request->phone;
         if ($request->has('file_link')) {
             $fileImage =  $request->file('file_link');
