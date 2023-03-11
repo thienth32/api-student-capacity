@@ -14,7 +14,7 @@ const rules = {
     published_at: {
         required: true,
     },
-    recruitment_id: "multipeFieldValidator",
+    // recruitment_id: "multipeFieldValidator",
 
     contest_id: "multipeFieldValidator",
     round_id: "multipeFieldValidator",
@@ -63,15 +63,15 @@ $.validator.addMethod(
         if (
             $("select[name=contest_id").val() == 0 &&
             $("select[name=capacity_id").val() == 0 &&
-            $("select[name=round_id").val() == 0 &&
-            $("select[name=recruitment_id").val() == 0
+            $("select[name=round_id").val() == 0
+            // && $("select[name=recruitment_id").val() == 0
         ) {
             returnVal = false;
         } else if (
             $("select[name=round_id").val() != 0 ||
             $("select[name=capacity_id").val() != 0 ||
-            $("select[name=contest_id").val() != 0 ||
-            $("select[name=recruitment_id").val() != 0
+            $("select[name=contest_id").val() != 0
+            // || $("select[name=recruitment_id").val() != 0
         ) {
             returnVal = true;
         }

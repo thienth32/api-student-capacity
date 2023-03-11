@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\ResultController;
 use App\Http\Controllers\Admin\RoundController;
 use App\Http\Controllers\Admin\SkillController;
 use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Admin\BranchController;
 use App\Http\Controllers\Admin\SponsorController as AdminSponsorController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\WishlistController;
@@ -58,6 +59,10 @@ Route::prefix('majors')->group(function () {
 
 Route::prefix('sliders')->group(function () {
     Route::get('', [SliderController::class, 'apiIndex'])->name('slider.api.index');
+});
+
+Route::prefix('branches')->group(function () {
+    Route::get('', [BranchController::class, 'apiIndex'])->name('branches.api.index');
 });
 //
 Route::prefix('enterprise')->group(function () {
