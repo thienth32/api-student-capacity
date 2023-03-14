@@ -76,6 +76,27 @@
                 </div>
             </div> --}}
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
+                <div class="  form-group pt-2">
+                    <label class="form-label">Tìm kiếm </label>
+                    <input id="searchTeam" value="{{ request('keyword') ?? '' }}" type="text"
+                        placeholder="'*Enter' tìm kiếm ..." class=" ip-search form-control">
+                </div>
+            </div>
+            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
+                <div class="form-group  pt-2">
+                    <label for="" class="form-label">Cơ sở đăng bài</label>
+                    <select id="select-branch" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                        data-hide-search="true" tabindex="-1" aria-hidden="true">
+                        <option class="form-control" value="">Chọn cơ sở</option>
+                        @foreach ($branches as $branch)
+                            <option @selected(request('branch_id') == $branch->id) value="{{ $branch->id }}">
+                                {{ $branch->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="form-group  pt-2">
                     <label for="" class="form-label">Quá trình </label>
                     <select class="select-date-time form-select mb-2 select2-hidden-accessible" data-control="select2"
@@ -101,13 +122,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
-                <div class="  form-group pt-2">
-                    <label class="form-label">Tìm kiếm </label>
-                    <input id="searchTeam" value="{{ request('keyword') ?? '' }}" type="text"
-                        placeholder="'*Enter' tìm kiếm ..." class=" ip-search form-control">
-                </div>
-            </div>
+
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="  form-group pt-2">
                     <div class="mb-0">
@@ -138,7 +153,9 @@
             <div class="col-12 row">
                 <label class="form-label" for="">Lọc theo thành phần</label>
                 <div class="row col-12 m-auto">
-
+                    <button type="button"
+                        class="click-recruitment  btn {{ request()->has('recruitment_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light">
+                        Bài viết thuộc tuyển dụng</button>
                     <button id="clickContset" type="button"
                         class="mygroup btn  {{ request()->has('contest_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light click-contest">
                         Bài viết thuộc cuộc thi</button>
@@ -148,9 +165,7 @@
                     <button type="button"
                         class="mygroup btn {{ request()->has('round_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light click-round">
                         Bài viết thuộc vòng thi</button>
-                    <button type="button"
-                        class="click-recruitment  btn {{ request()->has('recruitment_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light">
-                        Bài viết thuộc tuyển dụng</button>
+
                 </div>
                 <br>
                 <div class="col-12 pb-2">

@@ -213,6 +213,12 @@ $(document).ready(function () {
             window.location = url + "?keyword=" + key;
         }
     });
+
+    $("#select-branch").change(function () {
+        let branchId = $(this).val();
+        window.location = url + "?branch_id=" + branchId;
+    });
+
     $(".select-date-time").change(function () {
         let dateTime = $(this).val();
         window.location = url + "?progress=" + dateTime;

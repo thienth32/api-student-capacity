@@ -43,6 +43,7 @@ class Post
         $endTime = $request->has('endTime') ? $request->endTime : null;
         $sortBy = $request->has('sortBy') ? $request->sortBy : "desc";
         $postHot =  $request->has('postHot') ? $request->postHot : null;
+        $branch_id =  $request->has('branch_id') ? $request->branch_id : null;
         $softDelete = $request->has('post_soft_delete') ? $request->post_soft_delete : null;
         if ($softDelete != null) {
             $query = $this->post::onlyTrashed()->where('title', 'like', "%$keyword%")->orderByDesc('deleted_at');
@@ -97,6 +98,9 @@ class Post
         if ($recruitment != 0) {
             $query->where('postable_id', $recruitment)->where('postable_type', $this->recruitment::class);
         }
+        if ($branch_id != 0) {
+            $query->where('branch_id', $branch_id)->where('postable_type', $this->recruitment::class);
+        }
         if ($request->post != null) {
             $this->loadAble($query, $request->post);
         }
@@ -134,6 +138,7 @@ class Post
             'link_to' => $request->link_to ? $request->link_to : null,
             'code_recruitment' => $request->code_recruitment ? $request->code_recruitment : null,
             'user_id' => $request->user_id != 0 ?  $request->user_id : auth()->user()->id,
+            'branch_id' => $request->branch_id ?? 0,
         ];
 
         if ($request->has('thumbnail_url')) {
