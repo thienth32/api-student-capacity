@@ -7,5 +7,6 @@ WORKDIR /home/capacity/
 
 ADD ./docker/script.sh /bin/script.sh
 RUN chmod +x /bin/script.sh
+RUN dos2unix /bin/script.sh
 
 ENTRYPOINT ["sh", "/bin/script.sh"]

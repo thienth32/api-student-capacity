@@ -111,11 +111,12 @@ return [
 
     'CHALLENEGE' => [
         "php" => [
-            "INOPEN" => "
-                <?php
-                function FC(INPUT)
-                {
-                };
+            "INOPEN" => 
+"
+<?php
+function FC(INPUT)
+{
+};
             ",
             "OUTPEN" => '
                 $result =  FC(INPUT);
@@ -189,8 +190,8 @@ else:
     print(result)
             ',
             "TEST_CASE" => "
-INOPEN
-OUTPEN
+            INOPEN
+            OUTPEN
             "
         ],
         // 'java' => [
