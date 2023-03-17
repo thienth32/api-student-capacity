@@ -333,7 +333,7 @@ class CodeManagerController extends Controller
         $RUNDCODE = str_replace("INOPEN", request()->content, config('util.CHALLENEGE')[$extensionFile]['TEST_CASE']);
         $OUTPEN = str_replace("FC", $challenge->sample_code[0]->code, config('util.CHALLENEGE')[$extensionFile]['OUTPEN']);
         $RUNDCODE = str_replace("OUTPEN", $OUTPEN, $RUNDCODE);
-
+       
         // $resultend = $challenge->sample_code[0]->code;
         // $fistResultend = explode("(", $resultend)[0] . "(";
         $arrResult = [];

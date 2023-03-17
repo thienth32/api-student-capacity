@@ -31,7 +31,14 @@ class SampleChallenge extends Model
         $challenge = $this->challenge->load(['test_case']);
         if (count($challenge->test_case) == 0) return 'No code';
         $input = $challenge->test_case[0]->input;
-        $inputs = explode(',', $input);
+        $re = '/(\[[\d?\,?]+\])/m';
+        if(preg_match($re, $input))
+        {
+            $inputs = [1];
+        }else{
+            $inputs = explode(',', $input);
+        }
+       
         array_splice($PARAMS, count($inputs));
         $inputDone = "";
         foreach ($PARAMS as $key => $PARAM) {
@@ -49,6 +56,7 @@ class SampleChallenge extends Model
                     break;
             }
         }
+        
         $code = str_replace('FC', $this->code, config('util.CHALLENEGE')[$code_language->ex]['INOPEN']);
         $code = str_replace('INPUT', $inputDone, $code);
         // $code = trim($code);

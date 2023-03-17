@@ -117,18 +117,18 @@ return [
 function FC(INPUT)
 {
 };
-            ",
+",
             "OUTPEN" => '
-                $result =  FC(INPUT);
-                if(is_array($result))
-                {
-                    foreach($result  as $r)
-                    {
-                        echo $r;
-                    }
-                }else{
-                    echo $result;
-                }
+$result =  FC(INPUT);
+if(is_array($result))
+{
+    foreach($result  as $r)
+    {
+        echo $r;
+    }
+}else{
+    echo $result;
+}
             ',
             "TEST_CASE" => "
                 INOPEN
@@ -137,22 +137,22 @@ function FC(INPUT)
         ],
         "js" => [
             "INOPEN" => "
-                function FC(INPUT)
-                {};
+function FC(INPUT)
+{};
             ",
             "OUTPEN" => '
-                var result =  FC(INPUT);
-                if(Array.isArray(result))
-                {
+var result =  FC(INPUT);
+if(Array.isArray(result))
+{
 
-                    for(var i = 0 ; i < result.length ; i ++ )
-                    {
-                        console.log(result[i]);
-                    }
+    for(var i = 0 ; i < result.length ; i ++ )
+    {
+        console.log(result[i]);
+    }
 
-                }else{
-                    console.log(result);
-                }
+}else{
+    console.log(result);
+}
             ',
             "TEST_CASE" => "
                 INOPEN
@@ -179,7 +179,7 @@ function FC(INPUT)
         // ],
         'py' => [
             "INOPEN" => '
-                def FC(INPUT):
+def FC(INPUT):
             ',
             "OUTPEN" => '
 result = FC(INPUT);
