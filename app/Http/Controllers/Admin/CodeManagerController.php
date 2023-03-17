@@ -495,7 +495,7 @@ class CodeManagerController extends Controller
 
     public function getCodechallAll()
     {
-        // try {
+        try {
             $challenge = $this->challenge
                 ->getChallenges(
                     ['limit' => request()->limit ?? 10],
@@ -538,12 +538,12 @@ class CodeManagerController extends Controller
                 "status" => true,
                 "payload" => $challenge,
             ]);
-        // } catch (\Throwable $th) {
-        //     return response()->json([
-        //         "status" => false,
-        //         "payload" => $th->getMessage() . $th->getLine() . 'File' . $th->getFile(),
-        //     ]);
-        // }
+        } catch (\Throwable $th) {
+            return response()->json([
+                "status" => false,
+                "payload" => $th->getMessage() . $th->getLine() . 'File' . $th->getFile(),
+            ]);
+        }
     }
 
     public function show($id)
