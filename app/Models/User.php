@@ -80,4 +80,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Branch::class, 'user_id');
     }
+
+    public function candidateNotes()
+    {
+        return $this->hasMany(CandidateNote::class, 'user_id');
+    }
 }
