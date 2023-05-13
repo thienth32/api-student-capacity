@@ -45,7 +45,10 @@ class Candidate
     }
     public function index(Request $request)
     {
-        return $this->getList($request)->with('post:id,code_recruitment,slug')->paginate(request('limit') ?? 10);
+        return $this->getList($request)
+            ->with('post:id,code_recruitment,slug')
+            ->with('candidateNotes.user')
+            ->paginate(request('limit') ?? 10);
     }
     public function listCvUser($request)
     {
@@ -81,5 +84,22 @@ class Candidate
             $candidate->file_link = $file;
         }
         $candidate->save();
+    }
+
+    public function updateOrCreate($request)
+    {
+        $dataCheck = [
+            'post_id' => $request->post_id,
+            'email' => $request->email,
+            'student_code' => $request->student_code,
+            'phone' => $request->phone,
+        ];
+        $dataUpdate = [
+            'name' => $request->name,
+            'file_link' => $this->uploadFile($request->file_link),
+        ];
+        $candidate = $this->candidate::updateOrCreate($dataCheck, $dataUpdate);
+
+        return $candidate;
     }
 }

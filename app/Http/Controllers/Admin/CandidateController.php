@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\SendMailUploadCV;
+use App\Jobs\SendMailNoteCV;
 use App\Mail\MailUploadCV;
 use App\Models\Candidate;
+use App\Models\CandidateNote;
 use App\Models\Post;
 use App\Models\Recruitment;
 use App\Services\Modules\MCandidate\Candidate as MCandidateCandidate;
@@ -17,6 +19,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class CandidateController extends Controller
 {
@@ -41,6 +44,28 @@ class CandidateController extends Controller
             'posts' => $posts
         ]);
     }
+
+    public function createNote(Request $request, $candidateId) {
+        if (!$candidateId) {
+            return abort(404);
+        }
+
+        CandidateNote::create([
+            'content' => $request->content,
+            'candidate_id' => $candidateId,
+            'user_id' => Auth::user()->id,
+            'status' => 1, // TODO, 0: email not sent, 1: email sent
+        ]);
+
+        $candidate = $this->candidate::find($candidateId);
+        $post = $candidate->post;
+
+        $email = new SendMailNoteCV($candidate, $post, $request->content);
+        dispatch($email);
+
+        return redirect()->back();
+    }
+
     public function detail($id)
     {
         if (!$id) return abort(404);
@@ -163,15 +188,23 @@ class CandidateController extends Controller
             'file_link.max' => 'Link CV dung lượng quá lớn. Tối đa 10MB !',
         ];
         $validator = Validator::make($request->all(), $rules, $message);
-        if ($validator->fails()) return response()->json(['status' => false, 'message' => $validator->errors()], 200);
-        $addCandidate =   $this->MCandidate->store($request);
-        if (!$addCandidate) return $this->responseApi(false, ' Lỗi upload CV !');
+        if ($validator->fails()) {
+            return response()->json(['status' => false, 'message' => $validator->errors()], 200);
+        }
+
+        $addCandidate =   $this->MCandidate->updateOrCreate($request);
+        if (!$addCandidate) {
+            return $this->responseApi(false, ' Lỗi upload CV !');
+        }
+
         $sizeFile = Storage::disk('s3')->size($addCandidate->file_link);
         $sizeFileFormat =  number_format($sizeFile / 1048576, 2);
         $addCandidate['file_link'] = Storage::disk('s3')->temporaryUrl($addCandidate->file_link, now()->addMinutes(5));
         $addCandidate['sizeFile'] = $sizeFileFormat;
+
         $email = new SendMailUploadCV($addCandidate);
         dispatch($email);
+
         return $this->responseApi(true, 'Upload CV thành công !', ['data' => $addCandidate]);
     }
     public function ApiDetailCandidate($id)

@@ -28,6 +28,6 @@ class MailUploadCV extends Mailable
      */
     public function build()
     {
-        return $this->subject('Xác Nhận ứng tuyển thành công')->view('emails.upload-cv', ['data' => $this->data]);
+        return $this->subject('Xác nhận ứng tuyển thành công')->view('emails.upload-cv', ['data' => $this->data]);
     }
 }

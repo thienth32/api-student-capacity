@@ -25,4 +25,9 @@ class Candidate extends Model
     {
         return DB::table($this->table)->where('email', $email)->where('post_id', $post_id)->count();
     }
+
+    public function candidateNotes()
+    {
+        return $this->hasMany(CandidateNote::class, 'candidate_id')->orderBy('created_at', 'desc');
+    }
 }
