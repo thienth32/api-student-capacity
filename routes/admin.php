@@ -251,6 +251,7 @@ Route::group([
 ], function () {
     Route::get('prinft-pdf', [PrintPDFController::class, 'printf'])->name('admin.prinf');
     Route::get('prinft-excel', [PrintExcelController::class, 'printf'])->name('admin.excel');
+    Route::get('download-recruitment-list', [RecruitmentController::class, 'downloadList'])->name('admin.recruitment.download-list');
 });
 
 

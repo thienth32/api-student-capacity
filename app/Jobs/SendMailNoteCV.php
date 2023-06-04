@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Mail\MailNoteCV;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;

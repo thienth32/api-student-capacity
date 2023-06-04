@@ -32,10 +32,11 @@ class MailNoteCV extends Mailable
      */
     public function build()
     {
-        return $this->subject('Điều chỉnh thông tin ứng tuyển')->view('emails.note-cv', [
-            'content' => $this->content,
-            'candidate' => $this->candidate,
-            'post' => $this->post,
-        ]);
+        return $this->subject('Điều chỉnh thông tin ứng tuyển tại hệ thống Beecareer')
+            ->view('emails.note-cv', [
+                'content' => $this->content,
+                'candidate' => $this->candidate,
+                'post' => $this->post,
+            ]);
     }
 }
