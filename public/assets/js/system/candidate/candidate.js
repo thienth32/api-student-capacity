@@ -127,6 +127,29 @@ $(document).ready(function () {
 
         cb(start, end, (ranges = ""));
     });
+    $(document).on("click", ".print-excel", function (e) {
+        $.ajax({
+            type: 'GET',
+            url: 'admin/download-recruitment-list',
+            data: {},
+            xhrFields: {
+                responseType: 'blob'
+            },
+            success: function(response){
+                var blob = new Blob([response]);
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = "file.xlsx";
+                link.click();
+            },
+            error: function(blob){
+                console.log(blob);
+            }
+        })
+        // window.location =
+        //     "admin/download-recruitment-list";
+        // return false;
+    });
 
     function UpdateQueryString(key, value, url) {
         if (!url) url = window.location.href;

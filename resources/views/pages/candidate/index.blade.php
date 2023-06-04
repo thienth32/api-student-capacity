@@ -38,13 +38,12 @@
             </div>
 
         </div>
-        {{-- <div class=" col-lg-6">
-                <div class=" d-flex flex-row-reverse bd-highlight">
-
-                    <a href="{{ route('admin.recruitment.create') }}" class=" btn btn-primary">Tải CV lên
-        </a>
-    </div>
-</div> --}}
+        <div class=" col-lg-6">
+            <div class=" d-flex flex-row-reverse bd-highlight">
+                <button class="print-excel btn btn-primary">Download Danh sách
+                </button>
+            </div>
+        </div>
 </div>
 <div class="row card-format">
     <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">

@@ -52,5 +52,10 @@ class Enterprise extends Model
         return $this->belongsTo(Branch::class, 'user_id');
     }
 
+    public function posts()
+    {
+        return $this->hasMany(Post::class, 'enterprise_id');
+    }
+
     use HasFactory;
 }

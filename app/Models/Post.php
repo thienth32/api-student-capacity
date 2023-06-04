@@ -37,8 +37,12 @@ class Post extends Model
         'career_type',
         'major_id',
         'branch_id',
+        'enterprise_id',
+        'total',
+        'deadline',
     ];
     protected $casts = [
+        'deadline' => FormatDate::class,
         'created_at' => FormatDate::class,
         'updated_at' =>  FormatDate::class,
         'thumbnail_url' => FormatImageGet::class,
@@ -55,6 +59,11 @@ class Post extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function enterprise()
+    {
+        return $this->belongsTo(Enterprise::class, 'enterprise_id');
     }
 
     public function branch()

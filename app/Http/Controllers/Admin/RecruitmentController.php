@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\RecruitmentsExport;
 use App\Services\Traits\TUploadImage;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Recruitment\RequestsRecruitment;
@@ -18,7 +19,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Maatwebsite\Excel\Sheet;
+use Excel;
 
 class RecruitmentController extends Controller
 {
@@ -160,6 +161,11 @@ class RecruitmentController extends Controller
     {
         $data = $this->modulesRecruitment->find($id);
         return view('pages.recruitment.detailRecruitment', compact('data'));
+    }
+
+    public function downloadList()
+    {
+        return Excel::download(new RecruitmentsExport(), 'DS-du-lieu-viec-lam_' . time() . '.xlsx');
     }
 
     /**

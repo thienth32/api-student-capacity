@@ -10,13 +10,18 @@
 
 <body>
     <div class="container">
-        <h2> Xin chào , {{ $candidate->name }}</h2>
-        <p>{{$content}}</p>
-        <a href="{{ env('CLIENT_URL') }}/tin-tuc/{{$post->slug}}?name={{$candidate->name}}&student_code={{$candidate->student_code}}&email={{$candidate->email}}&phone={{$candidate->phone}}">
-            Cập nhật hồ sơ tại đây
-        </a>
+        <p>Xin chào, {{ $candidate->name }}</p>
         <br>
-        <h3>Chúc {{ $data->name }} Một ngày tốt lành .</h3>
+        <p>Cảm ơn bạn đã gửi thông tin ứng tuyển tại hệ thống Beecareer thuộc phòng Quan hệ doanh nghiệp trường Cao đẳng FPT Polytechnic.</p>
+        <p>Tuy nhiên thông tin ứng tuyển của bạn đang gặp vấn đề: {{$content}}</p>
+        <p>
+            Vui lòng cập nhật lại thông tin hồ sơ và CV
+            <a href="{{ env('CLIENT_URL') }}/tin-tuc/{{$post->slug}}?name={{$candidate->name}}&student_code={{$candidate->student_code}}&email={{$candidate->email}}&phone={{$candidate->phone}}">
+                 tại đây.
+            </a>
+        </p>
+        <br>
+        <p>Cảm ơn {{ $candidate->name }}!</p>
     </div>
 </body>
 
