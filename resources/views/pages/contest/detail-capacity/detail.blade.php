@@ -890,7 +890,6 @@
                             </div>
                             <div id="data-save"
                                 style="
-                                    position: absolute;
                                     left: 0;
                                     bottom: -5vh;
                                     right: 0;
