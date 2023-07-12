@@ -54,6 +54,10 @@ class Exam implements MExamInterface
             ->with(['user'])
             ->get();
     }
+    public function destroyResultCapacity($id)
+    {
+        return $this->resultCapacity::where('id', $id)->delete();
+    }
 
     public function getExamCapacityPlay($params = [], $with = [])
     {

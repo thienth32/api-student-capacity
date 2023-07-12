@@ -9,8 +9,10 @@ class ResultCapacity implements MResultCapacityInterface
 
     public function __construct(
         private ModelsResultCapacity $model
-    ) {
+    )
+    {
     }
+
     public function findByUserExam($user_id, $exam_id)
     {
         $data = $this->model::where('user_id', $user_id)
@@ -49,6 +51,10 @@ class ResultCapacity implements MResultCapacityInterface
         return $model->first();
     }
 
+    public function destroy($id)
+    {
+        return $this->model::whereId($id)->delete();
+    }
     // public function updateStatusEndRenderScores($data = [])
     // {
     //     $resultCapacity = $this->model::where("exam_id", $data['exam']->id)
