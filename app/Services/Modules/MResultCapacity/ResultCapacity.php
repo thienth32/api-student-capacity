@@ -51,10 +51,6 @@ class ResultCapacity implements MResultCapacityInterface
         return $model->first();
     }
 
-    public function destroy($id)
-    {
-        return $this->model::whereId($id)->delete();
-    }
     // public function updateStatusEndRenderScores($data = [])
     // {
     //     $resultCapacity = $this->model::where("exam_id", $data['exam']->id)
