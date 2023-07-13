@@ -15,9 +15,10 @@ class RecruitmentsByCandidateExport implements FromCollection, WithHeadings, Wit
     use RemembersRowNumber;
 
     private $row = 0;
+
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
         return Candidate::all();
@@ -31,6 +32,7 @@ class RecruitmentsByCandidateExport implements FromCollection, WithHeadings, Wit
             'row_number' => $currentRowNumber,
         ]);
     }
+
     public function title(): string
     {
         return 'DS SV ứng tuyển';
@@ -62,21 +64,21 @@ class RecruitmentsByCandidateExport implements FromCollection, WithHeadings, Wit
     {
         return [
             $data->row_number,
+            !empty($data->post->code_recruitment) ? $data->post->code_recruitment : '',
+            'Ngày ' . date('d', strtotime($data->created_at)),
+            'Tháng ' . date('m', strtotime($data->created_at)),
+            $data->student_code,
+            $data->name,
+            $data->email,
+            $data->phone,
+            !empty($data->post->major->name) ? $data->post->major->name : '',
+            !empty($data->post->position) ? $data->post->position : '',
+            !empty($data->post->enterprise->address) ? $data->post->enterprise->address : '',
             '',
+            !empty($data->post->note) ? $data->post->note : '',
             '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
+            !empty($data->candidateNotes) ? $data->candidateNotes->pluck('content')->join(' | ') : '',
+            !empty($data->post->user->name) ? $data->post->user->name : '',
         ];
     }
 }

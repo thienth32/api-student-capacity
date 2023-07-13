@@ -78,11 +78,11 @@ class RecruitmentsByPostExport implements FromCollection, WithHeadings, WithMapp
             $post->position,
             $post->total,
             $post->deadline,
-            $post->career_type,
+            $post->career_type == 0 ? 'Part-time' : 'Full-time',
             $post->career_source,
             $post->career_require,
-            '',
-            $post->user->name ?? ''
+            $post->note,
+            $post->user->name ?? '',
         ];
     }
 }
