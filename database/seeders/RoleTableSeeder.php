@@ -21,9 +21,11 @@ class RoleTableSeeder extends Seeder
         //     ['name' => 'member'],
         //     ['name' => 'judge'],
         // ];
+        // $roles = [
+        //     ['name' => 'teacher'],
+        // ];
         $roles = [
-            ['name' => 'teacher'],
-
+            ['name' => 'staff'],
         ];
         foreach ($roles as $r) {
             Role::create($r);

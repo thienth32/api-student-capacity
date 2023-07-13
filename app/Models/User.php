@@ -22,7 +22,8 @@ class User extends Authenticatable
         'email',
         'status',
         'avatar',
-        'mssv'
+        'mssv',
+        'branch_id'
     ];
 
     protected $hidden = [
@@ -73,5 +74,15 @@ class User extends Authenticatable
     public function wishlistContests()
     {
         return $this->hasMany(Wishlist::class, 'user_id');
+    }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'user_id');
+    }
+
+    public function candidateNotes()
+    {
+        return $this->hasMany(CandidateNote::class, 'user_id');
     }
 }

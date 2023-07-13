@@ -26,6 +26,9 @@
                     <div class="form-group mb-5">
                         <label class="form-label" for="">Thuộc các thành phần</label>
                         <div class="row col-12 m-auto">
+                            <button type="button"
+                                class="click-recruitment  btn {{ old('recruitment_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light">
+                                Tuyển dụng</button>
                             <button id="clickContset" type="button"
                                 class="mygroup btn  {{ old('contest_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light click-contest">
                                 Cuộc thi</button>
@@ -35,11 +38,6 @@
                             <button type="button"
                                 class="mygroup btn  {{ old('round_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light click-round">
                                 Vòng thi</button>
-                            <button type="button"
-                                class="click-recruitment  btn {{ old('recruitment_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light">
-                                Tuyển dụng</button>
-
-
                         </div>
                         <br>
                         <div class="col-12 pb-2">
@@ -94,21 +92,30 @@
                                 </div>
                                 <br>
                             </div>
-                            <div style="{{ old('recruitment_id') ? '' : 'display:none' }}" id="recruitment">
-                                <div class="form-group mb-10">
-                                    <label for="" class="form-label">Tuyển dụng</label>
+                            <div style="{{ old('recruitment_id') ? '' : 'display:none' }}" id="recruitment" class="row">
+                                <div class="form-group mb-10 col-xl-6 col-12">
+                                    <label for="" class="form-label">Thuộc đợt tuyển dụng</label>
                                     <select name="recruitment_id" class="form-select form-major" data-control="select2"
-                                        data-placeholder="Chọn cuộc thi ">
-                                        <option value="0">Chọn tuyển dụng</option>
+                                        data-placeholder="Chọn đợt tuyển dụng ">
+                                        <option value="0">Không thuộc đợt tuyển dụng nào</option>
                                         @foreach ($recruitments as $item)
                                             <option @selected(old('recruitment_id') == $item->id) value="{{ $item->id }}">
                                                 {{ $item->name }}
                                             </option>
                                         @endforeach
                                     </select>
-
                                 </div>
-
+                                <div class="form-group mb-10 col-xl-6 col-12">
+                                    <label for="" class="form-label">Bài đăng thuộc cơ sở</label>
+                                    <select name="branch_id" class="form-select form-major" data-control="select2"
+                                        data-placeholder="Chọn cơ sở đăng bài">
+                                        @foreach ($branches as $branch)
+                                            <option @selected(old('branch_id') ? old('branch_id') == $branch->id : auth()->user()->branch_id == $branch->id) value="{{ $branch->id }}">
+                                                {{ $branch->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                             <div class="form-group mb-10">
                                 <label class="form-label" for="">Mã tuyển dụng ( Áp dụng với bài viết tuyển
@@ -204,7 +211,7 @@
         const oldCapacity = @json(old('capacity_id'));
         $(document).ready(function() {
             if (oldRound == null || oldRecruitment == null || oldCapacity == null) {
-                $(".click-contest").click();
+                $(".click-recruitment").click();
             }
             if (oldRound != null) {
                 $("#select-contest-p").change();

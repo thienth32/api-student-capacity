@@ -14,6 +14,7 @@ use App\Models\Enterprise;
 use App\Models\Recruitment;
 use App\Models\Round;
 use App\Models\User;
+use App\Models\Branch;
 use App\Services\Modules\MPost\Post as MPostPost;
 use App\Services\Traits\TStatus;
 use Illuminate\Support\Facades\Redirect;
@@ -35,6 +36,7 @@ class PostController extends Controller
         private Enterprise $enterprise,
         private Recruitment $recruitment,
         private Round $round,
+        private Branch $branches,
         private DB $db,
         private Storage $storage
     ) {
@@ -47,9 +49,10 @@ class PostController extends Controller
 
         $contest = $this->contest::where('type', 0)->get();
         $capacity = $this->contest::where('type', 1)->get();
-        $recruitments = $this->recruitment::all();
-        $rounds = $this->round::all();
+        $recruitments = $this->recruitment::select('id', 'name')->get();
+        $rounds = $this->round::select('id', 'name')->get();
         $posts = $this->modulesPost->index($request);
+        $branches = $this->branches::select('id', 'name')->get();
 
         return view('pages.post.index', [
             'posts' => $posts,
@@ -57,7 +60,8 @@ class PostController extends Controller
             'capacity' => $capacity,
             'recruitments' => $recruitments,
             'rounds' => $rounds,
-            'round' => $round
+            'round' => $round,
+            'branches' => $branches,
         ]);
     }
 
@@ -80,6 +84,7 @@ class PostController extends Controller
             // dd($users);
             $recruitments = $this->recruitment::all(['id', 'name']);
             $rounds = $this->round::all(['id', 'name', 'contest_id']);
+            $branches = $this->branches::select('id', 'name')->get();
             $this->db::commit();
             return view(
                 'pages.post.form-add',
@@ -88,7 +93,8 @@ class PostController extends Controller
                     'contest' => $contest,
                     'recruitments' => $recruitments,
                     'rounds' => $rounds,
-                    'users' => $users
+                    'users' => $users,
+                    'branches' => $branches,
                 ]
             );
         } catch (\Throwable $th) {
@@ -106,6 +112,7 @@ class PostController extends Controller
             $users = $this->user::all(['id', 'name', 'email']);
             $recruitments = $this->recruitment::all(['id', 'name']);
             $rounds = $this->round::all(['id', 'name', 'contest_id']);
+            $branches = $this->branches::select('id', 'name')->get();
             $this->db::commit();
             return view(
                 'pages.post.form-add-outside',
@@ -115,7 +122,8 @@ class PostController extends Controller
                     'recruitments' => $recruitments,
                     'rounds' => $rounds,
                     'capacity' => $capacity,
-                    'users' => $users
+                    'users' => $users,
+                    'branches' => $branches,
                 ]
             );
         } catch (\Throwable $th) {
@@ -160,6 +168,7 @@ class PostController extends Controller
         $users = $this->user::all(['id', 'name', 'email']);
         $recruitments = $this->recruitment::all(['id', 'name']);
         $post = $this->modulesPost->getList($request)->where('slug', $slug)->first();
+        $branches = $this->branches::select('id', 'name')->get();
         $post->load(['postable' => function ($q) {
             $q->select('id', 'name');
         }]);
@@ -174,8 +183,8 @@ class PostController extends Controller
             'contest' => $contest,
             'capacity' => $capacity,
             'rounds' => $this->round::all(['id', 'name', 'contest_id']),
-            'users' => $users
-
+            'users' => $users,
+            'branches' => $branches,
         ]);
     }
     public function update(RequestsPost $request, $id)
@@ -315,7 +324,7 @@ class PostController extends Controller
         $data = $this->modulesPost
                 ->getList($request)
                 ->where('published_at','<=',now())
-                ->paginate(request('limit') ?? 6);
+                ->paginate(request('limit') ?? 10);
         $data->load(
             [
                 'postable:id,name',
