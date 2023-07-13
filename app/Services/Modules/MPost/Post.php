@@ -17,15 +17,17 @@ use function GuzzleHttp\Promise\all;
 class Post
 {
     use TUploadImage;
+
     public function __construct(
 
-        private Contest $contest,
-        private ModelsPost $post,
-        private Enterprise $enterprise,
+        private Contest     $contest,
+        private ModelsPost  $post,
+        private Enterprise  $enterprise,
         private Recruitment $recruitment,
-        private Round $round,
-        private Keyword $keyword,
-    ) {
+        private Round       $round,
+        private Keyword     $keyword,
+    )
+    {
     }
 
     public function getList(Request $request)
@@ -42,8 +44,8 @@ class Post
         $startTime = $request->has('startTime') ? $request->startTime : null;
         $endTime = $request->has('endTime') ? $request->endTime : null;
         $sortBy = $request->has('sortBy') ? $request->sortBy : "desc";
-        $postHot =  $request->has('postHot') ? $request->postHot : null;
-        $branch_id =  $request->has('branch_id') ? $request->branch_id : null;
+        $postHot = $request->has('postHot') ? $request->postHot : null;
+        $branch_id = $request->has('branch_id') ? $request->branch_id : null;
         $softDelete = $request->has('post_soft_delete') ? $request->post_soft_delete : null;
         if ($softDelete != null) {
             $query = $this->post::onlyTrashed()->where('title', 'like', "%$keyword%")->orderByDesc('deleted_at');
@@ -107,10 +109,12 @@ class Post
 
         return $query;
     }
+
     public function index(Request $request)
     {
         return $this->getList($request)->with(['postable:id,name'])->paginate(request('limit') ?? config('util.HOMEPAGE_ITEM_AMOUNT'));
     }
+
     private function loadAble($query, $post = null)
     {
         if ($post == config('util.post-contest')) {
@@ -123,10 +127,12 @@ class Post
             $query->where('postable_type', $this->recruitment::class);
         }
     }
+
     public function find($id)
     {
         return $this->post::find($id);
     }
+
     public function store($request)
     {
         $data = [
@@ -137,12 +143,25 @@ class Post
             'slug' => $request->slug,
             'link_to' => $request->link_to ? $request->link_to : null,
             'code_recruitment' => $request->code_recruitment ? $request->code_recruitment : null,
-            'user_id' => $request->user_id != 0 ?  $request->user_id : auth()->user()->id,
+            'user_id' => $request->user_id != 0 ? $request->user_id : auth()->user()->id,
             'branch_id' => $request->branch_id ?? 0,
+            'contact_name' => $request->contact_name != 0 ? $request->contact_name : null,
+            'contact_phone' => $request->contact_phone != 0 ? $request->contact_phone : null,
+            'contact_email' => $request->contact_email != 0 ? $request->contact_email : null,
+            'career_source' => $request->career_source != 0 ? $request->career_source : null,
+            'career_require' => $request->career_require != 0 ? $request->career_require : null,
+            'position' => $request->position != 0 ? $request->position : null,
+            'career_type' => $request->career_type != 0 ? $request->career_type : null,
+            'major_id' => $request->major_id != 0 ? $request->major_id : null,
+            'branch_id' => $request->branch_id != 0 ? $request->branch_id : null,
+            'enterprise_id' => $request->enterprise_id != 0 ? $request->enterprise_id : null,
+            'total' => $request->total != 0 ? $request->total : null,
+            'deadline' => $request->deadline != 0 ? $request->deadline : null,
+            'note' => $request->note != 0 ? $request->note : null,
         ];
 
         if ($request->has('thumbnail_url')) {
-            $fileImage =  $request->file('thumbnail_url');
+            $fileImage = $request->file('thumbnail_url');
             $image = $this->uploadFile($fileImage);
             $data['thumbnail_url'] = $image;
         }
@@ -162,6 +181,7 @@ class Post
             $dataRound->posts()->create($data);
         }
     }
+
     public function update($request, $id)
     {
         $post = $this->post::find($id);
@@ -173,14 +193,28 @@ class Post
         $post->slug = $request->slug;
         $post->published_at = $request->published_at;
         $post->description = $request->description;
-        $post->content = $request->content ?  $request->content : null;
-        $post->link_to = $request->link_to ?  $request->link_to : null;
+        $post->content = $request->content ? $request->content : null;
+        $post->link_to = $request->link_to ? $request->link_to : null;
         $post->code_recruitment = $request->code_recruitment ? $request->code_recruitment : null;
         $post->user_id = $request->user_id != 0 ? $request->user_id : auth()->user()->id;
+        $post->branch_id = $request->branch_id ?? 0;
+        $post->contact_name = $request->contact_name != 0 ? $request->contact_name : null;
+        $post->contact_phone = $request->contact_phone != 0 ? $request->contact_phone : null;
+        $post->contact_email = $request->contact_email != 0 ? $request->contact_email : null;
+        $post->career_source = $request->career_source != 0 ? $request->career_source : null;
+        $post->career_require = $request->career_require != 0 ? $request->career_require : null;
+        $post->position = $request->position != 0 ? $request->position : null;
+        $post->career_type = $request->career_type != 0 ? $request->career_type : null;
+        $post->major_id = $request->major_id != 0 ? $request->major_id : null;
+        $post->branch_id = $request->branch_id != 0 ? $request->branch_id : null;
+        $post->enterprise_id = $request->enterprise_id != 0 ? $request->enterprise_id : null;
+        $post->total = $request->total != 0 ? $request->total : null;
+        $post->deadline = $request->deadline != 0 ? $request->deadline : null;
+        $post->note = $request->note != 0 ? $request->note : null;
 
         if ($request->has('thumbnail_url')) {
-            $fileImage =  $request->file('thumbnail_url');
-            $image = $this->uploadFile($fileImage,  $post->thumbnail_url);
+            $fileImage = $request->file('thumbnail_url');
+            $image = $this->uploadFile($fileImage, $post->thumbnail_url);
             $post->thumbnail_url = $image;
         }
         if ($request->contest_id != 0) {

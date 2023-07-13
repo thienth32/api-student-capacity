@@ -1,48 +1,48 @@
 @extends('layouts.main')
-@section('title', 'Thêm bài viết bên ngoài trang')
-@section('page-title', 'Thêm bài viết bên ngoài trang')
+@section('title', 'Thêm bài viết')
+@section('page-title', 'Thêm bài viết')
 @section('content')
-
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-flush h-lg-100 p-10">
-                <form id="formPost" action="{{ route('admin.post.store') }}" method="post" enctype="multipart/form-data">
+                <form id="formPost" action="{{ route('admin.post.store') }}" method="post"
+                      enctype="multipart/form-data">
                     @csrf
-
                     <div class="form-group mb-10">
                         <label class="form-label" for="">Tiêu đề bài viết</label>
                         <input type="text" name="title" value="{{ old('title') }}" class="name-sl form-control"
-                            placeholder="">
+                               placeholder="">
                         @error('title')
-                            <p id="checkname" class="text-danger">{{ $message }}</p>
+                        <p id="checkname" class="text-danger">{{ $message }}</p>
                         @enderror
                     </div>
                     <div class="form-group mb-5">
                         <label class="form-label" for="">Slug bài viết</label>
                         <input type="text" name="slug" value="{{ old('slug') }}" class="slug-sl form-control"
-                            placeholder="">
+                               placeholder="">
                         @error('slug')
-                            <p id="checkslug" class="text-danger">{{ $message }}</p>
+                        <p id="checkslug" class="text-danger">{{ $message }}</p>
                         @enderror
                     </div>
                     <div class="form-group mb-5">
                         <label class="form-label" for="">Thuộc các thành phần</label>
                         <div class="row col-12 m-auto">
                             <button type="button"
-                                class="click-recruitment  btn {{ old('recruitment_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light">
-                                Tuyển dụng</button>
-
+                                    class="click-recruitment  btn {{ old('recruitment_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light">
+                                Tuyển dụng
+                            </button>
                             <button id="clickContset" type="button"
-                                class="mygroup btn  {{ old('contest_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light click-contest">
-                                Cuộc thi</button>
+                                    class="mygroup btn  {{ old('contest_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light click-contest">
+                                Cuộc thi
+                            </button>
                             <button type="button"
-                                class="click-capacity  btn {{ old('capacity_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light">
-                                Bài Test</button>
+                                    class="click-capacity  btn {{ old('capacity_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light">
+                                Bài Test
+                            </button>
                             <button type="button"
-                                class="mygroup btn  {{ old('round_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light click-round">
-                                Vòng thi</button>
-
-
+                                    class="mygroup btn  {{ old('round_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light click-round">
+                                Vòng thi
+                            </button>
                         </div>
                         <br>
                         <div class="col-12 pb-2">
@@ -50,7 +50,7 @@
                                 <div class="form-group mb-10">
                                     <label for="" class="form-label">Cuộc thi</label>
                                     <select name="contest_id" class="form-select form-major" data-control="select2"
-                                        data-placeholder="Chọn cuộc thi ">
+                                            data-placeholder="Chọn cuộc thi ">
                                         <option value="0">Chọn cuộc thi</option>
                                         @foreach ($contest as $item)
                                             <option @selected(old('contest_id') == $item->id) value="{{ $item->id }}">
@@ -58,15 +58,13 @@
                                             </option>
                                         @endforeach
                                     </select>
-
                                 </div>
-
                             </div>
                             <div style="{{ old('capacity_id') ? '' : 'display:none' }}" id="capacity">
                                 <div class="form-group mb-10">
                                     <label for="" class="form-label">Bài test</label>
                                     <select name="capacity_id" class="form-select form-major" data-control="select2"
-                                        data-placeholder="Chọn  bài test ">
+                                            data-placeholder="Chọn  bài test ">
                                         <option value="0">Chọn bài test</option>
                                         @foreach ($capacity as $item)
                                             <option @selected(old('capacity_id') == $item->id) value="{{ $item->id }}">
@@ -81,7 +79,7 @@
                             <div style="{{ old('round_id') ? '' : 'display:none' }}" id="round">
                                 <label class="form-label">Cuộc thi </label>
                                 <select id="select-contest-p" name="contestRound" class="form-select form-contest "
-                                    data-control="select2" data-placeholder="Chọn cuộc thi ">
+                                        data-control="select2" data-placeholder="Chọn cuộc thi ">
                                     <option value="">Chọn cuộc thi</option>
                                     @foreach ($contest as $item)
                                         <option @selected(old('contestRound') == $item->id) value="{{ $item->id }}">
@@ -92,44 +90,126 @@
                                 <div>
                                     <label class="form-label">Vòng thi </label>
                                     <select id="select-round" name="round_id" class="form-select form-round "
-                                        data-control="select2" data-placeholder="Chọn vòng thi ">
+                                            data-control="select2" data-placeholder="Chọn vòng thi ">
                                         <option value="0" disable>Không có vòng thi nào ! Hãy chọn cuộc thi
                                         </option>
                                     </select>
                                 </div>
-
+                                <br>
                             </div>
                             <div style="{{ old('recruitment_id') ? '' : 'display:none' }}" id="recruitment" class="row">
                                 <div class="form-group mb-10 col-xl-6 col-12">
                                     <label for="" class="form-label">Thuộc đợt tuyển dụng</label>
                                     <select name="recruitment_id" class="form-select form-major" data-control="select2"
-                                        data-placeholder="Chọn đợt tuyển dụng ">
+                                            data-placeholder="Chọn đợt tuyển dụng ">
                                         <option value="0">Không thuộc đợt tuyển dụng nào</option>
                                         @foreach ($recruitments as $item)
-                                            <option @selected(old('recruitment_id') == $item->id) value="{{ $item->id }}">
+                                            <option
+                                                @selected(old('recruitment_id') == $item->id) value="{{ $item->id }}">
                                                 {{ $item->name }}
                                             </option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group mb-10 col-xl-6 col-12">
+                                    <label for="" class="form-label">Doanh nghiệp</label>
+                                    <select name="enterprise_id" class="form-select form-major" data-control="select2"
+                                            data-placeholder="Chọn doanh nghiệp">
+                                        <option value="0">Chọn doanh nghiệp</option>
+                                        @foreach ($enterprises as $enterprise)
+                                            <option
+                                                @selected(old('enterprise_id') ? old('enterprise_id') == $enterprise->id : auth()->user()->enterprise_id == $enterprise->id) value="{{ $enterprise->id }}">
+                                                {{ $enterprise->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group mb-10 col-xl-3 col-12">
+                                    <label for="" class="form-label">Chuyên ngành</label>
+                                    <select name="major_id" class="form-select form-major" data-control="select2"
+                                            data-placeholder="Chọn chuyên ngành">
+                                        <option value="0">Chọn chuyên ngành</option>
+                                        @foreach ($majors as $major)
+                                            <option
+                                                @selected(old('major') ? old('major') == $major->id : auth()->user()->major_id == $major->id) value="{{ $major->id }}">
+                                                {{ $major->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group mb-10 col-xl-3 col-12">
+                                    <label for="" class="form-label">Vị trí</label>
+                                    <input type="text" class="form-control" name="position"
+                                           value="{{ old('position') }}">
+                                </div>
+                                <div class="form-group mb-10 col-xl-3 col-12">
+                                    <label for="" class="form-label">Số lượng</label>
+                                    <input type="text" class="form-control" name="total" value="{{ old('total') }}">
+                                </div>
+                                <div class="form-group mb-10 col-xl-3 col-12">
+                                    <label for="" class="form-label">Yêu cầu kinh nghiệm</label>
+                                    <input type="text" class="form-control" name="career_require"
+                                           value="{{ old('career_require') }}">
+                                </div>
+                                <div class="form-group mb-10 col-xl-3 col-6">
                                     <label for="" class="form-label">Bài đăng thuộc cơ sở</label>
                                     <select name="branch_id" class="form-select form-major" data-control="select2"
-                                        data-placeholder="Chọn cơ sở đăng bài">
+                                            data-placeholder="Chọn cơ sở đăng bài">
                                         @foreach ($branches as $branch)
-                                            <option @selected(old('branch_id') ? old('branch_id') == $branch->id : auth()->user()->branch_id == $branch->id) value="{{ $branch->id }}">
+                                            <option
+                                                @selected(old('branch_id') ? old('branch_id') == $branch->id : auth()->user()->branch_id == $branch->id) value="{{ $branch->id }}">
                                                 {{ $branch->name }}
                                             </option>
                                         @endforeach
                                     </select>
                                 </div>
+                                <div class="form-group mb-10 col-xl-3 col-6">
+                                    <label for="" class="form-label">Người liên hệ</label>
+                                    <input type="text" class="form-control" name="contact_name"
+                                           value="{{ old('contact_name') }}">
+                                </div>
+                                <div class="form-group mb-10 col-xl-3 col-6">
+                                    <label for="" class="form-label">SĐT liên hệ</label>
+                                    <input type="text" class="form-control" name="contact_phone"
+                                           value="{{ old('contact_phone') }}">
+                                </div>
+                                <div class="form-group mb-10 col-xl-3 col-6">
+                                    <label for="" class="form-label">Email liên hệ</label>
+                                    <input type="text" class="form-control" name="contact_email"
+                                           value="{{ old('contact_email') }}">
+                                </div>
+                                <div class="form-group mb-10 col-xl-4 col-12">
+                                    <label for="" class="form-label">Hình thức</label>
+                                    <select name="career_type" id="" class="form-select form-major"
+                                            data-control="select2">
+                                        <option value="">Hình thức</option>
+                                        <option value="0" @selected(old('career_type') == 0)>Part-time</option>
+                                        <option value="1" @selected(old('career_type') == 1)>Full-time</option>
+                                    </select>
+                                </div>
+                                <div class="form-group mb-10 col-xl-4 col-12">
+                                    <label for="" class="form-label">Thời hạn tuyển dụng</label>
+                                    <input type="datetime-local" class="form-control" name="deadline"
+                                           value="{{ old('deadline') }}">
+                                </div>
+                                <div class="form-group mb-10 col-xl-4 col-12">
+                                    <label for="" class="form-label">Nguồn</label>
+                                    <input type="text" class="form-control" name="career_source"
+                                           value="{{ old('career_source') }}">
+                                </div>
+                                <div class="form-group mb-10 col-xl-12 col-12">
+                                    <label for="" class="form-label">Ghi chú</label>
+                                    <textarea name="note" class="form-control" id="" cols="30"
+                                              rows="3">{{ old('note') }}</textarea>
+                                </div>
                             </div>
                             <div class="form-group mb-10">
-                                <label class="form-label" for="">Mã tuyển dụng</label>
+                                <label class="form-label" for="">Mã tuyển dụng ( Áp dụng với bài viết tuyển
+                                    dụng ) </label>
                                 <input type="text" name="code_recruitment" value="{{ old('code_recruitment') }}"
-                                    class="form-control" placeholder="">
+                                       class="form-control" placeholder="">
                                 @error('code_recruitment')
-                                    <p class="text-danger">{{ $message }}</p>
+                                <p class="text-danger">{{ $message }}</p>
                                 @enderror
                             </div>
                         </div>
@@ -140,12 +220,12 @@
                             <div class="form-group mb-10">
                                 <label for="" class="form-label">Tác giả bài viết</label>
                                 <select placeholder="Chọn" class="form-select mb-2 select2-hidden-accessible"
-                                    data-control="select2" data-hide-search="false" tabindex="-1" aria-hidden="true"
-                                    name="user_id" value="{{ old('user_id') }}">
+                                        data-control="select2" data-hide-search="false" tabindex="-1" aria-hidden="true"
+                                        name="user_id" value="{{ old('user_id') }}">
                                     <option value="0">Chọn tác giả</option>
                                     @foreach ($users as $user)
                                         <option {{ old('user_id') == $user->id ? 'selected' : '' }}
-                                            value="{{ $user->id }}">
+                                                value="{{ $user->id }}">
                                             {{ $user->name }}&nbsp;
                                             <small class="badge bg-success">( {{ $user->email }} )</small>
                                         </option>
@@ -153,55 +233,49 @@
                                 </select>
 
 
-
                             </div>
                             <div class="form-group mb-10">
                                 <label class="form-label" for="">Thời gian xuất bản</label>
                                 <input id="begin" max="" type="datetime-local"
-                                    value="{{ old('published_at') }}" name="published_at" class="form-control "
-                                    placeholder="">
+                                       value="{{ old('published_at') }}" name="published_at" class="form-control "
+                                       placeholder="">
                                 @error('published_at')
-                                    <p class="text-danger">{{ $message }}</p>
+                                <p class="text-danger">{{ $message }}</p>
                                 @enderror
-
                             </div>
-
                             <div class="form-group mb-10">
                                 <label class="form-label" for="">Mô tả ngắn bài viết</label>
-                                <textarea class="form-control" name="description" id="kt_docs_ckeditor_classic" rows="3">{{ old('description') }}</textarea>
+                                <textarea class="form-control" name="description" id="kt_docs_ckeditor_classic"
+                                          rows="3">{{ old('description') }}</textarea>
                                 @error('description')
-                                    <p class="text-danger">{{ $message }}</p>
+                                <p class="text-danger">{{ $message }}</p>
                                 @enderror
                             </div>
-
-
                         </div>
                         <div class="col-4">
                             <div class="form-group ">
                                 <label for="" class="form-label">Ảnh đại diện bài viết</label>
                                 <input name="thumbnail_url" type='file' id="file-input" accept=".png, .jpg, .jpeg"
-                                    class="form-control" />
+                                       class="form-control"/>
                                 <img class="w-100 mt-4 border rounded-3" id="image-preview"
-                                    src="https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg" />
-
+                                     src="https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg"/>
                             </div>
                             @error('thumbnail_url')
-                                <p class="text-danger">{{ $message }}</p>
+                            <p class="text-danger">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>
                     <div class="form-group mb-10">
-                        <label class="form-label" for="">link bài viết bên ngoài trang</label>
-                        <input type="text" name="link_to" value="{{ old('link_to') }}" class="form-control"
-                            placeholder="">
-                        @error('link_to')
-                            <p class="text-danger">{{ $message }}</p>
+                        <label class="form-label" for="">Nội dung bài viết</label>
+                        <textarea class="form-control" name="content" id="kt_docs_ckeditor_classic2"
+                                  rows="3">{{ old('content') }}</textarea>
+                        @error('content')
+                        <p class="text-danger">{{ $message }}</p>
                         @enderror
                     </div>
-
                     <div class="form-group mb-10 ">
                         <button type="submit" name="" id=""
-                            class="btn btn-success btn-lg btn-block">Lưu
+                                class="btn btn-success btn-lg btn-block">Lưu
                         </button>
                     </div>
                 </form>
@@ -222,13 +296,34 @@
         const oldRound = @json(old('round_id'));
         const oldRecruitment = @json(old('recruitment_id'));
         const oldCapacity = @json(old('capacity_id'));
-        $(document).ready(function() {
+        const recruitments = @json($recruitments);
+        let enterprises = @json($enterprises);
+        $(document).ready(function () {
+            const recruitmentSelect = $('select[name="recruitment_id"]');
+            const enterpriseSelect = $('select[name="enterprise_id"]');
             if (oldRound == null || oldRecruitment == null || oldCapacity == null) {
                 $(".click-recruitment").click();
             }
             if (oldRound != null) {
                 $("#select-contest-p").change();
             }
+            recruitmentSelect.change(e => {
+                let recruitment_id = e.target.value;
+                const recruitment = recruitments.find(e => e.id == recruitment_id);
+                const newEnterprises = enterprises.filter(e => recruitment.enterprises_id.includes(e.id));
+                enterpriseSelect.empty();
+                enterpriseSelect.append($('<option>', {
+                    value: '0',
+                    text: 'Chọn doanh nghiệp'
+                }));
+                newEnterprises.forEach(enterprise => {
+                    enterpriseSelect.append($('<option>', {
+                        value: enterprise.id,
+                        text: enterprise.name
+                    }))
+                })
+                enterpriseSelect.trigger('change.select2');
+            })
 
         });
         rules.thumbnail_url = {
