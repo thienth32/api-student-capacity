@@ -398,8 +398,11 @@
                             </th>
                             <th scope="col">link ngoài
                             </th>
+                            <th scope="col">Lượt xem
+                            </th>
                             <th scope="col">Nội dung
                             </th>
+
 
                             <th class="text-center" colspan="2">
 
@@ -500,6 +503,9 @@
                                     @if ($key->link_to != null)
                                         <a href="{{ $key->link_to }}" class="btn  btn-primary btn-sm">Xem</a>
                                     @endif
+                                </td>
+                                <td>
+                                    {{ $key->view }}
                                 </td>
                                 <td>
                                     <button class="btn  btn-primary btn-sm" type="button" data-bs-toggle="modal"

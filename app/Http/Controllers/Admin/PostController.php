@@ -346,6 +346,14 @@ class PostController extends Controller
      *     @OA\Response(response="404", description="{ status: false , message : 'Not found' }")
      * )
      */
+
+    public function view(Request $request){
+        $data = $this->modulesPost->updateView($request->id,$request->view);
+        return $this->responseApi(
+            true,
+            $data
+        );
+    }
     public function apiDetail($slug)
     {
         $data = $this->post::where('slug', $slug)->first();
