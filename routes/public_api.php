@@ -76,6 +76,7 @@ Route::prefix('exam')->group(function () {
     Route::get('get-by-round/{id}', [ExamController::class, 'get_by_round'])->name('exam.api.get.round');
     Route::get('get-question-by-exam/{id}', [ExamController::class, 'showQuestionAnswerExams'])->name('exam.api.get.questions.exam');
     Route::get('get-history/{id}', [ExamController::class, 'getHistory']);
+    Route::delete('delete-history/{id}', [ExamController::class, 'deleteHistory'])->name('exam.api.delete.history.exam');
 });
 
 Route::prefix('questions')->group(function () {

@@ -143,6 +143,46 @@
                                     </select>
                                 </div>
                                 <div class="form-group mb-10 col-xl-6 col-12">
+                                    <label for="" class="form-label">Doanh nghiệp</label>
+                                    <select name="enterprise_id" class="form-select form-major" data-control="select2"
+                                            data-placeholder="Chọn doanh nghiệp">
+                                        <option value="0">Chọn doanh nghiệp</option>
+                                        @foreach ($enterprises as $enterprise)
+                                            <option
+                                                @selected(old('enterprise_id') ? old('enterprise_id') == $enterprise->id : $post->enterprise_id == $enterprise->id) value="{{ $enterprise->id }}">
+                                                {{ $enterprise->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group mb-10 col-xl-3 col-12">
+                                    <label for="" class="form-label">Chuyên ngành</label>
+                                    <select name="major_id" class="form-select form-major" data-control="select2"
+                                            data-placeholder="Chọn chuyên ngành">
+                                        <option value="0">Chọn chuyên ngành</option>
+                                        @foreach ($majors as $major)
+                                            <option
+                                                @selected(old('major') ? old('major') == $major->id : $post->major_id == $major->id) value="{{ $major->id }}">
+                                                {{ $major->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group mb-10 col-xl-3 col-12">
+                                    <label for="" class="form-label">Vị trí</label>
+                                    <input type="text" class="form-control" name="position"
+                                           value="{{ old('position') ?? $post->position }}">
+                                </div>
+                                <div class="form-group mb-10 col-xl-3 col-12">
+                                    <label for="" class="form-label">Số lượng</label>
+                                    <input type="text" class="form-control" name="total" value="{{ old('total') ?? $post->total }}">
+                                </div>
+                                <div class="form-group mb-10 col-xl-3 col-12">
+                                    <label for="" class="form-label">Yêu cầu kinh nghiệm</label>
+                                    <input type="text" class="form-control" name="career_require"
+                                           value="{{ old('career_require') ?? $post->career_require }}">
+                                </div>
+                                <div class="form-group mb-10 col-xl-3 col-6">
                                     <label for="" class="form-label">Bài đăng thuộc cơ sở</label>
                                     <select name="branch_id" class="form-select form-major" data-control="select2"
                                         data-placeholder="Chọn cơ sở đăng bài">
@@ -153,6 +193,45 @@
                                             </option>
                                         @endforeach
                                     </select>
+                                </div>
+                                <div class="form-group mb-10 col-xl-3 col-6">
+                                    <label for="" class="form-label">Người liên hệ</label>
+                                    <input type="text" class="form-control" name="contact_name"
+                                           value="{{ old('contact_name') ?? $post->contact_name }}">
+                                </div>
+                                <div class="form-group mb-10 col-xl-3 col-6">
+                                    <label for="" class="form-label">SĐT liên hệ</label>
+                                    <input type="text" class="form-control" name="contact_phone"
+                                           value="{{ old('contact_phone') ?? $post->contact_phone }}">
+                                </div>
+                                <div class="form-group mb-10 col-xl-3 col-6">
+                                    <label for="" class="form-label">Email liên hệ</label>
+                                    <input type="text" class="form-control" name="contact_email"
+                                           value="{{ old('contact_email') ?? $post->contact_email }}">
+                                </div>
+                                <div class="form-group mb-10 col-xl-4 col-12">
+                                    <label for="" class="form-label">Hình thức</label>
+                                    <select name="career_type" id="" class="form-select form-major"
+                                            data-control="select2">
+                                        <option value="">Hình thức</option>
+                                        <option value="0" @selected(old('career_type') == 0 || $post->career_type == 0)>Part-time</option>
+                                        <option value="1" @selected(old('career_type') == 1 || $post->career_type == 1)>Full-time</option>
+                                    </select>
+                                </div>
+                                <div class="form-group mb-10 col-xl-4 col-12">
+                                    <label for="" class="form-label">Thời hạn tuyển dụng</label>
+                                    <input type="datetime-local" class="form-control" name="deadline"
+                                           value="{{ old('deadline') ?? $post->deadline }}">
+                                </div>
+                                <div class="form-group mb-10 col-xl-4 col-12">
+                                    <label for="" class="form-label">Nguồn</label>
+                                    <input type="text" class="form-control" name="career_source"
+                                           value="{{ old('career_source') ?? $post->career_source }}">
+                                </div>
+                                <div class="form-group mb-10 col-xl-12 col-12">
+                                    <label for="" class="form-label">Ghi chú</label>
+                                    <textarea name="note" class="form-control" id="" cols="30"
+                                              rows="3">{{ old('note') ?? $post->note }}</textarea>
                                 </div>
                             </div>
                             <div class="form-group mb-10">
@@ -270,6 +349,45 @@
         dateAfter('input[type=datetime-local]#begin', 'input[type=datetime-local]#end')
         const oldRound = @json(old('round_id'));
         const rounds = @json($rounds);
+        const recruitments = @json($recruitments);
+        let enterprises = @json($enterprises);
+
+        $(document).ready(function () {
+            const recruitmentSelect = $('select[name="recruitment_id"]');
+            const enterpriseSelect = $('select[name="enterprise_id"]');
+            let recruitment_id = recruitmentSelect.val();
+            let recruitment = recruitments.find(e => e.id == recruitment_id);
+            let newEnterprises = enterprises.filter(e => recruitment.enterprises_id.includes(e.id));
+            enterpriseSelect.empty();
+            enterpriseSelect.append($('<option>', {
+                value: '0',
+                text: 'Chọn doanh nghiệp'
+            }));
+            newEnterprises.forEach(enterprise => {
+                enterpriseSelect.append($('<option>', {
+                    value: enterprise.id,
+                    text: enterprise.name
+                }))
+            })
+            enterpriseSelect.trigger('change.select2');
+            recruitmentSelect.change(e => {
+                recruitment_id = e.target.value;
+                recruitment = recruitments.find(e => e.id == recruitment_id);
+                newEnterprises = enterprises.filter(e => recruitment.enterprises_id.includes(e.id));
+                enterpriseSelect.empty();
+                enterpriseSelect.append($('<option>', {
+                    value: '0',
+                    text: 'Chọn doanh nghiệp'
+                }));
+                newEnterprises.forEach(enterprise => {
+                    enterpriseSelect.append($('<option>', {
+                        value: enterprise.id,
+                        text: enterprise.name
+                    }))
+                })
+                enterpriseSelect.trigger('change.select2');
+            })
+        });
     </script>
     <script src="assets/js/system/validate/validate.js"></script>
 @endsection

@@ -40,6 +40,7 @@ class Post extends Model
         'enterprise_id',
         'total',
         'deadline',
+        'note',
     ];
     protected $casts = [
         'deadline' => FormatDate::class,

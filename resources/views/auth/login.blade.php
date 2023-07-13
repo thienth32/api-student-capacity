@@ -64,6 +64,7 @@
                             <!--end::Google link-->
                         </div>
                         <!--end::Actions-->
+{{--                        <p>{{$user}}</p>--}}
                     </form>
                     <!--end::Form-->
                 </div>

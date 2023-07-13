@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Major;
 use App\Models\Post;
 use App\Services\Traits\TResponse;
 use App\Services\Traits\TUploadImage;
@@ -27,20 +28,24 @@ class PostController extends Controller
 {
     use TUploadImage;
     use TResponse, TStatus;
+
     public function __construct(
 
-        private Contest $contest,
-        private Post $post,
-        private MPostPost $modulesPost,
-        private User $user,
-        private Enterprise $enterprise,
+        private Contest     $contest,
+        private Post        $post,
+        private MPostPost   $modulesPost,
+        private User        $user,
+        private Enterprise  $enterprise,
         private Recruitment $recruitment,
-        private Round $round,
-        private Branch $branches,
-        private DB $db,
-        private Storage $storage
-    ) {
+        private Round       $round,
+        private Branch      $branches,
+        private DB          $db,
+        private Storage     $storage,
+        private Major       $majors
+    )
+    {
     }
+
     public function index(Request $request)
     {
 
@@ -69,10 +74,12 @@ class PostController extends Controller
     {
         return $this->modulesPost->find($id);
     }
+
     public function getModelDataHot($id)
     {
         return $this->modulesPost->find($id);
     }
+
     public function create(Request $request)
     {
         $this->db::beginTransaction();
@@ -81,8 +88,15 @@ class PostController extends Controller
             $contest = $this->contest::where('type', 0)->get(['id', 'name']);
             $capacity = $this->contest::where('type', 1)->get(['id', 'name']);
             $users = $this->user::all(['id', 'name', 'email']);
+            $recruitments = $this->recruitment::with(['enterprise' => function ($query) {
+                $query->select('enterprises.id')->pluck('enterprises.id')->toArray();
+            }])->get(['id', 'name']);
+            foreach ($recruitments as $recruitment) {
+                $recruitment->enterprises_id = $recruitment->enterprise->pluck('id')->toArray();
+            }
+            $majors = $this->majors::all(['id', 'name']);
             // dd($users);
-            $recruitments = $this->recruitment::all(['id', 'name']);
+            $enterprises = $this->enterprise::all(['id', 'name']);
             $rounds = $this->round::all(['id', 'name', 'contest_id']);
             $branches = $this->branches::select('id', 'name')->get();
             $this->db::commit();
@@ -95,6 +109,8 @@ class PostController extends Controller
                     'rounds' => $rounds,
                     'users' => $users,
                     'branches' => $branches,
+                    'enterprises' => $enterprises,
+                    'majors' => $majors,
                 ]
             );
         } catch (\Throwable $th) {
@@ -102,6 +118,7 @@ class PostController extends Controller
             return redirect('error');
         };
     }
+
     public function insert(Request $request)
     {
         $this->db::beginTransaction();
@@ -110,7 +127,15 @@ class PostController extends Controller
             $contest = $this->contest::where('type', 0)->get(['id', 'name']);
             $capacity = $this->contest::where('type', 1)->get(['id', 'name']);
             $users = $this->user::all(['id', 'name', 'email']);
-            $recruitments = $this->recruitment::all(['id', 'name']);
+            $recruitments = $this->recruitment::with(['enterprise' => function ($query) {
+                $query->select('enterprises.id')->pluck('enterprises.id')->toArray();
+            }])->get(['id', 'name']);
+            foreach ($recruitments as $recruitment) {
+                $recruitment->enterprises_id = $recruitment->enterprise->pluck('id')->toArray();
+            }
+            $majors = $this->majors::all(['id', 'name']);
+            // dd($users);
+            $enterprises = $this->enterprise::all(['id', 'name']);
             $rounds = $this->round::all(['id', 'name', 'contest_id']);
             $branches = $this->branches::select('id', 'name')->get();
             $this->db::commit();
@@ -124,6 +149,8 @@ class PostController extends Controller
                     'capacity' => $capacity,
                     'users' => $users,
                     'branches' => $branches,
+                    'enterprises' => $enterprises,
+                    'majors' => $majors,
                 ]
             );
         } catch (\Throwable $th) {
@@ -131,6 +158,7 @@ class PostController extends Controller
             return redirect('error');
         };
     }
+
     public function store(RequestsPost $request)
     {
         $this->db::beginTransaction();
@@ -145,6 +173,7 @@ class PostController extends Controller
             return abort(404);
         }
     }
+
     public function destroy($slug)
     {
         try {
@@ -158,6 +187,7 @@ class PostController extends Controller
             return abort(404);
         }
     }
+
     public function edit(Request $request, $slug)
     {
 
@@ -166,8 +196,17 @@ class PostController extends Controller
         $contest = $this->contest::where('type', 0)->get(['id', 'name']);
         $capacity = $this->contest::where('type', 1)->get(['id', 'name']);
         $users = $this->user::all(['id', 'name', 'email']);
-        $recruitments = $this->recruitment::all(['id', 'name']);
+        $recruitments = $this->recruitment::with(['enterprise' => function ($query) {
+            $query->select('enterprises.id')->pluck('enterprises.id')->toArray();
+        }])->get(['id', 'name']);
+        foreach ($recruitments as $recruitment) {
+            $recruitment->enterprises_id = $recruitment->enterprise->pluck('id')->toArray();
+        }
+        $majors = $this->majors::all(['id', 'name']);
+        // dd($users);
+        $enterprises = $this->enterprise::all(['id', 'name']);
         $post = $this->modulesPost->getList($request)->where('slug', $slug)->first();
+//        dd($post->major->name);
         $branches = $this->branches::select('id', 'name')->get();
         $post->load(['postable' => function ($q) {
             $q->select('id', 'name');
@@ -185,8 +224,11 @@ class PostController extends Controller
             'rounds' => $this->round::all(['id', 'name', 'contest_id']),
             'users' => $users,
             'branches' => $branches,
+            'majors' => $majors,
+            'enterprises' => $enterprises,
         ]);
     }
+
     public function update(RequestsPost $request, $id)
     {
         DB::beginTransaction();
@@ -200,6 +242,7 @@ class PostController extends Controller
             return redirect('error');
         }
     }
+
     public function detail($slug)
     {
         $data = $this->post::where('slug', $slug)->first();
@@ -214,6 +257,7 @@ class PostController extends Controller
         // dd($listSofts);
         return view('pages.post.soft-delete', compact('listSofts'));
     }
+
     public function backUpPost($id)
     {
         try {
@@ -223,6 +267,7 @@ class PostController extends Controller
             return abort(404);
         }
     }
+
     //xóa vĩnh viễn
     public function delete($id)
     {
@@ -236,6 +281,7 @@ class PostController extends Controller
             return abort(404);
         }
     }
+
     /**
      * @OA\Get(
      *     path="/api/public/posts",
@@ -322,9 +368,9 @@ class PostController extends Controller
     public function apiShow(Request $request)
     {
         $data = $this->modulesPost
-                ->getList($request)
-                ->where('published_at','<=',now())
-                ->paginate(request('limit') ?? 10);
+            ->getList($request)
+            ->where('published_at', '<=', now())
+            ->paginate(request('limit') ?? 10);
         $data->load(
             [
                 'postable:id,name',
@@ -340,6 +386,7 @@ class PostController extends Controller
             $data,
         );
     }
+
     /**
      * @OA\Get(
      *     path="/api/public/posts/{slug}",
