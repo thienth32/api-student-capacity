@@ -71,6 +71,7 @@ class Kernel extends HttpKernel
         'cors' => \App\Http\Middleware\Cors::class,
         'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
         'role_admin' => \App\Http\Middleware\RoleHasAdmins::class,
+        'role_super_admin' => \App\Http\Middleware\RoleSuperAdmin::class,
         'version.api' => \App\Http\Middleware\VersionApi::class,
         'auth.admin' => \App\Http\Middleware\AuthenticateAdmin::class
     ];

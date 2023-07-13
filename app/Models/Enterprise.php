@@ -17,7 +17,7 @@ class Enterprise extends Model
         'updated_at' =>  FormatDate::class,
         'logo' => FormatImageGet::class,
     ];
-    protected $fillable = ['name', 'logo', 'description', 'link_web', 'status'];
+    protected $fillable = ['name', 'logo', 'description', 'link_web', 'status', 'branch_id', 'address'];
     protected static function boot()
     {
         parent::boot();
@@ -46,5 +46,16 @@ class Enterprise extends Model
         // ->with('contest:id,name')
         return $this->BelongsToMany(Recruitment::class, 'enterprise_recruitments', 'enterprise_id', 'recruitment_id')->withTimestamps();
     }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'user_id');
+    }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class, 'enterprise_id');
+    }
+
     use HasFactory;
 }

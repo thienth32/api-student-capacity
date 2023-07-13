@@ -21,13 +21,13 @@
                 </a>
 
             </div>
-
             @foreach(\Menu::get() as $menu)
+
             @hasanyrole($menu['role'])
             <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                 @if (isset($menu['link']))
                 <a href="{{ route($menu['link']). $menu['param'] }}">
-                    <span class="menu-link">
+                    <span class="menu-link {{url()->full() == route($menu['link']). $menu['param'] ? 'active' : ''}}">
                             <span class="menu-icon">
                                 {!! $menu['icon'] !!}
                             </span>
@@ -51,7 +51,9 @@
                         @foreach($menu['subs-menu'] as $subMenu)
                             @hasanyrole($subMenu['role'])
                                 <div class="menu-item">
-                                    <a class="menu-link" href="{{ route($subMenu['link']). $subMenu['param'] }}">
+                                    <a class="menu-link {{url()->full() == route($subMenu['link']). $subMenu['param'] ? 'active' : ''}}"
+                                        href="{{ route($subMenu['link']). $subMenu['param'] }}"
+                                    >
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>

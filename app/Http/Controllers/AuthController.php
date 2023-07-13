@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
+use Laravel\Socialite\Two\InvalidStateException;
 
 class AuthController extends Controller
 {
@@ -26,7 +27,12 @@ class AuthController extends Controller
 
     public function adminGoogleCallback()
     {
-        $ggUser = Socialite::driver('google')->user();
+        // try {
+            $ggUser = Socialite::driver('google')->user();
+        // } catch (InvalidStateException $e) {
+        //     $ggUser = Socialite::driver('google')->stateless()->user();
+        // }
+        // $ggUser = Socialite::driver('google')->user();
         $user = User::where('email', $ggUser->email)->first();
         // dd($user->hasRole(config('util.ADMIN_ROLE')));
         if ($user && $user->hasRole([config('util.SUPER_ADMIN_ROLE'), config('util.ADMIN_ROLE'), config('util.JUDGE_ROLE'), config('util.TEACHER_ROLE')])) {

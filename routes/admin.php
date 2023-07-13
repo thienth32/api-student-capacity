@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ExamController;
 use App\Http\Controllers\Admin\TeamController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\BranchController;
 use App\Http\Controllers\Admin\MajorController;
 use App\Http\Controllers\Admin\RoundController;
 use App\Http\Controllers\Admin\SkillController;
@@ -31,7 +32,6 @@ Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::prefix('dashboard')->group(function () {
     Route::get('api-cuoc-thi', [DashboardController::class, 'chartCompetity'])->name('dashboard.chart-competity');
     Route::get('rank-contest', [DashboardController::class, 'getRankContest']);
-
 });
 Route::prefix('rounds')->group(function () {
 
@@ -251,8 +251,20 @@ Route::group([
 ], function () {
     Route::get('prinft-pdf', [PrintPDFController::class, 'printf'])->name('admin.prinf');
     Route::get('prinft-excel', [PrintExcelController::class, 'printf'])->name('admin.excel');
+    Route::get('download-recruitment-list', [RecruitmentController::class, 'downloadList'])->name('admin.recruitment.download-list');
 });
 
+
+Route::group([
+    'middleware' => 'role_super_admin'
+], function () {
+    Route::prefix('acount')->group(function () {
+        Route::get('', [UserController::class, 'listAdmin'])->name('admin.acount.list');
+        Route::post('un-status/{id}', [UserController::class, 'un_status'])->name('admin.acount.un.status');
+        Route::post('re-status/{id}', [UserController::class, 're_status'])->name('admin.acount.re.status');
+        Route::post('change-role', [UserController::class, 'changeRole'])->name('admin.acount.change.role');
+    });
+});
 Route::group([
     'middleware' => 'role_admin'
 ], function () {
@@ -270,6 +282,19 @@ Route::group([
         Route::get('enterprise-soft-delete', [EnterpriseController::class, 'softDelete'])->name('admin.enterprise.soft.delete');
         Route::get('enterprise-soft-delete/{id}/backup', [EnterpriseController::class, 'backUpEnterprise'])->name('admin.enterprise.soft.backup');
         Route::get('enterprise-soft-delete/{id}/delete', [EnterpriseController::class, 'delete'])->name('admin.enterprise.soft.destroy');
+    });
+    Route::prefix('branches')->group(function () {
+        Route::get('', [BranchController::class, 'index'])->name('admin.branch.list');
+        Route::get('{branch_id}/edit', [BranchController::class, 'edit'])->name('admin.branch.edit');
+        Route::put('{branch_id}', [BranchController::class, 'update'])->name('admin.branch.update');
+        Route::get('create', [BranchController::class, 'create'])->name('admin.branch.create');
+        Route::post('store', [BranchController::class, 'store'])->name('admin.branch.store');
+        Route::delete('{branch_id}', [BranchController::class, 'destroy'])->name('admin.branch.destroy');
+        Route::prefix('list-soft-deletes')->group(function () {
+            Route::get('', [BranchController::class, 'listRecordSoftDeletes'])->name('admin.branch.list.soft.deletes');
+            Route::get('{branch_id}/delete', [BranchController::class, 'permanently_deleted'])->name('admin.branch.soft.deletes');
+            Route::get('{branch_id}/restore', [BranchController::class, 'restore_deleted'])->name('admin.branch.soft.restore');
+        });
     });
     Route::prefix('majors')->group(function () {
         Route::get('{slug}/edit', [MajorController::class, 'edit'])->name('admin.major.edit');
@@ -329,13 +354,6 @@ Route::group([
         Route::get('skill-soft-delete/{id}/delete', [SkillController::class, 'delete'])->name('admin.skill.soft.destroy');
     });
 
-    Route::prefix('acount')->group(function () {
-        Route::get('', [UserController::class, 'listAdmin'])->name('admin.acount.list');
-        Route::post('un-status/{id}', [UserController::class, 'un_status'])->name('admin.acount.un.status');
-        Route::post('re-status/{id}', [UserController::class, 're_status'])->name('admin.acount.re.status');
-        Route::post('change-role', [UserController::class, 'changeRole'])->name('admin.acount.change.role');
-    });
-
     Route::prefix('capacity')->group(function () {
         Route::get('{id}', [ContestController::class, 'show_test_capacity'])->name('admin.contest.show.capatity');
     });
@@ -383,6 +401,7 @@ Route::group([
     });
     Route::prefix('candidates')->group(function () {
         Route::get('', [CandidateController::class, 'index'])->name('admin.candidate.list');
+        Route::post('create-note/{candidate_id}', [CandidateController::class, 'createNote'])->name('admin.candidate.createNote');
         Route::get('user-cv', [CandidateController::class, 'listCvUser'])->name('admin.candidate.listCvUser');
         Route::delete('{id}', [CandidateController::class, 'destroy'])->name('admin.candidate.destroy');
         Route::prefix('list-soft-deletes')->group(function () {

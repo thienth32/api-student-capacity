@@ -10,7 +10,7 @@ class AuthenticateAdmin
 {
     public function handle(Request $request, Closure $next)
     {
-        if (!auth()->check() || !auth()->user()->hasAnyRole(['admin', 'super admin', 'judge', 'teacher']))
+        if (!auth()->check() || !auth()->user()->hasAnyRole(['admin', 'super admin', 'judge', 'teacher', 'staff']))
             return $this->redirectToCatch($request);
         return $next($request);
     }

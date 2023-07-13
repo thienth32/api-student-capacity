@@ -13,7 +13,7 @@ class Candidate extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = 'candidates';
-    protected $fillable = ['post_id', 'name', 'phone', 'email', 'file_link'];
+    protected $fillable = ['post_id', 'name', 'phone', 'email', 'file_link', 'student_code'];
     // protected $casts = [
     //     'file_link' => FormatImageGet::class,
     // ];
@@ -24,5 +24,10 @@ class Candidate extends Model
     public function countCv($email, $post_id)
     {
         return DB::table($this->table)->where('email', $email)->where('post_id', $post_id)->count();
+    }
+
+    public function candidateNotes()
+    {
+        return $this->hasMany(CandidateNote::class, 'candidate_id')->orderBy('created_at', 'desc');
     }
 }
