@@ -13,6 +13,7 @@ interface MExamInterface
     public function where($param = []);
 
     public function getResult($id);
+    public function destroyResultCapacity($id);
 
     public function getExamCapacityPlay($params = [], $with = []);
 

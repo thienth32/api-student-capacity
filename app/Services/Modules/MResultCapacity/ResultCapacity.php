@@ -9,8 +9,10 @@ class ResultCapacity implements MResultCapacityInterface
 
     public function __construct(
         private ModelsResultCapacity $model
-    ) {
+    )
+    {
     }
+
     public function findByUserExam($user_id, $exam_id)
     {
         $data = $this->model::where('user_id', $user_id)
