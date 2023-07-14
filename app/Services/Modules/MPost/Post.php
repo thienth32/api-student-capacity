@@ -110,6 +110,17 @@ class Post
         return $query;
     }
 
+    public function updateView($id)
+    {
+        $post = $this->post::find($id);
+        if ($post) {
+            $post->increment('view');
+            // Hoặc: $job->increment('views', 1);
+            return response()->json(['message' => 'Views increased successfully post ID' . $id], 200);
+        } else {
+            return response()->json(['message' => 'Job not found'], 404);
+        }
+    }
     public function index(Request $request)
     {
         return $this->getList($request)->with(['postable:id,name'])->paginate(request('limit') ?? config('util.HOMEPAGE_ITEM_AMOUNT'));
