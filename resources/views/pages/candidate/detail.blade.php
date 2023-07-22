@@ -134,7 +134,7 @@
                             <div class="row mt-3">
 
                                 <div class="col-md-5 mx-auto">
-                                    <a target="_blank"
+                                    <a target="_blank" rel="noopener"
                                         href="{{ Storage::disk('s3')->temporaryUrl($data->file_link, now()->addMinutes(5)) }}">
                                         <div
                                             class="badge badge-primary badge-pill bg-opacity-70 rounded-2 px-6 py-5 d-flex justify-content-around">

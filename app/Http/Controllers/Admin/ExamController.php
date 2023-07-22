@@ -194,7 +194,7 @@ class ExamController extends Controller
                 $validatorContest = Validator::make(
                     $request->all(),
                     [
-                        'external_url' => 'required|mimes:zip,docx,word|file|max:10000',
+                        'external_url' => 'required|mimes:zip,docx,word|file|max:8000',
                     ],
                     [
                         'external_url.mimes' => 'Trường đề thi không đúng định dạng !',

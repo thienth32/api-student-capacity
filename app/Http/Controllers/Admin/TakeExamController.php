@@ -134,7 +134,7 @@ class TakeExamController extends Controller
             [
                 'id' => 'required',
                 'result_url' => 'url',
-                'file_url' => 'file|mimes:zip,docx,word,rar,rtf'
+                'file_url' => 'file|mimes:zip,docx,word,rar,rtf|max:8000'
             ],
             [
                 'result_url.url' => 'Sai định dạng !!!',

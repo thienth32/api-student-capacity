@@ -62,7 +62,7 @@
                         </a>
                     </div>
                     <div>
-                        <a class=" btn btn-primary" target="_blank" href="{{ route('admin.download.execel.pass') }}">
+                        <a class=" btn btn-primary" target="_blank" href="{{ route('admin.download.execel.pass') }}" rel="noopener">
                             <span class="svg-icon svg-icon-x svg-icon-primary   ">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none">
@@ -532,7 +532,7 @@
 
     <script src="assets/js/system/formatlist/formatlis.js"></script>
     <script src="{{ asset('assets/js/system/question/index.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js" integrity="sha512-YUkaLm+KJ5lQXDBdqBqk7EVhJAdxRnVdT2vtCzwPHSweCzyMgYV/tgGF4/dCyqtCC2eCphz0lRQgatGVdfR0ww==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         question.selectChangeStatus(
             ".form-select-status"

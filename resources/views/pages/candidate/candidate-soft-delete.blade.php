@@ -105,7 +105,7 @@
                                 </td>
                                 <td>
 
-                                    <a class="show_file btn btn-primary" target="_blank"
+                                    <a class="show_file btn btn-primary" target="_blank" rel="noopener"
                                         href="{{ Storage::disk('s3')->temporaryUrl($listSoft->file_link, now()->addMinutes(5)) }}">Xem</a>
                                 </td>
 

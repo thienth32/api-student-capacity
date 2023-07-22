@@ -80,7 +80,7 @@ class Exam implements MExamInterface
                 "type" => $data->type,
                 "ponit" => $data->max_ponit,
                 "external_url" => "null",
-                "room_code" => MD5(uniqid() . time()),
+                "room_code" => hash("sha512", uniqid() . time()),
             ]
         );
         $exam->questions()->attach($data->questions ?? []);

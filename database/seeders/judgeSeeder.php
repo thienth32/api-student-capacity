@@ -15,6 +15,7 @@ class judgeSeeder extends Seeder
      * Run the database seeds.
      *
      * @return void
+     * @throws \Exception
      */
     public function run()
     {
@@ -25,7 +26,7 @@ class judgeSeeder extends Seeder
             ->get()
             ->each(function ($contest) use ($user) {
                 $contest->judges()->syncWithoutDetaching(
-                    $user->random(rand(2, 5))->pluck('id')->toArray()
+                    $user->random(random_int(2, 5))->pluck('id')->toArray()
                 );
             });
     }

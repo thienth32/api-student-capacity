@@ -196,7 +196,7 @@
 
                 <td>
 
-                    <a class="show_file btn btn-primary btn-sm" target="_blank" href="{{ Storage::disk('s3')->temporaryUrl($key->file_link, now()->addMinutes(5)) }}">Xem</a>
+                    <a class="show_file btn btn-primary btn-sm" target="_blank" rel="noopener" href="{{ Storage::disk('s3')->temporaryUrl($key->file_link, now()->addMinutes(5)) }}">Xem</a>
                 </td>
 
                 <td>
