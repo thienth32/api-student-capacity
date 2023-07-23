@@ -17,6 +17,7 @@ class ResultCapacitySeeder extends Seeder
      * Run the database seeds.
      *
      * @return void
+     * @throws \Exception
      */
     public function run()
     {
@@ -26,18 +27,18 @@ class ResultCapacitySeeder extends Seeder
         $users = User::all()->pluck('id')->toArray();
         $resultCapacityArr = [];
         for ($i = 0; $i < 50; $i++) {
-            array_push($resultCapacityArr, [
-                'scores' => rand(20, 100),
+            $resultCapacityArr[] = [
+                'scores' => random_int(20, 100),
                 'status' => 1,
-                'exam_id' =>  $exams[array_rand($exams)],
-                'user_id' =>  $users[array_rand($users)],
+                'exam_id' => $exams[array_rand($exams)],
+                'user_id' => $users[array_rand($users)],
                 'type' => 1,
-                'donot_answer' => rand(0, 5),
-                'false_answer' => rand(1, 5),
-                'true_answer' => rand(9, 15),
+                'donot_answer' => random_int(0, 5),
+                'false_answer' => random_int(1, 5),
+                'true_answer' => random_int(9, 15),
                 'created_at' => Carbon::now()->toDateTimeString(),
-                'updated_at' => Carbon::now()->addMinutes(rand(10, 15))->toDateTimeString()
-            ]);
+                'updated_at' => Carbon::now()->addMinutes(random_int(10, 15))->toDateTimeString()
+            ];
         }
         ResultCapacity::insert($resultCapacityArr);
     }
