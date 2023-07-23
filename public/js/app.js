@@ -4034,7 +4034,8 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/**
   var reEsTemplate = /\$\{([^\\}]*(?:\\.[^\\}]*)*)\}/g;
 
   /** Used to match `RegExp` flags from their coerced string values. */
-  var reFlags = /\w+(?![\w\s]*\w)/;
+  // var reFlags = /\w+(?![\w\s]*\w)/;
+  var reFlags = /\w+$/;
 
   /** Used to detect bad signed hexadecimal string values. */
   var reIsBadHex = /^[-+]0x[0-9a-f]+$/i;
@@ -5323,7 +5324,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/**
 
     /** Used to detect methods masquerading as native. */
     var maskSrcKey = (function() {
-      var uid = /.*(?=\.[^.]+$)/.exec(coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || '');
+      var uid = /[^.]+$/.exec(coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || '');
       return uid ? ('Symbol(src)_1.' + uid) : '';
     }());
 
@@ -18783,10 +18784,19 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/**
         source +
         'return __p\n}';
 
-      var result = attempt(function() {
-        return Function(`${importsKeys}`, sourceURL + 'return ' + source)
-          .apply(undefined, importsValues);
-      });
+      // var result = attempt(function() {
+      //   return Function(`${importsKeys}`, sourceURL + 'return ' + source)
+      //     .apply(undefined, importsValues);
+      // });
+
+        var result;
+        try {
+            const func = new Function(importsKeys, sourceURL + 'return ' + source);
+            result = func.apply(undefined, importsValues);
+        } catch (error) {
+            // Xử lý lỗi nếu cần thiết
+            console.log(error);
+        }
 
       // Provide the compiled function's source by its `toString` method or
       // the `source` property as a convenience for inlining compiled templates.
