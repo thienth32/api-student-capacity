@@ -10,7 +10,6 @@ function to_slug(str) {
     str = str.replace(/(ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ)/g, "u");
     str = str.replace(/(ỳ|ý|ỵ|ỷ|ỹ)/g, "y");
     str = str.replace(/(đ)/g, "d");
-
     // Xóa ký tự đặc biệt
     str = str.replace(/([^0-9a-z-\s])/g, "");
 
@@ -21,8 +20,7 @@ function to_slug(str) {
     str = str.replace(/^-+/g, "");
 
     // xóa phần dư - ở cuối
-    str = str.replace(/-(?=-*$)/g, "");
-
+    str = str.replace(/(?=-+$)-/g, "");
     // return
     return str;
 }
