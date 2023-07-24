@@ -21,7 +21,7 @@ function to_slug(str) {
     str = str.replace(/^-+/g, "");
 
     // xóa phần dư - ở cuối
-    str = str.replace(/-(?=-*$)/g, "");
+    str = str.replace(/-+(?=-*$)/g, "");
 
     // return
     return str;
