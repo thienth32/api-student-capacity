@@ -713,8 +713,8 @@
     </div>
 @endsection
 @section('page-script')
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script type="text/javascript" src="assets/js/custom/documentation/general/moment.min.js"></script>
+    <script type="text/javascript" src="assets/js/custom/documentation/general/daterangepicker.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <script src="assets/js/system/post/postFilter.js"></script>
     <script>

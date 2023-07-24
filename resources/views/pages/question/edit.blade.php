@@ -245,7 +245,7 @@
 @section('page-script')
     <script src="assets/plugins/custom/tinymce/tinymce.bundle.js"></script>
     <script src="assets/plugins/custom/ckeditor/ckeditor-classic.bundle.js"></script>
-    <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
+    <script type="text/javascript" src="assets/js/custom/documentation/general/ckfinder.js"></script>
     <script src="assets/js/system/ckeditor/ckeditor.js"></script>
 
     <script src="assets/plugins/custom/formrepeater/formrepeater.bundle.js"></script>

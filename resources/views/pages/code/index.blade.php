@@ -3,7 +3,7 @@
 @section('page-title', 'Quản lý bài thử thách ')
 @section('content')
     <script src="assets/plugins/custom/ckeditor/ckeditor-classic.bundle.js"></script>
-    <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
+    <script type="text/javascript" src="assets/js/custom/documentation/general/ckfinder.js"></script>
     <script src="assets/js/system/ckeditor/ckeditor.js"></script>
     <div class="card card-flush p-4">
         <div class="row">

@@ -19,7 +19,12 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+//    'allowed_origins' => ['*'],
+    'allowed_origins' => [
+        "https://beecareer.poly.edu.vn",
+        "https://admin.beecareer.poly.edu.vn",
+//        "http://localhost:4200",
+    ],
 
     'allowed_origins_patterns' => [],
 
