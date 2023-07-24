@@ -1,5 +1,10 @@
 FROM openjdk:19-jdk-alpine3.16
 
+RUN addgroup -S nonroot \
+    && adduser -S nonroot -G nonroot
+
+USER nonroot
+
 RUN apk add --no-cache bc
 RUN apk add --update coreutils && rm -rf /var/cache/apk/*
 

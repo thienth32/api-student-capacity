@@ -162,9 +162,9 @@ class Post
             'career_source' => $request->career_source != 0 ? $request->career_source : null,
             'career_require' => $request->career_require != 0 ? $request->career_require : null,
             'position' => $request->position != 0 ? $request->position : null,
-            'career_type' => $request->career_type != 0 ? $request->career_type : null,
+            'career_type' => $request->career_type != 0 ? $request->career_type : 1,
             'major_id' => $request->major_id != 0 ? $request->major_id : null,
-            'branch_id' => $request->branch_id != 0 ? $request->branch_id : null,
+            'branch_id' => $request->branch_id != 0 ? $request->branch_id : 0,
             'enterprise_id' => $request->enterprise_id != 0 ? $request->enterprise_id : null,
             'total' => $request->total != 0 ? $request->total : null,
             'deadline' => $request->deadline != 0 ? $request->deadline : null,
@@ -215,9 +215,9 @@ class Post
         $post->career_source = $request->career_source != 0 ? $request->career_source : null;
         $post->career_require = $request->career_require != 0 ? $request->career_require : null;
         $post->position = $request->position != 0 ? $request->position : null;
-        $post->career_type = $request->career_type != 0 ? $request->career_type : null;
+        $post->career_type = $request->career_type != 0 ? $request->career_type : 1;
         $post->major_id = $request->major_id != 0 ? $request->major_id : null;
-        $post->branch_id = $request->branch_id != 0 ? $request->branch_id : null;
+        $post->branch_id = $request->branch_id != 0 ? $request->branch_id : 0;
         $post->enterprise_id = $request->enterprise_id != 0 ? $request->enterprise_id : null;
         $post->total = $request->total != 0 ? $request->total : null;
         $post->deadline = $request->deadline != 0 ? $request->deadline : null;
