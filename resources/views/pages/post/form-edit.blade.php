@@ -29,7 +29,7 @@
                         <label class="form-label" for="">Thuộc các thành phần</label>
                         <div class="row col-12 m-auto">
                             <button type="button"
-                                class="click-recruitment btn {{ $post->postable !== null && get_class($post->postable) == \App\Models\Recruitment::class ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 btn-light col-xl-3 ">
+                                class="click-recruitment btn {{ ($post->postable !== null && get_class($post->postable) == \App\Models\Recruitment::class) || $post->postable_type == \App\Models\Recruitment::class ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 btn-light col-xl-3 ">
                                 Tuyển dụng</button>
                             <button id="clickContset" type="button"
                                 class="mygroup btn  {{ $post->postable !== null && get_class($post->postable) == \App\Models\Contest::class && $post->status_capacity == 0 ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light  click-contest">
@@ -129,20 +129,20 @@
                                 </div>
 
                             </div> -->
-                            <div style="{{ $post->postable !== null && get_class($post->postable) == \App\Models\Recruitment::class ? '' : 'display:none' }}" class="row">
-                                <div class="form-group mb-10 col-xl-6 col-12">
-                                    <label for="" class="form-label">Thuộc đợt tuyển dụng</label>
-                                    <select name="recruitment_id" class="form-select form-major" data-control="select2"
-                                        data-placeholder="Chọn đợt tuyển dụng ">
-                                        <option value="0">Không thuộc đợt tuyển dụng nào</option>
-                                        @foreach ($recruitments as $item)
-                                            <option @selected(($post->postable != null ? $post->postable->id : 0) === $item->id && get_class($post->postable) == \App\Models\Recruitment::class)  value="{{ $item->id }}">
-                                                {{ $item->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group mb-10 col-xl-6 col-12">
+                            <div style="{{ ($post->postable !== null && get_class($post->postable) == \App\Models\Recruitment::class) || $post->postable_type == \App\Models\Recruitment::class ? '' : 'display:none' }}" id="recruitment" class="row">
+{{--                                <div class="form-group mb-10 col-xl-6 col-12">--}}
+{{--                                    <label for="" class="form-label">Thuộc đợt tuyển dụng</label>--}}
+{{--                                    <select name="recruitment_id" class="form-select form-major" data-control="select2"--}}
+{{--                                        data-placeholder="Chọn đợt tuyển dụng ">--}}
+{{--                                        <option value="0">Không thuộc đợt tuyển dụng nào</option>--}}
+{{--                                        @foreach ($recruitments as $item)--}}
+{{--                                            <option @selected(($post->postable != null ? $post->postable->id : 0) === $item->id && get_class($post->postable) == \App\Models\Recruitment::class)  value="{{ $item->id }}">--}}
+{{--                                                {{ $item->name }}--}}
+{{--                                            </option>--}}
+{{--                                        @endforeach--}}
+{{--                                    </select>--}}
+{{--                                </div>--}}
+                                <div class="form-group mb-10 col-xl-12 col-12">
                                     <label for="" class="form-label">Doanh nghiệp</label>
                                     <select name="enterprise_id" class="form-select form-major" data-control="select2"
                                             data-placeholder="Chọn doanh nghiệp">
@@ -182,6 +182,7 @@
                                     <input type="text" class="form-control" name="career_require"
                                            value="{{ old('career_require') ?? $post->career_require }}">
                                 </div>
+                                <input type="hidden" name="post_type" id="post_type" value="{{ $post_type }}">
                                 <div class="form-group mb-10 col-xl-3 col-6">
                                     <label for="" class="form-label">Bài đăng thuộc cơ sở</label>
                                     <select name="branch_id" class="form-select form-major" data-control="select2"
@@ -356,37 +357,11 @@
             const recruitmentSelect = $('select[name="recruitment_id"]');
             const enterpriseSelect = $('select[name="enterprise_id"]');
             let recruitment_id = recruitmentSelect.val();
-            let recruitment = recruitments.find(e => e.id == recruitment_id);
-            let newEnterprises = enterprises.filter(e => recruitment.enterprises_id.includes(e.id));
-            enterpriseSelect.empty();
-            enterpriseSelect.append($('<option>', {
-                value: '0',
-                text: 'Chọn doanh nghiệp'
-            }));
-            newEnterprises.forEach(enterprise => {
-                enterpriseSelect.append($('<option>', {
-                    value: enterprise.id,
-                    text: enterprise.name
-                }))
-            })
-            enterpriseSelect.trigger('change.select2');
-            recruitmentSelect.change(e => {
-                recruitment_id = e.target.value;
-                recruitment = recruitments.find(e => e.id == recruitment_id);
-                newEnterprises = enterprises.filter(e => recruitment.enterprises_id.includes(e.id));
-                enterpriseSelect.empty();
-                enterpriseSelect.append($('<option>', {
-                    value: '0',
-                    text: 'Chọn doanh nghiệp'
-                }));
-                newEnterprises.forEach(enterprise => {
-                    enterpriseSelect.append($('<option>', {
-                        value: enterprise.id,
-                        text: enterprise.name
-                    }))
-                })
-                enterpriseSelect.trigger('change.select2');
-            })
+            enterpriseSelect.select2({
+                placeholder: "Chọn doanh nghiệp",
+                allowClear: true,
+                tags: true,
+            });
         });
     </script>
     <script src="assets/js/system/validate/validate.js"></script>

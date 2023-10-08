@@ -46,6 +46,7 @@ $(document).ready(function () {
         $("#capacity").hide(100);
         $("#round").hide(100);
         $("#recruitment").hide(100);
+        $("#post_type").val("contest");
         $("#contest").show(300);
     });
     $(".click-capacity").click(function () {
@@ -56,6 +57,7 @@ $(document).ready(function () {
         $("#contest").hide(100);
         $("#round").hide(100);
         $("#recruitment").hide(100);
+        $("#post_type").val("capacity");
         $("#capacity").show(300);
     });
     $(".click-round").click(function () {
@@ -66,6 +68,7 @@ $(document).ready(function () {
         $("#contest").hide(100);
         $("#recruitment").hide(100);
         $(this).addClass("btn-primary");
+        $("#post_type").val("round");
         $("#round").toggle(300);
     });
     $(".click-recruitment").click(function () {
@@ -75,8 +78,9 @@ $(document).ready(function () {
         $("#capacity").hide(100);
         $("#contest").hide(100);
         $("#round").hide(100);
+        $("#post_type").val("recruitment");
         $(this).addClass("btn-primary");
-        $("#recruitment").toggle(300);
+        $("#recruitment").show(300);
     });
 });
 

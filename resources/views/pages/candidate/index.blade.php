@@ -110,7 +110,7 @@
                 </th>
                 <th scope="col"> Xem CV
                 </th>
-                <th scope="col"> Tải CV
+                <th scope="col"> DN ứng tuyển
                 </th>
                 <th scope="col">Thời gian ứng tuyển
                     <a data-href="{{ request()->has('sortBy') ? (request('sortBy') == 'desc' ? 'asc' : 'desc') : 'asc' }}" data-order="created_at" id="time_candidate">
@@ -200,8 +200,9 @@
                 </td>
 
                 <td>
-                    <a class="download_file btn btn-success btn-sm" href="{{ route('dowload.file') . '?url=' . $key->file_link }}">Tải
-                        xuống</a>
+{{--                    <a class="download_file btn btn-success btn-sm" href="{{ route('dowload.file') . '?url=' . $key->file_link }}">Tải--}}
+{{--                        xuống</a>--}}
+                    {{ $posts->find($key->post_id)->enterprise->name ?? "" }}
 
                 </td>
 
