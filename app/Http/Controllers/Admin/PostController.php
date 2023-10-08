@@ -382,7 +382,7 @@ class PostController extends Controller
         $data = $this->modulesPost
             ->getList($request)
             ->where('published_at', '<=', now())
-            ->paginate(request('limit') ?? 10);
+            ->paginate(request('limit') ?? 12);
         $data->load(
             [
                 'postable:id,name',
