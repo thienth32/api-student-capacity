@@ -22,6 +22,8 @@ class Branch extends Model
         'address',
         'phone',
         'status',
+        'email',
+        'website',
     ];
 
     // public static function boot()

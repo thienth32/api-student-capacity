@@ -98,28 +98,30 @@
                                 <br>
                             </div>
                             <div style="{{ old('recruitment_id') ? '' : 'display:none' }}" id="recruitment" class="row">
-                                <div class="form-group mb-10 col-xl-6 col-12">
-                                    <label for="" class="form-label">Thuộc đợt tuyển dụng</label>
-                                    <select name="recruitment_id" class="form-select form-major" data-control="select2"
-                                            data-placeholder="Chọn đợt tuyển dụng ">
-                                        <option value="0">Không thuộc đợt tuyển dụng nào</option>
-                                        @foreach ($recruitments as $item)
-                                            <option
-                                                @selected(old('recruitment_id') == $item->id) value="{{ $item->id }}">
-                                                {{ $item->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group mb-10 col-xl-6 col-12">
+{{--                                <div class="form-group mb-10 col-xl-6 col-12">--}}
+{{--                                    <label for="" class="form-label">Thuộc đợt tuyển dụng</label>--}}
+{{--                                    <select name="recruitment_id" class="form-select form-major" data-control="select2"--}}
+{{--                                            data-placeholder="Chọn đợt tuyển dụng ">--}}
+{{--                                        <option value="0">Không thuộc đợt tuyển dụng nào</option>--}}
+{{--                                        @foreach ($recruitments as $item)--}}
+{{--                                            <option--}}
+{{--                                                @selected(old('recruitment_id') == $item->id) value="{{ $item->id }}">--}}
+{{--                                                {{ $item->name }}--}}
+{{--                                            </option>--}}
+{{--                                        @endforeach--}}
+{{--                                    </select>--}}
+{{--                                </div>--}}
+                                <div class="form-group mb-10 col-xl-12 col-12">
                                     <label for="" class="form-label">Doanh nghiệp</label>
-                                    <select name="enterprise_id" class="form-select form-major" data-control="select2"
+                                    <select id="enterprise_id" name="enterprise_id" class="form-select form-major" data-control="select2"
                                             data-placeholder="Chọn doanh nghiệp">
                                         <option value="0">Chọn doanh nghiệp</option>
                                         @foreach ($enterprises as $enterprise)
                                             <option
                                                 @selected(old('enterprise_id') ? old('enterprise_id') == $enterprise->id : auth()->user()->enterprise_id == $enterprise->id) value="{{ $enterprise->id }}">
                                                 {{ $enterprise->name }}
+{{--                                                @selected(old('enterprise_name') ? old('enterprise_name') == $enterprise->name : auth()->user()->enterprise_id == $enterprise->id) value="{{ $enterprise->name }}">--}}
+{{--                                                {{ $enterprise->name }}--}}
                                             </option>
                                         @endforeach
                                     </select>
@@ -151,6 +153,7 @@
                                     <input type="text" class="form-control" name="career_require"
                                            value="{{ old('career_require') }}">
                                 </div>
+                                <input type="hidden" name="post_type" id="post_type" value="recruitment">
                                 <div class="form-group mb-10 col-xl-3 col-6">
                                     <label for="" class="form-label">Bài đăng thuộc cơ sở</label>
                                     <select name="branch_id" class="form-select form-major" data-control="select2"
@@ -307,23 +310,11 @@
             if (oldRound != null) {
                 $("#select-contest-p").change();
             }
-            recruitmentSelect.change(e => {
-                let recruitment_id = e.target.value;
-                const recruitment = recruitments.find(e => e.id == recruitment_id);
-                const newEnterprises = enterprises.filter(e => recruitment.enterprises_id.includes(e.id));
-                enterpriseSelect.empty();
-                enterpriseSelect.append($('<option>', {
-                    value: '0',
-                    text: 'Chọn doanh nghiệp'
-                }));
-                newEnterprises.forEach(enterprise => {
-                    enterpriseSelect.append($('<option>', {
-                        value: enterprise.id,
-                        text: enterprise.name
-                    }))
-                })
-                enterpriseSelect.trigger('change.select2');
-            })
+            enterpriseSelect.select2({
+                placeholder: "Chọn doanh nghiệp",
+                allowClear: true,
+                tags: true,
+            });
 
         });
         rules.thumbnail_url = {

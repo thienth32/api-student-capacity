@@ -27,12 +27,12 @@ class RequestsPost extends FormRequest
     public function rules()
     {
         $ruleTitle = 'required|max:255|unique:posts,title';
-        $ruleSlug =  'required|unique:posts,slug';
+        $ruleSlug = 'required|unique:posts,slug';
         $ruleCodeRecruiment = 'required|max:20|regex:/^[0-9a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễếệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\ ]+$/u|unique:posts,code_recruitment';
         if ($this->route()->id) {
             // dd($this->route()->id);
             $ruleTitle = 'required|max:255|unique:posts,title,' . $this->route()->id;
-            $ruleSlug =  'required|unique:posts,slug,' . $this->route()->id . ',id';
+            $ruleSlug = 'required|unique:posts,slug,' . $this->route()->id . ',id';
             $ruleCodeRecruiment = 'required|max:20|regex:/^[0-9a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễếệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\ ]+$/u|unique:posts,code_recruitment,' . $this->route()->id . ',id';
         }
 
@@ -40,24 +40,25 @@ class RequestsPost extends FormRequest
             'title' => $ruleTitle,
             'description' => 'required',
             'published_at' => 'required',
-            'slug' =>   $ruleSlug,
+            'slug' => $ruleSlug,
             'code_recruitment' =>
-            request()->recruitment_id != 0 ?
-                $ruleCodeRecruiment :
-                function ($nullRole, $value = null, $fail) {
-                    if ($value != null) {
-                        return $fail('Trường chỉ áp dụng với bài viết tuyển dụng');
-                    }
-                },
-            'content' => request()->content != null  ? 'required' : '',
-            'link_to' => request()->link_to != null  ? 'required' : '',
+                request()->post_type == 'recruitment' ?
+                    $ruleCodeRecruiment :
+                    function ($nullRole, $value = null, $fail) {
+                        if ($value != null) {
+                            return $fail('Trường chỉ áp dụng với bài viết tuyển dụng');
+                        }
+                    },
+            'content' => request()->content != null ? 'required' : '',
+            'link_to' => request()->link_to != null ? 'required' : '',
         ];
 
-        if (!$this->route()->id || $this->has('image_url'))  $rule = array_merge($rule, [
+        if (!$this->route()->id || $this->has('image_url')) $rule = array_merge($rule, [
             'thumbnail_url' => 'required|required|mimes:jpeg,png,jpg|max:10000',
         ]);
         return $rule;
     }
+
     public function messages()
     {
         return [

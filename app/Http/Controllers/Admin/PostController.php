@@ -163,8 +163,7 @@ class PostController extends Controller
     {
         $this->db::beginTransaction();
         try {
-            if ($request->recruitment_id == 0) $request['code_recruitment'] = null;
-
+            if ($request->post_type !== 'recruitment') $request['code_recruitment'] = null;
             $this->modulesPost->store($request);
             $this->db::commit();
             return Redirect::route('admin.post.list');
@@ -215,6 +214,18 @@ class PostController extends Controller
             $round = $this->round::find($post->postable->id)->load('contest:id,name');
         }
 
+        if ($post->postable_type == $this->recruitment::class) {
+            $post_type = 'recruitment';
+        } elseif ($post->postable_type == $this->round::class) {
+            $post_type = 'round';
+        } elseif ($post->postable_type == $this->contest::class) {
+            $post_type = 'contest';
+        } elseif ($post->postable_type == $this->capacity::class) {
+            $post_type = 'capacity';
+        } else {
+            $post_type = 'outside';
+        }
+
         return view('pages.post.form-edit', [
             'round' => $round,
             'post' => $post,
@@ -226,6 +237,7 @@ class PostController extends Controller
             'branches' => $branches,
             'majors' => $majors,
             'enterprises' => $enterprises,
+            'post_type' => $post_type,
         ]);
     }
 
@@ -403,13 +415,15 @@ class PostController extends Controller
      * )
      */
 
-    public function view(Request $request){
-        $data = $this->modulesPost->updateView($request->id,$request->view);
+    public function view(Request $request)
+    {
+        $data = $this->modulesPost->updateView($request->id, $request->view);
         return $this->responseApi(
             true,
             $data
         );
     }
+
     public function apiDetail($slug)
     {
         $data = $this->post::where('slug', $slug)->first();

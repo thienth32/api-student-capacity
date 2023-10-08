@@ -168,6 +168,9 @@
                                 <!--end::Svg Icon-->
                             </span>
                         </th>
+                        <th>
+                            Trạng thái
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -197,6 +200,13 @@
 
                             </td>
                             <td>{{ $branch->users_count }}
+                            </td>
+                            <td>
+                                @if ($branch->status == 1)
+                                    <span class="badge badge-light-success">Hoạt động</span>
+                                @else
+                                    <span class="badge badge-light-danger">Không hoạt động</span>
+                                @endif
                             </td>
                             <td>
                                 @if (Auth::user()->hasRole(config('util.ROLE_DELETE')) || Auth::user()->branch_id == $branch->id)

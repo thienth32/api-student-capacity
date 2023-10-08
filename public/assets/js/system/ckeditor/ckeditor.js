@@ -3,6 +3,9 @@ const pageCkeditor = {
         ClassicEditor.create(
             document.querySelector("#kt_docs_ckeditor_classic"),
             {
+                alignment: {
+                    options: ['left', 'right', 'center', 'justify',]
+                },
                 toolbar: [
                     "heading",
                     "undo",
@@ -12,28 +15,36 @@ const pageCkeditor = {
                     "blockQuote",
                     "ckfinder",
                     "imageTextAlternative",
+                    '|',
+                    'alignment',
+                    '|',
                     // "imageUpload",
-                    "heading",
+                    // "heading",
                     "imageStyle:full",
                     "imageStyle:side",
                     "link",
                     "numberedList",
                     "bulletedList",
-                    "mediaEmbed",
                     "insertTable",
+                    "mediaEmbed",
                     "tableColumn",
                     "tableRow",
                     "mergeTableCells",
                 ],
             }
         )
-            .then((editor) => {})
-            .catch((error) => {});
+            .then((editor) => {
+            })
+            .catch((error) => {
+            });
     },
     classicCk2: function () {
         ClassicEditor.create(
             document.querySelector("#kt_docs_ckeditor_classic2"),
             {
+                alignment: {
+                    options: ['left', 'right', 'center', 'justify',]
+                },
                 toolbar: [
                     "heading",
                     "undo",
@@ -43,8 +54,14 @@ const pageCkeditor = {
                     "blockQuote",
                     "ckfinder",
                     "imageTextAlternative",
+                    '|',
+                    'alignment:left',
+                    'alignment:right',
+                    'alignment:center',
+                    'alignment:justify',
+                    '|',
                     // "imageUpload",
-                    "heading",
+                    // "heading",
                     "imageStyle:full",
                     "imageStyle:side",
                     "link",
@@ -58,8 +75,10 @@ const pageCkeditor = {
                 ],
             }
         )
-            .then((editor) => {})
-            .catch((error) => {});
+            .then((editor) => {
+            })
+            .catch((error) => {
+            });
     },
 };
 pageCkeditor.classicCk();

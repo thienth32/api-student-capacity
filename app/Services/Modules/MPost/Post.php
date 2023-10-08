@@ -46,6 +46,7 @@ class Post
         $sortBy = $request->has('sortBy') ? $request->sortBy : "desc";
         $postHot = $request->has('postHot') ? $request->postHot : null;
         $branch_id = $request->has('branch_id') ? $request->branch_id : null;
+        $major_id = $request->has('major_id') ? $request->major_id : null;
         $softDelete = $request->has('post_soft_delete') ? $request->post_soft_delete : null;
         if ($softDelete != null) {
             $query = $this->post::onlyTrashed()->where('title', 'like', "%$keyword%")->orderByDesc('deleted_at');
@@ -103,6 +104,12 @@ class Post
         if ($branch_id != 0) {
             $query->where('branch_id', $branch_id)->where('postable_type', $this->recruitment::class);
         }
+        if ($major_id != 0) {
+            $query->where('major_id', $major_id)->where('postable_type', $this->recruitment::class);
+        }
+//        if (!auth()->user()->hasRole(config('util.SUPER_ADMIN_ROLE'))) {
+//            $query->where('branch_id', auth()->user()->branch_id);
+//        }
         if ($request->post != null) {
             $this->loadAble($query, $request->post);
         }
@@ -171,6 +178,20 @@ class Post
             'note' => $request->note != 0 ? $request->note : null,
         ];
 
+        if ($request->post_type === 'recruitment') {
+            $enterprise = $this->enterprise::query()
+                ->where('id', $request->enterprise_id)
+                ->orWhere('name', $request->enterprise_id)
+                ->first();
+            if (!$enterprise) {
+                $enterprise = $this->enterprise::create([
+                    'name' => $request->enterprise_id,
+                ]);
+            }
+
+            $data['enterprise_id'] = $enterprise->id;
+        }
+
         if ($request->has('thumbnail_url')) {
             $fileImage = $request->file('thumbnail_url');
             $image = $this->uploadFile($fileImage);
@@ -190,6 +211,9 @@ class Post
         } elseif ($request->recruitment_id != 0) {
             $dataRound = $this->recruitment::find($request->recruitment_id);
             $dataRound->posts()->create($data);
+        } elseif ($request->post_type === 'recruitment') {
+            $data['postable_type'] = $this->recruitment::class;
+            $this->post::create($data);
         }
     }
 
@@ -223,6 +247,20 @@ class Post
         $post->deadline = $request->deadline != 0 ? $request->deadline : null;
         $post->note = $request->note != 0 ? $request->note : null;
 
+        if ($request->post_type === 'recruitment') {
+            $enterprise = $this->enterprise::query()
+                ->where('id', $request->enterprise_id)
+                ->orWhere('name', $request->enterprise_id)
+                ->first();
+            if (!$enterprise) {
+                $enterprise = $this->enterprise::create([
+                    'name' => $request->enterprise_id,
+                ]);
+            }
+
+            $post->enterprise_id = $enterprise->id;
+        }
+
         if ($request->has('thumbnail_url')) {
             $fileImage = $request->file('thumbnail_url');
             $image = $this->uploadFile($fileImage, $post->thumbnail_url);
@@ -242,6 +280,9 @@ class Post
             $post->status_capacity = 0;
         } elseif ($request->recruitment_id != 0) {
             $post->postable_id = $request->recruitment_id;
+            $post->postable_type = $this->recruitment::class;
+            $post->status_capacity = 0;
+        } elseif ($request->post_type === 'recruitment') {
             $post->postable_type = $this->recruitment::class;
             $post->status_capacity = 0;
         }
