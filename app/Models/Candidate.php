@@ -12,8 +12,9 @@ use Illuminate\Support\Facades\DB;
 class Candidate extends Model
 {
     use HasFactory, SoftDeletes;
+
     protected $table = 'candidates';
-    protected $fillable = ['post_id', 'name', 'phone', 'email', 'file_link', 'student_code'];
+    protected $fillable = ['post_id', 'name', 'phone', 'email', 'file_link', 'student_code', 'major_id', 'status', 'result',];
     // protected $casts = [
     //     'file_link' => FormatImageGet::class,
     // ];
@@ -21,6 +22,7 @@ class Candidate extends Model
     {
         return $this->belongsTo(Post::class, 'post_id');
     }
+
     public function countCv($email, $post_id)
     {
         return DB::table($this->table)->where('email', $email)->where('post_id', $post_id)->count();
@@ -29,5 +31,10 @@ class Candidate extends Model
     public function candidateNotes()
     {
         return $this->hasMany(CandidateNote::class, 'candidate_id')->orderBy('created_at', 'desc');
+    }
+
+    public function major()
+    {
+        return $this->belongsTo(Major::class, 'major_id');
     }
 }

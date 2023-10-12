@@ -93,6 +93,7 @@ class Candidate
             'email' => $request->email,
             'student_code' => $request->student_code,
             'phone' => $request->phone,
+            'major_id' => $request->major_id,
         ];
         $dataUpdate = [
             'name' => $request->name,
