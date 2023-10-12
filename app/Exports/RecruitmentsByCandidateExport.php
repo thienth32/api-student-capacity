@@ -71,7 +71,7 @@ class RecruitmentsByCandidateExport implements FromCollection, WithHeadings, Wit
             $data->name,
             $data->email,
             $data->phone,
-            !empty($data->post->major->name) ? $data->post->major->name : '',
+            !empty($data->major->name) ? $data->major->name : '',
             !empty($data->post->position) ? $data->post->position : '',
             !empty($data->post->enterprise->address) ? $data->post->enterprise->address : '',
             '',

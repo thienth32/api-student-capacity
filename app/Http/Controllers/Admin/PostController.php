@@ -245,7 +245,7 @@ class PostController extends Controller
     {
         DB::beginTransaction();
         try {
-            if ($request->recruitment_id == 0) $request['code_recruitment'] = null;
+            if ($request->post_type !== 'recruitment') $request['code_recruitment'] = null;
             $this->modulesPost->update($request, $id);
             Db::commit();
             return Redirect::route('admin.post.list');

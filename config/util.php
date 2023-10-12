@@ -108,6 +108,19 @@ return [
     'TYPE_RECRUITMENTS' => 1,
     'TYPE_CAPACITY_TEST' => 2,
 
+    "CANDIDATE_OPTIONS" => [
+        "STATUSES" => [
+            "0" => "Sửa CV",
+            "1" => "Đã gửi sang DN",
+        ],
+        "RESULTS" => [
+            "fail" => "Fail",
+            "pass" => "Pass",
+            "to_another_recruitment" => "Chuyển sang mã TD khác",
+            "full" => "DN đã tuyển đủ",
+        ],
+    ],
+
 
     'CHALLENEGE' => [
         "php" => [

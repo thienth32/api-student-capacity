@@ -66,14 +66,17 @@
                                         <h3>Thuộc</h3>
                                     </div>
                                     <div class="col-8">
-                                        @if (get_class($data->postable) == \App\Models\Round::class)
+                                        @if ($data->postable_type == \App\Models\Round::class)
                                             Vòng thi : <b><a
                                                     href="{{ route('admin.round.detail', ['id' => $data->postable->id]) }}">{{ $data->postable->name }}</a></b>
-                                        @elseif (get_class($data->postable) == \App\Models\Recruitment::class)
-                                            Tuyển dụng :
+                                        @elseif ($data->postable_type == \App\Models\Recruitment::class)
+                                            Tuyển dụng
+                                            @if($data->postable)
+                                            :
                                             <b><a
                                                     href="{{ route('admin.recruitment.detail', ['id' => $data->postable->id]) }}">{{ $data->postable->name }}</a></b>
-                                        @elseif(get_class($data->postable) == \App\Models\Contest::class && $data->postable->type == 0)
+                                            @endif
+                                        @elseif($data->postable_type == \App\Models\Contest::class && $data->postable->type == 0)
                                             Cuộc thi : <b><a
                                                     href="{{ route('admin.contest.show', ['id' => $data->postable->id]) }}">{{ $data->postable->name }}</a></b>
                                         @else
