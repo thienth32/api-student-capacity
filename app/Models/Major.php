@@ -18,6 +18,7 @@ class Major extends Model
         'name',
         'slug',
         'parent_id',
+        'for_recruitment',
     ];
 
     public static function boot()

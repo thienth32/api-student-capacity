@@ -185,9 +185,12 @@
                                     <label for="" class="form-label">Hình thức</label>
                                     <select name="career_type" id="" class="form-select form-major"
                                             data-control="select2">
-                                        <option value="">Hình thức</option>
-                                        <option value="0" @selected(old('career_type') == 0)>Part-time</option>
-                                        <option value="1" @selected(old('career_type') == 1)>Full-time</option>
+                                        <option value="">Chọn hình thức</option>
+                                        @foreach (config('util.CAREER_TYPES') as $key => $value)
+                                            <option @selected(old('career_type') == $key) value="{{ $key }}">{{ $value }}</option>
+                                        @endforeach
+{{--                                        <option value="0" @selected(old('career_type') == 0)>Part-time</option>--}}
+{{--                                        <option value="1" @selected(old('career_type') == 1)>Full-time</option>--}}
                                     </select>
                                 </div>
                                 <div class="form-group mb-10 col-xl-4 col-12">
@@ -249,7 +252,7 @@
                             <div class="form-group mb-10">
                                 <label class="form-label" for="">Mô tả ngắn bài viết</label>
                                 <textarea class="form-control" name="description" id="kt_docs_ckeditor_classic"
-                                          rows="3">{{ old('description') }}</textarea>
+                                          rows="3">{{ old('description') ?? "(Tên cơ sở) + [Tên Công ty] tuyển dụng [Số lượng tuyển] + [Vị trí tuyển] + [Hình thức tuyển]" }}</textarea>
                                 @error('description')
                                 <p class="text-danger">{{ $message }}</p>
                                 @enderror
@@ -301,9 +304,16 @@
         const oldCapacity = @json(old('capacity_id'));
         const recruitments = @json($recruitments);
         let enterprises = @json($enterprises);
+        let branches = @json($branches);
+        let careerTypes = @json(config('util.CAREER_TYPES'));
+
         $(document).ready(function () {
             const recruitmentSelect = $('select[name="recruitment_id"]');
             const enterpriseSelect = $('select[name="enterprise_id"]');
+            let branchSelect = $('select[name="branch_id"]');
+            let careerTypeSelect = $('select[name="career_type"]');
+            let total = $('input[name="total"]');
+
             if (oldRound == null || oldRecruitment == null || oldCapacity == null) {
                 $(".click-recruitment").click();
             }

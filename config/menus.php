@@ -202,6 +202,12 @@ return [
                 "link" => "admin.major.list",
             ],
             [
+                "name" => "Chuyên ngành tuyển dụng",
+                "role" => $ROLE_HAS_ADMINS,
+                "param" => '',
+                "link" => "admin.major.recruitment.list",
+            ],
+            [
                 "name" => "Kỹ năng",
                 "role" => $ROLE_HAS_ADMINS,
                 "param" => '',

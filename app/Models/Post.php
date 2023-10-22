@@ -43,7 +43,7 @@ class Post extends Model
         'note',
     ];
     protected $casts = [
-        'deadline' => FormatDate::class,
+//        'deadline' => FormatDate::class,
         'created_at' => FormatDate::class,
         'updated_at' =>  FormatDate::class,
         'thumbnail_url' => FormatImageGet::class,

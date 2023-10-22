@@ -4,6 +4,12 @@ return [
     'CAREER_PARTTIME_TYPE' => 0,
     'CAREER_FULL_PART_TYPE' => 2,
 
+    'CAREER_TYPES' => [
+        '0' => 'Part-time',
+        '1' => 'Full-time',
+        '2' => 'Online',
+    ],
+
 
     'TAKE_EXAM_STATUS_CANCEL' => 0, //TRẠNG THÁI HỦY BÀI THI
     'TAKE_EXAM_STATUS_UNFINISHED' => 1, // TRẠNG THÁI CHƯA HOÀN THÀNH BÀI THI
