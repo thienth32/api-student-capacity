@@ -214,9 +214,12 @@
                                     <label for="" class="form-label">Hình thức</label>
                                     <select name="career_type" id="" class="form-select form-major"
                                             data-control="select2">
-                                        <option value="">Hình thức</option>
-                                        <option value="0" @selected(old('career_type') == 0 || $post->career_type == 0)>Part-time</option>
-                                        <option value="1" @selected(old('career_type') == 1 || $post->career_type == 1)>Full-time</option>
+                                        <option value="">Chọn hình thức</option>
+                                        @foreach (config('util.CAREER_TYPES') as $key => $value)
+                                            <option @selected(old('career_type') == $key || $post->career_type == $key) value="{{ $key }}">{{ $value }}</option>
+                                        @endforeach
+{{--                                        <option value="0" @selected(old('career_type') == 0 || $post->career_type == 0)>Part-time</option>--}}
+{{--                                        <option value="1" @selected(old('career_type') == 1 || $post->career_type == 1)>Full-time</option>--}}
                                     </select>
                                 </div>
                                 <div class="form-group mb-10 col-xl-4 col-12">

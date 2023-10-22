@@ -94,7 +94,7 @@ class PostController extends Controller
             foreach ($recruitments as $recruitment) {
                 $recruitment->enterprises_id = $recruitment->enterprise->pluck('id')->toArray();
             }
-            $majors = $this->majors::all(['id', 'name']);
+            $majors = $this->majors::select(['id', 'name'])->where('for_recruitment', 1)->get();
             // dd($users);
             $enterprises = $this->enterprise::all(['id', 'name']);
             $rounds = $this->round::all(['id', 'name', 'contest_id']);
@@ -133,7 +133,7 @@ class PostController extends Controller
             foreach ($recruitments as $recruitment) {
                 $recruitment->enterprises_id = $recruitment->enterprise->pluck('id')->toArray();
             }
-            $majors = $this->majors::all(['id', 'name']);
+            $majors = $this->majors::select(['id', 'name'])->where('for_recruitment', 1)->get();
             // dd($users);
             $enterprises = $this->enterprise::all(['id', 'name']);
             $rounds = $this->round::all(['id', 'name', 'contest_id']);
@@ -201,7 +201,7 @@ class PostController extends Controller
         foreach ($recruitments as $recruitment) {
             $recruitment->enterprises_id = $recruitment->enterprise->pluck('id')->toArray();
         }
-        $majors = $this->majors::all(['id', 'name']);
+        $majors = $this->majors::select(['id', 'name'])->where('for_recruitment', 1)->get();
         // dd($users);
         $enterprises = $this->enterprise::all(['id', 'name']);
         $post = $this->modulesPost->getList($request)->where('slug', $slug)->first();
@@ -427,7 +427,7 @@ class PostController extends Controller
     public function apiDetail($slug)
     {
         $data = $this->post::where('slug', $slug)->first();
-        $data->load('user:id,name,email');
+        $data->load(['user:id,name,email', 'enterprise:id,name,address,description,link_web', 'major']);
         if (!$data) abort(404);
         return $this->responseApi(
             true,

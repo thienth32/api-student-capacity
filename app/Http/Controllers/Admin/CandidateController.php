@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendMailUploadCV;
 use App\Jobs\SendMailNoteCV;
+use App\Jobs\SendMailWhenSendCvToEnterprise;
 use App\Mail\MailUploadCV;
 use App\Models\Candidate;
 use App\Models\CandidateNote;
@@ -103,7 +104,7 @@ class CandidateController extends Controller
         }
     }
 
-    public function changStatus(Request $request)
+    public function changeStatus(Request $request)
     {
         [$status, $id] = explode("|", $request->status);
 
@@ -112,23 +113,29 @@ class CandidateController extends Controller
             'payload' => 'Không tìm thấy thông tin ứng viên tuyển dụng  !',
         ]);
 
+        if ($status == 1) {
+            $email = new SendMailWhenSendCvToEnterprise($candidate);
+            dispatch($email);
+        }
+
         $candidate->update([
             'status' => $status
         ]);
 
+
         return response()->json([
             'status' => true,
-            'payload' => 'Cập nhật thành công  !',
+            'payload' => 'Cập nhật thành công!',
         ]);
     }
 
-    public function changResult(Request $request)
+    public function changeResult(Request $request)
     {
         [$result, $id] = explode("|", $request->result);
 
         if (!$candidate = $this->candidate::find($id)) return response()->json([
             'status' => false,
-            'payload' => 'Không tìm thấy thông tin ứng viên tuyển dụng  !',
+            'payload' => 'Không tìm thấy thông tin ứng viên tuyển dụng!',
         ]);
 
         $candidate->update([
@@ -217,7 +224,7 @@ class CandidateController extends Controller
             'email' => 'required|email',
             'phone' => 'required',
             'major_id' => 'required',
-            'file_link' => 'required|mimes:zip,docx,word,pdf|file|max:10000',
+            'file_link' => 'required|mimes:pdf|file|max:10000',
         ];
         $message = [
             'post_id.required' => 'Mã tuyển dụng không được bỏ trống ',
@@ -228,8 +235,8 @@ class CandidateController extends Controller
             'phone.required' => 'Số điện thoại không được bỏ trống ',
             'major_id.required' => 'Chuyên ngành không được bỏ trống ',
             'file_link.required' => 'Link CV không được bỏ trống ',
-            'file_link.mimes' => 'Link CV không đúng định dạng . Yêu cầu file zip,docx,word,pdf , tối đa dung lượng file 10MB  !',
-            'file_link.file' => 'Link CV phải là một file  . Yêu cầu file zip,docx,word,pdf , tối đa dung lượng file 10MB  !',
+            'file_link.mimes' => 'Link CV không đúng định dạng. Yêu cầu file pdf, tối đa dung lượng file 10MB  !',
+            'file_link.file' => 'Link CV phải là một file. Yêu cầu file pdf, tối đa dung lượng file 10MB  !',
             'file_link.max' => 'Link CV dung lượng quá lớn. Tối đa 10MB !',
         ];
         $validator = Validator::make($request->all(), $rules, $message);

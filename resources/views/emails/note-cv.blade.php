@@ -9,20 +9,24 @@
 </head>
 
 <body>
-    <div class="container">
-        <p>Xin chào, {{ $candidate->name }}</p>
-        <br>
-        <p>Cảm ơn bạn đã gửi thông tin ứng tuyển tại hệ thống Beecareer thuộc phòng Quan hệ doanh nghiệp trường Cao đẳng FPT Polytechnic.</p>
-        <p>Tuy nhiên thông tin ứng tuyển của bạn đang gặp vấn đề: {{$content}}</p>
-        <p>
-            Vui lòng cập nhật lại thông tin hồ sơ và CV
-            <a href="{{ env('CLIENT_URL') }}/tin-tuc/{{$post->slug}}?name={{$candidate->name}}&student_code={{$candidate->student_code}}&email={{$candidate->email}}&phone={{$candidate->phone}}">
-                 tại đây.
-            </a>
-        </p>
-        <br>
-        <p>Cảm ơn {{ $candidate->name }}!</p>
-    </div>
+<div class="container">
+    <p>{{ $candidate->name }} thân mến,</p>
+    <br>
+    <p>Beecareer đã nhận được thông tin và CV từ bạn.</p>
+    <p>Chúng tôi có một số góp ý cho CV của bạn như sau:</p>
+    <p><strong>{{$content}}</strong></p>
+    <p>
+        Bạn hãy sửa lại CV sau đó ứng tuyển lại
+        <a href="{{ config('app.client_url') }}/tin-tuc/{{$post->slug}}?name={{$candidate->name}}&student_code={{$candidate->student_code}}&email={{$candidate->email}}&phone={{$candidate->phone}}">
+            tại đây
+        </a>
+        để cập nhật CV của mình nhé!
+    </p>
+    <br>
+    <p>Thân mến!</p>
+    <br>
+    @include('emails.signature')
+</div>
 </body>
 
 </html>

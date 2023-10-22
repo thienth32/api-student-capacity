@@ -63,7 +63,7 @@ class MajorController extends Controller
         return $this->responseApi(true, $major->first());
     }
 
-    private function getList()
+    private function getList($recruitment = 0)
     {
         try {
             $limit = 10;
@@ -72,6 +72,7 @@ class MajorController extends Controller
                 ->with(['majorChils' => function ($q) {
                     return $q->withCount(['sliders', 'contests', 'majorChils', 'teams', 'parent']);
                 }])
+                ->where('for_recruitment', $recruitment)
                 ->search(request('q') ?? null, ['name', 'slug']);
             return $dataMajor;
         } catch (\Throwable $th) {
@@ -81,10 +82,28 @@ class MajorController extends Controller
 
     public function index()
     {
-        $data = $this->getList()->where('parent_id', '=', 0);
+        $data = $this->getList()->where([
+            ['parent_id', '=', 0],
+            ['for_recruitment', '=', 0]
+        ]);
         if ($data) {
             return  view('pages.major.index', [
                 'majors' => $data->paginate(request('limit') ?? 5),
+                'recruitment' => false,
+            ]);
+        }
+        return abort(404);
+    }
+
+    public function indexRecruitment()
+    {
+        $data = $this->getList(1)->where([
+            ['parent_id', '=', 0],
+        ]);
+        if ($data) {
+            return  view('pages.major.index', [
+                'majors' => $data->paginate(request('limit') ?? 5),
+                'recruitment' => true,
             ]);
         }
         return abort(404);
@@ -125,10 +144,26 @@ class MajorController extends Controller
         return $this->responseApi(false);
     }
 
+    public function apiIndexRecruitment()
+    {
+        if ($data = $this->getList(1)) {
+            return $this->responseApi(true, $data->get());
+        }
+        return $this->responseApi(false);
+    }
+
     public function create()
     {
         $dataMajor = $this->getList()->where('parent_id', '=', 0)->get();
-        return view('pages.major.create', compact('dataMajor'));
+        $recruitment = false;
+        return view('pages.major.create', compact('dataMajor', 'recruitment'));
+    }
+
+    public function createRecruitment()
+    {
+        $dataMajor = $this->getList()->where('parent_id', '=', 0)->get();
+        $recruitment = true;
+        return view('pages.major.create', compact('dataMajor', 'recruitment'));
     }
 
     public function store(Request $request)
@@ -154,12 +189,51 @@ class MajorController extends Controller
         ]);
         return redirect()->route('admin.major.list');;
     }
+
+    public function storeRecruitment(Request $request)
+    {
+
+        $request->validate(
+            [
+                'name' => 'required|min:4',
+                'slug' => 'required|unique:majors,slug'
+            ],
+            [
+                'name.required' => 'Không được bỏ trống tên !',
+                'slug.required' => 'Không được bỏ trống slug !',
+                'name.min' => 'Ký tự tên phải lớn hơn 4 ký tự  !',
+                'name.unique' => 'Slug không được trùng !',
+            ]
+        );
+        $slug = \Str::slug($request->slug);
+        $this->major::create([
+            'name' => $request->name,
+            'slug' => $slug,
+            'parent_id' => 0,
+            'for_recruitment' => 1
+        ]);
+        return redirect()->route('admin.major.recruitment.list');;
+    }
     public function edit(Request $request, $slug)
     {
-        $dataMajor = Major::where('parent_id', 0)->get();
+        $dataMajor = Major::where([
+            ['parent_id', 0],
+            ['for_recruitment', 0],
+        ])->get();
+        $recruitment = false;
         if ($major = $this->getMajor($slug)) {
             //   dd( $major->first()->parent);
-            return view('pages.major.edit', ['major' => $major->first(), 'dataMajor' => $dataMajor]);
+            return view('pages.major.edit', ['major' => $major->first(), 'dataMajor' => $dataMajor, 'recruitment' => $recruitment]);
+        }
+        return abort(404);
+    }
+    public function editRecruitment(Request $request, $slug)
+    {
+        $dataMajor = Major::where('parent_id', 0)->get();
+        $recruitment = true;
+        if ($major = $this->getMajor($slug)) {
+            //   dd( $major->first()->parent);
+            return view('pages.major.edit', ['major' => $major->first(), 'dataMajor' => $dataMajor, 'recruitment' => $recruitment]);
         }
         return abort(404);
     }
@@ -189,6 +263,30 @@ class MajorController extends Controller
         return redirect()->route('admin.major.list');
     }
 
+    public function updateRecruitment(Request $request, $slug)
+    {
+        if (!($major = $this->getMajor($slug))) return abort(404);
+
+        $request->validate(
+            [
+                'name' => 'required|min:4',
+                'slug' => 'required|unique:majors,slug,' . $major->first()->id,
+            ],
+            [
+                'name.required' => 'Không được bỏ trống tên !',
+                'slug.required' => 'Không được bỏ trống slug !',
+                'name.min' => 'Ký tự tên phải lớn hơn 4 ký tự  !',
+                'name.unique' => 'Slug không được trùng !',
+            ]
+        );
+        $slug = \Str::slug($request->slug);
+        $major->update([
+            'name' => $request->name,
+            'slug' => $slug,
+        ]);
+        return redirect()->route('admin.major.recruitment.list');
+    }
+
     public function destroy($slug)
     {
 
@@ -204,6 +302,16 @@ class MajorController extends Controller
     public function listRecordSoftDeletes()
     {
         if ($data = $this->getList()->onlyTrashed()) {
+            return  view('pages.major.soft-deletes', [
+                'majors' => $data->paginate(request('limit') ?? 5),
+            ]);
+        }
+        return abort(404);
+    }
+
+    public function listRecordSoftDeletesRecruitment()
+    {
+        if ($data = $this->getList()->onlyTrashed()->where('for_recruitment', 1)) {
             return  view('pages.major.soft-deletes', [
                 'majors' => $data->paginate(request('limit') ?? 5),
             ]);
