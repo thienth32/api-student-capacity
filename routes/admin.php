@@ -21,7 +21,7 @@ use App\Http\Controllers\Admin\SendMailController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EnterpriseController;
 use App\Http\Controllers\Admin\JobController;
-use App\Http\Controllers\admin\KeywordController;
+use App\Http\Controllers\Admin\KeywordController;
 use App\Http\Controllers\Admin\RecruitmentController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\PrintPDFController;
