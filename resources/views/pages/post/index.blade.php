@@ -413,8 +413,11 @@
                             </th>
                             <th scope="col">link ngoài
                             </th>
+                            <th scope="col">Lượt xem
+                            </th>
                             <th scope="col">Nội dung
                             </th>
+
 
                             <th class="text-center" colspan="2">
 
@@ -447,15 +450,21 @@
                                     {{ $key->title }}
                                 </td>
                                 <td>
-                                    @if (get_class($key->postable) == \App\Models\Round::class)
+                                    @php
+                                        $class = $key->postable ? get_class($key->postable) : $key->postable_type;
+                                    @endphp
+                                    @if ($class == \App\Models\Round::class)
                                         Vòng thi : <b><a
                                                 href="{{ route('admin.round.detail', ['id' => $key->postable->id]) }}">{{ $key->postable->name }}
                                             </a></b>
-                                    @elseif (get_class($key->postable) == \App\Models\Recruitment::class)
-                                        Tuyển dụng :
+                                    @elseif ($class == \App\Models\Recruitment::class)
+                                        Tuyển dụng
+                                    @if($key->postable)
+                                        :
                                         <b><a
                                                 href="{{ route('admin.recruitment.detail', ['id' => $key->postable->id]) }}">{{ $key->postable->name }}</a></b>
-                                    @elseif(get_class($key->postable) == \App\Models\Contest::class && $key->status_capacity == 0)
+                                        @endif
+                                    @elseif($class == \App\Models\Contest::class && $key->status_capacity == 0)
                                         Cuộc thi : <b><a
                                                 href="{{ route('admin.contest.show', ['id' => $key->postable->id]) }}">{{ $key->postable->name }}
                                             </a></b>
@@ -465,7 +474,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @if (get_class($key->postable) == \App\Models\Recruitment::class)
+                                    @if ($class == \App\Models\Recruitment::class)
                                         <a href="{{ route('admin.candidate.list', ['post_id' => $key->id]) }}"
                                             class=" btn btn-primary btn-sm">Danh
                                             sách ứng tuyển
@@ -515,6 +524,9 @@
                                     @if ($key->link_to != null)
                                         <a href="{{ $key->link_to }}" class="btn  btn-primary btn-sm">Xem</a>
                                     @endif
+                                </td>
+                                <td>
+                                    {{ $key->view }}
                                 </td>
                                 <td>
                                     <button class="btn  btn-primary btn-sm" type="button" data-bs-toggle="modal"
@@ -632,7 +644,7 @@
                                             </li>
                                             <li class="my-3">
                                                 @hasrole('super admin')
-                                                    @if ($key->postable->count() == 0 && $key->user->count() == 0)
+                                                    @if ($key->postable?->count() == 0 && $key->user->count() == 0)
                                                         <form action="{{ route('admin.post.destroy', $key->slug) }}"
                                                             method="post">
                                                             @csrf
@@ -707,8 +719,8 @@
     </div>
 @endsection
 @section('page-script')
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script type="text/javascript" src="assets/js/custom/documentation/general/moment.min.js"></script>
+    <script type="text/javascript" src="assets/js/custom/documentation/general/daterangepicker.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <script src="assets/js/system/post/postFilter.js"></script>
     <script>

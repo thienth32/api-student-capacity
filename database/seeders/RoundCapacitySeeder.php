@@ -15,6 +15,7 @@ class RoundCapacitySeeder extends Seeder
      * Run the database seeds.
      *
      * @return void
+     * @throws \Exception
      */
     public function run()
     {
@@ -79,12 +80,12 @@ class RoundCapacitySeeder extends Seeder
             '62fc98271b925-1660721191.jpg',
         ];
         for ($i = 0; $i < $qltFace; $i++) {
-            $date = Carbon::create(2022, rand(9, 10), rand(1, 4), 0, 0, 0);
+            $date = Carbon::create(2022, random_int(9, 10), random_int(1, 4), 0, 0, 0);
             $start = $date->format('Y-m-d H:i:s');
-            $end = $date->addWeeks(rand(1, 12))->format('Y-m-d H:i:s');
+            $end = $date->addWeeks(random_int(1, 12))->format('Y-m-d H:i:s');
             $selected = array();
             foreach ($sentences as $sentence) {
-                $selected[] = $sentence[rand(0, count($sentence) - 1)];
+                $selected[] = $sentence[random_int(0, count($sentence) - 1)];
             }
             $paragraph = implode(' ', $selected) . Str::random(10);
             Round::create([

@@ -58,7 +58,7 @@ class GameTypePlay implements ShouldQueue
         $questions = $exam->questions[0];
 
         $exam = $this->examRepo->updateCapacityPlay($exam->id, [
-            "room_token" => MD5(uniqid() . time()),
+            "room_token" => hash("sha512", uniqid() . time()),
         ]);
 
         broadcast(new PlayGameEvent($this->code, $exam->token, $questions->toArray(), $ranks));
@@ -104,7 +104,7 @@ class GameTypePlay implements ShouldQueue
             $question = $exam->questions[0];
             $next = $exam->questions[1]->id;
             $exam = $this->examRepo->updateCapacityPlay($exam->id, [
-                "room_token" => MD5(uniqid() . time()),
+                "room_token" => hash("sha512", uniqid() . time()),
                 "room_progress" => json_encode([$question->id])
             ]);
             broadcast(new PlayGameEvent($this->code, $exam->token, $question->toArray(), $ranks));

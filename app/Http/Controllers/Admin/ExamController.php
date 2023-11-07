@@ -22,19 +22,30 @@ class ExamController extends Controller
     use TUploadImage, TResponse;
 
     public function __construct(
-        private MExamInterface $repoExam,
-        private Exam $exam,
+        private MExamInterface  $repoExam,
+        private Exam            $exam,
         private MRoundInterface $repoRound,
-        private Round $round,
-        private Question $question,
-        private DB $db
-    ) {
+        private Round           $round,
+        private Question        $question,
+        private DB              $db
+    )
+    {
     }
 
     public function getHistory($id)
     {
         try {
             $data = $this->repoRound->getResult($id);
+            return $this->responseApi(true, $data);
+        } catch (\Throwable $th) {
+            return $this->responseApi(false, $th->getMessage());
+        }
+    }
+
+    public function deleteHistory($id)
+    {
+        try {
+            $data = $this->repoExam->destroyResultCapacity($id);
             return $this->responseApi(true, $data);
         } catch (\Throwable $th) {
             return $this->responseApi(false, $th->getMessage());
@@ -120,7 +131,7 @@ class ExamController extends Controller
                 'type' => $type,
                 'status' => 1
             ];
-            if ($type == 1)  $dataMer = [
+            if ($type == 1) $dataMer = [
                 'round_id' => $id_round,
                 'type' => $type,
                 'status' => 1,
@@ -143,7 +154,6 @@ class ExamController extends Controller
             return abort(404);
         }
     }
-
 
 
     public function destroy($id)
@@ -184,7 +194,7 @@ class ExamController extends Controller
                 $validatorContest = Validator::make(
                     $request->all(),
                     [
-                        'external_url' => 'required|mimes:zip,docx,word|file|max:10000',
+                        'external_url' => 'required|mimes:zip,docx,word|file|max:8000',
                     ],
                     [
                         'external_url.mimes' => 'Trường đề thi không đúng định dạng !',
@@ -205,7 +215,7 @@ class ExamController extends Controller
         try {
 
             if ($request->has('external_url')) {
-                $fileImage =  $request->file('external_url');
+                $fileImage = $request->file('external_url');
                 $external_url = $this->uploadFile($fileImage, $examModel->external_url);
                 $examModel->external_url = $external_url;
             }

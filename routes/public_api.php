@@ -54,6 +54,7 @@ Route::prefix('rounds')->group(function () {
 
 Route::prefix('majors')->group(function () {
     Route::get('', [AdminMajorController::class, 'apiIndex'])->name('major.api.index');
+    Route::get('recruitment', [AdminMajorController::class, 'apiIndexRecruitment'])->name('major.api.index');
     Route::get('{slug}', [AdminMajorController::class, 'apiShow'])->name('major.api.show');
 });
 
@@ -76,6 +77,7 @@ Route::prefix('exam')->group(function () {
     Route::get('get-by-round/{id}', [ExamController::class, 'get_by_round'])->name('exam.api.get.round');
     Route::get('get-question-by-exam/{id}', [ExamController::class, 'showQuestionAnswerExams'])->name('exam.api.get.questions.exam');
     Route::get('get-history/{id}', [ExamController::class, 'getHistory']);
+    Route::delete('delete-history/{id}', [ExamController::class, 'deleteHistory'])->name('exam.api.delete.history.exam');
 });
 
 Route::prefix('questions')->group(function () {
@@ -95,6 +97,7 @@ Route::prefix('recruitments')->group(function () {
 
 Route::prefix('posts')->group(function () {
     Route::get('', [PostController::class, 'apiShow']);
+    Route::post('view', [PostController::class, 'view']);
     Route::get('{slug}', [PostController::class, 'apiDetail']);
 });
 // Route::get('rating-major/{slug}', [RankUserController::class, 'getRatingUser']);

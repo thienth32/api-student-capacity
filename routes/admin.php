@@ -21,7 +21,7 @@ use App\Http\Controllers\Admin\SendMailController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EnterpriseController;
 use App\Http\Controllers\Admin\JobController;
-use App\Http\Controllers\admin\KeywordController;
+use App\Http\Controllers\Admin\KeywordController;
 use App\Http\Controllers\Admin\RecruitmentController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\PrintPDFController;
@@ -313,6 +313,20 @@ Route::group([
             Route::get('{slug}/delete', [MajorController::class, 'permanently_deleted'])->name('admin.major.soft.deletes');
             Route::get('{slug}/restore', [MajorController::class, 'restore_deleted'])->name('admin.major.soft.restore');
         });
+
+        Route::prefix('recruitment')->group(function () {
+            Route::get('{slug}/edit', [MajorController::class, 'editRecruitment'])->name('admin.major.recruitment.edit');
+            Route::put('{slug}', [MajorController::class, 'updateRecruitment'])->name('admin.major.recruitment.update');
+            Route::get('', [MajorController::class, 'indexRecruitment'])->name('admin.major.recruitment.list');
+            Route::get('create', [MajorController::class, 'createRecruitment'])->name('admin.major.recruitment.create');
+            Route::post('store', [MajorController::class, 'storeRecruitment'])->name('admin.major.recruitment.store');
+            Route::delete('{slug}', [MajorController::class, 'destroy'])->name('admin.major.recruitment.destroy');
+            Route::prefix('list-soft-deletes')->group(function () {
+                Route::get('', [MajorController::class, 'listRecordSoftDeletesRecruitment'])->name('admin.major.recruitment.list.soft.deletes');
+                Route::get('{slug}/delete', [MajorController::class, 'permanently_deleted'])->name('admin.major.recruitment.soft.deletes');
+                Route::get('{slug}/restore', [MajorController::class, 'restore_deleted'])->name('admin.major.recruitment.soft.restore');
+            });
+        });
     });
 
     Route::prefix('judges')->group(function () {
@@ -402,6 +416,8 @@ Route::group([
     Route::prefix('candidates')->group(function () {
         Route::get('', [CandidateController::class, 'index'])->name('admin.candidate.list');
         Route::post('create-note/{candidate_id}', [CandidateController::class, 'createNote'])->name('admin.candidate.createNote');
+        Route::post('change-status', [CandidateController::class, 'changeStatus'])->name('admin.candidate.changeStatus');
+        Route::post('change-result', [CandidateController::class, 'changeResult'])->name('admin.candidate.changeResult');
         Route::get('user-cv', [CandidateController::class, 'listCvUser'])->name('admin.candidate.listCvUser');
         Route::delete('{id}', [CandidateController::class, 'destroy'])->name('admin.candidate.destroy');
         Route::prefix('list-soft-deletes')->group(function () {

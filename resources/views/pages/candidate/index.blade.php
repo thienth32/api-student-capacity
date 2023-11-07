@@ -110,7 +110,7 @@
                 </th>
                 <th scope="col"> Xem CV
                 </th>
-                <th scope="col"> Tải CV
+                <th scope="col"> DN ứng tuyển
                 </th>
                 <th scope="col">Thời gian ứng tuyển
                     <a data-href="{{ request()->has('sortBy') ? (request('sortBy') == 'desc' ? 'asc' : 'desc') : 'asc' }}" data-order="created_at" id="time_candidate">
@@ -129,23 +129,8 @@
                     </a>
 
                 </th>
-                <th scope="col">Cập nhật mới nhất
-                    <a data-href="{{ request()->has('sortBy') ? (request('sortBy') == 'desc' ? 'asc' : 'desc') : 'asc' }}" data-order="updated_at" id="update_time_candidate">
-                        <span role="button" data-key="name" data-bs-toggle="tooltip" title="Lọc theo thời gian cập nhật" class=" svg-icon svg-icon-primary  svg-icon-2x format-database">
-                            <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Up-down.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="width: 14px !important ; height: 14px !important" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                    <polygon points="0 0 24 0 24 24 0 24" />
-                                    <rect fill="#000000" opacity="0.3" transform="translate(6.000000, 11.000000) rotate(-180.000000) translate(-6.000000, -11.000000) " x="5" y="5" width="2" height="12" rx="1" />
-                                    <path d="M8.29289322,14.2928932 C8.68341751,13.9023689 9.31658249,13.9023689 9.70710678,14.2928932 C10.0976311,14.6834175 10.0976311,15.3165825 9.70710678,15.7071068 L6.70710678,18.7071068 C6.31658249,19.0976311 5.68341751,19.0976311 5.29289322,18.7071068 L2.29289322,15.7071068 C1.90236893,15.3165825 1.90236893,14.6834175 2.29289322,14.2928932 C2.68341751,13.9023689 3.31658249,13.9023689 3.70710678,14.2928932 L6,16.5857864 L8.29289322,14.2928932 Z" fill="#000000" fill-rule="nonzero" />
-                                    <rect fill="#000000" opacity="0.3" transform="translate(18.000000, 13.000000) scale(1, -1) rotate(-180.000000) translate(-18.000000, -13.000000) " x="17" y="7" width="2" height="12" rx="1" />
-                                    <path d="M20.2928932,5.29289322 C20.6834175,4.90236893 21.3165825,4.90236893 21.7071068,5.29289322 C22.0976311,5.68341751 22.0976311,6.31658249 21.7071068,6.70710678 L18.7071068,9.70710678 C18.3165825,10.0976311 17.6834175,10.0976311 17.2928932,9.70710678 L14.2928932,6.70710678 C13.9023689,6.31658249 13.9023689,5.68341751 14.2928932,5.29289322 C14.6834175,4.90236893 15.3165825,4.90236893 15.7071068,5.29289322 L18,7.58578644 L20.2928932,5.29289322 Z" fill="#000000" fill-rule="nonzero" transform="translate(18.000000, 7.500000) scale(1, -1) translate(-18.000000, -7.500000) " />
-                                </g>
-                            </svg>
-                            <!--end::Svg Icon-->
-                        </span>
-                    </a>
-
-                </th>
+                <th>Trạng thái</th>
+                <th>Kết quả</th>
                 <th class="text-center" colspan="2">
 
                 </th>
@@ -196,12 +181,13 @@
 
                 <td>
 
-                    <a class="show_file btn btn-primary btn-sm" target="_blank" href="{{ Storage::disk('s3')->temporaryUrl($key->file_link, now()->addMinutes(5)) }}">Xem</a>
+                    <a class="show_file btn btn-primary btn-sm" target="_blank" rel="noopener" href="{{ Storage::disk('s3')->temporaryUrl($key->file_link, now()->addMinutes(5)) }}">Xem</a>
                 </td>
 
                 <td>
-                    <a class="download_file btn btn-success btn-sm" href="{{ route('dowload.file') . '?url=' . $key->file_link }}">Tải
-                        xuống</a>
+{{--                    <a class="download_file btn btn-success btn-sm" href="{{ route('dowload.file') . '?url=' . $key->file_link }}">Tải--}}
+{{--                        xuống</a>--}}
+                    {{ $posts->find($key->post_id)->enterprise->name ?? "" }}
 
                 </td>
 
@@ -210,9 +196,32 @@
                     <br>
                     {{ \Carbon\Carbon::parse($key->created_at)->diffforHumans() }}
                 </td>
-
                 <td>
-                    {{ \Carbon\Carbon::parse($key->updated_at)->diffforHumans() }}
+                    <select name="" id="" class="select-status form-select mb-2 select2-hidden-accessible"
+                    data-control="select2" data-hide-search="true"
+                    >
+                        @foreach(config('util.CANDIDATE_OPTIONS.STATUSES') as $status => $statusValue)
+                            <option value="{{ $status }}|{{ $key->id }}"
+                                    @selected($status == $key->status)
+                            >
+                                {{ $statusValue }}
+                            </option>
+                        @endforeach
+                    </select>
+                </td>
+                <td>
+                    <select name="" id="" class="select-result form-select mb-2 select2-hidden-accessible"
+                    data-control="select2" data-hide-search="true"
+                    >
+                        <option value="|{{ $key->id }}">Chưa có</option>
+                        @foreach(config('util.CANDIDATE_OPTIONS.RESULTS') as $result => $resultValue)
+                            <option value="{{ $result }}|{{ $key->id }}"
+                                    @selected($result == $key->result)
+                            >
+                                {{ $resultValue }}
+                            </option>
+                        @endforeach
+                    </select>
                 </td>
                 <td>
                     <div data-bs-toggle="tooltip" title="Thao tác " class="btn-group dropstart">
@@ -353,13 +362,68 @@
 </div>
 @endsection
 @section('page-script')
-<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script type="text/javascript" src="assets/js/custom/documentation/general/moment.min.js"></script>
+<script type="text/javascript" src="assets/js/custom/documentation/general/daterangepicker.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <script src="assets/js/system/candidate/candidate.js"></script>
 
 <script src="assets/js/system/formatlist/formatlis.js"></script>
 <script>
     const _token = "{{ csrf_token() }}";
+    $('.select-status').on('change', function (){
+        let status = $(this).val();
+        $.ajax({
+            url: `admin/candidates/change-status`,
+            method: "POST",
+            data: {
+                _token: _token,
+                status: status,
+            },
+            success: function (data) {
+                if(data.status == true)
+                {
+                    loadTast(
+                        "Thành công !",
+                        "toastr-bottom-left",
+                        "success"
+                    );
+                }else{
+                    loadTast(
+                        data.payload,
+                        "toastr-bottom-left",
+                        "info"
+                    );
+                }
+            },
+        });
+    });
+
+    $('.select-result').on('change', function (){
+        let result = $(this).val();
+        $.ajax({
+            url: `admin/candidates/change-result`,
+            method: "POST",
+            data: {
+                _token: _token,
+                result: result,
+            },
+            success: function (data) {
+                if(data.status == true)
+                {
+                    loadTast(
+                        "Thành công !",
+                        "toastr-bottom-left",
+                        "success"
+                    );
+                }else{
+                    loadTast(
+                        data.payload,
+                        "toastr-bottom-left",
+                        "info"
+                    );
+                }
+            },
+        });
+    });
 </script>
 @endsection

@@ -17,6 +17,7 @@ class TeamSeeder extends Seeder
      * Run the database seeds.
      *
      * @return void
+     * @throws \Exception
      */
     public function run()
     {
@@ -41,7 +42,7 @@ class TeamSeeder extends Seeder
         foreach ($contests as $key =>    $contest) {
             $selected = array();
             foreach ($sentences as $sentence) {
-                $selected[] = $sentence[rand(0, count($sentence) - 1)];
+                $selected[] = $sentence[random_int(0, count($sentence) - 1)];
             }
             $paragraph = implode(' ', $selected) . Str::random(10);
             $team =  Team::create([
@@ -50,7 +51,7 @@ class TeamSeeder extends Seeder
                 'image' => null,
             ]);
             $team->members()->syncWithoutDetaching(
-                $users->random(rand(2, 4))->pluck('id')->toArray()
+                $users->random(random_int(2, 4))->pluck('id')->toArray()
             );
             if ($contest->rounds) foreach ($contest->rounds as $key => $round) {
                 array_push($RoundTeams, [

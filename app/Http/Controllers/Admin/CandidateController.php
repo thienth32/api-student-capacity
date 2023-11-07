@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendMailUploadCV;
 use App\Jobs\SendMailNoteCV;
+use App\Jobs\SendMailWhenSendCvToEnterprise;
 use App\Mail\MailUploadCV;
 use App\Models\Candidate;
 use App\Models\CandidateNote;
@@ -25,18 +26,21 @@ class CandidateController extends Controller
 {
     use TUploadImage;
     use TResponse, TStatus;
+
     public function __construct(
-        private Candidate $candidate,
-        private Post $post,
+        private Candidate           $candidate,
+        private Post                $post,
         private MCandidateCandidate $MCandidate,
-        private DB $db,
-        private Storage $storage
-    ) {
+        private DB                  $db,
+        private Storage             $storage
+    )
+    {
     }
+
     public function index(Request $request)
     {
 
-        $posts = $this->post::where('postable_type', Recruitment::class)->get();
+        $posts = $this->post::where('postable_type', Recruitment::class)->with(['enterprise'])->get();
         $candidates = $this->MCandidate->index($request);
 
         return view('pages.candidate.index', [
@@ -45,7 +49,8 @@ class CandidateController extends Controller
         ]);
     }
 
-    public function createNote(Request $request, $candidateId) {
+    public function createNote(Request $request, $candidateId)
+    {
         if (!$candidateId) {
             return abort(404);
         }
@@ -73,6 +78,7 @@ class CandidateController extends Controller
 
         return view('pages.candidate.detail', compact('data'));
     }
+
     public function listCvUser(Request $request)
     {
         try {
@@ -83,6 +89,7 @@ class CandidateController extends Controller
             return abort(404);
         }
     }
+
     public function destroy($id)
     {
         try {
@@ -96,12 +103,58 @@ class CandidateController extends Controller
             return abort(404);
         }
     }
+
+    public function changeStatus(Request $request)
+    {
+        [$status, $id] = explode("|", $request->status);
+
+        if (!$candidate = $this->candidate::find($id)) return response()->json([
+            'status' => false,
+            'payload' => 'Không tìm thấy thông tin ứng viên tuyển dụng  !',
+        ]);
+
+        if ($status == 1) {
+            $email = new SendMailWhenSendCvToEnterprise($candidate);
+            dispatch($email);
+        }
+
+        $candidate->update([
+            'status' => $status
+        ]);
+
+
+        return response()->json([
+            'status' => true,
+            'payload' => 'Cập nhật thành công!',
+        ]);
+    }
+
+    public function changeResult(Request $request)
+    {
+        [$result, $id] = explode("|", $request->result);
+
+        if (!$candidate = $this->candidate::find($id)) return response()->json([
+            'status' => false,
+            'payload' => 'Không tìm thấy thông tin ứng viên tuyển dụng!',
+        ]);
+
+        $candidate->update([
+            'result' => $result
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'payload' => 'Cập nhật thành công  !',
+        ]);
+    }
+
     public function listRecordSoftDeletes(Request $request)
     {
         $posts = $this->post::where('postable_type', Recruitment::class)->get();
         $listSofts = $this->MCandidate->getList($request)->paginate(config('util.HOMEPAGE_ITEM_AMOUNT'));
         return view('pages.candidate.candidate-soft-delete', compact('listSofts', 'posts'));
     }
+
     public function backUpPost($id)
     {
         try {
@@ -111,6 +164,7 @@ class CandidateController extends Controller
             return abort(404);
         }
     }
+
     //xóa vĩnh viễn
     public function delete($id)
     {
@@ -124,6 +178,7 @@ class CandidateController extends Controller
             return abort(404);
         }
     }
+
     /**
      * @OA\Post(
      *      path="/api/public/candidate/add",
@@ -136,27 +191,22 @@ class CandidateController extends Controller
      *                  @OA\Property(
      *                      type="number",
      *                      property="post_id",
-
      *                  ),
      *                  @OA\Property(
      *                      type="string",
      *                      property="name",
-
      *                  ),
      *   @OA\Property(
      *                      type="string",
      *                      property="phone",
-
      *                  ),
      *   @OA\Property(
      *                      type="string",
      *                      property="email",
-
      *                  ),
      *                  @OA\Property(
      *                      type="file",
      *                      property="file_link",
-
      *                  ),
      *              ),
      *          ),
@@ -173,7 +223,8 @@ class CandidateController extends Controller
             'student_code' => 'required',
             'email' => 'required|email',
             'phone' => 'required',
-            'file_link' => 'required|mimes:zip,docx,word,pdf|file|max:10000',
+            'major_id' => 'required',
+            'file_link' => 'required|mimes:pdf|file|max:10000',
         ];
         $message = [
             'post_id.required' => 'Mã tuyển dụng không được bỏ trống ',
@@ -181,10 +232,11 @@ class CandidateController extends Controller
             'student_code.required' => 'Mã sinh viên không được bỏ trống ',
             'email.required' => 'Email không được bỏ trống ',
             'email.email' => 'Email sai định dạng ',
-            'phone.required' => 'Số điện thoạt không được bỏ trống ',
+            'phone.required' => 'Số điện thoại không được bỏ trống ',
+            'major_id.required' => 'Chuyên ngành không được bỏ trống ',
             'file_link.required' => 'Link CV không được bỏ trống ',
-            'file_link.mimes' => 'Link CV không đúng định dạng . Yêu cầu file zip,docx,word,pdf , tối đa dung lượng file 10MB  !',
-            'file_link.file' => 'Link CV phải là một file  . Yêu cầu file zip,docx,word,pdf , tối đa dung lượng file 10MB  !',
+            'file_link.mimes' => 'Link CV không đúng định dạng. Yêu cầu file pdf, tối đa dung lượng file 10MB  !',
+            'file_link.file' => 'Link CV phải là một file. Yêu cầu file pdf, tối đa dung lượng file 10MB  !',
             'file_link.max' => 'Link CV dung lượng quá lớn. Tối đa 10MB !',
         ];
         $validator = Validator::make($request->all(), $rules, $message);
@@ -192,13 +244,13 @@ class CandidateController extends Controller
             return response()->json(['status' => false, 'message' => $validator->errors()], 200);
         }
 
-        $addCandidate =   $this->MCandidate->updateOrCreate($request);
+        $addCandidate = $this->MCandidate->updateOrCreate($request);
         if (!$addCandidate) {
             return $this->responseApi(false, ' Lỗi upload CV !');
         }
 
         $sizeFile = Storage::disk('s3')->size($addCandidate->file_link);
-        $sizeFileFormat =  number_format($sizeFile / 1048576, 2);
+        $sizeFileFormat = number_format($sizeFile / 1048576, 2);
         $addCandidate['file_link'] = Storage::disk('s3')->temporaryUrl($addCandidate->file_link, now()->addMinutes(5));
         $addCandidate['sizeFile'] = $sizeFileFormat;
 
@@ -207,6 +259,7 @@ class CandidateController extends Controller
 
         return $this->responseApi(true, 'Upload CV thành công !', ['data' => $addCandidate]);
     }
+
     public function ApiDetailCandidate($id)
     {
         $data = $this->candidate::find($id);

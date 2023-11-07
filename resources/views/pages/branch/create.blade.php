@@ -89,6 +89,53 @@
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
                     </div>
+
+                    <div class="form-group mb-5 row">
+                        <div class="col-6">
+                            <label class="form-label" for="">Số điện thoại</label>
+                            <input type="text" name="phone" value="{{ old('phone') }}" class="slug-sl form-control"
+                                   placeholder="">
+                            @error('phone')
+                            <p class="text-danger">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label" for="">Trạng thái</label>
+                            <select name="status" id="status" class="form-control">
+                                <option selected value="1" {{ old('status') == 1 ? 'selected' : '' }}>Hoạt động</option>
+                                <option value="0" {{ old('status') && old('status') == 0 ? 'selected' : '' }}>Không hoạt động
+                                </option>
+                            </select>
+                            @error('status')
+                            <p class="text-danger">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="form-group mb-5 row">
+                        <div class="col-6">
+                            <label class="form-label" for="">Email</label>
+                            <input type="text" name="email" value="{{ old('email') }}" class="slug-sl form-control"
+                                   placeholder="">
+                            @error('email')
+                            <p class="text-danger">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label" for="">Website</label>
+                            <input type="text" name="website" value="{{ old('website') }}"
+                                   class="slug-sl form-control" placeholder="">
+                            @error('website')
+                            <p class="text-danger">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="form-group mb-5">
+                        <label class="form-label" for="">Địa chỉ</label>
+                        <input type="text" name="address" value="{{ old('address') }}" class="slug-sl form-control" placeholder="">
+                        @error('address')
+                        <p class="text-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
                     <div class="form-group mb-10 ">
                         <button type="submit" name="" id=""
                             class="btn btn-success btn-lg btn-block">Lưu </button>

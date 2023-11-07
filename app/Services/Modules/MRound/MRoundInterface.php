@@ -23,4 +23,5 @@ interface MRoundInterface
     public function results($id);
 
     public function getResult($id);
+
 }
