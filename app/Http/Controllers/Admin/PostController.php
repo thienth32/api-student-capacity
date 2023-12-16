@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Jobs\SendCvToEnterprise;
 use App\Models\Major;
 use App\Models\Post;
+use App\Services\Modules\MCandidate\Candidate;
 use App\Services\Traits\TResponse;
 use App\Services\Traits\TUploadImage;
 use Illuminate\Http\Request;
@@ -41,12 +43,13 @@ class PostController extends Controller
         private Branch      $branches,
         private DB          $db,
         private Storage     $storage,
-        private Major       $majors
+        private Major       $majors,
+        private Candidate   $candidate,
     )
     {
     }
 
-    public function index(Request $request)
+    public function index(Request $request, $postable = null)
     {
 
         $round = null;
@@ -56,7 +59,7 @@ class PostController extends Controller
         $capacity = $this->contest::where('type', 1)->get();
         $recruitments = $this->recruitment::select('id', 'name')->get();
         $rounds = $this->round::select('id', 'name')->get();
-        $posts = $this->modulesPost->index($request);
+        $posts = $this->modulesPost->index($request, $postable);
         $branches = $this->branches::select('id', 'name')->get();
 
         return view('pages.post.index', [
@@ -67,6 +70,7 @@ class PostController extends Controller
             'rounds' => $rounds,
             'round' => $round,
             'branches' => $branches,
+            'postable' => $postable,
         ]);
     }
 
@@ -258,9 +262,42 @@ class PostController extends Controller
     public function detail($slug)
     {
         $data = $this->post::where('slug', $slug)->first();
+        $candidates = null;
+        if ($data->postable_type == Recruitment::class) {
+            \request()->merge(['post_id' => $data->id]);
+            $candidates = $this->candidate->getList(\request())->get();
+        }
 
-        return view('pages.post.detailPost', compact('data'));
+        return view('pages.post.detailPost', compact('data', 'candidates'));
     }
+
+
+    public function sendCvToEnterprise(Request $request, $slug)
+    {
+        $validator = Validator::make($request->all(), [
+            'candidate_ids' => 'required',
+            'email' => 'required|email',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->responseApi(false, $validator->errors()->first());
+        }
+
+        if (!$post = $this->post::where('slug', $slug)->first()) {
+            return $this->responseApi(false, 'Không tìm thấy bài viết');
+        }
+
+        $candidates = $this->candidate->getList($request)->whereIn('id', $request->candidate_ids)->get();
+
+        $email = new SendCvToEnterprise($post, $candidates, $request->email);
+
+        $syncEmail = $email->onConnection('sync')->onQueue('emails');
+
+        dispatch($email)->onConnection('sync')->onQueue('emails');
+
+        return $this->responseApi(true, 'Gửi CV thành công');
+    }
+
 
     public function listRecordSoftDeletes(Request $request)
     {

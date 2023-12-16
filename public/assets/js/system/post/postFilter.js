@@ -47,7 +47,7 @@ $(document).ready(function () {
         $(this).addClass("btn-primary");
         $("#capacity").hide(100);
         $("#round").hide(100);
-        $("#recruitment").hide(100);
+        // $("#recruitment").hide(100);
         $("#contest").show(300);
     });
     $(".click-capacity").click(function () {
@@ -57,7 +57,7 @@ $(document).ready(function () {
         $(this).addClass("btn-primary");
         $("#contest").hide(100);
         $("#round").hide(100);
-        $("#recruitment").hide(100);
+        // $("#recruitment").hide(100);
         $("#capacity").show(300);
     });
     $(".click-round").click(function () {
@@ -66,7 +66,7 @@ $(document).ready(function () {
         $(".click-capacity").removeClass("btn-primary");
         $("#capacity").hide(100);
         $("#contest").hide(100);
-        $("#recruitment").hide(100);
+        // $("#recruitment").hide(100);
         $(this).addClass("btn-primary");
         $("#round").toggle(300);
     });
@@ -78,7 +78,8 @@ $(document).ready(function () {
         $("#contest").hide(100);
         $("#round").hide(100);
         $(this).addClass("btn-primary");
-        $("#recruitment").toggle(300);
+        window.location = "admin/posts" + "/recruitment?";
+        // $("#recruitment").toggle(300);
     });
 });
 const pageSliderForm = {
@@ -201,10 +202,10 @@ $(document).ready(function () {
         let round_id = $(this).val();
         window.location = url + "?round_id=" + round_id;
     });
-    $("#select-recruitment").change(function () {
-        let recruitment_id = $(this).val();
-        window.location = url + "?recruitment_id=" + recruitment_id;
-    });
+    // $("#select-recruitment").change(function () {
+    //     let recruitment_id = $(this).val();
+    //     window.location = url + "?recruitment_id=" + recruitment_id;
+    // });
 
     $("#searchTeam").keypress(function (event) {
         var keycode = event.keyCode ? event.keyCode : event.which;

@@ -4,6 +4,18 @@ $(document).ready(function () {
         let post_id = $(this).val();
         window.location = UpdateQueryString("post_id", post_id);
     });
+    $("#select-major-recruitment").change(function () {
+        let major_id = $(this).val();
+        window.location = UpdateQueryString("major_id", major_id);
+    });
+    $("#select-status-recruitment").change(function () {
+        let status = $(this).val();
+        window.location = UpdateQueryString("status", status);
+    });
+    $("#select-result-recruitment").change(function () {
+        let result = $(this).val();
+        window.location = UpdateQueryString("result", result);
+    });
     $("#time_candidate").click(function () {
         let sortBy = $(this).data("href");
         let orderBy = $(this).data("order");

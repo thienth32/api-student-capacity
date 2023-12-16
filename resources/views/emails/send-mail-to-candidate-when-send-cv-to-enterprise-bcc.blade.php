@@ -10,15 +10,15 @@
 
 <body>
 <div class="container">
-    <p>{{ $data->name ?? "Ứng viên" }} thân mến,</p>
+    <p>Ứng viên thân mến,</p>
     <br>
     <p>Beecareer đã gửi CV của bạn đến doanh nghiệp.</p>
     <p>Nhà tuyển dụng sẽ liên hệ với bạn trong thời gian sớm nhất nếu hồ sơ của bạn phù hợp và đáp ứng yêu cầu tuyển dụng.</p>
     <p>Trong thời gian đợi phản hồi, bạn lưu ý check mail và để ý điện thoại thường xuyên để không bỏ lỡ các thông tin quan trọng.</p>
     <br>
-    <p>Ngoài ra, Beecareer gửi đến bạn thêm các mã tuyển dụng khác thuộc ngành
-        <a href="{{ config('app.client_url') }}/tin-tuc-tuyen-dung?major_id={{$data->major_id}}">
-            {{ $data->major->name }}
+    <p>Ngoài ra, Beecareer gửi đến bạn thêm các mã tuyển dụng khác trên
+        <a href="{{ config('app.client_url') }}/tin-tuc-tuyen-dung">
+            Beecareer
         </a>
     </p>
     <br>
