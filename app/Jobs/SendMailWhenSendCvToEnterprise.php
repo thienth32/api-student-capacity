@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use App\Mail\MailSendCvToEnterprise;
-use App\Mail\MailToCandidatesWhenSendCvToEnterpriseBCC;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -15,18 +14,17 @@ use Illuminate\Support\Facades\Mail;
 class SendMailWhenSendCvToEnterprise implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    public $candidates;
+    public $candidate;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($candidates)
+    public function __construct($candidate)
     {
         //
-        $this->candidates = $candidates;
+        $this->candidate = $candidate;
     }
 
     /**
@@ -37,9 +35,6 @@ class SendMailWhenSendCvToEnterprise implements ShouldQueue
     public function handle()
     {
         //
-        $emailTo = $this->candidates->shift();
-        Mail::to($emailTo)
-            ->bcc($this->candidates->pluck('email')->toArray())
-            ->send(new MailToCandidatesWhenSendCvToEnterpriseBCC());
+        Mail::to($this->candidate->email)->send(new MailSendCvToEnterprise($this->candidate));
     }
 }
