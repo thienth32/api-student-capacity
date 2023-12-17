@@ -118,6 +118,9 @@ return [
         "STATUSES" => [
             "0" => "Sửa CV",
             "1" => "Đã gửi sang DN",
+            "2" => "Ứng viên không gửi lại CV",
+            "3" => "Không thuộc đối tượng hỗ trợ",
+            "4" => "CV đạt yêu cầu",
         ],
         "RESULTS" => [
             "fail" => "Fail",

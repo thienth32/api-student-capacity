@@ -396,7 +396,7 @@ Route::group([
     Route::prefix('posts')->group(function () {
         Route::get('{slug}/edit', [PostController::class, 'edit'])->name('admin.post.edit');
         Route::put('{id}', [PostController::class, 'update'])->name('admin.post.update');
-        Route::get('', [PostController::class, 'index'])->name('admin.post.list');
+        Route::get('{postable?}', [PostController::class, 'index'])->where('postable', '(recruitment|roud|contest)')->name('admin.post.list');
         Route::get('create', [PostController::class, 'create'])->name('admin.post.create');
         Route::get('insert', [PostController::class, 'insert'])->name('admin.post.insert');
 
@@ -412,6 +412,7 @@ Route::group([
             Route::get('{id}/restore', [PostController::class, 'delete'])->name('admin.post.soft.restore');
         });
         Route::get('{slug}', [PostController::class, 'detail'])->name('admin.post.detail');
+        Route::post('{slug}/sendCvToEnterprise', [PostController::class, 'sendCvToEnterprise'])->name('admin.post.sendCvToEnterprise');
     });
     Route::prefix('candidates')->group(function () {
         Route::get('', [CandidateController::class, 'index'])->name('admin.candidate.list');
@@ -426,6 +427,7 @@ Route::group([
             Route::get('{id}/restore', [CandidateController::class, 'delete'])->name('admin.candidate.soft.restore');
         });
         Route::get('{id}', [CandidateController::class, 'detail'])->name('admin.candidate.detail');
+        Route::get('{id}/show-cv', [CandidateController::class, 'showCv'])->name('admin.candidate.showcv');
     });
     Route::prefix('keywords')->group(function () {
         Route::get('{id}/edit', [KeywordController::class, 'edit'])->name('admin.keyword.edit');

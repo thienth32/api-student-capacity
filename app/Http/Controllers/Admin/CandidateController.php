@@ -9,6 +9,7 @@ use App\Jobs\SendMailWhenSendCvToEnterprise;
 use App\Mail\MailUploadCV;
 use App\Models\Candidate;
 use App\Models\CandidateNote;
+use App\Models\Major;
 use App\Models\Post;
 use App\Models\Recruitment;
 use App\Services\Modules\MCandidate\Candidate as MCandidateCandidate;
@@ -32,7 +33,8 @@ class CandidateController extends Controller
         private Post                $post,
         private MCandidateCandidate $MCandidate,
         private DB                  $db,
-        private Storage             $storage
+        private Storage             $storage,
+        private Major               $major,
     )
     {
     }
@@ -42,10 +44,12 @@ class CandidateController extends Controller
 
         $posts = $this->post::where('postable_type', Recruitment::class)->with(['enterprise'])->get();
         $candidates = $this->MCandidate->index($request);
+        $majors = $this->major::select(['id', 'name'])->where('for_recruitment', 1)->get();
 
         return view('pages.candidate.index', [
             'candidates' => $candidates,
-            'posts' => $posts
+            'posts' => $posts,
+            'majors' => $majors,
         ]);
     }
 
@@ -77,6 +81,19 @@ class CandidateController extends Controller
         $data = $this->candidate::find($id);
 
         return view('pages.candidate.detail', compact('data'));
+    }
+
+    public function showCv($id)
+    {
+        if (!$id) return abort(404);
+        $data = $this->candidate::find($id);
+
+        if ($data->has_checked == 0) {
+            $data->has_checked = 1;
+            $data->save();
+        }
+
+        return view('pages.candidate.show-cv', compact('data'));
     }
 
     public function listCvUser(Request $request)

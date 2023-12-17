@@ -162,8 +162,8 @@
                                 <th scope="col">Logo
 
                                 </th>
-                                <th scope="col">Hiển thị trên trang chủ
-                                </th>
+{{--                                <th scope="col">Hiển thị trên trang chủ--}}
+{{--                                </th>--}}
                                 <th scope="col">Giới thiệu
                                 </th>
                                 <th scope="col">Tài trợ
@@ -185,19 +185,19 @@
                                             alt="">
                                     </td>
 
-                                    <td>
-                                        @hasanyrole('admin|super admin')
+{{--                                    <td>--}}
+{{--                                        @hasanyrole('admin|super admin')--}}
 
-                                            <div data-bs-toggle="tooltip" title="Cập nhật trạng thái "
-                                                class="form-check form-switch">
-                                                <input value="{{ $key->status }}" data-id="{{ $key->id }}"
-                                                    class="form-select-status form-check-input" @checked($key->status == config('util.STATUS_ENTERPRISE_SHOW'))
-                                                    type="checkbox" role="switch">
+{{--                                            <div data-bs-toggle="tooltip" title="Cập nhật trạng thái "--}}
+{{--                                                class="form-check form-switch">--}}
+{{--                                                <input value="{{ $key->status }}" data-id="{{ $key->id }}"--}}
+{{--                                                    class="form-select-status form-check-input" @checked($key->status == config('util.STATUS_ENTERPRISE_SHOW'))--}}
+{{--                                                    type="checkbox" role="switch">--}}
 
-                                            </div>
-                                        @endhasrole
+{{--                                            </div>--}}
+{{--                                        @endhasrole--}}
 
-                                    </td>
+{{--                                    </td>--}}
                                     <td>
 
                                         <button class="btn  btn-primary btn-sm" type="button" data-bs-toggle="modal"

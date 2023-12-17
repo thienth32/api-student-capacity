@@ -128,9 +128,18 @@ class Post
             return response()->json(['message' => 'Job not found'], 404);
         }
     }
-    public function index(Request $request)
+
+    public function index(Request $request, $postable = null)
     {
-        return $this->getList($request)->with(['postable:id,name'])->paginate(request('limit') ?? config('util.HOMEPAGE_ITEM_AMOUNT'));
+        if ($postable) {
+            $postable_prefix = "App\\Models\\";
+            $postable_type = $postable_prefix . ucfirst($postable);
+        }
+        $query = $this->getList($request)->with(['postable:id,name']);
+        if ($postable) {
+            $query->where('postable_type', $postable_type);
+        }
+        return $query->paginate(request('limit') ?? config('util.HOMEPAGE_ITEM_AMOUNT'));
     }
 
     private function loadAble($query, $post = null)

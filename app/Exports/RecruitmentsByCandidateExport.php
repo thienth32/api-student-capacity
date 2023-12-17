@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Candidate;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -50,6 +51,7 @@ class RecruitmentsByCandidateExport implements FromCollection, WithHeadings, Wit
             'Email',
             'Số điện thoại',
             'Ngành học',
+            'Link CV',
             'Vị trí ứng tuyển',
             'Nơi ứng tuyển',
             'Tình trạng',
@@ -72,6 +74,7 @@ class RecruitmentsByCandidateExport implements FromCollection, WithHeadings, Wit
             $data->email,
             $data->phone,
             !empty($data->major->name) ? $data->major->name : '',
+            Storage::disk('s3')->temporaryUrl($data->file_link, now()->addDay(7)),
             !empty($data->post->position) ? $data->post->position : '',
             !empty($data->post->enterprise->address) ? $data->post->enterprise->address : '',
             '',

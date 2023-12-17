@@ -154,7 +154,7 @@
                 <label class="form-label" for="">Lọc theo thành phần</label>
                 <div class="row col-12 m-auto">
                     <button type="button"
-                        class="click-recruitment  btn {{ request()->has('recruitment_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light">
+                        class="click-recruitment  btn {{ request()->has('recruitment_id') || ($postable && $postable == 'recruitment') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light">
                         Bài viết thuộc tuyển dụng</button>
                     <button id="clickContset" type="button"
                         class="mygroup btn  {{ request()->has('contest_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light click-contest">
@@ -233,22 +233,22 @@
                         </div>
 
                     </div>
-                    <div style="{{ request()->has('recruitment_id') ? '' : 'display: none' }}" id="recruitment">
-                        <div class="form-group mb-10">
-                            <label for="" class="form-label">Tuyển dụng</label>
-                            <select id="select-recruitment" name="recruitment_id" class="form-select form-major"
-                                data-control="select2" data-placeholder="Chọn cuộc thi ">
-                                <option value="0">Chọn tuyển dụng</option>
-                                @foreach ($recruitments as $item)
-                                    <option @selected(request('recruitment_id') == $item->id) value="{{ $item->id }}">
-                                        {{ $item->name }}
-                                    </option>
-                                @endforeach
-                            </select>
+{{--                    <div style="{{ request()->has('recruitment_id') ? '' : 'display: none' }}" id="recruitment">--}}
+{{--                        <div class="form-group mb-10">--}}
+{{--                            <label for="" class="form-label">Tuyển dụng</label>--}}
+{{--                            <select id="select-recruitment" name="recruitment_id" class="form-select form-major"--}}
+{{--                                data-control="select2" data-placeholder="Chọn cuộc thi ">--}}
+{{--                                <option value="0">Chọn tuyển dụng</option>--}}
+{{--                                @foreach ($recruitments as $item)--}}
+{{--                                    <option @selected(request('recruitment_id') == $item->id) value="{{ $item->id }}">--}}
+{{--                                        {{ $item->name }}--}}
+{{--                                    </option>--}}
+{{--                                @endforeach--}}
+{{--                            </select>--}}
 
-                        </div>
+{{--                        </div>--}}
 
-                    </div>
+{{--                    </div>--}}
                 </div>
 
             </div>
