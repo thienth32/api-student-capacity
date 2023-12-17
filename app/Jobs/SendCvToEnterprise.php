@@ -70,7 +70,7 @@ class SendCvToEnterprise implements ShouldQueue
 
         Candidate::query()->whereIn('id', $this->candidates->pluck('id'))->update(['status' => 1]);
 
-        $email = new SendMailWhenSendCvToEnterprise($this->candidates);
+        $email = new SendEmailWhenSendCvToEnterpriseBCC($this->candidates);
 
         dispatch($email);
     }
