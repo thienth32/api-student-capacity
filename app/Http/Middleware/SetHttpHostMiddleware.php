@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class SetHttpHostMiddleware
 {
@@ -16,7 +17,8 @@ class SetHttpHostMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $_SERVER['HTTP_HOST'] = '123';
+        $http_host = Str::replace(['http://', 'https://'], '', env('APP_URL') ?? 'localhost');
+        $_SERVER['HTTP_HOST'] = $http_host;
 
         return $next($request);
     }
