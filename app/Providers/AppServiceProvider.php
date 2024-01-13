@@ -6,6 +6,7 @@ use App\Http\Controllers\CustomUrlResolver;
 use App\Services\Manager\FMenu\MenuManager;
 use App\Services\Traits\RepositorySetup;
 use Google\Service\ServiceControl\Auth;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Routing\UrlGenerator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Schema;
@@ -27,6 +28,9 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->callApp();
+        Paginator::currentPathResolver(function () {
+            return config('app.url');
+        });
     }
 
     /**
