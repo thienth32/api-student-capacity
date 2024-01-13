@@ -29,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->callApp();
         Paginator::currentPathResolver(function () {
-            return config('app.url');
+            return app(UrlGenerator::class)->current();
         });
     }
 
