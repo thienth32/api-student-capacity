@@ -12,6 +12,9 @@ const rules = {
     link_web: {
         required: true,
     },
+    address: {
+        required: true,
+    },
 };
 const messages = {
     name: {
@@ -23,6 +26,9 @@ const messages = {
         required: "Trường mô tả không bỏ trống !",
     },
     link_web: {
+        required: "Trường không bỏ trống !",
+    },
+    address: {
         required: "Trường không bỏ trống !",
     },
 };

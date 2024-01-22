@@ -5,6 +5,7 @@ namespace App\Services\Modules\MPost;
 use App\Models\Contest;
 use App\Models\Enterprise;
 use App\Models\Keyword;
+use App\Models\Major;
 use App\Models\Post as ModelsPost;
 use App\Models\Recruitment;
 use App\Models\Round;
@@ -12,6 +13,7 @@ use App\Services\Traits\TUploadImage;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Str;
 use function GuzzleHttp\Promise\all;
 
 class Post
@@ -26,8 +28,14 @@ class Post
         private Recruitment $recruitment,
         private Round       $round,
         private Keyword     $keyword,
+        private Major       $majorModel,
     )
     {
+    }
+
+    public function getModel()
+    {
+        return $this->post->query();
     }
 
     public function getList(Request $request)
@@ -35,6 +43,7 @@ class Post
         $keyword = $request->has('keyword') ? $request->keyword : "";
         $q = $request->has('q') ? $request->q : null;
         $status = $request->has('status') ? $request->status : null;
+        $post = $request->has('post_id') ? $request->post_id : 0;
         $contest = $request->has('contest_id') ? $request->contest_id : 0;
         $capacity = $request->has('capacity_id') ? $request->capacity_id : 0;
         $rounds = $request->has('round_id') ? $request->round_id : 0;
@@ -47,6 +56,7 @@ class Post
         $postHot = $request->has('postHot') ? $request->postHot : null;
         $branch_id = $request->has('branch_id') ? $request->branch_id : null;
         $major_id = $request->has('major_id') ? $request->major_id : null;
+        $enterprise_id = $request->has('enterprise_id') ? $request->enterprise_id : null;
         $softDelete = $request->has('post_soft_delete') ? $request->post_soft_delete : null;
         if ($softDelete != null) {
             $query = $this->post::onlyTrashed()->where('title', 'like', "%$keyword%")->orderByDesc('deleted_at');
@@ -89,6 +99,9 @@ class Post
         } else {
             $query->orderBy($orderBy);
         }
+        if ($post != 0) {
+            $query->where('id', $post);
+        }
         if ($contest != 0) {
             $query->where('postable_id', $contest)->where('postable_type', $this->contest::class);
         }
@@ -106,6 +119,9 @@ class Post
         }
         if ($major_id != 0) {
             $query->where('major_id', $major_id)->where('postable_type', $this->recruitment::class);
+        }
+        if ($enterprise_id != 0) {
+            $query->where('enterprise_id', $enterprise_id)->where('postable_type', $this->recruitment::class);
         }
 //        if (!auth()->user()->hasRole(config('util.SUPER_ADMIN_ROLE'))) {
 //            $query->where('branch_id', auth()->user()->branch_id);
@@ -172,6 +188,7 @@ class Post
             'code_recruitment' => $request->code_recruitment ? $request->code_recruitment : null,
             'user_id' => $request->user_id != 0 ? $request->user_id : auth()->user()->id,
             'branch_id' => $request->branch_id ?? 0,
+            'tax_number' => $request->tax_number != 0 ? $request->tax_number : null,
             'contact_name' => $request->contact_name != 0 ? $request->contact_name : null,
             'contact_phone' => $request->contact_phone != 0 ? $request->contact_phone : null,
             'contact_email' => $request->contact_email != 0 ? $request->contact_email : null,
@@ -192,13 +209,30 @@ class Post
                 ->where('id', $request->enterprise_id)
                 ->orWhere('name', $request->enterprise_id)
                 ->first();
+
             if (!$enterprise) {
                 $enterprise = $this->enterprise::create([
                     'name' => $request->enterprise_id,
                 ]);
             }
 
+            $major_id = trim($request->major_id);
+
+            $major = $this->majorModel::query()
+                ->where('id', $major_id)
+                ->orWhere('slug', Str::slug($major_id))
+                ->first();
+
+            if (!$major) {
+                $major = $this->majorModel::query()->create([
+                    'name' => $major_id,
+                    'slug' => Str::slug($major_id),
+                    'for_recruitment' => '1',
+                ]);
+            }
+
             $data['enterprise_id'] = $enterprise->id;
+            $data['major_id'] = $major->id;
         }
 
         if ($request->has('thumbnail_url')) {
@@ -242,6 +276,7 @@ class Post
         $post->code_recruitment = $request->code_recruitment ? $request->code_recruitment : null;
         $post->user_id = $request->user_id != 0 ? $request->user_id : auth()->user()->id;
         $post->branch_id = $request->branch_id ?? 0;
+        $post->tax_number = $request->tax_number != 0 ? $request->tax_number : null;
         $post->contact_name = $request->contact_name != 0 ? $request->contact_name : null;
         $post->contact_phone = $request->contact_phone != 0 ? $request->contact_phone : null;
         $post->contact_email = $request->contact_email != 0 ? $request->contact_email : null;
@@ -267,7 +302,23 @@ class Post
                 ]);
             }
 
+            $major_id = trim($request->major_id);
+
+            $major = $this->majorModel::query()
+                ->where('id', $major_id)
+                ->orWhere('slug', Str::slug($major_id))
+                ->first();
+
+            if (!$major) {
+                $major = $this->majorModel::query()->create([
+                    'name' => $major_id,
+                    'slug' => Str::slug($major_id),
+                    'for_recruitment' => '1',
+                ]);
+            }
+
             $post->enterprise_id = $enterprise->id;
+            $post->major_id = $major->id;
         }
 
         if ($request->has('thumbnail_url')) {
@@ -296,5 +347,21 @@ class Post
             $post->status_capacity = 0;
         }
         $post->save();
+    }
+
+    public function getLatestInfoWithDiffTaxNumber(): \Illuminate\Database\Eloquent\Builder
+    {
+        return $this->post::query()
+            ->whereIn('id', function ($query) {
+                $query->selectRaw('MAX(id)')
+                    ->from($this->post->getTable())
+                    ->whereNotNull('tax_number')
+                    ->groupBy('tax_number');
+            });
+//        return $this->post->query()
+//            ->select('tax_number', 'contact_name', 'contact_phone', 'contact_email')
+//            ->whereNotNull('tax_number')
+//            ->groupBy('tax_number')
+//            ->latest('created_at');
     }
 }

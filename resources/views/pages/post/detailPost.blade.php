@@ -264,7 +264,11 @@
                                                        id=""
                                                        value="{{ $candidate->id }}">
                                             </td>
-                                            <td>{{ $candidate->name }}</td>
+                                            <td>
+                                                <a href="{{ route('admin.candidate.showcv', $candidate->id) }}" target="_blank">
+                                                    {{ $candidate->name }}
+                                                </a>
+                                            </td>
                                             <td>{{ $candidate->email }}</td>
                                             <td>{{ $candidate->student_code }}</td>
                                             <td>{{ config('util.CANDIDATE_OPTIONS.STATUSES')[$candidate->status] }}</td>

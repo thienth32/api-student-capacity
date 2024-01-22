@@ -83,6 +83,14 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-10">
+                                <label class="form-label" for="">Địa chỉ</label>
+                                <input type="text" name="address" value="{{ old('address') }}" class=" form-control"
+                                    placeholder="">
+                                @error('address')
+                                    <p id="checkname" class="text-danger">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <div class="form-group mb-10">
                                 <label class="form-label" for="">Địa chỉ Website</label>
                                 <input type="text" name="link_web" value="{{ old('link_web') }}" class=" form-control"
                                     placeholder="">

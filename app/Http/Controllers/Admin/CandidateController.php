@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendMailUploadCV;
 use App\Jobs\SendMailNoteCV;
+use App\Jobs\SendMailWhenCandidateIsNotSupport;
 use App\Jobs\SendMailWhenSendCvToEnterprise;
 use App\Mail\MailUploadCV;
 use App\Models\Candidate;
@@ -44,12 +45,14 @@ class CandidateController extends Controller
 
         $posts = $this->post::where('postable_type', Recruitment::class)->with(['enterprise'])->get();
         $candidates = $this->MCandidate->index($request);
+        $count = $this->MCandidate->getList($request)->count();
         $majors = $this->major::select(['id', 'name'])->where('for_recruitment', 1)->get();
 
         return view('pages.candidate.index', [
             'candidates' => $candidates,
             'posts' => $posts,
             'majors' => $majors,
+            'count' => $count,
         ]);
     }
 
@@ -59,7 +62,7 @@ class CandidateController extends Controller
             return abort(404);
         }
 
-        CandidateNote::create([
+        $model = CandidateNote::create([
             'content' => $request->content,
             'candidate_id' => $candidateId,
             'user_id' => Auth::user()->id,
@@ -69,18 +72,27 @@ class CandidateController extends Controller
         $candidate = $this->candidate::find($candidateId);
         $post = $candidate->post;
 
-        $email = new SendMailNoteCV($candidate, $post, $request->content);
+        $email = new SendMailNoteCV($candidate, $post, $model->content);
         dispatch($email);
 
         return redirect()->back();
     }
 
-    public function detail($id)
+    public function detail(Request $request, $id)
     {
         if (!$id) return abort(404);
         $data = $this->candidate::find($id);
+        if (!$data) return abort(404);
 
-        return view('pages.candidate.detail', compact('data'));
+        $candidates = $this->MCandidate
+            ->getList($request)
+            ->with(['post:id,slug,code_recruitment,position', 'candidateNotes' => function ($query) {
+                $query->orderBy('created_at', 'desc');
+            }])
+            ->where('email', $data->email)
+            ->get();
+
+        return view('pages.candidate.detail', compact('data', 'candidates'));
     }
 
     public function showCv($id)
@@ -130,8 +142,13 @@ class CandidateController extends Controller
             'payload' => 'Không tìm thấy thông tin ứng viên tuyển dụng  !',
         ]);
 
-        if ($status == 1) {
+        if ($status == config('util.CANDIDATE_OPTIONS.STATUS_KEYS.SEND_TO_ENTERPRISE')) {
             $email = new SendMailWhenSendCvToEnterprise($candidate);
+            dispatch($email);
+        }
+
+        if ($status == config('util.CANDIDATE_OPTIONS.STATUS_KEYS.NOT_SUPPORT')) {
+            $email = new SendMailWhenCandidateIsNotSupport($candidate);
             dispatch($email);
         }
 
@@ -242,6 +259,7 @@ class CandidateController extends Controller
             'phone' => 'required',
             'major_id' => 'required',
             'file_link' => 'required|mimes:pdf|file|max:10000',
+            'student_status' => 'required',
         ];
         $message = [
             'post_id.required' => 'Mã tuyển dụng không được bỏ trống ',
@@ -255,6 +273,7 @@ class CandidateController extends Controller
             'file_link.mimes' => 'Link CV không đúng định dạng. Yêu cầu file pdf, tối đa dung lượng file 10MB  !',
             'file_link.file' => 'Link CV phải là một file. Yêu cầu file pdf, tối đa dung lượng file 10MB  !',
             'file_link.max' => 'Link CV dung lượng quá lớn. Tối đa 10MB !',
+            'student_status.required' => 'Trạng thái sinh viên không được bỏ trống ',
         ];
         $validator = Validator::make($request->all(), $rules, $message);
         if ($validator->fails()) {

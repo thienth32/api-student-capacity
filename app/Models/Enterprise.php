@@ -17,7 +17,7 @@ class Enterprise extends Model
         'updated_at' =>  FormatDate::class,
         'logo' => FormatImageGet::class,
     ];
-    protected $fillable = ['name', 'logo', 'description', 'link_web', 'status', 'branch_id', 'address'];
+    protected $fillable = ['name', 'logo', 'description', 'link_web', 'status', 'branch_id', 'address', 'tax_number'];
     protected static function boot()
     {
         parent::boot();

@@ -103,6 +103,11 @@ class PostController extends Controller
             $enterprises = $this->enterprise::all(['id', 'name']);
             $rounds = $this->round::all(['id', 'name', 'contest_id']);
             $branches = $this->branches::select('id', 'name')->get();
+
+            $tax_numbers = $this->modulesPost
+                ->getLatestInfoWithDiffTaxNumber()
+                ->select('tax_number', 'contact_name', 'contact_phone', 'contact_email')
+                ->get();
             $this->db::commit();
             return view(
                 'pages.post.form-add',
@@ -115,12 +120,13 @@ class PostController extends Controller
                     'branches' => $branches,
                     'enterprises' => $enterprises,
                     'majors' => $majors,
+                    'tax_numbers' => $tax_numbers,
                 ]
             );
         } catch (\Throwable $th) {
             $this->db::rollBack();
             return redirect('error');
-        };
+        }
     }
 
     public function insert(Request $request)
@@ -214,6 +220,10 @@ class PostController extends Controller
         $post->load(['postable' => function ($q) {
             $q->select('id', 'name');
         }]);
+        $tax_numbers = $this->modulesPost
+            ->getLatestInfoWithDiffTaxNumber()
+            ->select('tax_number', 'contact_name', 'contact_phone', 'contact_email')
+            ->get();
         if ($post->postable && (get_class($post->postable) == $this->round::class)) {
             $round = $this->round::find($post->postable->id)->load('contest:id,name');
         }
@@ -242,6 +252,7 @@ class PostController extends Controller
             'majors' => $majors,
             'enterprises' => $enterprises,
             'post_type' => $post_type,
+            'tax_numbers' => $tax_numbers,
         ]);
     }
 
@@ -470,5 +481,39 @@ class PostController extends Controller
             true,
             $data
         );
+    }
+
+    public function enterprise(Request $request)
+    {
+        $code_recruitments = $this->modulesPost->getModel()
+            ->select('id', 'code_recruitment')
+            ->where('postable_type', Recruitment::class)
+            ->get();
+
+        $majors = $this->majors::query()->select(['id', 'name'])->where('for_recruitment', 1)->get();
+
+        $enterprises = $this->enterprise::query()->select(['id', 'name'])->get();
+
+        $postsModule = $this->modulesPost
+            ->getList($request)
+            ->where('postable_type', Recruitment::class);
+
+        $count = $postsModule->count();
+
+        $posts = $postsModule
+            ->with([
+                'enterprise:id,name,address',
+                'major:id,name',
+                'user:id,name,email',
+            ])
+            ->paginate(request('limit') ?? 10);
+
+        return view('pages.enterprise.recruitment.index', compact(
+            'posts',
+            'code_recruitments',
+            'majors',
+            'enterprises',
+            'count',
+        ));
     }
 }

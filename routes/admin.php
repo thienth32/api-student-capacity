@@ -282,7 +282,9 @@ Route::group([
         Route::get('enterprise-soft-delete', [EnterpriseController::class, 'softDelete'])->name('admin.enterprise.soft.delete');
         Route::get('enterprise-soft-delete/{id}/backup', [EnterpriseController::class, 'backUpEnterprise'])->name('admin.enterprise.soft.backup');
         Route::get('enterprise-soft-delete/{id}/delete', [EnterpriseController::class, 'delete'])->name('admin.enterprise.soft.destroy');
+        Route::get('recruitment', [PostController::class, 'enterprise'])->name('admin.enterprise.recruitment.list');
     });
+
     Route::prefix('branches')->group(function () {
         Route::get('', [BranchController::class, 'index'])->name('admin.branch.list');
         Route::get('{branch_id}/edit', [BranchController::class, 'edit'])->name('admin.branch.edit');

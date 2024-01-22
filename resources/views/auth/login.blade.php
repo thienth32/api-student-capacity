@@ -1,3 +1,9 @@
+{{--@dd($_SERVER)--}}
+{{--@dd(app('router')->getRoutes())--}}
+{{--    @dd(new \Illuminate\Routing\UrlGenerator(app()))--}}
+{{--@dd(get_class_methods(app('router')))--}}
+{{--    @dd(asset('12345'))--}}
+{{--@dd($_SERVER)--}}
 <!DOCTYPE html>
 <html lang="en">
 <!--begin::Head-->

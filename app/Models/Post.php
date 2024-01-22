@@ -28,6 +28,7 @@ class Post extends Model
         'thumbnail_url',
         'link_to',
         'user_id',
+        'tax_number',
         'contact_name',
         'contact_phone',
         'contact_email',
