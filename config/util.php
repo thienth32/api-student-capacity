@@ -115,12 +115,27 @@ return [
     'TYPE_CAPACITY_TEST' => 2,
 
     "CANDIDATE_OPTIONS" => [
+        "STATUS_KEYS" => [
+            "EDIT_CV" => 0,
+            "SEND_TO_ENTERPRISE" => 1,
+            "CANDIDATE_NOT_RESEND_CV" => 2,
+            "NOT_SUPPORT" => 3,
+            "CV_MEET_REQUIREMENT" => 4,
+        ],
+        "STUDENT_STATUS_KEYS" => [
+            "STUDYING" => 0,
+            "GRADUATED" => 1,
+        ],
         "STATUSES" => [
             "0" => "Sửa CV",
             "1" => "Đã gửi sang DN",
             "2" => "Ứng viên không gửi lại CV",
             "3" => "Không thuộc đối tượng hỗ trợ",
             "4" => "CV đạt yêu cầu",
+        ],
+        "STUDENT_STATUSES" => [
+            "0" => "Đang học",
+            "1" => "Đã tốt nghiệp",
         ],
         "RESULTS" => [
             "fail" => "Fail",

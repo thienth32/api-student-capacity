@@ -81,15 +81,23 @@
                         <div class="col-8">
                             <div class="form-group mb-10">
                                 <label class="form-label" for="">Tên doanh nghiệp</label>
-                                <input type="text" name="name" value="{{ $enterprise->name }}" class=" form-control"
+                                <input type="text" name="name" value="{{ $enterprise->name ?? old('name') }}" class=" form-control"
                                     placeholder="">
                                 @error('name')
                                     <p id="checkname" class="text-danger">{{ $message }}</p>
                                 @enderror
                             </div>
                             <div class="form-group mb-10">
+                                <label class="form-label" for="">Địa chỉ</label>
+                                <input type="text" name="address" value="{{ $enterprise->address ?? old('address') }}" class=" form-control"
+                                       placeholder="">
+                                @error('address')
+                                <p id="checkname" class="text-danger">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <div class="form-group mb-10">
                                 <label class="form-label" for="">Địa chỉ Website</label>
-                                <input type="text" name="link_web" value="{{ $enterprise->link_web }}"
+                                <input type="text" name="link_web" value="{{ $enterprise->link_web ?? old('link_web') }}"
                                     class=" form-control" placeholder="">
                                 @error('link_web')
                                     <p id="checkname" class="text-danger">{{ $message }}</p>
@@ -97,7 +105,7 @@
                             </div>
                             <div class="form-group mb-10">
                                 <label for="" class="form-label">Giới thiệu</label>
-                                <textarea class="form-control" name="description" id="kt_docs_ckeditor_classic" rows="3">{{ $enterprise->description }}</textarea>
+                                <textarea class="form-control" name="description" id="kt_docs_ckeditor_classic" rows="3">{{ $enterprise->description ?? old('description') }}</textarea>
                                 {{-- <textarea class="form-control" name="description" value="" id="" rows="3">{{ $enterprise->description }}</textarea> --}}
                                 @error('description')
                                     <p class="text-danger">{{ $message }}</p>

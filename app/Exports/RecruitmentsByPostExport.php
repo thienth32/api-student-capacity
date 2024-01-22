@@ -13,11 +13,12 @@ use Maatwebsite\Excel\Concerns\ToModel;
 class RecruitmentsByPostExport implements FromCollection, WithHeadings, WithMapping, WithTitle, ToModel
 {
     use RemembersRowNumber;
+
     private $row = 0;
 
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
         return Post::all();
@@ -45,6 +46,7 @@ class RecruitmentsByPostExport implements FromCollection, WithHeadings, WithMapp
             'Ngày cập nhật',
             'Mã tuyển dụng',
             'Tên nhà tuyển dụng',
+            'Mã số thuế',
             'Địa chỉ',
             'Người liên hệ',
             'Thông tin liên hệ',
@@ -70,6 +72,7 @@ class RecruitmentsByPostExport implements FromCollection, WithHeadings, WithMapp
             $post->updated_at,
             $post->code_recruitment,
             $post->enterprise->name ?? '',
+            $post->tax_number,
             $post->enterprise->address ?? '',
             $post->contact_name,
             $post->contact_phone,
@@ -78,7 +81,7 @@ class RecruitmentsByPostExport implements FromCollection, WithHeadings, WithMapp
             $post->position,
             $post->total,
             $post->deadline,
-            $post->career_type == 0 ? 'Part-time' : 'Full-time',
+            config('util.CAREER_TYPES.' . $post->career_type) ?? '',
             $post->career_source,
             $post->career_require,
             $post->note,

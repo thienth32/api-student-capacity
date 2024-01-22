@@ -14,7 +14,7 @@
     <br>
     <p>Beecareer đã nhận được thông tin và CV từ bạn.</p>
     <p>Chúng tôi có một số góp ý cho CV của bạn như sau:</p>
-    <p><strong>{{$content}}</strong></p>
+    <p><strong>{!! $content !!}</strong></p>
     <p>
         Bạn hãy sửa lại CV sau đó ứng tuyển lại
         <a href="{{ config('app.client_url') }}/tin-tuc/{{$post->slug}}?name={{$candidate->name}}&student_code={{$candidate->student_code}}&email={{$candidate->email}}&phone={{$candidate->phone}}">

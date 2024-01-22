@@ -106,7 +106,7 @@
 
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="form-group p-2">
-                    <label class="form-label">Ngành</label>
+                    <label class="form-label">Trạng thái</label>
                     <select id="select-status-recruitment" class="form-select mb-2 select2-hidden-accessible"
                             name="status" data-control="select2" data-hide-search="false" tabindex="-1"
                             aria-hidden="true">
@@ -122,7 +122,7 @@
 
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="form-group p-2">
-                    <label class="form-label">Ngành</label>
+                    <label class="form-label">Kết quả</label>
                     <select id="select-result-recruitment" class="form-select mb-2 select2-hidden-accessible"
                             name="result" data-control="select2" data-hide-search="false" tabindex="-1"
                             aria-hidden="true">
@@ -138,37 +138,41 @@
 
 
         </div>
-        <div class="back">
-            <hr>
-            <span data-bs-toggle="tooltip" title="Đóng lọc" class="btn-hide svg-icon svg-icon-primary svg-icon-2x">
-        <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Stockholm-icons/Navigation/Angle-up.svg--><svg
-                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                    height="24px" viewBox="0 0 24 24" version="1.1">
-            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                <polygon points="0 0 24 0 24 24 0 24"/>
-                <path
-                    d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z"
-                    fill="#000000" fill-rule="nonzero"/>
-            </g>
-        </svg>
-    </span>
+        <hr>
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="back">
+                    <span data-bs-toggle="tooltip" title="Đóng lọc"
+                          class="btn-hide svg-icon svg-icon-primary svg-icon-2x">
+                <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Stockholm-icons/Navigation/Angle-up.svg--><svg
+                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                            height="24px" viewBox="0 0 24 24" version="1.1">
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <polygon points="0 0 24 0 24 24 0 24"/>
+                        <path
+                            d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z"
+                            fill="#000000" fill-rule="nonzero"/>
+                    </g>
+                </svg>
+                </span>
 
-            <span data-bs-toggle="tooltip" title="Mở lọc" style="display: none"
-                  class="btn-show svg-icon svg-icon-primary svg-icon-2x">
-        <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Angle-down.svg--><svg
-                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                    height="24px" viewBox="0 0 24 24" version="1.1">
-            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                <polygon points="0 0 24 0 24 24 0 24"/>
-                <path
-                    d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z"
-                    fill="#000000" fill-rule="nonzero"
-                    transform="translate(12.000003, 11.999999) rotate(-180.000000) translate(-12.000003, -11.999999) "/>
-            </g>
-        </svg>
-                <!--end::Svg Icon-->
-    </span>
+                <span data-bs-toggle="tooltip" title="Mở lọc" style="display: none"
+                      class="btn-show svg-icon svg-icon-primary svg-icon-2x">
+                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Navigation/Angle-down.svg--><svg
+                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                        height="24px" viewBox="0 0 24 24" version="1.1">
+                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <polygon points="0 0 24 0 24 24 0 24"/>
+                            <path
+                                d="M6.70710678,15.7071068 C6.31658249,16.0976311 5.68341751,16.0976311 5.29289322,15.7071068 C4.90236893,15.3165825 4.90236893,14.6834175 5.29289322,14.2928932 L11.2928932,8.29289322 C11.6714722,7.91431428 12.2810586,7.90106866 12.6757246,8.26284586 L18.6757246,13.7628459 C19.0828436,14.1360383 19.1103465,14.7686056 18.7371541,15.1757246 C18.3639617,15.5828436 17.7313944,15.6103465 17.3242754,15.2371541 L12.0300757,10.3841378 L6.70710678,15.7071068 Z"
+                                fill="#000000" fill-rule="nonzero"
+                                transform="translate(12.000003, 11.999999) rotate(-180.000000) translate(-12.000003, -11.999999) "/>
+                        </g>
+                    </svg>
+                    <!--end::Svg Icon-->
+                </span>
 
+            </div>
+            <span class="text-primary">{{ $count }} kết quả</span>
         </div>
         <div class="table-responsive p-4 card card-flush ">
 
@@ -258,6 +262,8 @@
                                                     <li>Email : {{ $key->email }} .</li>
                                                     <li>Sdt : {{ $key->phone }} .</li>
                                                     <li>Mã sinh viên : {{ $key->student_code }} .</li>
+                                                    <li>Trạng
+                                                        thái: {{ config('util.CANDIDATE_OPTIONS.STUDENT_STATUSES')[$key->student_status] ?? 'Chưa có' }}</li>
 
                                                 </ul>
                                             </div>
@@ -278,8 +284,8 @@
 
                             <td>
 
-{{--                                <a class="show_file btn btn-primary btn-sm" target="_blank" rel="noopener"--}}
-{{--                                   href="{{ Storage::disk('s3')->temporaryUrl($key->file_link, now()->addMinutes(5)) }}">Xem</a>--}}
+                                {{--                                <a class="show_file btn btn-primary btn-sm" target="_blank" rel="noopener"--}}
+                                {{--                                   href="{{ Storage::disk('s3')->temporaryUrl($key->file_link, now()->addMinutes(5)) }}">Xem</a>--}}
                                 <a class="show_file btn btn-primary btn-sm" target="_blank" rel="noopener"
                                    href="{{ route('admin.candidate.showcv', $key->id) }}">Xem</a>
                             </td>
@@ -292,9 +298,15 @@
                             </td>
 
                             <td>
-                                {{ date('d-m-Y H:i', strtotime($key->created_at)) }}
-                                <br>
-                                {{ \Carbon\Carbon::parse($key->created_at)->diffforHumans() }}
+                                @if($key->send_cv_at)
+                                    {{ date('d-m-Y H:i', strtotime($key->send_cv_at)) }}
+                                    <br>
+                                    {{ \Carbon\Carbon::parse($key->send_cv_at)->diffforHumans() }}
+                                @else
+                                    {{ date('d-m-Y H:i', strtotime($key->created_at)) }}
+                                    <br>
+                                    {{ \Carbon\Carbon::parse($key->created_at)->diffforHumans() }}
+                                @endif
                             </td>
                             <td>
                                 <select name="" id="" class="select-status form-select mb-2 select2-hidden-accessible"
@@ -466,7 +478,7 @@
                                                             <b>{{$idx + 1}}
                                                                 . {{ date('d-m-Y H:i', strtotime($note->created_at)) }}
                                                                 - {{$note->user->email}}</b>
-                                                            <p>{{$note->content}}</p>
+                                                            <p>{!! $note->content !!}</p>
                                                         </li>
                                                     </ul>
                                                 @endforeach

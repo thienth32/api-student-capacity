@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\SkillController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\BranchController;
 use App\Http\Controllers\Admin\SponsorController as AdminSponsorController;
+use App\Http\Controllers\Admin\StudentStatusController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\WishlistController;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +38,8 @@ Route::prefix('contests')->group(function () {
     Route::get('{id}/demo', [AdminContestController::class, 'apiShowDemo'])->name('contest.api.show.demo');
     Route::get('{id}/related', [AdminContestController::class, 'apiContestRelated'])->name('contest.api.related');
 });
+
+Route::get('student-statuses', [StudentStatusController::class, 'index']);
 
 Route::prefix('capacity')->group(function () {
     Route::get('', [AdminContestController::class, 'apiIndexCapacity'])->name('capacity.api.index');

@@ -113,7 +113,8 @@
                                 {{--                                </div>--}}
                                 <div class="form-group mb-10 col-xl-12 col-12">
                                     <label for="" class="form-label">Doanh nghiệp</label>
-                                    <select id="enterprise_id" name="enterprise_id" class="form-select form-major" data-control="select2"
+                                    <select id="enterprise_id" name="enterprise_id" class="form-select form-major"
+                                            data-control="select2"
                                             data-placeholder="Chọn doanh nghiệp">
                                         <option value="0">Chọn doanh nghiệp</option>
                                         @foreach ($enterprises as $enterprise)
@@ -155,13 +156,15 @@
                                 </div>
                                 <input type="hidden" name="post_type" id="post_type" value="recruitment">
                                 <div class="form-group mb-10 col-xl-3 col-6">
-                                    <label for="" class="form-label">Bài đăng thuộc cơ sở</label>
-                                    <select name="branch_id" class="form-select form-major" data-control="select2"
-                                            data-placeholder="Chọn cơ sở đăng bài">
-                                        @foreach ($branches as $branch)
+                                    <label for="" class="form-label">Mã số thuế</label>
+                                    <select name="tax_number" id="tax_number" class="form-select form-major"
+                                            data-control="select2"
+                                            data-placeholder="Mã số thuế">
+                                        <option value="0">Mã số thuế</option>
+                                        @foreach ($tax_numbers as $tax_number)
                                             <option
-                                                @selected(old('branch_id') ? old('branch_id') == $branch->id : auth()->user()->branch_id == $branch->id) value="{{ $branch->id }}">
-                                                {{ $branch->name }}
+                                                @selected(old('tax_number') ? old('tax_number') == $tax_number->tax_number : '') value="{{ $tax_number->tax_number }}">
+                                                {{ $tax_number->tax_number }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -181,24 +184,35 @@
                                     <input type="text" class="form-control" name="contact_email"
                                            value="{{ old('contact_email') }}">
                                 </div>
-                                <div class="form-group mb-10 col-xl-4 col-12">
+                                <div class="form-group mb-10 col-xl-3 col-6">
+                                    <label for="" class="form-label">Bài đăng thuộc cơ sở</label>
+                                    <select name="branch_id" class="form-select form-major" data-control="select2"
+                                            data-placeholder="Chọn cơ sở đăng bài">
+                                        @foreach ($branches as $branch)
+                                            <option
+                                                @selected(old('branch_id') ? old('branch_id') == $branch->id : auth()->user()->branch_id == $branch->id) value="{{ $branch->id }}">
+                                                {{ $branch->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group mb-10 col-xl-3 col-12">
                                     <label for="" class="form-label">Hình thức</label>
                                     <select name="career_type" id="" class="form-select form-major"
                                             data-control="select2">
                                         <option value="">Chọn hình thức</option>
                                         @foreach (config('util.CAREER_TYPES') as $key => $value)
-                                            <option @selected(old('career_type') == $key) value="{{ $key }}">{{ $value }}</option>
+                                            <option
+                                                @selected(old('career_type') == $key) value="{{ $key }}">{{ $value }}</option>
                                         @endforeach
-                                        {{--                                        <option value="0" @selected(old('career_type') == 0)>Part-time</option>--}}
-                                        {{--                                        <option value="1" @selected(old('career_type') == 1)>Full-time</option>--}}
                                     </select>
                                 </div>
-                                <div class="form-group mb-10 col-xl-4 col-12">
+                                <div class="form-group mb-10 col-xl-3 col-12">
                                     <label for="" class="form-label">Thời hạn tuyển dụng</label>
                                     <input type="datetime-local" class="form-control" name="deadline"
                                            value="{{ old('deadline') }}">
                                 </div>
-                                <div class="form-group mb-10 col-xl-4 col-12">
+                                <div class="form-group mb-10 col-xl-3 col-12">
                                     <label for="" class="form-label">Nguồn</label>
                                     <input type="text" class="form-control" name="career_source"
                                            value="{{ old('career_source') }}">
@@ -306,6 +320,7 @@
         let enterprises = @json($enterprises);
         let branches = @json($branches);
         let careerTypes = @json(config('util.CAREER_TYPES'));
+        let tax_numbers = @json($tax_numbers);
 
         $(document).ready(function () {
             const recruitmentSelect = $('select[name="recruitment_id"]');
@@ -313,6 +328,11 @@
             let branchSelect = $('select[name="branch_id"]');
             let careerTypeSelect = $('select[name="career_type"]');
             let total = $('input[name="total"]');
+            const taxNumberSelect = $('select[name="tax_number"]');
+            let contactName = $('input[name="contact_name"]');
+            let contactPhone = $('input[name="contact_phone"]');
+            let contactEmail = $('input[name="contact_email"]');
+            let majorSelect = $('select[name="major_id"]');
 
             if (oldRound == null || oldRecruitment == null || oldCapacity == null) {
                 $(".click-recruitment").click();
@@ -324,6 +344,29 @@
                 placeholder: "Chọn doanh nghiệp",
                 allowClear: true,
                 tags: true,
+            });
+            majorSelect.select2({
+                placeholder: "Chọn chuyên ngành",
+                allowClear: true,
+                tags: true,
+            });
+            taxNumberSelect.select2({
+                placeholder: "Chọn mã số thuế",
+                allowClear: true,
+                tags: true,
+            });
+            taxNumberSelect.on('change', function () {
+                let taxNumber = $(this).val();
+                let info = tax_numbers.find(enterprise => enterprise.tax_number == taxNumber);
+                if (info) {
+                    contactName.val(info.contact_name);
+                    contactPhone.val(info.contact_phone);
+                    contactEmail.val(info.contact_email);
+                } else {
+                    contactName.val('');
+                    contactPhone.val('');
+                    contactEmail.val('');
+                }
             });
 
         });

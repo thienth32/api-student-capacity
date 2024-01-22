@@ -82,6 +82,7 @@ class EnterpriseController extends Controller
         $contest =  $this->contest::all();
 
         $listEnterprise = $this->modulesEnterprise->index($request);
+//        dd($listEnterprise->first()->logo);
         return view('pages.enterprise.index', compact('listEnterprise', 'contest'));
     }
     public function getModelDataStatus($id)
@@ -112,7 +113,7 @@ class EnterpriseController extends Controller
                 'name' => $request->name,
                 'description' => $request->description,
                 'link_web' => $request->link_web,
-
+                'address' => $request->address,
             ];
 
             $logo = $this->uploadFile($request->file('logo'));
