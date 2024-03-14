@@ -25,11 +25,12 @@ class UserController extends Controller
 
 
     public function __construct(
-        private MUserInterface $user,
+        private MUserInterface    $user,
         private MContestInterface $contest,
-        private User $modeluser,
-        private Role $role
-    ) {
+        private User              $modeluser,
+        private Role              $role
+    )
+    {
     }
 
     public function TeamUserSearch(Request $request)
@@ -88,7 +89,7 @@ class UserController extends Controller
                 'pagination' => [
                     'currentPage' => $pageNumber,
                     'pageSize' => $pageSize,
-                    'totalItem' =>  $totalItem,
+                    'totalItem' => $totalItem,
                     'totalPage' => ceil($totalItem / $pageSize)
                 ]
             ]
@@ -113,7 +114,7 @@ class UserController extends Controller
 
     public function index()
     {
-        if (!$users = $this->getUser())    return response()->json(
+        if (!$users = $this->getUser()) return response()->json(
             [
                 'status' => false,
                 'payload' => 'Trang không tồn tại !'
@@ -145,7 +146,7 @@ class UserController extends Controller
     public function listAdmin()
     {
         if (!$users = $this->getUser()) return abort(404);
-        $roles =  $this->role::all();
+        $roles = $this->role::all();
         return view('pages.auth.index', ['users' => $users, 'roles' => $roles]);
     }
 
@@ -157,7 +158,7 @@ class UserController extends Controller
 
     public function un_status($id)
     {
-        if (!$this->checkRole())   return response()->json([
+        if (!$this->checkRole()) return response()->json([
             'status' => false,
             'payload' => 'Không thể câp nhật trạng thái !',
         ]);
@@ -181,7 +182,7 @@ class UserController extends Controller
 
     public function re_status($id)
     {
-        if (!$this->checkRole())   return response()->json([
+        if (!$this->checkRole()) return response()->json([
             'status' => false,
             'payload' => 'Không thể câp nhật trạng thái !',
         ]);
@@ -510,5 +511,62 @@ class UserController extends Controller
             'status' => true,
             'payload' => $user,
         ]);
+    }
+
+    public function registerCapacity(Request $request)
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'name' => 'required|min:4|max:50',
+                'email' => 'required|email',
+            ],
+            [
+                'name.required' => 'Tên không được bỏ trống !',
+                'name.min' => 'Tên không nhỏ hơn 4 ký tự !',
+                'name.max' => 'Tên không lớn hơn 50 ký tự !',
+                'email.required' => 'Email không được bỏ trống !',
+                'email.email' => 'Email không đúng định dạng !',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'payload' => $validator->errors(),
+            ]);
+        }
+
+        try {
+            $user = $this->modeluser::query()->firstOrCreate(
+                [
+                    'email' => $request->email,
+                ],
+                [
+                    'name' => $request->name,
+                    'email' => $request->email,
+                ]
+            );
+
+            $user->assignRole('student');
+
+            $token = $user->createToken('auth_token')->plainTextToken;
+
+            return response()->json([
+                'status' => true,
+                'payload' => [
+                    "token" => $token,
+                    "token_type" => 'Bearer',
+                    'user' => $user->toArray(),
+                ],
+            ]);
+
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            return response()->json([
+                'status' => false,
+                'payload' => "Xác thực thất bại",
+            ]);
+        }
     }
 }
