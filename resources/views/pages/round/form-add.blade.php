@@ -128,6 +128,25 @@
                                             <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
+                                    <div class="col-lg-6 form-group mb-4">
+                                        <label class="form-label" for="">Cho phép truy cập từ bên ngoài</label>
+                                        <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                                                data-hide-search="false" data-placeholder="Select an option" tabindex="-1"
+                                                aria-hidden="true" name="access_from_outside" value="{{ old('access_from_outside') }}">
+                                            <option data-select2-id="select2-data-130-vofb"></option>
+                                            <option
+                                                value="0"
+                                                @selected(old('time_type_exam') == 0)
+                                            >Không cho phép</option>
+                                            <option
+                                                value="1"
+                                                @selected(old('time_type_exam') == 1)
+                                            >Cho phép</option>
+                                        </select>
+                                        @error('access_from_outside')
+                                        <p class="text-danger">{{ $message }}</p>
+                                        @enderror
+                                    </div>
                                 </div>
                             @endif
 

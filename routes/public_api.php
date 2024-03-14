@@ -27,7 +27,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('sponsors', [AdminSponsorController::class, 'list']);
 
-Route::get('users', [AdminUserController::class, 'index']); // danh sách user
+Route::prefix('users')->group(function () {
+    Route::get('users', [AdminUserController::class, 'index']); // danh sách user
+    Route::post('register-capacity', [AdminUserController::class, 'registerCapacity']);
+});
+
 
 Route::get('companys', [AdminCompanyController::class, 'listCompany']); // Doanh nghiệp
 
