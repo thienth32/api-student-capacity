@@ -1081,7 +1081,7 @@
 @endsection
 @section('page-script')
     <script>
-        const urlApiPublic = "{{ request()->root() }}/api/public/";
+        const urlApiPublic = "{{ config('app.url') }}/api/public/";
         const _token = "{{ csrf_token() }}";
         let questions = null;
         let listSave = [];
