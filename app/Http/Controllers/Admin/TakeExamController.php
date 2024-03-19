@@ -317,9 +317,9 @@ class TakeExamController extends Controller
                 ]);
             }
             $exam->load(['questions' => function ($q) {
-                return $q->with([
+                return $q->inRandomOrder()->with([
                     'answers' => function ($q) {
-                        return $q->select(['id', 'content', 'question_id']);
+                        return $q->select(['id', 'content', 'question_id'])->inRandomOrder();
                     }
                 ]);
             }]);

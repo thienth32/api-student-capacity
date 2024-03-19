@@ -21,8 +21,11 @@ use App\Services\Modules\MContest\MContestInterface;
 use App\Services\Modules\MRound\MRoundInterface;
 use App\Services\Modules\MRoundTeam\MRoundTeamInterface;
 use App\Services\Modules\MTeam\MTeamInterface;
+use App\Services\Modules\MSkill\MSkillInterface;
 use App\Services\Traits\TResponse;
 use App\Services\Traits\TUploadImage;
+use App\Models\Question;
+use App\Models\Exam;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -46,7 +49,8 @@ class RoundController extends Controller
         private Team $team,
         private MTeamInterface $teamRepo,
         private DB $db,
-        private MContestInterface $mContestInterfacet
+        private MContestInterface $mContestInterfacet,
+        private MSkillInterface $skill
     ) {
     }
 
@@ -315,6 +319,73 @@ class RoundController extends Controller
             'type_exams' => $this->type_exam::all(),
             'contest' => $contest
         ]);
+    }
+
+    public function formQuickAddExam($id)
+    {
+        $round = $this->round::whereId($id)->first();
+        $skills = $this->skill->getAll();
+        if (is_null($round)) {
+            return $this->responseApi(false, 'Không tồn tại trong hệ thống !');
+        }
+
+        return view('pages.round.detail.quickAddExam.index', ['round' => $round->load('contest'), 'skills' => $skills]);
+
+    }
+
+    public function quickAddExam(Request $request, $id)
+    {
+        $round = $this->round::whereId($id)->first();
+        $numOfExams = (int) $request->total_exam;
+        $skillIds = $request->skill;
+        $total_easy = (int) $request->total_easy;
+        $total_medium = (int) $request->total_medium;
+        $total_hard = (int) $request->total_hard;
+
+        $this->db::beginTransaction();
+        try {
+        // Lặp qua số lượng đề thi cần tạo
+            for ($i = 0; $i < $numOfExams; $i++) {
+                // Tạo một bản ghi đề thi mới
+                $exam = new Exam();
+                $exam->round_id = $round->id;
+                $exam->name = 'Đề ' . $round->exams->count() + $i + 1 . ' ' . $round->name . uniqid();
+                $exam->max_ponit = $round->max_questions_exam;
+                $exam->ponit = 0;
+                $exam->type = 1;
+                $exam->status = 1;
+                $exam->save();
+
+                // Lấy danh sách câu hỏi theo kỹ năng và mức độ
+                $questions = Question::whereIn('id', function($query) use ($skillIds) {
+                    $query->select('question_id')
+                        ->from('question_skills')
+                        ->whereIn('skill_id', $skillIds);
+                })
+                // ->where(function ($query) use ($total_easy, $total_medium, $total_hard) {
+                //     $query->where('rank', 0)->take($total_easy)
+                //         ->orWhere('rank', 1)->take($total_medium)
+                //         ->orWhere('rank', 2)->take($total_hard);
+                // })
+                ->inRandomOrder()
+                ->get();
+                $filteredQuestions = $questions->groupBy('rank')->map(function ($group) use ($total_easy, $total_medium, $total_hard) {
+                    return $group->take($group->first()->rank === 0 ? $total_easy : ($group->first()->rank === 1 ? $total_medium : $total_hard));
+                })->collapse();
+
+                // Gán các câu hỏi vào đề thi
+                foreach ($filteredQuestions as $question) {
+                    $exam->questions()->attach($question->id);
+                }
+            }
+
+            $this->db::commit();
+
+            return redirect()->route('admin.contest.show.capatity', ['id' => $round->contest_id]);
+        } catch (Exception $ex) {
+            $this->db::rollBack();
+            return Redirect::back()->with(['error' => 'Thêm mới thất bại !']);
+        }
     }
 
     public function adminShow($id)
