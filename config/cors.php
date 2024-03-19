@@ -23,7 +23,7 @@ return [
     'allowed_origins' => [
         "https://beecareer.poly.edu.vn",
         "https://admin.beecareer.poly.edu.vn",
-//        "http://localhost:4200",
+        // "http://localhost:4200",
     ],
 
     'allowed_origins_patterns' => [],

@@ -46,6 +46,8 @@ Route::prefix('rounds')->group(function () {
         Route::get('form-add', [RoundController::class, 'create'])->name('admin.round.create');
         Route::post('form-add-save', [RoundController::class, 'store'])->name('admin.round.store');
         Route::get('{id}/edit', [RoundController::class, 'edit'])->name('admin.round.edit');
+        Route::get('{id}/form-quick-add-exam', [RoundController::class, 'formQuickAddExam'])->name('admin.round.form-quick-add-exam');
+        Route::post('{id}/quick-add-exam', [RoundController::class, 'quickAddExam'])->name('admin.round.quick-add-exam');
         Route::put('{id}', [RoundController::class, 'update'])->name('admin.round.update');
         Route::delete('{id}', [RoundController::class, 'destroy'])->name('admin.round.destroy');
         Route::get('round-soft-delete', [RoundController::class, 'softDelete'])->name('admin.round.soft.delete');

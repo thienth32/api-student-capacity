@@ -388,6 +388,12 @@
                                                     <ul class="dropdown-menu ps-3">
                                                         <li class="my-3">
                                                             <a
+                                                                href="{{ route('admin.round.form-quick-add-exam', ['id' => $round->id]) . '?type=' . $round->contest->type }}">
+                                                                Thêm đề thi nhanh
+                                                            </a>
+                                                        </li>
+                                                        <li class="my-3">
+                                                            <a
                                                                 href="{{ route('admin.round.edit', ['id' => $round->id]) . '?type=' . $round->contest->type }}">
                                                                 <span role="button"
                                                                     class="svg-icon svg-icon-success svg-icon-2x">
@@ -414,6 +420,7 @@
                                                                 Chỉnh sửa
                                                             </a>
                                                         </li>
+
                                                         <li class="my-3">
                                                             @hasrole(config('util.ROLE_DELETE'))
                                                                 @if ($round->results_count == 0 &&
