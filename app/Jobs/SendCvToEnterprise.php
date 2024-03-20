@@ -42,7 +42,7 @@ class SendCvToEnterprise implements ShouldQueue
      */
 
     private function removeSpecialChar($str){
-        $res = preg_replace('/[^a-zA-Z0-9_ -]/s',' ', $str);
+        $res = preg_replace('/[^a-z0-9A-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễếệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]/u',' ', $str);
 
         return $res;
     }
