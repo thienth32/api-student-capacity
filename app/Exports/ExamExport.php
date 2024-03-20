@@ -2,44 +2,46 @@
 
 namespace App\Exports;
 
+use App\Exports\Exam\ResultCapacityDetailExport;
+use App\Exports\Exam\ResultCapacityExport;
 use App\Services\Modules\MExam\MExamInterface;
 use App\Services\Modules\MRound\MRoundInterface;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
-class ExamExport implements FromCollection, WithHeadings, WithMapping
+class ExamExport implements WithMultipleSheets
 {
     public function __construct(private $id)
     {
     }
 
-    public function collection()
+    public function sheets(): array
     {
-        return app(MRoundInterface::class)->getResult($this->id);
-    }
+        $data = app(MRoundInterface::class)->getResult($this->id)->load([
+            'user' => function ($query) {
+                $query->select('id', 'name', 'email');
+            },
+            'resultCapacityDetail:result_capacity_id,question_id,answer_id',
+            'examBelongTo' => function ($query) {
+                $query
+                    ->select('id', 'name', 'max_ponit', 'ponit', 'round_id', 'status', 'type', 'time', 'time_type')
+                    ->with([
+                        'questions:id,content,status,type,rank',
+                        'questions.answers:id,question_id,content,is_correct'
+                    ]);
+            },
+        ]);
 
-    public function headings(): array
-    {
-        return [
-            'Sinh vien',
-            'Mail',
-            "So diem",
-            "Trang thai",
-            "Chon dung",
-            "Chon sai",
+        $sheets = [
+            new ResultCapacityExport($data),
         ];
-    }
 
-    public function map($data): array
-    {
-        return [
-            $data->user->name,
-            $data->user->email,
-            $data->scores,
-            $data->status == 1 ? 'Đã nộp' : 'Chưa nộp ',
-            $data->false_answer,
-            $data->true_answer,
-        ];
+        foreach ($data as $item) {
+            $sheets[] = new ResultCapacityDetailExport($item);
+        }
+
+        return $sheets;
     }
 }
