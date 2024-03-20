@@ -525,7 +525,7 @@
 
                             loadTast(
                                 "Thành công !",
-                                "toastr-bottom-left",
+                                "toastr-top-right",
                                 "success"
                             );
 
