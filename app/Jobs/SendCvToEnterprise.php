@@ -40,6 +40,13 @@ class SendCvToEnterprise implements ShouldQueue
      *
      * @return void
      */
+
+    private function removeSpecialChar($str){
+        $res = preg_replace('/[^a-z0-9A-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễếệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]/u',' ', $str);
+
+        return $res;
+    }
+
     public function handle()
     {
         $position = $this->post->position;
@@ -47,7 +54,12 @@ class SendCvToEnterprise implements ShouldQueue
         $cvs = [];
 
         foreach ($this->candidates as $candidate) {
-            $file_name = $position . ' - ' . $candidate->student_code . '_' . $candidate->name . '.pdf';;
+            $file_name = $this->removeSpecialChar($position)
+                . ' - '
+                . $this->removeSpecialChar($candidate->student_code)
+                . '_'
+                . $this->removeSpecialChar($candidate->name)
+                . '.pdf';
 
             $fileContents = Storage::disk('s3')->get($candidate->file_link);
 
