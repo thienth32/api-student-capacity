@@ -42,6 +42,7 @@ class ResultCapacityDetailExport implements FromCollection, WithHeadings, WithMa
                     'id' => $question->id,
                     'type' => '',
                     'rank' => '',
+                    'content' => '',
                     'ans_id' => $answer->id,
                     'ans_content' => $answer->content,
                     'is_correct' => $answer->is_correct,
@@ -86,8 +87,8 @@ class ResultCapacityDetailExport implements FromCollection, WithHeadings, WithMa
         return [
             $data['type'] == '' ? '' : ($data['type'] == 0 ? 'Một đáp án' : 'Nhiều đáp án'),
             config('util.EXCEL_QESTIONS.RANKS')[$data['rank']] ?? '',
-            $data['content'] ?? '',
-            $data['ans_content'],
+            strip_tags($data['content']),
+            strip_tags($data['ans_content']),
             $is_correct ? 'Đáp án đúng' : '',
             $resultDetail && $resultDetail->answer_id == $ans_id ? 'X' : '',
             $status
