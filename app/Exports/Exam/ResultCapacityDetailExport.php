@@ -86,7 +86,7 @@ class ResultCapacityDetailExport implements FromCollection, WithHeadings, WithMa
         return [
             $data['type'] == '' ? '' : ($data['type'] == 0 ? 'Một đáp án' : 'Nhiều đáp án'),
             config('util.EXCEL_QESTIONS.RANKS')[$data['rank']] ?? '',
-            $data['content'],
+            $data['content'] ?? '',
             $data['ans_content'],
             $is_correct ? 'Đáp án đúng' : '',
             $resultDetail && $resultDetail->answer_id == $ans_id ? 'X' : '',
