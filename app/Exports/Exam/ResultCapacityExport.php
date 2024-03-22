@@ -45,8 +45,8 @@ class ResultCapacityExport implements FromCollection, WithHeadings, WithMapping,
             $data->user->email,
             $data->scores,
             $data->status == 1 ? 'Đã nộp' : 'Chưa nộp ',
-            $data->false_answer,
             $data->true_answer,
+            $data->false_answer,
             $data->donot_answer,
         ];
     }

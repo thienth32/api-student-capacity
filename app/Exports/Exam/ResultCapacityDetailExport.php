@@ -71,16 +71,15 @@ class ResultCapacityDetailExport implements FromCollection, WithHeadings, WithMa
         $resultDetail = $this->resultCapacity->resultCapacityDetail
             ->where('question_id', $data['id'])
             ->first();
-
         $ans_id = $data['ans_id'];
 
         $is_correct = $data['is_correct'];
 
         $status = '';
 
-        if (empty($resultDetail->answer_id) && $data['type'] != '') {
-            $status = 'Chưa trả lời';
-        } elseif ($resultDetail->answer_id == $ans_id) {
+        if ((is_null($resultDetail) || empty($resultDetail->answer_id))) {
+            $status = $data['type'] !== '' ? 'Chưa trả lời' : '';
+        } else if ($resultDetail->answer_id == $ans_id) {
             $status = $is_correct == 1 ? 'Trả lời đúng' : 'Trả lời sai';
         }
 
