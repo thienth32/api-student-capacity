@@ -80,7 +80,7 @@
             </div>
             <div class="col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="form-group">
-                    <label class="form-label">Tình trạng </label>
+                    <label class="form-label">Trạng thái hiển thị </label>
                     <select id="select-status" class="form-select mb-2 select2-hidden-accessible" data-control="select2"
                         data-hide-search="true" tabindex="-1" aria-hidden="true">
                         <option value="3" @selected(!request()->has('status'))>Chọn tình trạng</option>
