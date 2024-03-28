@@ -28,26 +28,30 @@ class ResultCapacityExport implements FromCollection, WithHeadings, WithMapping,
     public function headings(): array
     {
         return [
-            'Sinh vien',
-            'Mail',
-            "So diem",
-            "Trang thai",
-            "Chon dung",
-            "Chon sai",
-            "Chua tra loi"
+            'Thí sinh',
+            'Email',
+            "Điểm hệ thống",
+            "Trạng thái",
+            "Số câu đúng",
+            "Số câu sai",
+            "Số câu chưa làm",
+            "Điểm tổng kết"
         ];
     }
 
     public function map($data): array
     {
+        $total_question = $data->true_answer + $data->false_answer + $data->donot_answer;
+
         return [
             $data->user->name,
             $data->user->email,
             $data->scores,
             $data->status == 1 ? 'Đã nộp' : 'Chưa nộp ',
-            $data->true_answer,
-            $data->false_answer,
-            $data->donot_answer,
+            $data->true_answer ?? '0',
+            $data->false_answer ?? '0',
+            $data->donot_answer ?? '0',
+            $total_question ? round($data->true_answer/$total_question, 2)*10 : '0'
         ];
     }
 
