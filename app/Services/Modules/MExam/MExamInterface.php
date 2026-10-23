@@ -14,6 +14,8 @@ interface MExamInterface
 
     public function getResult($id);
 
+    public function destroyResultCapacity($id);
+
     public function getExamCapacityPlay($params = [], $with = []);
 
     public function storeCapacityPlay($data);

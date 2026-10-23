@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\CandidateNoteContent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,6 +15,9 @@ class CandidateNote extends Model
     use HasFactory, SoftDeletes;
     protected $table = 'candidate_notes';
     protected $fillable = ['candidate_id', 'user_id', 'content', 'status'];
+    protected $casts = [
+        'content' => CandidateNoteContent::class,
+    ];
 
     public function candidate()
     {

@@ -85,7 +85,7 @@
                 <div class="tab-pane fade active show tab-list" id="kt_vtab_pane_4" role="tabpanel">
                     <h2>
                         Danh sách vòng thi thuộc <strong style="color: blue">{{ $test_capacity->name }}</strong>
-                        <a class="mx-2" target="_blank"
+                        <a class="mx-2" target="_blank" rel="noopener"
                             href="{{ route('admin.round.soft.delete', 'round_soft_delete=1') }}">
 
                             <span data-bs-toggle="tooltip" title="Kho lưu trữ bản xóa "
@@ -107,7 +107,7 @@
                             </span>
                         </a>
                     </h2>
-                    <a class="btn btn-primary" target="_blank"
+                    <a class="btn btn-primary" target="_blank" rel="noopener"
                         href="{{ route('admin.round.create') . '?contest_id=' . $test_capacity->id . '&type=1' }}"
                         style="float:right">Thêm vòng thi </a>
                     <div style="width: 100%" class="table-responsive table-responsive-md ">
@@ -139,7 +139,7 @@
 
                                             </td>
                                             <td>
-                                                <a target="_blank"
+                                                <a target="_blank" rel="noopener"
                                                     href="{{ route('admin.exam.create', ['id' => $round->id]) . '?type=1' }}">Thêm
                                                     đề thi</a>
                                             </td>
@@ -388,6 +388,12 @@
                                                     <ul class="dropdown-menu ps-3">
                                                         <li class="my-3">
                                                             <a
+                                                                href="{{ route('admin.round.form-quick-add-exam', ['id' => $round->id]) . '?type=' . $round->contest->type }}">
+                                                                Thêm đề thi nhanh
+                                                            </a>
+                                                        </li>
+                                                        <li class="my-3">
+                                                            <a
                                                                 href="{{ route('admin.round.edit', ['id' => $round->id]) . '?type=' . $round->contest->type }}">
                                                                 <span role="button"
                                                                     class="svg-icon svg-icon-success svg-icon-2x">
@@ -414,6 +420,7 @@
                                                                 Chỉnh sửa
                                                             </a>
                                                         </li>
+
                                                         <li class="my-3">
                                                             @hasrole(config('util.ROLE_DELETE'))
                                                                 @if ($round->results_count == 0 &&
@@ -890,7 +897,6 @@
                             </div>
                             <div id="data-save"
                                 style="
-                                    position: absolute;
                                     left: 0;
                                     bottom: -5vh;
                                     right: 0;
@@ -1082,7 +1088,7 @@
 @endsection
 @section('page-script')
     <script>
-        const urlApiPublic = "{{ request()->root() }}/api/public/";
+        const urlApiPublic = "{{ config('app.url') }}/api/public/";
         const _token = "{{ csrf_token() }}";
         let questions = null;
         let listSave = [];
@@ -1100,7 +1106,7 @@
         );
     </script>
     <script src="assets/js/system/capacity/main.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js" integrity="sha512-YUkaLm+KJ5lQXDBdqBqk7EVhJAdxRnVdT2vtCzwPHSweCzyMgYV/tgGF4/dCyqtCC2eCphz0lRQgatGVdfR0ww==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         $(document).ready(function() {
             $('.up-file').on("change", function() {

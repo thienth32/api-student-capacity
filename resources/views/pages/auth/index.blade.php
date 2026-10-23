@@ -26,7 +26,6 @@
         </div>
 
         <div class="row card-format">
-
             <div class=" col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4">
                 <div class="   form-group ">
                     <label class="form-label">Lọc theo quyền </label>

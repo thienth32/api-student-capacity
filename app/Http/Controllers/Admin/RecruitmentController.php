@@ -163,9 +163,12 @@ class RecruitmentController extends Controller
         return view('pages.recruitment.detailRecruitment', compact('data'));
     }
 
-    public function downloadList()
+    public function downloadList(Request $request)
     {
-        return Excel::download(new RecruitmentsExport(), 'DS-du-lieu-viec-lam_' . time() . '.xlsx');
+        $startDate = $request->has('start_date') ? $request->start_date : null;
+        $endDate = $request->has('end_date') ? $request->end_date : null;
+        
+        return Excel::download(new RecruitmentsExport($startDate,$endDate), 'DS-du-lieu-viec-lam_' . time() . '.xlsx');
     }
 
     /**

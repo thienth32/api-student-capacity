@@ -224,7 +224,7 @@
             });
     </script>
 
-
+    <script type="text/javascript" src="assets/js/custom/documentation/general/moment.min.js"></script>
     <script src="assets/plugins/global/plugins.bundle.js"></script>
     <script src="assets/plugins/custom/tinymce/tinymce.bundle.js"></script>
     <script src="assets/js/system/config-mail/mail.js"></script>

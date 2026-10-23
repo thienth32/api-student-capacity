@@ -17,7 +17,19 @@ class Enterprise extends Model
         'updated_at' =>  FormatDate::class,
         'logo' => FormatImageGet::class,
     ];
-    protected $fillable = ['name', 'logo', 'description', 'link_web', 'status', 'branch_id', 'address'];
+    protected $fillable = [
+        'name', 
+        'logo', 
+        'description', 
+        'link_web', 
+        'status', 
+        'branch_id', 
+        'address', 
+        'tax_number',
+        'contact_name',
+        'contact_phone',
+        'contact_email'
+    ];
     protected static function boot()
     {
         parent::boot();
@@ -55,6 +67,11 @@ class Enterprise extends Model
     public function posts()
     {
         return $this->hasMany(Post::class, 'enterprise_id');
+    }
+
+    public function projects()
+    {
+        return $this->morphToMany(Project::class, 'participant', 'project_participants');
     }
 
     use HasFactory;

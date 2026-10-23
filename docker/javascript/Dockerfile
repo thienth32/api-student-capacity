@@ -1,5 +1,10 @@
 FROM node:18.4.0-alpine
 
+RUN addgroup -S nonroot \
+    && adduser -S nonroot -G nonroot
+
+USER nonroot
+
 RUN apk add --no-cache bc
 RUN apk add --update coreutils && rm -rf /var/cache/apk/*
 

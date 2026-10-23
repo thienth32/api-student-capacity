@@ -4,6 +4,22 @@ $(document).ready(function () {
         let post_id = $(this).val();
         window.location = UpdateQueryString("post_id", post_id);
     });
+    $("#select-student-code").change(function () {
+        let candidate_id = $(this).val();
+        window.location = UpdateQueryString("candidate_id", candidate_id);
+    });
+    $("#select-major-recruitment").change(function () {
+        let major_id = $(this).val();
+        window.location = UpdateQueryString("major_id", major_id);
+    });
+    $("#select-status-recruitment").change(function () {
+        let status = $(this).val();
+        window.location = UpdateQueryString("status", status);
+    });
+    $("#select-result-recruitment").change(function () {
+        let result = $(this).val();
+        window.location = UpdateQueryString("result", result);
+    });
     $("#time_candidate").click(function () {
         let sortBy = $(this).data("href");
         let orderBy = $(this).data("order");
@@ -128,18 +144,36 @@ $(document).ready(function () {
         cb(start, end, (ranges = ""));
     });
     $(document).on("click", ".print-excel", function (e) {
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
+            var results = regex.exec(location.search);
+            return results === null
+                ? ""
+                : decodeURIComponent(results[1].replace(/\+/g, " "));
+        }
+        const start = getUrlParameter("startTime")
+            ? moment(getUrlParameter("startTime"))
+            : moment().subtract(29, "days");
+        const end = getUrlParameter("endTime")
+            ? moment(getUrlParameter("endTime"))
+            : moment();
+        const start_date = start.format("MMMM D, YYYY");
+        const end_date = end.format("MMMM D, YYYY");
+
         $.ajax({
             type: 'GET',
-            url: 'admin/download-recruitment-list',
+            url: `admin/download-recruitment-list?start_date=${start_date}&end_date=${end_date}`,
             data: {},
             xhrFields: {
                 responseType: 'blob'
             },
+            
             success: function(response){
                 var blob = new Blob([response]);
                 var link = document.createElement('a');
                 link.href = window.URL.createObjectURL(blob);
-                link.download = "file.xlsx";
+                link.download = `Candidates_${start_date}_${end_date}.xlsx`;
                 link.click();
             },
             error: function(blob){

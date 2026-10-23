@@ -24,16 +24,24 @@ class RequestsEnterprise extends FormRequest
     public function rules()
     {
         $ruleName =  'required|unique:enterprises,name';
-        if ($this->route()->id) $ruleName = 'required|unique:enterprises,name,' . $this->route()->id . ',id';
+        $ruleTaxNumber = 'required|unique:enterprises,tax_number';
+        if ($this->route()->id) {
+            $ruleName = 'required|unique:enterprises,name,' . $this->route()->id . ',id';
+            $ruleTaxNumber = 'required|unique:enterprises,tax_number,' . $this->route()->id . ',id';    
+        }
         $rule = [
             'name' =>  $ruleName,
             'description' => "required",
-            'link_web' => "required",
-
+            // 'link_web' => "required", //không bắt buộc trường website
+            'tax_number' => $ruleTaxNumber,
+            'contact_email' => 'required|max:255',
+            'contact_name' => 'required|max:255',
+            'contact_phone' => 'required|max:20',
         ];
         if (!$this->route()->id || $this->has('logo'))  $rule = array_merge($rule, [
             'logo' => 'required|required|mimes:jpeg,png,jpg|max:10000',
         ]);
+
         return $rule;
     }
     // public function messages()

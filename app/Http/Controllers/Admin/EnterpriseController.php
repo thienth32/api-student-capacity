@@ -72,6 +72,7 @@ class EnterpriseController extends Controller
     {
         $data = $this->modulesEnterprise->index($request);
         $data->load(['recruitment:id,name', 'recruitment.contest:id,name']);
+        
         return $this->responseApi(
             true,
             $data
@@ -80,11 +81,11 @@ class EnterpriseController extends Controller
     public function index(Request $request)
     {
         $contest =  $this->contest::all();
-
         $listEnterprise = $this->modulesEnterprise->index($request);
+
         return view('pages.enterprise.index', compact('listEnterprise', 'contest'));
     }
-    public function getModelDataStatus($id)
+    public function getModelDataById($id)
     {
         return $this->modulesEnterprise->find($id);
     }
@@ -110,9 +111,14 @@ class EnterpriseController extends Controller
         try {
             $data = [
                 'name' => $request->name,
+                'status' => $request->status,
+                'tax_number' => $request->tax_number,
+                'contact_name' => $request->contact_name,
+                'contact_phone' => $request->contact_phone,
+                'contact_email' => $request->contact_email,
                 'description' => $request->description,
                 'link_web' => $request->link_web,
-
+                'address' => $request->address,
             ];
 
             $logo = $this->uploadFile($request->file('logo'));
@@ -121,7 +127,6 @@ class EnterpriseController extends Controller
             $this->modulesEnterprise->store($data, $request);
             return redirect()->route('admin.enterprise.list');
         } catch (\Throwable $th) {
-
             return redirect('error');
         }
     }

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 class CkeditorController extends Controller
 {
     use TUploadImage;
-    public function updoadFile(Request $request)
+    public function uploadCkFile(Request $request)
     {
         $nameFile = $this->uploadFile($request->upload);
         return response()->json([

@@ -17,6 +17,7 @@ use App\Services\Modules\MRoundTeam\RoundTeam;
 use App\Services\Modules\MTakeExam\TakeExam;
 use App\Services\Traits\TResponse;
 use App\Services\Traits\TUploadImage;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -134,7 +135,7 @@ class TakeExamController extends Controller
             [
                 'id' => 'required',
                 'result_url' => 'url',
-                'file_url' => 'file|mimes:zip,docx,word,rar,rtf'
+                'file_url' => 'file|mimes:zip,docx,word,rar,rtf|max:8000'
             ],
             [
                 'result_url.url' => 'Sai định dạng !!!',
@@ -238,8 +239,9 @@ class TakeExamController extends Controller
             $round = $this->round->find($request->round_id);
             $exam = $this->exam->whereGet(['round_id' => $request->round_id])->pluck('id');
             if (is_null($round) || is_null($exam)) return $this->responseApi(false, 'Lỗi truy cập hệ thống !!');
-            $resultCapacity = $this->resultCapacity->whereInExamUser($exam, $user_id)->load('exam:id,max_ponit');
+            $resultCapacity = $this->resultCapacity->whereInExamUser($exam, $user_id);
             if ($resultCapacity) {
+                $resultCapacity->load('exam:id,max_ponit');
                 if ($resultCapacity->status == config('util.STATUS_RESULT_CAPACITY_DOING')) {
                     return $this->responseApi(true, config('util.STATUS_RESULT_CAPACITY_DOING'), ['message' => "Đang làm !!"]);
                 } else {
@@ -249,6 +251,7 @@ class TakeExamController extends Controller
                 return $this->responseApi(false, "Chưa làm !!");
             }
         } catch (\Throwable $th) {
+            Log::error($th->getMessage());
             return $this->responseApi(false, 'Lỗi hệ thống !!');
         }
     }
@@ -314,9 +317,9 @@ class TakeExamController extends Controller
                 ]);
             }
             $exam->load(['questions' => function ($q) {
-                return $q->with([
+                return $q->inRandomOrder()->with([
                     'answers' => function ($q) {
-                        return $q->select(['id', 'content', 'question_id']);
+                        return $q->select(['id', 'content', 'question_id'])->inRandomOrder();
                     }
                 ]);
             }]);

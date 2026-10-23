@@ -51,7 +51,7 @@
                         <h2>Đề bài {{ $takeExam->exam->name }}
                             @if (Storage::disk('s3')->has($takeExam->exam->external_url ?? 'ABC'))
                                 <a href="{{ route('dowload.file') }}?url={{ $takeExam->exam->external_url }}"
-                                    target="_blank" class="  btn btn-outline-primary">Tải về </a>
+                                    target="_blank" rel="noopener" class="  btn btn-outline-primary">Tải về </a>
                             @endif
                         </h2>
                         <div>
@@ -82,7 +82,7 @@
                         <h2>Bài làm đội thi : {{ $team->name }}
                             @if ($takeExam->result_url == null)
                                 @if (\Storage::disk('s3')->has($takeExam->file_url ?? 'ABC'))
-                                    <a target="_blank" href="{{ route('dowload.file') }}?url={{ $takeExam->file_url }}"
+                                    <a target="_blank" href="{{ route('dowload.file') }}?url={{ $takeExam->file_url }}" rel="noopener"
                                         class="  btn btn-outline-primary">Tải về </a>
                                 @endif
                             @endif
@@ -96,7 +96,7 @@
                                 @if (!\Storage::disk('s3')->has($takeExam->file_url ?? 'ABC'))
                                     {{ $takeExam->result_url }}
                                 @else
-                                    <a target="_blank"
+                                    <a target="_blank" rel="noopener"
                                         href="{{ route('dowload.file') }}?url={{ $takeExam->file_url }}">{{ $takeExam->file_url }}
                                     </a>
                                 @endif

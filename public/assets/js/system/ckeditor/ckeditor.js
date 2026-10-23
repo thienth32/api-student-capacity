@@ -3,6 +3,9 @@ const pageCkeditor = {
         ClassicEditor.create(
             document.querySelector("#kt_docs_ckeditor_classic"),
             {
+                alignment: {
+                    options: ['left', 'right', 'center', 'justify',]
+                },
                 toolbar: [
                     "heading",
                     "undo",
@@ -10,30 +13,38 @@ const pageCkeditor = {
                     "bold",
                     "italic",
                     "blockQuote",
-                    "ckfinder",
+                    // "ckfinder", //item unavailable
                     "imageTextAlternative",
-                    // "imageUpload",
-                    "heading",
-                    "imageStyle:full",
+                    '|',
+                    'alignment',
+                    '|',
+                    "uploadImage",
+                    // "heading",
+                    // "imageStyle:full", //item unavailable
                     "imageStyle:side",
                     "link",
                     "numberedList",
                     "bulletedList",
-                    "mediaEmbed",
                     "insertTable",
+                    "mediaEmbed",
                     "tableColumn",
                     "tableRow",
                     "mergeTableCells",
                 ],
             }
         )
-            .then((editor) => {})
-            .catch((error) => {});
+            .then((editor) => {
+            })
+            .catch((error) => {
+            });
     },
     classicCk2: function () {
         ClassicEditor.create(
             document.querySelector("#kt_docs_ckeditor_classic2"),
             {
+                alignment: {
+                    options: ['left', 'right', 'center', 'justify',]
+                },
                 toolbar: [
                     "heading",
                     "undo",
@@ -41,11 +52,17 @@ const pageCkeditor = {
                     "bold",
                     "italic",
                     "blockQuote",
-                    "ckfinder",
+                    // "ckfinder", //item unavailable
                     "imageTextAlternative",
-                    // "imageUpload",
-                    "heading",
-                    "imageStyle:full",
+                    '|',
+                    'alignment:left',
+                    'alignment:right',
+                    'alignment:center',
+                    'alignment:justify',
+                    '|',
+                    "imageUpload",
+                    // "heading",
+                    // "imageStyle:full", //item unavailable
                     "imageStyle:side",
                     "link",
                     "numberedList",
@@ -58,8 +75,10 @@ const pageCkeditor = {
                 ],
             }
         )
-            .then((editor) => {})
-            .catch((error) => {});
+            .then((editor) => {
+            })
+            .catch((error) => {
+            });
     },
 };
 pageCkeditor.classicCk();

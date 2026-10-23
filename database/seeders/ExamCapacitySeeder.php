@@ -17,12 +17,13 @@ class ExamCapacitySeeder extends Seeder
      * Run the database seeds.
      *
      * @return void
+     * @throws \Exception
      */
     public function run()
     {
         $today = Carbon::now()->format('Y-m-d H:i:s');
         $questions = Question::all();
-        // capacity  
+        // capacity
         // $contests = Contest::where('type', config('util.TYPE_TEST'))->has('rounds')->pluck('id');
         // $roundARR = Round::whereIn('contest_id', $contests)->get()->map(function ($q) {
         //     return [
@@ -96,7 +97,7 @@ class ExamCapacitySeeder extends Seeder
         foreach ($roundARR as $key => $round) {
             $selected = array();
             foreach ($sentences as $sentence) {
-                $selected[] = $sentence[rand(0, count($sentence) - 1)];
+                $selected[] = $sentence[random_int(0, count($sentence) - 1)];
             }
             $paragraph = implode(' ', $selected) . Str::random(5);
             Exam::create([

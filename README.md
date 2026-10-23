@@ -55,7 +55,7 @@ Before start the project, open `.env`, and update the following:
 
 Start the project:
 ```
-php artisan server
+php artisan serve
 php artisan queue:work --queue=default
 php artisan schedule:work
 laravel-echo-server start 

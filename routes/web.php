@@ -15,13 +15,12 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Route::redirect('/', '/admin');
 Route::group(['prefix' => 'auth', 'middleware' => "guest"], function () {
     Route::get('login', [AuthController::class, 'adminLogin'])->name('login');
 
     Route::get('google', [AuthController::class, 'redirectToGoogle'])->name('auth.redirect-google');
-    Route::get('google/callback', [AuthController::class, 'adminGoogleCallback'])->name('google-auth.callback');
+    Route::get('callback', [AuthController::class, 'adminGoogleCallback'])->name('google-auth.callback');
 });
 Route::any('logout', [AuthController::class, 'logout'])->name('logout');
 

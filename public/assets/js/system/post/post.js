@@ -10,7 +10,6 @@ function to_slug(str) {
     str = str.replace(/(ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ)/g, "u");
     str = str.replace(/(ỳ|ý|ỵ|ỷ|ỹ)/g, "y");
     str = str.replace(/(đ)/g, "d");
-
     // Xóa ký tự đặc biệt
     str = str.replace(/([^0-9a-z-\s])/g, "");
 
@@ -21,8 +20,7 @@ function to_slug(str) {
     str = str.replace(/^-+/g, "");
 
     // xóa phần dư - ở cuối
-    str = str.replace(/-+$/g, "");
-
+    str = str.replace(/-+(?=-*$)/g, "");
     // return
     return str;
 }
@@ -44,42 +42,73 @@ $(document).ready(function () {
         $(".click-capacity").removeClass("btn-primary");
         $(".click-round").removeClass("btn-primary");
         $(".click-recruitment").removeClass("btn-primary");
+        $(".click-event").removeClass("btn-primary");
         $(this).addClass("btn-primary");
         $("#capacity").hide(100);
         $("#round").hide(100);
         $("#recruitment").hide(100);
+        $("#event").hide(100);
+        $("#post_type").val("contest");
         $("#contest").show(300);
+        console.log($("#kt_docs_ckeditor_classic").attr("data-placeholder", ""));
+        // $("#kt_docs_ckeditor_classic").attr("data-placeholder", "")
     });
     $(".click-capacity").click(function () {
         $(".click-contest").removeClass("btn-primary");
         $(".click-round").removeClass("btn-primary");
         $(".click-recruitment").removeClass("btn-primary");
+        $(".click-event").removeClass("btn-primary");
         $(this).addClass("btn-primary");
         $("#contest").hide(100);
         $("#round").hide(100);
         $("#recruitment").hide(100);
+        $("#event").hide(100);
+        $("#post_type").val("capacity");
         $("#capacity").show(300);
+        $("#kt_docs_ckeditor_classic").attr("data-placeholder", "")
     });
     $(".click-round").click(function () {
         $(".click-contest").removeClass("btn-primary");
         $(".click-recruitment").removeClass("btn-primary");
+        $(".click-event").removeClass("btn-primary");
         $(".click-capacity").removeClass("btn-primary");
         $("#capacity").hide(100);
         $("#contest").hide(100);
+        $("#event").hide(100);
         $("#recruitment").hide(100);
         $(this).addClass("btn-primary");
+        $("#post_type").val("round");
         $("#round").toggle(300);
+        $("#kt_docs_ckeditor_classic").attr("data-placeholder", "")
     });
     $(".click-recruitment").click(function () {
+        $(".click-contest").removeClass("btn-primary");
+        $(".click-round").removeClass("btn-primary");
+        $(".click-capacity").removeClass("btn-primary");
+        $(".click-event").removeClass("btn-primary");
+        $("#capacity").hide(100);
+        $("#contest").hide(100);
+        $("#event").hide(100);
+        $("#round").hide(100);
+        $("#post_type").val("recruitment");
+        $(this).addClass("btn-primary");
+        $("#recruitment").show(300);
+        $("#kt_docs_ckeditor_classic").attr("data-placeholder", "(Tên cơ sở) + [Tên Công ty] tuyển dụng [Số lượng tuyển] + [Vị trí tuyển] + [Hình thức tuyển]")
+    });
+    $(".click-event").click(function () {
+        $(".click-recruitment").removeClass("btn-primary");
         $(".click-contest").removeClass("btn-primary");
         $(".click-round").removeClass("btn-primary");
         $(".click-capacity").removeClass("btn-primary");
         $("#capacity").hide(100);
         $("#contest").hide(100);
         $("#round").hide(100);
+        $("#recruitment").hide(100);
         $(this).addClass("btn-primary");
-        $("#recruitment").toggle(300);
-    });
+        $("#post_type").val("event");
+        $("#event").show(300);
+        $("#kt_docs_ckeditor_classic").attr("data-placeholder", "")
+    })
 });
 
 const pageSliderForm = {

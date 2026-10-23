@@ -128,20 +128,20 @@ class QuestionAnswerSeeder extends Seeder
             for ($i = 0; $i < 20; $i++) {
                 $selected = array();
                 foreach ($sentences as $sentence) {
-                    $selected[] = $sentence[rand(0, count($sentence) - 1)];
+                    $selected[] = $sentence[random_int(0, count($sentence) - 1)];
                 }
                 $paragraph = implode(' ', $selected) . Str::random(5);
                 $question = Question::create([
                     'content' => 'Câu hỏi ' . Str::random(5) . ' : ' . $paragraph . ' ' . $province[array_rand($province)] . ' ' . $java[array_rand($java)],
                     'type' =>  0,
                     'status' => 1,
-                    'rank' => rand(0, 2),
+                    'rank' => random_int(0, 2),
                 ]);
                 $question->skills()->syncWithoutDetaching(
-                    $skills->random(rand(1, 4))->pluck('id')->toArray()
+                    $skills->random(random_int(1, 4))->pluck('id')->toArray()
                 );
                 $answerArr = [];
-                $is_correct = rand(0, 3);
+                $is_correct = random_int(0, 3);
                 for ($i = 0; $i < 4; $i++) {
                     array_push($answerArr, [
                         'content' => $sentences[3][array_rand($sentences[3])] . '' . $sentences[5][array_rand($sentences[5])] . ' ' . Str::random(5) . ' ' . $java[array_rand($java)] . '' . ($i == $is_correct ? 'true' : ''),

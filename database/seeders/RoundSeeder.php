@@ -16,6 +16,7 @@ class RoundSeeder extends Seeder
      * Run the database seeds.
      *
      * @return void
+     * @throws \Exception
      */
     public function run()
     {
@@ -78,12 +79,12 @@ class RoundSeeder extends Seeder
         ];
         foreach ($contests as $key =>    $contest) {
             $judge = Judge::where('contest_id', $contest)->get();
-            $date = Carbon::create(2022, rand(9, 10), rand(1, 4), 0, 0, 0);
+            $date = Carbon::create(2022, random_int(9, 10), random_int(1, 4), 0, 0, 0);
             $start = $date->format('Y-m-d H:i:s');
-            $end = $date->addWeeks(rand(1, 4))->format('Y-m-d H:i:s');
+            $end = $date->addWeeks(random_int(1, 4))->format('Y-m-d H:i:s');
             $selected = array();
             foreach ($sentences as $sentence) {
-                $selected[] = $sentence[rand(0, count($sentence) - 1)];
+                $selected[] = $sentence[random_int(0, count($sentence) - 1)];
             }
             $paragraph = implode(' ', $selected) . Str::random(10);
             $round =  Round::create([
@@ -96,7 +97,7 @@ class RoundSeeder extends Seeder
                 'type_exam_id' => 1,
             ]);
             $round->judges()->syncWithoutDetaching(
-                $judge->random(rand(2, 3))->pluck('id')->toArray()
+                $judge->random(random_int(2, 3))->pluck('id')->toArray()
             );
         }
     }

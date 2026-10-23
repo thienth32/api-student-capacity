@@ -612,6 +612,31 @@ class ContestController extends Controller
             return $this->responseApi(false);
         }
     }
+
+
+//    /**
+//     * Counts the number of views
+//     *
+//     * @param  int  $id
+//     * @return Response
+//     */
+//    public function countViews($id)
+//    {
+//        $contest = $this->contest->findOrFail($id);
+//
+//        // Check the cookie existence
+//        $cookieName = "contest_viewed_" . $id;
+//        if (!isset($_COOKIE[$cookieName])) {
+//            // Cookie does not exist, count the view and set the cookie
+//            $contest->increment('views');
+//
+//            // Set a cookie for 24 hours
+//            setcookie($cookieName, true, time()+86400);
+//        }
+//
+//        return $this->responseApi(true, "View counts updated");
+//    }
+
 }
 
 

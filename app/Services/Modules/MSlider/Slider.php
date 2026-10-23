@@ -38,7 +38,7 @@ class Slider
             $valueDate = request('year');
             $key = 'year';
         };
-
+        
         return $this->slider::when(request()
             ->has('slider_soft_delete'), function ($q) {
             return $q->onlyTrashed();
@@ -62,6 +62,24 @@ class Slider
             })
             ->when(request()->has('code'), function ($q) {
                 return $q->whereNull('sliderable_id')->where('sliderable_type', 'App\Models\Challenge');
+            })
+            ->when(request()->has('service'), function ($q) {
+                return $q->whereNull('sliderable_id')->where('sliderable_type', 'App\Models\Service');
+            })
+            ->when(request()->has('mentor'), function ($q) {
+                return $q->whereNull('sliderable_id')->where('sliderable_type', 'App\Models\User');
+            })
+            ->when(request()->has('event'), function ($q) {
+                return $q->whereNull('sliderable_id')->where('sliderable_type', 'App\Models\Event');
+            })
+            ->when(request()->has('recruitment'), function ($q) {
+                return $q->whereNull('sliderable_id')->where('sliderable_type', 'App\Models\Recruitment');
+            })
+            ->when(request()->has('privilege'), function ($q) {
+                return $q->whereNull('sliderable_id')->where('sliderable_type', 'App\Models\Privilege');
+            })
+            ->when(request()->has('project'), function ($q) {
+                return $q->whereNull('sliderable_id')->where('sliderable_type', 'App\Models\Project');
             })
             ->hasDateTimeBetween('start_time', request('start_time') ?? null, request('end_time') ?? null)
             ->hasSubTime(

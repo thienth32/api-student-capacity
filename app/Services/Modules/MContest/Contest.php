@@ -32,24 +32,24 @@ class Contest implements MContestInterface
     ) {
     }
 
-    private function getList($flagCapacity, $request)
+    private function getList($request)
     {
-        $with = [];
         $user = auth()->user();
-        if (!$flagCapacity)
-            $with = [];
+        
         $whereDate = ['date_start', 'register_deadline', 'start_register_time', 'end_register_time'];
         if (request()->has('type') && request('type') == 1) $whereDate = ['date_start', 'register_deadline'];
 
-        if ($flagCapacity)
-            $with = [
-                'skills:name,short_name',
-            ];
-
+        $with = [
+            'skills:name,short_name',
+        ];
+        
         $now = $this->carbon::now('Asia/Ho_Chi_Minh');
         $contest =  $this->contest::when($request->has('contest_soft_delete'), function ($q) {
             return $q->onlyTrashed();
         })
+            ->when($request->has('type') && $request->type != "", function ($q) use ($request) {
+                return $q->where('type', $request->type);
+            })
             ->when(isset($user) && $user->hasRole('judge'), function ($q, $v) use ($user) {
                 return $q->whereIn('id', array_unique($this->judge::where('user_id', $user->id)
                     ->pluck('contest_id')
@@ -70,7 +70,6 @@ class Contest implements MContestInterface
             if ($request->has('skill_id')) $contest->whenWhereHasRelationship(request('skill_id') ?? null, 'skills', 'skills.id', (request()->has('skill_id') && request('skill_id') == 0) ? true : false);
         });
         if ($request->has('sort')) $contest->sort(($request->sort == 'asc' ? 'asc' : 'desc'), $request->sort_by ?? null, 'contests');
-
 
         return $contest
             ->with($with)
@@ -97,22 +96,19 @@ class Contest implements MContestInterface
     {
         return  CapacityResource::collection($data)->response()->getData(true);
     }
-    public function apiIndex($flagCapacity = false)
+    public function apiIndex()
     {
-        if ($flagCapacity) {
-            $data = $this->getList($flagCapacity, request())
-                ->where('type', $flagCapacity ?  config('util.TYPE_TEST') : config('util.TYPE_CONTEST'))
-                ->orderBy('date_start', 'desc')
-                ->paginate(request('limit') ?? 9);
-            return  $this->capacityResourceCollection($data);
-        }
-        if (!$flagCapacity) {
-            $data = $this->getList($flagCapacity, request())
-                ->where('type', $flagCapacity ?  config('util.TYPE_TEST') : config('util.TYPE_CONTEST'))
-                ->orderBy('date_start', 'desc')
-                ->get();
-            return  ContestResource::collection($data);
-        }
+        $data = $this->getList(request())
+            ->orderBy('date_start', 'desc')
+            ->paginate(request('limit') ?? 9);
+        return  $this->capacityResourceCollection($data);
+        // if (!$flagCapacity) {
+        //     $data = $this->getList($flagCapacity, request())
+        //         ->where('type', $flagCapacity ?  config('util.TYPE_TEST') : config('util.TYPE_CONTEST'))
+        //         ->orderBy('date_start', 'desc')
+        //         ->get();
+        //     return  ContestResource::collection($data);
+        // }
     }
 
     public function getConTestCapacityByDateTime()

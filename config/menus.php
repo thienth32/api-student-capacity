@@ -45,6 +45,89 @@ return [
         "link" => "admin.post.list",
     ], // Bai viet
     [
+        "icon" => '<span class="svg-icon svg-icon-primary svg-icon-2x">
+            <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Code/Question-circle.svg--><svg
+                xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                    <rect x="0" y="0" width="24" height="24" />
+                    <circle fill="#000000" opacity="0.3" cx="12" cy="12"
+                        r="10" />
+                    <path
+                        d="M12,16 C12.5522847,16 13,16.4477153 13,17 C13,17.5522847 12.5522847,18 12,18 C11.4477153,18 11,17.5522847 11,17 C11,16.4477153 11.4477153,16 12,16 Z M10.591,14.868 L10.591,13.209 L11.851,13.209 C13.447,13.209 14.602,11.991 14.602,10.395 C14.602,8.799 13.447,7.581 11.851,7.581 C10.234,7.581 9.121,8.799 9.121,10.395 L7.336,10.395 C7.336,7.875 9.31,5.922 11.851,5.922 C14.392,5.922 16.387,7.875 16.387,10.395 C16.387,12.915 14.392,14.868 11.851,14.868 L10.591,14.868 Z"
+                        fill="#000000" />
+                </g>
+            </svg>
+            <!--end::Svg Icon-->
+        </span>',
+        "name" => "Q&A",
+        "role" => $ROLE_HAS_ADMINS,
+        "subs-menu" => [
+            [
+                "name" => "Danh mục",
+                "param" => '',
+                "link" => "admin.faq_category.list",
+                "role" => $ROLE_HAS_ADMINS
+            ],
+            [
+                "name" => "Danh sách câu hỏi",
+                "param" => '',
+                "link" => "admin.faq.list",
+                "role" => $ROLE_HAS_ADMINS
+            ]
+        ]
+    ], // Q&A
+    [
+        "icon" => '',
+        "name" => 'Chức năng mới request 03/2026',
+        "role" => $ROLE_HAS_ADMINS,
+        "subs-menu" => [
+            [
+                "name" => "Dịch vụ việc làm",
+                "param" => '',
+                "link" => "admin.service.list",
+                "role" => $ROLE_HAS_ADMINS
+            ],
+            [
+                "name" => "Ngày hội việc làm",
+                "param" => '',
+                "link" => "admin.event.list",
+                "role" => $ROLE_HAS_ADMINS
+            ],
+            [
+                "name" => "Quản lý mentor",
+                "param" => '',
+                "link" => "admin.mentor.list",
+                "role" => $ROLE_HAS_ADMINS
+            ],
+            [
+                "name" => 'Đặc quyền sinh viên',
+                "role" => $ROLE_HAS_ADMINS,
+                "param" => '',
+                "link" => "admin.privilege.list",
+            ], 
+            [
+                "name" => 'Vườn ươm khởi nghiệp (dự án)',
+                "role" => $ROLE_HAS_ADMINS,
+                "param" => '',
+                "link" => "admin.project.list",
+            ], 
+            [
+                "name" => 'Lĩnh vực dự án',
+                "role" => $ROLE_HAS_ADMINS,
+                "param" => '',
+                "link" => "admin.topic.list",
+            ], 
+            [
+                "name" => "Thiết lập trang chủ",
+                "role" => $ROLE_HAS_ADMINS,
+                "param" => '',
+                "link" => 'admin.stat.list',
+            ],
+        ]
+    ], // Dịch vụ - sự kiện
+    
+    [
         "icon" => '<span class="svg-icon svg-icon-primary svg-icon-2x"><!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo1/dist/../src/media/svg/icons/General/Search.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
             <rect x="0" y="0" width="24" height="24"/>
@@ -79,9 +162,29 @@ return [
         </g>
     </svg><!--end::Svg Icon--></span>',
         "name" => "Doanh nghiệp",
-        "param" => '',
-        "link" => "admin.enterprise.list",
+//        "param" => '',
+//        "link" => "admin.enterprise.list",
         "role" => $ROLE_HAS_ADMINS,
+        "subs-menu" => [
+            [
+                "name" => "Doanh nghiệp",
+                "param" => '',
+                "link" => "admin.enterprise.list",
+                "role" => $ROLE_HAS_ADMINS
+            ],
+            [
+                "name" => "Doanh nghiệp tuyển dụng",
+                "param" => '',
+                "link" => "admin.enterprise.recruitment.list",
+                "role" => $ROLE_HAS_ADMINS
+            ],
+            [
+                "name" => "Thông tin doanh nghiệp liên hệ",
+                "param" => '',
+                "link" => "admin.cc.list",
+                "role" => $ROLE_HAS_ADMINS
+            ]
+        ]
     ], // Doanh nghiep
     [
         "icon" => ' <span class="svg-icon svg-icon-primary svg-icon-2x"><!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Devices/Gamepad2.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -200,6 +303,12 @@ return [
                 "role" => $ROLE_HAS_ADMINS,
                 "param" => '',
                 "link" => "admin.major.list",
+            ],
+            [
+                "name" => "Chuyên ngành tuyển dụng",
+                "role" => $ROLE_HAS_ADMINS,
+                "param" => '',
+                "link" => "admin.major.recruitment.list",
             ],
             [
                 "name" => "Kỹ năng",

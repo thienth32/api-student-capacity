@@ -81,8 +81,21 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
-                                                <div class="modal-body  ">
-                                                    {!! $listSoft->description !!}
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col mx-auto">
+                                                            <p><b>Mã số thuế:</b> {{ $listSoft->tax_number }}</p>
+                                                            <p><b>Website:</b> {{ $listSoft->link_web }}</p>
+                                                            <p><b>Địa chỉ:</b> {{ $listSoft->address }}</p>
+                                                        </div>
+                                                        <div class="col mx-auto">
+                                                            <p><b>Người liên hệ:</b> {{ $listSoft->contact_name }}</p>
+                                                            <p><b>Email liên hệ:</b> {{ $listSoft->contact_email }}</p>
+                                                            <p><b>Sđt liên hệ:</b> {{ $listSoft->contact_phone }}</p>
+                                                        </div>
+                                                    </div>
+                                                    <p><b>Mô tả:</b> {!! $listSoft->description !!}</p>
+                                                    
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"

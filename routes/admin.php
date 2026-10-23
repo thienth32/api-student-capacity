@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ExamController;
 use App\Http\Controllers\Admin\TeamController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\BranchController;
+use App\Http\Controllers\Admin\CompanyContactController;
 use App\Http\Controllers\Admin\MajorController;
 use App\Http\Controllers\Admin\RoundController;
 use App\Http\Controllers\Admin\SkillController;
@@ -20,13 +21,24 @@ use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\SendMailController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EnterpriseController;
+use App\Http\Controllers\Admin\EventController;
+use App\Http\Controllers\Admin\EventParticipantController;
+use App\Http\Controllers\Admin\FaqCategoryController;
+use App\Http\Controllers\Admin\FaqRatingController;
+use App\Http\Controllers\Admin\FrequentlyAskedQuestionController;
 use App\Http\Controllers\Admin\JobController;
-use App\Http\Controllers\admin\KeywordController;
+use App\Http\Controllers\Admin\KeywordController;
+use App\Http\Controllers\Admin\MentorController;
 use App\Http\Controllers\Admin\RecruitmentController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\PrintPDFController;
 use App\Http\Controllers\Admin\PrintExcelController;
+use App\Http\Controllers\Admin\PrivilegeController;
+use App\Http\Controllers\Admin\ProjectController;
+use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\SupportController;
+use App\Http\Controllers\Admin\StatController;
+use App\Http\Controllers\Admin\TopicController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 Route::prefix('dashboard')->group(function () {
@@ -46,6 +58,8 @@ Route::prefix('rounds')->group(function () {
         Route::get('form-add', [RoundController::class, 'create'])->name('admin.round.create');
         Route::post('form-add-save', [RoundController::class, 'store'])->name('admin.round.store');
         Route::get('{id}/edit', [RoundController::class, 'edit'])->name('admin.round.edit');
+        Route::get('{id}/form-quick-add-exam', [RoundController::class, 'formQuickAddExam'])->name('admin.round.form-quick-add-exam');
+        Route::post('{id}/quick-add-exam', [RoundController::class, 'quickAddExam'])->name('admin.round.quick-add-exam');
         Route::put('{id}', [RoundController::class, 'update'])->name('admin.round.update');
         Route::delete('{id}', [RoundController::class, 'destroy'])->name('admin.round.destroy');
         Route::get('round-soft-delete', [RoundController::class, 'softDelete'])->name('admin.round.soft.delete');
@@ -282,7 +296,9 @@ Route::group([
         Route::get('enterprise-soft-delete', [EnterpriseController::class, 'softDelete'])->name('admin.enterprise.soft.delete');
         Route::get('enterprise-soft-delete/{id}/backup', [EnterpriseController::class, 'backUpEnterprise'])->name('admin.enterprise.soft.backup');
         Route::get('enterprise-soft-delete/{id}/delete', [EnterpriseController::class, 'delete'])->name('admin.enterprise.soft.destroy');
+        Route::get('recruitment', [PostController::class, 'enterprise'])->name('admin.enterprise.recruitment.list');
     });
+
     Route::prefix('branches')->group(function () {
         Route::get('', [BranchController::class, 'index'])->name('admin.branch.list');
         Route::get('{branch_id}/edit', [BranchController::class, 'edit'])->name('admin.branch.edit');
@@ -312,6 +328,20 @@ Route::group([
             Route::get('', [MajorController::class, 'listRecordSoftDeletes'])->name('admin.major.list.soft.deletes');
             Route::get('{slug}/delete', [MajorController::class, 'permanently_deleted'])->name('admin.major.soft.deletes');
             Route::get('{slug}/restore', [MajorController::class, 'restore_deleted'])->name('admin.major.soft.restore');
+        });
+
+        Route::prefix('recruitment')->group(function () {
+            Route::get('{slug}/edit', [MajorController::class, 'editRecruitment'])->name('admin.major.recruitment.edit');
+            Route::put('{slug}', [MajorController::class, 'updateRecruitment'])->name('admin.major.recruitment.update');
+            Route::get('', [MajorController::class, 'indexRecruitment'])->name('admin.major.recruitment.list');
+            Route::get('create', [MajorController::class, 'createRecruitment'])->name('admin.major.recruitment.create');
+            Route::post('store', [MajorController::class, 'storeRecruitment'])->name('admin.major.recruitment.store');
+            Route::delete('{slug}', [MajorController::class, 'destroy'])->name('admin.major.recruitment.destroy');
+            Route::prefix('list-soft-deletes')->group(function () {
+                Route::get('', [MajorController::class, 'listRecordSoftDeletesRecruitment'])->name('admin.major.recruitment.list.soft.deletes');
+                Route::get('{slug}/delete', [MajorController::class, 'permanently_deleted'])->name('admin.major.recruitment.soft.deletes');
+                Route::get('{slug}/restore', [MajorController::class, 'restore_deleted'])->name('admin.major.recruitment.soft.restore');
+            });
         });
     });
 
@@ -382,7 +412,7 @@ Route::group([
     Route::prefix('posts')->group(function () {
         Route::get('{slug}/edit', [PostController::class, 'edit'])->name('admin.post.edit');
         Route::put('{id}', [PostController::class, 'update'])->name('admin.post.update');
-        Route::get('', [PostController::class, 'index'])->name('admin.post.list');
+        Route::get('{postable?}', [PostController::class, 'index'])->where('postable', '(recruitment|round|contest|event)')->name('admin.post.list');
         Route::get('create', [PostController::class, 'create'])->name('admin.post.create');
         Route::get('insert', [PostController::class, 'insert'])->name('admin.post.insert');
 
@@ -390,6 +420,8 @@ Route::group([
         Route::post('re-status/{id}', [PostController::class, 're_status'])->name('admin.post.re.status');
         Route::post('un-hot/{id}', [PostController::class, 'un_hot'])->name('admin.post.un.hot');
         Route::post('re-hot/{id}', [PostController::class, 're_hot'])->name('admin.post.re.hot');
+        Route::post('un-full-recruitment/{id}', [PostController::class, 'un_full_recruitment'])->name('admin.post.un.full');
+        Route::post('re-full-recruitment/{id}', [PostController::class, 're_full_recruitment'])->name('admin.post.re.full');
         Route::post('store', [PostController::class, 'store'])->name('admin.post.store');
         Route::delete('{slug}', [PostController::class, 'destroy'])->name('admin.post.destroy');
         Route::prefix('list-soft-deletes')->group(function () {
@@ -398,10 +430,13 @@ Route::group([
             Route::get('{id}/restore', [PostController::class, 'delete'])->name('admin.post.soft.restore');
         });
         Route::get('{slug}', [PostController::class, 'detail'])->name('admin.post.detail');
+        Route::post('{slug}/sendCvToEnterprise', [PostController::class, 'sendCvToEnterprise'])->name('admin.post.sendCvToEnterprise');
     });
     Route::prefix('candidates')->group(function () {
         Route::get('', [CandidateController::class, 'index'])->name('admin.candidate.list');
         Route::post('create-note/{candidate_id}', [CandidateController::class, 'createNote'])->name('admin.candidate.createNote');
+        Route::post('change-status', [CandidateController::class, 'changeStatus'])->name('admin.candidate.changeStatus');
+        Route::post('change-result', [CandidateController::class, 'changeResult'])->name('admin.candidate.changeResult');
         Route::get('user-cv', [CandidateController::class, 'listCvUser'])->name('admin.candidate.listCvUser');
         Route::delete('{id}', [CandidateController::class, 'destroy'])->name('admin.candidate.destroy');
         Route::prefix('list-soft-deletes')->group(function () {
@@ -410,6 +445,7 @@ Route::group([
             Route::get('{id}/restore', [CandidateController::class, 'delete'])->name('admin.candidate.soft.restore');
         });
         Route::get('{id}', [CandidateController::class, 'detail'])->name('admin.candidate.detail');
+        Route::get('{id}/show-cv', [CandidateController::class, 'showCv'])->name('admin.candidate.showcv');
     });
     Route::prefix('keywords')->group(function () {
         Route::get('{id}/edit', [KeywordController::class, 'edit'])->name('admin.keyword.edit');
@@ -431,7 +467,7 @@ Route::group([
     Route::get('dowload-frm-excel', function () {
         return response()->download(public_path('assets/media/excel/excel_download.xlsx'));
     })->name("admin.download.execel.pass");
-    Route::post('upload-image', [CkeditorController::class, 'updoadFile'])->name('admin.ckeditor.upfile');
+    Route::post('upload-image', [CkeditorController::class, 'uploadCkFile'])->name('admin.ckeditor.upfile');
     Route::prefix('questions')->group(function () {
         Route::get('', [QuestionController::class, 'index'])->name('admin.question.index');
         Route::get('add', [QuestionController::class, 'create'])->name('admin.question.create');
@@ -470,7 +506,99 @@ Route::group([
         Route::post('update-sample-code/{id}', [CodeManagerController::class, 'updateSampleCode'])->name('admin.code.manager.update.sample.code');
         Route::post('update-status/{id}', [CodeManagerController::class, 'updateStatus'])->name('admin.code.manager.update.status');
     });
-
+    Route::prefix('question-and-answer')->group(function () {
+        Route::get('', [FrequentlyAskedQuestionController::class, 'index'])->name('admin.faq.list');
+        Route::get('edit/{faq}', [FrequentlyAskedQuestionController::class, 'edit'])->name('admin.faq.edit');
+        Route::put('update/{faq}', [FrequentlyAskedQuestionController::class, 'update'])->name('admin.faq.update');
+        Route::get('create', [FrequentlyAskedQuestionController::class, 'create'])->name('admin.faq.create');
+        Route::post('store', [FrequentlyAskedQuestionController::class, 'store'])->name('admin.faq.store');
+        Route::delete('delete/{faq}', [FrequentlyAskedQuestionController::class, 'destroy'])->name('admin.faq.delete');
+        Route::delete('delete-rate/{faqRating}', [FaqRatingController::class, 'destroy'])->name('admin.faq.deleteRate');
+        Route::prefix('category')->group(function () {
+            Route::get('', [FaqCategoryController::class, 'index'])->name('admin.faq_category.list');
+            Route::get('create', [FaqCategoryController::class, 'create'])->name('admin.faq_category.create');
+            Route::get('edit/{faqCategory}', [FaqCategoryController::class, 'edit'])->name('admin.faq_category.edit');
+            Route::post('store', [FaqCategoryController::class, 'store'])->name('admin.faq_category.store');
+            Route::put('update/{faqCategory}', [FaqCategoryController::class, 'update'])->name('admin.faq_category.update');
+            Route::delete('delete/{faqCategory}', [FaqCategoryController::class, 'destroy'])->name('admin.faq_category.delete');
+        });
+    });
+    Route::prefix('company-contact')->group(function () {
+        Route::get('', [CompanyContactController::class, 'index'])->name('admin.cc.list');
+        Route::put('/{companyContact}/un-status', [CompanyContactController::class, 'un_status'])->name('admin.cc.unStatus');
+        Route::put('/{companyContact}/re-status', [CompanyContactController::class, 're_status'])->name('admin.cc.reStatus');
+        Route::delete('delete/{companyContact}', [CompanyContactController::class, 'destroy'])->name('admin.cc.delete');
+    });
+    Route::prefix('events')->group(function () {
+        Route::prefix('{event}')->group(function() {
+            Route::prefix('participants')->group(function () {
+                Route::get('', [EventParticipantController::class, 'list'])->name('admin.event.participants');
+                Route::post('/add-mentor', [EventParticipantController::class, 'addMentor'])->name('admin.event.addMentor');
+                Route::delete('{participant}/remove', [EventParticipantController::class, 'remove'])->name('admin.event.removeParticipant');
+            });
+            Route::prefix('sponsors')->group(function () {
+                Route::get('', [EventController::class, 'sponsors'])->name('admin.event.sponsors');
+                Route::post('/add', [EventController::class, 'addSponsors'])->name('admin.event.addSponsors');
+                Route::delete('{sponsor}/remove', [EventController::class, 'deleteSponsor'])->name('admin.event.removeSponsor');
+            });
+        });
+        Route::get('', [EventController::class, 'index'])->name('admin.event.list');
+        Route::get('edit/{event}', [EventController::class, 'edit'])->name('admin.event.edit');
+        Route::put('update/{event}', [EventController::class, 'update'])->name('admin.event.update');
+        Route::get('create', [EventController::class, 'create'])->name('admin.event.create');
+        Route::post('store', [EventController::class, 'store'])->name('admin.event.store');
+        Route::delete('delete/{event}', [EventController::class, 'destroy'])->name('admin.event.delete');
+    });
+    Route::prefix('services')->group(function () {
+        Route::prefix('{service}/requests')->group(function() {
+            Route::get('', [ServiceController::class, 'requestList'])->name('admin.service.requests');
+        });
+        Route::get('', [ServiceController::class, 'index'])->name('admin.service.list');
+        Route::get('edit/{service}', [ServiceController::class, 'edit'])->name('admin.service.edit');
+        Route::put('update/{service}', [ServiceController::class, 'update'])->name('admin.service.update');
+        Route::get('create', [ServiceController::class, 'create'])->name('admin.service.create');
+        Route::post('store', [ServiceController::class, 'store'])->name('admin.service.store');
+        Route::delete('delete/{service}', [ServiceController::class, 'destroy'])->name('admin.service.delete');
+    });
+    Route::prefix('stats')->group(function () {
+        Route::get('', [StatController::class, 'index'])->name('admin.stat.list');
+        Route::get('edit/{stat}', [StatController::class, 'edit'])->name('admin.stat.edit');
+        Route::put('update/{stat}', [StatController::class, 'update'])->name('admin.stat.update');
+        Route::get('create', [StatController::class, 'create'])->name('admin.stat.create');
+        Route::post('store', [StatController::class, 'store'])->name('admin.stat.store');
+        Route::delete('delete/{stat}', [StatController::class, 'destroy'])->name('admin.stat.delete');
+    });
+    Route::prefix('privileges')->group(function () {
+        Route::get('', [PrivilegeController::class, 'index'])->name('admin.privilege.list');
+        Route::get('edit/{privilege}', [PrivilegeController::class, 'edit'])->name('admin.privilege.edit');
+        Route::put('update/{privilege}', [PrivilegeController::class, 'update'])->name('admin.privilege.update');
+        Route::get('create', [PrivilegeController::class, 'create'])->name('admin.privilege.create');
+        Route::post('store', [PrivilegeController::class, 'store'])->name('admin.privilege.store');
+        Route::delete('delete/{privilege}', [PrivilegeController::class, 'destroy'])->name('admin.privilege.delete');
+    });
+    Route::prefix('mentors')->group(function () {
+        Route::get('', [MentorController::class, 'index'])->name('admin.mentor.list');
+        Route::post('/add', [MentorController::class, 'addMentorsHaveAccount'])->name('admin.mentor.addMentorsHaveAccount');
+        Route::post('/add-no-account', [MentorController::class, 'addMentorNoAccount'])->name('admin.mentor.addMentorNoAccount');
+        Route::post('/info', [MentorController::class, 'saveInfo'])->name('admin.mentor.saveInfo');
+        Route::delete('/delete/{mentor}', [MentorController::class, 'destroy'])->name('admin.mentor.delete');
+    });
+    Route::prefix('projects')->group(function () {
+        Route::get('', [ProjectController::class, 'index'])->name('admin.project.list');
+        Route::get('edit/{project}', [ProjectController::class, 'edit'])->name('admin.project.edit');
+        Route::put('update/{project}', [ProjectController::class, 'update'])->name('admin.project.update');
+        Route::get('create', [ProjectController::class, 'create'])->name('admin.project.create');
+        Route::post('store', [ProjectController::class, 'store'])->name('admin.project.store');
+        Route::delete('/delete/{project}', [ProjectController::class, 'destroy'])->name('admin.project.delete');
+    });
+    Route::prefix('topics')->group(function () {
+        Route::get('', [TopicController::class, 'index'])->name('admin.topic.list');
+        Route::get('edit/{topic}', [TopicController::class, 'edit'])->name('admin.topic.edit');
+        Route::put('update/{topic}', [TopicController::class, 'update'])->name('admin.topic.update');
+        Route::get('create', [TopicController::class, 'create'])->name('admin.topic.create');
+        Route::post('store', [TopicController::class, 'store'])->name('admin.topic.store');
+        Route::delete('/delete/{topic}', [ProjectController::class, 'destroy'])->name('admin.topic.delete');
+    });
     Route::get('support-poly', [SupportController::class, 'index'])->name('admin.support');
 });
 

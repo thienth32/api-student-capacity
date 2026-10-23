@@ -17,6 +17,7 @@ class TakeExam_ResultSeeder extends Seeder
      * Run the database seeds.
      *
      * @return void
+     * @throws \Exception
      */
     public function run()
     {
@@ -29,27 +30,24 @@ class TakeExam_ResultSeeder extends Seeder
         $resultArr = [];
         $takeExam = [];
         foreach ($roundTeams as $key => $roundTeam) {
-            array_push(
-                $takeExam,
-                [
-                    'exam_id' => $roundTeam['exams'][array_rand($roundTeam['exams'])]['id'],
-                    'round_team_id' => $roundTeam['id'],
-                    'mark_comment' => null,
-                    'final_point' => rand(5, 10),
-                    'result_url' => null,
-                    'file_url' => 'https://www.facebook.com/nguyenvantrong2511/',
-                    'status' => 2,
-                    "created_at" =>  \Carbon\Carbon::now(), # new \Datetime()
-                    "updated_at" => \Carbon\Carbon::now(),  # new \Datetime()
-                ]
-            );
-            array_push($resultArr, [
+            $takeExam[] = [
+                'exam_id' => $roundTeam['exams'][array_rand($roundTeam['exams'])]['id'],
+                'round_team_id' => $roundTeam['id'],
+                'mark_comment' => null,
+                'final_point' => random_int(5, 10),
+                'result_url' => null,
+                'file_url' => 'https://www.facebook.com/nguyenvantrong2511/',
+                'status' => 2,
+                "created_at" => \Carbon\Carbon::now(), # new \Datetime()
+                "updated_at" => \Carbon\Carbon::now(),  # new \Datetime()
+            ];
+            $resultArr[] = [
                 'team_id' => $roundTeam['team_id'],
                 'round_id' => $roundTeam['round_id'],
-                'point' => rand(3, 10),
-                "created_at" =>  \Carbon\Carbon::now(), # new \Datetime()
+                'point' => random_int(3, 10),
+                "created_at" => \Carbon\Carbon::now(), # new \Datetime()
                 "updated_at" => \Carbon\Carbon::now(),  # new \Datetime()
-            ]);
+            ];
         }
         TakeExam::insert($takeExam);
         Result::insert($resultArr);

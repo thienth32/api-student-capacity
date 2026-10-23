@@ -74,24 +74,73 @@
                     @csrf
                     <div class="row">
                         <div class="col-8">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group mb-10">
+                                        <label class="form-label" for="">Tên doanh nghiệp </label>
+                                        <input type="text" name="name" class=" form-control"
+                                            placeholder="">
+                                        @error('name')
+                                            <p id="checkname" class="text-danger">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group mb-10">
+                                        <label class="form-label" for="">Người liên hệ </label>
+                                        <input type="text" name="contact_name" class=" form-control"
+                                            placeholder="">
+                                        @error('contact_name')
+                                            <p id="checkname" class="text-danger">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group mb-10">
+                                        <label class="form-label" for="">Email liên hệ </label>
+                                        <input type="email" name="contact_email" class=" form-control"
+                                            placeholder="">
+                                        @error('contact_email')
+                                            <p id="checkname" class="text-danger">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group mb-10">
+                                        <label class="form-label" for="">Mã số thuế </label>
+                                        <input type="text" name="tax_number" class=" form-control"
+                                            placeholder="">
+                                        @error('tax_number')
+                                            <p id="checkname" class="text-danger">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group mb-10">
+                                        <label class="form-label" for="">SĐT liên hệ </label>
+                                        <input type="text" name="contact_phone" class=" form-control"
+                                            placeholder="">
+                                        @error('contact_phone')
+                                            <p id="checkname" class="text-danger">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group mb-10">
+                                        <label class="form-label" for="">Trạng thái (hiển thị ở trang chủ)</label>
+                                        <select name="status" id="status" class="form-control">
+                                            <option value="1">Hiển thị</option>
+                                            <option value="0">Không hiển thị</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div> 
                             <div class="form-group mb-10">
-                                <label class="form-label" for="email">Tên doanh nghiệp </label>
-                                <input type="text" name="name" value="{{ old('name') }}" class=" form-control"
+                                <label class="form-label" for="">Địa chỉ</label>
+                                <input type="text" name="address" class=" form-control"
                                     placeholder="">
-                                @error('name')
+                                @error('address')
                                     <p id="checkname" class="text-danger">{{ $message }}</p>
                                 @enderror
                             </div>
                             <div class="form-group mb-10">
                                 <label class="form-label" for="">Địa chỉ Website</label>
-                                <input type="text" name="link_web" value="{{ old('link_web') }}" class=" form-control"
+                                <input type="text" name="link_web" class=" form-control"
                                     placeholder="">
-                                @error('link_web')
-                                    <p id="checkname" class="text-danger">{{ $message }}</p>
-                                @enderror
                             </div>
                             <div class="form-group mb-10">
-
                                 <label for="" class="form-label">Giới thiệu</label>
                                 <textarea class="form-control" name="description" id="kt_docs_ckeditor_classic" rows="3">{{ old('description') }}</textarea>
                                 @error('description')
@@ -112,15 +161,6 @@
                                 <img class="w-100 mt-4 border rounded-3" id="image-preview"
                                     src="https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg" />
                             </div>
-                            {{-- <div class="form-group ">
-                                <label for="" class="form-label">Logo doanh nghiệp</label>
-
-                                <input name="logo" type='file' id="file-input" accept=".png, .jpg, .jpeg"
-                                    class="form-control" />
-                                <img class="w-100 mt-4 border rounded-3" id="image-preview"
-                                    src="https://vanhoadoanhnghiepvn.vn/wp-content/uploads/2020/08/112815953-stock-vector-no-image-available-icon-flat-vector.jpg" />
-
-                            </div> --}}
                             @error('logo')
                                 <p class="text-danger">{{ $message }}</p>
                             @enderror
@@ -135,7 +175,7 @@
 @section('page-script')
     <script src="assets/plugins/custom/tinymce/tinymce.bundle.js"></script>
     <script src="assets/plugins/custom/ckeditor/ckeditor-classic.bundle.js"></script>
-    <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
+    <script type="text/javascript" src="assets/js/custom/documentation/general/ckfinder.js"></script>
     <script src="assets/js/system/ckeditor/ckeditor.js"></script>
     <script src="assets/js/system/preview-file/previewImg.js"></script>
     <script src="assets/js/system/enterprise/form.js"></script>

@@ -10,7 +10,6 @@ trait TResponse
         if (!$status) $data = ['status' => $status, 'message' => $data];
         if ($status) $data = ['status' => $status, 'payload' => $data];
         if ($status) $data = array_merge($data, $dataAppend);
-
         return response()->json(
             $data,
             $code

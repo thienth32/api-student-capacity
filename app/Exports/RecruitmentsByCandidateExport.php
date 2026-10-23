@@ -3,6 +3,8 @@
 namespace App\Exports;
 
 use App\Models\Candidate;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -15,12 +17,22 @@ class RecruitmentsByCandidateExport implements FromCollection, WithHeadings, Wit
     use RemembersRowNumber;
 
     private $row = 0;
+
+    protected $startDate;
+    protected $endDate;
+
+    public function __construct($startDate,$endDate)
+    {
+        $this->startDate = $startDate;
+        $this->endDate = $endDate;
+    }
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
-        return Candidate::all();
+        return Candidate::whereBetween('created_at', [Carbon::parse($this->startDate)->toDateTimeString(),Carbon::parse($this->endDate)->toDateTimeString()])
+            ->get();
     }
 
     public function model(array $row)
@@ -31,6 +43,7 @@ class RecruitmentsByCandidateExport implements FromCollection, WithHeadings, Wit
             'row_number' => $currentRowNumber,
         ]);
     }
+
     public function title(): string
     {
         return 'DS SV ứng tuyển';
@@ -48,6 +61,7 @@ class RecruitmentsByCandidateExport implements FromCollection, WithHeadings, Wit
             'Email',
             'Số điện thoại',
             'Ngành học',
+            'Link CV',
             'Vị trí ứng tuyển',
             'Nơi ứng tuyển',
             'Tình trạng',
@@ -62,21 +76,22 @@ class RecruitmentsByCandidateExport implements FromCollection, WithHeadings, Wit
     {
         return [
             $data->row_number,
+            !empty($data->post->code_recruitment) ? $data->post->code_recruitment : '',
+            'Ngày ' . date('d', strtotime($data->created_at)),
+            'Tháng ' . date('m', strtotime($data->created_at)),
+            $data->student_code,
+            $data->name,
+            $data->email,
+            $data->phone,
+            !empty($data->major->name) ? $data->major->name : '',
+            Storage::disk('s3')->temporaryUrl($data->file_link, now()->addDay(7)),
+            !empty($data->post->position) ? $data->post->position : '',
+            !empty($data->post->enterprise->address) ? $data->post->enterprise->address : '',
             '',
+            !empty($data->post->note) ? $data->post->note : '',
             '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
+            !empty($data->candidateNotes) ? $data->candidateNotes->pluck('content')->join(' | ') : '',
+            !empty($data->post->user->name) ? $data->post->user->name : '',
         ];
     }
 }

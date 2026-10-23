@@ -3,6 +3,8 @@
 namespace App\Exports;
 
 use App\Models\Post;
+use App\Models\Recruitment;
+use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -13,14 +15,26 @@ use Maatwebsite\Excel\Concerns\ToModel;
 class RecruitmentsByPostExport implements FromCollection, WithHeadings, WithMapping, WithTitle, ToModel
 {
     use RemembersRowNumber;
+
     private $row = 0;
 
+    protected $startDate;
+    protected $endDate;
+
+    public function __construct($startDate,$endDate)
+    {
+        $this->startDate = $startDate;
+        $this->endDate = $endDate;
+    }
+
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
-        return Post::all();
+        return Post::where('postable_type', Recruitment::class)
+            ->whereBetween('published_at', [Carbon::parse($this->startDate)->toDateTimeString(),Carbon::parse($this->endDate)->toDateTimeString()])
+            ->get();
     }
 
     public function model(array $row)
@@ -45,6 +59,7 @@ class RecruitmentsByPostExport implements FromCollection, WithHeadings, WithMapp
             'Ngày cập nhật',
             'Mã tuyển dụng',
             'Tên nhà tuyển dụng',
+            'Mã số thuế',
             'Địa chỉ',
             'Người liên hệ',
             'Thông tin liên hệ',
@@ -70,6 +85,7 @@ class RecruitmentsByPostExport implements FromCollection, WithHeadings, WithMapp
             $post->updated_at,
             $post->code_recruitment,
             $post->enterprise->name ?? '',
+            $post->tax_number,
             $post->enterprise->address ?? '',
             $post->contact_name,
             $post->contact_phone,
@@ -78,11 +94,11 @@ class RecruitmentsByPostExport implements FromCollection, WithHeadings, WithMapp
             $post->position,
             $post->total,
             $post->deadline,
-            $post->career_type,
+            config('util.CAREER_TYPES.' . $post->career_type) ?? '',
             $post->career_source,
             $post->career_require,
-            '',
-            $post->user->name ?? ''
+            $post->note,
+            $post->user->name ?? '',
         ];
     }
 }

@@ -22,20 +22,22 @@ use Illuminate\Http\Request;
 class CapacityPlayController extends Controller
 {
     use TResponse;
+
     public function __construct(
-        public MExamInterface $examRepo,
-        public MQuestionInterface $questionRepo,
-        public MResultCapacityInterface $resultCapacityRepo,
+        public MExamInterface                 $examRepo,
+        public MQuestionInterface             $questionRepo,
+        public MResultCapacityInterface       $resultCapacityRepo,
         public MResultCapacityDetailInterface $resultCapacityDetailRepo,
-        public MAnswerInterface $answerRepo,
-        public MSkillInterface $skillRepo
-    ) {
+        public MAnswerInterface               $answerRepo,
+        public MSkillInterface                $skillRepo
+    )
+    {
     }
 
     public function un_status($id)
     {
         try {
-            $this->examRepo->updateCapacityPlay($id,['status'=>0]);
+            $this->examRepo->updateCapacityPlay($id, ['status' => 0]);
             return $this->responseApi(true, ['message' => 'Thành công !']);
         } catch (\Throwable $th) {
             return $this->responseApi(false, $th->getMessage());
@@ -46,7 +48,7 @@ class CapacityPlayController extends Controller
     public function re_status($id)
     {
         try {
-            $this->examRepo->updateCapacityPlay($id,['status'=>1]);
+            $this->examRepo->updateCapacityPlay($id, ['status' => 1]);
             return $this->responseApi(true, ['message' => 'Thành công !']);
         } catch (\Throwable $th) {
             return $this->responseApi(false, $th->getMessage());
@@ -72,7 +74,7 @@ class CapacityPlayController extends Controller
     {
         DB::beginTransaction();
         try {
-            $exam  = $this->examRepo->storeCapacityPlay($request);
+            $exam = $this->examRepo->storeCapacityPlay($request);
             DB::commit();
             return redirect()->route('admin.capacit.play.show', ['id' => $exam->id]);
         } catch (\Throwable $th) {
@@ -89,7 +91,7 @@ class CapacityPlayController extends Controller
         if ($exam = $this->examRepo->getExamBtyTokenRoom($code)) {
             $PROGRESS = json_decode($exam->room_progress) ?? [];
             // if (($exam->type == 0 && count($PROGRESS) == 0)  )
-            if($exam->status == 0) return $this->responseApi(false,$exam);
+            if ($exam->status == 0) return $this->responseApi(false, $exam);
             return $this->responseApi(true, [
                 "exam" => $exam
             ]);
@@ -139,9 +141,9 @@ class CapacityPlayController extends Controller
         ], ['user'], true, $exam->status == 2 ? 100 : 5)->toArray();
 
         $data['rank'] = $this->resultCapacityRepo->where([
-            "exam_id" => $exam->id,
-            "user_id" => auth('sanctum')->id()
-        ], ['user', 'resultCapacityDetail']) ?? false;
+                "exam_id" => $exam->id,
+                "user_id" => auth('sanctum')->id()
+            ], ['user', 'resultCapacityDetail']) ?? false;
 
         $PROGRESS = json_decode($exam->room_progress) ?? [];
 
@@ -251,7 +253,7 @@ class CapacityPlayController extends Controller
             broadcast(new BeforNextGame($code));
             $data['question'] = $data['exam']->questions[0];
             $exam = $this->examRepo->updateCapacityPlay($exam->id, [
-                "room_token" => MD5(uniqid() . time()),
+                "room_token" => hash("sha512", uniqid() . time()),
                 "room_progress" => json_encode([$data['question']->id])
             ]);
 
@@ -283,7 +285,7 @@ class CapacityPlayController extends Controller
             broadcast(new BeforNextGame($code));
             $data['questions'] = $data['exam']->questions[0];
             $exam = $this->examRepo->updateCapacityPlay($exam->id, [
-                "room_token" => MD5(uniqid() . time()),
+                "room_token" => hash("sha512", uniqid() . time()),
             ]);
             broadcast(new PlayGameEvent($code, $exam->token, $data['questions']->toArray(), $data['ranks']));
             $data['exam'] = $exam;
@@ -402,7 +404,7 @@ class CapacityPlayController extends Controller
             })->toArray();
 
             if (count(array_unique($questionTake)) == count(($exam->questions))) {
-                $scores = (int) $true_answer / (int) count(($exam->questions));
+                $scores = (int)$true_answer / (int)count(($exam->questions));
                 $rank = $this->resultCapacityRepo->update($resultCapacity->id, [
                     "scores" => $scores * $exam->max_ponit,
                     'status' => 1
@@ -467,7 +469,7 @@ class CapacityPlayController extends Controller
                 $donot_answer = $resultCapacity->donot_answer + $flagDonot;
                 if ($request->flagEvent) {
 
-                    $scores = (int) $true_answer / (int) count(json_decode($exam->room_progress) ?? []);
+                    $scores = (int)$true_answer / (int)count(json_decode($exam->room_progress) ?? []);
                     $this->resultCapacityRepo->update($resultCapacity->id, [
                         "true_answer" => $true_answer,
                         "false_answer" => $false_answer,

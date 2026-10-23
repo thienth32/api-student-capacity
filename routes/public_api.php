@@ -18,7 +18,17 @@ use App\Http\Controllers\Admin\RoundController;
 use App\Http\Controllers\Admin\SkillController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\BranchController;
+use App\Http\Controllers\Admin\CompanyContactController;
+use App\Http\Controllers\Admin\EventController;
+use App\Http\Controllers\Admin\FaqCategoryController;
+use App\Http\Controllers\Admin\FaqRatingController;
+use App\Http\Controllers\Admin\FrequentlyAskedQuestionController;
+use App\Http\Controllers\Admin\PrivilegeController;
+use App\Http\Controllers\Admin\ProjectController;
+use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\SponsorController as AdminSponsorController;
+use App\Http\Controllers\Admin\StatController;
+use App\Http\Controllers\Admin\StudentStatusController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\WishlistController;
 use Illuminate\Support\Facades\Route;
@@ -26,7 +36,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('sponsors', [AdminSponsorController::class, 'list']);
 
-Route::get('users', [AdminUserController::class, 'index']); // danh sách user
+Route::prefix('users')->group(function () {
+    Route::get('users', [AdminUserController::class, 'index']); // danh sách user
+    Route::post('register-capacity', [AdminUserController::class, 'registerCapacity']);
+});
+
 
 Route::get('companys', [AdminCompanyController::class, 'listCompany']); // Doanh nghiệp
 
@@ -37,6 +51,8 @@ Route::prefix('contests')->group(function () {
     Route::get('{id}/demo', [AdminContestController::class, 'apiShowDemo'])->name('contest.api.show.demo');
     Route::get('{id}/related', [AdminContestController::class, 'apiContestRelated'])->name('contest.api.related');
 });
+
+Route::get('student-statuses', [StudentStatusController::class, 'index']);
 
 Route::prefix('capacity')->group(function () {
     Route::get('', [AdminContestController::class, 'apiIndexCapacity'])->name('capacity.api.index');
@@ -54,6 +70,7 @@ Route::prefix('rounds')->group(function () {
 
 Route::prefix('majors')->group(function () {
     Route::get('', [AdminMajorController::class, 'apiIndex'])->name('major.api.index');
+    Route::get('recruitment', [AdminMajorController::class, 'apiIndexRecruitment'])->name('major.api.index');
     Route::get('{slug}', [AdminMajorController::class, 'apiShow'])->name('major.api.show');
 });
 
@@ -76,6 +93,7 @@ Route::prefix('exam')->group(function () {
     Route::get('get-by-round/{id}', [ExamController::class, 'get_by_round'])->name('exam.api.get.round');
     Route::get('get-question-by-exam/{id}', [ExamController::class, 'showQuestionAnswerExams'])->name('exam.api.get.questions.exam');
     Route::get('get-history/{id}', [ExamController::class, 'getHistory']);
+    Route::delete('delete-history/{id}', [ExamController::class, 'deleteHistory'])->name('exam.api.delete.history.exam');
 });
 
 Route::prefix('questions')->group(function () {
@@ -95,6 +113,7 @@ Route::prefix('recruitments')->group(function () {
 
 Route::prefix('posts')->group(function () {
     Route::get('', [PostController::class, 'apiShow']);
+    Route::post('view', [PostController::class, 'view']);
     Route::get('{slug}', [PostController::class, 'apiDetail']);
 });
 // Route::get('rating-major/{slug}', [RankUserController::class, 'getRatingUser']);
@@ -128,5 +147,20 @@ Route::prefix('code-language')->group(function () {
     Route::get('', [CodeManagerController::class, 'getCodeLanguageAll']);
 });
 
+Route::prefix('question-and-answer')->group(function () {
+    Route::get('categories', [FaqCategoryController::class, 'apiList']);
+    Route::get('', [FrequentlyAskedQuestionController::class, 'getListFAQ']);
+    Route::get('detail/{faq}', [FrequentlyAskedQuestionController::class, 'apiDetail']);
+    Route::get('related/{faq}', [FrequentlyAskedQuestionController::class, 'apiRelate']);
+    Route::post('rate/{faq}', [FaqRatingController::class, 'apiRate'])->middleware('throttle:3');
+});
+Route::group(['prefix'=>'company-contact', 'middleware' =>'throttle:3'], function () {
+    Route::post('add', [CompanyContactController::class, 'apiSaveCompanyContact']);
+});
 
-
+Route::get('stats', [StatController::class, 'getListStats']);
+Route::get('mentors', [AdminUserController::class, 'getMentors']);
+Route::get('services', [ServiceController::class, 'getServices']);
+Route::get('events', [EventController::class, 'getCurrentEvent']);
+Route::get('privileges', [PrivilegeController::class, 'getPrivileges']);
+Route::get('projects', [ProjectController::class, 'getProjects']);

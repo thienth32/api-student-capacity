@@ -101,7 +101,7 @@
 
                             <td>
 
-                                <a class="show_file btn btn-primary btn-sm" target="_blank"
+                                <a class="show_file btn btn-primary btn-sm" target="_blank" rel="noopener"
                                     href="{{ Storage::disk('s3')->temporaryUrl($key->file_link, now()->addMinutes(5)) }}">Xem</a>
                             </td>
 
@@ -253,8 +253,8 @@
 
 @endsection
 @section('page-script')
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script type="text/javascript" src="assets/js/custom/documentation/general/moment.min.js"></script>
+    <script type="text/javascript" src="assets/js/custom/documentation/general/daterangepicker.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <script src="assets/js/system/formatlist/formatlis.js"></script>
 

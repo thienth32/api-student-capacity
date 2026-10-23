@@ -6,7 +6,7 @@ interface MContestInterface
 {
     public function index();
 
-    public function apiIndex($flagCapacity = false);
+    public function apiIndex();
 
     public function store($filename, $fileBanner, $request, $skills = []);
 

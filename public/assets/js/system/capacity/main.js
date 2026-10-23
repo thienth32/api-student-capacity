@@ -135,16 +135,19 @@ function fetchHistoryExam(id) {
                                     <td>${data.user.email}</td>
                                     <td>${data.scores}</td>
                                     <td>${
-                                        data.status == 1
-                                            ? "Đã nộp"
-                                            : "Chưa nộp "
-                                    }</td>
+                            data.status == 1
+                                ? "Đã nộp"
+                                : "Chưa nộp "
+                        }</td>
                                     <td>${data.false_answer}</td>
                                     <td>${data.true_answer}</td>
                                     <td>
                                          <button data-id="${
-                                             data.id
-                                         }"   type="button" class="print-hítory-dowload-excel btn btn-primary">Xuất lịch sử (excel)</button>
+                            data.id
+                        }"   type="button" class="print-history-dowload-excel btn btn-primary">Xuất lịch sử (excel)</button>
+                                         <button data-id="${
+                            data.id
+                        }"   type="button" class="delete-history-exam btn btn-danger">Xoá bản ghi</button>
                                     </td>
                                 </tr>
                             `;
@@ -735,6 +738,29 @@ const mainPage = {
             }
         });
     },
+    deleteHistoryExam: function () {
+        $(document).on("click", ".delete-history-exam", function () {
+            let id = $(this).data("id");
+            var that = this;
+            const url = urlApiPublic+"exam/delete-history/"+id;
+            if (!confirm("Bạn có chắc chắn muốn xóa ?")) return;
+            $.ajax({
+                url: url,
+                method: "DELETE",
+                data: {
+                    _token: _token,
+                },
+                success: function (data) {
+                    if (!data.status) return alert(data.payload);
+                    $(that).parent().parent().remove();
+                    loadTast("Thành công !", "success");
+                },
+                error: function (request, status, error) {
+                    loadTast("Không thành công !", "info");
+                },
+            });
+        });
+    },
     selectShowResult: function () {
         $(document).on("click", ".btn-click-show-result-exam", function () {
             fetchHistoryExam($(this).data("round_id"));
@@ -757,7 +783,7 @@ const mainPage = {
         });
     },
     printHistoryEXCEL: function () {
-        $(document).on("click", ".print-hítory-dowload-excel", function () {
+        $(document).on("click", ".print-history-dowload-excel", function () {
             window.location =
                 "admin/prinft-excel?type=historyDetailCapacity&capacity_result_id=" +
                 $(this).data("id");
@@ -803,6 +829,7 @@ mainPage.printEXCEL();
 mainPage.printHistoryEXCEL();
 mainPage.btnHide();
 mainPage.btnShow();
+mainPage.deleteHistoryExam();
 
 $("#selectSkill").on("change", function () {
     var value = $(this).val();

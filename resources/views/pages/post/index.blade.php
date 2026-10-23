@@ -154,18 +154,20 @@
                 <label class="form-label" for="">Lọc theo thành phần</label>
                 <div class="row col-12 m-auto">
                     <button type="button"
-                        class="click-recruitment  btn {{ request()->has('recruitment_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light">
+                        class="click-recruitment  btn {{ request()->has('recruitment_id') || ($postable && $postable == 'recruitment') ? 'btn-primary' : '' }} col btn-light">
                         Bài viết thuộc tuyển dụng</button>
                     <button id="clickContset" type="button"
-                        class="mygroup btn  {{ request()->has('contest_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light click-contest">
+                        class="mygroup btn  {{ request()->has('contest_id') ? 'btn-primary' : '' }} col btn-light click-contest">
                         Bài viết thuộc cuộc thi</button>
                     <button id="clickCapacity" type="button"
-                        class="mygroup btn  {{ request()->has('capacity_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light click-capacity">
+                        class="mygroup btn  {{ request()->has('capacity_id') ? 'btn-primary' : '' }} col btn-light click-capacity">
                         Bài viết thuộc bài test</button>
                     <button type="button"
-                        class="mygroup btn {{ request()->has('round_id') ? 'btn-primary' : '' }} col-12 col-lg-3 col-sx-12 col-md-12 col-sm-12 col-xxl-3 col-xl-3 btn-light click-round">
+                        class="mygroup btn {{ request()->has('round_id') ? 'btn-primary' : '' }} col btn-light click-round">
                         Bài viết thuộc vòng thi</button>
-
+                    <button type="button"
+                        class="click-event  btn {{($postable && $postable == 'event') ? 'btn-primary' : '' }} col btn-light">
+                        Bài viết thuộc tin tức-sự kiện</button>
                 </div>
                 <br>
                 <div class="col-12 pb-2">
@@ -233,22 +235,22 @@
                         </div>
 
                     </div>
-                    <div style="{{ request()->has('recruitment_id') ? '' : 'display: none' }}" id="recruitment">
-                        <div class="form-group mb-10">
-                            <label for="" class="form-label">Tuyển dụng</label>
-                            <select id="select-recruitment" name="recruitment_id" class="form-select form-major"
-                                data-control="select2" data-placeholder="Chọn cuộc thi ">
-                                <option value="0">Chọn tuyển dụng</option>
-                                @foreach ($recruitments as $item)
-                                    <option @selected(request('recruitment_id') == $item->id) value="{{ $item->id }}">
-                                        {{ $item->name }}
-                                    </option>
-                                @endforeach
-                            </select>
+{{--                    <div style="{{ request()->has('recruitment_id') ? '' : 'display: none' }}" id="recruitment">--}}
+{{--                        <div class="form-group mb-10">--}}
+{{--                            <label for="" class="form-label">Tuyển dụng</label>--}}
+{{--                            <select id="select-recruitment" name="recruitment_id" class="form-select form-major"--}}
+{{--                                data-control="select2" data-placeholder="Chọn cuộc thi ">--}}
+{{--                                <option value="0">Chọn tuyển dụng</option>--}}
+{{--                                @foreach ($recruitments as $item)--}}
+{{--                                    <option @selected(request('recruitment_id') == $item->id) value="{{ $item->id }}">--}}
+{{--                                        {{ $item->name }}--}}
+{{--                                    </option>--}}
+{{--                                @endforeach--}}
+{{--                            </select>--}}
 
-                        </div>
+{{--                        </div>--}}
 
-                    </div>
+{{--                    </div>--}}
                 </div>
 
             </div>
@@ -372,6 +374,8 @@
                             </th>
                             <th scope="col">Nổi bật
                             </th>
+                            <th scope="col">Đã ngừng tuyển
+                            </th>
                             <th scope="col">Quá trình
                             </th>
                             <th scope="col">Ngày xuất bản
@@ -413,8 +417,11 @@
                             </th>
                             <th scope="col">link ngoài
                             </th>
+                            <th scope="col">Lượt xem
+                            </th>
                             <th scope="col">Nội dung
                             </th>
+
 
                             <th class="text-center" colspan="2">
 
@@ -447,28 +454,36 @@
                                     {{ $key->title }}
                                 </td>
                                 <td>
-                                    @if (get_class($key->postable) == \App\Models\Round::class)
+                                    @php
+                                        $class = $key->postable ? get_class($key->postable) : $key->postable_type;
+                                    @endphp
+                                    @if ($class == \App\Models\Round::class)
                                         Vòng thi : <b><a
                                                 href="{{ route('admin.round.detail', ['id' => $key->postable->id]) }}">{{ $key->postable->name }}
                                             </a></b>
-                                    @elseif (get_class($key->postable) == \App\Models\Recruitment::class)
-                                        Tuyển dụng :
-                                        <b><a
-                                                href="{{ route('admin.recruitment.detail', ['id' => $key->postable->id]) }}">{{ $key->postable->name }}</a></b>
-                                    @elseif(get_class($key->postable) == \App\Models\Contest::class && $key->status_capacity == 0)
+                                    @elseif ($class == \App\Models\Recruitment::class)
+                                        Tuyển dụng
+                                        @if($key->postable)
+                                            :
+                                            <b><a
+                                                    href="{{ route('admin.recruitment.detail', ['id' => $key->postable->id]) }}">{{ $key->postable->name }}</a></b>
+                                        @endif
+                                    @elseif($class == \App\Models\Contest::class && $key->status_capacity == 0)
                                         Cuộc thi : <b><a
                                                 href="{{ route('admin.contest.show', ['id' => $key->postable->id]) }}">{{ $key->postable->name }}
                                             </a></b>
+                                    @elseif($class == \App\Models\Event::class)
+                                        Tin tức - sự kiện
                                     @else
                                         Bài test : <b><a
                                                 href="{{ route('admin.contest.show.capatity', ['id' => $key->postable->id]) }}">{{ $key->postable->name }}</a></b>
                                     @endif
                                 </td>
                                 <td>
-                                    @if (get_class($key->postable) == \App\Models\Recruitment::class)
+                                    @if ($class == \App\Models\Recruitment::class)
                                         <a href="{{ route('admin.candidate.list', ['post_id' => $key->id]) }}"
-                                            class=" btn btn-primary btn-sm">Danh
-                                            sách ứng tuyển
+                                            class=" btn btn-primary btn-sm">
+                                            Danh sách ứng tuyển
                                         </a>
                                     @endif
                                 </td>
@@ -499,6 +514,21 @@
 
                                 </td>
                                 <td>
+                                    @php
+                                        $class = $key->postable ? get_class($key->postable) : $key->postable_type;
+                                    @endphp
+                                    @if($class == \App\Models\Recruitment::class)
+                                        @hasanyrole('admin|super admin')
+                                            <div data-bs-toggle="tooltip" title="Đã ngừng tuyển"
+                                                class="form-check form-switch">
+                                                <input value="{{ $key->full_recruitment }}" data-id="{{ $key->id }}"
+                                                    class="form-select-full-recruitment form-check-input" @checked($key->full_recruitment == config('util.POST_FULL_RECRUITMENT'))
+                                                    type="checkbox" role="switch">
+                                            </div>
+                                        @endhasrole
+                                    @endif
+                                </td>
+                                <td>
                                     @if (\Carbon\Carbon::parse($key->published_at)->toDateTimeString() >
                                         \Carbon\Carbon::now('Asia/Ho_Chi_Minh')->toDateTimeString())
                                         <span class="badge bg-danger">Chưa xuất bản </span>
@@ -515,6 +545,9 @@
                                     @if ($key->link_to != null)
                                         <a href="{{ $key->link_to }}" class="btn  btn-primary btn-sm">Xem</a>
                                     @endif
+                                </td>
+                                <td>
+                                    {{ $key->view }}
                                 </td>
                                 <td>
                                     <button class="btn  btn-primary btn-sm" type="button" data-bs-toggle="modal"
@@ -630,67 +663,67 @@
                                                     Chi tiết
                                                 </a>
                                             </li>
-                                            <li class="my-3">
-                                                @hasrole('super admin')
-                                                    @if ($key->postable->count() == 0 && $key->user->count() == 0)
-                                                        <form action="{{ route('admin.post.destroy', $key->slug) }}"
-                                                            method="post">
-                                                            @csrf
-                                                            @method('delete')
-                                                            <button onclick="return confirm('Bạn có chắc muốn xóa không !')"
-                                                                style=" background: none ; border: none ; list-style : none"
-                                                                type="submit">
-                                                                <span role="button"
-                                                                    class="svg-icon svg-icon-danger svg-icon-2x">
-                                                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Trash.svg--><svg
-                                                                        xmlns="http://www.w3.org/2000/svg"
-                                                                        xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                                        width="24px" height="24px" viewBox="0 0 24 24"
-                                                                        version="1.1">
-                                                                        <g stroke="none" stroke-width="1" fill="none"
-                                                                            fill-rule="evenodd">
-                                                                            <rect x="0" y="0"
-                                                                                width="24" height="24" />
-                                                                            <path
-                                                                                d="M6,8 L18,8 L17.106535,19.6150447 C17.04642,20.3965405 16.3947578,21 15.6109533,21 L8.38904671,21 C7.60524225,21 6.95358004,20.3965405 6.89346498,19.6150447 L6,8 Z M8,10 L8.45438229,14.0894406 L15.5517885,14.0339036 L16,10 L8,10 Z"
-                                                                                fill="#000000" fill-rule="nonzero" />
-                                                                            <path
-                                                                                d="M14,4.5 L14,3.5 C14,3.22385763 13.7761424,3 13.5,3 L10.5,3 C10.2238576,3 10,3.22385763 10,3.5 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z"
-                                                                                fill="#000000" opacity="0.3" />
-                                                                        </g>
-                                                                    </svg>
-                                                                    <!--end::Svg Icon-->
-                                                                </span>
-                                                                Xóa bỏ
-                                                            </button>
-                                                        </form>
-                                                    @endif
-                                                @else
-                                                    <div style="cursor: not-allowed; user-select: none">
+{{--                                            <li class="my-3">--}}
+{{--                                                @hasrole('super admin')--}}
+{{--                                                    @if ($key->postable?->count() == 0 && $key->user->count() == 0)--}}
+{{--                                                        <form action="{{ route('admin.post.destroy', $key->slug) }}"--}}
+{{--                                                            method="post">--}}
+{{--                                                            @csrf--}}
+{{--                                                            @method('delete')--}}
+{{--                                                            <button onclick="return confirm('Bạn có chắc muốn xóa không !')"--}}
+{{--                                                                style=" background: none ; border: none ; list-style : none"--}}
+{{--                                                                type="submit">--}}
+{{--                                                                <span role="button"--}}
+{{--                                                                    class="svg-icon svg-icon-danger svg-icon-2x">--}}
+{{--                                                                    <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Home/Trash.svg--><svg--}}
+{{--                                                                        xmlns="http://www.w3.org/2000/svg"--}}
+{{--                                                                        xmlns:xlink="http://www.w3.org/1999/xlink"--}}
+{{--                                                                        width="24px" height="24px" viewBox="0 0 24 24"--}}
+{{--                                                                        version="1.1">--}}
+{{--                                                                        <g stroke="none" stroke-width="1" fill="none"--}}
+{{--                                                                            fill-rule="evenodd">--}}
+{{--                                                                            <rect x="0" y="0"--}}
+{{--                                                                                width="24" height="24" />--}}
+{{--                                                                            <path--}}
+{{--                                                                                d="M6,8 L18,8 L17.106535,19.6150447 C17.04642,20.3965405 16.3947578,21 15.6109533,21 L8.38904671,21 C7.60524225,21 6.95358004,20.3965405 6.89346498,19.6150447 L6,8 Z M8,10 L8.45438229,14.0894406 L15.5517885,14.0339036 L16,10 L8,10 Z"--}}
+{{--                                                                                fill="#000000" fill-rule="nonzero" />--}}
+{{--                                                                            <path--}}
+{{--                                                                                d="M14,4.5 L14,3.5 C14,3.22385763 13.7761424,3 13.5,3 L10.5,3 C10.2238576,3 10,3.22385763 10,3.5 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z"--}}
+{{--                                                                                fill="#000000" opacity="0.3" />--}}
+{{--                                                                        </g>--}}
+{{--                                                                    </svg>--}}
+{{--                                                                    <!--end::Svg Icon-->--}}
+{{--                                                                </span>--}}
+{{--                                                                Xóa bỏ--}}
+{{--                                                            </button>--}}
+{{--                                                        </form>--}}
+{{--                                                    @endif--}}
+{{--                                                @else--}}
+{{--                                                    <div style="cursor: not-allowed; user-select: none">--}}
 
-                                                        <span class="svg-icon svg-icon-danger svg-icon-2x">
-                                                            <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Code/Lock-circle.svg--><svg
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                                                                height="24px" viewBox="0 0 24 24" version="1.1">
-                                                                <g stroke="none" stroke-width="1" fill="none"
-                                                                    fill-rule="evenodd">
-                                                                    <rect x="0" y="0" width="24"
-                                                                        height="24" />
-                                                                    <circle fill="#000000" opacity="0.3" cx="12"
-                                                                        cy="12" r="10" />
-                                                                    <path
-                                                                        d="M14.5,11 C15.0522847,11 15.5,11.4477153 15.5,12 L15.5,15 C15.5,15.5522847 15.0522847,16 14.5,16 L9.5,16 C8.94771525,16 8.5,15.5522847 8.5,15 L8.5,12 C8.5,11.4477153 8.94771525,11 9.5,11 L9.5,10.5 C9.5,9.11928813 10.6192881,8 12,8 C13.3807119,8 14.5,9.11928813 14.5,10.5 L14.5,11 Z M12,9 C11.1715729,9 10.5,9.67157288 10.5,10.5 L10.5,11 L13.5,11 L13.5,10.5 C13.5,9.67157288 12.8284271,9 12,9 Z"
-                                                                        fill="#000000" />
-                                                                </g>
-                                                            </svg>
-                                                            <!--end::Svg Icon-->
-                                                        </span>
-                                                        Xóa bỏ
-                                                    </div>
-                                                @endhasrole
+{{--                                                        <span class="svg-icon svg-icon-danger svg-icon-2x">--}}
+{{--                                                            <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo2/dist/../src/media/svg/icons/Code/Lock-circle.svg--><svg--}}
+{{--                                                                xmlns="http://www.w3.org/2000/svg"--}}
+{{--                                                                xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"--}}
+{{--                                                                height="24px" viewBox="0 0 24 24" version="1.1">--}}
+{{--                                                                <g stroke="none" stroke-width="1" fill="none"--}}
+{{--                                                                    fill-rule="evenodd">--}}
+{{--                                                                    <rect x="0" y="0" width="24"--}}
+{{--                                                                        height="24" />--}}
+{{--                                                                    <circle fill="#000000" opacity="0.3" cx="12"--}}
+{{--                                                                        cy="12" r="10" />--}}
+{{--                                                                    <path--}}
+{{--                                                                        d="M14.5,11 C15.0522847,11 15.5,11.4477153 15.5,12 L15.5,15 C15.5,15.5522847 15.0522847,16 14.5,16 L9.5,16 C8.94771525,16 8.5,15.5522847 8.5,15 L8.5,12 C8.5,11.4477153 8.94771525,11 9.5,11 L9.5,10.5 C9.5,9.11928813 10.6192881,8 12,8 C13.3807119,8 14.5,9.11928813 14.5,10.5 L14.5,11 Z M12,9 C11.1715729,9 10.5,9.67157288 10.5,10.5 L10.5,11 L13.5,11 L13.5,10.5 C13.5,9.67157288 12.8284271,9 12,9 Z"--}}
+{{--                                                                        fill="#000000" />--}}
+{{--                                                                </g>--}}
+{{--                                                            </svg>--}}
+{{--                                                            <!--end::Svg Icon-->--}}
+{{--                                                        </span>--}}
+{{--                                                        Xóa bỏ--}}
+{{--                                                    </div>--}}
+{{--                                                @endhasrole--}}
 
-                                            </li>
+{{--                                            </li>--}}
                                         </ul>
                                     </div>
                                 </td>
@@ -707,8 +740,8 @@
     </div>
 @endsection
 @section('page-script')
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script type="text/javascript" src="assets/js/custom/documentation/general/moment.min.js"></script>
+    <script type="text/javascript" src="assets/js/custom/documentation/general/daterangepicker.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <script src="assets/js/system/post/postFilter.js"></script>
     <script>

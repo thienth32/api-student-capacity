@@ -11,11 +11,11 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\Two\InvalidStateException;
-
 class AuthController extends Controller
 {
     public function adminLogin()
     {
+//        $user= User::query()->where('email','binhnhph25932@fpt.edu.vn')->with("roles")->get();
         return view('auth.login');
     }
 
@@ -27,13 +27,15 @@ class AuthController extends Controller
 
     public function adminGoogleCallback()
     {
-        // try {
+         try {
             $ggUser = Socialite::driver('google')->user();
-        // } catch (InvalidStateException $e) {
-        //     $ggUser = Socialite::driver('google')->stateless()->user();
-        // }
-        // $ggUser = Socialite::driver('google')->user();
-        $user = User::where('email', $ggUser->email)->first();
+         } catch (InvalidStateException $e) {
+             $ggUser = Socialite::driver('google')->stateless()->user();
+         }
+//         $ggUser = Socialite::driver('google')->user();
+        $user = User::where('email', $ggUser->email)
+            ->where('status', config('util.ACTIVE_STATUS'))
+            ->first();
         // dd($user->hasRole(config('util.ADMIN_ROLE')));
         if ($user && $user->hasRole([config('util.SUPER_ADMIN_ROLE'), config('util.ADMIN_ROLE'), config('util.JUDGE_ROLE'), config('util.TEACHER_ROLE')])) {
             Auth::login($user);

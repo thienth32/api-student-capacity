@@ -17,7 +17,9 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Laravel 123'),
+
+    'client_url' => env('CLIENT_URL', 'http://localhost:4200'),
 
     /*
     |--------------------------------------------------------------------------

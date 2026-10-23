@@ -21,7 +21,7 @@ function to_slug(str) {
     str = str.replace(/^-+/g, "");
 
     // xóa phần dư - ở cuối
-    str = str.replace(/-+$/g, "");
+    str = str.replace(/-(?=-*$)/g, "");
 
     // return
     return str;
@@ -44,29 +44,32 @@ $(document).ready(function () {
         $(".click-capacity").removeClass("btn-primary");
         $(".click-round").removeClass("btn-primary");
         $(".click-recruitment").removeClass("btn-primary");
+        $(".click-event").removeClass("btn-primary");
         $(this).addClass("btn-primary");
         $("#capacity").hide(100);
         $("#round").hide(100);
-        $("#recruitment").hide(100);
+        // $("#recruitment").hide(100);
         $("#contest").show(300);
     });
     $(".click-capacity").click(function () {
         $(".click-contest").removeClass("btn-primary");
         $(".click-round").removeClass("btn-primary");
         $(".click-recruitment").removeClass("btn-primary");
+        $(".click-event").removeClass("btn-primary");
         $(this).addClass("btn-primary");
         $("#contest").hide(100);
         $("#round").hide(100);
-        $("#recruitment").hide(100);
+        // $("#recruitment").hide(100);
         $("#capacity").show(300);
     });
     $(".click-round").click(function () {
         $(".click-contest").removeClass("btn-primary");
         $(".click-recruitment").removeClass("btn-primary");
         $(".click-capacity").removeClass("btn-primary");
+        $(".click-event").removeClass("btn-primary");
         $("#capacity").hide(100);
         $("#contest").hide(100);
-        $("#recruitment").hide(100);
+        // $("#recruitment").hide(100);
         $(this).addClass("btn-primary");
         $("#round").toggle(300);
     });
@@ -74,11 +77,24 @@ $(document).ready(function () {
         $(".click-contest").removeClass("btn-primary");
         $(".click-round").removeClass("btn-primary");
         $(".click-capacity").removeClass("btn-primary");
+        $(".click-event").removeClass("btn-primary");
         $("#capacity").hide(100);
         $("#contest").hide(100);
         $("#round").hide(100);
         $(this).addClass("btn-primary");
-        $("#recruitment").toggle(300);
+        window.location = "admin/posts" + "/recruitment?";
+        // $("#recruitment").toggle(300);
+    });
+    $(".click-event").click(function () {
+        $(".click-contest").removeClass("btn-primary");
+        $(".click-round").removeClass("btn-primary");
+        $(".click-capacity").removeClass("btn-primary");
+        $(".click-recruitment").removeClass("btn-primary");
+        $("#capacity").hide(100);
+        $("#contest").hide(100);
+        $("#round").hide(100);
+        $(this).addClass("btn-primary");
+        window.location = "admin/posts" + "/event?";
     });
 });
 const pageSliderForm = {
@@ -178,10 +194,49 @@ const pageSliderForm = {
             }
         });
     },
+    selectChangeFullRecruitment: function () {
+        $(".form-select-full-recruitment").on("change", function () {
+            let id = $(this).data("id");
+            if ($(this).val() == 1) {
+                $.ajax({
+                    url: `admin/posts/un-full-recruitment/${id}`,
+                    method: "POST",
+                    data: {
+                        _token: _token,
+                    },
+                    success: function (data) {
+                        if (!data.status) return alert(data.payload);
+                        loadTast(
+                            "Thành công !",
+                            "toastr-bottom-left",
+                            "success"
+                        );
+                    },
+                });
+            } else {
+                $.ajax({
+                    url: `admin/posts/re-full-recruitment/${id}`,
+                    method: "POST",
+                    data: {
+                        _token: _token,
+                    },
+                    success: function (data) {
+                        if (!data.status) return alert(data.payload);
+                        loadTast(
+                            "Thành công !",
+                            "toastr-bottom-left",
+                            "success"
+                        );
+                    },
+                });
+            }
+        });
+    },
 };
 pageSliderForm.selectRoundChildContest();
 pageSliderForm.selectChangeStatus();
 pageSliderForm.selectChangePostHot();
+pageSliderForm.selectChangeFullRecruitment();
 
 $(document).ready(function () {
     const url = "admin/posts";
@@ -201,10 +256,10 @@ $(document).ready(function () {
         let round_id = $(this).val();
         window.location = url + "?round_id=" + round_id;
     });
-    $("#select-recruitment").change(function () {
-        let recruitment_id = $(this).val();
-        window.location = url + "?recruitment_id=" + recruitment_id;
-    });
+    // $("#select-recruitment").change(function () {
+    //     let recruitment_id = $(this).val();
+    //     window.location = url + "?recruitment_id=" + recruitment_id;
+    // });
 
     $("#searchTeam").keypress(function (event) {
         var keycode = event.keyCode ? event.keyCode : event.which;

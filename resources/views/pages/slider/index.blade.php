@@ -99,6 +99,24 @@
                         class="btn-home-re {{ request()->has('home') ? 'btn-primary' : '' }} btn col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light">Banner
                         thuộc trang chủ </button>
                     <button
+                        class="btn-service {{ request()->has('service') ? 'btn-primary' : '' }} btn col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light">Banner
+                        thuộc dịch vụ việc làm </button>
+                    <button
+                        class="btn-mentor {{ request()->has('mentor') ? 'btn-primary' : '' }} btn col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light">Banner
+                        thuộc mentorship </button>
+                    <button
+                        class="btn-event {{ request()->has('event') ? 'btn-primary' : '' }} btn col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light">Banner
+                        thuộc ngày hội việc làm </button>
+                    <button
+                        class="btn-recruitment {{ request()->has('recruitment') ? 'btn-primary' : '' }} btn col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light">Banner
+                        thuộc tuyển dụng </button>
+                    <button
+                        class="btn-privilege {{ request()->has('privilege') ? 'btn-primary' : '' }} btn col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light">Banner
+                        thuộc đặc quyền sinh viên </button>
+                    <button
+                        class="btn-project {{ request()->has('project') ? 'btn-primary' : '' }} btn col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light">Banner
+                        thuộc vườn ươm khởi nghiệp </button>
+                        <!-- <button
                         class="btn-code {{ request()->has('code') ? 'btn-primary' : '' }} btn col-12 col-lg-4 col-sx-12 col-md-12 col-sm-12 col-xxl-4 col-xl-4 btn-light">Banner
                         thuộc code online </button>
                     <button
@@ -109,9 +127,7 @@
                         thuộc chuyên ngành</button>
                     <button
                         class="btn-round {{ request()->has('round') ? 'btn-primary' : '' }} btn col-12 col-lg-6 col-sx-12 col-md-12 col-sm-12 col-xxl-6 col-xl-6 btn-light">Banner
-                        thuộc vòng thi</button>
-
-
+                        thuộc vòng thi</button> -->
                 </div>
                 <div class="col-12 pb-2">
                     <div style="{{ request()->has('major') ? '' : 'display: none' }} " id="major">
@@ -361,9 +377,21 @@
                                     @endif
                                 @else
                                     @if ($slider->sliderable_type == 'App\Models\Contest')
-                                        {{ 'Đánh giá năng lực ' }}
+                                        {{ 'Đánh giá năng lực' }}
                                     @elseif($slider->sliderable_type == 'App\Models\Challenge')
-                                        {{ 'Code online ' }}
+                                        {{ 'Code online' }}
+                                    @elseif($slider->sliderable_type == 'App\Models\Service')
+                                        {{ 'Dịch vụ việc làm' }}
+                                    @elseif($slider->sliderable_type == 'App\Models\User')
+                                        {{ 'Mentorship' }}
+                                    @elseif($slider->sliderable_type == 'App\Models\Event')
+                                        {{ 'Ngày hội việc làm' }}
+                                    @elseif($slider->sliderable_type == 'App\Models\Recruitment')
+                                        {{ 'Tuyển dụng' }}
+                                    @elseif($slider->sliderable_type == 'App\Models\Privilege')
+                                        {{ 'Đặc quyền sinh viên' }}
+                                    @elseif($slider->sliderable_type == 'App\Models\Project')
+                                        {{ 'Vườn ươm khởi nghiệp' }}
                                     @else
                                         {{ 'Trang chủ ' }}
                                     @endif

@@ -73,7 +73,7 @@
                             <label for="" class="form-label">Thuộc thành phần </label>
                             <input type="hidden" name="able" class="able">
                             <div class="row mb-10">
-                                <div class="col-2">
+                                <!-- <div class="col-2">
                                     <button type="button" class="btn btn-light btn-major">Chuyên ngành </button>
                                 </div>
                                 <div class="col-2">
@@ -84,12 +84,30 @@
                                 </div>
                                 <div class="col-2">
                                     <button type="button" class="btn btn-light btn-code">Code online </button>
+                                </div> -->
+                                <div class="col">
+                                    <button type="button" class="btn btn-light btn-home">Trang chủ</button>
                                 </div>
-                                <div class="col-2">
-                                    <button type="button" class="btn btn-light btn-home">Trang chủ </button>
+                                <div class="col">
+                                    <button type="button" class="btn btn-light btn-service">Dịch vụ việc làm</button>
+                                </div>
+                                <div class="col">
+                                    <button type="button" class="btn btn-light btn-mentor">Mentorship</button>
+                                </div>
+                                <div class="col">
+                                    <button type="button" class="btn btn-light btn-event">Ngày hội việc làm</button>
+                                </div>
+                                <div class="col">
+                                    <button type="button" class="btn btn-light btn-recruitment">Tuyển dụng</button>
+                                </div>
+                                <div class="col">
+                                    <button type="button" class="btn btn-light btn-privilege">Đặc quyền sinh viên</button>
+                                </div>
+                                <div class="col">
+                                    <button type="button" class="btn btn-light btn-project">Vườn ươm khởi nghiệp</button>
                                 </div>
                             </div>
-                            <div style="display: none" id="major">
+                            <!-- <div style="display: none" id="major">
                                 <label class="form-label">Chuyên ngành</label>
                                 <select name="major_id" class="form-select form-major" data-control="select2"
                                     data-placeholder="Chọn chuyên ngành ">
@@ -121,8 +139,7 @@
                                         <option value="0" disable>Không có vòng thi nào ! Hãy chọn cuộc thi </option>
                                     </select>
                                 </div>
-
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     <div class="form-group mb-10 ">

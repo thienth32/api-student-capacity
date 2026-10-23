@@ -12,4 +12,9 @@ class ResultCapacityDetail extends Model
     protected $primaryKey = "id";
     // public $fillable = [];
     protected $guarded = [];
+
+    public function questions()
+    {
+        return $this->belongsTo(Question::class, 'question_id');
+    }
 }

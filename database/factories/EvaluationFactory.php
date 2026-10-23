@@ -16,11 +16,12 @@ class EvaluationFactory extends Factory
      * Define the model's default state.
      *
      * @return array<string, mixed>
+     * @throws \Exception
      */
     public function definition()
     {
         return [
-            'ponit' => mt_rand(1, 10),
+            'ponit' => random_int(1, 10),
             'exams_team_id' => TakeExam::all()->random()->id,
             'judge_round_id' => JudgeRound::all()->random()->id,
         ];

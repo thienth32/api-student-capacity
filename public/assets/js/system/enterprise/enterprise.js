@@ -3,11 +3,25 @@ $(document).ready(function () {
         let idContest = $(this).val();
         window.location = UpdateQueryString("contest", idContest);
     });
+    $("#selectStatus").change(function () {
+        let status = $(this).val();
+        console.log(status);
+        window.location = UpdateQueryString("status", status);
+    });
     $("#searchTeam").keypress(function (event) {
         var keycode = event.keyCode ? event.keyCode : event.which;
         if (keycode == "13") {
             let key = $(this).val();
             window.location = UpdateQueryString("keyword", key);
+            // alert(key)
+            // window.location = "admin/enterprise?keyword=" + key;
+        }
+    });
+    $("#searchTaxNumber").keypress(function (event) {
+        var keycode = event.keyCode ? event.keyCode : event.which;
+        if (keycode == "13") {
+            let key = $(this).val();
+            window.location = UpdateQueryString("taxNumber", key);
             // alert(key)
             // window.location = "admin/enterprise?keyword=" + key;
         }

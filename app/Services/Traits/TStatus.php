@@ -8,18 +8,10 @@ trait TStatus
 {
     use TResponse;
 
-    /**
-     * Note
-     * public function getModelDataStatus($id)
-     * {
-     *      return $this->model->find($id);
-     * }
-     */
-
     public function un_status($id)
     {
         try {
-            $data = $this->updateStatus($this->getModelDataStatus($id), 0);
+            $data = $this->updateStatus($this->getModelDataById($id), 0);
             return $this->responseApi(true, $data);
         } catch (\Throwable $th) {
             dump($th);
@@ -31,7 +23,7 @@ trait TStatus
     public function re_status($id)
     {
         try {
-            $data = $this->updateStatus($this->getModelDataStatus($id), 1);
+            $data = $this->updateStatus($this->getModelDataById($id), 1);
             return $this->responseApi(true, $data);
         } catch (\Throwable $th) {
             return $this->responseApi(false, 'Không thể câp nhật trạng thái !');
@@ -46,19 +38,10 @@ trait TStatus
         return $data;
     }
 
-    /**
-     * Note
-     * dùng cho recruitment và post hoặc có trạng thái nổi bật .
-     * public function getModelDataHot($id)
-     * {
-     *      return $this->model->find($id);
-     * }
-     */
-
     public function un_hot($id)
     {
         try {
-            $data = $this->updateHot($this->getModelDataHot($id), 0);
+            $data = $this->updateHot($this->getModelDataById($id), 0);
             return $this->responseApi(true, $data);
         } catch (\Throwable $th) {
             return $this->responseApi(false, 'Không thể câp nhật trạng thái !');
@@ -67,7 +50,7 @@ trait TStatus
     public function re_hot($id)
     {
         try {
-            $data = $this->updateHot($this->getModelDataHot($id), 1);
+            $data = $this->updateHot($this->getModelDataById($id), 1);
             return $this->responseApi(true, $data);
         } catch (\Throwable $th) {
             return $this->responseApi(false, 'Không thể câp nhật trạng thái !');
@@ -79,5 +62,37 @@ trait TStatus
             'hot' => $status,
         ]);
         return $data;
+    }
+
+    public function un_full_recruitment($id)
+    {
+        try {
+            $data = $this->updateFullRecruitment($this->getModelDataById($id), 0);
+            return $this->responseApi(true, $data);
+        } catch (\Throwable $th) {
+            return $this->responseApi(false, 'Không thể câp nhật trạng thái !');
+        }
+    }
+    public function re_full_recruitment($id)
+    {
+        try {
+            $data = $this->updateFullRecruitment($this->getModelDataById($id), 1);
+            return $this->responseApi(true, $data);
+        } catch (\Throwable $th) {
+            return $this->responseApi(false, 'Không thể câp nhật trạng thái !');
+        }
+    }
+    private function updateFullRecruitment($data, $status)
+    {
+        if ($data->postable_type == \App\Models\Recruitment::class) {
+            $data->update([
+                'full_recruitment' => $status,
+            ]);
+
+            return $data;
+        }
+
+        return $this->responseApi(false, 'Loại bài viết không hợp lệ');
+        
     }
 }

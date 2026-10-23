@@ -57,4 +57,9 @@ class ResultCapacity extends Model
     {
         return $this->hasMany(Exam::class, 'id', 'exam_id');
     }
+
+    public function examBelongTo()
+    {
+        return $this->belongsTo(Exam::class, 'exam_id', 'id');
+    }
 }

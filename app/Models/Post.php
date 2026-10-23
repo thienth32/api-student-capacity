@@ -28,6 +28,7 @@ class Post extends Model
         'thumbnail_url',
         'link_to',
         'user_id',
+        'tax_number',
         'contact_name',
         'contact_phone',
         'contact_email',
@@ -40,9 +41,11 @@ class Post extends Model
         'enterprise_id',
         'total',
         'deadline',
+        'note',
+        'full_recruitment'
     ];
     protected $casts = [
-        'deadline' => FormatDate::class,
+//        'deadline' => FormatDate::class,
         'created_at' => FormatDate::class,
         'updated_at' =>  FormatDate::class,
         'thumbnail_url' => FormatImageGet::class,

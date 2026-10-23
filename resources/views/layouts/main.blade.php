@@ -115,7 +115,7 @@
                         <!--begin::Copyright-->
                         <div class="text-dark order-2 order-md-1">
                             <span class="text-muted fw-bold me-1">2022©</span>
-                            <a href="https://caodang.fpt.edu.vn/" target="_blank"
+                            <a href="https://caodang.fpt.edu.vn/" target="_blank" rel="noopener"
                                 class="text-gray-800 text-hover-primary">Cao đẳng FPT Polytechnic</a>
                         </div>
                         <!--end::Copyright-->

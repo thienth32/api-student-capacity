@@ -335,7 +335,7 @@
                                                     height: 50px;
                                                     width: 50px;
                                                     "
-                                                    src="{{$item->user->avatar}}"
+                                                    src="{{ $item->user->avatar ?? 'assets/media/avatars/blank.png' }}"
                                                 >
                                                <span
                                                     style="display: inline-block;
@@ -444,6 +444,7 @@
             </div>
             <!--end::Col-->
         </div>
+        
         @if (auth()->user()->hasRole(config('util.ROLE_ADMINS')))
             <div class="col-xl-4 mb-5 mb-xl-10">
                 <!--begin::Col-->

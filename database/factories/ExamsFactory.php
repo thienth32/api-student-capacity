@@ -14,6 +14,7 @@ class ExamsFactory extends Factory
      * Define the model's default state.
      *
      * @return array<string, mixed>
+     * @throws \Exception
      */
     public function definition()
     {
@@ -22,7 +23,7 @@ class ExamsFactory extends Factory
             'description' => $this->faker->text,
             'max_ponit' => 10,
             'external_url'=>$this->faker->sentence(15),
-            'ponit' => mt_rand(1, 10),
+            'ponit' => random_int(1, 10),
             'round_id' => Round::all()->random()->id,
         ];
     }

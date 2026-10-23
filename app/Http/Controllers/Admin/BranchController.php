@@ -22,8 +22,9 @@ class BranchController extends Controller
     private function getList()
     {
         try {
-            $dataBranch = Branch::sort(request('sort') == 'asc' ? 'asc' : 'desc', request('sort_by') ?? null, 'branches')
+            $dataBranch = Branch::sort(request('sort') == 'desc' ? 'desc' : 'asc', request('sort_by') ?? null, 'branches')
                 ->withCount(['users'])
+                ->where('status', 1)
                 ->search(request('q') ?? null, ['name']);
             return $dataBranch;
         } catch (\Throwable $th) {
@@ -187,6 +188,8 @@ class BranchController extends Controller
                 'address' => $request->address,
                 'phone' => $request->phone,
                 'status' => $request->status,
+                'email' => $request->email,
+                'website' => $request->website,
             ]);
 
             $currentBranchAdmin = $this->getCurrentBranchAdmin($branch_id);

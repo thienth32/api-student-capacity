@@ -19,8 +19,8 @@ class Enterprise
     }
     public function getList(Request $request)
     {
-
         $keyword = $request->has('keyword') ? $request->keyword : "";
+        $taxNumber = $request->has('taxNumber') ? $request->taxNumber : "";
         $contest = $request->has('contest') ? $request->contest : null;
         $status = $request->has('status') ? $request->status : null;
         $orderBy = $request->has('orderBy') ? $request->orderBy : 'id';
@@ -31,7 +31,8 @@ class Enterprise
             $query = $this->enterprise::onlyTrashed()->where('name', 'like', "%$keyword%")->orderByDesc('deleted_at');
             return $query;
         }
-        $query =  $this->enterprise::where('name', 'like', "%$keyword%");
+        $query =  $this->enterprise::where('name', 'like', "%$keyword%")
+            ->where('tax_number', 'like', "%$taxNumber%");
         if ($status != null) {
             $query->where('status', $status);
         }
@@ -63,8 +64,14 @@ class Enterprise
     {
         $enterprise = $this->enterprise::find($id);
         $enterprise->name = $request->name;
+        $enterprise->status = $request->status;
+        $enterprise->tax_number = $request->tax_number;
+        $enterprise->contact_name = $request->contact_name;
+        $enterprise->contact_phone = $request->contact_phone;
+        $enterprise->contact_email = $request->contact_email;
         $enterprise->description = $request->description;
         $enterprise->link_web = $request->link_web;
+        $enterprise->address = $request->address;
         if ($request->has('logo')) {
             $fileImage =  $request->file('logo');
             $logo = $this->uploadFile($fileImage, $enterprise->logo);

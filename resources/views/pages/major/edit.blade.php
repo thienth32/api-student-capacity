@@ -7,12 +7,12 @@
             <ol class="breadcrumb text-muted fs-6 fw-bold">
                 <li class="breadcrumb-item pe-3">
 
-                    <a href="{{ route('admin.major.list') }}" class="pe-3">
-                        Danh sách chuyên ngành
+                    <a href="{{ $recruitment ? route('admin.major.recruitment.list') : route('admin.major.list') }}" class="pe-3">
+                        Danh sách chuyên ngành {{ $recruitment ? 'tuyển dụng' : '' }}
                     </a>
 
                 </li>
-                <li class="breadcrumb-item px-3 text-muted">Cập nhập chuyên ngành : {{ $major->name }} </li>
+                <li class="breadcrumb-item px-3 text-muted">Cập nhập chuyên ngành: {{ $major->name }} </li>
             </ol>
         </div>
     </div>
@@ -47,7 +47,7 @@
                     @endphp
                 @endif
 
-                <form id="formAddContest" action="{{ route('admin.major.update', ['slug' => $major->slug]) }}"
+                <form id="formAddContest" action="{{ $recruitment ? route('admin.major.recruitment.update', ['slug' => $major->slug]) : route('admin.major.update', ['slug' => $major->slug]) }}"
                     method="post" enctype="multipart/form-data">
                     @csrf
                     @method('put')
@@ -67,47 +67,49 @@
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
                     </div>
-                    <div class="form-group mb-10">
+                    @if(!$recruitment)
+                        <div class="form-group mb-10">
 
-                        <label for="" class="form-label">Thuộc chuyên ngành</label>
-                        <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
-                            data-hide-search="false" tabindex="-1" aria-hidden="true" name="parent_id"
-                            value="{{ old('parent_id') }}">
-                            @if ($major->parent != null)
-                                <option value="0">Không thuộc chuyên ngành nào</option>
-                                @foreach ($dataMajor as $Major)
-                                    @php
-                                        $dash = '';
-                                    @endphp
-                                    <option @selected($major->parent->id == $Major->id) value="{{ $Major->id }}">Chuyên ngành:
-                                        {{ $Major->name }}</option>
-                                    @include('pages.major.include.listSelecterChisl', [
-                                        'majorPrent' => $Major,
-                                        'major' => $major,
-                                    ])
-                                @endforeach
-                            @else
-                                <option value="0">Không thuộc chuyên ngành nào</option>
-                                @foreach ($dataMajor as $Major)
-                                    @php
-                                        $dash = '';
-                                    @endphp
-                                    <option value="{{ $Major->id }}">Chuyên ngành:
-                                        {{ $Major->name }}</option>
-                                    @include('pages.major.include.listSelecterChisl', [
-                                        'majorPrent' => $Major,
-                                        'major' => $major,
-                                    ])
-                                @endforeach
-                            @endif
+                            <label for="" class="form-label">Thuộc chuyên ngành</label>
+                            <select class="form-select mb-2 select2-hidden-accessible" data-control="select2"
+                                data-hide-search="false" tabindex="-1" aria-hidden="true" name="parent_id"
+                                value="{{ old('parent_id') }}">
+                                @if ($major->parent != null)
+                                    <option value="0">Không thuộc chuyên ngành nào</option>
+                                    @foreach ($dataMajor as $Major)
+                                        @php
+                                            $dash = '';
+                                        @endphp
+                                        <option @selected($major->parent->id == $Major->id) value="{{ $Major->id }}">Chuyên ngành:
+                                            {{ $Major->name }}</option>
+                                        @include('pages.major.include.listSelecterChisl', [
+                                            'majorPrent' => $Major,
+                                            'major' => $major,
+                                        ])
+                                    @endforeach
+                                @else
+                                    <option value="0">Không thuộc chuyên ngành nào</option>
+                                    @foreach ($dataMajor as $Major)
+                                        @php
+                                            $dash = '';
+                                        @endphp
+                                        <option value="{{ $Major->id }}">Chuyên ngành:
+                                            {{ $Major->name }}</option>
+                                        @include('pages.major.include.listSelecterChisl', [
+                                            'majorPrent' => $Major,
+                                            'major' => $major,
+                                        ])
+                                    @endforeach
+                                @endif
 
 
-                        </select>
+                            </select>
 
-                        @error('major_id')
-                            <p class="text-danger">{{ $message }}</p>
-                        @enderror
-                    </div>
+                            @error('major_id')
+                                <p class="text-danger">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    @endif
                     <div class="form-group mb-10 ">
                         <button type="submit" name="" id="" class="btn btn-success btn-lg btn-block">Lưu
                         </button>

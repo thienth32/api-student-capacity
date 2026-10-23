@@ -1,3 +1,9 @@
+{{--@dd($_SERVER)--}}
+{{--@dd(app('router')->getRoutes())--}}
+{{--    @dd(new \Illuminate\Routing\UrlGenerator(app()))--}}
+{{--@dd(get_class_methods(app('router')))--}}
+{{--    @dd(asset('12345'))--}}
+{{--@dd($_SERVER)--}}
 <!DOCTYPE html>
 <html lang="en">
 <!--begin::Head-->
@@ -64,6 +70,7 @@
                             <!--end::Google link-->
                         </div>
                         <!--end::Actions-->
+{{--                        <p>{{$user}}</p>--}}
                     </form>
                     <!--end::Form-->
                 </div>
@@ -90,6 +97,7 @@
         var hostUrl = "{{ asset('assets') . '/' }}";
     </script>
     <!--begin::Global Javascript Bundle(used by all pages)-->
+    <script type="text/javascript" src="assets/js/custom/documentation/general/moment.min.js"></script>
     <script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
     <!--end::Global Javascript Bundle-->

@@ -69,16 +69,46 @@ const sliderPage = {
             window.location = url + "home=1";
             return false;
         });
-        $(".btn-code").on("click", function () {
+        $(".btn-service").on("click", function () {
             loadTast();
-            window.location = url + "code=1";
+            window.location = url + "service=1";
             return false;
         });
-        $(".btn-capacity").on("click", function () {
+        $(".btn-mentor").on("click", function () {
             loadTast();
-            window.location = url + "capacity=1";
+            window.location = url + "mentor=1";
             return false;
         });
+        $(".btn-event").on("click", function () {
+            loadTast();
+            window.location = url + "event=1";
+            return false;
+        });
+        $(".btn-recruitment").on("click", function () {
+            loadTast();
+            window.location = url + "recruitment=1";
+            return false;
+        });
+        $(".btn-privilege").on("click", function () {
+            loadTast();
+            window.location = url + "privilege=1";
+            return false;
+        });
+        $(".btn-project").on("click", function () {
+            loadTast();
+            window.location = url + "project=1";
+            return false;
+        });
+        // $(".btn-code").on("click", function () {
+        //     loadTast();
+        //     window.location = url + "code=1";
+        //     return false;
+        // });
+        // $(".btn-capacity").on("click", function () {
+        //     loadTast();
+        //     window.location = url + "capacity=1";
+        //     return false;
+        // });
     },
     selectRoundChildContest: function () {
         $("#select-contest-p").on("change", function () {
